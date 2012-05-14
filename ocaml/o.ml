@@ -9,7 +9,7 @@ let environment = `Retheme
 let env = match environment with 
   | `Prod    -> "prod"
   | `Dev     -> "dev"
-  | `Retheme -> "retheme"
+  | `Retheme -> "dev"
 
 let db name = Printf.sprintf "%s-%s" env name
 
