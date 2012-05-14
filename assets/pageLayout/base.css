@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Oxygen'), url('/public/fonts/oxygen.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Cond Light'), local('OpenSans-CondensedLight'), url('/public/fonts/opensanscondensed-light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Condensed Bold'), local('OpenSans-CondensedBold'), url('/public/fonts/opensanscondensed-bold.ttf') format('truetype');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Oxygen", "Arial", sans-serif;
+}
+
+img {
+    border: none;
+}
+
+a {
+    text-decoration: none;
+    color: #24B;
+}
+
+a:hover {
+    color: #48D;
+}
