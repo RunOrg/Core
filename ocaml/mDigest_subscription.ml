@@ -6,7 +6,7 @@ open BatPervasives
 
 module Unique = struct
 
-  module MyDB = MModel.Register(struct let db = "digest-sbs-u" end) 
+  module MyDB = CouchDB.Convenience.Database(struct let db = O.db "digest-sbs-u" end) 
   module MyUnique = OhmCouchUnique.Make(MyDB)
     
   let key did iid = IDigest.to_string did ^ "-" ^ IInstance.to_string iid
@@ -17,7 +17,7 @@ module Unique = struct
 
 end
 
-module MyDB = MModel.Register(struct let db = "digest-sbs" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "digest-sbs" end)
 module Design = struct
   module Database = MyDB
   let name = "digest"

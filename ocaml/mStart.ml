@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module MyDB = MModel.Register(struct let db = "instance-start" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance-start" end)
 
 module Data = struct
   module T = struct

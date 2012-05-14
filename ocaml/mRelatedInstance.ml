@@ -4,13 +4,13 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module MyUniqueDB = MModel.Register(struct let db = "related-instance-u" end)
+module MyUniqueDB = CouchDB.Convenience.Database(struct let db = O.db "related-instance-u" end)
 module MyUnique = OhmCouchUnique.Make(MyUniqueDB)
 
 let connection iid followed_iid =
   OhmCouchUnique.pair (IInstance.to_id iid) (IInstance.to_id followed_iid) 
 
-module MyDB = MModel.Register(struct let db = "related-instance" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "related-instance" end)
 
 module Design = struct
   module Database = MyDB

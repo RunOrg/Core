@@ -19,7 +19,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-module MyDB = MModel.Register(struct let db = "funnel" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "funnel" end)
 module MyTable = CouchDB.Table(MyDB)(IFunnel)(Data)
 
 let default = Data.({

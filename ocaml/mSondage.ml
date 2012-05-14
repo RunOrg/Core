@@ -21,7 +21,7 @@ module Answer = Fmt.Make(struct
   > 
 end)
 
-module MyDB = MModel.SondageDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "sondage" end)
 module InitTable = CouchDB.Table(MyDB)(Id)(Init)
 module AnswerTable = CouchDB.Table(MyDB)(Id)(Answer)
 

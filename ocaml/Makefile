@@ -3,6 +3,8 @@ OCAMLBUILD=ocamlbuild -Xs ohm -use-ocamlfind -lib ohm -cflags -I,$(ROOT)/ohm/,-I
 
 all: 
 	make -C ohm/src all
+	make -C ohm/tool 
+	ohm/tool/tool.byte -assets
 	$(OCAMLBUILD) main.byte
 	cp _build/main.byte ../www/server
 

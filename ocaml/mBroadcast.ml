@@ -8,7 +8,7 @@ module Types = MBroadcast_types
 
 include Types
 
-module MyDB = MModel.Register(struct let db = "broadcast" end) 
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "broadcast" end) 
 module MyTable = CouchDB.Table(MyDB)(IBroadcast)(Item)
 
 module Design = struct
@@ -86,7 +86,7 @@ let post iid aid content =
 
 (* Post a brand new RSS broadcast ----------------------------------------------------------- *)
 
-module RssUniqueDB = MModel.Register(struct let db = "broadcast-rss-u" end)
+module RssUniqueDB = CouchDB.Convenience.Database(struct let db = O.db "broadcast-rss-u" end)
 module RssUnique = OhmCouchUnique.Make(RssUniqueDB)
 
 let rss_unique_key iid link = 

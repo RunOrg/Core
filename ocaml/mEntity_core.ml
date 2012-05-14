@@ -62,8 +62,8 @@ module EntityCoreConfig = struct
 
   let name = "entity-core"
   module Id = IEntity
-  module DataDB = MModel.Configure(struct let db = "entity" end)
-  module VersionDB = MModel.Configure(struct let db = "entity-v" end)
+  module DataDB = CouchDB.Convenience.Config(struct let db = O.db "entity" end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "entity-v" end)
   module Data = Data
   module Diff = Diff
   module VersionData = MUpdateInfo

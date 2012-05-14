@@ -1,10 +1,10 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open BatPervasives
 open Ohm.Universal
 
-module MyDB = MModel.ErrorDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "error" end)
 module Design = struct
   module Database = MyDB
   let name = "audit"

@@ -41,8 +41,9 @@ module Field = Fmt.Make(struct
   > 
 end)
 
-module FieldDiff = JoyA.Make(struct
+module FieldDiff = Fmt.Make(struct
     
+(*
   let edit = JoyA.obj [
     JoyA.field "name"  ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.join_field ()) ;
     JoyA.field "label" ~label:"Etiquette" (JoyA.string ~autocomplete:MPreConfigNames.i18n ()) ;
@@ -60,6 +61,7 @@ module FieldDiff = JoyA.Make(struct
     ]) ;
     JoyA.field "required" ~label:"Obligatoire" JoyA.bool ; 
   ]
+*)
 
   type json t = <
     name : string ;
@@ -95,8 +97,9 @@ end)
 
 let default = []
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     "Remove" |> JoyA.alternative
 	~label:"Supprimer"
@@ -111,6 +114,7 @@ module Diff = JoyA.Make(struct
 	~label:"Ajouter/Modifier"
 	~content:FieldDiff.edit
   ]
+*)
 
   type json t = 
     [ `Remove of string

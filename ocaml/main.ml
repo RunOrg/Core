@@ -7,5 +7,5 @@ module Actions = struct
   open MDo
 end
 
-module Main = Ohm.Main.Make(O.Action)(MModel.Reset)(MModel.Template)(MModel.Task)
-let _ = Main.run ()
+module Main = Ohm.Main.Make(MModel.Reset)
+let _ = Main.run O.run_async

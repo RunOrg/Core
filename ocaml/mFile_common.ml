@@ -9,7 +9,7 @@ module Float = Fmt.Float
 module PUser = IUser
 module PInstance = IInstance
 
-module MyDB = MModel.FileDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "file" end)
 module Design = struct
   module Database = MyDB
   let name = "file"

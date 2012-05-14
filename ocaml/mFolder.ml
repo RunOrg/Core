@@ -7,7 +7,7 @@ open Ohm.Universal
 
 (* General definitions ---------------------------------------------------------------------- *)
 
-module MyDB = MModel.Register(struct let db = "folder" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "folder" end)
 module Design = struct
   module Database = MyDB
   let name = "folder"

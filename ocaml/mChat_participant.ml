@@ -22,7 +22,7 @@ end
 let make_id crid self = 
   Id.of_string (IChat.Room.to_string crid ^ "-" ^ IAvatar.to_string self) 
 
-module MyDB = MModel.Register(struct let db = "chat-participant" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "chat-participant" end)
 module MyTable = CouchDB.Table(MyDB)(Id)(Data)
 module Design = struct
   module Database = MyDB

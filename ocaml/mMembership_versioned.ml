@@ -9,8 +9,8 @@ module Config = struct
 
   let name = "membership"
 
-  module DataDB    = MModel.Configure(struct let db = "membership"   end)
-  module VersionDB = MModel.Configure(struct let db = "membership-v" end) 
+  module DataDB    = CouchDB.Convenience.Config(struct let db = O.db "membership"   end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "membership-v" end) 
 
   module Id = IMembership
   module Data = MMembership_details

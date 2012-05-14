@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module MyDB = MModel.Register(struct let db = "user-digest" end) 
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "user-digest" end) 
 module MyUnique = OhmCouchUnique.Make(MyDB)
 
 let get id = MyUnique.get (IUser.to_string id) |> Run.map IDigest.of_id  

@@ -7,7 +7,7 @@ open Ohm.Universal
 
 (* General definitions ---------------------------------------------------------------------- *)
 
-module MyDB = MModel.AlbumDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "album" end)
 module Design = struct
   module Database = MyDB
   let name = "album"

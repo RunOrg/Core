@@ -3,7 +3,7 @@
 open Ohm
 open Ohm.Universal
 
-module UniqueDB = MModel.Register(struct let db = "membership-u" end)
+module UniqueDB = CouchDB.Convenience.Database(struct let db = O.db "membership-u" end)
 module Unique = OhmCouchUnique.Make(UniqueDB)
 
 let key group avatar = 

@@ -6,7 +6,7 @@ open Ohm.Universal
 
 (* Database definition --------------------------------------------------------------------- *)
 
-module MyDB = MModel.Register(struct let db = "avatar-pending" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "avatar-pending" end)
 
 module Design = struct
   module Database = MyDB

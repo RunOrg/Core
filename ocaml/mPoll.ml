@@ -4,7 +4,7 @@ open Ohm
 open BatPervasives
 open Ohm.Universal
 
-module MyDB     = MModel.PollDB
+module MyDB     = CouchDB.Convenience.Database(struct let db = O.db "poll" end)
 module MyUnique = OhmCouchUnique.Make(MyDB)
 module Design   = struct
   module Database = MyDB

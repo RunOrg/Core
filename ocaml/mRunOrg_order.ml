@@ -157,8 +157,8 @@ let apply_status s data =
 
 module OrderConfig = struct
   let name = "runorg-order"
-  module DataDB    = MModel.Configure(struct let db = "runorg-order" end)
-  module VersionDB = MModel.Configure(struct let db = "runorg-order-v" end)
+  module DataDB    = CouchDB.Convenience.Config(struct let db = O.db "runorg-order" end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "runorg-order-v" end)
   module Id = IRunOrg.Order
   module Data = Data
   module Diff = Diff 

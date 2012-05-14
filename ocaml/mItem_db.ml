@@ -2,7 +2,7 @@
 
 open Ohm
 
-module MyDB = MModel.Register(struct let db = "item" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "item" end)
 
 module Design = struct
   module Database = MyDB

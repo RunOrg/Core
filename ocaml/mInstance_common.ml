@@ -8,7 +8,7 @@ module Data    = MInstance_data
 
 (* Database definition --------------------------------------------------------------------- *)
 
-module MyDB = MModel.InstanceDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance" end)
 module Design = struct
   module Database = MyDB
   let name = "instance"

@@ -66,8 +66,8 @@ module Config = struct
 
   module Source    = Source
   module Content   = Content
-  module PollDB    = MModel.Register(struct let db = "polling-info" end)
-  module ContentDB = MModel.Register(struct let db = "polling-content" end) 
+  module PollDB    = CouchDB.Convenience.Database(struct let db = O.db "polling-info" end)
+  module ContentDB = CouchDB.Convenience.Database(struct let db = O.db "polling-content" end) 
 
   let poll = function 
     | Source.RSS url -> poll_rss url 

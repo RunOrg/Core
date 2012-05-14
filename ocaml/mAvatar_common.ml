@@ -4,7 +4,7 @@ open Ohm
 
 (* Database definitions -------------------------------------------------------------------- *)
 
-module MyDB = MModel.AvatarDB
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "avatar" end)
 
 module Design = struct
   module Database = MyDB

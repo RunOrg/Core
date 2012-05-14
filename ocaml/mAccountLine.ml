@@ -61,9 +61,9 @@ type where =
     
 module VersionedConfig = struct
   let name = "accountLine"
-  module DataDB = MModel.Configure(struct let db = "account-line" end)
+  module DataDB = CouchDB.Convenience.Config(struct let db = O.db "account-line" end)
   module Id = IAccountLine
-  module VersionDB = MModel.Configure(struct let db = "account-line-v" end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "account-line-v" end)
   module Data = Data
 
   module Diff = Fmt.Make(struct

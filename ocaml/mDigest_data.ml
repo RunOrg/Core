@@ -127,7 +127,7 @@ let mark_sent time t =
  
 (* Actual operations on the database ---------------------------------------------------- *)
 
-module MyDB = MModel.Register(struct let db = "digest" end) 
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "digest" end) 
 module MyTable = CouchDB.Table(MyDB)(IDigest)(Data)
 
 module Design = struct

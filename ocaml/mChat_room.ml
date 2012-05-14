@@ -24,7 +24,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-module MyDB = MModel.Register(struct let db = "chat-room" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "chat-room" end)
 module MyTable = CouchDB.Table(MyDB)(IChat.Room)(Data)
 
 module Design = struct

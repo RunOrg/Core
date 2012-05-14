@@ -51,7 +51,7 @@ let make_naked id data =
 let make_from id t =
   { id ; data = t.data ; read = t.read ; vote = t.vote ; admin = t.admin } 
 
-module VoteDB = MModel.Register(struct let db = "vote" end)
+module VoteDB = CouchDB.Convenience.Database(struct let db = O.db "vote" end)
 module VoteTable = CouchDB.Table(VoteDB)(IVote)(Vote)
 
 module VoteDesign = struct
@@ -72,7 +72,7 @@ module Ballot = struct
   include Fmt.Extend(T)
 end
 
-module BallotDB = MModel.Register(struct let db = "vote-ballot" end)
+module BallotDB = CouchDB.Convenience.Database(struct let db = O.db "vote-ballot" end)
 module BallotTable = CouchDB.Table(BallotDB)(Id)(Ballot)
 
 module BallotDesign = struct

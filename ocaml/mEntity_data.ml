@@ -23,8 +23,8 @@ module EntityDataConfig = struct
 
   let name = "entity-data"
   module Id = IEntity
-  module DataDB = MModel.Configure(struct let db = "entity-data" end)
-  module VersionDB = MModel.Configure(struct let db = "entity-data-v" end)
+  module DataDB = CouchDB.Convenience.Config(struct let db = O.db "entity-data" end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "entity-data-v" end)
   module Data = Data  
 
   module Diff = Fmt.Make(struct

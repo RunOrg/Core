@@ -9,8 +9,8 @@ module Reason = Fmt.Make(struct
 end)
 
 module PaypalConfig = struct
-  module MainDB    = MModel.Configure (struct let db = "paypal" end)
-  module VersionDB = MModel.Configure (struct let db = "paypal-v" end)
+  module MainDB    = CouchDB.Convenience.Config(struct let db = O.db "paypal" end)
+  module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "paypal-v" end)
   module Id        = IPayment
   module Reason    = Reason
   let testing = MModel.Paypal.testing

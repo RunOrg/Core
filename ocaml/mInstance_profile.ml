@@ -7,7 +7,7 @@ open Ohm.Universal
 module Data   = MInstance_data
 module Common = MInstance_common 
 
-module MyDB = MModel.Register(struct let db = "instance-profile" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance-profile" end)
 
 module Design = struct
   module Database = MyDB

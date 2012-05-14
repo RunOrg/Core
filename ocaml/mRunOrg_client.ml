@@ -7,7 +7,7 @@ open BatPervasives
 
 module O = MRunOrg_order.Data
 
-module MyDB = MModel.Register(struct let db = "runorg-client" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "runorg-client" end)
 
 module Design = struct
   module Database = MyDB

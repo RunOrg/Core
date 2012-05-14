@@ -16,7 +16,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-module MyDB = MModel.Register(struct let db = "instance-access" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance-access" end)
 module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let default = Data.({

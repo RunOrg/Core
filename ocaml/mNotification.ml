@@ -7,7 +7,7 @@ open Ohm.Universal
 
 module Float     = Fmt.Float
 
-module MyDB     = MModel.NotifyDB
+module MyDB     = CouchDB.Convenience.Database(struct let db = O.db "notify" end)
 module MyUnique = OhmCouchUnique.Make(MyDB)
 module Design = struct
   module Database = MyDB

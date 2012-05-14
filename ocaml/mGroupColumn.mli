@@ -1,6 +1,6 @@
 (* © 2012 MRunOrg *)
 
-module View : Ohm.JoyA.FMT with type t = 
+module View : Ohm.Fmt.FMT with type t = 
   [ `text
   | `date
   | `datetime
@@ -59,7 +59,7 @@ val default : t
 ( *|||| *)(* }}}} *) 
 
 
-module DiffEval : Ohm.JoyA.FMT with type t = 
+module DiffEval : Ohm.Fmt.FMT with type t = 
   [ `profile of [ `firstname 
 		| `lastname 
 		| `email 
@@ -80,7 +80,7 @@ module DiffEval : Ohm.JoyA.FMT with type t =
 		       | `field of string ]
   ]
 
-module DiffColumn : Ohm.JoyA.FMT with type t = 
+module DiffColumn : Ohm.Fmt.FMT with type t = 
   <
     after : DiffEval.t option ;
     sort  : bool ;
@@ -90,7 +90,7 @@ module DiffColumn : Ohm.JoyA.FMT with type t =
     label : string ;
   >
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   [ `Add of DiffColumn.t 
   | `Remove of DiffEval.t
   | `Refresh

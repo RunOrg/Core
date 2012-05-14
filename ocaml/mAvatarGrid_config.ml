@@ -19,9 +19,9 @@ module Column    = MAvatarGrid_column
   
 let evaluator_of_column t = t.Column.eval
 
-module ListDB = MModel.Configure(struct let db = "avatar-grid" end)
-module LineDB = MModel.Configure(struct let db = "avatar-grid-l" end)
-module UniqDB = MModel.Configure(struct let db = "avatar-grid-u" end)
+module ListDB = CouchDB.Convenience.Config(struct let db = O.db "avatar-grid" end)
+module LineDB = CouchDB.Convenience.Config(struct let db = O.db "avatar-grid-l" end)
+module UniqDB = CouchDB.Convenience.Config(struct let db = O.db "avatar-grid-u" end)
   
 let background operation = Task.Background.register 10 operation 
   

@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module MyDB = MModel.Register(struct let db = "help" end)
+module MyDB = CouchDB.Convenience.Database(struct let db = O.db "help" end)
 
 module Data = Fmt.Make(struct
   type json t = <
