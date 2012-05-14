@@ -34,10 +34,12 @@ module ConfigDB = CouchDB.Convenience.Database(struct let db = db "config" end)
 module Reset    = Reset.Make(ConfigDB)
 module Proof    = OhmCouchProof.Make(ConfigDB)
 
+type i18n = Asset_AdLib.key
+
 class ctx adlib = object
   inherit CouchDB.init_ctx
   inherit Async.ctx
-  inherit [Asset_AdLib.key] AdLib.ctx adlib
+  inherit [i18n] AdLib.ctx adlib
 end
 
 let ctx = function
