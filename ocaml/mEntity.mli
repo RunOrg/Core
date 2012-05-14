@@ -64,16 +64,16 @@ module Get : sig
   val template      :            'any t -> ITemplate.t
   val instance      :            'any t -> IInstance.t
   val kind          :            'any t -> MEntityKind.t
-  val template_name :            'any t -> Ohm.I18n.text
+  val template_name :            'any t -> [ `label of string | `text of string ]
   val id            :            'any t -> 'any IEntity.id
   val draft         :            'any t -> bool
   val public        :            'any t -> bool
   val grants        :            'any t -> bool
   val group         : [<`Admin|`View|`Bot] t -> IGroup.t
-  val name          : [<`Admin|`View] t -> Ohm.I18n.text option
+  val name          : [<`Admin|`View] t -> [ `label of string | `text of string ] option
   val on_add        :            'any t -> [ `ignore | `invite | `add ] 
   val picture       : [<`Admin|`View] t -> [`GetPic] IFile.id option
-  val summary       : [<`Admin|`View] t -> Ohm.I18n.text 
+  val summary       : [<`Admin|`View] t -> [ `label of string | `text of string ] 
   val date          : [<`Admin|`View] t -> string option
   val end_date      : [<`Admin|`View] t -> string option
   val admin         :       [<`Admin] t -> MAccess.t 
@@ -108,7 +108,7 @@ module Data : sig
   val get : 'any IEntity.id -> 'any t option O.run
     
   val data   : [<`View|`Admin|`Bot] t -> (string * Json_type.t) list
-  val name   : [<`View|`Admin|`Bot] t -> Ohm.I18n.text option
+  val name   : [<`View|`Admin|`Bot] t -> [ `label of string | `text of string ] option
   val info   : 'any t -> MEntityInfo.t
   val fields : 'any t -> MEntityFields.t    
 
@@ -121,7 +121,7 @@ end
 val try_update : 
      [`Admin] t
   -> status:[ `Active | `Delete | `Draft ]
-  -> name:Ohm.I18n.text option 
+  -> name:[ `label of string | `text of string ] option 
   -> data:(string * Json_type.t) list
   -> 'any IIsIn.id
   -> unit O.run
@@ -149,7 +149,7 @@ val bot_update :
      [`Bot] IEntity.id 
   -> ?draft:bool 
   -> ?public:bool 
-  -> ?name:Ohm.I18n.text option 
+  -> ?name:[ `label of string | `text of string ] option 
   -> ?data:(string * Json_type.t) list
   -> ?config:MEntityConfig.Diff.t list
   -> unit 

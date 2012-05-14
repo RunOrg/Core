@@ -24,8 +24,9 @@ module Eval = Fmt.Make(struct
     ]
 end)
   
-module View = JoyA.Make(struct
+module View = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     JoyA.alternative ~label:"Texte" "t" ;
     JoyA.alternative ~label:"Date"  "d" ;
@@ -35,6 +36,7 @@ module View = JoyA.Make(struct
     JoyA.alternative ~label:"Age" "a" ;
     JoyA.alternative ~label:"Liste de choix" "po"
   ]
+*)
 
   type json t = 
     [ `text "t"
@@ -48,7 +50,8 @@ module View = JoyA.Make(struct
 
 end)
   
-module DiffEval = JoyA.Make(struct
+module DiffEval = Fmt.Make(struct
+(*
   let edit = JoyA.variant [
 
     "profile" |> JoyA.alternative
@@ -89,6 +92,7 @@ module DiffEval = JoyA.Make(struct
 	]) 
 
   ]
+*)
 
   type json t = 
     [ `profile of [ `firstname 
@@ -113,8 +117,9 @@ module DiffEval = JoyA.Make(struct
 
 end)
 
-module DiffColumn = JoyA.Make(struct
+module DiffColumn = Fmt.Make(struct
 
+(*
   let edit = JoyA.obj [
     JoyA.field "after" ~label:"Insérer après ..." (JoyA.optional DiffEval.edit) ;
     JoyA.field "sort"  ~label:"Triable?" JoyA.bool ;
@@ -123,7 +128,8 @@ module DiffColumn = JoyA.Make(struct
     JoyA.field "view"  ~label:"Affichage" View.edit ;
     JoyA.field "label" ~label:"Etiquette" (JoyA.string ~autocomplete:MPreConfigNames.i18n ())
   ]
-    
+*)  
+
   type json t =   <
     after : DiffEval.t option ;
     sort  : bool ;
@@ -135,13 +141,15 @@ module DiffColumn = JoyA.Make(struct
 
 end)
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     "Add"     |> JoyA.alternative ~label:"Ajouter/déplacer une colonne" ~content:DiffColumn.edit ;
     "Remove"  |> JoyA.alternative ~label:"Supprimer une colonne" ~content:DiffEval.edit ;
     "Refresh" |> JoyA.alternative ~label:"Recalculer la grille" ;
   ]
+*)
 
   type json t = 
     [ `Add of DiffColumn.t 

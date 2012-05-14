@@ -48,6 +48,9 @@ module Config = struct
 
   module VersionData = MUpdateInfo
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx)
+
   let merge d l = 
     Data.({ 
       d with data = 

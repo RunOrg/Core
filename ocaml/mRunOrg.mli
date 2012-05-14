@@ -157,14 +157,14 @@ end
 module Offer: sig
     
   type main = < 
-    label : Ohm.I18n.text ;
+    label : [`label of string | `text of string] ;
     seats : int ; 
     memory : int ; 
     daily : (int * int) ;
     days : int
   > ;;
 
-  type memory = < label : Ohm.I18n.text ; memory : int ; daily : (int*int) > ;;
+  type memory = < label : [`label of string | `text of string] ; memory : int ; daily : (int*int) > ;;
   
   val main : ([`Main] IRunOrg.Offer.id * main) list
     

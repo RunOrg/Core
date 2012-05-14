@@ -27,6 +27,9 @@ module EntityDataConfig = struct
   module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "entity-data-v" end)
   module Data = Data  
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx) 
+
   module Diff = Fmt.Make(struct
     module Json = Fmt.Json
     module FieldDiff = MEntityFields.Diff

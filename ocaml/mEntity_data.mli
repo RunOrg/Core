@@ -5,7 +5,7 @@ type 'a t
 val create :
       id:[`Created] IEntity.id
   ->  who:MUpdateInfo.who
-  -> ?name:(Ohm.I18n.text option)
+  -> ?name:([`label of string | `text of string] option)
   -> ?data:(string * Json_type.t) list
   ->  fields:MEntityFields.Diff.t list
   ->  info:MEntityInfo.Diff.t list
@@ -14,7 +14,7 @@ val create :
 
 val upgrade : 
       id:[`Bot] IEntity.id
-  -> ?name:(Ohm.I18n.text option)
+  -> ?name:([`label of string | `text of string] option)
   -> ?data:(string * Json_type.t) list
   -> ?fields:MEntityFields.Diff.t list
   -> ?info:MEntityInfo.Diff.t list
@@ -24,7 +24,7 @@ val upgrade :
 val update :
       id:[`Admin] IEntity.id
   ->  who:MUpdateInfo.who
-  -> ?name:(Ohm.I18n.text option)
+  -> ?name:([`label of string | `text of string] option)
   ->  data:(string * Json_type.t) list
   ->  unit
   ->  unit O.run
@@ -41,7 +41,7 @@ val recover :
 val get : 'any IEntity.id -> 'any t option O.run
 
 val data   : [<`View|`Admin|`Bot] t -> (string * Json_type.t) list
-val name   : [<`View|`Admin|`Bot] t -> Ohm.I18n.text option
+val name   : [<`View|`Admin|`Bot] t -> [`label of string | `text of string] option
 val info   : 'any t -> MEntityInfo.t
 val fields : 'any t -> MEntityFields.t
 

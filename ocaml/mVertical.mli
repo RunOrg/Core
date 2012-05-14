@@ -2,7 +2,7 @@
 
 module Template : sig
 
-  module Edit : Ohm.JoyA.FMT with type t = 
+  module Edit : Ohm.Fmt.FMT with type t = 
     <
       kind : MEntityKind.t ;
       name : string ;
@@ -18,7 +18,7 @@ module Template : sig
 
   val get : 'any ITemplate.id -> t option 
 
-  val admin_all : [`Admin] ICurrentUser.id -> (ITemplate.t * Ohm.I18n.text * MEntityKind.t) list O.run
+  val admin_all : [`Admin] ICurrentUser.id -> (ITemplate.t * [`label of string | `text of string] * MEntityKind.t) list O.run
 
   val admin_get : [`Admin] ICurrentUser.id -> ITemplate.t -> Edit.t option O.run
 
@@ -67,9 +67,9 @@ type t = <
   steps : Step.t list ;
 > ;;
 
-val reword : t -> Ohm.I18n.text -> Ohm.I18n.text
+val reword : t -> [`label of string | `text of string] -> [`label of string | `text of string]
 
-module Edit : Ohm.JoyA.FMT with type t = 
+module Edit : Ohm.Fmt.FMT with type t = 
   <
     name : string ;
     desc : string ;
@@ -92,7 +92,7 @@ module Edit : Ohm.JoyA.FMT with type t =
     steps : Step.t list 
   > ;;
 
-val admin_all : [`Admin] ICurrentUser.id -> (IVertical.t * Ohm.I18n.text * bool) list O.run
+val admin_all : [`Admin] ICurrentUser.id -> (IVertical.t * [`label of string | `text of string] * bool) list O.run
 
 val admin_get : [`Admin] ICurrentUser.id -> IVertical.t -> Edit.t option O.run
 
@@ -104,7 +104,7 @@ val get_cached : IVertical.t -> t O.run
 val default : Edit.t
 
 val by_url : string -> IVertical.t option O.run
-val by_parent : IVertical.t -> (IVertical.t * string * Ohm.I18n.text) list O.run
+val by_parent : IVertical.t -> (IVertical.t * string * [`label of string | `text of string]) list O.run
 
 val get_templates : IVertical.t -> MEntityKind.t -> (ITemplate.t * Template.t) list O.run
 

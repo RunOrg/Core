@@ -29,7 +29,7 @@ include Ohm.Fmt.FMT with type t = <
 
 val default : t
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   [ `NoGroup 
   | `Group_WaitingList of [`manual|`none]
   | `Group_Payment of [`none]

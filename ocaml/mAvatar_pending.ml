@@ -107,14 +107,12 @@ let all_unconfirmed_by_user uid =
   return $ List.map (#id |- IAvatar.of_id) list
 
 let confirm_user =
-  let task = Task.register "avatar-confirm-user" IUser.fmt begin fun uid self ->
-    let! list = ohm $ all_unconfirmed_by_user uid in
-    let! _    = ohm $ Run.list_iter join list in
-    return $ Task.Finished uid 
+  let task = O.async # define "avatar-confirm-user" IUser.fmt 
+    begin fun uid ->
+      let! list = ohm $ all_unconfirmed_by_user uid in
+      Run.list_iter join list
   end in
-  fun uid -> 
-    let! _ = ohm $ MModel.Task.call task uid in
-    return ()
+  fun uid -> task uid 
 
 let _ = 
   Sig.listen MUser.Signals.on_confirm

@@ -15,13 +15,14 @@ module Signals = struct
 end
 
 let erase_if_still_temp =   
-  let task = Task.register "file.erase-temp" IFile.fmt begin fun id _ ->
-    let! _ = ohm $
-      MyTable.transaction id (MyTable.remove_if (fun f -> f # k = `Temp))
-    in
-    return (Task.Finished id)
-  end in
-  MModel.Task.delay 600.0 task
+  let task = O.async # define "file.erase-temp" IFile.fmt 
+    begin fun id -> 
+      let! _ = ohm $
+	MyTable.transaction id (MyTable.remove_if (fun f -> f # k = `Temp))
+      in
+      return ()
+    end in
+  task ~delay:600.
 
 let _do_prepare ~usr ~lift ?ins ?item () =   
   let id = IFile.gen () in
@@ -169,18 +170,19 @@ let remove ~version id =
   MyTable.transaction id (MyTable.if_exists remove) 
       
 let remove_original = 
-  let task = Task.register "file.rm-original" IFile.fmt begin fun id _ ->
+  let task = O.async # define "file.rm-original" IFile.fmt 
+    begin fun id ->
 
-    let! result = ohm $ remove ~version:`Original id in
-    match result with 
-	| Some false -> Run.of_lazy (lazy (raise (Task.Error "Amazon.S3.delete")))
-	| _          -> return (Task.Finished id)
+      let! result = ohm $ remove ~version:`Original id in
+      match result with 
+	| Some false -> Run.of_lazy (lazy (raise Async.Reschedule))
+	| _          -> return ()
 
-  end in
-  fun id -> MModel.Task.call task id |> Run.map ignore
+    end in
+  fun id -> task id
 
 let define_async_resizer ~kind ~name ~bucket ~large ~small =   
-  let task = Task.register ("file.resize."^name) IFile.fmt begin fun id _ ->
+  let task = O.async # define ("file.resize."^name) IFile.fmt begin fun id   ->
     
     let process file reader =       
 
@@ -258,10 +260,8 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
       let bucket = "ro-temp" 
       and key = (Id.str (file # key)) ^ "/" ^ MFile_common.original ^ "/" ^ name in
       
-      process file (ConfigS3.download ~bucket ~key) |> Run.map begin function 
-	| true -> Task.Finished id
-	| false -> Task.Failed
-      end	    
+      let! _ = ohm $ process file (ConfigS3.download ~bucket ~key) in
+      return ()	    
     in
 
     let get_original file = 
@@ -269,24 +269,21 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	let obj = (List.assoc MFile_common.original (file # versions)) in
 	download_file file (obj # name)
       with Not_found -> 
-	log "File.resize: %s has no original version!" (IFile.to_string id) ; 
-	return Task.Failed
+	return (log "File.resize: %s has no original version!" (IFile.to_string id)) 
     in
 
     let! file_opt = ohm $ MyTable.get id in
 
     match file_opt with 
-    | Some file -> 
-      if file # k = kind then get_original file else
-	return ( log "File.resize: %s is not correct type" (IFile.to_string id) ; 
-		 Task.Failed )
-	  
-    | None -> 
-      return ( log "File.resize: %s not found" (IFile.to_string id) ;
-	       Task.Failed )
+      | Some file -> 
+	if file # k = kind then get_original file else
+	  return ( log "File.resize: %s is not correct type" (IFile.to_string id) )
+	    
+      | None -> 
+	return ( log "File.resize: %s not found" (IFile.to_string id) )
 	
   end in
-  fun id -> MModel.Task.call task id |> Run.map ignore
+  fun id -> task id
       
 let process_pic = 
   define_async_resizer
@@ -305,7 +302,7 @@ let process_img =
     ~bucket:"ro-files"
 
 let process_doc =
-  let task = Task.register "file.process.doc" IFile.fmt begin fun id _ ->
+  let task = O.async # define "file.process.doc" IFile.fmt begin fun id ->
     
     let process file name =       
 
@@ -328,7 +325,7 @@ let process_doc =
 
       in
 
-      let! size = req_or (return Task.Failed) size_opt in
+      let! size = req_or (return ()) size_opt in
 
       let update file = 
 	let versions = file # versions in
@@ -349,12 +346,12 @@ let process_doc =
 	 end)
       in
 	
-      let! _ = ohm_req_or (return Task.Failed) $
+      let! _ = ohm_req_or (return ()) $
 	MyTable.transaction id (MyTable.update update)
       in
 
       let! () = ohm $ remove_original id in
-      return (Task.Finished id)
+      return ()
     in
 
     let get_original file = 
@@ -362,24 +359,22 @@ let process_doc =
 	let obj = (List.assoc MFile_common.original (file # versions)) in
 	process file (obj # name) 
       with Not_found -> 
-	log "File.process-doc: %s has no original version!" (IFile.to_string id) ; 
-	return Task.Failed
+	return (log "File.process-doc: %s has no original version!" (IFile.to_string id))
     in
     
-    let! file = ohm_req_or (return Task.Failed) $ MyTable.get id in
+    let! file = ohm_req_or (return ()) $ MyTable.get id in
 
     if file # k = `Doc then get_original file else
-      return ( log "File.process-doc: %s is not correct type" (IFile.to_string id) ; 
-	       Task.Failed )
+      return (log "File.process-doc: %s is not correct type" (IFile.to_string id))
 	
   end in
-  fun id -> MModel.Task.call task id |> Run.map ignore  
+  fun id -> task id 
       
 let define_async_confirmer ~kind ~name ~process = 
-  let task = Task.register ("file.confirm."^name) IFile.fmt begin fun id _ ->
+  let task = O.async # define ("file.confirm."^name) IFile.fmt begin fun id ->
 
-    let fail = return Task.Failed in 
-    let success = return $ Task.Finished id in
+    let fail = return () in
+    let success = return () in
 
     let transform = function 
       | None -> 
@@ -454,7 +449,7 @@ let define_async_confirmer ~kind ~name ~process =
     success
 
   end in
-  fun id -> MModel.Task.call task (IFile.decay id) |> Run.map ignore
+  fun id -> task (IFile.decay id) 
 
 let confirm_pic = 
   define_async_confirmer ~kind:`Picture ~name:"pic" ~process:process_pic

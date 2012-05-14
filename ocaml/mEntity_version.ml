@@ -102,19 +102,19 @@ let process_oldest_version =
   let! eid_opt, eversion = ohm $ first_unapplied_version in 
   
   match iid_opt, eid_opt with 
-    | None,     None     -> return false
+    | None,     None     -> return (Some 10.)
     | Some iid, None     -> let! () = ohm $ MInstance.upgrade iid in 
-			    return true
+			    return None
     | None,     Some eid -> let! () = ohm $ upgrade eid in
-			    return true
+			    return None
     | Some iid, Some eid ->
       
       let! () = ohm begin 
 	if iversion < eversion then MInstance.upgrade ~upto:eversion iid
 	else upgrade ~upto:iversion eid
       end in 
-      return true
+      return None
 	   
 
 let () = 
-  Task.Background.register 15 process_oldest_version
+  O.async # periodic 15 process_oldest_version

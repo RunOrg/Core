@@ -10,8 +10,8 @@ end)
 
 let _ = 
 
-  let propagate = Task.register "propagate-membership" PropagateArgs.fmt
-    begin fun (from,aid,gid) _ ->
+  let propagate = O.async # define "propagate-membership" PropagateArgs.fmt
+    begin fun (from,aid,gid) ->
       
       let propagate_to_gid gid =
 	
@@ -38,7 +38,7 @@ let _ =
       let! list = ohm $ MGroup.Propagate.get_direct gid in
       let! _    = ohm $ Run.list_iter propagate_to_gid list in
       
-      return $ Task.Finished (from, aid, gid)
+      return () 
 	
     end
   in
@@ -49,7 +49,7 @@ let _ =
       let! _, _, from = req_or (return ()) t.MMembership.admin in
       let  gid = t.MMembership.where in
       let  aid = t.MMembership.who in
-      let!  _  = ohm $ MModel.Task.delay 5.0 propagate (from,aid,gid) in
+      let!  _  = ohm $ propagate ~delay:5.0 (from,aid,gid) in
       return ()
     else
       return ()

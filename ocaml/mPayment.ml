@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -13,6 +13,8 @@ module PaypalConfig = struct
   module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "paypal-v" end)
   module Id        = IPayment
   module Reason    = Reason
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx) 
   let testing = MModel.Paypal.testing
 end
 

@@ -162,7 +162,7 @@ let name_suggestions =
 
 (* Template versions ----------------------------------------------------------------------- *)
 
-module TemplateDiff = JoyA.Make(struct
+module TemplateDiff = Fmt.Make(struct
 
   module EntityConfigDiff = MEntityConfig.Diff
   module EntityInfoDiff   = MEntityInfo.Diff
@@ -178,6 +178,7 @@ module TemplateDiff = JoyA.Make(struct
 		| `Join   of JoinFieldsDiff.t 
 		| `Propagate of GroupPropagateDiff.t ]
       
+(*
   let edit = JoyA.variant [
     "Info"   |> JoyA.alternative ~label:"Affichage"     ~content:MEntityInfo.Diff.edit ;
     "Field"  |> JoyA.alternative ~label:"Champs Entité" ~content:MEntityFields.Diff.edit ;
@@ -187,7 +188,7 @@ module TemplateDiff = JoyA.Make(struct
     "Propagate" |> JoyA.alternative ~label:"Inscription automatique"
 	~content:MGroupPropagate.Entity.Diff.edit ;
   ]
-    
+*)   
 end)
 
 module TemplateVersion = struct
@@ -209,7 +210,7 @@ module SavedTemplateVersion = Saved(TemplateVersion)
 
 (* Vertical versions ----------------------------------------------------------------------- *)
 
-module VerticalDiff = JoyA.Make(struct
+module VerticalDiff = Fmt.Make(struct
 
   module InstanceEntityDiff = MInstanceEntity.Diff
   module GroupPropagateDiff = MGroupPropagate.Diff
@@ -217,12 +218,13 @@ module VerticalDiff = JoyA.Make(struct
   type json t =
     [ `Entities of InstanceEntityDiff.t
     | `Propagate of GroupPropagateDiff.t ]
-
+(*
   let edit = JoyA.variant [
     "Entities" |> JoyA.alternative ~label:"Entités" ~content:MInstanceEntity.Diff.edit ;
     "Propagate" |> JoyA.alternative ~label:"Inscription Automatique"
 	~content:MGroupPropagate.Diff.edit
   ]
+*)
 end)
 
 module VerticalVersion = struct

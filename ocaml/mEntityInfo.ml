@@ -1,10 +1,11 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open BatPervasives
 
-module Format = JoyA.Make(struct
+module Format = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     JoyA.alternative ~label:"Texte court" "t" ;
     JoyA.alternative ~label:"Texte long" "lt" ;
@@ -12,6 +13,7 @@ module Format = JoyA.Make(struct
     JoyA.alternative ~label:"Lieu" "l" ;
     JoyA.alternative ~label:"Lien" "u"
   ]
+*)
 
   type json t = 
     [ `text     "t"
@@ -61,8 +63,9 @@ include Data
 
 let default = []
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     "AddField" |> JoyA.alternative
 	~label:"Champ : Ajouter"
@@ -124,6 +127,7 @@ module Diff = JoyA.Make(struct
 	~label:"Section : Supprimer"
 	~content:(JoyA.label "Section" (JoyA.string ~autocomplete:MPreConfigNames.info_section ())) ;
   ]
+*)
 
   type json t = 
     [ `DelSection of string

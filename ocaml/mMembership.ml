@@ -77,14 +77,12 @@ module Signals = struct
   let after_update_call, after_update = Sig.make (Run.list_iter identity)
     
   let perform_after_update = 
-    let task = Task.register "after-membership-update" IMembership.fmt begin fun mid _ -> 
-      let! data = ohm_req_or (return Task.Failed) $ get mid in
-      let! ()   = ohm $ after_update_call (mid,data) in
-      return $ Task.Finished mid
-    end in
-    fun mid -> 
-      let! _ = ohm $ MModel.Task.call task mid in
-      return ()
+    let task = O.async # define "after-membership-update" IMembership.fmt 
+      begin fun mid -> 
+	let! data = ohm_req_or (return ()) $ get mid in
+	after_update_call (mid,data)
+      end in
+    fun mid -> task mid
 
   let _ = 
     if allow_propagation then 
@@ -95,11 +93,11 @@ module Signals = struct
   let after_version_call, after_version = Sig.make (Run.list_iter identity)
 
   let perform_after_version = 
-    let task = Task.register "after-membership-version" Versioned.VersionId.fmt begin
-      fun vid _ -> 
-	let! version = ohm_req_or (return Task.Failed) $ Versioned.get_version vid in
+    let task = O.async # define "after-membership-version" Versioned.VersionId.fmt 
+      begin fun vid -> 
+	let! version = ohm_req_or (return ()) $ Versioned.get_version vid in
 	let  mid     = Versioned.version_object version in 
-	let! b, a    = ohm_req_or (return Task.Failed) $
+	let! b, a    = ohm_req_or (return ()) $
 	  Versioned.version_snapshot version
 	in
 	let  time     = Versioned.version_time  version in    
@@ -111,12 +109,11 @@ module Signals = struct
 	  method diffs = diffs
 	  method after = a
 	end in 
-	let! ()       = ohm $ after_version_call data in
-	return $ Task.Finished vid
+	
+	after_version_call data 
+
     end in
-    fun vid -> 
-      let! _ = ohm $ MModel.Task.delay 5.0 task vid in
-      return ()
+    fun vid -> task ~delay:5.0 vid
 
   let _ =
     if allow_propagation then 
@@ -127,15 +124,12 @@ module Signals = struct
   let after_reflect_call, after_reflect = Sig.make (Run.list_iter identity)
 
   let perform_after_reflect = 
-    let task = Task.register "after-membership-reflect" IMembership.fmt begin
-      fun mid _ -> 
-	let! current = ohm_req_or (return Task.Failed) $ get mid in 
-	let! ()      = ohm $ after_reflect_call current in
-	return $ Task.Finished mid
+    let task = O.async # define "after-membership-reflect" IMembership.fmt
+      begin fun mid -> 
+	let! current = ohm_req_or (return ()) $ get mid in 
+	after_reflect_call current 
     end in
-    fun mid -> 
-      let! _ = ohm $ MModel.Task.call task mid in
-      return ()
+    fun mid -> task mid
 
   let _ =
     if allow_propagation then 
@@ -215,28 +209,27 @@ end)
 
 let () = 
 
-  let task = Task.register "after-group-update" GroupIter.fmt begin fun (gid,start) _ -> 
+  let task, define = O.async # declare "after-group-update" GroupIter.fmt in
+  let () = define begin fun (gid,start) -> 
 
     let bot_gid = IGroup.Assert.bot gid in 
-
+    
     let! list, next = ohm $ InGroup.list_everyone ?start ~count:20 bot_gid in 
-
+    
     let! _ = ohm $ Run.list_map begin fun aid ->
       let! mid = ohm_req_or (return ()) $ Unique.find_if_exists gid aid in
       Versioned.reflect mid
     end list in       
-
-    return begin match next with 
-      | None -> Task.Finished (gid,None)
-      | some -> Task.Partial ((gid,some), 0, 1)
-    end
-
+    
+    match next with 
+      | None -> return ()
+      | some -> task (gid,some)    
+	
   end in
   
   let refresh gid =
     let gid = IGroup.decay gid in 
-    let! _ = ohm $ MModel.Task.call task (gid,None) in
-    return ()
+    task (gid,None) 
   in
 
   Sig.listen MGroup.Signals.on_update refresh

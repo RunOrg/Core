@@ -617,26 +617,26 @@ let by_status iid status =
 
 let _ = 
 
-  let task = Task.register "refresh-avatars" Id.fmt begin fun id _ ->
+  let task = O.async # define "refresh-avatars" Id.fmt 
+    begin fun id ->
 
-    (* We are acting as the user to do these updates. *)
-    let user      = IUser.Assert.is_self (IUser.of_id id) in
-
-    let refresh (_,inst) =
-      let! id = ohm $ identify inst (IUser.Deduce.self_is_unsafe user) in
-      let! _  = ohm $ MProfile.refresh id in
-      return ()
-    in
- 
-    let! list = ohm $ user_instances (IUser.Deduce.self_can_view_inst user) in
-    let! ()    = ohm $ Run.list_iter refresh list in
-
-    return $ Task.Finished id
+      (* We are acting as the user to do these updates. *)
+      let user      = IUser.Assert.is_self (IUser.of_id id) in
+      
+      let refresh (_,inst) =
+	let! id = ohm $ identify inst (IUser.Deduce.self_is_unsafe user) in
+	let! _  = ohm $ MProfile.refresh id in
+	return ()
+      in
+      
+      let! list = ohm $ user_instances (IUser.Deduce.self_can_view_inst user) in
+      
+      Run.list_iter refresh list
 
   end in
 
   let! id, _ = Sig.listen MUser.Signals.on_update in 
-  MModel.Task.call task (IUser.to_id id) |> Run.map ignore
+  task (IUser.to_id id)
 
 let _ = 
 
@@ -690,11 +690,8 @@ let obliterate_for_user uid =
   return ()
 
 let obliterate_for_user_later = 
-  let task = Task.register "obliterate-user-avatars" IUser.fmt begin fun uid _ ->
-    let! () = ohm $ obliterate_for_user uid in
-    return (Task.Finished uid)
-  end in
-  fun uid -> MModel.Task.call task uid
+  let task = O.async # define "obliterate-user-avatars" IUser.fmt obliterate_for_user in
+  fun uid -> task uid
 
 let _ =
   Sig.listen MUser.Signals.on_obliterate obliterate_for_user

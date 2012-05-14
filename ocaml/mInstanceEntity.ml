@@ -2,8 +2,9 @@
 
 open Ohm
 
-module Update = JoyA.Make(struct
+module Update = Fmt.Make(struct
    
+(*
   let edit = JoyA.obj [
     JoyA.field "name" ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;
     JoyA.field "title" ~label:"Etiquette" (JoyA.optional (JoyA.string ~autocomplete:MPreConfigNames.i18n ())) ;
@@ -11,7 +12,8 @@ module Update = JoyA.Make(struct
     JoyA.field "draft" ~label:"Brouillon" (JoyA.optional JoyA.bool) ;
     JoyA.field "data" ~label:"Champs" (JoyA.dict (JoyA.string ())) ;
   ]
- 
+*)
+
   type json t = 
   <
     name : string ;
@@ -25,7 +27,7 @@ end)
 type 'a update =  
        ?draft:bool 
     -> ?public:bool 
-    -> ?name:Ohm.I18n.text option 
+    -> ?name:[`label of string | `text of string] option 
     -> ?data:(string * Json_type.t) list
     -> ?config:MEntityConfig.Diff.t list
     -> unit 
@@ -76,13 +78,15 @@ let update changes (f:'a update) =
     ~config:(args.config)
     ()
       
-module Create = JoyA.Make(struct
+module Create = Fmt.Make(struct
    
+(*
   let edit = JoyA.obj [
     JoyA.field "name" ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;
     JoyA.field "template" ~label:"Modèle" 
       (JoyA.string ~autocomplete:MPreConfigNames.template ()) ;
   ]
+*)
 
   type json t = 
   <
@@ -91,16 +95,17 @@ module Create = JoyA.Make(struct
   >
 end)
 
-module Config = JoyA.Make(struct
+module Config = Fmt.Make(struct
 
   module EntityConfigDiff = MEntityConfig.Diff
 
+(*
   let edit = JoyA.obj [
     JoyA.field "name" ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;
     JoyA.field "diffs" ~label:"Modifications" 
       (JoyA.array MEntityConfig.Diff.edit) ;
   ]
-
+*)
 
   type json t = 
   <
@@ -110,13 +115,15 @@ module Config = JoyA.Make(struct
 
 end)
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
    
+(*
   let edit = JoyA.variant [
     JoyA.alternative ~label:"Créer une entité" ~content:Create.edit "Create" ;
     JoyA.alternative ~label:"Modifier une entité" ~content:Update.edit "Update" ;
     JoyA.alternative ~label:"Configurer une entité" ~content:Config.edit "Config"
   ]
+*)
 
   type json t = 
     [ `Create of Create.t

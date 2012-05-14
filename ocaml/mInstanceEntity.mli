@@ -1,12 +1,12 @@
 (* © 2012 MRunOrg *)
 
-module Create : Ohm.JoyA.FMT with type t = 
+module Create : Ohm.Fmt.FMT with type t = 
   <
     name : string ;
     template : ITemplate.t ;
   >
 
-module Update : Ohm.JoyA.FMT with type t = 
+module Update : Ohm.Fmt.FMT with type t = 
   <
     name : string ;
     title : string option ;
@@ -15,13 +15,13 @@ module Update : Ohm.JoyA.FMT with type t =
     data : (string * string) list
   >
 
-module Config : Ohm.JoyA.FMT with type t = 
+module Config : Ohm.Fmt.FMT with type t = 
   <
     name   : string ;
     diffs  : MEntityConfig.Diff.t list
   >
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   [ `Create of Create.t 
   | `Update of Update.t
   | `Config of Config.t
@@ -32,7 +32,7 @@ val names : Diff.t -> (string * string) list
 type 'a update =  
        ?draft:bool 
     -> ?public:bool 
-    -> ?name:Ohm.I18n.text option 
+    -> ?name:[`text of string | `label of string] option 
     -> ?data:(string * Json_type.t) list
     -> ?config:MEntityConfig.Diff.t list
     -> unit 

@@ -5,9 +5,9 @@ open Ohm.Util
 open Ohm.Universal
 open BatPervasives
 
-module O = MRunOrg_order.Data
-
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "runorg-client" end)
+
+module O = MRunOrg_order.Data
 
 module Design = struct
   module Database = MyDB

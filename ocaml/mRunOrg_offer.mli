@@ -1,14 +1,14 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 type main = < 
-  label : Ohm.I18n.text ; 
+  label : [`text of string|`label of string] ;
   seats : int ; 
   memory : int ; 
   daily : (int * int) ; 
   days : int 
 > ;;
 
-type memory = < label : Ohm.I18n.text ; memory : int ; daily : (int*int) > ;;
+type memory = < label : [`text of string|`label of string] ; memory : int ; daily : (int*int) > ;;
 
 val main : ([`Main] IRunOrg.Offer.id * main) list
 

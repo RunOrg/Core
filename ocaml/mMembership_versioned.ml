@@ -12,6 +12,9 @@ module Config = struct
   module DataDB    = CouchDB.Convenience.Config(struct let db = O.db "membership"   end)
   module VersionDB = CouchDB.Convenience.Config(struct let db = O.db "membership-v" end) 
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx)
+
   module Id = IMembership
   module Data = MMembership_details
   module Diff = MMembership_diff

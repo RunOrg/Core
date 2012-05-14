@@ -1,6 +1,6 @@
 (* © 2012 MRunOrg *)
 
-module Format : Ohm.JoyA.FMT with type t = 
+module Format : Ohm.Fmt.FMT with type t = 
   [ `text
   | `longtext
   | `date
@@ -22,7 +22,7 @@ include Ohm.Fmt.FMT with type t =
 
 val default : t
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   [ `DelSection of string
   | `DelItem    of string * string
   | `DelField   of string * string * string

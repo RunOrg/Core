@@ -14,7 +14,7 @@ type entity = {
   config   : MEntityConfig.t ;
   deleted  : IAvatar.t option ;
   version  : string ;
-  name     : Ohm.I18n.text option ; 
+  name     : [`label of string | `text of string] option ; 
   summary  : string ;
   date     : string option ;
   end_date : string option ;

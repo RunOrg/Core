@@ -45,8 +45,9 @@ let default_album  = BatOption.get default # album
 let default_folder = BatOption.get default # folder
 let default_votes  = BatOption.get default # votes 
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
 
+(*
   let edit = JoyA.variant [
     JoyA.alternative ~label:"Liste de membres : supprimer" "NoGroup";
     JoyA.alternative ~label:"Liste de membres : validation"
@@ -123,6 +124,7 @@ module Diff = JoyA.Make(struct
 	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
       ]) "Votes_Vote" ;
   ] 
+*)
 
   type json t = 
     [ `NoGroup 

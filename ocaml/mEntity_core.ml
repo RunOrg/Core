@@ -69,6 +69,9 @@ module EntityCoreConfig = struct
   module VersionData = MUpdateInfo
   module ReflectedData = Reflected
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx) 
+
   let apply_status t = function 
     | `Draft      -> Data.({ t with draft = true  ; deleted = None })
     | `Active     -> Data.({ t with draft = false ; deleted = None })
@@ -148,7 +151,7 @@ type entity = {
   config   : MEntityConfig.t ;
   deleted  : IAvatar.t option ;
   version  : string ;
-  name     : I18n.text option ; 
+  name     : [`label of string | `text of string] option ;
   summary  : string ;
   date     : string option ;
   end_date : string option ;

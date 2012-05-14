@@ -1,6 +1,6 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
-module Field : Ohm.JoyA.FMT with type t = 
+module Field : Ohm.Fmt.FMT with type t = 
   <
     label   : string ;    
     explain : string option ;
@@ -13,7 +13,7 @@ include Ohm.Fmt.FMT with type t = (string * Field.t) list
 
 val default : t
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   [ `Remove of string
   | `Move of string * string option 
   | `Add of string * Field.t 

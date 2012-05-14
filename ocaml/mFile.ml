@@ -94,7 +94,7 @@ let delete_now fid =
   let remove version = 
     let! success = ohm $ MFile_upload.remove ~version fid in 
     match success with
-      | Some false -> Run.of_lazy (lazy (raise (Task.Error "Amazon.S3.delete")))
+      | Some false -> Run.of_lazy (lazy (raise Async.Reschedule))
       | _          -> return ()
   in
 

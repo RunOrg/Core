@@ -8,7 +8,7 @@ type ('id,'payload) version = <
   payload : 'payload list
 >
 
-module TemplateDiff : Ohm.JoyA.FMT with type t = 
+module TemplateDiff : Ohm.Fmt.FMT with type t = 
   [ `Config of MEntityConfig.Diff.t 
   | `Info   of MEntityInfo.Diff.t 
   | `Field  of MEntityFields.Diff.t 
@@ -16,7 +16,7 @@ module TemplateDiff : Ohm.JoyA.FMT with type t =
   | `Join   of MJoinFields.Diff.t
   | `Propagate of MGroupPropagate.Entity.Diff.t ]
 
-module VerticalDiff : Ohm.JoyA.FMT with type t = 
+module VerticalDiff : Ohm.Fmt.FMT with type t = 
   [ `Entities of MInstanceEntity.Diff.t 
   | `Propagate of MGroupPropagate.Diff.t ]
 

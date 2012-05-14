@@ -4,8 +4,9 @@ open Ohm
 open BatPervasives
 open Ohm.Universal
 
-module Diff = JoyA.Make(struct
+module Diff = Fmt.Make(struct
 
+(*
   let edit = JoyA.obj [
     JoyA.field "action" ~label:"Action" (JoyA.variant [
       JoyA.alternative ~label:"Ajouter" "add" ;
@@ -14,6 +15,7 @@ module Diff = JoyA.Make(struct
     JoyA.field "src" ~label:"Source" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;
     JoyA.field "dest" ~label:"Destination" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;  
   ]
+*)
 
   type json t = <
     action : [`add|`remove] ;
@@ -36,8 +38,9 @@ let apply upgrade namer diff =
 
 module Entity = struct
 
-  module Diff = JoyA.Make(struct
+  module Diff = Fmt.Make(struct
       
+(*
     let edit = JoyA.obj [
       JoyA.field "action" ~label:"Action" (JoyA.variant [
 	JoyA.alternative ~label:"Ajouter" "add" ;
@@ -46,6 +49,7 @@ module Entity = struct
       JoyA.field "dest" ~label:"Destination"
 	(JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;  
     ]
+*)
       
     type json t = <
       action : [`add|`remove] ;

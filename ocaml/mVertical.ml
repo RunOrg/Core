@@ -100,8 +100,9 @@ module Template = struct
     try Some (Hashtbl.find all (ITemplate.decay id))
     with Not_found -> None
 
-  module Edit = JoyA.Make(struct
+  module Edit = Fmt.Make(struct
 
+(*
     let edit = JoyA.obj [
       JoyA.field "name" ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.i18n ()) ;
       JoyA.field "desc" ~label:"Description" (JoyA.string ~autocomplete:MPreConfigNames.i18n ()) ;
@@ -115,6 +116,7 @@ module Template = struct
 	JoyA.alternative ~label:"Cours" "Course"
       ])
     ]
+*)
 
     type json t = <
       name : string ;
@@ -392,8 +394,9 @@ let is_active id =
     | Some vertical -> not (vertical # archive) 
   end
 
-module Edit = JoyA.Make(struct
+module Edit = Fmt.Make(struct
     
+(*
   let edit = JoyA.obj [
     JoyA.field "name" ~label:"Nom" (JoyA.string ~autocomplete:MPreConfigNames.i18n ()) ;
     JoyA.field "desc" ~label:"Description"  (JoyA.string ~editor:`area ()) ;
@@ -445,6 +448,7 @@ module Edit = JoyA.Make(struct
     ])) ;
     JoyA.field "wording" ~label:"Formulation" (JoyA.optional (JoyA.string ())) ;
   ]
+*)
 
   type json t = <
     name : string ;

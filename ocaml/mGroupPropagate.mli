@@ -1,6 +1,6 @@
 (* © 2012 RunOrg *)
 
-module Diff : Ohm.JoyA.FMT with type t = 
+module Diff : Ohm.Fmt.FMT with type t = 
   <
     action : [`add | `remove] ;
     src : string ;
@@ -17,7 +17,7 @@ val apply :
 
 module Entity : sig
 
-  module Diff : Ohm.JoyA.FMT with type t = 
+  module Diff : Ohm.Fmt.FMT with type t = 
     <
       action : [`add | `remove] ;
       dest : string  

@@ -9,16 +9,16 @@ val config        : 'any t -> MEntityConfig.t
 val template      : 'any t -> ITemplate.t
 val instance      : 'any t -> IInstance.t
 val kind          : 'any t -> MEntityKind.t
-val template_name : 'any t -> Ohm.I18n.text
+val template_name : 'any t -> [`label of string | `text of string] 
 val id            : 'any t -> 'any IEntity.id
 val draft         : 'any t -> bool
 val public        : 'any t -> bool
 val grants        : 'any t -> bool
 val group         : 'any t -> IGroup.t 
-val name          : 'any t -> Ohm.I18n.text option
+val name          : 'any t -> [`label of string | `text of string] option
 val on_add        : 'any t -> [ `ignore | `invite | `add ] 
 val picture       : 'any t -> [`GetPic] IFile.id option
-val summary       : 'any t -> Ohm.I18n.text 
+val summary       : 'any t -> [`label of string | `text of string] 
 val date          : 'any t -> string option
 val end_date      : 'any t -> string option
 val admin         : 'any t -> MAccess.t

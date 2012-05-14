@@ -163,6 +163,9 @@ module OrderConfig = struct
   module Data = Data
   module Diff = Diff 
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx) 
+
   let apply = function
     | `Update   c -> return (fun id t data -> return (apply_update c data))
     | `User     u -> return (fun id t data -> return { data with Data.user = Some u })

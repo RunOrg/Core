@@ -69,6 +69,9 @@ module Config = struct
   module PollDB    = CouchDB.Convenience.Database(struct let db = O.db "polling-info" end)
   module ContentDB = CouchDB.Convenience.Database(struct let db = O.db "polling-content" end) 
 
+  type ctx = O.ctx
+  let couchDB ctx = (ctx :> CouchDB.ctx) 
+
   let poll = function 
     | Source.RSS url -> poll_rss url 
 
@@ -76,7 +79,7 @@ end
 
 module Poller = OhmCouchPollUrl.Make(Config) 
 
-let () = Task.Background.register 1 Poller.process
+let () = O.async # periodic 1 (Poller.process 60.0)
 
 (* Forward calls to the poller module. ---------------------------------------- *)
 
