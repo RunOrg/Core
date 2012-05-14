@@ -25,9 +25,11 @@ let login_template =
 
 let () = UrlLogin.def_login begin fun req res -> 
 
-  let  form = OhmForm.create ~template:login_template ~source:OhmForm.empty in
+  let form = OhmForm.create ~template:login_template ~source:OhmForm.empty in
+  let html = Asset_Login_Page.render 
+    (Asset_Form_Clean.render (OhmForm.render form "url")) in 
 
-  CPageLayout.core `Login_Title (OhmForm.render form "url") res
+  CPageLayout.core `Login_Title html res
 
 end
     

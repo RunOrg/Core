@@ -1,0 +1,50 @@
+<div class="clean-form">
+  { this | ohm | verbatim } 
+</div>
+
+<style>
+.clean-form {
+  width: 308px;
+  input[type="text"], input[type="password"] {
+    background-color: transparent;
+    border: 1px solid #CCC;
+    margin: 0;
+    padding: 3px;
+    font-size: 16px;
+    .oxygen();
+    width: 300px;
+    &:focus {
+      background-color: white;
+    }
+  }
+
+  .joy-field-actual {
+    position: absolute;
+    top: 0;
+  }
+
+  .joy-field-label label {
+    padding: 4px 5px;
+    display: block;
+    color: #888;
+  }
+
+  .joy-field {
+    position: relative;
+    margin-bottom: -1px;
+  }
+
+  .joy-buttons {
+    overflow: hidden;
+    margin-top: 10px;
+    margin-right: -3px;
+    button { 
+      float: right;
+      span { 
+        font-size: 16px;
+        padding: 5px 20px;
+      }
+    }
+  }
+}
+</style>
