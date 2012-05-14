@@ -1,0 +1,24 @@
+.runorg-client {
+
+  .-current {
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  } 
+
+  .-info {
+    background: url("/public/icon/shading.png") no-repeat scroll left center transparent;
+    font-size: 14px;
+    margin: auto;
+    padding: 4px 4px 4px 22px;
+    width: 240px;
+  }
+
+  .-used {
+    color: #888;
+    font-size: 12px;
+  } 
+}

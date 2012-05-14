@@ -1,0 +1,7 @@
+.tick 
+{
+    display: block;
+    height: 18px;
+    width: 18px;
+    background: transparent url("/public/icon/tick.png") center center no-repeat;
+}

@@ -1,0 +1,115 @@
+<script type="coffeescript" params="">
+$contents = @$.find ".folder-contents"
+window.### =
+  $empty    : $contents.find ".empty-list"
+  $tbody    : $contents.find "tbody"
+</script>
+
+<div class="span-18 last">
+
+  {{upload:
+  <div class="action-bar -no-underline">
+    <button type="button" class="pretty-button" onclick="###.upload()">
+      {t:folder.upload}
+    </button>
+    <script type="coffeescript" params="title,get,put,cancel">
+###.upload = ->
+  $iframe = $('<iframe/>').attr
+      scrolling:"no"
+      src:put
+      height:108
+      width:390
+    .load ->
+      location = $iframe.contents().get(0).location.href
+      if /confirm/.test location
+        id = /[-a-zA-Z0-9]*\?/.exec(location)[0]
+        id = id.substr 0, id.length-1
+        do $$.runorg.closeDialog
+        check = ->
+          $.post get, {id:id}, (data) ->
+            return unless ###.$tbody.is ':visible'
+            return if data.error 
+            return setTimeout check, 2000 unless data.html 
+            $i = $(data.html).prependTo ###.$tbody
+            do ###.$empty.remove
+            jog.call jog.extend(###,$i) data.code if data.code
+        do check
+      if /cancel/.test location
+        do $$.runorg.closeDialog
+
+  $$.runorg.dialog $iframe, title, [], {}
+    </script>
+  </div>
+  }}
+
+  <table class="folder-contents">
+    <thead>
+      <tr>
+	<td style="width:517px">
+	</td>
+	<td></td>
+	<td></td>
+	<td><img src="/public/icon/star.png"/></td>
+	<td><img src="/public/icon/comments.png"/></td>
+      </tr>
+    </thead>
+    <tbody>
+      {v:items}
+      {v:more}
+    </tbody>
+  </table>
+</div>
+
+<style type="less">
+.folder-contents {
+
+  width: 100%;
+  border-collapse: collapse;
+
+  td {
+    border: 1px solid #CCC;
+    text-align: center;
+    padding: 2px 8px;
+  }
+
+  thead td {
+    background: url("/public/css/jqueryui-aristo/images/the_gradient.gif") 
+                repeat-x center top #DDD;
+    padding: 2px;
+
+    a {
+      display: block;
+      text-align: left;
+
+      img {
+        vertical-align: top; 
+      }
+    }
+
+    > img {
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .-left {
+    line-height: 16px;
+    padding: 2px 0;
+    text-align: left;
+  }
+
+  .-details {
+    font-size: 10px;
+    display: block;
+    color: #666;
+    img { margin: -4px 0 }
+  }
+
+  .-title {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: left;
+    display: block;
+  }
+}
+</style>

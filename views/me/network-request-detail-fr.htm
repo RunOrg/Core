@@ -1,0 +1,41 @@
+<div class="span-16 prepend-4 append-4 append-bottom prepend-top last">
+
+  <div class="span-12 prepend-2 append-2 last append-bottom wall-item">
+    <span class="-pic"><img src="{v:pic}"></span>
+    <div class="-body">
+      <strong>{v:contact}</strong>&ensp;<span class="-role">({v:asso})</span>
+      <div class="-text"><p>{v:text}</p></div>
+    </div>  
+  </div>
+
+  <div class="centered-message">
+    <p class="bottom">
+      {v:contact} souhaite ajouter <strong>{v:contacted}</strong> au réseau de <strong>{v:asso}</strong>.
+    </p>
+  </div>
+
+  <div class="span-16 last">
+    <div class="joy-fields"></div>
+  </div>
+
+  <div class="span-3 prepend-13 prepend-top last">
+    <button type="submit" class="pretty-button green-button typwidth">{t:ok}</button>
+  </div> 
+
+</div>
+
+{{create:{t:me.network.request.create} <span class="mini-mugshot">{v:name}</span>}}
+{{bind:{t:me.network.request.bind}<span class="mini-mugshot"><img src="{v:pic}"/> {v:name}</span>}}
+
+<style type="less">
+
+.centered-message {
+  clear: both;
+  margin: 0 0 1.5em 0;
+  border: 1px solid #CCC;
+  padding: 10px;
+  background-color: #EEE;
+  text-align: center;
+}
+
+</style>

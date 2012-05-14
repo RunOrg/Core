@@ -1,0 +1,66 @@
+<div class="span-16 prepend-1 append-1 labels-right last">
+  {v:member-create.begin}
+  <div class="span-4 label">{v:member-create.firstname.label}</div>
+  <div class="span-11 prepend-1 last required large-input">{v:member-create.firstname.input}</div>
+  <div class="span-11 prepend-5 last">{v:member-create.firstname.error}</div>
+  
+  <div class="span-4 label">{v:member-create.lastname.label}</div>
+  <div class="span-11 prepend-1 last required large-input">{v:member-create.lastname.input}</div>
+  <div class="span-11 prepend-5 last">{v:member-create.lastname.error}</div>
+
+  <div class="span-4 label">{v:member-create.email.label}</div>
+  <div class="span-11 prepend-1 last large-input">{v:member-create.email.input}</div>
+  <div class="span-11 prepend-5 last">{v:member-create.email.error}</div>
+
+  <div class="span-4 label">{v:member-create.gender.label}</div>
+  <div class="span-11 prepend-1 last">{v:member-create.gender.input}</div>
+  <div class="span-11 prepend-5 last">{v:member-create.gender.error}</div> 
+
+  <div class="span-16 last">
+  {i:show-details}
+  <div>    
+    <div class="span-4 label">{v:member-create.pic.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.pic.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.pic.error}</div>
+  
+    <div class="span-4 label">{v:member-create.birthdate.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.birthdate.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.birthdate.error}</div>
+
+    <div class="span-4 label">{v:member-create.phone.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.phone.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.phone.error}</div>  
+    
+    <div class="span-4 label">{v:member-create.cellphone.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.cellphone.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.cellphone.error}</div> 
+    
+    <div class="span-4 label">{v:member-create.address.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.address.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.address.error}</div> 
+    
+    <div class="span-4 label">{v:member-create.zipcode.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.zipcode.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.zipcode.error}</div> 
+    
+    <div class="span-4 label">{v:member-create.city.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.city.input}</div>
+    <div class="span-11 prepend-5 last">{v:member-create.city.error}</div> 
+    
+    <div class="span-4 label">{v:member-create.country.label}</div>
+    <div class="span-11 prepend-1 last">{v:member-create.country.input}</div>
+    <div class="span-11 prepend-5 last append-bottom">{v:member-create.country.error}</div>     
+  </div>
+  
+  <hr/>
+  <div class="span-4">
+    <div class="required-legend">{t:required}</div>
+  </div>
+  <div class="span-3 prepend-6">
+    <button type="submit" class="pretty-button typwidth">{t:create}</button>
+  </div>
+  <div class="span-3 last">
+    <a class="pretty-button typwidth" href="{v:cancel}">{t:cancel}</a>
+  </div>
+  {v:member-create.end}
+</div>

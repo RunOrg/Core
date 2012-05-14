@@ -1,0 +1,11 @@
+table.compacted {
+
+  td {
+    border: 1px solid #CCCCCC;
+    padding: 1px 3px;
+    vertical-align: middle;
+  }
+
+  border-collapse: collapse;
+  width: 100%;
+}

@@ -1,0 +1,29 @@
+.go-button, .see-button 
+{
+  background: url("/public/img/green_gradient.png") repeat scroll bottom center transparent;
+  border: 1px solid #999;
+  border-radius: 5px;
+  color: white;
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  height: 60px;
+  line-height: 58px;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 1px 1px #444;
+
+  &:hover {
+    color: white;
+    text-decoration: none;
+    background: url("/public/img/green_gradient.png") repeat scroll top center transparent;
+    border-color: #BBB;
+  }
+}
+
+.see-button, .see-button:hover {
+  color: #666;
+  text-shadow: 0 1px 1px #EEE;
+  background-image: url("/public/css/jqueryui-aristo/images/the_gradient.gif") ;
+}

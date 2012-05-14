@@ -1,0 +1,54 @@
+<div id="{v:id}" class="wall-item-chat">
+  <h4>{t:item.chat.title}</h4>
+  <div class="-avatars">
+    {{avatars:<a class="minitip -s" title="{v:name}">
+      <img src="{v:pic}"/>
+    </a>}}
+  </div>
+  <div class="tool">
+    <img src="/public/icon/comments.png">
+    {v:date} &middot; 
+    {v:participants} {t:item.chat.participants} &middot; 
+    {v:lines} {t:item.chat.lines} &middot; 
+    <a href="{v:url}">{v:label}</a>
+  </div>
+</div>
+
+<style type="less">
+.wall-item-chat {
+
+  h4 {
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: #BBB;
+    font-weight: bold;
+  }
+
+  .-avatars {
+    width: 418px;
+    height: 38px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+    a { 
+
+      float: left; 
+      margin-right: 8px;
+
+      &, img {
+        height: 38px;
+        width: 38px;
+        display: block
+      }
+
+    } 
+  }
+
+  width: 410px;
+  margin-left: auto;
+
+  padding-bottom: 10px;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 12px;
+}
+</style>

@@ -1,0 +1,1340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sondage</title>
+
+<link media="screen, projection" type="text/css" href="/public/css/reset.css" rel="stylesheet">
+<link media="screen, projection" type="text/css" href="http://www.runorg.com/public/css/jqueryui-aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet">
+<link media="screen, projection" type="text/css" href="/public/css/sondage.css" rel="stylesheet">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(function(){
+
+        function showForInput() {
+		var name = $(this).attr('name') || 'nil';
+		var value = $(this).attr('value');
+		
+                if ($(this).is(':checked')) 
+                {
+		  $('.'+name+':not(.answer-'+value+')').css('display','none');
+                  $('.'+name+'.answer-'+value).css('display','block');
+                }
+                else
+                {
+		  $('.'+name).css('display','none');
+                }
+        }
+
+        function showForSelect() {
+                var name = $(this).attr('name') || 'nil';
+                var value = $(this).val();
+
+		$('.'+name+':not(.answer-'+value+')').css('display','none');
+                $('.'+name+'.answer-'+value).css('display','block');
+        }
+
+        function tagAnswered()
+        {
+		var unanswered = 0; 
+			$('.page:visible').find('.answer:visible').each(function(){ 
+			  var answered = false, ignanswered = false, found = 0; 
+			  $(this).find('input, select').each(function(){ 
+				if ($(this).is(':visible')) {
+                                  if ($(this).is(':checkbox:checked') || $(this).is(':radio:checked') || !$(this).is(':radio') && !$(this).is(':checkbox') && $(this).val()) { 
+                                    if ($(this).is('.ignore')) ignanswered = true;
+                                    else answered = true; 
+                                  }
+                                  if (!$(this).is('.ignore')) ++found;
+                                }                               
+			  }); 
+			  $(this).toggleClass('is-ok',answered || found == 0 && ignanswered); 
+			  if (found > 0 && !answered) ++unanswered;
+			});
+		
+		/* Système de pages et de barre d'avancement */
+		$('.page:visible .nextpage').button({disabled:unanswered>0});
+        }
+
+        function upload()
+        {							
+		/* Envoyer sur le serveur */					
+		var name = $(this).attr('name'), value = null;
+		
+		/* Tableau */
+		if ($(this).is(':radio, :checkbox')) {
+			value = $('input[name='+name+']:checked').attr('value');			
+		}
+		else {
+			value = $(this).val();
+		}
+		
+		$.post('{v:ajax-url}',{name:name,value:value});
+		
+		/* Déterminer les éléments à afficher */
+                tagAnswered();
+        }
+
+        function clickForInput() { showForInput.call(this); upload.call(this); }
+        function clickForSelect() { showForSelect.call(this); upload.call(this); }
+	
+	$('.page').hide().each(function(){              
+
+                $('<button type="button" class="nextpage" disabled="disabled">Page Suivante</button>')
+                .click(function(){
+                  var total = $('.page').length - 1;
+                  var num   = $(this).closest('.page').prevAll('.page').length + 1;
+                  $('#thebar div').animate({width:(num/total * 100)+'%'},2000);
+                  $(this).closest('.page').hide().next().show();
+                  $(document).scrollTop(0);
+                  tagAnswered();
+                }).appendTo($(this).children('.buttons'));
+  
+                $('<button type="button" class="prevpage">Page précédente</button>')
+                .click(function(){
+                   var total = $('.page').length - 1;
+                   var num   = $(this).closest('.page').prevAll('.page').length - 1;
+                   $('#thebar div').animate({width:(num/total * 100)+'%'},2000);                   
+                   $(this).closest('.page').hide().prev().show();
+                   $(document).scrollTop(0);
+                   tagAnswered();
+                }).appendTo($(this).children('.buttons'));
+
+	});
+	
+        $('.page:first .prevpage').remove();
+	$('.page:first').show();
+	$('.page:last .nextpage').remove();
+        $('.page:first .nextpage').addClass('question-1 answer-oui');
+
+        $('button[type=submit]').addClass('nextpage');
+        $('button').button();
+
+        setTimeout(function(){
+          if ($.browser.msie) {
+            $('input:radio, input:checkbox').click(clickForInput).filter(':checked').each(showForInput);
+            $('input:not(:radio):not(:checkbox)').change(clickForInput);
+          }
+          else $('input').change(clickForInput).filter(':checked').each(showForInput);
+          $('select').change(clickForSelect).each(showForSelect);
+          tagAnswered();
+        },1000);
+	
+	$('#thebar').progressbar({value:0});
+});
+</script>
+</head>
+
+<body>
+<div id="progress">
+<div style="margin:auto;width:279px"><div id="thebar"></div></div>
+</div>
+
+<div id="everything">
+<form method="post" action="{v:final-url}">
+<div id="page1" class="page">
+<h1>Bienvenue</h1>
+<div id="intro">
+<h1 align="center">Votre avis nous intéresse !</h1>
+<p>Il n’existe aujourd’hui aucune étude portant spécifiquement sur la situation et les besoins des associations en communication et en outils numériques.<br />
+C’est pourquoi, dans le cadre du projet RunOrg, nous organisons un sondage traitant de ces questions.</p>
+<p>Ce sondage a pour but de mieux connaître vos attentes en termes de services et de moyens de communications pouvant être proposés par les associations  (club de sport, association culturelle, syndicat, association d'aide aux personnes, association de défense d'intérêts (consommateurs, parents d'élèves, patrimoine, etc.), association professionnelle, association religieuse, etc.</p>
+<p>Cela prendra 10 minutes environ.<br />
+Vos réponses resteront anonymes et confidentielles. Elles seront traitées de façon globale et ne seront utilisées qu’à des fins statistiques.</p>
+<p>Les résultats de cette étude seront publics et disponibles gratuitement. Afin de les recevoir, nous vous invitons à laisser votre adresse email a la fin de ce sondage.</p>
+<p>Si vous êtes responsable d'association et que les réponses de vos membres à ce sondage pourraient vous intéresser (elles seront anonymisées) : écrivez-nous à contact@runorg.com et nous vous enverrons un lien spécial à leur diffuser.</p>
+<p>L'équipe RunOrg</p>
+</div>
+
+<div class="answer">
+<p>Etes-vous membre ou ancien membre d'une association ? <span class="petit">(club de sport, association culturelle, syndicat, association d'aide aux personnes, association de défense d'intérêts, association professionnelle, association religieuse, etc.)</span></p>
+<input type="radio" name="question-1" value="oui" id="r1" /><label for="r1"> Oui</label>
+<input type="radio" name="question-1" value="non" id="r2" /><label for="r2"> Non</label>
+</div>
+
+<div class="question-1 answer-non" style="display:none">
+<p>Nous vous remercions de l'intérêt que vous nous avez porté, malheureusement vous ne correspondez pas au profil que nous recherchons pour ce sondage.</p>
+<p><a href="http://www.runorg.com/">Retourner au site RunOrg</a></p>
+</div>
+<div class="question-1 answer-oui" style="display:none">
+<p style="color:#F36">Merci de répondre aux questions suivantes en prenant en compte uniquement l'association dans laquelle vous êtes le plus impliqué, ou à laquelle vous consacrez ou avez consacré le plus de temps.</p>
+<p>Vis-à-vis de cette association...</p>
+<div class="answer">
+<input type="radio" name="question-2" value="respo" id="r3" /> <label for="r3">Vous êtes en charge de responsabilité</label><br />
+<input type="radio" name="question-2" value="exrespo" id="r4" /> <label for="r4">Vous avez été en charge de responsabilité</label><br />
+<input type="radio" name="question-2" value="membre" id="r5" /> <label for="r5">Vous êtes membre</label><br />
+<input type="radio" name="question-2" value="exmembre" id="r6" /> <label for="r6">Vous avez été membre</label><br />
+</div>
+
+</div>
+<div class="buttons"></div>
+</div>
+
+<div id="page2" class="page">
+<h1>Votre association</h1>
+<p style="color:#F36">RAPPEL : Merci de répondre aux questions suivantes en prenant en compte uniquement l'association à laquelle vous consacrez ou avez consacré le plus de temps.</p>
+
+<div class="answer">
+<label for="r11"><p>Nom de l'association <span class="facultatif">(facultatif)</span></p></label>
+<input type="text" class="textinput ignore" name="question-6" id="r11" />
+</div>
+
+<div class="answer">
+<p>Secteur</p>
+<select name="question-7" >
+<option value="">Sélectionnez</option>
+<option value="a">Action caritative et humanitaire</option>
+<option value="b">Action sociale/Santé</option>
+<option value="c">Défense des droits et des causes</option>
+<option value="d">Education/Formation/Insertion</option>
+<option value="e">Sports</option>
+<option value="f">Culture</option>
+<option value="g">Loisirs et vie sociale</option>
+<option value="h">Economie, développement local</option>
+<option value="i">Religion</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-a hide">
+<p>Sous-secteur</p>
+<select name="question-7a">
+<option class="select-7a" value="">Sélectionnez</option>
+<option class="select-7a" value="1">Action nationale/locale</option>
+<option class="select-7a" value="2">Action internationale</option>
+<option class="select-7a" value="3">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-b hide">
+<p>Sous-secteur</p>
+<select name="question-7b">
+<option class="select-7b" value="">Sélectionnez</option>
+<option class="select-7b" value="4">Etablissements sociaux ou médico-sociaux</option>
+<option class="select-7b" value="5">Action en faveur des familles</option>
+<option class="select-7b" value="6">Action en faveur des personnes âgées</option>
+<option class="select-7b" value="7">Action en faveur des jeunes et des adolescents</option>
+<option class="select-7b" value="8">Etablissements de type hospitalier</option>
+<option class="select-7b" value="9">Associations de soins à domicile</option>
+<option class="select-7b" value="10">Associations de malades</option>
+<option class="select-7b" value="11">Associations de prévention, sensibilisation, ou d'éducation à la santé</option>
+<option class="select-7b" value="12">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-c hide">
+<p>Sous-secteur</p>
+<select name="question-7c">
+<option class="select-7c" value="">Sélectionnez</option>
+<option class="select-7c" value="13">Associations de quartier</option>
+<option class="select-7c" value="14">Associations de consommateurs</option>
+<option class="select-7c" value="15">Défense de l'environnement</option>
+<option class="select-7c" value="16">Défense des minorités</option>
+<option class="select-7c" value="17">Syndicats et associations professionnelles</option>
+<option class="select-7c" value="18">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-d hide">
+<p>Sous-secteur</p>
+<select name="question-7d">
+<option class="select-7d" value="">Sélectionnez</option>
+<option class="select-7d" value="19">Etablissements d'enseignement</option>
+<option class="select-7d" value="20">Associations d'aide à l'insertion et aux chômeurs</option>
+<option class="select-7d" value="21">Association de parents d'élèves</option>
+<option class="select-7d" value="22">Association de formation</option>
+<option class="select-7d" value="23">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-e hide">
+<p>Sous-secteur</p>
+<select name="question-7e">
+<option class="select-7e" value="">Sélectionnez</option>
+<option class="select-7e" value="24">Sports collectifs</option>
+<option class="select-7e" value="25">Sports individuels</option>
+<option class="select-7e" value="26">Association de chasse et pêche</option>
+<option class="select-7e" value="27">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-f hide">
+<p>Sous-secteur</p>
+<select name="question-7f">
+<option class="select-7f" value="">Sélectionnez</option>
+<option class="select-7f" value="28">Gestion d'équipement culturel</option>
+<option class="select-7f" value="29">Organisation et production de spectacles vivants</option>
+<option class="select-7f" value="30">Préservation du patrimoine culturel</option>
+<option class="select-7f" value="31">Clubs culturels spécialisés (danse, musique, etc.)</option>
+<option class="select-7f" value="32">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-g hide">
+<p>Sous-secteur</p>
+<select name="question-7g">
+<option class="select-7g" value="">Sélectionnez</option>
+<option class="select-7g" value="33">Gestion d'équipement socio-culturel</option>
+<option class="select-7g" value="34">Associations de loisirs spécialisés ou polyvalents</option>
+<option class="select-7g" value="35">Les amicales</option>
+<option class="select-7g" value="36">Associations d'étudiants</option>
+<option class="select-7g" value="37">Associations d'amitiés internationales</option>
+<option class="select-7g" value="38">Tourisme social</option>
+<option class="select-7g" value="39">Association d'anciens élèves</option>
+<option class="select-7g" value="40">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-h hide">
+<p>Sous-secteur</p>
+<select name="question-7h">
+<option class="select-7h" value="">Sélectionnez</option>
+<option class="select-7h" value="41">Syndicats d'initiative</option>
+<option class="select-7h" value="42">Agences de développement local</option>
+<option class="select-7h" value="43">Promotion du tourisme et de la vie locale</option>
+<option class="select-7h" value="44">Gestion des services locaux</option>
+<option class="select-7h" value="45">Gestion d'une activité économique</option>
+<option class="select-7h" value="46">Développement du commerce équitable ou de la consommation éthique</option>
+<option class="select-7h" value="47">Autres</option>
+</select>
+</div>
+
+<div class="answer question-7 answer-i hide">
+<p>Sous-secteur</p>
+<select name="question-7i">
+<option class="select-7i" value="">Sélectionnez</option>
+<option class="select-7i" value="48">Association à but religieux</option>
+<option class="select-7i" value="49">Autres</option>
+</select>
+</div>
+
+<div class="answer">
+<label for="r12"><p>Objectifs et activités <span class="facultatif">(facultatif)</span></p></label>
+<input type="text" class="textinput ignore" name="question-8" id="r12" />
+</div>
+
+<div class="answer">
+<p>Nombre de membres</p>
+<table class="choix">
+<tr>
+    <td><input type="radio" name="question-10" value="moins50" id="r14" /><label for="r14"> Moins de 50</label></td>
+    <td><input type="radio" name="question-10" value="151a250" id="r17" /><label for="r17"> 151 à 250</label></td>
+    <td><input type="radio" name="question-10" value="1001a2000" id="r20" /><label for="r20"> 1001 à 2000</label></td>
+    <td><input type="radio" name="question-10" value="10001a20000" id="r23" /><label for="r23"> 10001 à 20000</label></td>
+    <td><input type="radio" name="question-10" value="plus100000" id="r26" /><label for="r26"> Plus 100000</label></td>
+</tr>
+<tr>
+    <td><input type="radio" name="question-10" value="50a100" id="r15" /><label for="r15"> 50 à 100</label></td>
+    <td><input type="radio" name="question-10" value="251a500" id="r18" /><label for="r18"> 251 à 500</label></td>
+    <td><input type="radio" name="question-10" value="2001a5000" id="r21" /><label for="r21"> 2001 à 5000</label></td>
+    <td><input type="radio" name="question-10" value="20001a50000" id="r24" /><label for="r24"> 20001 à 50000</label></td>
+    <td><input type="radio" name="question-10" value="nsp" id="r1026" /><label for="r1026"> Je ne sais pas</label></td>
+</tr>
+<tr>
+    <td><input type="radio" name="question-10" value="101a150" id="r16" /><label for="r16"> 101 à 150</label></td>
+    <td><input type="radio" name="question-10" value="501a1000" id="r19" /><label for="r19"> 501 à 1000</label></td>
+    <td><input type="radio" name="question-10" value="5001a10000" id="r22" /><label for="r22"> 5001 à 10000</label></td>
+    <td><input type="radio" name="question-10" value="50001a100000" id="r25" /><label for="r25"> 50001 à 100000</label></td>
+</tr>
+</table>
+</div>
+
+<div class="answer">
+<p>Nombre de responsables</p>
+<table class="choix">
+<tr>
+	<td><input type="radio" name="question-11" value="0" id="r27" /><label for="r27"> 0</label></td>
+    <td><input type="radio" name="question-11" value="6a10" id="r30" /><label for="r30"> 6 à 10</label></td>
+    <td><input type="radio" name="question-11" value="51a100" id="r33" /><label for="r33"> 51 à 100</label></td>
+    <td><input type="radio" name="question-11" value="501a1000" id="r36" /><label for="r36"> 501 à 1000</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-11" value="1a2" id="r28" /><label for="r28"> 1 à 2</label></td>
+    <td><input type="radio" name="question-11" value="11a20" id="r31" /><label for="r31"> 11 à 20</label></td>
+    <td><input type="radio" name="question-11" value="101a200" id="r34" /><label for="r34"> 101 à 200</label></td>
+    <td><input type="radio" name="question-11" value="plus1000" id="r37" /><label for="r37"> Plus de 1000</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-11" value="3a5" id="r29" /><label for="r29"> 3 à 5</label></td>
+    <td><input type="radio" name="question-11" value="21a50" id="r32" /><label for="r32"> 21 à 50</label></td>
+    <td><input type="radio" name="question-11" value="201a500" id="r35" /><label for="r35"> 201 à 500</label></td>
+    <td><input type="radio" name="question-11" value="nsp" id="r1035" /><label for="r1035"> Je ne sais pas</label></td>
+</tr>
+</table>
+</div>
+
+<div class="answer">
+<p>Nombre de salariés <span class="petit">(professeurs, administratifs, etc.)</span></p>
+<table class="choix">
+<tr>
+	<td><input type="radio" name="question-12" value="0" id="r38" /> <label for="r38">0</label></td>
+    <td><input type="radio" name="question-12" value="6a10" id="r41" /> <label for="r41">6 à 10</label></td>
+    <td><input type="radio" name="question-12" value="51a100" id="r44" /> <label for="r44">51 à 100</label></td>
+    <td><input type="radio" name="question-12" value="501a1000" id="r47" /> <label for="r47">501 à 1000</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-12" value="1a2" id="r39" /> <label for="r39">1 à 2</label></td>
+    <td><input type="radio" name="question-12" value="11a20" id="r42" /> <label for="r42">11 à 20</label></td>
+    <td><input type="radio" name="question-12" value="101a200" id="r45" /> <label for="r45">101 à 200</label></td>
+    <td><input type="radio" name="question-12" value="plus1000" id="r48" /> <label for="r48">Plus de 1000</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-12" value="3a5" id="r40" /> <label for="r40">3 à 5</label></td>
+    <td><input type="radio" name="question-12" value="21a50" id="r43" /> <label for="r43">21 à 50</label></td>
+    <td><input type="radio" name="question-12" value="201a500" id="r46" /> <label for="r46">201 à 500</label></td>
+    <td><input type="radio" name="question-12" value="nsp" id="r1046" /> <label for="r1046">Je ne sais pas</label></td>
+</tr>
+</table>
+</div>
+
+<div class="answer">
+<p>Votre association organise-t-elle des événements avec du public ? <span class="petit">(matchs, spectacles, rencontres, visites, manifestations, etc.)</span></p>
+<input type="radio" name="question-13" value="oui" id="r49" /> <label for="r49">Oui</label>
+<input type="radio" name="question-13" value="non" id="r50" /> <label for="r50">Non</label>
+<input type="radio" name="question-13" value="nsp" id="r51" /> <label for="r51">Je ne sais pas</label>
+</div>
+
+<div class="answer">
+<p>Votre association est-elle rattachée à une fédération ?</p>
+<input type="radio" name="question-14" value="oui" id="r52" /> <label for="r52">Oui</label>
+<input type="radio" name="question-14" value="non" id="r53" /> <label for="r53">Non</label>
+<input type="radio" name="question-14" value="nsp" id="r54" /> <label for="r54">Je ne sais pas</label>
+</div>
+
+<div class="buttons"></div>
+</div>
+
+<div id="page3" class="page">
+<br />
+<p style="color:#F36">Merci de ne répondre aux questions suivantes qu'en fonction de l'association que vous venez de définir.</p>
+
+<h1>Nouvelles technologies</h1>
+
+<h2>Site Internet</h2>
+
+<div class="answer">
+<p>Votre association dispose-t-elle d'un site Internet ?</p>
+<input type="radio" name="question-15" value="oui" id="r55" /> <label for="r55">Oui</label>
+<input type="radio" name="question-15" value="non" id="r56" /> <label for="r56">Non</label>
+</div>
+
+<div class="answer question-15 answer-oui hide">
+<p>Si oui, Êtes-vous satisfait du site Internet de votre association ?</p>
+<input type="radio" name="question-16" value="tresatisfait" id="r57" /> <label for="r57">Très satisfait</label>
+<input type="radio" name="question-16" value="plutsatisfait" id="r58" /> <label for="r58">Plutôt satisfait</label>
+<input type="radio" name="question-16" value="plutpassatisfait" id="r59" /> <label for="r59">Plutôt pas satisfait</label>
+<input type="radio" name="question-16" value="passatisfait" id="r59" /> <label for="r59">Pas du tout satisfait</label>
+</div>
+
+<div class="answer question-15 answer-oui hide">
+<label for="r60"><p>Adresse du site Internet <span class="facultatif">(facultatif)</span></p></label>
+<input type="text" name="question-17" id="r60" class="textinput ignore" />
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer question-15 answer-oui hide">
+<p>Combien de personnes mettent à jour votre site Internet ?</p>
+<table class="choix">
+<tr>
+	<td><input type="radio" name="question-18" value="0" id="r61" /> <label for="r61">Aucune</label></td>
+    <td><input type="radio" name="question-18" value="5a9" id="r64" /> <label for="r64">5 à 9</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-18" value="1ou2" id="r62" /> <label for="r62">1 ou 2</label></td>
+    <td><input type="radio" name="question-18" value="plus10" id="r65" /> <label for="r65">Plus de 10</label></td>
+</tr>
+<tr>
+	<td><input type="radio" name="question-18" value="3ou4" id="r63" /> <label for="r63">3 ou 4</label></td>
+    <td><input type="radio" name="question-18" value="nsp" id="r66" /> <label for="r66">Je ne sais pas</label></td>
+</tr>
+</table>
+</div>
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<p>Sélectionnez la situation qui se rapproche le plus de la vôtre</p>
+<label><input type="radio" name="question-19" value="1" />Nous disposons d'un site Internet à jour et facile à mettre à jour.</label><br />
+<label><input type="radio" name="question-19" value="2" />Nous avons un site Internet à jour, mais il est complexe à mettre à jour.</label><br />
+<label><input type="radio" name="question-19" value="3" />Nous avons un site Internet, mais nous avons beaucoup de mal à le mettre à jour.</label><br />
+<label><input type="radio" name="question-19" value="4" />Nous avions un site Internet, mais nous n'avons plus personne pour s'en occuper.</label><br />
+<label><input type="radio" name="question-19" value="5" />Nous sommes en train de mettre en place un site Internet.</label><br />
+<label><input type="radio" name="question-19" value="6" />Nous désirons un site Internet mais nous n'avons pas de compétence en interne pour le créer et le maintenir.</label><br />
+<label><input type="radio" name="question-19" value="7" />Nous désirons un site Internet mais nous n'avons pas de budget pour l'héberger.</label><br />
+<label><input type="radio" name="question-19" value="8" />Nous ne désirons pas de site Internet ou cela n'a pas d'intérêt pour notre activité.</label><br />
+<label><input type="radio" name="question-19" value="9" />Je ne sais pas.</label>
+</div>
+</div>
+
+<div class="answer">
+<p>Votre association dispose-t-elle de supporters, amis, contacts, etc. participant régulièrement à vos événements ?</p>
+<input type="radio" name="question-20" value="oui" id="r67" /> <label for="r67">oui</label>
+<input type="radio" name="question-20" value="non" id="r68" /> <label for="r68">non</label>
+</div>
+
+<div class="buttons"></div>
+</div>
+
+<div id="page4" class="page">
+<h1>Communication</h1>
+<p>Comment percevez-vous les éléments suivants au sein de votre association ?</p>
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Efficace</td>
+<td>Plutôt efficace</td>
+<td>Plutôt inefficace</td>
+<td>Inefficace</td>
+<td>Je ne sais pas</td>
+</tr>
+</thead>
+
+<tr class="answer"><th>La diffusion de l'information auprès de tous les membres</th>
+<td><input type="radio" name="question-21" value="eff" id="question-21-eff" /> <label for="question-21-eff">Efficace</label></td>
+<td><input type="radio" name="question-21" value="plueff" id="question-21-plueff" /> <label for="question-21-plueff">Plutôt efficace</label></td>
+<td><input type="radio" name="question-21" value="pluine" id="question-21-pluine" /> <label for="question-21-pluine">Plutôt inefficace</label></td>
+<td><input type="radio" name="question-21" value="ine" id="question-21-ine" /> <label for="question-21-ine">Inefficace</label></td>
+<td><input type="radio" name="question-21" value="nsp" id="question-21-nsp" /> <label for="question-21-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>La diffusion de l'information auprès de tous les responsables</th>
+<td><input type="radio" name="question-22" value="eff" id="question-22-eff" /> <label for="question-22-eff">Efficace</label></td>
+<td><input type="radio" name="question-22" value="plueff" id="question-22-plueff" /> <label for="question-22-plueff">Plutôt efficace</label></td>
+<td><input type="radio" name="question-22" value="pluine" id="question-22-pluine" /> <label for="question-22-pluine">Plutôt inefficace</label></td>
+<td><input type="radio" name="question-22" value="ine" id="question-22-ine" /> <label for="question-22-ine">Inefficace</label></td>
+<td><input type="radio" name="question-22" value="nsp" id="question-22-nsp" /> <label for="question-22-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>La remontée des informations depuis les membres vers les responsables</th>
+<td><input type="radio" name="question-23" value="eff" id="question-23-eff" /> <label for="question-23-eff">Efficace</label></td>
+<td><input type="radio" name="question-23" value="plueff" id="question-23-plueff" /> <label for="question-23-plueff">Plutôt efficace</label></td>
+<td><input type="radio" name="question-23" value="pluine" id="question-23-pluine" /> <label for="question-23-pluine">Plutôt inefficace</label></td>
+<td><input type="radio" name="question-23" value="ine" id="question-23-ine" /> <label for="question-23-ine">Inefficace</label></td>
+<td><input type="radio" name="question-23" value="nsp" id="question-23-nsp" /> <label for="question-23-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>La circulation de l'information entre les responsables</th>
+<td><input type="radio" name="question-24" value="eff" id="question-24-eff" /> <label for="question-24-eff">Efficace</label></td>
+<td><input type="radio" name="question-24" value="plueff" id="question-24-plueff" /> <label for="question-24-plueff">Plutôt efficace</label></td>
+<td><input type="radio" name="question-24" value="pluine" id="question-24-pluine" /> <label for="question-24-pluine">Plutôt inefficace</label></td>
+<td><input type="radio" name="question-24" value="ine" id="question-24-ine" /> <label for="question-24-ine">Inefficace</label></td>
+<td><input type="radio" name="question-24" value="nsp" id="question-24-nsp" /> <label for="question-24-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>La circulation de l'information entre les membres</th>
+<td><input type="radio" name="question-25" value="eff" id="question-25-eff" /> <label for="question-25-eff">Efficace</label></td>
+<td><input type="radio" name="question-25" value="plueff" id="question-25-plueff" /> <label for="question-25-plueff">Plutôt efficace</label></td>
+<td><input type="radio" name="question-25" value="pluine" id="question-25-pluine" /> <label for="question-25-pluine">Plutôt inefficace</label></td>
+<td><input type="radio" name="question-25" value="ine" id="question-25-ine" /> <label for="question-25-ine">Inefficace</label></td>
+<td><input type="radio" name="question-25" value="nsp" id="question-25-nsp" /> <label for="question-25-nsp">Je ne sais pas</label></td>
+</tr>
+
+</table>
+
+<br />
+
+<p>Sélectionnez les moyens de communication utilisés au sein de votre association, et indiquez à quelle fréquence ils sont employés</p>
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Plus d'une fois par jour</td>
+<td>Au moins une fois par semaine</td>
+<td>Au moins une fois par mois</td>
+<td>Au moins une fois par trimestre</td>
+<td>Au moins une fois par semestre</td>
+<td>Au moins une fois par an</td>
+</tr>
+</thead>
+
+<tr class="answer"><th><input type="checkbox" name="question-26" value="reunions" id="r94" class="ignore" /><label for="r94"> Les réunions</label></th>
+<td><input type="radio" name="question-26a" value="jour" id="question-26a-jour" class="question-26 answer-reunions hide" /> <label for="question-26a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-26a" value="semaine" id="question-26a-semaine" class="question-26 answer-reunions hide" /> <label for="question-26a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-26a" value="mois" id="question-26a-mois" class="question-26 answer-reunions hide" /> <label for="question-26a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-26a" value="trimestre" id="question-26a-trimestre" class="question-26 answer-reunions hide" /> <label for="question-26a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-26a" value="semestre" id="question-26a-semestre" class="question-26 answer-reunions hide" /> <label for="question-26a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-26a" value="an" id="question-26a-an" class="question-26 answer-reunions hide" /> <label for="question-26a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><input type="checkbox" name="question-27" value="emails" id="r101" class="ignore" /><label for="r101"> Les emails</label></th>
+<td><input type="radio" name="question-27a" value="jour" id="question-27a-jour" class="question-27 answer-emails hide" /> <label for="question-27a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-27a" value="semaine" id="question-27a-semaine" class="question-27 answer-emails hide" /> <label for="question-27a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-27a" value="mois" id="question-27a-mois" class="question-27 answer-emails hide" /> <label for="question-27a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-27a" value="trimestre" id="question-27a-trimestre" class="question-27 answer-emails hide" /> <label for="question-27a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-27a" value="semestre" id="question-27a-semestre" class="question-27 answer-emails hide" /> <label for="question-27a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-27a" value="an" id="question-27a-an" class="question-27 answer-emails hide" /> <label for="question-27a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><input type="checkbox" name="question-28" value="mailing" id="r108" class="ignore" /><label for="r108"> Les mailings lists/emails groupes</label></th>
+<td><input type="radio" name="question-28a" value="jour" id="question-28a-jour" class="question-28 answer-mailing hide" /> <label for="question-28a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-28a" value="semaine" id="question-28a-semaine" class="question-28 answer-mailing hide" /> <label for="question-28a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-28a" value="mois" id="question-28a-mois" class="question-28 answer-mailing hide" /> <label for="question-28a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-28a" value="trimestre" id="question-28a-trimestre" class="question-28 answer-mailing hide" /> <label for="question-28a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-28a" value="semestre" id="question-28a-semestre" class="question-28 answer-mailing hide" /> <label for="question-28a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-28a" value="an" id="question-28a-an" class="question-28 answer-mailing hide" /> <label for="question-28a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><input type="checkbox" name="question-29" value="courriers" id="r115" class="ignore" /><label for="r115"> Les courriers</label></th>
+<td><input type="radio" name="question-29a" value="jour" id="question-29a-jour" class="question-29 answer-courriers hide" /> <label for="question-29a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-29a" value="semaine" id="question-29a-semaine" class="question-29 answer-courriers hide" /> <label for="question-29a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-29a" value="mois" id="question-29a-mois" class="question-29 answer-courriers hide" /> <label for="question-29a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-29a" value="trimestre" id="question-29a-trimestre" class="question-29 answer-courriers hide" /> <label for="question-29a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-29a" value="semestre" id="question-29a-semestre" class="question-29 answer-courriers hide" /> <label for="question-29a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-29a" value="an" id="question-29a-an" class="question-29 answer-courriers hide" /> <label for="question-29a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-30" value="journaux" class="ignore" />Les journaux</label></th>
+<td><input type="radio" name="question-30a" value="jour" id="question-30a-jour" class="question-30 answer-journaux hide" /> <label for="question-30a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-30a" value="semaine" id="question-30a-semaine" class="question-30 answer-journaux hide" /> <label for="question-30a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-30a" value="mois" id="question-30a-mois" class="question-30 answer-journaux hide" /> <label for="question-30a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-30a" value="trimestre" id="question-30a-trimestre" class="question-30 answer-journaux hide" /> <label for="question-30a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-30a" value="semestre" id="question-30a-semestre" class="question-30 answer-journaux hide" /> <label for="question-30a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-30a" value="an" id="question-30a-an" class="question-30 answer-journaux hide" /> <label for="question-30a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><input type="checkbox" name="question-31" value="msginst" id="r129" class="ignore" /><label for="r129"> Les messageries instantanées</label></th>
+<td><input type="radio" name="question-31a" value="jour" id="question-31a-jour" class="question-31 answer-msginst hide" /> <label for="question-31a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-31a" value="semaine" id="question-31a-semaine" class="question-31 answer-msginst hide" /> <label for="question-31a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-31a" value="mois" id="question-31a-mois" class="question-31 answer-msginst hide" /> <label for="question-31a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-31a" value="trimestre" id="question-31a-trimestre" class="question-31 answer-msginst hide" /> <label for="question-31a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-31a" value="semestre" id="question-31a-semestre" class="question-31 answer-msginst hide" /> <label for="question-31a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-31a" value="an" id="question-31a-an" class="question-31 answer-msginst hide" /> <label for="question-31a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-32" value="facebook" class="ignore" /> Facebook</label></th>
+<td><input type="radio" name="question-32a" value="jour" id="question-32a-jour" class="question-32 answer-facebook hide" /> <label for="question-32a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-32a" value="semaine" id="question-32a-semaine" class="question-32 answer-facebook hide" /> <label for="question-32a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-32a" value="mois" id="question-32a-mois" class="question-32 answer-facebook hide" /> <label for="question-32a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-32a" value="trimestre" id="question-32a-trimestre" class="question-32 answer-facebook hide" /> <label for="question-32a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-32a" value="semestre" id="question-32a-semestre" class="question-32 answer-facebook hide" /> <label for="question-32a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-32a" value="an" id="question-32a-an" class="question-32 answer-facebook hide" /> <label for="question-32a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-33" value="telephone" class="ignore" /> Téléphone / télé/visioconférences / etc.</label></th>
+<td><input type="radio" name="question-33a" value="jour" id="question-33a-jour" class="question-33 answer-telephone hide" /> <label for="question-33a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-33a" value="semaine" id="question-33a-semaine" class="question-33 answer-telephone hide" /> <label for="question-33a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-33a" value="mois" id="question-33a-mois" class="question-33 answer-telephone hide" /> <label for="question-33a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-33a" value="trimestre" id="question-33a-trimestre" class="question-33 answer-telephone hide" /> <label for="question-33a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-33a" value="semestre" id="question-33a-semestre" class="question-33 answer-telephone hide" /> <label for="question-33a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-33a" value="an" id="question-33a-an" class="question-33 answer-telephone hide" /> <label for="question-33a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-34" value="smsmms" class="ignore" /> SMS/MMS</label></th>
+<td><input type="radio" name="question-34a" value="jour" id="question-34a-jour" class="question-34 answer-smsmms hide" /> <label for="question-34a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-34a" value="semaine" id="question-34a-semaine" class="question-34 answer-smsmms hide" /> <label for="question-34a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-34a" value="mois" id="question-34a-mois" class="question-34 answer-smsmms hide" /> <label for="question-34a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-34a" value="trimestre" id="question-34a-trimestre" class="question-34 answer-smsmms hide" /> <label for="question-34a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-34a" value="semestre" id="question-34a-semestre" class="question-34 answer-smsmms hide" /> <label for="question-34a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-34a" value="an" id="question-34a-an" class="question-34 answer-smsmms hide" /> <label for="question-34a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-35" value="fluxrss" class="ignore" /> Flux RSS</label></th>
+<td><input type="radio" name="question-35a" value="jour" id="question-35a-jour" class="question-35 answer-fluxrss hide" /> <label for="question-35a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-35a" value="semaine" id="question-35a-semaine" class="question-35 answer-fluxrss hide" /> <label for="question-35a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-35a" value="mois" id="question-35a-mois" class="question-35 answer-fluxrss hide" /> <label for="question-35a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-35a" value="trimestre" id="question-35a-trimestre" class="question-35 answer-fluxrss hide" /> <label for="question-35a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-35a" value="semestre" id="question-35a-semestre" class="question-35 answer-fluxrss hide" /> <label for="question-35a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-35a" value="an" id="question-35a-an" class="question-35 answer-fluxrss hide" /> <label for="question-35a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-36" value="twitter" class="ignore" /> Twitter</label></th>
+<td><input type="radio" name="question-36a" value="jour" id="question-36a-jour" class="question-36 answer-twitter hide" /> <label for="question-36a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-36a" value="semaine" id="question-36a-semaine" class="question-36 answer-twitter hide" /> <label for="question-36a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-36a" value="mois" id="question-36a-mois" class="question-36 answer-twitter hide" /> <label for="question-36a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-36a" value="trimestre" id="question-36a-trimestre" class="question-36 answer-twitter hide" /> <label for="question-36a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-36a" value="semestre" id="question-36a-semestre" class="question-36 answer-twitter hide" /> <label for="question-36a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-36a" value="an" id="question-36a-an" class="question-36 answer-twitter hide" /> <label for="question-36a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-37" value="forum" class="ignore" /> Un forum</label></th>
+<td><input type="radio" name="question-37a" value="jour" id="question-37a-jour" class="question-37 answer-forum hide" /> <label for="question-37a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-37a" value="semaine" id="question-37a-semaine" class="question-37 answer-forum hide" /> <label for="question-37a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-37a" value="mois" id="question-37a-mois" class="question-37 answer-forum hide" /> <label for="question-37a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-37a" value="trimestre" id="question-37a-trimestre" class="question-37 answer-forum hide" /> <label for="question-37a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-37a" value="semestre" id="question-37a-semestre" class="question-37 answer-forum hide" /> <label for="question-37a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-37a" value="an" id="question-37a-an" class="question-37 answer-forum hide" /> <label for="question-37a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-38" value="wiki" class="ignore" /> Un wiki</label></th>
+<td><input type="radio" name="question-38a" value="jour" id="question-38a-jour" class="question-38 answer-wiki hide" /> <label for="question-38a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-38a" value="semaine" id="question-38a-semaine" class="question-38 answer-wiki hide" /> <label for="question-38a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-38a" value="mois" id="question-38a-mois" class="question-38 answer-wiki hide" /> <label for="question-38a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-38a" value="trimestre" id="question-38a-trimestre" class="question-38 answer-wiki hide" /> <label for="question-38a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-38a" value="semestre" id="question-38a-semestre" class="question-38 answer-wiki hide" /> <label for="question-38a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-38a" value="an" id="question-38a-an" class="question-38 answer-wiki hide" /> <label for="question-38a-an">Au moins une fois par an</label></td>
+</tr>
+
+<tr class="answer"><th><label><input type="checkbox" name="question-39" value="autres" class="ignore" /> Autres (préciser)</label>
+<input type="text" class="textinput ignore" name="question-39b" /></th>
+<td><input type="radio" name="question-39a" value="jour" id="question-39a-jour" class="question-39 answer-autres hide" /> <label for="question-39a-jour">Plus d'une fois par jour</label></td>
+<td><input type="radio" name="question-39a" value="semaine" id="question-39a-semaine" class="question-39 answer-autres hide" /> <label for="question-39a-semaine">Au moins une fois par semaine</label></td>
+<td><input type="radio" name="question-39a" value="mois" id="question-39a-mois" class="question-39 answer-autres hide" /> <label for="question-39a-mois">Au moins une fois par mois</label></td>
+<td><input type="radio" name="question-39a" value="trimestre" id="question-39a-trimestre" class="question-39 answer-autres hide" /> <label for="question-39a-trimestre">Au moins une fois par trimestre</label></td>
+<td><input type="radio" name="question-39a" value="semestre" id="question-39a-semestre" class="question-39 answer-autres hide" /> <label for="question-39a-semestre">Au moins une fois par semestre</label></td>
+<td><input type="radio" name="question-39a" value="an" id="question-39a-an" class="question-39 answer-autres hide" /> <label for="question-39a-an">Au moins une fois par an</label></td>
+
+</tr>
+</table>
+<br />
+
+<p>Selon vous, au total combien d'emails sont échangés par semaine dans le cadre de votre association ?</p>
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Moins de 10</td>
+<td>10 à 20</td>
+<td>21 à 50</td>
+<td>Plus de 50</td>
+</tr>
+</thead>
+
+<tr class="answer"><th>Entre responsables ?</th>
+<td><input type="radio" name="question-40" value="moins10" id="question-40-moins10" /> <label for="question-40-moins10">Moins de 10</label></td>
+<td><input type="radio" name="question-40" value="10a20" id="question-40-10a20" /> <label for="question-40-10a20">10 à 20</label></td>
+<td><input type="radio" name="question-40" value="21a50" id="question-40-21a50" /> <label for="question-40-21a50">21 à 50</label></td>
+<td><input type="radio" name="question-40" value="plus50" id="question-40-plus50" /> <label for="question-40-plus50">Plus de 50</label></td>
+</tr>
+
+<tr class="answer"><th>Entre les responsables et les membres ?</th>
+<td><input type="radio" name="question-41" value="moins10" id="question-41-moins10" /> <label for="question-41-moins10">Moins de 10</label></td>
+<td><input type="radio" name="question-41" value="10a20" id="question-41-10a20" /> <label for="question-41-10a20">10 à 20</label></td>
+<td><input type="radio" name="question-41" value="21a50" id="question-41-21a50" /> <label for="question-41-21a50">21 à 50</label></td>
+<td><input type="radio" name="question-41" value="plus50" id="question-41-plus50" /> <label for="question-41-plus50">Plus de 50</label></td>
+</tr>
+
+<tr class="answer"><th>Entre membres ?</th>
+<td><input type="radio" name="question-42" value="moins10" id="question-42-moins10" /> <label for="question-42-moins10">Moins de 10</label></td>
+<td><input type="radio" name="question-42" value="10a20" id="question-42-10a20" /> <label for="question-42-10a20">10 à 20</label></td>
+<td><input type="radio" name="question-42" value="21a50" id="question-42-21a50" /> <label for="question-42-21a50">21 à 50</label></td>
+<td><input type="radio" name="question-42" value="plus50" id="question-42-plus50" /> <label for="question-42-plus50">Plus de 50</label></td>
+</tr>
+
+</table>
+<br />
+
+<div class="answer">
+<p>Pensez-vous que les membres et les responsables de votre association prennent en charge sur leur budget privé la majorité des coûts de communications ? (téléphone privé, fourniture d'enveloppes timbrées, etc.)</p>
+<label><input type="radio" name="question-43" value="oui" /> oui</label>
+<label><input type="radio" name="question-43" value="non" /> non</label>
+</div>
+<div class="buttons"></div>
+</div>
+
+<div id="page5" class="page">
+<h1>Technologies numériques</h1>
+
+<div class="answer">
+<p>Selon vous, votre association utilise-t-elle efficacement les technologies numériques ? (site Internet, email, etc.)</p>
+<select name="question-44">
+<option value="">Sélectionnez</option>
+<option value="1">Oui et ça marche très bien.</option>
+<option value="2">Oui mais je pense que l'on peut mieux faire.</option>
+<option value="3">Oui mais cela ne nous aide pas beaucoup.</option>
+<option value="4">Non mais cela nous aiderait.</option>
+<option value="5">Non et cela nous intéresse pas.</option>
+<option value="6">Nous n'y avons pas encore songé.</option>
+</select>
+</div>
+
+<p>Vous diriez que les aptitudes en informatique et sur Internet sont bonnes, plutôt bonnes, plutôt faibles ou faibles, pour :</p>
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Bonnes</td>
+<td>Plutôt bonnes</td>
+<td>Plutôt faibles</td>
+<td>Faibles</td>
+<td>Je ne sais pas</td>
+<td>Il n'y en a pas</td>
+</tr>
+</thead>
+
+<tr class="answer"><th>Les membres de votre association</th>
+<td><input type="radio" name="question-45" value="bonnes" /> <label for="question-45-bonnes">Bonnes</label></td>
+<td><input type="radio" name="question-45" value="plubonnes" /> <label for="question-45-plubonnes">Plutôt bonnes</label></td>
+<td><input type="radio" name="question-45" value="plufaibles" /> <label for="question-45-plufaibles">Plutôt faibles</label></td>
+<td><input type="radio" name="question-45" value="faibles" /> <label for="question-45-faibles">Faibles</label></td>
+<td><input type="radio" name="question-45" value="nsp" /> <label for="question-45-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-45" value="apa" /> <label for="question-45-apa">Il n'y en a pas</label></td>
+</tr>
+
+
+<tr class="answer"><th>Les responsables de votre association</th>
+<td><input type="radio" name="question-46" value="bonnes" /> <label for="question-46-bonnes">Bonnes</label></td>
+<td><input type="radio" name="question-46" value="plubonnes" /> <label for="question-46-plubonnes">Plutôt bonnes</label></td>
+<td><input type="radio" name="question-46" value="plufaibles" /> <label for="question-46-plufaibles">Plutôt faibles</label></td>
+<td><input type="radio" name="question-46" value="faibles" /> <label for="question-46-faibles">Faibles</label></td>
+<td><input type="radio" name="question-46" value="nsp" /> <label for="question-46-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-46" value="apa" /> <label for="question-46-apa">Il n'y en a pas</label></td>
+</tr>
+
+<tr class="answer"><th>Les salariés de votre association</th>
+<td><input type="radio" name="question-47" value="bonnes" /> <label for="question-47-bonnes">Bonnes</label></td>
+<td><input type="radio" name="question-47" value="plubonnes" /> <label for="question-47-plubonnes">Plutôt bonnes</label></td>
+<td><input type="radio" name="question-47" value="plufaibles" /> <label for="question-47-plufaibles">Plutôt faibles</label></td>
+<td><input type="radio" name="question-47" value="faibles" /> <label for="question-47-faibles">Faibles</label></td>
+<td><input type="radio" name="question-47" value="nsp" /> <label for="question-47-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-47" value="apa" /> <label for="question-47-apa">Il n'y en a pas</label></td>
+</tr>
+
+<tr class="answer"><th>Les supporters, amis, contacts, etc. de votre association</th>
+<td><input type="radio" name="question-48" value="bonnes" /> <label for="question-48-bonnes">Bonnes</label></td>
+<td><input type="radio" name="question-48" value="plubonnes" /> <label for="question-48-plubonnes">Plutôt bonnes</label></td>
+<td><input type="radio" name="question-48" value="plufaibles" /> <label for="question-48-plufaibles">Plutôt faibles</label></td>
+<td><input type="radio" name="question-48" value="faibles" /> <label for="question-48-faibles">Faibles</label></td>
+<td><input type="radio" name="question-48" value="nsp" /> <label for="question-48-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-48" value="apa" /> <label for="question-48-apa">Il n'y en a pas</label></td>
+</tr>
+</table>
+<br />
+<p>Selon vous, votre association gagnerait-elle à offrir les services en ligne suivants ?</p>
+
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Beaucoup</td>
+<td>Plutôt</td>
+<td>Un peu</td>
+<td>Pas du tout</td>
+<td>Nous disposons déjà de ce service</td>
+<td>Je ne sais pas</td>
+</tr>
+</thead>
+
+<tr class="answer"><th>Inscription des membres en ligne</th>
+<td><input type="radio" name="question-49" value="beaucoup" /> <label for="question-49-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-49" value="plutot" /> <label for="question-49-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-49" value="unpeu" /> <label for="question-49-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-49" value="pasdutout" /> <label for="question-49-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-49" value="disposons" /> <label for="question-49-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-49" value="nsp" /> <label for="question-49-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Modification par les membres de leurs informations personnelles</th>
+<td><input type="radio" name="question-50" value="beaucoup" /> <label for="question-50-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-50" value="plutot" /> <label for="question-50-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-50" value="unpeu" /> <label for="question-50-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-50" value="pasdutout" /> <label for="question-50-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-50" value="disposons" /> <label for="question-50-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-50" value="nsp" /> <label for="question-50-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Forum</th>
+<td><input type="radio" name="question-51" value="beaucoup" /> <label for="question-51-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-51" value="plutot" /> <label for="question-51-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-51" value="unpeu" /> <label for="question-51-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-51" value="pasdutout" /> <label for="question-51-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-51" value="disposons" /> <label for="question-51-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-51" value="nsp" /> <label for="question-51-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Annuaire</th>
+<td><input type="radio" name="question-54" value="beaucoup" /> <label for="question-54-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-54" value="plutot" /> <label for="question-54-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-54" value="unpeu" /> <label for="question-54-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-54" value="pasdutout" /> <label for="question-54-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-54" value="disposons" /> <label for="question-54-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-54" value="nsp" /> <label for="question-54-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Blog <span class="petit">(en plus du site Internet)</span></th>
+<td><input type="radio" name="question-52" value="beaucoup" /> <label for="question-52-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-52" value="plutot" /> <label for="question-52-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-52" value="unpeu" /> <label for="question-52-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-52" value="pasdutout" /> <label for="question-52-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-52" value="disposons" /> <label for="question-52-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-52" value="nsp" /> <label for="question-52-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Wiki</th>
+<td><input type="radio" name="question-55" value="beaucoup" /> <label for="question-55-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-55" value="plutot" /> <label for="question-55-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-55" value="unpeu" /> <label for="question-55-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-55" value="pasdutout" /> <label for="question-55-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-55" value="disposons" /> <label for="question-55-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-55" value="nsp" /> <label for="question-55-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Newsletter</th>
+<td><input type="radio" name="question-56" value="beaucoup" /> <label for="question-56-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-56" value="plutot" /> <label for="question-56-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-56" value="unpeu" /> <label for="question-56-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-56" value="pasdutout" /> <label for="question-56-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-56" value="disposons" /> <label for="question-56-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-56" value="nsp" /> <label for="question-56-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Mailing list</th>
+<td><input type="radio" name="question-58" value="beaucoup" /> <label for="question-58-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-58" value="plutot" /> <label for="question-58-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-58" value="unpeu" /> <label for="question-58-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-58" value="pasdutout" /> <label for="question-58-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-58" value="disposons" /> <label for="question-58-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-58" value="nsp" /> <label for="question-58-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Sondages</th>
+<td><input type="radio" name="question-57" value="beaucoup" /> <label for="question-57-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-57" value="plutot" /> <label for="question-57-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-57" value="unpeu" /> <label for="question-57-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-57" value="pasdutout" /> <label for="question-57-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-57" value="disposons" /> <label for="question-57-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-57" value="nsp" /> <label for="question-57-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Partage sécurisé de documents et de photos</th>
+<td><input type="radio" name="question-65" value="beaucoup" /> <label for="question-65-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-65" value="plutot" /> <label for="question-65-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-65" value="unpeu" /> <label for="question-65-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-65" value="pasdutout" /> <label for="question-65-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-65" value="disposons" /> <label for="question-65-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-65" value="nsp" /> <label for="question-65-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Inscription des participants aux activités et événements</th>
+<td><input type="radio" name="question-67" value="beaucoup" /> <label for="question-67-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-67" value="plutot" /> <label for="question-67-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-67" value="unpeu" /> <label for="question-67-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-67" value="pasdutout" /> <label for="question-67-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-67" value="disposons" /> <label for="question-67-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-67" value="nsp" /> <label for="question-67-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Paiement des adhésions et des activités en ligne</th>
+<td><input type="radio" name="question-82" value="beaucoup" /> <label for="question-82-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-82" value="plutot" /> <label for="question-82-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-82" value="unpeu" /> <label for="question-82-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-82" value="pasdutout" /> <label for="question-82-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-82" value="disposons" /> <label for="question-82-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-82" value="nsp" /> <label for="question-82-nsp">Je ne sais pas</label></td>
+</tr>
+</table>
+
+<br />
+<div class="question-2 answer-respo answer-exrespo hide">
+<p>Selon vous, votre association gagnerait-elle à offrir les services en ligne suivants à ses responsables ?</p>
+
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Beaucoup</td>
+<td>Plutôt</td>
+<td>Un peu</td>
+<td>Pas du tout</td>
+<td>Nous disposons déjà de ce service</td>
+<td>Je ne sais pas</td>
+<td>Non-applicable</td>
+</tr>
+</thead>
+
+<tr class="answer"><th>Accès aux informations d'urgence des membres <span class="petit">(fiches sanitaires, contacts d'urgences, etc.)</span></th>
+<td><input type="radio" name="question-1049" value="beaucoup" /> <label for="question-1049-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1049" value="plutot" /> <label for="question-1049-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1049" value="unpeu" /> <label for="question-1049-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1049" value="pasdutout" /> <label for="question-1049-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1049" value="disposons" /> <label for="question-1049-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1049" value="nsp" /> <label for="question-1049-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1049" value="nsp" /> <label for="question-1049-nona">Non-applicable</label></td>
+</tr>
+
+<tr class="answer"><th>Archivage des échanges emails entre les membres et les responsables</th>
+<td><input type="radio" name="question-1050" value="beaucoup" /> <label for="question-1050-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1050" value="plutot" /> <label for="question-1050-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1050" value="unpeu" /> <label for="question-1050-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1050" value="pasdutout" /> <label for="question-1050-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1050" value="disposons" /> <label for="question-1050-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1050" value="nsp" /> <label for="question-1050-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1050" value="nsp" /> <label for="question-1050-nona">Non-applicable</label></td>
+</tr>
+
+<tr class="answer"><th>Comptabilité en ligne</th>
+<td><input type="radio" name="question-1051" value="beaucoup" /> <label for="question-1051-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1051" value="plutot" /> <label for="question-1051-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1051" value="unpeu" /> <label for="question-1051-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1051" value="pasdutout" /> <label for="question-1051-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1051" value="disposons" /> <label for="question-1051-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1051" value="nsp" /> <label for="question-1051-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1051" value="nsp" /> <label for="question-1051-nona">Non-applicable</label></td>
+</tr>
+
+<tr class="answer"><th>Gestion des cours et des activités</th>
+<td><input type="radio" name="question-1054" value="beaucoup" /> <label for="question-1054-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1054" value="plutot" /> <label for="question-1054-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1054" value="unpeu" /> <label for="question-1054-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1054" value="pasdutout" /> <label for="question-1054-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1054" value="disposons" /> <label for="question-1054-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1054" value="nsp" /> <label for="question-1054-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1054" value="nsp" /> <label for="question-1054-nona">Non-applicable</label></td>
+</tr>
+
+<tr class="answer"><th>Gestion des matériels <span class="petit">(tout objet appartenant à l'association : véhicules, maillots, etc.)</span></th>
+<td><input type="radio" name="question-1052" value="beaucoup" /> <label for="question-1052-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1052" value="plutot" /> <label for="question-1052-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1052" value="unpeu" /> <label for="question-1052-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1052" value="pasdutout" /> <label for="question-1052-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1052" value="disposons" /> <label for="question-1052-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1052" value="nsp" /> <label for="question-1052-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1052" value="nsp" /> <label for="question-1052-nona">Non-applicable</label></td>
+</tr>
+
+<tr class="answer"><th>Gestion des demandes des membres</th>
+<td><input type="radio" name="question-1055" value="beaucoup" /> <label for="question-1055-beaucoup">Beaucoup</label></td>
+<td><input type="radio" name="question-1055" value="plutot" /> <label for="question-1055-plutot">Plutôt</label></td>
+<td><input type="radio" name="question-1055" value="unpeu" /> <label for="question-1055-unpeu">Un peu</label></td>
+<td><input type="radio" name="question-1055" value="pasdutout" /> <label for="question-1055-pasdutout">Pas du tout</label></td>
+<td><input type="radio" name="question-1055" value="disposons" /> <label for="question-1055-disposons">Nous disposons déjà de ce service</label></td>
+<td><input type="radio" name="question-1055" value="nsp" /> <label for="question-1055-nsp">Je ne sais pas</label></td>
+<td><input type="radio" name="question-1055" value="nsp" /> <label for="question-1055-nona">Non-applicable</label></td>
+</tr>
+</table>
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<p>Selon vous, combien votre association dépense-t-elle annuellement pour ses systèmes d'information (site internet, hébergement, téléphone, courriers, etc.)</p>
+<table class="choix-2">
+<tr>
+	<td><label><input type="radio" name="question-86" value="0" /> Zéro euro</label></td>
+    <td><label><input type="radio" name="question-86" value="101a200" /> Entre 101 et 200 euros</label></td>
+    <td><label><input type="radio" name="question-86" value="1001a2000" /> Entre 1001 et 2000 euros</label></td>
+</tr>
+<tr>
+	<td><label><input type="radio" name="question-86" value="1a50" /> Entre 1 et 50 euros</label></td>
+    <td><label><input type="radio" name="question-86" value="201a500" /> Entre 201 et 500 euros</label></td>
+    <td><label><input type="radio" name="question-86" value="2001a5000" /> Entre 2001 euros et 5000</label></td>
+</tr>
+<tr>
+	<td><label><input type="radio" name="question-86" value="51a100" /> Entre 51 et 100 euros</label></td>
+    <td><label><input type="radio" name="question-86" value="501a1000" /> Entre 501 et 1000 euros</label></td>
+    <td><label><input type="radio" name="question-86" value="plus5000" /> Plus de 5000 euros</label></td>
+</tr>
+</table>
+</div>
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<p>Avec quel outil effectuez-vous la comptabilité dans votre association ?</p>
+<select name="question-87">
+<option value="">Sélectionnez</option>
+<option value="1">Bureautique (excel, etc.)</option>
+<option value="2">Logiciel standard de comptabilité</option>
+<option value="3">Logiciel de comptabilité spécialisé pour les associations</option>
+<option value="4">Pas d'outils</option>
+<option value="5">Je ne sais pas</option>
+</select>
+</div>
+</div>
+
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<p>Dans vos relations avec d'autres associations, quels seraient vos intérêts pour les services suivants en ligne ?</p>
+<table id="moyens_communication">
+<thead>
+<tr>
+<th></th>
+<td>Très intéressant</td>
+<td>Plutôt intéressant</td>
+<td>Plutôt pas intéressant</td>
+<td>Aucun intérêt</td>
+<td>Je ne sais pas</td>
+</tr>
+</thead>
+
+
+<tr class="answer"><th>Faire connaître vos événements <span class="petit">(compétitions, spectacles, rassemblements, conférences, etc.)</span></th>
+<td><input type="radio" name="question-88" value="tresinter" /> <label for="question-88-tresinter">Très intéressant</label></td>
+<td><input type="radio" name="question-88" value="plutotinter" /> <label for="question-88-plutotinter">Plutôt intéressant</label></td>
+<td><input type="radio" name="question-88" value="plutotpas" /> <label for="question-88-plutotpas">Plutôt pas intéressant</label></td>
+<td><input type="radio" name="question-88" value="aucuninteret" /> <label for="question-88-aucuninteret">Aucun intérêt</label></td>
+<td><input type="radio" name="question-88" value="nsp" /> <label for="question-88-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Organisation conjointe d'événements : toute l'organisation est partagée</th>
+<td><input type="radio" name="question-90" value="tresinter" /> <label for="question-90-tresinter">Très intéressant</label></td>
+<td><input type="radio" name="question-90" value="plutotinter" /> <label for="question-90-plutotinter">Plutôt intéressant</label></td>
+<td><input type="radio" name="question-90" value="plutotpas" /> <label for="question-90-plutotpas">Plutôt pas intéressant</label></td>
+<td><input type="radio" name="question-90" value="aucuninteret" /> <label for="question-90-aucuninteret">Aucun intérêt</label></td>
+<td><input type="radio" name="question-90" value="nsp" /> <label for="question-90-nsp">Je ne sais pas</label></td>
+</tr>
+
+<tr class="answer"><th>Partage de photos et de fichiers <span class="petit">(programme, résultats de compétitions, compte-rendus, présentations, etc.)</span></th>
+<td><input type="radio" name="question-93" value="tresinter" /> <label for="question-93-tresinter">Très intéressant</label></td>
+<td><input type="radio" name="question-93" value="plutotinter" /> <label for="question-93-plutotinter">Plutôt intéressant</label></td>
+<td><input type="radio" name="question-93" value="plutotpas" /> <label for="question-93-plutotpas">Plutôt pas intéressant</label></td>
+<td><input type="radio" name="question-93" value="aucuninteret" /> <label for="question-93-aucuninteret">Aucun intérêt</label></td>
+<td><input type="radio" name="question-93" value="nsp" /> <label for="question-93-nsp">Je ne sais pas</label></td>
+</tr>
+
+</table>
+</div>
+
+<div class="buttons"></div>
+</div>
+
+<div id="page6" class="page">
+<h1>En conclusion</h1>
+<div class="answer">
+<p>Pensez-vous que votre association profite pleinement des avantages des technologies numériques ?</p>
+<label><input type="radio" name="question-95" value="oui" /> Oui tout-à-fait</label><br />
+<label><input type="radio" name="question-95" value="pluoui" /> Oui plutôt</label><br />
+<label><input type="radio" name="question-95" value="plunon" /> Non plutôt</label><br />
+<label><input type="radio" name="question-95" value="non" /> Non pas du tout</label><br />
+<label><input type="radio" name="question-95" value="nsp" /> Je ne sais pas</label>
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<p>Pensez-vous que les technologies numériques peuvent vous faire gagner davantage de temps dans la gestion de votre association ?</p>
+<label><input type="radio" name="question-96" value="oui" /> Oui tout-à-fait</label><br />
+<label><input type="radio" name="question-96" value="pluoui" /> Oui plutôt</label><br />
+<label><input type="radio" name="question-96" value="plunon" /> Non plutôt</label><br />
+<label><input type="radio" name="question-96" value="non" /> Non pas du tout</label><br />
+<label><input type="radio" name="question-96" value="nsp" /> Je ne sais pas</label>
+</div>
+</div>
+
+<div class="answer">
+<p>Pensez-vous que les technologies numériques peuvent faciliter les relations entre les membres et leur association ?</p>
+<label><input type="radio" name="question-97" value="oui" /> Oui tout-à-fait</label><br />
+<label><input type="radio" name="question-97" value="pluoui" /> Oui plutôt</label><br />
+<label><input type="radio" name="question-97" value="plunon" /> Non plutôt</label><br />
+<label><input type="radio" name="question-97" value="non" /> Non pas du tout</label><br />
+<label><input type="radio" name="question-97" value="nsp" /> Je ne sais pas</label>
+</div>
+
+<h2>Vous</h2>
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<label><p>Votre responsabilité au sein de l'association <span class="facultatif">(facultatif)</span></p>
+<input type="text" class="textinput ignore" name="question-98" /></label>
+</div>
+</div>
+
+<div class="answer">
+<p>Age</p>
+<select name="question-99" >
+<option value="">Sélectionnez</option>
+<option value="16a24">16-24 ans</option>
+<option value="25a39">25-39 ans</option>
+<option value="40a59">40-59 ans</option>
+<option value="60a74">60-74 ans</option>
+<option value="plus75">75 ans et plus</option>
+</select>
+</div>
+
+<div class="answer">
+<p>Sexe</p>
+<label><input type="radio" name="question-100" value="homme" /> Homme</label>
+<label><input type="radio" name="question-100" value="femme" /> Femme</label>
+</div>
+
+<div class="answer">
+<label><p>Code postal</p>
+<input type="text" class="textinput" name="question-1002" /></label>
+</div>
+
+<div class="answer">
+<p>Vous habitez dans...</p>
+<select name="question-99" >
+<option value="">Sélectionnez</option>
+<option value="a">Une commune rurale</option>
+<option value="b">Une agglomération de moins de 10 000 habitants</option>
+<option value="c">Une agglomération de 10 000 à 50 000 h.</option>
+<option value="d">Une agglomération de 50 000 à 200 000 h.</option>
+<option value="e">Une agglomération de plus de 200 000 h. (hors Paris)</option>
+<option value="f">A Paris</option>
+</select>
+</div>
+
+
+<div class="answer">
+<p>Catégorie socio-professionnelle</p>
+<select name="question-1001" >
+<option value="">Sélectionnez</option>
+<option value="a">1 Agriculteurs exploitants</option>
+<option value="b">2 Artisans, commerçants et chefs d'entreprise</option>
+<option value="c">3 Cadres et professions intellectuelles supérieures</option>
+<option value="d">4 Professions Intermédiaires</option>
+<option value="e">5 Employés</option>
+<option value="f">6 Ouvriers</option>
+<option value="g">7 Retraités</option>
+<option value="h">8 Autres personnes sans activité professionnelle</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-a hide">
+<p>Sous-catégorie</p>
+<select name="question-1001a">
+<option class="select-1001a" value="">Sélectionnez</option>
+<option class="select-1001a" value="11">11 Agriculteurs sur petite exploitation</option>
+<option class="select-1001a" value="12">12 Agriculteurs sur moyenne exploitation</option>
+<option class="select-1001a" value="13">13 Agriculteurs sur grande exploitation</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-b hide">
+<p>Sous-catégorie</p>
+<select name="question-1001b">
+<option class="select-1001b" value="">Sélectionnez</option>
+<option class="select-1001b" value="21">21 Artisans</option>
+<option class="select-1001b" value="22">22 Commerçants et assimilés</option>
+<option class="select-1001b" value="23">23 Chefs d'entreprise de 10 salariés ou plus</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-c hide">
+<p>Sous-catégorie</p>
+<select name="question-1001c">
+<option class="select-1001c" value="">Sélectionnez</option>
+<option class="select-1001c" value="31">31 Professions libérales</option>
+<option class="select-1001c" value="33">33 Cadres de la fonction publique</option>
+<option class="select-1001c" value="34">34 Professeurs, professions scientifiques</option>
+<option class="select-1001c" value="35">35 Professions de l'information, des arts et des spectacles</option>
+<option class="select-1001c" value="37">37 Cadres administratifs et commerciaux d'entreprise</option>
+<option class="select-1001c" value="38">38 Ingénieurs et cadres techniques d'entreprise</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-d hide">
+<p>Sous-catégorie</p>
+<select name="question-1001d">
+<option class="select-1001d" value="">Sélectionnez</option>
+<option class="select-1001d" value="42">42 Professeurs des écoles, instituteurs et assimilés</option>
+<option class="select-1001d" value="43">43 Professions intermédiaires de la santé et du travail social</option>
+<option class="select-1001d" value="44">44 Clergé, religieux</option>
+<option class="select-1001d" value="45">45 Professions intermédiaires administratives de la fonction publique</option>
+<option class="select-1001d" value="46">46 Professions intermédiaires administratives et commerciales des entreprises</option>
+<option class="select-1001d" value="47">47 Techniciens</option>
+<option class="select-1001d" value="48">48 Contremaîtres, agents de maîtrise</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-e hide">
+<p>Sous-catégorie</p>
+<select name="question-1001e">
+<option class="select-1001e" value="">Sélectionnez</option>
+<option class="select-1001e" value="52">52 Employés civils et agents de service de la fonction publique</option>
+<option class="select-1001e" value="53">53 Policiers et militaires</option>
+<option class="select-1001e" value="54">54 Employés administratifs d'entreprise</option>
+<option class="select-1001e" value="55">55 Employés de commerce</option>
+<option class="select-1001e" value="56">56 Personnels des services directs aux particuliers</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-f hide">
+<p>Sous-catégorie</p>
+<select name="question-1001f">
+<option class="select-1001f" value="">Sélectionnez</option>
+<option class="select-1001f" value="62">62 Ouvriers qualifiés de type industriel</option>
+<option class="select-1001f" value="63">63 Ouvriers qualifiés de type artisanal</option>
+<option class="select-1001f" value="64">64 Chauffeurs</option>
+<option class="select-1001f" value="65">65 Ouvriers qualifiés de la manutention, du magasinage et du transport</option>
+<option class="select-1001f" value="67">67 Ouvriers non qualifiés de type industriel</option>
+<option class="select-1001f" value="68">68 Ouvriers non qualifiés de type artisanal</option>
+<option class="select-1001f" value="69">69 Ouvriers agricoles</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-g hide">
+<p>Sous-catégorie</p>
+<select name="question-1001g">
+<option class="select-1001g" value="">Sélectionnez</option>
+<option class="select-1001g" value="71">71 Anciens agriculteurs exploitants</option>
+<option class="select-1001g" value="72">72 Anciens artisans, commerçants, chefs d'entreprise</option>
+<option class="select-1001g" value="74">74 Anciens cadres</option>
+<option class="select-1001g" value="75">75 Anciennes professions intermédiaires</option>
+<option class="select-1001g" value="77">77 Anciens employés</option>
+<option class="select-1001g" value="78">78 Anciens ouvriers</option>
+</select>
+</div>
+
+<div class="answer question-1001 answer-h hide">
+<p>Sous-catégorie</p>
+<select name="question-1001h">
+<option class="select-1001h" value="">Sélectionnez</option>
+<option class="select-1001h" value="81">81 Chômeurs n'ayant jamais travaillé</option>
+<option class="select-1001h" value="83">83 Militaires du contingent</option>
+<option class="select-1001h" value="84">84 Elèves, étudiants</option>
+<option class="select-1001h" value="85">85 Personnes diverses sans activité professionnelle de moins de 60 ans (sauf retraités)</option>
+<option class="select-1001h" value="86">86 Personnes diverses sans activité professionnelle de 60 ans et plus (sauf retraités)</option>
+</select>
+</div>
+
+<div class="answer">
+<p>Année(s) d'expérience dans la vie associative en tant que membre</p>
+<label><input type="radio" name="question-101" value="moins1" /> Moins d'un an</label><br />
+<label><input type="radio" name="question-101" value="1a2" /> 1 à 2 ans</label><br />
+<label><input type="radio" name="question-101" value="3a4" /> 3 à 4 ans</label><br />
+<label><input type="radio" name="question-101" value="5a10" /> 5 à 10 ans</label><br />
+<label><input type="radio" name="question-101" value="plus10" /> Plus de 10 ans</label>
+</div>
+
+<div class="question-2 answer-respo answer-exrespo hide">
+<div class="answer">
+<p>Année(s) d'expérience dans la vie associative en tant que personne à responsabilité</p>
+<label><input type="radio" name="question-102" value="moins1" /> Moins d'un an</label><br />
+<label><input type="radio" name="question-102" value="1a2" /> 1 à 2 ans</label><br />
+<label><input type="radio" name="question-102" value="3a4" /> 3 à 4 ans</label><br />
+<label><input type="radio" name="question-102" value="5a10" /> 5 à 10 ans</label><br />
+<label><input type="radio" name="question-102" value="plus10" /> Plus de 10 ans</label>
+</div>
+</div>
+
+<div class="answer">
+<p>Vous diriez que vos aptitudes en informatique et sur Internet sont...</p>
+<label><input type="radio" name="question-103" value="bon" /> Bonnes</label><br />
+<label><input type="radio" name="question-103" value="plubon" /> Plutôt bonnes</label><br />
+<label><input type="radio" name="question-103" value="plumau" /> Plutôt mauvaises</label><br />
+<label><input type="radio" name="question-103" value="mau" /> Mauvaises</label><br />
+<label><input type="radio" name="question-103" value="nsp" /> Je ne sais pas</label>
+</div>
+
+<div class="answer">
+<p>Souhaitez-vous recevoir les résultats de cette étude ?</p>
+<label><input type="radio" name="question-104" value="oui" /> Oui</label>
+<label><input type="radio" name="question-104" value="non" /> Non</label>
+</div>
+
+<div class="answer">
+<p>Souhaitez-vous être tenu au courant de l'évolution du projet RunOrg ?</p>
+<label><input type="radio" name="question-105" value="oui" /> Oui</label>
+<label><input type="radio" name="question-105" value="non" /> Non</label>
+</div>
+
+
+<div class="answer"><label><p>Nom <span class="facultatif">(facultatif)</span></p>
+<input type="text" class="textinput ignore" name="question-106" /></label>
+</div>
+
+<div class="answer">
+<label><p>Prénom <span class="facultatif">(facultatif)</span></p>
+<input type="text" class="textinput ignore" name="question-107" /></label>
+</div>
+
+<div class="answer">
+<label><p>Adresse email <span class="facultatif">(facultatif)</span></p>
+<input type="text" class="textinput ignore" name="question-108" /></label>
+</div>
+
+<p style="font-size:11px; font-weight:normal;">Conformément à la loi « informatique et libertés » du 6 janvier 1978 modifiée en 2004, vous bénéficiez d’un droit d’accès et de rectification aux informations qui vous concernent, que vous pouvez exercer en vous adressant à @runorg.com : Contact (inscrivez contact avant le @runorg.com)</p>
+<p style="font-size:11px; font-weight:normal;">Vous pouvez également, pour des motifs légitimes, vous opposer au traitement des données vous concernant.</p>
+
+
+<div class="buttons">
+  <button type="submit">Terminer</button>
+</div>
+</form>
+</div>
+</div>
+<div id="footer">
+&copy; 2012 - <a href="/" title="RunOrg">RUN<strong>ORG</strong></a>
+</div>
+<script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-17992452-1']); _gaq.push(['_setDomainName', '.runorg.com']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script>
+</body>
+</html>

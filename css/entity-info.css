@@ -1,0 +1,14 @@
+.entity-info {
+
+  p { margin-bottom: 0.5em }
+
+  h3 {
+    margin-bottom: 0;
+    color: #AAA;
+  }
+
+  hr, .append-bottom {
+    margin-bottom: 8px;
+  }
+
+}

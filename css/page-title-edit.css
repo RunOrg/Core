@@ -1,0 +1,24 @@
+.page-title-edit {
+
+  label {
+    color:#AAAAAA;
+    font-size:24px;
+    font-weight:bold;
+    line-height:24px;
+    margin:0;
+    position:absolute;
+    text-shadow:0 0 1px #AAAAAA;
+  }
+
+  input {
+    background-color:transparent;
+    color:#333333;
+    font-size:24px;
+    font-weight:bold;
+    margin:-8px 7px 8px -7px;
+    padding:5px;
+    position:absolute;
+    text-shadow:0 0 1px #333333;
+    width:700px
+  }
+}

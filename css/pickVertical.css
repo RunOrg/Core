@@ -1,0 +1,13 @@
+.pickVertical {
+
+  margin: 0.5em 0;
+ 
+  a {
+    border: 1px solid #BBB;
+    display: block;
+    width: 396px; 
+    padding: 0 2px;
+    text-decoration: none;
+    line-height: 17px;
+  }
+}

@@ -1,0 +1,24 @@
+.sbs-item {
+
+  display:block;
+  margin:4px 35px;
+  padding:5px;
+  border:1px solid #CCC;
+  border-radius:5px;
+ 
+  span {
+    display:block;
+    color:#333;
+  }
+
+  .-name {
+    font-size:14px;
+    font-weight:bold;
+  }
+
+  &:hover {
+    text-decoration:none;
+    background-color:#EEE;
+  }
+}
+

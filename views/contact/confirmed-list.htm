@@ -1,0 +1,23 @@
+{{items:
+  <tr class="-avatar">
+    <td>
+      <a href="{v:url}"><img src="{v:image-url}"/></a>
+    </td>
+    <td>
+      <a href="{v:url}"><strong>{v:name}</strong></a>
+    </td>
+    <td>
+      <span class="status {v:status-class}">{v:status-name}</span>
+    </td>
+    <td>
+      <span class="-details">{v:time}</span>
+    </td>
+  </tr>
+}}
+{{more:
+  <tr onclick="{v:onclick}">
+    <td colspan="4">
+      <a href="javascript:void(0)" class="show-details">{t:show-details}</a>
+    </td>
+  </tr>
+}}

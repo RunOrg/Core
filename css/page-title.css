@@ -1,0 +1,10 @@
+h1.page-title, h1.page-title a
+{
+  text-decoration:none;
+  text-shadow: 0 0 1px #333;
+  color: #333;
+  font-size:24px;
+  font-weight:bold;
+  margin:0;
+  text-transform:none;
+}

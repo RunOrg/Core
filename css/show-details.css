@@ -1,0 +1,68 @@
+.enlarge-details
+{
+  overflow: hidden;
+  position: relative;
+
+  a.-show {
+    background-color: #EEE;
+    border-color: #CCC;
+    border-style: solid;
+    border-width: 1px 0;
+    bottom: 0;
+    display: block;
+    left: 0;
+    font-size: 10px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    color: black;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #DDD;
+    }
+  }
+
+}
+
+.show-details
+{
+  clear:both;
+  display: block;
+  padding: 4px 16px;
+  color: #666;
+  font-weight: bold;
+  background-color: #DDD;
+  margin:0.5em 1em;
+  text-align:center;
+
+  &:hover {
+    color: white;
+    text-shadow: 0 0 1px white;
+    text-decoration: none;
+  }
+}
+
+
+.theme-show-details() {
+  .show-details {
+    &:hover {
+      background-color: @titles;
+    }
+  }
+}
+
+body {
+  .colors-pink;
+  .theme-show-details;
+}
+
+.theme-green {
+  .colors-green;
+  .theme-show-details;
+}
+
+.theme-sobre {
+  .colors-sobre;
+  .theme-show-details;
+}

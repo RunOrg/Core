@@ -1,0 +1,19 @@
+.tag {
+    display: inline-block;
+    margin: 0 2px 1px 2px;
+    background: url("/public/css/jqueryui-aristo/images/the_gradient.gif") top center;
+    padding: 0px 6px;
+    border: 1px solid #888;
+    border-radius: 4px;
+}
+
+.tag-link {
+  color: inherit;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+    .tag { 
+      background: url("/public/css/jqueryui-aristo/images/the_gradient.gif") bottom center;
+    }
+  }
+}

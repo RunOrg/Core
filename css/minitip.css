@@ -1,0 +1,15 @@
+.minitip {
+
+  color: #888888;
+  font-size: 10px;
+  vertical-align: top;
+  visibility: hidden;
+
+  &.-shown {
+    visibility: visible; 
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}

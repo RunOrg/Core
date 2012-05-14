@@ -1,0 +1,65 @@
+.wall-item, .album-item {
+
+  .-like {
+    border-radius: 4px;
+    border: 1px solid #E7A;
+    color: #E7A;
+    font-size: 10px;
+    font-family:"Arial",sans;	
+    margin: -1px 0;
+    padding: 1px 5px;
+
+    &:hover {
+      border: 1px solid #FFF !important;
+      text-decoration: none;
+      text-shadow: none !important;
+      padding: 1px 5px !important;
+    }
+
+    &.-liked {
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      text-shadow: 0 0 1px white;
+    }
+  }
+}
+
+.theme-album-wall-item() {
+	.wall-item, .album-item {
+		.-like {
+			border-color: @like;
+			color: @like;
+			&:hover {
+				background-color: @sidebar-background !important;
+				color: @like !important;
+				border-color: @like !important;
+			}
+	
+			&.-liked {
+				background-color: @like;
+				color: #FFF;
+			}
+		}
+	}
+}
+
+body {
+	.colors-pink;
+	.theme-album-wall-item;
+}
+
+.theme-green {
+	.colors-green;
+	.theme-album-wall-item;
+}
+
+.theme-sobre {
+	.colors-sobre;
+	.theme-album-wall-item;
+}
+
+.theme-sobre {
+	.colors-white;
+	.theme-album-wall-item;
+}

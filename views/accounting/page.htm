@@ -1,0 +1,42 @@
+<div class="span-18 last">
+  
+  <div class="span-18 last">
+    <div class="action-bar">
+      <a href="{v:new-out}" class="pretty-button -right">
+	{t:accounting.new.debit}
+      </a>
+      <a href="{v:new-in}" class="pretty-button -right">
+	{t:accounting.new.credit}
+      </a>
+      <a href="{v:download}" class="pretty-button">
+	{t:accounting.download}
+      </a>
+    </div>
+  </div>
+
+  <table class="accounting">
+    <thead>
+      <tr>
+	<td></td>
+	<td>{t:accounting.debit}</td>
+	<td>{t:accounting.credit}</td>
+      </tr>
+    </thead>
+    <tr class="-totals">
+      <td class="-label">{t:accounting.total}</td>     
+      <td>{v:out-total}</td>
+      <td>{v:in-total}</td>
+    </tr>
+    {{lines:
+    <tr class="-line{v:canceled}">
+      <td>
+	<div class="-details"><a href="{v:url}">{v:details}</a></div>
+	<small>{v:date} · {v:who}</small>
+      </td>
+      <td><div class="-debit">{v:out}</div></td>
+      <td><div class="-credit">{v:in}</div></td>
+    </tr>
+    }}
+  </table>
+</div>
+      

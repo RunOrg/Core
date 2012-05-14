@@ -1,0 +1,50 @@
+<div class="from-entity-block">
+  <h4><span class="-icon" style="background-image:url({v:icon});"> {v:title}</span></h4>
+  <div id="{v:id}" class="-content -loading">
+    <script type="coffeescript" params="id,url,kind">
+self = jog.extend @, @$.find ('#'+id)
+jog.remote self, url, { kind : kind }, -> @$.removeClass('-loading')
+    </script>
+  </div>
+</div>
+
+<style type="less"> 
+
+.from-entity-block {
+  border: 1px solid #CCC;
+  padding: 0;
+  border-radius: 3px;
+  margin: 0 0 10px 0;
+  display: block;
+  overflow: hidden;
+	
+  .-content {
+    margin: 5px;
+    overflow: hidden;
+
+    &.-loading {
+      height: 40px;
+      background: url("/public/icon/ajax-load.gif") center center no-repeat transparent ;
+    }
+  }
+	  
+  h4 {
+    font-size:1.1em;
+    font-weight:bold;
+    color:#333;
+    text-shadow:0 1px 0 #FFF;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #CCC;
+    background-image: url("/public/css/jqueryui-aristo/images/the_gradient.gif");
+		
+    span {
+      background: url("/public/icon/shading.png") no-repeat scroll 4px center transparent;
+      padding: 2px 0 2px 24px;
+      line-height: 16px;
+      display: block;
+    }
+  }
+}
+
+</style>

@@ -1,0 +1,80 @@
+<div style="height:0px; width:0px; overflow:hidden">
+  <img src="/public/img/logo-square.png"/>
+</div>
+
+<div class="bar-products">
+  <div class="-inner">
+    <a href="{v:home}">
+      <img class="logo" alt="RunOrg" src="/public/img/logo-2.png" />
+    </a>
+    <ul>
+      {{product:
+      <li{v:selected}><a href="{v:url}">
+	  {v:name} <em>▼</em>
+      </a></li>
+      }}
+    </ul>
+  </div>	
+</div>
+
+<style type="less">
+.theme-splash .bar-products {
+  background: url(/public/img/degrade-rose.png) #E70079 center center repeat-x;
+  margin: 5px 0 20px 0;
+  border: 1px solid #555;
+  border-size:1px 0;
+  box-shadow: 0 1px 4px #888;
+  overflow: hidden;
+
+  .-inner {
+    width:950px;
+    margin:auto;
+  }
+
+  .logo {
+    margin:5px 0 2px 0;
+  }
+
+  ul {
+    list-style-type: none;
+    float:right;
+    margin:0;
+  }
+
+  li {
+    float:left;
+   
+    a {
+      display:block;
+      color:white;
+      font-weight:bold;
+      text-shadow:0 -1px 0 #888;
+      font-size: 16px;
+      height:53px;
+      line-height:53px;
+      margin: 0 0 0 10px;
+      padding: 0 5px;
+
+      em {
+	visibility:hidden;
+	display: block;
+	text-align: center;
+	top: -36px;
+	position: relative;
+      }
+
+      &:hover {
+        text-decoration: none;
+        em {
+          visibility:visible;
+          opacity: 0.75;
+        }
+      }
+    }
+
+    &.-selected a em  {
+      visibility:visible; 
+    }
+  }
+}
+</style>

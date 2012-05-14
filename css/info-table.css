@@ -1,0 +1,10 @@
+table.info-table
+{
+  width:100%;
+}
+
+.info-table .info-label
+{
+  text-align:right;
+  font-weight:bold;
+}

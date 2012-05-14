@@ -1,0 +1,13 @@
+.public-link {
+
+  padding: 5px 15px;
+  background: #DDD;
+  border-bottom: 1px solid #CCC;
+
+  input {
+    color: #666;
+    margin: 0px;
+    width: 350px;
+  }
+}
+

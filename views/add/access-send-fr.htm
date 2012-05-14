@@ -1,0 +1,25 @@
+<div class="span-16 prepend-4 append-4 prepend-top last"> 
+  <h4>Partagez ou envoyez le lien vers la page d'inscription de votre espace&nbsp;:</h4>  
+</div>
+<div class="span-8 prepend-4">
+  <center><a href="{v:url}" style="line-height: 30px;">{v:url}</a></center></div>
+<div class="span-8 append-4 last">
+  <div style="float:left">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="{v:url}" 
+       data-text="Rejoignez notre espace collaboratif privé" data-via="runorg" data-size="large" data-count="none">Tweeter</a>
+    <script type="coffeescript" params="">
+      f = (d,s) ->        
+        fjs = d.getElementsByTagName(s)[0]
+        js  = d.createElement(s)
+        js.src = "//platform.twitter.com/widgets.js"
+        fjs.parentNode.insertBefore js, fjs
+      f document, "script"
+    </script>  
+  </div>
+  <div style="float: left; position: relative;">
+    <iframe frameborder="0" scrolling="no" allowtransparency="true" 
+	    style="border: medium none; overflow: hidden; height: 21px; position: absolute; left: 5px; top: 4px; width: 200px;" 
+	    src="//www.facebook.com/plugins/like.php?href={v:url-esc}&amp;send=false&amp;layout=button_count&amp;width=200&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=verdana&amp;height=21">
+    </iframe>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+.grey-links {
+
+  padding: 0 8px;
+
+  a {
+
+    padding: 5px 0;
+    line-height: 14px;
+    display: block;    
+  
+    &:hover {
+      text-decoration: none;
+    }
+
+    img {
+      vertical-align: bottom;
+    }
+  }
+}

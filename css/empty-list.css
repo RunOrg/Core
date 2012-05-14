@@ -1,0 +1,14 @@
+.empty-list {
+
+  font-size: 14px;
+  padding: 25px 0;
+  text-align: center;
+  clear: both;
+  border: 1px dashed #CCC;
+  color: #888;
+
+  img {
+    vertical-align: middle;
+    margin-right: 1em;
+  }
+}

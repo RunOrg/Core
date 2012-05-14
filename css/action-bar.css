@@ -1,0 +1,22 @@
+.action-bar
+{
+  padding: 0 0 2px 0;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+
+  &.-no-underline {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .pretty-button {
+    float: left;
+    margin: 0 4px 0 0 ;
+  }
+
+  .pretty-button.-right {
+    float: right;
+    margin: 0 0 0 4px;
+  }
+}

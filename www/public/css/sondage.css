@@ -1,0 +1,181 @@
+﻿body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+#progress {
+	background:url(/public/img/runorg_sondage.png) no-repeat #FFF;
+	height:40px;
+}
+
+#everything {
+	margin:40px auto 30px auto;
+	width:1000px;
+}
+
+#intro p{
+	font-size:12px;
+	font-weight:normal;
+	margin-top:6px;
+	margin-bottom:8px;
+}
+
+h1 {
+	font-size:26px;
+	font-weight:bold;
+	line-height:2em;
+	text-transform:uppercase;
+	color:#F36;
+}
+
+h2 {
+	font-size:22px;
+	font-weight:bold;
+	line-height:1.5em;
+	text-transform:uppercase;
+}
+
+p {
+	line-height: 1.4em;
+	font-weight:bold;
+	font-size:14px;
+}
+
+a{
+	color:inherit;
+	text-decoration:none;
+}
+
+.textinput{
+	width:300px;
+}
+
+#moyens_communication {
+	border-top:1px solid #999;
+	border-left:1px solid #999;
+	border-right:1px solid #999;
+}
+
+#moyens_communication td, #moyens_communication th {
+	border-bottom:1px solid #999;
+	padding:2px;
+	vertical-align:middle;
+}
+
+#moyens_communication th{
+	width:200px;
+}
+
+#moyens_communication tr {
+	height:24px;
+}
+
+#moyens_communication td {
+	width:100px;
+	text-align:center;
+}
+
+#choix-2 td{
+	width:200px;
+}
+
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+
+#progress{
+	position:fixed;
+	width:100%;
+	top:0;
+	left:0;
+	height:18px;
+	padding:11px 0;
+	border-bottom:1px solid #888;
+	background-color:white;
+}
+
+#moyens_communication td label {
+	display: none;
+}
+
+.cat-tableau{
+	text-align:left;
+}
+
+#moyens_communication td input {
+	width:100%;
+	height:2em;
+}
+
+.answer {
+	padding:5px;
+	margin:5px;
+	background-color:#EFEFEF;
+}
+
+.anstab{
+	background:none;
+	margin:0;
+	padding:0;
+}
+
+table {
+	margin:5px inherit;
+}
+
+input{
+}
+
+.is-ok{
+	background:url(/public/img/degrade-vert.jpg) repeat-y #FFF;
+}
+
+.hide{
+	display:none;
+}
+
+.choix{
+	border:none;
+}
+
+.choix td{
+	width:160px;
+}
+
+.cat-tableau{
+	font-weight:bold;
+	font-size:14px;
+}
+
+.facultatif{
+	color:#999;
+	font-weight:normal;
+}
+
+.petit{
+	font-size:12px;
+	color:#333;
+	font-weight:normal;
+}
+
+.prevpage , .nextpage {
+	width:150px;
+	float: right;
+        margin-left: 20px;
+}
+
+.buttons
+{
+    margin-top: 25px;
+    overflow: hidden;
+}
+
+#footer{
+	width:100%;
+	height:20px;
+	padding:10px auto;
+	border-top:1px #CCC solid;
+	color:#F36;
+	text-align:center;
+	background-color:#FFF;
+	font-size:13px;
+}

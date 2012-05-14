@@ -1,0 +1,177 @@
+html{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+h1{
+	font-size:32px;
+	text-align:center;
+	padding-top:15px;
+	padding-bottom:15px;
+	background:url(../img/fond-rose.jpg) #FFF no-repeat;
+	width:1000px;
+	color:#333;
+}
+
+h2{
+	font-size:20px;
+	padding-bottom:2px;
+	padding-left:10px;
+	color:#666;
+	margin-left:20px;
+}
+
+p{
+	font-size:14px;
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:18px;
+}
+
+a{
+	color:inherit;
+	text-decoration:inherit;
+}
+
+#centrer{
+	width:1000px;
+	margin-left:auto;
+	margin-right:auto;
+	padding-top:20px;
+}
+
+#top{
+	height:100px;
+}
+
+#logo{
+	width:250px;
+	float:left;
+}
+
+#middle{
+	padding:5px;
+}
+
+.gris{
+	font-size:10px;
+	color:#999;
+}
+
+#bottom{
+	padding-top:10px;
+	height:25px;
+	font-size:12px;
+	background-color:#EEE;
+	float:left;
+	margin-left:50px;
+	width:950px;
+}
+
+.links{
+	margin-left:750px;
+}
+
+.link{
+	float:left;
+	margin-left:20px;
+}
+
+.link a:hover{
+	color:#F6C;
+}
+
+.menu{
+	font-size:12px;
+	font-weight:bold;
+	float:left;
+	margin-left:450px;
+	margin-top:30px;
+	border:1px #CCC solid;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+.menu-li{
+	float:left;
+	background-color:#EEE;
+	border:1px #FFF solid;
+	padding:10px 0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+	background: -moz-linear-gradient(top, #fff, #ddd);
+}
+
+.menu-li a{
+	padding:10px;
+}
+
+.menu-li a:hover{
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#999));
+	background: -moz-linear-gradient(top, #fff, #999);
+}
+
+.menu-li a.soon:hover{
+	background: -webkit-gradient(linear, left top, left bottom, from(#c99), to(#c55));
+	background: -moz-linear-gradient(top, #C99, #C55);
+}
+
+#mailing-list{
+	background-color:#FEDCED;
+	height:25px;
+	padding:15px 20px;
+	border:1px #CCC hidden;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	float:left;
+	width:1000px;
+}
+
+.champ-mail{
+	font-size:20px;
+	float:left;
+	width:350px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	border:1px solid #CCC;
+	padding:3px;
+	margin-top:-3px;
+	background-color:#FFF;
+}
+
+.bouton-mail{
+	font-size:18px;
+	margin-left:20px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	border:1px solid #CCC;
+	padding:2px;
+	margin-top:-2px;
+}
+
+.mailing-text{
+	margin-left:20px; float:left; font-size:20px;
+}
+
+#texte{
+	float:left;
+	width:450px;
+	margin:0 20px;
+}
+
+#buzzwords{
+	float:left;
+	width:450px;
+	margin:0 20px;
+}
+
+#buzztitre{
+	font-size:28px;
+	font-weight:bold;
+	text-align:center;
+	padding-bottom:5px;
+}
+
+#tags p{
+	padding-top:20px;
+	font-size:10px;
+}

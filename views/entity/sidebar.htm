@@ -1,0 +1,47 @@
+{i:r-breadcrumbs}
+<div class="span-24 last">
+  {{maxhd: 
+  <div class="span-21">
+    <h1 class="page-title"><a href="{v:home}">{v:name}</a></h1>
+    <p>{v:desc}</p>
+  </div>
+  <div class="span-3 last">
+    {v:button}
+  </div>
+  <hr/>
+  }}
+  <div class="span-6">
+    {{image:
+    <div class="span-6 append-bottom last">
+      <a href="{v:home}">
+	<img class="profile-pic" src="{v:pic}"/>
+      </a>
+    </div>
+    }}
+    {v:sidebar}
+  </div>
+  <div class="span-18 last">
+    {{minhd:
+    <div class="span-15">
+      <h1 class="page-title"><a href="{v:home}">{v:name}</a></h1>
+      <p>{v:desc}</p>
+    </div>
+    <div class="span-3 last">
+      {v:button}
+    </div>
+    <hr/>
+    }}
+    <div class="span-18 last">
+      {v:content}
+    </div>
+  </div>
+</div>
+
+<script type="coffeescript" params="eid,invited">
+window.### = window.### || { last : null }
+
+if invited && ###.last != eid
+  $('.status-button').click()
+
+###.last = eid
+</script>

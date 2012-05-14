@@ -1,0 +1,20 @@
+.joinbox {
+
+  background: #FEC url("/public/icon/32x32/error.png") 15px center no-repeat;
+  overflow: hidden;
+  padding: 10px 5px 10px 64px;
+  border: 1px solid #FC9;
+  color: black;
+
+  &.-yes {
+    background-image: url("/public/icon/32x32/tick.png");
+    background-color: #CCFFCC;
+    border-color: #99CC99;
+  }
+
+  &.-wait {
+    background-image: url("/public/icon/32x32/help.png");
+    background-color: #CCFFFF;
+    border-color: #99CCCC;
+  }
+}

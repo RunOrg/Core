@@ -1,0 +1,59 @@
+//VERSION ROSE
+.colors-pink(){
+@the-color:#E70074;
+@sidebar-background:#FACCE3;
+@sidebar-hover:#FDE6F1;
+@tool:#EE77AA;
+@tool-hover:#FF99CC;
+@like:#EE77AA;
+@titles:#FF7094;
+@the-dark-color:#C20069;
+}
+
+//VERSION SOBRE
+.colors-sobre(){
+@the-color:#330000;
+@sidebar-background:#C1B2B2;
+@sidebar-hover:#D6CCCC;
+@tool:#444400;
+@tool-hover:#777777;
+@like:#444400;
+@titles:#444400;
+@the-dark-color:#220000;
+}
+
+//VERSION VERTE
+.colors-green(){
+@the-color:#339900;
+@sidebar-background:#C1E0B2;
+@sidebar-hover:#D6EBCC;
+@tool:#009900;
+@tool-hover:#B2E0B2;
+@like:#009900;
+@titles:#339933;
+@the-dark-color:#006600;
+}
+
+//VERSION BLEUE
+.colors-blue(){
+@the-color:#339900;
+@sidebar-background:#C1E0B2;
+@sidebar-hover:#D6EBCC;
+@tool:#009900;
+@tool-hover:#B2E0B2;
+@like:#009900;
+@titles:#339933;
+@the-dark-color:#006600;
+}
+
+//VERSION MARQUE BLANCHE
+.colors-white(){
+@the-color:#333;
+@sidebar-background:#CCC;
+@sidebar-hover:#CCC;
+@tool:#444;
+@tool-hover:#777;
+@like:#444;
+@titles:#444;
+@the-dark-color:#222;
+}

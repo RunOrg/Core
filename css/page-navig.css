@@ -1,0 +1,21 @@
+.page-navig {
+
+  display: none;
+  text-align: center;
+  background-color: #EEE;
+  border: 1px solid #CCC;
+  line-height: 20px;
+  height: 20px;
+  padding: 2px;
+  width: 120px;
+  margin:auto;
+  
+  a {
+    font-size: 15px;
+    &:hover { text-decoration: none; }
+  }
+
+  * {
+    vertical-align: middle;
+  }
+}

@@ -1,0 +1,84 @@
+<div class="container showgrid">
+  <h1 class="splash-pricing-title">Contactez-nous&nbsp;!</h1>
+  <h2 class="splash-pricing-subtitle">Nous sommes impatients de vous entendre.</h2>
+
+  <div class="span-18 prepend-3 append-3 prepend-top append-bottom last">
+    <div class="span-8">    
+      <table>
+	<tr>
+	  <td><b>Par e-mail</b></td>
+	  <td><a href="mailto:contact@runorg.com">contact@runorg.com</a></td>
+	</tr>
+	<tr>
+	  <td><b>Par Facebook</b></td>
+	  <td><a href="http://www.facebook.com/RunOrg">facebook.com/RunOrg</a></td>
+	</tr>
+	<tr>
+	  <td><b>Par Twitter</b></td>
+	  <td><a href="https://twitter.com/#!/runorg">@runorg</a></td>
+	</tr>
+	<tr>
+	  <td style="vertical-align:top"><b>Par téléphone</b></td>
+	  <td>Contact commercial<br/>09 70 40 80 01</td>
+	</tr>
+	<tr>
+	  <td style="vertical-align:top"><b>Par courrier</b></td>
+	  <td>RUNORG<br/>22 rue Planchat<br/>75020 Paris</td>
+	</tr>
+      </table>
+    </div>
+    
+    <div class="span-10 last">
+      <p><b>On vous rappelle </b>&nbsp;:<br/>Laissez-nous votre numéro, et nous vous rappelons dès que possible.</p> 
+      <div id="after-contact" style="display:none;padding:10px;border:1px solid #CCC;background-color:#EEE">
+	<p>Votre demande a bien été prise en compte.</p>
+	<p><b>Nous allons vous appeler au numéro indiqué dans les 48 heures.</b></p>
+	<p>Merci pour votre intérêt, et à bientôt par téléphone.</p>
+	<p class="bottom" style="text-align:right">L'Équipe RunOrg</p>
+      </div>
+      <form id="contact-form">
+	<div>
+	  <label>
+	    <b>Numéro de téléphone</b>&emsp;<small>(obligatoire)</small><br/>
+	    <input type="text" name="phone"/>
+	  </label>
+	</div>
+	<div>
+	  <label>
+	    <b>Vos nom et prénom</b>&emsp;<small>(obligatoire)</small><br/>
+	    <input type="text" name="name"/>
+	  </label>
+	</div>
+	<div>
+	  <label>
+	    <b>Votre organisation, association ou entreprise</b><br/>
+	    <input type="text" name="org"/>
+	  </label>
+	</div>
+	<div>
+	  <label>
+	    <b>Un message ?</b><br/>
+	    <textarea name="message"></textarea>
+	  </label>
+	</div>
+	<button type="submit" class="pretty-button typwidth" style="float:right">
+	  Appelez-moi
+	</button>
+      </form>
+    </div>
+
+  </div>
+
+</div>  
+
+<script type="coffeescript" params="">
+$('#contact-form').submit () -> 
+  $me = $ @
+  do $me.hide
+  do $('#after-contact').show
+  data = {}
+  $me.find('input, textarea').each () -> 
+    data[$(@).attr 'name'] = $(@).val()
+  jog.post '/post-contact', data
+  return false
+</script>

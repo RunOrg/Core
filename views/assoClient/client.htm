@@ -1,0 +1,38 @@
+<div class="span-12 column-right runorg-client">
+
+  {{paying:
+  <div class="-current">{v:offer}</div>
+
+  <div class="span-12 prepend-top append-bottom last">
+    <div class="-info" style="background-image: url('/public/icon/key.png')">
+      <b>{v:seats}</b> {t:client.seats} <span class="-used">({v:used-seats} {t:client.used})</span>
+    </div>
+    <div class="-info" style="background-image: url('/public/icon/database_save.png')">
+      <b>{v:memory}</b> {t:megabytes} <span class="-used">({v:used-memory} {t:client.used})</span>
+    </div>
+    <div class="-info" style="background-image: url('/public/icon/date.png')">
+      {t:client.expires}{t:colon} <b>{v:last-day}</b>
+    </div>
+  </div>
+  }}
+
+  {{free:
+  <div class="-current">{t:offer.light}</div>
+
+  <div class="span-12 prepend-top append-bottom last">
+    <div class="-info" style="background-image: url('/public/icon/key.png')">
+      <b>{v:seats}</b> {t:client.seats}
+    </div>
+    <div class="-info" style="background-image: url('/public/icon/database_save.png')">
+      <b>{v:memory}</b> {t:megabytes} <span class="-used">({v:used-memory} {t:client.used})</span>
+    </div>
+  </div>
+  }}
+
+  {v:orders}
+
+</div>
+
+<div class="span-6 last">
+  {v:actions}&nbsp;
+</div>

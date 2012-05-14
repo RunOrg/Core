@@ -1,0 +1,35 @@
+<div id="mbrFrom">
+  
+  <div class="span-24 append-bottom last">
+    <div class="span-8">{v:col1}</div>
+    <div class="span-8">{v:col2}</div>
+    <div class="span-8 last">{v:col3}</div>
+  </div>
+  
+  <div class="span-6 prepend-18 last">
+        
+    <div class="span-3">
+      <button type="button" id="mbrFrom-invite" class="pretty-button blue-button  typwidth">{t:member.add-or-invite.invite}</button>
+    </div>
+    
+    <div class="span-3 last">
+      <button type="button" id="mbrFrom-add"    class="pretty-button green-button typwidth">{t:member.add-or-invite.add}</button>
+    </div>
+    
+  </div>
+</div>
+
+<script type="coffeescript" params="url">				  
+
+add = (mode) ->
+  ids = []
+  $('#mbrFrom input:checked').each () -> 
+    ids.push $(@).val()
+  return if !ids.length
+  jog.post url, { mode : mode, list : ids }
+  $('#mbrFrom').html("").addClass("big-loading")
+
+$('#mbrFrom-add').click () -> add "add"
+$('#mbrFrom-invite').click () -> add "invite"
+
+</script>

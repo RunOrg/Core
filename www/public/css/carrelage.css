@@ -1,0 +1,99 @@
+.carrelage 
+{ 
+    width: auto; 
+    margin: auto; 
+    border: 1px solid #ddd;
+}
+     
+.carrelage td 
+{
+    padding: 0px; 
+    overflow:hidden; 
+}    
+
+.carrelage thead td, .carrelage tfoot td
+{
+    background-color: #ddd;
+}
+
+.carrelage tbody td 
+{
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+}
+
+.carrelage tbody tr.fst td { border-top: 0px solid white }
+.carrelage tbody td.fst { border-left: 0px solid white }
+
+.carrelage tbody td > div 
+{ 
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 3px 5px;
+} 
+
+.carrelage tfoot .paging
+{
+    font-style: normal;
+    font-weight: bold;
+    text-align: center;
+}
+
+.carrelage tfoot .paging a
+{
+    text-decoration: none;
+}
+
+.carrelage .crl-btn .ui-button-text {             
+  margin: 0;
+  border: 0px solid white;
+  -moz-border-radius: 0;
+  display: block;
+}
+.carrelage .crl-btn 
+{ 
+    display: block; 
+    margin: 0 
+}
+
+.carrelage tr.even td { background-color: #f8f8f8 }
+{   
+    background:#F8F8F8 none repeat scroll 0 0;
+}
+
+.carrelage thead a, .carrelage thead span 
+{
+    background:#DDDDDD url() no-repeat scroll right center;
+    color:#666666;
+    display:block;
+    font-weight:bold;
+    padding:1px 20px 1px 5px;
+}
+
+.carrelage thead a:hover, .carrelage thead a.ord-a:hover, .carrelage thead a.ord-d:hover 
+{
+    background-color:#EEEEEE;
+    text-decoration:none;
+}
+
+.carrelage thead a {
+    display: block;
+    height: 19px;
+}
+
+.carrelage thead a span {
+    background: transparent;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;    
+}
+
+.carrelage thead a.ord-a 
+{
+    background-image:url(/public/icon/bullet_arrow_down.png);
+}
+
+.carrelage thead a.ord-d 
+{
+    background-image:url(/public/icon/bullet_arrow_up.png);
+}

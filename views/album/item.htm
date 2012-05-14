@@ -1,0 +1,13 @@
+<div class="album-item">
+  <a href="{v:url}">
+    <img src="{v:image-url}"/>
+  </a>
+  <span>
+    <a href="{v:by-url}"><strong>{v:by}</strong></a><span> · {v:time}</span>
+  </span>
+  <span>
+    <a href="javascript:void(0)" onclick="{v:like}" class="-like{v:liked}">★ <span>{v:likes}</span></a>
+    {{comments: · {v:count} <img src="/public/icon/comment.png"/>}}
+    {v:remove}
+  </span>
+</div>

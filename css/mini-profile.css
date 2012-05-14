@@ -1,0 +1,82 @@
+.-attach .mini-profile {
+
+  padding: 3px !important;
+  width: 180px;
+  float: left;
+
+  img {
+    width: 27px;
+    height: 27px;
+  }
+
+  > span {
+    padding-left: 33px;
+  }
+}
+
+.ui-menu .mini-profile, .ui-menu .mini-profile-joy
+{
+  border-bottom: 1px solid #CCC ! important;
+}
+
+.mini-profile {
+
+  display: block;
+  overflow: hidden;
+  padding: 5px ! important;
+
+  img {
+    float:left;
+    width: 40px;
+    height: 40px;
+  }
+
+   > span {
+    display: block;
+    padding: 2px 4px 0 46px ;
+  }
+
+  &.ui-state-hover { 
+
+    color: white;
+    text-shadow: 0 1px 1px #345;
+    background-color: #68A;
+  }
+}
+
+.mini-profile-joy {
+
+  display: block;
+  overflow: hidden;
+  padding: 5px;
+
+  img {
+    float:left;
+    width: 40px;
+    height: 40px;
+  }
+
+  > span {
+    display: block;
+    padding: 2px 4px 0 46px ;
+  }
+}
+
+.ui-state-hover .mini-profile-joy { 
+  color: white;		  
+  text-shadow: 0 1px 1px #345;  
+  background-color: #68A;
+} 
+
+.joy-select-html .mini-profile-joy {
+  padding: 0;
+
+  > span {
+    padding: 0 0 0 22px;
+  }
+
+  img {
+    height: 18px;
+    width: 18px;
+  }
+}

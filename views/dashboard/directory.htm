@@ -1,0 +1,41 @@
+<div class="-directory">
+  {{avatars:
+  <a href="{v:url}" class="minitip -s" title="{v:name}">
+    <img src="{v:pic}"/>
+  </a>
+  }}
+  {{more:
+  <a href="{v:url}">
+    <span>+{v:more}</span> 
+  </a>
+  }}
+</div>
+
+<style type="less">
+.dash-block .-directory {
+  img { 
+    width: 44px;
+    height: 44px;
+    display: block;
+  }
+  span {
+    display: block; 
+    height: 42px;
+    width: 42px;
+    border: 1px solid #BBB;
+    background-color: #DDD;
+    text-align: center;
+    line-height: 42px;
+    color: black;
+    font-size: 13px;
+  } 
+  a {
+    display:block;
+    padding:2px;
+    float:left;
+
+    &:hover { text-decoration: none }
+  }
+
+}
+</style>

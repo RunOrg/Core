@@ -1,0 +1,8 @@
+.wall-more {
+  display: block;
+  background: white url("/public/icon/comments.png") 4px center no-repeat;
+  margin-top: 5px;
+  border-top: 1px dashed #DDD;
+  padding: 5px 0px 5px 24px;
+  clear: both;
+}

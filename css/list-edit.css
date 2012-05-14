@@ -1,0 +1,87 @@
+.colsort td {
+
+  background-color: white;
+
+  &.-name input {
+    height: 14px;
+    margin: 1px -2px 2px;
+    display: block;
+  }
+
+  &.-order div {
+    width: 37px;
+    background: white url("/public/icon/arrow_out.png") center center no-repeat;
+  }
+
+}
+
+.colsort td.-name div, .coladdrem td.-name div
+{
+    width: 177px;
+}
+
+.coladdrem td.-remove a
+{
+    display: block;
+    text-align: center;
+}
+
+.coladdrem td.-remove a:hover
+{
+    background-color: #FDD;
+}
+
+.coladdrem img, .colsort img, .summary img
+{
+    vertical-align: middle;
+}
+
+.coladdrem td, .colsort td, .summary td
+{
+    height: 25px;
+}
+
+.colsort td.-source div, .coladdrem td.-source div
+{
+    width: 367px;
+}
+
+.colsort td.-infile div, .colsort td.-inlist div, .coladdrem td.-infile div, .coladdrem td.-inlist div
+{
+    width: 37px;
+    text-align: center;
+}
+
+.colsort tr.sort-placeholder td, .fieldedit tr.sort-placeholder td
+{
+    height: 22px;
+    background-color: #FFDDEE;
+}
+
+.fieldedit {
+
+  td {
+    background-color: white;
+  }
+
+  .-required div {
+    text-align: center;
+    width: 63px;
+  }
+
+  .-name div {
+    width: 303px;
+    font-weight: bold;
+  }
+
+  .-source div {
+    width: 230px;
+  }
+}
+
+.autosubscribe td.-source div
+{
+    width: 311px;
+    overflow: hidden;
+}
+

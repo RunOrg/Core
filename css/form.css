@@ -1,0 +1,127 @@
+div.label
+{
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;	
+}
+
+.labels-right div.label
+{
+  text-align: right;
+}
+
+input[type=radio], input[type=checkbox]
+{
+    vertical-align: top;
+    margin: 4px 3px;
+}
+
+input[type=file]
+{
+    margin: 4px 0;
+}
+
+input[type=text],input[type=password]
+{ 
+  width: 180px;
+}
+
+.large-input input[type=text]
+{
+  width: 400px;
+}
+
+.span-10 .large-input input[type=text]
+{
+  width: 373px;
+}
+
+.span-10 textarea
+{
+  width: 378px;
+}
+
+.medium-input input[type=text]
+{
+  width: 280px;
+}
+
+.right-input input[type=text]
+{
+  text-align: right;
+}
+
+.required-legend
+{
+   background: transparent url("/public/icon/bullet_star.png") no-repeat scroll left center;
+   padding-left: 16px;
+   line-height: 16px;
+   font-size: 10px;
+   color: #666;
+}
+
+.view-label
+{
+    font-weight: bold;
+    text-align: right;
+}
+
+.required 
+{
+    background: transparent url("/public/icon/bullet_star.png") no-repeat scroll right center;
+}
+
+input, .ui-widget form input
+{
+  font-size: 12px;
+}
+
+label.field-error
+{
+  display: block;
+  padding-left: 20px;
+  background: transparent url("/public/icon/exclamation.png") left center no-repeat;
+  color: #FF7094;
+  text-align: left;
+}
+
+label.field-count
+{
+  color:#888888;
+  display:block;
+  font-size:10px;
+  font-weight:normal;
+  line-height:11px;
+  margin-top:-5px;
+  text-align:right;
+}
+
+textarea
+{
+    display:block;
+    height:4.8em;
+    font-size: 12px;
+}
+
+.hide-labels label.label
+{
+    position: absolute;
+    margin: 0.5em;
+    color: #AAA;
+    font-weight: normal;
+}
+
+input[type="text"].ui-autocomplete-input
+{
+    margin:0.5em 0;
+    padding:2px 0;
+    width:170px;
+}
+
+input[type="text"].ui-autocomplete-input.filled
+{
+    background: url("/public/css/jqueryui-aristo/images/the_gradient.gif") repeat-x scroll center top #DDDDDD;
+}
+
+.-tall textarea {
+  height: 200px;
+}

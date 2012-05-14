@@ -1,0 +1,26 @@
+{{items:
+  <tr class="-file">
+    <td>
+      <a class="-title" href="{v:download}">{v:title}</a>
+      <span class="-details -left">
+	<img src="{v:ext}"/> · <a href="{v:by_url}">{v:by}</a> · {v:date}
+      </span>
+    </td>
+    <td>
+      <a href="{v:download}">{t:folder.download}</a>
+      <span class="-details">{v:size}</span>
+    </td>
+    <td>
+      <a href="{v:details}">{t:folder.details}</a>
+    </td>
+    <td><span class="-details">{v:likes}</span></td>
+    <td><span class="-details">{v:comments}</span></td>
+  </tr>
+}}
+{{more:
+  <tr onclick="{v:onclick}">
+    <td colspan="5">
+      <a href="javascript:void(0)" class="show-details">{t:show-details}</a>
+    </td>
+  </tr>
+}}

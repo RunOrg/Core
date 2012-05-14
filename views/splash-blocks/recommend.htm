@@ -1,0 +1,75 @@
+<div class="block-recommend">
+  <h2>{v:title}</h2>
+  <h3>{v:subtitle}</h3>
+  <div style="overflow:hidden">
+    {{item:
+    <div class="-item{v:last}">
+      <blockquote>{v:quote}</blockquote>
+      <cite>{v:who}<br/>{v:org}</cite>
+    </div>
+    }}
+  </div>
+</div>
+
+<style type="less">
+
+.theme-splash .block-recommend {
+  width: 950px;
+  margin: 20px auto;
+
+  h2 {
+    color: black;
+    text-transform: none;
+    text-shadow: #BBB 0px 1px 0px;
+    margin: 0 0 15px;
+    text-align:center;
+    line-height:30px;
+    font-size: 24px;
+    height: 30px;
+  }
+
+  h3 {
+    color: #555;
+    text-transform: none;
+    margin: 0;
+    position: relative;
+    top: -15px;
+    text-align:center;
+    line-height:18px;
+    font-size: 18px;
+    height: 18px;
+    font-weight: normal;
+  }
+
+  .-item {
+    float: left;
+    width: 300px;
+    margin-right: 25px;
+  }
+
+  .-item.-last {
+    margin-right: 0;
+  }
+
+  blockquote {
+    line-height: 20px;
+    font-size: 12px;
+    font-style: normal;
+    margin: 15px 0;
+    padding: 0;
+    overflow: hidden;
+    height: 60px;
+  }
+
+  cite {
+    font-size: 11px;
+    font-weight: bold;
+    display: block;
+    color: #E70079;
+    font-style: normal;
+    overflow: hidden;
+    text-align: right;
+  }
+}
+
+</style>

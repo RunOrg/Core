@@ -1,0 +1,25 @@
+.help-links {
+
+  background-color: #333;
+  border-radius: 4px;
+
+  &.-right { margin: 0 0 0 8px; }
+  &.-left { margin: 0 8px 0 0; }
+
+  padding: 4px 6px;
+
+  a {
+
+    color: white;
+    display: block;
+    height: 15px;
+    overflow: hidden;
+    padding: 2px 0;
+    white-space: nowrap;
+    font-size: 10px;
+    font-family: "Arial", sans;
+
+    &:hover { color: white }
+    &.-more { text-align: right }
+  }
+}

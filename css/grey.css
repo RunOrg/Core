@@ -1,0 +1,12 @@
+.grey {
+
+  overflow:hidden;
+  background-color: #DDD;
+  border-bottom: 1px solid #CCC;
+  padding: 5px;
+  margin-top: 3px;
+
+  p {
+    margin: 0;
+  }
+}

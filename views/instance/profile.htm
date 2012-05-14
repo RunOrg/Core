@@ -1,0 +1,45 @@
+<div class="span-18 entity-info last">
+  <div style="float:right;margin-left:10px;margin-bottom:8px">{v:stats}</div>
+
+  <div style="overflow:hidden"><p>{v:desc}</p></div>
+
+  <div class="append-bottom" style="overflow:hidden">
+    {{website:
+    <a class="icon-link" href="{v:url}" target="_blank"><img src="/public/icon/world_link.png"/> {t:instance.website}</a>&emsp;
+    }}
+    {{facebook:
+    <a class="icon-link" href="{v:url}" target="_blank"><img src="/public/icon/facebook.png"/> {t:instance.facebook}</a>&emsp;
+    }} 
+    {{twitter:
+    <a class="icon-link" href="{v:url}" target="_blank"><img src="/public/icon/twitter.png"/> {t:instance.twitter}</a>&emsp;
+    }}
+  </div>  
+
+  <div class="append-bottom" style="overflow:hidden;padding:5px;background-color:#EEE">
+  {{tags:
+    {{tag:<span class="tag">{v:name}</span>}}
+  }}
+  </div>
+
+  <div class="append-bottom" style="overflow:hidden">
+    {{address:
+    <a href="{v:url}" target="_blank">{v:text}</a>&emsp;
+    }}
+    {{phone:
+    {v:phone}&emsp;
+    }}
+    {{contact:
+    <a href="{v:url}">{v:email}</a>&emsp;
+    }}
+  </div>
+</div>
+
+<hr/>
+
+<div class="span-18 last">
+  {v:feed}
+</div>
+
+<script type="coffeescript" params="enlarge">
+runorg.enlargeDetails('.entity-info',enlarge,105) if enlarge
+</script>

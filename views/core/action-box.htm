@@ -1,0 +1,35 @@
+<div class="action-box">
+  {{label:<span class="-title">{v:title}</span>}}
+  {v:content}
+  {{link:<a style="background-image: url({v:img})" href="{v:url}">{v:label}</a>}}
+  {{button:<a style="background-image: url({v:img})" href="javascript:void(0)"
+	      onclick="{v:click}">{v:label}</a>}}
+</div>
+
+<style type="less">
+.action-box {
+
+  min-width: 230px;
+  border: 1px solid #CCC;
+  margin-bottom: 10px;
+
+  .-title {
+    margin-bottom: 2px;
+    padding: 0px 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #888;
+    background-color: #EEE;
+    display: block;
+  }
+
+  a { 
+    display: block;
+    background: url(/public/icon/shading.png) left center no-repeat;
+    padding: 3px 5px 3px 22px;
+    margin: 0 0 0 10px;
+  }
+
+}
+</style>

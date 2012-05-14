@@ -1,0 +1,26 @@
+<div class="span-10 last">
+  {v:send-message.begin}
+  <div class="span-10 last">
+    <div class="hide-labels large-input">
+      {v:send-message.title.label}
+      {v:send-message.title.input}
+    </div>
+  </div>
+  <div class="span-10 last">
+    {v:send-message.title.error}
+  </div>
+  <div class="span-10 last">
+    {v:send-message.body.input}
+  </div>
+  <div class="span-10 append-bottom last">
+    {v:send-message.body.error}
+  </div>
+  <hr/>
+  <div class="span-3 prepend-4">
+    <button type="submit" class="pretty-button typwidth">{t:send}</button>
+  </div>
+  <div class="span-3 last">
+    <button type="button" class="pretty-button typwidth" onclick="runorg.closeDialog()">{t:cancel}</button>
+  </div>
+  {v:send-message.end}
+</div>

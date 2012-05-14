@@ -1,0 +1,10 @@
+.small-details {
+  font-size: 11px;
+  line-height: 12px;
+  color: #888;
+
+  img {
+    height: 16px;
+    margin: -3px 0;  
+  }
+}

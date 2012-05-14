@@ -1,0 +1,91 @@
+<table class="block-pricing">
+  <thead>
+    <tr>
+      <td></td>
+      {{column:<td><div>
+	  {{item:<a href="{v:link}">{v:name}</a>}}
+      </div></td>}}
+    </tr>
+  </thead>
+  {{line:
+  <tr class="{v:css}">
+    <td class="-label">{v:label}</td>
+    {{cell:<td class="{v:css}">{v:content}</td>}}
+  </tr>
+  }}
+</table>
+<div class="block-pricing-foot">{v:foot}</div>
+
+<style type="less">
+
+.theme-splash .block-pricing-foot {
+  width: 950px;
+  margin: 20px auto;
+  color: #555;
+  font-size: 12px;
+}
+
+.theme-splash .block-pricing {
+
+  width: 950px;
+  margin: 20px auto;
+  border-collapse: collapse;
+
+  td {
+    text-align: center;
+  }
+
+  thead td{
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+
+    div {
+      width: 150px;
+    }
+  }
+
+  tbody td {
+    background-color: #EEE;
+    border-right: 1px solid white;
+    padding: 8px 0;
+    width: 166px;
+
+    &.-asso {
+      background-color: #EFF;
+      font-size: 1.5em;
+      width: 166px;
+    }
+  }
+
+  tr.-alt td {
+    background-color: #DDD;
+
+    &.-asso {
+      background-color: #DEE;
+    }
+  }
+
+  tbody tr td.-label {
+    background-color: white;
+    text-align: right;
+    padding: 0 10px 0;
+    width: 100px;
+  }
+
+  tr.-price td {
+    font-size: 14px;
+    font-weight: bold;
+  
+    &.-asso {
+      font-size: 18px;
+    }
+  }
+
+  td.-tick {
+    background-image: url(/public/icon/tick.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+</style>

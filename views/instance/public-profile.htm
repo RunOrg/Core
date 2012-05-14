@@ -1,0 +1,51 @@
+{i:public-network-head}
+
+<div class="container">
+  <div class="span-24 prepend-top last">
+    <div class="span-6">
+      <div class="span-6 last append-bottom" style="text-align:center">
+	<img src="{v:pic}"/>
+      </div>  
+      <form action="{v:subscribe}" method="POST">
+	{v:info}
+      </form>
+    </div>
+    <div class="span-18 last">
+      <div class="span-18">
+	<h1 class="assos-name">{v:name}</h1>
+      </div>
+      <hr/>
+      <div class="span-18 entity-info last">
+	<div style="float:right;margin-left:10px;margin-bottom:8px">{v:stats}</div>
+	
+	<div style="overflow:hidden"><p>{v:desc}</p></div>
+	<div class="append-bottom" style="overflow:hidden">
+	  {{website:
+	  <a class="icon-link" href="{v:url}" target="_blank">
+	    <img src="/public/icon/world_link.png"/> {t:instance.website}</a>&emsp;
+	  }}
+	  {{facebook:
+	  <a class="icon-link" href="{v:url}" target="_blank">
+	    <img src="/public/icon/facebook.png"/> {t:instance.facebook}</a>&emsp;
+	  }} 
+	  {{twitter:
+	  <a class="icon-link" href="{v:url}" target="_blank">
+	    <img src="/public/icon/twitter.png"/> {t:instance.twitter}</a>&emsp;
+	  }}
+	</div>  
+      </div>
+      
+      <hr/>
+      
+      <div class="span-18 last">
+	{v:feed}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/coffeescript" params="email">
+$("[name='email']").val(email) if email
+</script>
+
+{i:public-network-foot}

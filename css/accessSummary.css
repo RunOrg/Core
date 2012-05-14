@@ -1,0 +1,50 @@
+.accessSummary {
+
+  > div {
+
+    height: 16px;
+    background: url("/public/icon/lock.png") no-repeat scroll left center transparent ;
+    padding: 2px 2px 2px 18px;
+    font-weight: bold;
+
+    &.-access-normal
+    {
+      background-image: url("/public/icon/flag_blue.png");
+      color: #37C;  
+    }
+
+    &.-access-closed
+    {
+      background-image: url("/public/icon/flag_red.png");
+      color: #C44;  
+    }
+
+    &.-access-private
+    {
+      background-image: url("/public/icon/flag_orange.png");
+      color: #C73;  
+    }
+
+    &.-access-public
+    {
+      background-image: url("/public/icon/flag_green.png");
+      color: #4C4;  
+    }
+
+    &.-access-manage
+    {
+      background-image: url("/public/icon/user_gray.png");
+      font-weight: normal;
+    }
+
+  }
+
+  a.-details
+  {
+    color: #666;
+    font-weight: normal;
+    font-size: 10px;
+    display: inline-block;
+    vertical-align: top;
+  }
+}

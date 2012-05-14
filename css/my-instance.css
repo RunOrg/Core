@@ -1,0 +1,10 @@
+.my-instance {
+
+  .-title {
+    font-weight: bold;
+  }
+
+  .-desc p {
+    text-align: justify;
+  }
+}

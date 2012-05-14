@@ -1,0 +1,71 @@
+.v-tabs {
+
+  list-style-type: none;
+  margin: 0;
+  padding: 12px 0 20px 20px;
+  border-right: 1px solid #DDD;
+
+  li {
+    background-color: #DDDDDD;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  a {
+
+    display: block;
+    padding: 4px 16px;
+    color: #666;
+    font-weight: bold;
+
+    &:hover {
+      color: white;
+      text-shadow: 0 0 1px white;
+      text-decoration: none;
+    }
+  }
+
+  .-sel {
+
+    border-color:#DDD white #DDD #DDD;
+    border-style:solid;
+    border-width:1px;    
+    margin-right:-1px;
+  
+    a, a:hover {
+      padding: 3px 15px; 
+      background-color: white;
+      color: black;
+    }
+  }
+}
+
+.theme-v-tabs() {
+	.v-tabs {
+		a {
+			&:hover {
+				background-color: @titles;
+			}
+		}
+	}
+}
+
+body {
+	.colors-pink;
+	.theme-v-tabs;
+}
+
+.theme-green {
+	.colors-green;
+	.theme-v-tabs;
+}
+
+.theme-sobre {
+	.colors-sobre;
+	.theme-v-tabs;
+}
+
+.theme-sobre {
+	.colors-white;
+	.theme-v-tabs;
+}

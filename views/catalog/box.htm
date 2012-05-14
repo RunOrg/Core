@@ -1,0 +1,81 @@
+<div class="catalog-box" id="{v:id}">
+  <a name="{v:id}"></a>
+  <h3>{v:label}</h3>
+  <div class="-wrapper"> 
+    {{verticals:
+    <div class="-case">
+
+      <div class="-title-wrapper">
+	<h4 class="-title">{v:title}</h4> 
+      </div>
+
+      <div class="-desc-wrapper">
+        <p class="-desc bottom">{v:summary}</p>
+      </div>
+
+      <a class="pretty-button green-button typwidth" style="margin:auto" href="{v:start}">{t:catalog.start}</a>
+      <a href="{v:details}" class="-details">{t:catalog.details}</a>
+
+    </div>
+    }}
+  </div>
+</div>
+
+<style type="less">
+.catalog-box {
+
+  overflow: hidden;
+  margin: 20px 0;
+  background-color: white;
+  z-index: 2;
+
+  .-wrapper {
+    padding:2px;
+    width: 726px;  
+  }
+
+  .-case {
+
+    float: left;
+    box-shadow: 0px 3px 5px #999;
+    border-radius: 10px;
+    border:1px solid #EEE;
+    background-color:#FFF;
+    text-align:center;
+    padding:20px 10px;
+    margin:0 20px 20px 0;
+    width:199px;
+    text-align:center;
+
+    .-title-wrapper {
+
+      margin-bottom: 20px;
+      line-height: 45px;
+      height: 45px;
+      
+      h4.-title {
+        font-size:18px;
+        font-weight:bold;
+        margin:0;
+        vertical-align: middle;
+        display: inline-block;
+        line-height:22px; 
+      }
+    }
+
+    .-desc-wrapper {
+
+      .-desc {
+        max-height:43px;
+        display:inline-block;
+        vertical-align:middle;
+        line-height:1.2em;
+      }
+
+      height:43px;
+      line-height:43px;
+      margin-bottom: 20px;
+    }
+  }
+}
+</style>

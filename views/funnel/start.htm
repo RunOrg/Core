@@ -1,0 +1,308 @@
+{v:header}
+
+<div class="container" style="min-height:600px"> 
+  <div class="span-16 prepend-4 append-4 last">
+    
+    <h2>{t:start.title}</h2>
+    {{pick-vertical:
+    {v:help}
+    <div class="span-16 last">
+      <ul class="verticals">
+	{{verticals:
+	<li>
+	  <a href="{v:url}" class="vertical">
+	    <span class="-title">{v:title}</span>
+	    <span class="-summary">{v:summary}</span>
+	  </a>
+	</li>
+	}}
+      </ul>
+    </div>
+    }}
+    
+    {{vertical:
+    <div class="span-16 append-bottom last">
+      <div class="vertical">
+	<span class="-title">{v:title}</span>
+	<span class="-summary">{v:summary}</span>
+      </div>
+      <div style="text-align:right; font-size:10px">
+	<a href="{v:catalog}">{t:start.pick-another}</a>
+      </div>
+    </div>
+    }}
+    
+    {{form:
+    <div class="span-16 last">
+
+      <div class="span-16 append-bottom last"> 
+	<div class="field -asso-name">
+	  <div class="-label">
+	    <label></label>
+	  </div>
+	  <div class="-field -required">
+	    <div class="large-input">
+	      <input type="text"/>
+	    </div>
+	    <div class="-error">
+	      <label class="field-error"></label>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="field -asso-desc">
+	  <div class="-label">
+	    <label></label>
+	  </div>
+	  <div class="-field">
+	    <textarea></textarea>
+	    <div class="-error">
+	      <label class="field-error"></label>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="field -asso-key">
+	  <div class="-label">
+	    <label></label>
+	  </div>
+	  <div class="-field -required">
+	    <div class="right-input">
+	      <input type="text"/><span class="sentence-around-input">.runorg.com</span>
+	    </div>
+	    <div class="-error">
+	      <label class="field-error"></label>
+	    </div>
+	  </div>
+	</div>
+      </div>
+      
+      <div class="span-3 prepend-13 last"> 
+	<button type="submit" class="pretty-button typwidth">{v:submit}</button>
+      </div>
+      
+    </div>
+    }}
+    
+    {{asso:
+    <div class="span-16 append-bottom last">
+      <div class="funnel-confirm">
+	<div class="span-14 last">
+	  <div class="span-4"><b>{t:instance.field.name}</b></div>
+	  <div class="span-9 prepend-1 last">{v:name}</div>
+	</div>
+	
+	<div class="span-14 last">
+	  <div class="span-4"><b>{t:instance.field.desc}</b></div>
+	  <div class="span-9 prepend-1 last">{v:desc}</div>
+	</div>
+	
+	<div class="span-14 last">
+	  <div class="span-4"><b>{t:instance.field.key}</b></div>
+	  <div class="span-9 prepend-1 last">
+	    {v:key}<span class="quiet">.runorg.com</span>
+	  </div>
+	</div>
+	
+      </div>
+    </div>
+    }}
+    
+    {{account:
+    
+    <div id="fb-root"></div>
+    <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
+    
+    <div class="span-16 append-bottom last"> 
+      <div class="span-5">
+	<!--
+            <a class="login-method -facebook" href="javascript:void(0)">
+      	      {t:start.facebook}
+      	      <span class="-image"><img src="/public/icon/facebook-24.gif" /></span>
+	    </a>
+	    --> &nbsp;
+      </div>
+      <div class="span-6">
+    	<div class="login-method-center">
+	  <a class="login-method -signup" href="javascript:void(0)">
+	    {t:start.new.account}
+	    <span class="-image"><img src="/public/icon/key_add_24.png" /></span>
+          </a>
+    	</div>
+      </div>
+      <div class="span-5 last">
+	<a class="login-method -login" href="javascript:void(0)">
+	  {t:start.login}
+	  <span class="-image"><img src="/public/icon/key_runorg.png" /></span>
+	</a>
+      </div>
+    </div>
+    
+    <script type="coffeescript" params="fb_app_id,fb_url,fb_channel">
+FB.init
+  appId: fb_app_id
+  status: false
+  cookie: true
+  xfbml: true
+  channelUrl: fb_channel
+  oauth: true
+
+$(".login-method.-facebook").click ->
+  login = (r) -> 
+    if r.session
+      runorg.runFromServer(fb_url)
+  FB.login(login,{scope:"email"})
+
+$signup = $(".-signup-form").hide()
+$login  = $(".-login-form").hide()
+$(".login-method.-signup").click ->
+  $login.hide()
+  $signup.show()
+$(".login-method.-login").click ->
+  $login.show()
+  $signup.hide()
+    </script>
+    
+    <div class="-signup-form">
+      {{signup:
+      <div class="span-12 prepend-2 append-2 last">
+	
+	<div class="span-12 last"> 
+	  <div class="field -firstname">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="text"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-12 last"> 
+	  <div class="field -lastname">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="text"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-12 last"> 
+	  <div class="field -login">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="text"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-12 last"> 
+	  <div class="field -password">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="password"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-12 last"> 
+	  <div class="field -password2">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="password"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-3 prepend-9 last"> 
+	  <button type="submit" class="pretty-button typwidth">{t:login.signup-btn}</button>
+	</div>
+	
+      </div>
+      }}
+    </div>
+    
+    <div class="-login-form"> 
+      {{login:
+      <div class="span-12 prepend-2 append-2 last">
+	
+	<div class="span-12 last"> 
+	  <div class="field -login">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="text"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-12 last"> 
+	  <div class="field -password">
+	    <div class="-label">
+	      <label></label>
+	    </div>
+	    <div class="-field -required">
+	      <div class="">
+		<input type="password"/>
+	      </div>
+	      <div class="-error">
+		<label class="field-error"></label>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="span-3 prepend-9 last"> 
+	  <button type="submit" class="pretty-button typwidth">{t:login.login-btn}</button>
+	</div>
+	
+      </div>
+      }}
+    </div>
+    
+    }}
+  </div>
+</div>
+
+{v:footer}
+
+    

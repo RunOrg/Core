@@ -1,0 +1,24 @@
+{{days:
+<div class="calendar-day">
+  <span>{v:day}</span>
+  <div>{v:content}</div>
+</div>
+}}
+
+<style type="less">
+.calendar-day
+{
+  overflow: hidden;
+  > span {
+    float: left;
+    margin: 5px 10px 0 0;
+    font-size: 11px;
+    border-bottom: 1px solid #ccc;
+    width: 150px;
+    text-align: right;
+  }
+  > div {
+    overflow: hidden;
+  }
+}
+</style>

@@ -1,0 +1,78 @@
+<div class="dash-block">
+  <h4><span class="-icon" style="background-image:url({v:icon});"> {v:title}</span></h4>
+  {{abstract:
+  <div class="-abstract">
+    {v:text} 
+  </div>
+  }}
+  {{content:
+  <div id="{v:id}" class="-content -loading">
+    <script type="coffeescript" params="id,url">
+self = jog.extend @, @$.find ('#'+id)
+jog.remote self, url, {}, -> @$.removeClass('-loading')
+    </script>
+  </div>
+  }}
+  <div class="-action">
+    {v:access}
+    {{green:<a href="{v:action}" type="button" class="pretty-button green-button -right">{v:label}</a>}}
+    <a href="{v:url}" class="pretty-button -right">{v:action}</a>
+  </div>
+</div>
+
+<style type="less">
+
+.dash-block {
+  border: 1px solid #CCC;
+  padding: 0;
+  border-radius: 3px;
+  margin: 0 0 10px 0;
+  display: block;
+  overflow: hidden;
+	
+  .-abstract {
+    margin: 5px;
+    font-size: 10px;
+  }
+
+  h4 {
+    font-size:1.1em;
+    font-weight:bold;
+    color:#333;
+    text-shadow:0 1px 0 #FFF;
+  }
+
+  .-content {
+    margin: 5px;
+    overflow: hidden;
+
+    &.-loading {
+      height: 40px;
+      background: url("/public/icon/ajax-load.gif") center center no-repeat transparent ;
+    }
+  }
+	
+  .-action {
+    margin: 5px;
+    overflow: hidden;
+
+    a.access-flag { margin: 7px 0 0 0 }
+  }
+  
+  h4 {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #CCC;
+    background-image: url("/public/css/jqueryui-aristo/images/the_gradient.gif");
+    color: #333333;
+		
+    span {
+      background: url("/public/icon/shading.png") no-repeat scroll 4px center transparent;
+      padding: 2px 0 2px 24px;
+      line-height: 16px;
+      display: block;
+    }
+  }
+}
+
+</style>

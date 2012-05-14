@@ -1,0 +1,94 @@
+.ui-joy-dict-value {
+    padding-left: 3px;
+    overflow: hidden;
+}
+
+.ui-joy-array, .ui-joy-option, .ui-joy-dict
+{
+    padding: 0 0 0 29px;
+    margin: 0;
+}
+
+.ui-joy-array, .ui-joy-dict
+{
+    list-style-type: none;
+}
+
+.ui-joy-array .ui-joy-array-item, .ui-joy-option .ui-joy-option-item, .ui-joy-dict .ui-joy-dict-item
+{
+    padding: 3px;
+    margin: 0 0 3px 0;
+    position: relative;
+}
+
+textarea.ui-joy-field
+{
+    border: 0 none;
+    font-size: 12px;
+    padding: 2px;
+    vertical-align: top;
+    margin: 0;
+    width: 500px;
+    height: 300px;
+    background-color: #EEE;
+}
+
+input[type="text"].ui-joy-field, input.ui-joy-dict-key
+{
+    border: 0 none;
+    font-size: 12px;
+    padding: 2px;
+    vertical-align: top;
+    margin: 0;
+    width: 300px;
+    background-color: #EEE;
+}
+
+input.ui-joy-dict-key {
+    display: block;
+    float: left;
+    width: 150px;
+}
+
+.ui-joy-action
+{
+    width:16px;
+    height:16px;
+    padding:4px;
+    display:block;
+}
+
+.ui-joy-action-side
+{
+    position: absolute;
+    left: -30px;
+    top: -1px;
+}
+
+.ui-joy-object 
+{
+    border-spacing: 0 4px;
+}
+
+.ui-joy-object-value
+{
+    padding-left: 2px;
+}
+
+.ui-joy-object-key 
+{
+    font-weight: bold;
+    font-size: 12px;
+    text-align: right;
+    padding-right: 4px;
+    border-right: 1px solid #EEE;
+    vertical-align: top;
+    border-top: 1px solid #EEE;
+    max-width: 120px;
+}
+
+select.ui-joy-variant-select {
+    font-size: 12px;
+    margin: 0 0 4px;
+    padding: 0 4px;
+}

@@ -1,0 +1,12 @@
+.icon-50x50 {
+
+  display: block;
+  width: 50px;
+  margin: auto;
+  line-height: 50px;
+  text-align: center;
+
+  img {
+    vertical-align: middle;
+  }
+}

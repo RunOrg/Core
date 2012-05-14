@@ -1,0 +1,24 @@
+<div class="span-18 last">
+  <table class="summary">
+    <thead>
+      <tr>
+	<td><div style="width:37px;text-align:center">{t:column.order}</div></td>
+	<td><div style="width:177px">{t:column.name}</div></td>
+	<td><div style="width:367px">{t:column.source}</div></td>
+	<td><div style="width:37px;text-align:center">{t:column.show.file}</div></td>
+	<td><div style="width:37px;text-align:center">{t:column.show.list}</div></td>
+      </tr>
+    </thead>
+    <tbody>
+      {v:list}
+    </tbody>
+  </table>
+</div>
+<div class="span-18 prepend-top last">
+  <div class="span-3 prepend-12">
+    <a class="typwidth pretty-button" href="{v:addrem}">{t:column.actions.addrem}</a> 
+  </div>
+  <div class="span-3 last">
+    <a class="typwidth pretty-button" href="{v:edit}">{t:column.actions.edit}</a>
+  </div>
+</div>

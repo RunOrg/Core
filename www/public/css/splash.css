@@ -1,0 +1,437 @@
+﻿.cadre-1{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:300px;
+	margin:10px 0;
+	padding:30px 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.cadre-2{
+	margin-left:12px;
+	margin-right:6px;
+}
+
+.cadre-2 p{
+	font-size:14px;
+}
+
+.bouton-1{
+    background: url("../img/green_gradient.png") repeat scroll 0 0 transparent;
+    border-radius: 5px 5px 5px 5px;
+    color: #FFFFFF;
+    font-size: 16px;
+    height: 25px;
+    padding: 17px 28px;
+    width: 148px;
+	border:1px solid #999;
+	text-decoration:none;
+}
+
+.cadre-3{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:280px;
+	padding:10px 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.cadre-4{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:280px;
+	padding:10px 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.cadre-5{
+	padding:0;
+	border:none;
+}
+
+.bouton-2{
+    background-color: #EEEEEE;
+    border: 1px solid #CCCCCC;
+    border-radius: 7px 7px 7px 7px;
+    color: #333333;
+    font-size: 18px;
+    height: 35px;
+    margin-left: 6px;
+    padding: 0 4px 0px 4px;
+}
+
+.cadre-6{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:560px;
+	margin:10px 0;
+	padding:30px 22px;
+	border-radius: 10px;
+}
+
+.cadre-6 p{
+	font-size:14px;
+}
+
+.cadre-7{
+	height:550px;
+	margin:10px 0;
+	padding:30px 10px;
+}
+
+.cadre-7 h2{
+	text-align:center;
+}
+
+.cadre-8{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:235px;
+	margin:10px 0;
+	padding:30px 10px;
+	border-radius: 10px;
+}
+
+.cadre-9{
+	background-color:#FFF;
+	border: 1px solid #CCC;
+	height:1100px;
+	margin:10px 0;
+	padding:30px 10px;
+	border-radius: 10px;
+}
+
+a{
+    color:inherit;
+}
+
+a:hover
+{
+    color:#F36;
+}
+
+.suite{
+	text-align:right;
+	font-size:11px;
+}
+
+.suite a{
+	color:#09F;
+	text-decoration:none;
+}
+
+*::-moz-selection {
+    background: none repeat scroll 0 0 #E70070;
+    color: white;
+}
+
+*::selection{
+	background: none repeat scroll 0 0 #E70070;
+	color: white;
+}
+
+/* Headings --------------------------------------------------------------------------------- */
+
+h1
+{
+    color: #111;
+    text-transform: none;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 62px;
+    line-height: 54px;
+    text-shadow:#333 0px 1px 1px;
+}
+
+h2
+{
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    margin:0 0 0.5em 0;
+    color:#333;    
+    text-transform: none;
+    text-shadow:#FFF 0px 1px 0px;
+}
+
+h3
+{
+    color: #111;
+    text-transform: none;
+    font-size:14px;
+    font-weight:bold;
+    margin:5px 0;
+    text-align:center;
+    text-shadow:#FFF 0px 1px 0px;
+}
+
+h4
+{
+	font-size:14px;
+	border-bottom: 1px solid #CCC;
+	font-weight:bold;
+	text-align:left;
+}
+
+/* Page content ----------------------------------------------------------------------------- */
+
+.big-page h2
+{
+    font: bold 24px "Droid Sans",Verdana,sans-serif;
+    margin: 0 0 0.5em;
+    padding: 4px 0 0 4px;
+    color: #E70070;
+    background: url("../img/degrade-blanc.png") repeat scroll 0 0 #FFF;
+    clear: both;
+}
+
+p{
+    text-align:justify;
+}
+
+/* Grey zone ------------------------------------------------------------------------------------------- */
+
+.grey-zone
+{
+    border: 1px solid #DDD;
+    background-color: #F6F4F0;
+    -moz-border-radius: 5px;
+    padding: 15px;
+	height:265px;
+}
+
+
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Droid Sans'), url('fonts/Droid_Sans.ttf') format('truetype');
+}
+
+/* Buttons ---------------------------------------------------------------------------------------------- */
+
+.bouton-top
+{
+    height:54px;
+    margin-top:10px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #DDD url(/public/css/jqueryui-aristo/images/the_gradient.gif) center center repeat-x;
+    border: 1px solid #bbb;
+}
+
+.bouton-top.green, .bouton-med.green
+{
+    border: 1px solid #8c8;
+    background-image: url(/public/img/green_gradient.png);
+}
+
+.bouton-top.green h2 a:hover, .bouton-med.green h2 a:hover
+{
+    color: #FFF;
+    text-shadow: 0 1px 2px #4C4;
+}
+
+.bouton-top h2
+{
+    font: 20px "Droid Sans", Verdana, sans-serif;
+    text-align:center;
+    margin: 0px; 
+    line-height: 54px;
+    text-shadow: 0 1px 2px #888;
+}
+
+.bouton-top h2 a
+{
+    text-decoration:none;
+}
+
+.bouton-top h2 a:hover
+{
+    color:#FFF;
+    text-shadow: 0 1px 2px #888;
+}
+
+.bouton-med
+{
+    height:34px;
+    margin-top:6px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #DDD url(/public/css/jqueryui-aristo/images/the_gradient.gif) center center repeat-x;
+    border: 1px solid #bbb;
+}
+
+.bouton-med h2 {
+    font: 16px/36px "Droid Sans",Verdana,sans-serif;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 1px 2px #888888;
+}
+
+.bouton-med h2 a
+{
+    text-decoration:none;
+}
+
+.bouton-med h2 a:hover
+{
+    color:#333;
+    text-shadow: 0 1px 2px #888;
+}
+
+/* Unsorted -------------------------------------------------------------------------------------------- */
+
+#points
+{
+    height:280px;
+    border:#CCC 1px solid;
+    margin-top:20px;
+    background: url(../img/bg-cadre.png) no-repeat #EFEFEF;
+}
+
+#videos{
+	background-color:#EFEFEF;
+	height:350px;
+}
+
+#contact{
+}
+
+#contact form{
+	text-align:center;
+}
+
+#contact h2{
+	font: 260% "Droid Sans", Verdana, sans-serif;
+	text-align:left;
+	margin-left:5px;
+}
+
+#actus{
+	border-left:2px #F36 solid;
+	padding-left:10px;
+	height:100px;
+}
+
+#actus p{
+	line-height:normal;
+	margin:0;
+}
+
+.point{
+	margin:10px 0 0 20px;
+	font-size:11px;
+	width:450px;
+}
+
+.flottement{
+	float:left;
+}
+
+.point-prix{
+	padding-left:30px;
+	margin-top:50px;
+	text-align:center;
+}
+
+.point-prix h2{
+	font-size:20px;
+}
+
+.email{
+	font-size:20px;
+	width:300px;
+	height:30px;
+	padding:1px 7px;
+}
+
+#texte{
+	margin:10px;
+	font-size:16px;
+}
+
+.hidden-label{
+	position:relative;
+	
+}
+
+.mentions{text-align: center; font-size: 12px; position:absolute; top:50px; left:200px;}
+
+.icon-3{
+	float:left;
+	margin-right:15px;
+}
+
+#qui-sommes-nous{
+	font-size:12px;
+	background-color:#EDEDED;
+	padding:10px;
+	border:#CCC 1px solid;
+}
+
+#qui-sommes-nous p{
+	margin-top:6px;
+	margin-bottom:10px;
+}
+
+.vertical-list{
+	height:70px;
+	margin-bottom:5px;
+}
+
+.cadre-side{
+	margin-top:20px;
+	background:#EDEDED;
+	padding-top:10px;
+	padding-bottom:10px;
+	text-align:center;
+}
+
+#bouton-participe{
+	background:url(../img/degrade-blanc.png) #FFF;
+	color:#E70070;
+	font-weight:bold;
+	margin-left:auto;
+	margin-right:auto;
+	width:200px;
+	text-align:center;
+	font-size:14px;
+	padding-top:10px;
+}
+
+#bouton-participe a{
+	display:block;
+	height:30px;
+	text-decoration:none;
+}
+
+#bouton-participe a:hover{
+	color:#EEE;
+}
+
+#side{
+}
+
+.side-element{
+	border-bottom:1px #999 solid;
+	padding-bottom:10px;
+}
+
+.side-element a{
+	color:#D40474;
+}
+
+.side-titres{
+	font-weight:bold;
+	text-align:center;
+	background-color:#DDD;
+	border-bottom:1px #CCC solid;
+	margin-bottom:3px;
+}
+
+.side-titres img{
+	width:100%;
+	height:auto;
+	border-bottom:1px #CCC solid;
+}

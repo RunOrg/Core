@@ -1,0 +1,150 @@
+<div class="navbar">
+  <div class="container">
+    <div class="span-9 append-14 last">      
+      {v:name} / 
+      <strong>{t:notify.confirm}</strong>	
+    </div>
+  </div>
+  <div class="navbar-bottom">
+  </div>
+</div>
+
+<div class="container">
+<div class="span-24 prepend-top last">
+  <div class="span-16">
+    <h3>Bienvenue, {v:fullname}</h3>
+    <p>
+      {v:name} est un site web collaboratif permettant aux associations d'échanger avec leurs membres, ainsi que d'organiser des évènements et des activités. 
+    </p>
+    <p>
+      Votre inscription a été faite à la demande de <strong>{v:inviter}</strong>, qui souhaite pouvoir échanger avec vous.
+    </p>
+    <p>
+      Pour cela, vous devez d'abord activer votre compte&nbsp;:
+    </p>
+  </div>
+  <div class="span-8 last append-bottom" style="text-align:center">    
+    <img style="max-height:162px;vertical-align:middle" src="{v:image}"/>
+  </div>
+</div>
+<hr/>
+<div class="span-24 append-bottom last">
+  {v:confirm-form.begin}
+  <div class="span-8">
+    <h2>Nouveau Compte</h2>
+  </div>
+  <div class="span-12">
+  <div class="span-12 last">
+    <div class="span-4 label">    
+      <label for="ignored-1">Adresse Électronique</label>
+    </div>
+    <div class="span-5">
+      <input type="text" id="ignored-1" disabled="disabled" readonly="readonly" value="{v:email}"/>
+    </div>
+    <div class="span-3 label last">
+    </div>
+  </div>
+    
+  <div class="span-12 last">
+    <div class="span-4 label">    
+      {v:confirm-form.pass.label}
+    </div>
+    <div class="span-5">
+      {v:confirm-form.pass.input}
+    </div>
+    <div class="span-3 label last">
+      {v:confirm-form.pass.error}
+    </div>
+  </div>
+    
+  <div class="span-12 last">
+    <div class="span-4 label">
+      {v:confirm-form.pass2.label}
+    </div>
+    <div class="span-5">
+      {v:confirm-form.pass2.input}
+    </div>
+    <div class="span-3 label last">
+      {v:confirm-form.pass2.error}
+    </div>
+  </div>
+  
+  </div>
+  <div class="span-3 prepend-1 last" style="margin-top:67px;text-align:right">
+    <button class="pretty-button typwidth" type="submit">Inscription</button>
+  </div>    	
+  {v:confirm-form.end}
+</div>
+
+<hr/>
+<div class="span-24 append-bottom last">
+  {v:login-form.begin}
+  <div class="span-8">
+    <h2>J'ai déjà un Compte</h2>
+  </div>
+  <div class="span-12">
+    
+  <div class="span-12 last">
+    <div class="span-4 label">    
+      {v:login-form.login.label}
+    </div>
+    <div class="span-5 append-3 last">
+      {v:login-form.login.input}
+    </div>
+  </div>
+    
+  <div class="span-12 last">
+    <div class="span-4 label">
+      {v:login-form.pass.label}
+    </div>
+    <div class="span-5">
+      {v:login-form.pass.input}
+    </div>
+    <div class="span-3 label last">
+      {v:login-form.pass.error}
+    </div>
+  </div>
+  
+  </div>
+  <div class="span-3 prepend-1 last" style="margin-top:35px;text-align:right">
+    <button class="pretty-button typwidth" type="submit">Connexion</button>
+  </div>    	
+  {v:login-form.end}
+</div>
+
+
+<!--
+<hr />
+<div class="span-24 append-bottom last">
+  <div class="span-7">
+    <h2>{t:login.other}</h2>
+  </div>
+  <div class="span-13">
+    <p style="margin-top:12px"><strong>Facebook</strong> - Nous ne publions aucun message vers votre compte </p>
+  </div>
+  
+  <div class="span-3 prepend-1 last" style="text-align:right">
+    <button onclick="FB.login(function(r){if(r.session){runorg.runFromServer({v:fb-url})} },{scope:'email'})" class="pretty-button typwidth" type="submit"><img src="/public/icon/facebook-24.gif" style="margin-top:-2px"/></button>
+  </div>
+  <div id="fb-root"></div>
+  <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
+  <script type="text/javascript">
+    FB.init({
+    appId  : {v:fb-app-id},
+    channelUrl : {v:fb-channel},
+    status : false,
+    cookie : true,
+    xfbml  : false
+    });
+  </script>
+</div>
+-->
+
+<hr/>
+<div class="span-24 last">
+  <p class="small" style="text-align:right;color:#888">
+    Nous serions très heureux de vous compter parmi nos utilisateurs, mais si vous ne souhaitez pas 
+    vous inscrire, c'est très simple: il vous suffit de ne rien faire!
+  </p>
+</div>    
+</div>

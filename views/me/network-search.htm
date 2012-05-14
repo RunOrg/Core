@@ -1,0 +1,65 @@
+<div class="span-18 column-right">
+  {v:message}
+  {{list:
+  <div class="network-profile">
+    <a href="{v:url}"><img src="{v:pic}" /></a>
+    <span class="-body">
+      <a href="{v:url}" class="-name">{v:name}</a>
+      <span class="-desc">{v:desc}</span>
+      <span class="-tags">
+	{{tags: 
+	<a class="tag-link" href="{v:url}"><span class="tag">{v:tag}</span></a>
+	}}
+      </span>
+    </span>
+  </div>
+  }}  
+  &nbsp;
+</div>
+<div class="span-6 last">
+  {{tags:
+  <a href="{v:url}" class="tag-link">
+    <span class="tag">{v:tag}</span> <strong> &times; {v:count}</strong>
+  </a><br/>
+  }}
+</div>
+
+<style type="less">
+
+.network-profile {
+
+  overflow: hidden;
+  margin-bottom: 15px;
+
+  a img {
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-right: 5px;
+    padding: 2px;
+    border: 1px solid #CCC;
+  }
+
+  .-body {
+    overflow: hidden;
+    display: block;
+  }
+
+  .-name {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .-desc {
+    display: block;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .-tags {
+    padding: 4px 0;
+    display: block;
+  }
+}
+
+</style>

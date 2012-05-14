@@ -1,0 +1,24 @@
+#profiling 
+{
+  margin: 0 20px;
+}
+
+.breathe-profile {
+
+  thead td {
+    font-size: 90%;
+    color: #666;
+  }
+
+  td {
+
+    text-align: right;
+    font-family: "Courier New";
+    padding: 2px 10px;
+
+    &.breathe-profile-what
+    {
+      text-align: left;
+    }
+  }
+}

@@ -1,0 +1,72 @@
+(* © 2012 RunOrg *)
+
+include Ohm.Fmt.Make(struct
+  type json t = 
+    [ `Avatar  of IInstance.t * [ `Name ] 
+    | `Profile of IInstance.t * 
+	[ `Firstname 
+	| `Lastname
+	| `Email
+	| `Birthdate
+	| `City
+	| `Address
+	| `Zipcode
+	| `Country
+	| `Phone
+	| `Cellphone
+	| `Gender 
+	]
+    | `Group   of IGroup.t * 
+	[ `Status 
+	| `Date
+	| `InList
+	| `Field of string
+	]
+    ]
+end)
+
+let from_generic iid gid = function
+  | `profile what -> begin match what with 
+      | `fullname  -> `Avatar  (iid,`Name)
+      | `firstname -> `Profile (iid,`Firstname)
+      | `lastname  -> `Profile (iid,`Lastname)
+      | `email     -> `Profile (iid,`Email)
+      | `birthdate -> `Profile (iid,`Birthdate)
+      | `city      -> `Profile (iid,`City)
+      | `address   -> `Profile (iid,`Address)
+      | `zipcode   -> `Profile (iid,`Zipcode)
+      | `country   -> `Profile (iid,`Country)
+      | `phone     -> `Profile (iid,`Phone)
+      | `cellphone -> `Profile (iid,`Cellphone)
+      | `gender    -> `Profile (iid,`Gender)
+  end 
+  | `join (_,what) -> `Group (gid, begin match what with 
+      | `state   -> `Status
+      | `date    -> `Date
+      | `inList  -> `InList
+      | `field n -> `Field n
+  end)
+
+(* DELETE THIS
+let to_generic srcpos = function 
+  | `Avatar (_,`Name) -> `profile `fullname
+  | `Profile (_,what) -> `profile begin match what with 
+      | `Firstname -> `firstname
+      | `Lastname  -> `lastname
+      | `Email     -> `email
+      | `Birthdate -> `birthdate
+      | `City      -> `city
+      | `Address   -> `address
+      | `Zipcode   -> `zipcode
+      | `Country   -> `country
+      | `Phone     -> `phone
+      | `Cellphone -> `cellphone
+      | `Gender    -> `gender
+  end
+  | `Join (_,what) -> `join (srcpos, begin match what with 
+      | `Status  -> `state
+      | `Date    -> `date
+      | `InList  -> `inList
+      | `Field n -> `field n
+  end)
+*)

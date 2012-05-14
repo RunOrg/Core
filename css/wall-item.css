@@ -1,0 +1,131 @@
+.wall-item {
+
+  overflow: hidden;
+
+  .-pic {
+    float: left; 
+    display: block;
+    &, img {
+      width: 50px; 
+      height: 50px;
+    }
+    margin-right: 10px;
+  }
+
+  .-pic:hover img
+  {
+    border: 5px solid #CCC;
+    width: 40px;
+    height: 40px;
+  }	
+
+  > .-body {
+    float: left; 
+    width: 410px; 
+    line-height: 12px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 12px;
+  }
+
+  .-role {
+    color: #AAA;
+    font-size: 11px;
+  }
+
+  .-text {
+
+    font-size: 11px; 
+    font-family:"Arial",sans;	
+    line-height: 14px; 
+
+    p {
+      margin: 8px 0;
+      overflow: hidden;
+
+      img { margin: -4px 0; }
+    }
+  }
+
+  .-attach {
+
+    margin-bottom: 1em;
+
+    &.poll {
+
+      input {
+        margin: 1px 4px;
+      }
+
+      .bottom {
+        margin-top: 5px;
+        text-align: right;
+        font-size: 10px;
+      }
+
+      label.label {
+        font-size: 10px;
+        font-weight: normal;
+      }
+ 
+      div.radio, div.check {
+        margin: 5px 10px;
+      }
+
+      table {
+
+        width: 100%;
+        border-collapse: collapse;
+
+        td {
+          vertical-align: top;
+          font-size: 10px;
+	  font-family:"Arial",sans;
+          padding: 4px 5px;
+          background-color: #EEEEEE;
+          border: 1px solid #AAAAAA;
+          font-style: normal;
+        }
+      }
+     
+      .collapse {
+
+        width: 11px;
+        height: 13px;
+        display: inline-block;
+        background: transparent url(/public/icon/bullet_toggle_plus.png) center center no-repeat;
+        vertical-align: top;
+
+        &.open {
+          background-image: url(/public/icon/bullet_toggle_minus.png);
+        }
+      }
+    }
+  }
+
+  .comment {
+
+    margin-top: 1em;
+    overflow: hidden;
+
+    .-pic, .-pic img {
+      display: block;
+      width: 40px;
+      height: 40px;
+    }
+
+    .-pic:hover img {
+      border: 4px solid #CCC;
+      width: 32px;
+      height: 32px;
+    }
+
+    .-body {
+      float: left; 
+      width: 410px; 
+      line-height: 12px;
+      width: 360px;
+    }
+  }
+}
+

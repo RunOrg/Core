@@ -1,0 +1,482 @@
+(* © 2012 RunOrg *)
+
+open Ohm
+open Ohm.Util
+open BatPervasives
+open Ohm.Universal
+
+module Data    = MInstance_data
+module Common  = MInstance_common
+module Profile = MInstance_profile
+
+include Common 
+
+(* Extraction -------------------------------------------------------------------------- *)
+
+type t = <
+  id      : IInstance.t ;
+  key     : string ;
+  name    : string ;
+  theme   : string option ;
+  disk    : float ;
+  create  : float ;
+  seats   : int ;
+  usr     : IUser.t ; 
+  ver     : IVertical.t ;
+  pic     : [`GetPic] IFile.id option ;
+  install : bool ;
+  version : string ;
+  light   : bool ; 
+  trial   : bool ;
+  stub    : bool ;
+  white   : IWhite.t option
+> ;; 
+
+let extract id i = Data.(object
+  method id = IInstance.decay id 
+  method key = i.key
+  method name = i.name
+  method theme = i.theme
+  method disk = if i.stub then 10.0 else i.disk
+  method create = i.create
+  method seats = if i.stub then 1 else i.seats
+  method usr = i.usr
+  method ver = i.ver
+  method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
+  method install = i.install
+  method version = i.version
+  method light = i.light && not i.stub
+  method trial = i.light && (Unix.gettimeofday () -. 30. *. 24. *. 3600. < i.create) 
+    && i.ver <> IVertical.light && not i.stub
+  method stub = i.stub
+  method white = i.white
+end)
+
+(* Signals --------------------------------------------------------------------------------- *)
+  
+module Signals = struct
+
+  let on_create_call, on_create = Sig.make (Run.list_iter identity) 
+
+  let on_upgrade_call, on_upgrade = Sig.make (Run.list_iter identity)
+    
+end
+
+(* Update an instance to a provided version. ---------------------------------------------- *)
+
+module VersionView = CouchDB.DocView(struct
+  module Key = Fmt.String
+  module Value = Fmt.Unit
+  module Doc = Data
+  module Design = Design
+  let name = "by_version"
+  let map = "if (doc.t == 'inst') emit(doc.version || '',null);"
+end)
+
+let apply_version version ins = 
+  Data.({
+    ins with 
+      install = ins.install && version < MPreConfig.last_vertical_version ;
+      version
+  }) 
+
+let sorted_versions_above vid version = 
+  let applicable_versions = MPreConfig.applies_to vid MPreConfig.vertical_versions in 
+  let versions_above = 
+    List.filter (fun v -> v # version > version) applicable_versions 
+  in
+  List.sort (fun a b -> compare a # version b # version) versions_above
+
+let allowed_versions_above vid upto version = 
+  let applicable_versions = MPreConfig.applies_to vid MPreConfig.vertical_versions in 
+  let versions_above = 
+    List.filter (fun v -> v # version > version && upto >= v # version) applicable_versions 
+  in
+  List.sort (fun a b -> compare a # version b # version) versions_above
+
+let upgrade ?upto iid = 
+
+  let! instance = ohm_req_or (return ()) $ MyTable.get iid in 
+  let  upto = BatOption.default MPreConfig.last_vertical_version upto in 
+ 
+  match allowed_versions_above instance.Data.ver upto instance.Data.version with 
+    | [] ->
+      
+      log "No-op update of instance %s from version `%s` to version `%s`" 
+	(IInstance.to_string iid) (instance.Data.version) (upto) ;
+      
+      let! _ = ohm $ MyTable.transaction iid (MyTable.update (apply_version upto)) in
+      
+      return ()
+	
+    | list ->
+      
+      log "Updating Instance %s from version `%s` to version `%s` out of `%s`..."
+	(IInstance.to_string iid) (instance.Data.version)
+	(upto) (MPreConfig.last_vertical_version) ;
+      
+      let sorted_diffs_above = 
+	List.concat (List.map MPreConfig.payload list) 
+      in
+      
+      let! () = ohm $ Signals.on_upgrade_call (iid,sorted_diffs_above) in
+      let! _  = ohm $ MyTable.transaction iid (MyTable.update (apply_version upto)) 
+      in
+      
+      return ()
+	
+let first_unapplied_version = 
+  let! list = ohm $ VersionView.doc_query ~limit:1 () in
+  match list with [] -> return (None, MPreConfig.last_vertical_version) | h :: _ ->
+
+    let instance = h # doc in 
+    if instance.Data.version >= MPreConfig.last_vertical_version 
+    then return (None, MPreConfig.last_vertical_version) 
+    else 
+
+      let iid = IInstance.of_id (h # id) in
+      let vid = instance.Data.ver in 
+
+      match sorted_versions_above vid instance.Data.version with 
+	| []     -> return $ (Some iid, MPreConfig.last_vertical_version)
+	| h :: _ -> return $ (Some iid, h # version)
+
+(* Various functions --------------------------------------------------------------------- *)
+
+let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical = 
+
+  let id = IInstance.gen () in
+
+  let clip n s = if String.length s > n then String.sub s 0 n else s in 
+  let now = Unix.gettimeofday () in
+  let obj = Data.({
+    t       = `Instance ;
+    key     ;
+    name    = clip 80 name ;
+    theme   = None ;
+    disk    = 50.0 ;
+    seats   = 30 ;
+    create  = now ;
+    usr     = IUser.decay who ;
+    ver     = vertical ;
+    pic     = BatOption.map IFile.decay pic ;
+    install = true ;
+    version = ""  ;
+    light   = true ;
+    stub    = false ;
+    address = None ;
+    desc    = None ;
+    site    = None ;
+    contact = None ;
+    white   = None 
+  }) in 
+
+  let info old = Profile.Info.({ 
+    old with     
+      name     = clip 80 name ;
+      key      ;
+      address  = BatOption.map (clip 300) address ;
+      desc     = BatOption.map (clip 3000) desc ;
+      site     = BatOption.map (clip 256) site ;
+      contact  = BatOption.map (clip 256) contact ;
+      pic      = BatOption.map IFile.decay pic ;
+      unbound  = false ;
+  }) in
+
+  (* Created right here. *)
+  let cid = IInstance.Assert.created id in
+
+  let! () = ohm $ Profile.update id info in 
+  let! _  = ohm $ MyTable.put id obj in
+  let! () = ohm $ Signals.on_create_call cid in
+  let! () = ohm $ MRunOrg.Client.create now cid in
+
+  return cid
+
+let update id ~pic ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tags = 
+
+  let id = IInstance.decay id in 
+  let clip n s = if String.length s > n then String.sub s 0 n else s in
+  let update ins = Data.({ 
+    ins with 
+      name    = clip 80 name ;
+      address = None ;
+      pic     = BatOption.map IFile.decay pic ;
+      desc    = None ;
+      site    = None ; 
+      contact = None ;
+  }) in
+
+  let! current = ohm_req_or (return ()) $ MyTable.get id in 
+
+  let info old = Profile.Info.({    
+    old with 
+      name     = current.Data.name ;
+      key      = current.Data.key ;
+      address  = BatOption.map (clip 300)  address ;
+      desc     = BatOption.map (clip 3000) desc ;
+      site     = BatOption.map (clip 256)  site ;
+      contact  = BatOption.map (clip 256)  contact ;
+      facebook = BatOption.map (clip 256)  facebook ;
+      twitter  = BatOption.map (clip 256)  twitter ;
+      phone    = BatOption.map (clip 30)   phone ;
+      tags     = BatList.sort_unique compare (List.map (Util.fold_all |- clip 32) tags) ;
+      pic      = BatOption.map IFile.decay pic ;
+      unbound  = false ;
+  }) in
+
+  let! () = ohm $ Profile.update id info in 
+  MyTable.transaction (IInstance.decay id) (MyTable.update update) |> Run.map ignore
+
+let refresh_profile iid = 
+
+  let! data = ohm_req_or (return ()) $ MyTable.get iid in 
+
+  let () = 
+    Util.log "Refresh instance profile %s (%s.runorg.com)"
+      (IInstance.to_string iid) (data.Data.key) 
+  in
+
+  let  info old = Profile.Info.({
+    old with
+      name     = data.Data.name ;
+      key      = data.Data.key ;
+      pic      = data.Data.pic ;
+      unbound  = false 
+  }) in
+
+  let! () = ohm $ Profile.update iid info in
+
+  return ()
+    
+let () = 
+  let! _,client = Sig.listen MRunOrg.Client.Signals.update in
+    
+  let today = MRunOrg.Client.today () in
+  
+  let update ins = 
+    MRunOrg.Client.Data.({
+      ins with 
+	Data.disk  = if today > client.last_day then 50.0 else float_of_int client.memory ;
+	Data.seats = if today > client.last_day then 30 else client.seats ;
+	Data.light =    today > client.last_day ;
+    }) in
+  
+  MyTable.transaction (client.MRunOrg.Client.Data.instance) 
+    (MyTable.update update) |> Run.map ignore ;
+
+module ViewByKey = CouchDB.DocView(struct
+  module Key    = Fmt.String
+  module Value  = Fmt.Unit
+  module Doc    = Data
+  module Design = Design
+  let name = "by_key"
+  let map =  "if (doc.t == 'inst') emit(doc.key,null)"
+end)
+
+let by_key_cache = Hashtbl.create 100
+
+let by_key key =
+  try return (Some (Hashtbl.find by_key_cache key))
+  with Not_found -> 
+    let! list = ohm $ ViewByKey.doc key in
+    match list with [] -> return None | first :: _ ->
+      let iid = IInstance.of_id (first # id) in 
+      Hashtbl.add by_key_cache key iid ;
+      return $ Some iid
+      
+let key_of_servername name = 
+  List.fold_left (fun name remove ->
+    snd (BatString.replace name remove "" ))
+    name
+    [ ".local.host" ; ".dev.runorg.com" ; ".test.runorg.com" ; ".runorg.com" ]
+    
+let by_servername name = 
+  by_key (key_of_servername name)
+
+let servername_of_url url = 
+  
+  try let no_protocol = 
+	let url = snd (BatString.replace url "http://" "") in
+	snd (BatString.replace url "https://" "")
+      in
+      
+      Some (String.sub no_protocol 0 (BatString.find no_protocol "/"))
+
+  with _ -> None
+  
+let by_url url =
+  Run.opt_bind by_servername (servername_of_url url)
+
+let get id = 
+  MyTable.get (IInstance.decay id) |> Run.map (BatOption.map (extract id))
+  
+let get_free_space id = 
+  get id |> Run.map begin function 
+    | Some ins -> ins # disk
+    | None     -> 0.0
+  end
+
+let free_name name =
+  
+  let name = IInstanceKey.clean name in
+
+  let rec aux i name = 
+
+    if i = 100 then raise Not_found else
+      
+      let full_name = name ^ (if i = 1 then "" else "-"^string_of_int i) in
+      
+      let! forbidden = ohm begin
+	if IInstanceKey.forbidden full_name then return true else
+	  by_key full_name |> Run.map BatOption.is_some
+      end in
+      
+      if forbidden then aux (i+1) name else return full_name 
+  in
+
+  aux 1 name
+
+(* Profile-only (stub) instance management -------------------------------------- *)
+
+let create_stub ~who ~name ~desc ~site ~profile = 
+
+  let iid = BatOption.default (IInstance.gen ()) profile in
+
+  let! existing = ohm $ Profile.get iid in
+  
+  let! key  = ohm $ free_name (BatOption.default name (BatOption.map (#key) existing)) in 
+  let  site = BatOption.default site (BatOption.map (#site) existing) in
+  let  desc = BatOption.default desc (BatOption.map (#desc) existing) in
+  let  name = BatOption.default name (BatOption.map (#name) existing) in  
+
+  let clip n s = if String.length s > n then String.sub s 0 n else s in 
+  let now = Unix.gettimeofday () in
+  let obj = Data.({
+    t       = `Instance ;
+    key     ;
+    name    = clip 80 name ;
+    theme   = None ;
+    disk    = 50.0 ;
+    seats   = 30 ;
+    create  = now ;
+    usr     = IUser.decay who ;
+    ver     = IVertical.stub ;
+    pic     = None ;
+    install = false ;
+    version = MPreConfig.last_vertical_version ;
+    light   = true ;
+    stub    = true ;
+    address = None ;
+    desc    = None ;
+    site    = None ;
+    contact = None ;
+    white   = None
+  }) in 
+
+  let info old = Profile.Info.({
+    old with 
+      name     = clip 80 name ;
+      key      ;
+      desc     = BatOption.map (clip 3000) desc ;
+      site     = BatOption.map (clip 256) site ;
+  }) in
+
+  (* Created right here. *)
+  let cid = IInstance.Assert.created iid in
+
+  let! () = ohm $ Profile.update iid info in 
+  let! _  = ohm $ MyTable.put iid obj in
+  let! () = ohm $ Signals.on_create_call cid in
+  let! () = ohm $ MRunOrg.Client.create now cid in
+
+  return cid
+
+(* Recent visits ---------------------------------------------------------------- *)
+
+module Recent = Fmt.Make(struct
+  type json t = <
+    t : MType.t ;
+    i : IInstance.t list 
+  > ;; 
+end) 
+
+module RecentTable = CouchDB.Table(MyDB)(Id)(Recent)
+
+module FindRecent = Fmt.Make(struct
+  type json t = Id.t * int
+end) 
+
+module RecentView = CouchDB.DocView(struct
+  module Key    = FindRecent
+  module Value  = Fmt.Unit
+  module Doc    = Data    
+  module Design = Design
+  let name = "recent"
+  let map  = "if (doc.t == 'lavi') 
+                for (var k in doc.i) 
+                  emit([doc._id,parseInt(k)],{_id:doc.i[k]});" 
+end)
+
+let visit user inst = 
+
+  let id = ICurrentUser.to_id user in
+ 
+  let recent =
+    RecentView.doc_query ~startkey:(id,0) ~endkey:(id,4) () 
+    |> Run.map (List.map (fun d -> extract (IInstance.of_id d # id) (d # doc)) )
+  in
+
+  let add_recent inst = function
+
+    | None -> let obj = object
+                method t = `LastVisit
+                method i = [ inst ]
+              end in
+	      (), `put obj
+
+    | Some x -> let l = inst :: (BatList.remove (x # i) inst) in		      
+		if l = x # i then (), `keep else
+		  let obj = object 
+		    method t = `LastVisit
+		    method i = l		     
+		  end in
+		  (), `put obj
+  in
+
+  let! () = ohm begin
+    match inst with 
+      | None      -> return ()
+      | Some inst -> RecentTable.transaction id
+	(fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
+  end in
+
+  recent
+
+(* The backdoor --------------------------------------------------------------------- *)
+
+module Backdoor = struct
+
+  module CountView = CouchDB.ReduceView(struct
+    module Key = Fmt.Unit
+    module Value = Fmt.Int
+    module Reduced = Fmt.Int
+    module Design = Design
+    let name   = "backdoor-count"
+    let map    = "if (doc.t == 'inst') emit(null,1);"
+    let reduce = "return sum(values);"
+    let group  = true
+    let level  = None
+  end)
+
+  let count () = 
+    CountView.reduce_query () |> Run.map begin function
+      | ( _, v ) :: _ -> v 
+      | _ -> 0
+    end
+
+  let key_by_id = 
+    let! list = ohm $ ViewByKey.doc_query () in
+    return $ List.map (fun item -> IInstance.of_id item # id, (item # doc).Data.key) list
+	
+end

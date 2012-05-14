@@ -1,0 +1,113 @@
+<div class="vote">
+  <div class="-question"><p>{v:question}</p></div>
+  {{open:
+  <div class="-answers{v:answered}">
+    <form action="" method="POST">
+      <input type="hidden" value="{v:id}"/>
+      {{answer:
+      <label>
+	<input name="{v:name}" 
+	       type="{v:type}" value="{v:value}"{v:checked}{v:opens}/>&ensp;{v:label}
+      </label>
+      }}
+      {{vote:<button type="submit" class="pretty-button">{t:vote.submit}</button>}}
+    </form>
+  </div>
+  <div class="tool">
+    <a href="{v:by-url}">{v:by}</a> · 
+    {v:date}
+    {{opens:· {t:vote.opens.on} {v:date} }}
+    {{closes:· {t:vote.closes.on} {v:date} }}
+    {{anonymous:· <b>{t:vote.anonymous}</b> }}
+    {{manage:
+    · <a href="javascript:void(0)" onclick="{v:edit}">{t:vote.edit}</a>
+    · <a href="javascript:void(0)" onclick="{v:close}">{t:vote.close}</a>}}
+  </div>
+  }}
+  {{closed:
+  <div class="-stats big-loading" id="{v:id}">
+    {{contents:
+    <table>
+      {{answer:
+      <tr>
+	<td><div style="width:220px;text-align:left">{v:label}</div></td>
+	<td>
+	  <div class="ui-progressbar ui-widget ui-widget-content" style="width: 110px;">
+	    <div class="ui-progressbar-value ui-widget-header" style="width: {v:percent}%; display: block;"></div>
+	  </div>
+	</td>
+	<td><div style="width:25px">{v:count}</div></td>
+	<td><div style="width:46px">{v:percent} %</td>
+      </tr>
+      }}
+      <tr><td colspan="2">{t:vote.voters.total}</td><td>{v:voters}</td><td></td></tr>
+    </table>
+    <div class="tool">
+      <a href="{v:by-url}">{v:by}</a> · 
+      {v:date}
+      · {t:vote.closed.on} {v:closed}
+      {{edit:· <a href="javascript:void(0)" onclick="{v:edit}">{t:vote.edit}</a>}}     
+    </div>
+    }}
+  </div>
+  <script type="coffeescript" params="id,url,vote">
+self = jog.extend @, @$.find ('#'+id)
+jog.remote self, url, {id:vote}, -> @$.removeClass('big-loading')
+  </script>
+  }}
+</div>
+
+<style type="less">
+.vote {
+
+  margin-bottom: 20px;
+
+  .-question p {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  button { 
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  }
+
+  .-answers {
+    position: relative;
+    background-color: #EEE;
+    padding: 5px;
+    border-left: 10px solid #F88;
+    margin-bottom: 3px;
+
+    &.-answered { border-color: #8F8 }
+
+    label {
+      display: block;
+      line-height: 22px;
+      overflow: hidden;
+      width: 380px;
+      white-space: nowrap;
+    }
+
+  }
+
+  table {
+
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+    margin-bottom: 3px;
+
+    td {
+      border: 1px solid #CCC;  
+      background-color: #EEE;
+      text-align: right;
+
+      div { white-space : nowrap; overflow : hidden }
+    }
+
+  }
+
+}
+</style>

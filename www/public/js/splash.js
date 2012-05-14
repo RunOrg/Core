@@ -1,0 +1,1 @@
+$('.fade').tipsy({fade: true});

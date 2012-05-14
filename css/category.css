@@ -1,0 +1,47 @@
+.category {
+
+  &.-c7 {
+    background-color: #CCE;
+    border-color: #aad;
+  }
+
+  &.-c6 {
+    background-color: #CEC;
+    border-color: #ada;
+  }
+
+  &.-c5 {
+    background-color: #ECC;
+    border-color: #daa;
+  }
+
+  &.-c4 {
+    background-color: #EDC;
+    border-color: #dba;
+  }
+
+  &.-c3 {
+    background-color: #EEC;
+    border-color: #cca;
+  }
+
+  &.-c2 {
+    background-color: #ECE;
+    border-color: #cac;
+  }
+
+  font-family: "Verdana","Arial",sans;
+  font-size: 9px;
+  background-color: #CEE;
+  padding: 1px 4px;
+  border: 1px solid #acc;
+  border-radius: 5px;
+  vertical-align: top;
+}
+
+.categories {
+    margin: 0 0 10px 0;
+    padding: 2px 2px 2px 20px;
+    line-height: 16px;
+    background: url("/public/icon/tag_orange.png") 2px center no-repeat #EEE;
+}

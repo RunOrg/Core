@@ -1,0 +1,30 @@
+.r-picker {
+
+  overflow: auto;
+  max-height: 300px;
+
+  .-value {
+    display: none;
+  }
+
+  a {
+    display: block;
+    padding: 2px 2px 2px 20px;
+    border-bottom: 1px solid #DDD;
+  
+    &:hover, &.picked:hover {
+      text-decoration: none;
+      background-color: #DEF;
+    }
+
+    &.picked {
+      background: white url("/public/icon/tick.png") left center no-repeat;
+    }
+  }
+
+  p {
+    margin: 0 0;
+    font-size: 11px;
+    color: #666;
+  }
+}

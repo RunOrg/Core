@@ -1,0 +1,111 @@
+.theme-splash{
+	
+	h1
+	{
+			color: #111;
+			text-transform: none;
+			font-family: Arial,Helvetica,sans-serif;
+			font-weight: bold;
+			font-size: 42px;
+			line-height: 54px;
+			text-shadow:#333 0px 1px 1px;
+	}
+	
+	h2
+	{
+			font-family:Arial, Helvetica, sans-serif;
+			font-weight: bold;
+			margin:0 0 0.5em 0;
+			color:#333;    
+			text-transform: none;
+			text-shadow:#FFF 0px 1px 0px;
+	}
+	
+	h3
+	{
+			color: #111;
+			text-transform: none;
+			font-size:14px;
+			font-weight:bold;
+			margin:5px 0;
+			text-align:center;
+			text-shadow:#FFF 0px 1px 0px;
+	}
+
+	h1.splash-title {
+			color: #111;
+			text-transform: none;
+			font-family: Arial,Helvetica,sans-serif;
+			font-weight: bold;
+			font-size: 62px;
+			line-height: 54px;
+			text-shadow:#333 0px 1px 1px;
+			margin: 20px 0 10px 0;
+			text-align: center;
+	}
+	
+	h1.splash {
+			color: #111;
+			text-transform: none;
+			font-family: Arial,Helvetica,sans-serif;
+			font-weight: bold;
+			font-size: 62px;
+			line-height: 54px;
+			text-shadow:#333 0px 1px 1px;
+	}
+	
+	h2.splash-subtitle {
+			text-align: center;		  
+			color: #333;
+	}
+	
+	.splash-title-image {
+			text-align: center; 
+			height: 225px; 
+			overflow: hidden; 
+			border-bottom: 1px solid #CCC;
+	}
+}
+
+/* LA V2 */
+
+.theme-splash{
+
+	h1.splash-title2{
+			color: #111;
+			text-transform: none;
+			font-family: Arial,Helvetica,sans-serif;
+			font-weight: bold;
+			font-size: 42px;
+			line-height: 54px;
+			text-shadow:#333 0px 1px 1px;
+			margin: 20px 0 10px 0;
+			text-align:left;
+	}
+
+	h2.splash-subtitle2 {
+			text-align: left;		  
+			color: #666;
+			font-size: 20px;
+	}
+	
+	h3.splash-videos {
+			text-align: left;		  
+			color: #999;
+			font-size: 14px;
+			margin:20px auto;
+	}
+	
+	h3.splash-colonnes{
+			font-size:22px;
+			margin:5px auto 20px auto;
+			text-align:center;
+	}
+	
+	h3.splash-slides{
+			font-size:18px;
+			text-align:center;
+			color:#333;
+			margin:20px auto 25px auto;
+	}
+}

@@ -1,0 +1,20 @@
+<div class="block-video">
+  <video width="624" height="{v:height}" autoplay="autoplay" poster="{v:poster}">
+    {{source:<source src="{v:src}" type="{v:mime}"/>}}
+    <img src="{v:poster}" width="624" height="{v:height}"/>
+  </video>
+</div>
+
+<style type="less">
+.theme-splash .block-video {
+  vertical-align:bottom;
+  border: 1px solid #BBB;
+  padding: 2px;
+  min-height: 10px;
+  width: 624px;
+  line-height: 0;
+  background-color: white;
+  margin: 10px auto;
+}
+</style>
+

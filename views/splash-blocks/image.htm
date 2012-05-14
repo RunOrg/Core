@@ -1,0 +1,26 @@
+<div class="block-image">
+  <img src="{v:url}"/>
+</div>
+{{copyright:
+<div class="block-image-copyright">© <a href="{v:url}" target="_blank">{v:name}</a></div>
+}}
+
+<style type="less">
+.theme-splash .block-image {
+  padding: 2px;
+  border: 1px solid #BBB;
+  img { 
+    width: 100%;
+    display: block;
+  }
+}
+
+.theme-splash .block-image-copyright {
+    text-align: right;
+    font-size: 10px;
+}
+
+.theme-splash .-left .block-image-copyright {
+    text-align: left;
+}
+</style>

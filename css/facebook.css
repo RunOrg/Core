@@ -1,0 +1,21 @@
+.facebook-login {
+
+  background-color:#EEE;
+  padding:5px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+
+  h2 { margin-bottom:0 }
+
+  small {
+    font-size: 10px;
+    color: #666;
+    font-family: "Arial", sans;
+  }
+
+  img {
+    display: block;
+    float: right;
+  }
+}

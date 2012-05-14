@@ -1,0 +1,51 @@
+<div class="action-bar">
+  <a href="{v:file}" class="pretty-button typwidth -right">
+    {t:download}
+  </a>
+</div>
+
+<div class="span-18 last view-chat">
+  {{text:
+  <div class="-text">
+    <div class="-date">{v:date}</div> 
+    <div class="-author">
+      <a style="color:{v:color}" href="{v:url}">{v:name}</a>
+    </div>
+    <div class="-body">{v:text}</div>
+  </div>
+  }}
+</div>
+
+<style type="less">
+.view-chat {
+  .-text {
+    overflow: hidden;
+
+    .-date { 
+      float: left;  
+      font-size: 10px;
+      color: #888;   
+      width: 70px;
+      margin-right: 10px;
+      line-height: 22px;
+      text-align: right;
+    }
+
+    .-author {
+      float: left;
+      width: 105px;
+      overflow: hidden;
+      margin-right: 10px;
+      font-weight: bold;
+      height: 22px;
+      text-align: right;
+      line-height: 22px;
+    }
+
+    .-body { 
+      padding: 2px 0;
+      overflow: hidden;
+    }
+  } 
+}
+</style>

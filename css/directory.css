@@ -1,0 +1,40 @@
+.directory-item {
+
+  width: 230px;
+  float: left;
+  padding: 6px 6px 6px 0;
+
+  img {
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-right: 5px;
+  }
+  .status-contact { color: #666;    }
+}
+
+.theme-directory-item() {
+	.directory-item {
+		.status-admin   { color: @the-dark-color; }
+	}
+}
+
+body {
+	.colors-pink;
+	.theme-directory-item;
+}
+
+.theme-green {
+	.colors-green;
+	.theme-directory-item;
+}
+
+.theme-sobre {
+	.colors-sobre;
+	.theme-directory-item;
+}
+
+.theme-white {
+	.colors-white;
+	.theme-directory-item;
+}

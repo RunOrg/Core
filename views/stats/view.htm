@@ -1,0 +1,26 @@
+<div class="stats">
+  <table>
+    <tbody>
+      {{lines:
+      <tr>
+	<td><div class="-item">{v:answer}</div></td>
+	<td>
+	  <div class="ui-progressbar ui-widget ui-widget-content -percent">
+	    <div class="ui-progressbar-value ui-widget-header" 
+		 style="width: {v:percent}%; display: block;"></div>
+	  </div>
+	</td>
+	<td><div style="width:20px;text-align:right">{v:count}</div></td>
+	<td><div style="width:40px;text-align:right">{v:percent}%</div></td>
+      </tr>
+      }}
+    </tbody>
+    <tfoot>
+      <tr>
+	<td colspan="2"><div style="text-align:right">{t:wall.poll.total}</div></td>
+	<td><div style="text-align:right">{v:total}</div></td>
+	<td></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
