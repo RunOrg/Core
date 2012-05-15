@@ -4,3 +4,8 @@
 | `Login_Form_Submit -> "Connexion"
 | `Login_Form_Required -> "Champ obligatoire"
 | `Login_Form_Error -> "Non reconnu"
+| `Login_Form_Firstname -> "Prénom"
+| `Login_Form_Lastname -> "Nom"
+| `Login_Form_Pass2 -> "Mot de passe (encore)"
+| `Login_Section_Login -> "Vous avez déjà un compte ?"
+| `Login_Section_Signup -> "Créer un nouveau compte"

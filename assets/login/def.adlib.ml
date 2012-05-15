@@ -4,3 +4,8 @@
 | `Login_Form_Submit
 | `Login_Form_Required
 | `Login_Form_Error
+| `Login_Form_Firstname
+| `Login_Form_Lastname
+| `Login_Form_Pass2
+| `Login_Section_Login
+| `Login_Section_Signup
