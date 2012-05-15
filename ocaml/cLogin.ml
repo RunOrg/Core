@@ -21,7 +21,11 @@ let () = UrlLogin.def_login begin fun req res ->
     Asset_Form_Clean.render (OhmForm.render form url)
   in
 
+  let  iid = req # args in
+  let! navbar = ohm $ CNavbar.build ~uid:None ~iid in
+
   let html = Asset_Login_Page.render (object
+    method navbar = navbar
     method login  = login
     method signup = signup
   end) in

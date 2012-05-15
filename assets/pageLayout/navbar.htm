@@ -1,0 +1,181 @@
+<div id="topbar">
+  
+  <div id="navbar">
+    <div class="-inner">
+      <div class="-left">
+	<a href="{home}">RUN<strong>ORG</strong></a>
+	{?account}
+          <a href="{url}"><strong>{name}</strong></a>
+        {/?}
+      </div>
+      {?menu}
+        <div class="-right">
+  	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
+	  <a href="{network}">{ `PageLayout_Navbar_Network }</a>
+	  <a href="{news}">{ `PageLayout_Navbar_News }</a>
+	  <a href="{account}">{ `PageLayout_Navbar_Account }</a>
+        </div>
+      {/?}
+    </div>
+  </div>
+
+  {?asso}
+    <div class="-asso">
+      {?picture}
+        <a href="{url}" class="-pic">
+  	  <img src="{pic}"/>
+        </a>
+      {/?}
+      <div class="-main">
+        <h1><a href="{url}">{name}</a></h1>
+        <ul>
+          {?menu}
+  	    <li class="-root">
+	      <a href="{home}">{ `PageLayout_Navbar_Home }</a>
+	    </li>
+	    <li class="-root">
+	      <a href="{members}">{ `PageLayout_Navbar_Members }</a>
+	    </li>
+	    <li class="-root">
+	      <a href="{activities}">{ `PageLayout_Navbar_Activities }</a>
+	    </li>
+	    <li class="-root">
+	      <a href="{discussions}">{ `PageLayout_Navbar_Discussions }</a>
+	    </li>
+          {/?}
+	  <li class="-website">
+	    <a href="{website}" class="action-button">{ `PageLayout_Navbar_Website }</a>
+	  </li>
+	</ul>
+      </div>
+    </div>
+  {/?}
+ 
+</div>
+
+<style>
+
+
+#navbar {
+  border-bottom: 1px solid #555;
+  box-shadow: 0 1px 3px #888;
+  background: #E70079 url(/public/img/degrade-rose.png) center center;
+  font-size: 14px;
+  overflow: hidden;
+
+  .-inner {
+    width: 966px;
+    margin: 0 auto;
+  }
+
+  a {
+    font-family: "Arial", sans-serif ;
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+    float: left;
+
+    &:hover {
+      background: #fc0084 none;
+    }
+  }
+
+  .-right a {
+    float: right;
+    padding: 8px 12px;
+  }
+}
+
+#topbar {
+  background-color: #EEE;
+  background: -webkit-linear-gradient(top,white 0%,#CCC 100%);
+  background: -moz-linear-gradient(top,white 0%,#CCC 100%);
+  border-bottom: 1px solid #555;
+  box-shadow: 0 1px 3px #CCC;
+  margin-bottom: 10px;
+
+  .-asso {
+    width: 950px;
+    margin: 2px auto 0;
+    height: 72px;
+ 
+    .-main {
+      overflow: hidden;
+      padding: 8px 0;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 3px 0 6px;
+      height: 23px;
+      line-height: 23px;
+      font-size: 24px;
+    
+      a {
+        color: #555;
+        text-decoration: none;
+        font-weight: normal;
+        text-shadow: 0 1px 1px white;
+      }
+    }
+      
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        float: left;
+
+        &.-root a {
+          display: block;
+          margin: 0 -1px 0 0;
+          padding: 4px 10px;
+          height: 14px;
+          line-height: 14px;
+          color: black;
+          font-size: 12px;
+          font-family: "Verdana", "Arial", sans-serif;
+          text-decoration: none;
+          border: 1px solid #555;
+
+          &:hover {
+            background-color: #CCC;
+            background: -moz-linear-gradient(top,#CCC 0%,#BBB 100%);
+            background: -webkit-linear-gradient(top,#CCC 0%,#BBB 100%);
+            box-shadow: inset 1px 1px 1px #AAA;
+          }
+        }
+
+        &.-selected a, &.-selected a:hover {
+          background-color: #BBB;
+          background: -moz-linear-gradient(top,#BBB 0%,#AAA 100%);
+          background: -webkit-linear-gradient(top,#BBB 0%,#AAA 100%);
+          box-shadow: inset 1px 1px 2px #888;
+        }
+
+        &.-website {
+          float: right;
+          position: relative;
+          top: -3px;
+          right: -1px;
+        }
+      }
+    }
+  }
+
+  .-pic {
+    height: 50px;
+    width: 50px;
+    margin: 8px 10px 8px 0;
+    padding: 2px;
+    background-color: white;
+    border: 1px solid #555;
+    float: left;
+
+    img { display: block }
+  }
+}
+
+</style>
