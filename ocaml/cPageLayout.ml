@@ -11,4 +11,5 @@ let core title html res =
     (Html.print_page 
        ~js:["/public/jquery.min.js";"/public/jquery.json.min.js";Asset.js]
        ~css:[Asset.css] 
+       ~favicon:"/public/favicon.ico"
        ~title html) res
