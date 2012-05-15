@@ -48,6 +48,6 @@ let () = UrlLogin.def_post_login begin fun req res ->
 		    in
 		    let! uid  = ohm_req_or fail $ MUser.by_email email in
 		    let! self = ohm_req_or fail $ MUser.knows_password password uid in
-		    return res
+		    return (CSession.start (IUser.Deduce.self_can_login self) res)
 
 end
