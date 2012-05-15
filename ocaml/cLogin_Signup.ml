@@ -43,7 +43,7 @@ let template =
 	 (OhmForm.postpone 
 	    (OhmForm.required (AdLib.get `Login_Form_Required))))
 
-  |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Submit)
+  |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Signup_Submit)
 
 let () = UrlLogin.def_post_signup begin fun req res -> 
 

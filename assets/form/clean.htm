@@ -5,23 +5,23 @@
 <style>
 .clean-form {
   width: 308px;
+  margin-bottom: 30px;
+
   input[type="text"], input[type="password"] {
     background-color: transparent;
     border: 1px solid #CCC;
     margin: 0;
-    padding: 3px;
+    padding: 4px 3px 2px;
     font-size: 16px;
     .oxygen();
-    position: absolute;
     width: 300px;
+    box-shadow: inset 1px 1px 3px #DDD;
+    position: absolute;
+    top: -1px;
+  
     &:focus, &.-filled {
       background-color: white;
     }
-  }
-
-  .joy-field-actual {
-    position: absolute;
-    top: 0;
   }
 
   .joy-field-label label {
@@ -32,7 +32,7 @@
 
   .joy-field {
     position: relative;
-    margin-bottom: -1px;
+    margin-bottom: 6px;
   }
 
   .joy-buttons {
@@ -50,38 +50,38 @@
   }
 
   .joy-field-error {
-    position: absolute;
-    left: -212px;
-    width: 200px;
-    padding: 4px 0;    
+    padding: 0;    
+    margin: 3px;
     height: 20px;
+    position: relative;
 
     label {
+      display: inline-block;
+      vertical-align: top;
       background-color: #E66;
-      padding: 0 13px;
+      padding: 1px 13px 0;
       font-size: 12px;
-      line-height: 20px;
-      border-radius: 2px;
-      display: block;
-      float: right;
+      line-height: 18px;
+      border-radius: 20px;
+      display: inline-block;
       color: white; 
       text-shadow: 0 -1px 0 #B33;
+      border-bottom: 1px solid #B33;
+    }
+  
+    &:before {
+      bottom: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-bottom-color: #E66;
+      border-width: 6px;
+      left: 20px;
+      margin-left: -6px;
     }
   }
-
-  .joy-field-error:before {
-    left: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-left-color: #E66;
-    border-width: 6px;
-    top: 50%;
-    margin-top: -6px;
-  }
-  
 }
 </style>

@@ -1,5 +1,5 @@
 | `Login_Title -> "RunOrg - Connexion"
-| `Login_Form_Login -> "Email"
+| `Login_Form_Login -> "Adresse Email"
 | `Login_Form_Password -> "Mot de passe"
 | `Login_Form_Submit -> "Connexion"
 | `Login_Form_Required -> "Champ obligatoire"
@@ -7,5 +7,6 @@
 | `Login_Form_Firstname -> "Prénom"
 | `Login_Form_Lastname -> "Nom"
 | `Login_Form_Pass2 -> "Mot de passe (encore)"
+| `Login_Form_Signup_Submit -> "Inscription"
 | `Login_Section_Login -> "Vous avez déjà un compte ?"
 | `Login_Section_Signup -> "Créer un nouveau compte"
