@@ -4,6 +4,6 @@
 | `PageLayout_Navbar_Account -> "Mon Compte"
 | `PageLayout_Navbar_Home -> "Accueil"
 | `PageLayout_Navbar_Members -> "Membres"
-| `PageLayout_Navbar_Activities -> "Activités"
-| `PageLayout_Navbar_Discussions -> "Discussions"
+| `PageLayout_Navbar_Events -> "Activités"
+| `PageLayout_Navbar_Forums -> "Discussions"
 | `PageLayout_Navbar_Website -> "Site Web"

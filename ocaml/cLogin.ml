@@ -22,10 +22,9 @@ let () = UrlLogin.def_login begin fun req res ->
   in
 
   let  iid = req # args in
-  let! navbar = ohm $ CNavbar.build ~uid:None ~iid in
 
   let html = Asset_Login_Page.render (object
-    method navbar = navbar
+    method navbar = (None,iid)
     method login  = login
     method signup = signup
   end) in

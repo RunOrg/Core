@@ -37,11 +37,13 @@
 	      <a href="{members}">{ `PageLayout_Navbar_Members }</a>
 	    </li>
 	    <li class="-root">
-	      <a href="{activities}">{ `PageLayout_Navbar_Activities }</a>
+	      <a href="{events}">{ `PageLayout_Navbar_Events }</a>
 	    </li>
 	    <li class="-root">
-	      <a href="{discussions}">{ `PageLayout_Navbar_Discussions }</a>
+	      <a href="{forums}">{ `PageLayout_Navbar_Forums }</a>
 	    </li>
+          {else}
+  	    {?desc}<li class="-desc">{this}</li>{/?}            
           {/?}
 	  <li class="-website">
 	    <a href="{website}" class="action-button">{ `PageLayout_Navbar_Website }</a>
@@ -155,6 +157,16 @@
           box-shadow: inset 1px 1px 2px #888;
         }
 
+        &.-desc { 
+          font-size: 10px;
+          overflow: hidden;
+          line-height: 12px;
+          height: 24px;
+          width: 500px;
+          color: #333;
+          text-shadow: 0 1px 0 white;
+        }
+   
         &.-website {
           float: right;
           position: relative;

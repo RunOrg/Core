@@ -4,6 +4,6 @@
 | `PageLayout_Navbar_Account
 | `PageLayout_Navbar_Home
 | `PageLayout_Navbar_Members
-| `PageLayout_Navbar_Activities
-| `PageLayout_Navbar_Discussions
+| `PageLayout_Navbar_Events
+| `PageLayout_Navbar_Forums
 | `PageLayout_Navbar_Website
