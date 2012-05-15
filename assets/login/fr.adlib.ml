@@ -2,3 +2,5 @@
 | `Login_Form_Login -> "Email"
 | `Login_Form_Password -> "Mot de passe"
 | `Login_Form_Submit -> "Connexion"
+| `Login_Form_Required -> "Champ obligatoire"
+| `Login_Form_Error -> "Non reconnu"

@@ -12,8 +12,9 @@
     padding: 3px;
     font-size: 16px;
     .oxygen();
+    position: absolute;
     width: 300px;
-    &:focus {
+    &:focus, &.-filled {
       background-color: white;
     }
   }
@@ -40,11 +41,47 @@
     margin-right: -3px;
     button { 
       float: right;
+      height: 32px;
       span { 
         font-size: 16px;
         padding: 5px 20px;
       }
     }
   }
+
+  .joy-field-error {
+    position: absolute;
+    left: -212px;
+    width: 200px;
+    padding: 4px 0;    
+    height: 20px;
+
+    label {
+      background-color: #E66;
+      padding: 0 13px;
+      font-size: 12px;
+      line-height: 20px;
+      border-radius: 2px;
+      display: block;
+      float: right;
+      color: white; 
+      text-shadow: 0 -1px 0 #B33;
+    }
+  }
+
+  .joy-field-error:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-left-color: #E66;
+    border-width: 6px;
+    top: 50%;
+    margin-top: -6px;
+  }
+  
 }
 </style>
