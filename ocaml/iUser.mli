@@ -6,8 +6,7 @@ module Assert : sig
   val is_self     : 'unknown id -> [`IsSelf] id
   val can_confirm : 'unknown id -> [`Confirm] id
   val can_view    : 'unknown id -> [`View] id
-  val is_unsafe   : 'unknown id -> [`Unsafe] ICurrentUser.id
-  val is_safe     : 'unknown id -> [`Safe] ICurrentUser.id
+  val is_current  : 'unknown id -> ICurrentUser.t
   val created     : 'unknown id -> [`Created] id
   val updated     : 'unknown id -> [`Updated] id
   val beta        : 'unknown id -> [`Beta] id
@@ -16,10 +15,10 @@ end
   
 module Deduce : sig
     
-  val is_self : [< `Safe | `Admin] ICurrentUser.id -> [`IsSelf] id
+  val current_is_self : 'any ICurrentUser.id -> [`IsSelf] id
     
   val make_login_token   : [`CanLogin] id -> string
-  val from_login_token   : string -> 'unknown id -> [`Unsafe] ICurrentUser.id option
+  val from_login_token   : string -> 'unknown id -> ICurrentUser.t option
 
   val make_confirm_token   : [`Confirm] id -> string
   val from_confirm_token   : string -> 'unknown id -> [`Confirm] id option 
@@ -45,10 +44,8 @@ module Deduce : sig
   val can_view           : [<`Edit|`Confirm|`IsSelf] id -> [`View] id
  
   val current_is_anyone  : 'any ICurrentUser.id -> t
+  val current_can_view   : 'any ICurrentUser.id -> [`View] id
     
-  val unsafe_is_anyone   : [`Unsafe] ICurrentUser.id -> t
-  val unsafe_can_view    : [`Unsafe] ICurrentUser.id -> [`View] id
-    
-  val self_is_unsafe     : [`IsSelf] id -> [`Unsafe] ICurrentUser.id
+  val self_is_current    : [`IsSelf] id -> ICurrentUser.t
     
 end

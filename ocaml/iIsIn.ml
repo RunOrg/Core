@@ -4,7 +4,7 @@ type 'rel id = {
   role     : [`Admin|`Token|`Contact|`Nobody] ;
   avatar   : [`IsSelf] IAvatar.id option ;
   instance : 'rel IInstance.id ;
-  user     : [`Unsafe] ICurrentUser.id 
+  user     : ICurrentUser.t 
 }
     
 let cast f c = {

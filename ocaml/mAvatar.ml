@@ -174,7 +174,7 @@ let _update_status status ins usr =
     let role = (newsta :> [`Admin|`Token|`Contact|`Nobody]) in
     (* 3x assert : We're building this one right now, let him fetch his own data *)
     let  aid = IAvatar.Assert.is_self aid in
-    let  usr = IUser.Assert.is_unsafe usr in
+    let  usr = IUser.Assert.is_current usr in
     let! instance = ohm $ MInstance.get ins in 
     let  light    = BatOption.default false (BatOption.map (#light) instance) in
     let  trial    = BatOption.default false (BatOption.map (#trial) instance) in
@@ -327,7 +327,7 @@ let do_identify_user instance user cuid =
   return $ IIsIn.Assert.make ~id ~role ~ins:instance ~light ~trial ~usr:cuid
  
 let identify_user instance user = 
-  do_identify_user instance user (IUser.Deduce.self_is_unsafe user)
+  do_identify_user instance user (IUser.Deduce.self_is_current user)
     
 let identify instance user = 
   do_identify_user instance (IUser.Deduce.current_is_anyone user) user  
@@ -338,7 +338,7 @@ let identify_avatar id =
   (* There's an avatar, so we are a contact *)
   let ins  = IInstance.Assert.is_contact avatar # ins in 
   let role = (avatar # sta :> [`Admin|`Contact|`Token|`Nobody]) in
-  let usr  = IUser.Assert.is_unsafe (avatar # who) in 
+  let usr  = IUser.Assert.is_current (avatar # who) in 
   
   let! instance = ohm $ MInstance.get ins in 
   let  light    = BatOption.default false (BatOption.map (#light) instance) in
@@ -551,7 +551,7 @@ let get isin =
     | None        -> let  instance = IIsIn.instance isin in
 		     let  user     = IIsIn.user isin in
 		     let! aid      = ohm $
-		       become_contact instance (IUser.Deduce.unsafe_is_anyone user)
+		       become_contact instance (IUser.Deduce.current_is_anyone user)
 		     in
 		     (* Reconstructed an avatar from scratch, but that's still me! *)
 		     return $ IAvatar.Assert.is_self aid
@@ -624,7 +624,7 @@ let _ =
       let user      = IUser.Assert.is_self (IUser.of_id id) in
       
       let refresh (_,inst) =
-	let! id = ohm $ identify inst (IUser.Deduce.self_is_unsafe user) in
+	let! id = ohm $ identify inst (IUser.Deduce.self_is_current user) in
 	let! _  = ohm $ MProfile.refresh id in
 	return ()
       in

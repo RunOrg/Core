@@ -9,8 +9,7 @@ module Assert = struct
   let is_self     id = id
   let can_confirm id = id
   let can_view    id = id
-  let is_unsafe   id = ICurrentUser.Assert.is_unsafe (ICurrentUser.of_id id)
-  let is_safe     id = ICurrentUser.Assert.is_safe (ICurrentUser.of_id id)
+  let is_current  id = ICurrentUser.of_id id
   let updated     id = id
   let created     id = id
   let beta        id = id
@@ -19,14 +18,14 @@ end
   
 module Deduce = struct
     
-  let is_self id = ICurrentUser.to_id id
+  let current_is_self id = ICurrentUser.to_id id
     
   let make_login_token id = 
     ConfigKey.prove ["login" ; Id.str id]
       
   let from_login_token proof id =
     if ConfigKey.is_proof proof  ["login" ; Id.str id] 
-    then Some (Assert.is_unsafe id) else None
+    then Some (Assert.is_current id) else None
       
   let make_block_token id = 
     ConfigKey.prove ["block" ; Id.str id]
@@ -54,9 +53,8 @@ module Deduce = struct
   let admin_can_view   _ id = id      
   let edit_can_view      id = id
   let current_is_anyone  id = ICurrentUser.to_id id
-  let unsafe_is_anyone   id = ICurrentUser.to_id id
-  let unsafe_can_view    id = ICurrentUser.to_id id
-  let self_is_unsafe     id = Assert.is_unsafe id
+  let current_can_view   id = ICurrentUser.to_id id
+  let self_is_current    id = Assert.is_current id
   let can_view           id =  id
 
 end

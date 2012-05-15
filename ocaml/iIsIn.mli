@@ -2,7 +2,7 @@
 
 type 'relation id
   
-val user : 'relation id -> [`Unsafe] ICurrentUser.id
+val user : 'relation id -> ICurrentUser.t
 val instance : 'relation id -> 'relation IInstance.id
 val role : 'relation id -> [`Admin|`Token|`Contact|`Nobody]
 val avatar : 'relation id -> [`IsSelf] IAvatar.id option
@@ -14,7 +14,7 @@ module Assert : sig
     -> ins:'any IInstance.id 
     -> light:bool
     -> trial:bool 
-    -> usr:[`Unsafe] ICurrentUser.id 
+    -> usr:ICurrentUser.t
     -> 'any id
 end
   

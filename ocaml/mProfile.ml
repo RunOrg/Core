@@ -326,7 +326,7 @@ let find_or_create iid uid =
 let find_self isin = 
 
   let iid = IInstance.decay (IIsIn.instance isin) 
-  and uid = IUser.Deduce.unsafe_is_anyone (IIsIn.user isin) in
+  and uid = IUser.Deduce.current_is_anyone (IIsIn.user isin) in
 
   let! pid = ohm $ find_or_create iid uid in 
 
@@ -345,7 +345,7 @@ let find_view iid uid =
 let refresh isin = 
   
   let iid = IInstance.decay (IIsIn.instance isin) 
-  and uid = IUser.Deduce.unsafe_can_view  (IIsIn.user isin) in
+  and uid = IUser.Deduce.current_can_view  (IIsIn.user isin) in
 
   let! profiles = ohm $ FindView.doc (iid,IUser.decay uid) in
   let! profile  = req_or (return None) (Util.first profiles) in
