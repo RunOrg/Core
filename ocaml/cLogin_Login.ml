@@ -27,27 +27,53 @@ let template =
 
 let () = UrlLogin.def_post_login begin fun req res -> 
 
+  (* Extract the form JSON *)
+  
   let  fail = return res in
   let! json = req_or fail (Action.Convenience.get_json req) in
   let  src  = OhmForm.from_post_json json in 
   let  form = OhmForm.create ~template ~source:src in
 
-  let! result = ohm $ OhmForm.result form in
+  (* Extract the result for the form (or respond with errors) *)
+  
+  let fail errors =
+    let  form = OhmForm.set_errors errors form in
+    let! json = ohm $ OhmForm.response form in
+    return $ Action.json json res
+  in
 
-  match result with 
-    | Bad errors -> let  form = OhmForm.set_errors errors form in
-		    let! json = ohm $ OhmForm.response form in
-		    return $ Action.json json res
-    | Ok result  -> let email = result # login in 		    
-		    let password, field = result # password in
-		    let fail = 
-		      let! error = ohm $ AdLib.get `Login_Form_Error in		      
-		      let  form  = OhmForm.set_errors [field, error] form in 
-		      let! json  = ohm $ OhmForm.response form in 
-		      return $ Action.json json res
-		    in
-		    let! uid  = ohm_req_or fail $ MUser.by_email email in
-		    let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
-		    return (CSession.start (`Old cuid) res)
+  let! result = ohm_ok_or fail $ OhmForm.result form in
+
+  let email = result # login in 		    
+  let password, field = result # password in
+
+  (* Extract the user with the appropriate password, or fail *)
+
+  let fail = 
+    let! error = ohm $ AdLib.get `Login_Form_Error in		      
+    let  form  = OhmForm.set_errors [field, error] form in 
+    let! json  = ohm $ OhmForm.response form in 
+    return $ Action.json json res
+  in
+
+  let! uid  = ohm_req_or fail $ MUser.by_email email in
+  let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
+
+  let res = CSession.start (`Old cuid) res in
+
+  (* Determine the URL we should redirect to. *)
+
+  let  iid  = UrlLogin.instance_of (req # args) in
+  let  path = UrlLogin.path_of (req # args) in
+  let! ins  = ohm $ Run.opt_bind MInstance.get iid in
+  
+  let  url  = match ins, path with 
+    | None, []   -> UrlMe.news
+    | None, path -> UrlMe.url path 
+    | Some ins, [] -> UrlClient.home (ins # key) 
+    | Some ins, path -> UrlClient.intranet (ins # key) path 
+  in
+
+  return (Action.redirect url res)
 
 end

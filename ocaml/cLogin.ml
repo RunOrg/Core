@@ -21,7 +21,7 @@ let () = UrlLogin.def_login begin fun req res ->
     Asset_Form_Clean.render (OhmForm.render form url)
   in
 
-  let  iid = req # args in
+  let iid = UrlLogin.instance_of (req # args) in
 
   let title = 
     AdLib.get 
