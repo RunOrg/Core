@@ -3,7 +3,7 @@
 | `Login_Form_Password -> "Mot de passe"
 | `Login_Form_Submit -> "Connexion"
 | `Login_Form_Required -> "Champ obligatoire"
-| `Login_Form_Error -> "Adresse ou mot de passe incorrects"
+| `Login_Form_Error -> "Adresse ou mot de passe incorrect"
 | `Login_Form_Firstname -> "Prénom"
 | `Login_Form_Lastname -> "Nom"
 | `Login_Form_Pass2 -> "Mot de passe (encore)"

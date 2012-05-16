@@ -51,9 +51,21 @@
 
   .joy-field-error {
     padding: 0;    
-    margin: 3px;
-    height: 20px;
+    margin: -6px 3px 3px;
     position: relative;
+    display: none;
+    height: 0;
+    overflow: hidden;
+    line-height: 26px;
+
+    &.-error {
+      display: block;
+      -webkit-transition-property: height;
+      -webkit-transition-duration: 15s;
+      -moz-transition-property: height;
+      -moz-transition-duration: 15s;
+      height: 26px;
+    }
 
     label {
       display: inline-block;
@@ -65,12 +77,13 @@
       border-radius: 20px;
       display: inline-block;
       color: white; 
+      margin-top: 6px;
       text-shadow: 0 -1px 0 #B33;
       border-bottom: 1px solid #B33;
     }
   
     &:before {
-      bottom: 100%;
+      top: -6px;
       border: solid transparent;
       content: " ";
       height: 0;

@@ -45,6 +45,34 @@ let template =
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Signup_Submit)
 
+module ConfirmArgs = Fmt.Make(struct
+  type json t = <
+    instance : IInstance.t option ;
+    path     : string list ;
+    user     : IUser.t 
+  >
+end)
+
+let send_signup_confirmation = 
+  let task = O.async # define "login-signup-confirm" ConfirmArgs.fmt 
+    begin fun arg -> 
+
+      let! _ = ohm $ MMail.send_to_self (arg # user) 
+	begin fun self user send -> 
+
+	  return ()
+
+	end in
+
+      return () 
+
+    end in
+  fun ~iid ~path ~uid -> task (object
+    method instance = iid
+    method path     = path
+    method user     = uid
+  end)
+
 let () = UrlLogin.def_post_signup begin fun req res -> 
 
   let  fail = return res in
