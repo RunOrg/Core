@@ -23,8 +23,14 @@ let () = UrlLogin.def_login begin fun req res ->
 
   let  iid = req # args in
 
+  let title = 
+    AdLib.get 
+      (if iid = None then `Login_Heading_Core else `Login_Heading_Client)
+  in
+
   let html = Asset_Login_Page.render (object
     method navbar = (None,iid)
+    method title  = title 
     method login  = login
     method signup = signup
   end) in

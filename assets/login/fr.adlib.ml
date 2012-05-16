@@ -10,3 +10,5 @@
 | `Login_Form_Signup_Submit -> "Inscription"
 | `Login_Section_Login -> "Vous avez déjà un compte ?"
 | `Login_Section_Signup -> "Créer un nouveau compte"
+| `Login_Heading_Core -> "Avec votre compte RunOrg gratuit, rejoignez ou créez des associations"
+| `Login_Heading_Client -> "Pour accéder à cet espace, vous devez disposer d'un compte RunOrg"

@@ -10,3 +10,6 @@
 | `Login_Form_Signup_Submit
 | `Login_Section_Login
 | `Login_Section_Signup
+| `Login_Heading_Core
+| `Login_Heading_Client
+
