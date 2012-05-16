@@ -4,6 +4,8 @@ include Ohm.Id.PHANTOM
   
 module Assert : sig
   val is_admin  : 'any id -> [`Admin]  id
+  val is_new    : 'any id -> [`New] id
+  val is_old    : 'any id -> [`Old] id
 end
   
 module Deduce : sig

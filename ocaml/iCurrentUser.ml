@@ -1,11 +1,14 @@
 (* © 2012 IRunOrg *)
 
 open Ohm
+open BatPervasives
 
 include Id.Phantom
   
 module Assert = struct
-  let is_admin  id = id
+  let is_admin = identity
+  let is_new   = identity
+  let is_old   = identity 
 end
 
 module Deduce = struct

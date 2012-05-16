@@ -47,7 +47,7 @@ let () = UrlLogin.def_post_login begin fun req res ->
 		      return $ Action.json json res
 		    in
 		    let! uid  = ohm_req_or fail $ MUser.by_email email in
-		    let! self = ohm_req_or fail $ MUser.knows_password password uid in
-		    return (CSession.start (IUser.Deduce.self_can_login self) res)
+		    let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
+		    return (CSession.start (`Old cuid) res)
 
 end

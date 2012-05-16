@@ -12,7 +12,7 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
  
   (* Sending e-mail to self. *)
   let uid   = IUser.Assert.is_self uid in 
-  let vuid  = IUser.Deduce.self_can_view uid in 
+  let vuid  = IUser.Deduce.view uid in 
   
   let! user = ohm_req_or (return false) $ MUser.get vuid in
 

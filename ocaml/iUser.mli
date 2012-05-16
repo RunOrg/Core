@@ -4,48 +4,48 @@ include Ohm.Id.PHANTOM
   
 module Assert : sig
   val is_self     : 'unknown id -> [`IsSelf] id
-  val can_confirm : 'unknown id -> [`Confirm] id
-  val can_view    : 'unknown id -> [`View] id
-  val is_current  : 'unknown id -> ICurrentUser.t
   val created     : 'unknown id -> [`Created] id
   val updated     : 'unknown id -> [`Updated] id
-  val beta        : 'unknown id -> [`Beta] id
   val bot         : 'unknown id -> [`Bot] id
+  val is_new      : 'unknown id -> [`New] ICurrentUser.id 
+  val is_old      : 'unknown id -> [`Old] ICurrentUser.id
 end
   
 module Deduce : sig
     
-  val current_is_self : 'any ICurrentUser.id -> [`IsSelf] id
+  (* Allowing both new and old user accounts to login, but segregate which is which. *)
     
-  val make_login_token   : [`CanLogin] id -> string
-  val from_login_token   : string -> 'unknown id -> ICurrentUser.t option
+  val make_new_session_token : [`New] ICurrentUser.id -> string
+  val make_old_session_token : [`Old] ICurrentUser.id -> string
+  val from_session_token     : string -> 'unknown id -> [ `None 
+							| `Old of [`Old] ICurrentUser.id 
+							| `New of [`New] ICurrentUser.id 
+							] 
 
-  val make_confirm_token   : [`Confirm] id -> string
-  val from_confirm_token   : string -> 'unknown id -> [`Confirm] id option 
-    
-  val make_block_token   : [`Block] id -> string
-  val from_block_token   : string -> 'unknown id -> [`Block] id option 
-    
-  val self_can_login     : [`IsSelf] id -> [`CanLogin] id
-  val current_can_login  : 'any ICurrentUser.id -> [`CanLogin] id 
-    
-  val block              : [`IsSelf] id -> [`Block] id
+  (* The confirmation sequence. *)
 
-  val self_can_confirm   : [`IsSelf] id -> [`Confirm] id  
-  val self_can_edit      : [`IsSelf] id -> [`Edit] id
-  val self_can_view      : [`IsSelf] id -> [`View] id
-  val self_can_view_inst : [`IsSelf] id -> [`ViewInstances] id
-    
-  val admin_can_edit     : [`Admin] ICurrentUser.id -> 'unknown id -> [`Edit] id
-  val admin_can_view     : [`Admin] ICurrentUser.id -> 'unknown id -> [`View] id
-    
-  val edit_can_view      : [`Edit] id -> [`View] id
-   
-  val can_view           : [<`Edit|`Confirm|`IsSelf] id -> [`View] id
- 
-  val current_is_anyone  : 'any ICurrentUser.id -> t
-  val current_can_view   : 'any ICurrentUser.id -> [`View] id
-    
-  val self_is_current    : [`IsSelf] id -> ICurrentUser.t
-    
+  val created_is_new       : [`Created] id -> [`New] ICurrentUser.id 
+
+  val make_confirm_token   : [`New] ICurrentUser.id -> string
+  val from_confirm_token   : string -> 'unknown id -> [`Old] ICurrentUser.id option 
+
+  val old_can_confirm      : [`Old] ICurrentUser.id -> [`Confirm] id
+
+  (* What the user can always do. *)
+
+  val can_block     : 'any ICurrentUser.id -> [`Block] id
+  val can_edit      : 'any ICurrentUser.id -> [`Edit] id
+  val can_view      : 'any ICurrentUser.id -> [`View] id
+  val can_view_inst : 'any ICurrentUser.id -> [`ViewInstances] id
+  val is_anyone     : 'any ICurrentUser.id -> t
+
+  (* What the confirmed current user can do. *)
+
+  val self_is_current : [`IsSelf] id -> [`Old] ICurrentUser.id     
+  val current_is_self : [`Old] ICurrentUser.id -> [`IsSelf] id  
+
+  (* What the self user can do. *)  
+
+  val view      : [<`Bot|`IsSelf|`Edit] id -> [`View] id
+  val view_inst : [<`Bot|`IsSelf|`Edit] id -> [`ViewInstances] id
 end

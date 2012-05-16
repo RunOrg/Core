@@ -174,7 +174,7 @@ let _update_status status ins usr =
     let role = (newsta :> [`Admin|`Token|`Contact|`Nobody]) in
     (* 3x assert : We're building this one right now, let him fetch his own data *)
     let  aid = IAvatar.Assert.is_self aid in
-    let  usr = IUser.Assert.is_current usr in
+    let  usr = IUser.Assert.is_old usr in
     let! instance = ohm $ MInstance.get ins in 
     let  light    = BatOption.default false (BatOption.map (#light) instance) in
     let  trial    = BatOption.default false (BatOption.map (#trial) instance) in
@@ -191,13 +191,13 @@ let _update_status status ins usr =
       let! data   = ohm $ self_data isin in
       let! _      = ohm $ Pending.invite ~uid:usr ~iid:ins aid in
       return ((isin, true), `put (object
-	  (* Definition *)
+	(* Definition *)
 	method t       = `Avatar
 	method who     = usr
 	method ins     = ins
-	  (* Own data *)
+	(* Own data *)
 	method sta     = newsta
-	  (* Cached data *)
+	(* Cached data *)
 	method name    = data # name
 	method picture = data # picture
 	method sort    = data # sort
@@ -304,7 +304,7 @@ let become_admin instance user =
 (* Identify an user for an instance ------------------------------------------------------- *)
 
 let do_identify_user instance user cuid = 
-  let  usr = IUser.decay user in
+  let  usr = IUser.decay     user     in
   let  ins = IInstance.decay instance in 
   let! result = ohm $ _get ins usr in
         
@@ -328,9 +328,12 @@ let do_identify_user instance user cuid =
  
 let identify_user instance user = 
   do_identify_user instance user (IUser.Deduce.self_is_current user)
+
+let identify_bot instance user = 
+  do_identify_user instance user (IUser.Deduce.self_is_current user)
     
-let identify instance user = 
-  do_identify_user instance (IUser.Deduce.current_is_anyone user) user  
+let identify instance cuid = 
+  do_identify_user instance (IUser.decay (IUser.Deduce.current_is_self cuid)) cuid
 
 let identify_avatar id = 
   let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay id) in
@@ -338,7 +341,7 @@ let identify_avatar id =
   (* There's an avatar, so we are a contact *)
   let ins  = IInstance.Assert.is_contact avatar # ins in 
   let role = (avatar # sta :> [`Admin|`Contact|`Token|`Nobody]) in
-  let usr  = IUser.Assert.is_current (avatar # who) in 
+  let usr  = IUser.Assert.is_old (avatar # who) in 
   
   let! instance = ohm $ MInstance.get ins in 
   let  light    = BatOption.default false (BatOption.map (#light) instance) in
@@ -549,9 +552,9 @@ let get isin =
   match IIsIn.avatar isin with 
     | Some avatar -> return avatar
     | None        -> let  instance = IIsIn.instance isin in
-		     let  user     = IIsIn.user isin in
+		     let  cuid     = IIsIn.user isin in
 		     let! aid      = ohm $
-		       become_contact instance (IUser.Deduce.current_is_anyone user)
+		       become_contact instance (IUser.Deduce.is_anyone cuid)
 		     in
 		     (* Reconstructed an avatar from scratch, but that's still me! *)
 		     return $ IAvatar.Assert.is_self aid
@@ -621,17 +624,11 @@ let _ =
     begin fun id ->
 
       (* We are acting as the user to do these updates. *)
-      let user      = IUser.Assert.is_self (IUser.of_id id) in
+      let uid      = IUser.Assert.bot (IUser.of_id id) in
       
-      let refresh (_,inst) =
-	let! id = ohm $ identify inst (IUser.Deduce.self_is_current user) in
-	let! _  = ohm $ MProfile.refresh id in
-	return ()
-      in
+      let! list = ohm $ user_instances (IUser.Deduce.view_inst uid) in
       
-      let! list = ohm $ user_instances (IUser.Deduce.self_can_view_inst user) in
-      
-      Run.list_iter refresh list
+      Run.list_iter (snd |- MProfile.refresh uid) list
 
   end in
 

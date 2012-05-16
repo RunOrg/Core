@@ -52,7 +52,7 @@ val find_view : [`ViewProfile] IInstance.id -> IUser.t -> [`View] IProfile.id op
 
 val find_self : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> [`IsSelf] IProfile.id O.run
 
-val refresh : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> [`IsSelf] IProfile.id option O.run
+val refresh   : [`Bot] IUser.id -> 'b IInstance.id -> unit O.run
 
 val create : 'any IInstance.id -> Data.t -> 
   [ `ok of (IUser.t * [`Created] IProfile.id) | `exists of IUser.t ] O.run

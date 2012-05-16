@@ -200,13 +200,13 @@ let load_from_user share previous uid =
 let create_from_user iid uid = 
 
   (* When creating a profile from an user, we know that we can read user data. *)
-  let uid = IUser.Assert.can_view uid in 
+  let uid = IUser.Assert.bot uid in 
   let pid = IProfile.gen () in
 
-  let! source, data = ohm $ load_from_user None [] uid in
+  let! source, data = ohm $ load_from_user None [] (IUser.Deduce.view uid) in
 
   let insert = {
-    Profile.t      = `Profile ;
+    t      = `Profile ;
     ins    = iid ; 
     user   = IUser.decay uid ;
     share  = None ;
@@ -255,8 +255,8 @@ let create iid data =
       | Some uid ->
 
 	(* user exists : share! *)
-	let uid = IUser.Assert.can_view uid in
-	let! source, new_data = ohm $ load_from_user share [] uid in
+	let uid = IUser.Assert.bot uid in
+	let! source, new_data = ohm $ load_from_user share [] (IUser.Deduce.view uid) in
 	return (IUser.decay uid, source, new_data)
 
       | None      ->
@@ -326,7 +326,7 @@ let find_or_create iid uid =
 let find_self isin = 
 
   let iid = IInstance.decay (IIsIn.instance isin) 
-  and uid = IUser.Deduce.current_is_anyone (IIsIn.user isin) in
+  and uid = IUser.Deduce.is_anyone (IIsIn.user isin) in
 
   let! pid = ohm $ find_or_create iid uid in 
 
@@ -342,13 +342,13 @@ let find_view iid uid =
   (* Can view profiles *)
   |> Run.map (BatOption.map IProfile.Assert.view)
 
-let refresh isin = 
+let refresh uid iid =
   
-  let iid = IInstance.decay (IIsIn.instance isin) 
-  and uid = IUser.Deduce.current_can_view  (IIsIn.user isin) in
+  let iid = IInstance.decay   iid
+  and uid = IUser.Deduce.view uid in
 
   let! profiles = ohm $ FindView.doc (iid,IUser.decay uid) in
-  let! profile  = req_or (return None) (Util.first profiles) in
+  let! profile  = req_or (return ()) (Util.first profiles) in
     
   let id = IProfile.of_id (profile # id) in
  
@@ -373,8 +373,7 @@ let refresh isin =
       | None      -> return ()
   end in 
   
-  (* MUser was refreshing his own profile *) 
-  return (Some (IProfile.Assert.is_self id))
+  return ()
 	    
 type details = <
   firstname : string ;
@@ -416,8 +415,9 @@ module Sharing = struct
       | None -> return (None, `keep)
       | Some profile -> 
 	(* I can view the user data to refresh the profile. *)
-	let  uid = IUser.Assert.can_view profile.user in
-	let! source, data = ohm $ load_from_user share profile.source uid in 
+	let  uid = IUser.Assert.bot profile.user in
+	let! source, data = ohm $ load_from_user share profile.source 
+	  (IUser.Deduce.view uid) in 
 	return (
 	  Some (data, profile.ins, profile.user) , `put { profile with source ; data ; share }
 	)

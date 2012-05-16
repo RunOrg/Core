@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Util 
@@ -227,14 +227,14 @@ end
  
 let confirm uid = 
  
-  let id = IUser.decay uid in 
+  let uid = IUser.decay uid in 
   let update user = 
     if user.Data.confirmed then (None, true), `keep else 	      
       let o = Data.({ user with confirmed = true }) in
       (Some o, true), `put o
   in
   
-  let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  let! result = ohm $ MyTable.transaction uid (MyTable.if_exists update) in
   match result with 
     | Some (Some o, x) -> let! () = ohm $ Signals.on_confirm_call (uid, extract o) in
 			  return x
@@ -265,7 +265,7 @@ let quick_create (user : user_short) =
       | None      -> false
     in
     
-    if collision then `duplicate (IUser.Assert.can_confirm id), `keep
+    if collision then `duplicate (IUser.decay id), `keep
     else 
       let clip s = if String.length s > 200 then String.sub s 0 200 else s in      
       let email  = clip (EmailUtil.canonical (user # email)) in 
@@ -277,7 +277,7 @@ let quick_create (user : user_short) =
 	  email     ;
       }) in
       
-      `created (IUser.Assert.can_confirm id, obj), `put obj
+      `created (IUser.decay id, obj), `put obj
   in
   
   let! result = ohm $ MyTable.transaction id (fun id -> MyTable.get id |> Run.map update) in
@@ -291,7 +291,7 @@ let quick_create (user : user_short) =
 				  Signals.on_create_call
 				    (IUser.Assert.created id, extract obj) )
 			    in 
-			    return $ `created id
+			    return $ `created (IUser.Assert.is_new id)
 
 let listener_create email = 
 
@@ -393,7 +393,7 @@ let _facebook_update uid facebook details =
   
   let! () = ohm begin 
     if confirmed then 
-      Signals.on_confirm_call (IUser.Assert.can_confirm uid, extract obj) 
+      Signals.on_confirm_call (IUser.decay uid, extract obj) 
     else 
       return ()
   end in
@@ -627,7 +627,7 @@ let set_password pass uid =
   let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
   match result with
     | Some (Some o) -> let data = extract o in
-		       Signals.on_confirm_call (IUser.Deduce.self_can_confirm uid, data)
+		       Signals.on_confirm_call (IUser.decay uid, data)
     | _             -> return ()
 
 let _get id = MyTable.get (IUser.decay id)
@@ -639,7 +639,7 @@ let admin_get _ id = _get id |> Run.map (BatOption.map extract)
 let knows_password pass id = 
   let! user = ohm_req_or (return None) $ _get id in
   if user.Data.confirmed && user.Data.passhash = Some (ConfigKey.passhash pass)
-  then return $ Some (IUser.Assert.is_self id) 
+  then return $ Some (IUser.Assert.is_old id) 
   else return None
 
 let set_notifications uid ~blocked ~autologin = 

@@ -49,7 +49,7 @@ module Signals : sig
 
   val on_create     : ([`Created] IUser.id * t, unit O.run) Ohm.Sig.channel
   val on_update     : ([`Updated] IUser.id * t, unit O.run) Ohm.Sig.channel
-  val on_confirm    : ([`Confirm] IUser.id * t, unit O.run) Ohm.Sig.channel
+  val on_confirm    : (IUser.t * t, unit O.run) Ohm.Sig.channel
   val on_obliterate : (IUser.t, unit O.run) Ohm.Sig.channel 
   val on_merge      : (IUser.t * IUser.t, unit O.run) Ohm.Sig.channel 
 
@@ -65,8 +65,8 @@ class type user_short = object
   method email     : string
 end
 
-val quick_create : user_short -> [ `created of [`Confirm] IUser.id 
-				 | `duplicate of [`Confirm] IUser.id
+val quick_create : user_short -> [ `created   of [`New] ICurrentUser.id 
+				 | `duplicate of IUser.t
 				 | `error ] O.run
 
 val listener_create : string -> (IUser.t * bool) O.run
@@ -116,7 +116,7 @@ val get : [`View] IUser.id -> t option O.run
 
 val admin_get : [`Admin] ICurrentUser.id -> 'any IUser.id -> t option O.run
 
-val knows_password : string -> 'any IUser.id -> [`IsSelf] IUser.id option O.run
+val knows_password : string -> 'any IUser.id -> [`Old] ICurrentUser.id option O.run
 
 val confirm : [`Confirm] IUser.id -> bool O.run
 
