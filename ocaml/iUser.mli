@@ -24,8 +24,6 @@ module Deduce : sig
 
   (* The confirmation sequence. *)
 
-  val created_is_new       : [`Created] id -> [`New] ICurrentUser.id 
-
   val make_confirm_token   : [`New] ICurrentUser.id -> string
   val from_confirm_token   : string -> 'unknown id -> [`Old] ICurrentUser.id option 
 

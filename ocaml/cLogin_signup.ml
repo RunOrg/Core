@@ -60,20 +60,28 @@ let send_signup_confirmation =
   let task = O.async # define "login-signup-confirm" ConfirmArgs.fmt 
     begin fun arg -> 
 
-      let! _ = ohm $ MMail.send_to_self (arg # user) 
+      (* Restore new currentuser *)
+      let cuid  = IUser.Assert.is_new (arg # user) in
+      let token = IUser.Deduce.make_confirm_token cuid in
+
+      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
-	  return ()
+	  let  body = return (Html.str "") in
+	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) self body in
+	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
+ 
+	  send ~from ~subject ~html
 
 	end in
 
       return () 
 
     end in
-  fun ~iid ~path ~uid -> task (object
+  fun ~iid ~path ~(cuid:[`New] ICurrentUser.id) -> task (object
     method instance = iid
     method path     = path
-    method user     = uid
+    method user     = IUser.Deduce.is_anyone cuid
   end)
 
 let () = UrlLogin.def_post_signup begin fun req res -> 
@@ -115,7 +123,10 @@ let () = UrlLogin.def_post_signup begin fun req res ->
   (* Try connecting with the password. If not, do this. *)
   
   let if_login_failed = 
-    
+
+    let iid  = UrlLogin.instance_of (req # args) in
+    let path = UrlLogin.path_of (req # args) in
+
     (* Create the user. Either it's a brand new one, or the
        account already existed. *)
     let! result = ohm $ MUser.quick_create (object
@@ -125,8 +136,17 @@ let () = UrlLogin.def_post_signup begin fun req res ->
       method email     = email
     end) in
 
-    return res
+    match result with 
+      | `created cuid -> 
+
+	let! ( ) = ohm $ send_signup_confirmation ~iid ~path ~cuid in
+	
+	return res
     
+      | `duplicate uid -> 
+	
+	return res
+
   in
 
   Login.attempt if_login_failed email pass req res

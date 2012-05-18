@@ -31,8 +31,6 @@ module Deduce = struct
       then `New (Assert.is_new id) else `None
 
   (* -- *)
-  
-  let created_is_new id = Assert.is_new id
 
   let make_confirm_token id = 
     ConfigKey.prove ["confirm" ; ICurrentUser.to_string id]
