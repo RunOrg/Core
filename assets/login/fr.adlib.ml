@@ -1,4 +1,7 @@
 | `Login_Title -> "RunOrg - Connexion"
+| `Login_Lost_Title -> "Récupérer un mot de passe"
+| `Login_Lost_Link -> "Vous n'avez pas votre mot de passe ?"
+| `Login_Form_Reset_Submit -> "Récupérer"
 | `Login_Form_Login -> "Adresse email"
 | `Login_Form_Password -> "Mot de passe"
 | `Login_Form_Submit -> "Connexion"

@@ -5,17 +5,16 @@ class SubStack
     @$ = ctx.$.find(sel)
     @w  = @$.width()
     @stack = []
-        
+
     if @$.children().length	
-      $old = @$.children().clone true
-      	
-    @$.html '<div><div/></div>'
-    @$c = @$.children().css { overflow: 'hidden' } 
-    @$l = @$c.children().css { position: 'relative', overflow: 'hidden', left: '0px' } 
-    
+      $old = @$.children().detach()
+            
+    @$l = $('<div/>').css { position: 'relative', overflow: 'hidden', left: '0px' } 
+    @$c = $('<div/>').append(@$l).css { overflow: 'hidden' }
+    @$.append(@$c) 
     @i  = 0
 
-    if $old 
+    if $old
       @push 'initial', $old
 
   pop: () ->
@@ -64,6 +63,8 @@ class SubStack
   goto: (key,$what,data) -> 
     i = @find key 
     if i is not null
+      @stack[i][1].after($what).remove()
+      @stack[i] = [key,$what,data] 
       @move i
     else
       @push key, $what, data
@@ -77,12 +78,13 @@ getStack = () ->
     theStack = new SubStack { $: $('body') }, '#substack'
   theStack
 
-#>> stackPush(html:html) 
+#>> stackPush(?key:string,html:html) 
 
-window.stackPush = (html) -> 
+window.stackPush = (key,html) ->
+  key = key || 'dialog' 
   s = getStack()
   $h = $(html.html) 
-  s.push('dialog',$h)
+  s.push(key,$h)
   call { $: $h }, html.code
 
 #>> stackBack()

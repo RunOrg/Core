@@ -45,5 +45,31 @@ let send =
     method user     = uid
   end)
 
-  
+let template = 
+  OhmForm.Skin.text
+    ~label:(AdLib.get `Login_Form_Login)
+    (fun () -> return "")
+    (OhmForm.postpone
+       (OhmForm.required (AdLib.get `Login_Form_Required)))
 
+  |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Reset_Submit) 
+
+let () = UrlLogin.def_lost 
+  begin fun req res -> 
+
+    let form = OhmForm.create ~template ~source:OhmForm.empty in
+    let url  = Action.url UrlLogin.post_lost () () in
+
+    let! html = ohm $ 
+      Asset_Dialog_Dialog.render (object
+	method width = "600"
+	method title = AdLib.get `Login_Lost_Title
+	method body  = Asset_Form_Clean.render (OhmForm.render form url)  
+      end)
+    in
+    
+    let js   = Js.stackPush ~html () in
+    
+    return (Action.javascript js res)
+
+  end

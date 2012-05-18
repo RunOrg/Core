@@ -33,6 +33,7 @@ let () = UrlLogin.def_login begin fun req res ->
     method title  = title 
     method login  = login
     method signup = signup
+    method lost   = Js.remote ~url:(Action.url UrlLogin.lost () ()) ()
   end) in
 
   CPageLayout.core `Login_Title html res

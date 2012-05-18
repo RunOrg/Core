@@ -5,4 +5,7 @@
     margin: 0 0 5px 0;
     font-size: 18px;
   } 
+  .clean-form {
+    margin-top: 0;
+  }
 }
