@@ -2,17 +2,19 @@
 
 { title | Asset_PageLayout_Heading.render | ohm } 
 
-<div style="width: 740px ; margin: 40px auto ; overflow: hidden">
-  <div style="float: left ; margin : 2px">
-    <div class="formsection">
-      <h2>{ `Login_Section_Login }</h2>
-      <div>{ login  | ohm }</div>
+<div id="substack" style="width: 950px ; margin: 40px auto">
+  <div style="width: 740px ; margin: auto ; overflow: hidden">
+    <div style="float: left ; margin : 2px">
+      <div class="formsection">
+	<h2>{ `Login_Section_Login }</h2>
+	<div>{ login  | ohm }</div>
+      </div>
     </div>
-  </div>
-  <div style="float: right ; margin : 2px">
-    <div class="formsection">
-      <h2>{ `Login_Section_Signup }</h2>
-      <div>{ signup | ohm }</div>
+    <div style="float: right ; margin : 2px">
+      <div class="formsection">
+	<h2>{ `Login_Section_Signup }</h2>
+	<div>{ signup | ohm }</div>
+      </div>
     </div>
   </div>
 </div>

@@ -13,4 +13,6 @@
 | `Login_Section_Signup
 | `Login_Heading_Core
 | `Login_Heading_Client
-
+| `Login_PopConfirmReset_Title
+| `Login_PopConfirmReset_Intro
+| `Login_PopConfirmReset_Outro

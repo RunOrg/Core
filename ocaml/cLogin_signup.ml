@@ -5,6 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 module Login = CLogin_login
+module Reset = CLogin_reset
 
 let template = 
   OhmForm.begin_object 
@@ -151,8 +152,20 @@ let () = UrlLogin.def_post_signup begin fun req res ->
 	return res
     
       | `duplicate uid -> 
+
+	let!  ()  = ohm $ Reset.send ~iid ~uid in
+
+	let! html = ohm $ 
+	  Asset_Dialog_Dialog.render (object
+	    method width = "600"
+	    method title = AdLib.get `Login_PopConfirmReset_Title
+	    method body  = Asset_Login_PopConfirmReset.render email
+	  end)
+	in
 	
-	return res
+	let js   = Js.stackPush ~html () in
+
+	return (Action.javascript js res)
 
   in
 

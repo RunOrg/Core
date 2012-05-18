@@ -11,3 +11,6 @@ let unsubscribe, def_unsubscribe = O.declare O.core "mail/unsubscribe"
 
 let signupConfirm, def_signupConfirm = O.declare O.core "c"
   (A.rr IUser.arg A.string)
+
+let passReset, def_passReset = O.declare O.core "p"
+  (A.rr IUser.arg A.string)

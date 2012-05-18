@@ -13,3 +13,8 @@
 | `Login_Section_Signup -> "Créer un nouveau compte"
 | `Login_Heading_Core -> "Avec votre compte RunOrg gratuit, rejoignez ou créez des associations"
 | `Login_Heading_Client -> "Pour accéder à cet espace, vous devez disposer d'un compte RunOrg"
+| `Login_PopConfirmReset_Title -> "Mot de passe perdu" 
+| `Login_PopConfirmReset_Intro -> 
+  "Nous vous avons envoyé un email à l'adresse"
+| `Login_PopConfirmReset_Outro -> 
+  "Cet email contient un lien qui vous permettra de vous connecter à votre compte et d'en changer le mot de passe."

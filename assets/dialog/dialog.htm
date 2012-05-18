@@ -1,0 +1,42 @@
+<div class="dialog" style="width:{width}px">
+  <div class="-head">
+    <a class="-close" href="javascript:void(0)" onclick="stackBack()">&times;</a>
+    <h2>{title|ohm|esc}</h2>
+  </div>
+  {body|ohm}
+</div>
+
+<style>
+.dialog { 
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  margin: 15px auto;
+  box-shadow: 0 0 5px #BBB;
+  background-color: white;
+  padding:8px;
+
+  .-head h2 { 
+    margin: 0;
+    color: #888;
+    font-size: 20px; 
+  }
+
+  .-head  .-close {
+    background-color: #CCC;
+    color: white;
+    font-weight: bold;
+    float: right;
+    width: 27px;
+    height: 27px;
+    line-height: 25px;
+    font-size: 28px;
+    text-align: center;
+    border-radius: 27px;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #888;
+    }
+  }
+}
+</style>
