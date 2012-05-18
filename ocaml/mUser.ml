@@ -724,30 +724,34 @@ module Backdoor = struct
 
   let all = 
     AllView.query () |> Run.map 
-	(List.map (fun item -> IUser.of_id (item # id), item # value))
+	(List.map (fun item -> IUser.of_id (item # id), item # value))      
+end
 
-  let obliterate _ uid =
-    
-    let! user = ohm_req_or (return ()) $ MyTable.get uid in 
-    
-    let! () = ohm begin 
-      match user.Data.picture with None -> return () | Some fid -> 
+let obliterate uid =
+  
+  let  uid  = IUser.decay uid in
+  let! user = ohm_req_or (return `missing) $ MyTable.get uid in 
+  
+  let! () = true_or (return `destroyed) (user.Data.destroyed = None) in
+
+  let! () = ohm begin 
+    match user.Data.picture with None -> return () | Some fid -> 
 	(* Deletion acts as a bot - the user owns their picture. *)
-	let fid = IFile.Assert.bot fid in
-	MFile.delete_now fid
-    end in
-
-    let update user =
-      (), `put (Data.({
-	user with 
-	  firstname = "" ;
-	  lastname  = "" ;
-	  passhash  = None ;
-	  email     = user.email ;
-	  emails    = List.filter snd user.emails ;
-	  facebook  = None ;
-	  confirmed = true ;
-	  destroyed = Some (Unix.gettimeofday ()) ;
+      let fid = IFile.Assert.bot fid in
+      MFile.delete_now fid
+  end in
+  
+  let update user =
+    (), `put (Data.({
+      user with 
+	firstname = "" ;
+	lastname  = "" ;
+	passhash  = None ;
+	email     = user.email ;
+	emails    = List.filter snd user.emails ;
+	facebook  = None ;
+	confirmed = true ;
+	destroyed = Some (Unix.gettimeofday ()) ;
 	  autologin = false ;
 	  picture   = None ;
 	  birthdate = None ;
@@ -767,9 +771,7 @@ module Backdoor = struct
     let! () = ohm $ Signals.on_obliterate_call uid in 
     let! _  = ohm $ MyTable.transaction uid (MyTable.if_exists update) in
     
-    return ()
-      
-end
+    return `ok
 
 let merge_unconfirmed ~merged ~into = 
 

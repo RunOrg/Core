@@ -16,3 +16,10 @@
 | `Mail_PassReset_Explanation email -> 
   !! "Vous pouvez vous connecter directement à votre compte %s en cliquant sur le lien ci-dessous :" email 
 | `Mail_PassReset_Thanks -> "Une fois connecté, vous pourrez changer votre mot de passe."
+
+| `Mail_Unsubscribe_Title -> "Confirmez la suppression de votre compte"
+| `Mail_Unsubscribe_Intro name -> !! "Bonjour %s," name
+| `Mail_Unsubscribe_Explanation email ->
+  !! "Vous avez demandé aujourd'hui la suppression définitive de votre compte %s sur notre plate-forme. Pour confirmer cette suppression, cliquez sur le lien ci-dessous. Cela supprimera votre compte et les données personnelles qui y sont associées, et empêchera nos clients de vous envoyer d'autres courriers." email
+| `Mail_Unsubscribe_Warning -> "Attention : cliquer sur ce lien provoque la suppression immédiate et irréversible de votre compte."
+| `Mail_Unsubscribe_Thanks -> "Si vous supprimez votre compte, alors ceci sera le dernier message que vous recevrez de RunOrg. Nous sommes tristes que votre expérience de nos services n'ait pas été aussi agréable que nous l'avons espéré, et nous nous excusons pour tout désagrément que vous avez pu subir."

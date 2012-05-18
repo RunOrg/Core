@@ -3,7 +3,7 @@
 module Wrap : sig
 
   val render :
-       ?iid:'a IInstance.id
+       ?iid:IInstance.t
     -> [`IsSelf] IUser.id
     -> Ohm.Html.writer O.run
     -> (string option * Ohm.Html.writer O.run) O.run

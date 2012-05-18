@@ -12,3 +12,9 @@
 | `Mail_PassReset_Intro of string
 | `Mail_PassReset_Explanation of string
 | `Mail_PassReset_Thanks
+
+| `Mail_Unsubscribe_Title
+| `Mail_Unsubscribe_Intro of string
+| `Mail_Unsubscribe_Explanation of string
+| `Mail_Unsubscribe_Warning
+| `Mail_Unsubscribe_Thanks
