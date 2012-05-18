@@ -2,6 +2,7 @@
 | `Login_Lost_Link
 | `Login_Lost_Title
 | `Login_Form_Reset_Submit
+| `Login_Form_Reset_NotFound
 | `Login_Form_Login
 | `Login_Form_Password
 | `Login_Form_Submit
@@ -19,3 +20,5 @@
 | `Login_PopConfirmReset_Title
 | `Login_PopConfirmReset_Intro
 | `Login_PopConfirmReset_Outro
+| `Login_PopReset_Intro
+| `Login_PopReset_Outro

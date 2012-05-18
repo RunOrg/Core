@@ -57,12 +57,12 @@ class SubStack
   
   find: (key) -> 
     for e,i in @stack 
-      return i if e[0] = key 
+      return i if e[0] is key 
     return null
 
   goto: (key,$what,data) -> 
     i = @find key 
-    if i is not null
+    if i?
       @stack[i][1].after($what).remove()
       @stack[i] = [key,$what,data] 
       @move i
@@ -84,7 +84,7 @@ window.stackPush = (key,html) ->
   key = key || 'dialog' 
   s = getStack()
   $h = $(html.html) 
-  s.push(key,$h)
+  s.goto(key,$h)
   call { $: $h }, html.code
 
 #>> stackBack()

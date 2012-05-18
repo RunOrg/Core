@@ -2,6 +2,7 @@
 | `Login_Lost_Title -> "Récupérer un mot de passe"
 | `Login_Lost_Link -> "Vous n'avez pas votre mot de passe ?"
 | `Login_Form_Reset_Submit -> "Récupérer"
+| `Login_Form_Reset_NotFound -> "Ce compte n'existe pas"
 | `Login_Form_Login -> "Adresse email"
 | `Login_Form_Password -> "Mot de passe"
 | `Login_Form_Submit -> "Connexion"
@@ -17,7 +18,9 @@
 | `Login_Heading_Core -> "Avec votre compte RunOrg gratuit, rejoignez ou créez des associations"
 | `Login_Heading_Client -> "Pour accéder à cet espace, vous devez disposer d'un compte RunOrg"
 | `Login_PopConfirmReset_Title -> "Mot de passe perdu" 
-| `Login_PopConfirmReset_Intro -> 
+| `Login_PopConfirmReset_Intro  
+| `Login_PopReset_Intro -> 
   "Nous vous avons envoyé un email à l'adresse"
-| `Login_PopConfirmReset_Outro -> 
+| `Login_PopConfirmReset_Outro
+| `Login_PopReset_Outro -> 
   "Cet email contient un lien qui vous permettra de vous connecter à votre compte et d'en changer le mot de passe."

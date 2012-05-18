@@ -58,7 +58,7 @@ let () = UrlLogin.def_lost
   begin fun req res -> 
 
     let form = OhmForm.create ~template ~source:OhmForm.empty in
-    let url  = Action.url UrlLogin.post_lost () () in
+    let url  = Action.url UrlLogin.post_lost () (req # args) in
 
     let! html = ohm $ 
       Asset_Dialog_Dialog.render (object
@@ -73,3 +73,51 @@ let () = UrlLogin.def_lost
     return (Action.javascript js res)
 
   end
+
+let () = UrlLogin.def_post_lost 
+  begin fun req res -> 
+
+    (* Extract the form JSON *)
+    
+    let  fail = return res in
+    let! json = req_or fail (Action.Convenience.get_json req) in
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template ~source:src in
+
+    (* Extract the result for the form *)
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! email, email_field = ohm_ok_or fail $ OhmForm.result form in  
+
+    (* Try finding an user with this email. *)
+    
+    let fail = 
+      let! error = ohm $ AdLib.get `Login_Form_Reset_NotFound in
+      let  form = OhmForm.set_errors [ email_field, error ] form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res 
+    in
+
+    let! uid = ohm_req_or fail $ MUser.by_email email in
+    let  iid = UrlLogin.instance_of (req # args) in
+    
+    let! ()  = ohm $ send ~iid ~uid  in
+
+    let! html = ohm $ 
+      Asset_Dialog_Dialog.render (object
+	method width = "600"
+	method title = AdLib.get `Login_Lost_Title
+	method body  = Asset_Login_PopReset.render email
+      end)
+    in
+    
+    let js   = Js.stackPush ~html () in        
+
+    return $ Action.javascript js res
+      
+  end 
