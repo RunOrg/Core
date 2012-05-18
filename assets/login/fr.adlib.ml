@@ -8,6 +8,7 @@
 | `Login_Form_Lastname -> "Nom"
 | `Login_Form_Pass2 -> "Mot de passe (encore)"
 | `Login_Form_Signup_Submit -> "Inscription"
+| `Login_Form_Signup_Mismatch -> "Les mots de passe ne se correspondent pas"
 | `Login_Section_Login -> "Vous avez déjà un compte ?"
 | `Login_Section_Signup -> "Créer un nouveau compte"
 | `Login_Heading_Core -> "Avec votre compte RunOrg gratuit, rejoignez ou créez des associations"

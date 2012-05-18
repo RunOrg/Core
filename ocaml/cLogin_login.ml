@@ -25,6 +25,28 @@ let template =
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Submit)
 
+let attempt fail email password req res =
+
+  let! uid  = ohm_req_or fail $ MUser.by_email email in
+  let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
+
+  let res = CSession.start (`Old cuid) res in
+
+  (* Determine the URL we should redirect to. *)
+
+  let  iid  = UrlLogin.instance_of (req # args) in
+  let  path = UrlLogin.path_of (req # args) in
+  let! ins  = ohm $ Run.opt_bind MInstance.get iid in
+  
+  let  url  = match ins, path with 
+    | None, []   -> UrlMe.news
+    | None, path -> UrlMe.url path 
+    | Some ins, [] -> UrlClient.home (ins # key) 
+    | Some ins, path -> UrlClient.intranet (ins # key) path 
+  in
+
+  return (Action.javascript (Js.redirect ~url ()) res)
+
 let () = UrlLogin.def_post_login begin fun req res -> 
 
   (* Extract the form JSON *)
@@ -56,24 +78,6 @@ let () = UrlLogin.def_post_login begin fun req res ->
     return $ Action.json json res
   in
 
-  let! uid  = ohm_req_or fail $ MUser.by_email email in
-  let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
-
-  let res = CSession.start (`Old cuid) res in
-
-  (* Determine the URL we should redirect to. *)
-
-  let  iid  = UrlLogin.instance_of (req # args) in
-  let  path = UrlLogin.path_of (req # args) in
-  let! ins  = ohm $ Run.opt_bind MInstance.get iid in
-  
-  let  url  = match ins, path with 
-    | None, []   -> UrlMe.news
-    | None, path -> UrlMe.url path 
-    | Some ins, [] -> UrlClient.home (ins # key) 
-    | Some ins, path -> UrlClient.intranet (ins # key) path 
-  in
-
-  return (Action.redirect url res)
+  attempt fail email password req res
 
 end

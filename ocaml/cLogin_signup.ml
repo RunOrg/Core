@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Login = CLogin_login
+
 let template = 
   OhmForm.begin_object 
     (fun ~fname ~lname ~login ~password ~pass2 -> (object
@@ -17,7 +19,7 @@ let template =
   |> OhmForm.append (fun f fname -> return $ f ~fname) 
       (OhmForm.Skin.text 
 	 ~label:(AdLib.get `Login_Form_Firstname) 
-	 (fun () -> return "") 
+	 (fun () -> return "")
 	 (OhmForm.required (AdLib.get `Login_Form_Required)))
 
   |> OhmForm.append (fun f lname -> return $ f ~lname) 
@@ -30,7 +32,8 @@ let template =
       (OhmForm.Skin.text 
 	 ~label:(AdLib.get `Login_Form_Login) 
 	 (fun () -> return "") 
-	 (OhmForm.required (AdLib.get `Login_Form_Required)))
+	 (OhmForm.postpone 
+	    (OhmForm.required (AdLib.get `Login_Form_Required))))
       
   |> OhmForm.append (fun f password -> return $ f ~password) 
       (OhmForm.Skin.password
@@ -75,17 +78,59 @@ let send_signup_confirmation =
 
 let () = UrlLogin.def_post_signup begin fun req res -> 
 
+  (* Extract the form JSON *)
+
   let  fail = return res in
   let! json = req_or fail (Action.Convenience.get_json req) in
   let  src  = OhmForm.from_post_json json in 
   let  form = OhmForm.create ~template ~source:src in
 
-  let! result = ohm $ OhmForm.result form in
+  (* Extract the result for the form *)
 
-  match result with 
-    | Bad errors -> let  form = OhmForm.set_errors errors form in
-		    let! json = ohm $ OhmForm.response form in
-		    return $ Action.json json res
-    | Ok result  -> return res 
+  let fail errors = 
+    let  form = OhmForm.set_errors errors form in
+    let! json = ohm $ OhmForm.response form in
+    return $ Action.json json res
+  in
+
+  let! result = ohm_ok_or fail $ OhmForm.result form in  
+  let  email, email_field = result # login in
+  let  fname   = result # fname in
+  let  lname   = result # lname in
+  let  pass    = result # password in
+  let  pass2, pass2_field = result # pass2 in
+
+  (* Check that the two passwords match. *)
+
+  let fail = 
+    let! () = ohm (return ()) in
+    let! error = ohm $ AdLib.get `Login_Form_Signup_Mismatch in
+    let  form = OhmForm.set_errors [pass2_field, error] form in
+    let! json = ohm $ OhmForm.response form in 
+    return $ Action.json json res 
+  in
+
+  let! () = true_or fail (pass = pass2) in
+
+  (* Try connecting with the password. If not, do this. *)
+  
+  let if_login_failed = 
+    
+    (* Create the user. Either it's a brand new one, or the
+       account already existed. *)
+    let! result = ohm $ MUser.quick_create (object
+      method firstname = fname
+      method lastname  = lname
+      method password  = pass
+      method email     = email
+    end) in
+
+    return res
+    
+  in
+
+  Login.attempt if_login_failed email pass req res
 
 end
+  
+

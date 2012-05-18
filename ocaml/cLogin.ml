@@ -4,8 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Login  = CLogin_Login
-module Signup = CLogin_Signup
+module Login  = CLogin_login
+module Signup = CLogin_signup
 
 let () = UrlLogin.def_login begin fun req res -> 
 

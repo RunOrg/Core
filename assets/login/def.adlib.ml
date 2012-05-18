@@ -8,6 +8,7 @@
 | `Login_Form_Lastname
 | `Login_Form_Pass2
 | `Login_Form_Signup_Submit
+| `Login_Form_Signup_Mismatch
 | `Login_Section_Login
 | `Login_Section_Signup
 | `Login_Heading_Core

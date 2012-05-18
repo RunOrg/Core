@@ -66,8 +66,7 @@ class type user_short = object
 end
 
 val quick_create : user_short -> [ `created   of [`New] ICurrentUser.id 
-				 | `duplicate of IUser.t
-				 | `error ] O.run
+				 | `duplicate of IUser.t ] O.run
 
 val listener_create : string -> (IUser.t * bool) O.run
 
