@@ -6,6 +6,8 @@ open BatPervasives
 
 let render ?iid uid (body:Html.writer O.run) = 
   let! ins = ohm $ Run.opt_bind MInstance.get iid in
+  let unsubscribe = Action.url UrlMail.unsubscribe () 
+    (IUser.decay uid,IUser.Deduce.make_unsub_token uid) in
   let instance = BatOption.map (fun ins -> (object
     method url  = Action.url UrlClient.website (ins # key) []  
     method name = ins # name
@@ -13,7 +15,7 @@ let render ?iid uid (body:Html.writer O.run) =
   let writer = Asset_Mail_Template.render (object
     method body        = body
     method instance    = instance
-    method unsubscribe = "" 
+    method unsubscribe = unsubscribe
   end) in
   return (BatOption.map (#name) ins, writer) 
 

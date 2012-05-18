@@ -43,6 +43,15 @@ module Deduce = struct
       
   (* -- *)
 
+  let make_unsub_token id = 
+    ConfigKey.prove ["unsubscribe" ; Id.str id]
+      
+  let from_unsub_token proof id =
+    if ConfigKey.is_proof proof  ["unsubscribe" ; Id.str id] 
+    then Some id else None
+
+  (* -- *)
+
   let can_block     id = ICurrentUser.to_id id 
   let can_edit      id = ICurrentUser.to_id id
   let can_view      id = ICurrentUser.to_id id

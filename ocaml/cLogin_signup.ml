@@ -67,7 +67,14 @@ let send_signup_confirmation =
       let! _ = ohm $ MMail.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
-	  let  body = return (Html.str "") in
+	  let  url = Action.url UrlMail.signupConfirm () (arg # user, token) in
+	  
+	  let  body = Asset_Mail_SignupConfirm.render (object
+	    method url   = url 
+	    method name  = user # fullname
+	    method email = user # email
+	  end) in
+	  
 	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) self body in
 	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
  

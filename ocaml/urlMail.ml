@@ -9,3 +9,5 @@ module A = Action.Args
 let unsubscribe, def_unsubscribe = O.declare O.core "mail/unsubscribe" 
   (A.rr IUser.arg A.string) 
 
+let signupConfirm, def_signupConfirm = O.declare O.core "c"
+  (A.rr IUser.arg A.string)
