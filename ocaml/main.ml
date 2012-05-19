@@ -6,6 +6,7 @@ open BatPervasives
 module Actions = struct
   open MDo
   open CLogin
+  open CMe
 end
 
 module Main = Ohm.Main.Make(O.Reset)

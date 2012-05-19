@@ -90,5 +90,4 @@ window.stackPush = (key,html) ->
 #>> stackBack()
 
 window.stackBack = () -> 
-  s = getStack() 
-  do s.back
+  do getStack().back

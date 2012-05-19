@@ -7,3 +7,4 @@
 | `PageLayout_Navbar_Events -> "Activités"
 | `PageLayout_Navbar_Forums -> "Discussions"
 | `PageLayout_Navbar_Website -> "Site Web"
+| `PageLayout_Foot_PoweredBy -> "Propulsé par"

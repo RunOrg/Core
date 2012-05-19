@@ -4,14 +4,14 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+(* Environment and basic configuration ---------------------------------------------------------------------- *)
+
 let environment = `Retheme 
 
 let env = match environment with 
   | `Prod    -> "prod"
   | `Dev     -> "dev"
   | `Retheme -> "dev"
-
-let db name = Printf.sprintf "%s-%s" env name
 
 let () = 
   Configure.set `Log begin match Ohm.Util.role with 
@@ -21,18 +21,15 @@ let () =
     | `Web   -> "/var/log/ozone/" ^ env ^ ".log"
   end
 
-let domain = match environment with 
-  | `Prod    -> "runorg.com"
-  | `Dev     -> "dev.runorg.com"
-  | `Retheme -> "runorg.local"
+(* Basic databases ------------------------------------------------------------------------------------------ *)
 
-let core   = Action.Convenience.single_domain_server domain
-let client = Action.Convenience.sub_domain_server ("." ^ domain)
-let secure = Action.Convenience.single_domain_server ~secure:true domain
+let db name = Printf.sprintf "%s-%s" env name
 
 module ConfigDB = CouchDB.Convenience.Database(struct let db = db "config" end)
 module Reset    = Reset.Make(ConfigDB)
 module Proof    = OhmCouchProof.Make(ConfigDB)
+
+(* Context management --------------------------------------------------------------------------------------- *)
 
 type i18n = Asset_AdLib.key
 
@@ -55,6 +52,17 @@ let async : ctx Async.manager = new Async.manager
 let run_async () = 
   async # run (fun () -> ctx `FR) 
 
+(* Action management ---------------------------------------------------------------------------------------- *)
+
+let domain = match environment with 
+  | `Prod    -> "runorg.com"
+  | `Dev     -> "dev.runorg.com"
+  | `Retheme -> "runorg.local"
+
+let core   = Action.Convenience.single_domain_server domain
+let client = Action.Convenience.sub_domain_server ("." ^ domain)
+let secure = Action.Convenience.single_domain_server ~secure:true domain
+
 let action f req res = 
   Run.with_context (ctx `FR) (f req res)
 
@@ -64,3 +72,25 @@ let register s u a body =
 let declare s u a = 
   let endpoint, define = Action.declare s u a in
   endpoint, action |- define
+
+(* Box management ------------------------------------------------------------------------------------------- *)
+
+module BoxCtx = struct
+  class t adlib (box:OhmBox.ctx) = object
+    inherit ctx adlib
+    val box = box
+    method get_box = box
+    method set_box box = {< box = box >}
+  end
+  let get t = t # get_box
+  let set box t = t # set_box box
+  let make box = 
+    let! ctx = ohmctx identity in
+    return (new t (ctx # adlib) box) 
+end
+
+module Box = OhmBox.Make(BoxCtx)
+
+type 'a boxrun = (BoxCtx.t,'a) Run.t 
+
+let decay run = (run : 'a run :> 'a boxrun) 

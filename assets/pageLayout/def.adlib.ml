@@ -7,3 +7,4 @@
 | `PageLayout_Navbar_Events
 | `PageLayout_Navbar_Forums
 | `PageLayout_Navbar_Website
+| `PageLayout_Foot_PoweredBy
