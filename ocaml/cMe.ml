@@ -14,7 +14,7 @@ let () = UrlMe.def_root begin fun req res ->
     method box    = OhmBox.render ~url ~default
   end) in
 
-  CPageLayout.core ~deeplink:true `Login_Title html res
+  CPageLayout.core ~deeplink:true `Me_Title html res
 
 end
     

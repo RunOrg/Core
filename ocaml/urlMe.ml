@@ -13,6 +13,20 @@ let url list =
   Action.url root () () ^ "/#/" ^ String.concat "/" 
     (List.map Netencoding.Url.encode list)
 
-let account = url ["account"]
-let network = url ["network"]
-let news    = url ["news"]
+module Account = struct
+  let prefix = "account"
+  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string)
+  let root = url [prefix]
+end
+
+module Network = struct
+  let prefix = "network"
+  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string) 
+  let root = url [prefix] 
+end
+
+module News = struct
+  let prefix = "news"
+  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string) 
+  let root = url [prefix] 
+end
