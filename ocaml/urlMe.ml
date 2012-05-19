@@ -7,6 +7,7 @@ open BatPervasives
 module A = Action.Args
 
 let root, def_root = O.declare O.core "me" A.none
+let ajax, def_ajax = O.declare O.core "me/ajax" (A.n A.string)
 
 let url list = 
   Action.url root () () ^ "/#/" ^ String.concat "/" 

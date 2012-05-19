@@ -6,14 +6,21 @@ open BatPervasives
 
 let () = UrlMe.def_root begin fun req res -> 
 
+  let url = Action.url UrlMe.ajax () [] in
+  let default = "/account" in
+
   let html = Asset_Me_Page.render (object
     method navbar = (None,None)
+    method box    = OhmBox.render ~url ~default
   end) in
 
-  let js = Js.initBoxStack ~url:"/me/ajax" () in
-
-  CPageLayout.core ~deeplink:true `Login_Title html 
-    (Action.javascript js res)
+  CPageLayout.core ~deeplink:true `Login_Title html res
 
 end
     
+let () = UrlMe.def_ajax begin fun req res -> 
+
+  let body = O.Box.fill (Asset_Me_PageNotFound.render ()) in
+  O.Box.response O.BoxCtx.make body req res 
+
+end
