@@ -12,9 +12,15 @@ let () = UrlMe.def_root begin fun req res ->
 
   let url = Action.url UrlMe.ajax () [] in
   let default = "/account" in
+  let uid = 
+    match CSession.check req with 
+      | `None     -> None
+      | `Old cuid -> Some (IUser.Deduce.can_view cuid) 
+      | `New cuid -> Some (IUser.Deduce.can_view cuid)
+  in
 
   let html = Asset_Me_Page.render (object
-    method navbar = (None,None)
+    method navbar = (uid,None)
     method box    = OhmBox.render ~url ~default
   end) in
 
