@@ -6,7 +6,7 @@ open BatPervasives
 
 let notfound req res = 
   let body = O.Box.fill (Asset_Me_PageNotFound.render ()) in
-  O.Box.response O.BoxCtx.make body req res 
+  O.Box.response ~prefix:"/404" ~parents:[] O.BoxCtx.make body req res 
 
 let action f req res = 
 
@@ -28,7 +28,8 @@ let action f req res =
 	      return $ Action.javascript js res
     | Some cuid -> f cuid req res
 
-  
-  
+let define (prefix,parents,define) body =
+  define (action (fun cuid req res -> 
+    O.Box.response ~prefix ~parents O.BoxCtx.make (body cuid) req res
+  ))
 
-  

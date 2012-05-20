@@ -9,3 +9,9 @@
 | `MeAccount_Button_Edit
 | `MeAccount_Page_Title
 | `MeAccount_Admin_Title
+| `MeAccount_Admin_Edit_Link 
+| `MeAccount_Admin_Edit_Sub  
+| `MeAccount_Admin_Pass_Link 
+| `MeAccount_Admin_Pass_Sub  
+| `MeAccount_Admin_Privacy_Link
+| `MeAccount_Admin_Privacy_Sub 

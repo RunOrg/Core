@@ -9,3 +9,12 @@
 | `MeAccount_Button_Edit -> "Modifier"
 | `MeAccount_Page_Title -> "Mon Compte"
 | `MeAccount_Admin_Title -> "Administration"
+
+| `MeAccount_Admin_Edit_Link -> "Compléter votre profil"
+| `MeAccount_Admin_Edit_Sub  -> "Remplissez les informations de votre compte"
+
+| `MeAccount_Admin_Pass_Link -> "Changer mon mot de passe"
+| `MeAccount_Admin_Pass_Sub  -> "Entrez un nouveau mot de passe pour vous connecter"
+
+| `MeAccount_Admin_Privacy_Link -> "Options de partage"
+| `MeAccount_Admin_Privacy_Sub  -> "Définissez quelles informations sont visibles et par qui"

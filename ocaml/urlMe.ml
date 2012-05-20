@@ -13,19 +13,31 @@ let url list =
   Action.url root () () ^ "/#/" ^ String.concat "/" 
     (List.map Netencoding.Url.encode list)
 
-let declare url = 
+let declare ?p url = 
   let endpoint, define = O.declare O.core ("me/ajax/" ^ url) (A.n A.string) in
-  Action.setargs (Action.rewrite endpoint "me/ajax" "me/#") [], define
+  let endpoint = Action.setargs (Action.rewrite endpoint "me/ajax" "me/#") [] in
+  let prefix = "/" ^ url in
+  let parents = match p with 
+    | None -> [] 
+    | Some (prefix,parents,_) -> parents @ [prefix] 
+  in
+  endpoint, (prefix,parents,define)
+
+let root url = declare url 
+let child p url = declare ~p url 
 
 module Account = struct
-  let home, def_home = declare "account"
-  let edit, def_edit = declare "edit-account"
+  let home,    def_home    = root "account"
+  let admin,   def_admin   = child def_home  "admin/account"
+  let edit,    def_edit    = child def_admin "edit/profile"
+  let pass,    def_pass    = child def_admin "edit/password"
+  let privacy, def_privacy = child def_admin "edit/privacy"
 end
   
 module Network = struct
-  let home, def_home = declare "network"
+  let home, def_home = root "network"
 end
 
 module News = struct
-  let home, def_home = declare "news"
+  let home, def_home = root "news"
 end
