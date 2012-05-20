@@ -11,16 +11,20 @@ let render (uid,iid) =
   let! user     = ohm $ Run.opt_bind MUser.get uid in
   let! instance = ohm $ Run.opt_bind MInstance.get iid in
 
-  let  home = if user = None then Action.url UrlSplash.index () [] else UrlMe.Account.root in
+  let  home =
+    if user = None then Action.url UrlSplash.index () []
+    else Action.url UrlMe.Account.home () ()
+  in
+
   let  account = BatOption.map (fun user -> (object 
-    method url = UrlMe.Account.root
+    method url = Action.url UrlMe.Account.home () ()
     method name = user # fullname
   end)) user in
   
   let  menu = if user = None then None else Some (object
-    method account = UrlMe.Account.root
-    method network = UrlMe.Network.root
-    method news    = UrlMe.News.root
+    method account = Action.url UrlMe.Account.home () ()
+    method network = Action.url UrlMe.Network.home () ()
+    method news    = Action.url UrlMe.News.home () ()
     method logout  = Action.url UrlLogin.logout () ()
   end) in
 

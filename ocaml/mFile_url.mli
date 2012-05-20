@@ -1,6 +1,6 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 val get : 
      [<`PutImg|`GetImg|`PutPic|`GetPic|`OwnPic|`InsPic|`GetDoc|`PutDoc] IFile.id
   -> MFile_common.version
-  -> string option O.run
+  -> (#Ohm.CouchDB.ctx,string option) Ohm.Run.t

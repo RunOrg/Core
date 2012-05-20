@@ -23,7 +23,7 @@ module Url : sig
   val get : 
        [<`PutImg|`GetImg|`PutPic|`GetPic|`OwnPic|`InsPic|`GetDoc|`PutDoc] IFile.id
     -> version 
-    -> string option O.run
+    -> (#Ohm.CouchDB.ctx,string option) Ohm.Run.t
 end
 
 module Upload : sig

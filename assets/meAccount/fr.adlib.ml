@@ -1,0 +1,11 @@
+| `MeAccount_Detail_Email -> "Email"
+| `MeAccount_Detail_Phone -> "Tél. Fixe"
+| `MeAccount_Detail_Cellphone -> "Tél. Portable"
+| `MeAccount_Detail_Birthdate g -> macho "Né le" "Née le" g
+| `MeAccount_Detail_Address -> "Adresse"
+| `MeAccount_Detail_Zipcode -> "Code Postal"
+| `MeAccount_Detail_Country -> "Pays"
+| `MeAccount_Detail_Gender -> "Sexe"
+| `MeAccount_Button_Edit -> "Modifier"
+| `MeAccount_Page_Title -> "Mon Compte"
+| `MeAccount_Admin_Title -> "Administration"

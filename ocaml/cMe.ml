@@ -4,6 +4,10 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+open CMe_common
+
+module Account = CMe_account
+
 let () = UrlMe.def_root begin fun req res -> 
 
   let url = Action.url UrlMe.ajax () [] in
@@ -20,7 +24,6 @@ end
     
 let () = UrlMe.def_ajax begin fun req res -> 
 
-  let body = O.Box.fill (Asset_Me_PageNotFound.render ()) in
-  O.Box.response O.BoxCtx.make body req res 
+  notfound req res
 
 end

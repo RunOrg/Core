@@ -1,0 +1,57 @@
+<div class="admin-page">
+  <div class="-head">
+    <h2>{#parents}<a href="{url}">{title|ohm|esc}</a> &middot; {/#}{here|ohm|esc}</h2>		 
+  </div>
+  <div class="-body">
+    {body|ohm|verbatim}
+  </div>
+</div>
+
+<style>
+.admin-page { 
+
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 1px 1px 3px #888888;
+  margin: 2px;
+
+  .-head {
+    padding: 3px 5px 2px;
+    background-color: #333;
+    background: -webkit-linear-gradient(top, #333 0%, #222 100%);
+    background: -moz-linear-gradient(top, #333 0%, #222 100%);
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 4px 4px 0 0;
+
+    h2 { 
+      margin: 0 5px;
+      color: #AAA;
+      line-height: 30px;
+      font-size: 20px;        
+      font-weight: normal;
+
+      a { 
+        color: #FFF;
+        &:hover { color: #CCC }
+      } 
+    }
+
+    .action-button {
+      float: left;
+      margin-right: 10px;
+      box-shadow: none;
+    }
+  }
+
+  .-body {
+    background-color: #EEE;
+    background: -moz-linear-gradient(top, #DDD 20px, #EEE 150px);
+    background: -webkit-linear-gradient(top, #DDD 20px, #EEE 150px);
+    border: 1px solid black;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 8px;
+  }
+}
+
+</style>

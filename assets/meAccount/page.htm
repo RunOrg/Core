@@ -1,0 +1,68 @@
+<div class="account-page">
+  <div class="-picture">
+    <img src="{url}"/>
+  </div>
+  <div class="-body">
+    <ul class="actions">
+      <li class="-r">
+	<a href="{edit}" class="action-button -admin">{ `MeAccount_Button_Edit }</a>
+      </li>
+    </ul>
+    <h2>{fullname}</h2>    
+    <div class="-details">
+      {#details}<span class="-detail">{ key | Ohm.AdLib.get | ohm | esc }&ensp;<em>{value}</em>&ensp;&middot;&ensp;</span>{/#}<span class="-detail">{ `MeAccount_Detail_Email }&ensp;<em>{email}</em></span>
+    </div>
+  </div>
+</div>
+
+<style>
+
+.account-page {
+
+  overflow: hidden;
+
+  .actions {
+    float: right;
+    margin: 3px 0 0;
+  }
+
+  .-picture {
+    float: left;
+    margin-right: 16px;
+    width: 230px;
+    min-height: 1px;
+
+    img { 
+      display: block;
+      margin: auto;
+    } 
+  }
+
+  .-body { 
+    overflow: hidden;
+  }
+
+  h2 {
+    margin: 0 0 5px 0;
+    color: #555; 
+  }
+
+  .-details {
+    margin: 0 3px 20px 0;
+    font-size: 11px;
+    overflow: hidden;
+    
+    .-detail {  
+      display: block;
+      float: left;
+      white-space: nowrap;
+      color: #888;
+      em { 
+        font-style: normal;
+        color: black;
+      } 
+    }
+  }
+}
+
+</style>

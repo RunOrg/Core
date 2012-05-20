@@ -13,20 +13,19 @@ let url list =
   Action.url root () () ^ "/#/" ^ String.concat "/" 
     (List.map Netencoding.Url.encode list)
 
-module Account = struct
-  let prefix = "account"
-  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string)
-  let root = url [prefix]
-end
+let declare url = 
+  let endpoint, define = O.declare O.core ("me/ajax/" ^ url) (A.n A.string) in
+  Action.setargs (Action.rewrite endpoint "me/ajax" "me/#") [], define
 
+module Account = struct
+  let home, def_home = declare "account"
+  let edit, def_edit = declare "edit-account"
+end
+  
 module Network = struct
-  let prefix = "network"
-  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string) 
-  let root = url [prefix] 
+  let home, def_home = declare "network"
 end
 
 module News = struct
-  let prefix = "news"
-  let _, def = O.declare O.core ("me/ajax/" ^ prefix) (A.n A.string) 
-  let root = url [prefix] 
+  let home, def_home = declare "news"
 end
