@@ -6,9 +6,11 @@ open BatPervasives
 
 open CMe_common
 
-let () = define UrlMe.Account.def_home begin fun cuid  -> 
-  
+module Parents = CMe_account_parents
+
+let () = define UrlMe.Account.def_home begin fun cuid  ->   
   O.Box.fill begin
+
     let  uid  = IUser.Deduce.can_view cuid in
     let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
     
@@ -44,15 +46,12 @@ let () = define UrlMe.Account.def_home begin fun cuid  ->
     end in
     
     Asset_MeAccount_Page.render data
-  end 
 
+  end 
 end
 
 let () = define UrlMe.Account.def_admin begin fun cuid -> 
-
   O.Box.fill begin 
-
-    let back    = Action.url UrlMe.Account.home () () in
     
     let choices = Asset_Admin_Choice.render [
       
@@ -80,23 +79,22 @@ let () = define UrlMe.Account.def_admin begin fun cuid ->
     ] in
     
     Asset_Admin_Page.render (object
-      method parents = [
-	(object
-	  method title = AdLib.get `MeAccount_Page_Title
-	  method url  = back
-	 end)
-      ]
-      method here  = AdLib.get `MeAccount_Admin_Title
+      method parents = [ Parents.home ] 
+      method here  = Parents.admin # title
       method body  = choices
     end)
+
   end
- 
 end
 
 let () = define UrlMe.Account.def_edit begin fun cuid -> 
-  
   O.Box.fill begin
-    return (Html.str ".") 
-  end
 
+    Asset_Admin_Page.render (object
+      method parents = [ Parents.home ; Parents.admin ] 
+      method here  = Parents.edit # title
+      method body  = return $ Html.str "&nbsp;"
+    end)
+
+  end
 end
