@@ -27,7 +27,7 @@ let render_instance user (status,iid) =
     method pic    = pic
     method name   = ins # name
     method status = status
-    method url    = "" 
+    method url    = UrlClient.home (ins # key) 
   end)
   
 let long_user_instances user cuid = 
@@ -56,7 +56,7 @@ let long_user_instances user cuid =
 
 let short_user_instances user cuid more = 
   
-  let! list = ohm $ MInstance.visited cuid in 
+  let! list = ohm $ MInstance.visited ~count:4 cuid in 
   let! list = ohm $ Run.list_filter begin fun iid -> 
     let! status = ohm $ MAvatar.status iid cuid in
     render_instance user (status,iid)

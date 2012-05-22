@@ -407,16 +407,14 @@ module FindRecent = Fmt.Make(struct
   type json t = Id.t * int
 end) 
 
-let visited_max = 6
-
-let visited user = 
+let visited ~count user = 
 
   let id = ICurrentUser.to_id user in 
   let! recent = ohm_req_or (return []) $ RecentTable.get id in
 
-  return (BatList.take visited_max (recent # i)) 
+  return (BatList.take count (recent # i)) 
 
-let visit user inst = 
+let visit ~count user inst = 
 
   let id = ICurrentUser.to_id user in
  
@@ -444,7 +442,7 @@ let visit user inst =
 	(fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
   end in
 
-  visited user
+  visited count user
 
 (* The backdoor --------------------------------------------------------------------- *)
 
