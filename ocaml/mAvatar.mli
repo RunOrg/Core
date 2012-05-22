@@ -70,6 +70,8 @@ val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> 'any IIsIn.id O.ru
 val identify_user : 'a IInstance.id -> [`IsSelf] IUser.id -> 'a IIsIn.id O.run
 val identify_avatar : [`IsSelf] IAvatar.id -> [`IsContact] IIsIn.id option O.run
 
+val status : 'a IInstance.id -> 'b ICurrentUser.id -> ( #Ohm.CouchDB.ctx, Status.t ) Ohm.Run.t 
+
 val profile : 'a IAvatar.id -> IProfile.t O.run
 
 val get : 'any IIsIn.id -> [`IsSelf] IAvatar.id O.run
@@ -87,6 +89,10 @@ val user_instances :
   -> ?count:int
   ->  [`ViewInstances] IUser.id
   ->  ( #Ohm.CouchDB.ctx, (Status.t * [`IsContact] IInstance.id) list ) Ohm.Run.t
+
+val count_user_instances :
+     [`ViewInstances] IUser.id
+  -> ( #Ohm.CouchDB.ctx, int ) Ohm.Run.t
 
 val list_members : 
      ?start:string

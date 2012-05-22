@@ -10,6 +10,7 @@
 | `MeAccount_Page_Title -> "Mon Compte"
 
 | `MeAccount_Instances -> "Mes associations"
+| `MeAccount_Instances_More -> "Afficher le reste"
 
 | `MeAccount_Admin_Title -> "Paramètres"
 | `MeAccount_Admin_Edit_Link -> "Compléter votre profil"

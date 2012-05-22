@@ -14,23 +14,33 @@
       {#details}<span class="-detail">{ key | Ohm.AdLib.get | ohm | esc }&ensp;<em>{value}</em>&ensp;&middot;&ensp;</span>{/#}<span class="-detail">{ `MeAccount_Detail_Email }&ensp;<em>{email}</em></span>
     </div>
     
-    {?instances} 
-      <h3 class="-instances">{ `MeAccount_Instances } ({count|string_of_int|esc})</h3>
-      <ul class="-instances">
-	{#list}
-          <li>
-	    <a href="{url}">
-	      {?pic}
-	        <span class="-pic"><img src="{this}"/></span>
-	      {/?}
-              <span class="-name">{name}</span>
-	      <span class="-status">{ status | Asset_Status_Tag.render | ohm }</span>
-	    </a>
-	  </li>
-	{/#}
-      </ul>
-    {/?}
+    {instances | O.Box.render} 
 
+    {@!instances} 
+      {?instances} 
+        <h3 class="-instances">{ `MeAccount_Instances } ({count|string_of_int|esc})</h3>
+	<ul class="-instances">
+	  {#list}
+            <li class="-item">
+              <a href="{url}">
+	        {?pic}
+	          <span class="-pic"><img src="{this}"/></span>
+	        {/?}
+                <span class="-name">{name}</span>
+	        <span class="-status">{ status | Asset_Status_Tag.render | ohm }</span>
+	      </a>
+	    </li>	
+  	  {/#}
+	  {?more}
+	    <li>
+	      <a class="-more" href="{this}">
+	        { `MeAccount_Instances_More } 
+	      </a>
+	    </li>
+	  {/?}
+	</ul>
+      {/?}
+    {/@}
   </div>
 </div>
 
@@ -41,12 +51,11 @@
   overflow: hidden;
 
   h3.-instances { 
-    margin: 20px 50px 0;
+    margin: 40px 50px 0;
     padding: 3px 6px;
-    border: 1px solid #CCC;
     font-weight: normal;
     font-size: 16.99px;
-    color: #333;
+    color: #BBB;
   }
 
   ul.-instances {
@@ -59,12 +68,24 @@
       margin: -1px 0 0;
     }
 
-    a {     
-      border: 1px solid #CCC;
+    a {
+      border-top: 1px solid #DDD;
       display: block;
-      height: 50px;
-      padding: 6px;
+      padding: 4px 8px;
+    }
 
+    .-more { 
+      font-size: 12px;
+    }
+
+    .-item a {     
+      padding: 16px 8px;
+      height: 50px;
+
+      &:hover {
+        background-color: #EEE;
+      }
+ 
       span.-name { 
         color: #333;
         font-size: 16.99px;

@@ -10,8 +10,7 @@ let website, def_website = O.declare O.client "" (A.n A.string)
 let root,    def_root    = O.declare O.client "intranet" A.none
 
 let intranet key list = 
-  Action.url root key () ^ "/#/" ^ String.concat "/" 
-    (List.map Netencoding.Url.encode list)
+  OhmBox.url (Action.url root key ()) list
 
 let home    key = intranet key ["home"] 
 let members key = intranet key ["members"] 

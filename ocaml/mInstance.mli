@@ -140,7 +140,9 @@ val get_free_space : [`SeeUsage] IInstance.id -> float O.run
 
 val free_name : string -> string O.run
 
-val visit : 'any ICurrentUser.id -> IInstance.t option -> t list O.run
+val visited_max : int
+val visited : 'any ICurrentUser.id -> (#Ohm.CouchDB.ctx, IInstance.t list) Ohm.Run.t
+val visit : 'any ICurrentUser.id -> IInstance.t option -> IInstance.t list O.run
 
 val first_unapplied_version : (IInstance.t option * string) O.run
 val upgrade : ?upto:string -> IInstance.t -> unit O.run

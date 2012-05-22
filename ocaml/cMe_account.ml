@@ -10,9 +10,29 @@ module Parents = CMe_account_parents
 module Edit    = CMe_account_edit
 module Pass    = CMe_account_pass
 
-let user_instances user cuid = 
+module LengthSeg = OhmBox.Seg.OfJson(struct
+  type json t = [ `long | `short ]
+  let default = `short
+end)
 
-  let max_items = 10 in
+let render_instance user (status,iid) = 
+  let! ins = ohm_req_or (return None) $ MInstance.get iid in
+  let! pic = ohm $ CPicture.small_opt (ins # pic) in
+  let! status = req_or (return None) begin match status with 
+    | `Token -> Some (`Member (user # gender))
+    | `Admin -> Some (`Admin (user # gender)) 
+    | `Contact -> None
+  end in
+  return $ Some (object
+    method pic    = pic
+    method name   = ins # name
+    method status = status
+    method url    = "" 
+  end)
+  
+let long_user_instances user cuid = 
+
+  let max_items = 150 in
 
   let  uid = IUser.Deduce.can_view_inst cuid in
   let  count     = max_items in
@@ -21,35 +41,59 @@ let user_instances user cuid =
   let! member_of = ohm $ MAvatar.user_instances ~count ~status:`Token uid in
 
   let  list = admin_of @ member_of in
-  let! list = ohm $ Run.list_filter begin fun (status,iid) -> 
-    let! ins = ohm_req_or (return None) $ MInstance.get iid in
-    let! pic = ohm $ CPicture.small_opt (ins # pic) in
-    let status = match status with 
-      | `Token -> `Member (user # gender)
-      | `Admin -> `Admin (user # gender) 
-      | `Contact -> `Visitor (user # gender)
-    in 
-    return $ Some (object
-      method pic    = pic
-      method name   = ins # name
-      method status = status
-      method url    = "" 
-    end)
-  end list in
+  let! list = ohm $ Run.list_filter (render_instance user) list in
+
+  let! count = ohm $ MAvatar.count_user_instances uid in
 
   if list <> [] then 
     return $ Some (object
       method list  = list
-      method count = List.length list
+      method count = count
+      method more  = None
     end)
   else
     return None
 
-let () = define UrlMe.Account.def_home begin fun cuid  ->   
-  O.Box.fill begin
+let short_user_instances user cuid more = 
+  
+  let! list = ohm $ MInstance.visited cuid in 
+  let! list = ohm $ Run.list_filter begin fun iid -> 
+    let! status = ohm $ MAvatar.status iid cuid in
+    render_instance user (status,iid)
+  end list in
 
-    let  uid  = IUser.Deduce.can_view cuid in
-    let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
+  let uid = IUser.Deduce.can_view_inst cuid in
+  let! count = ohm $ MAvatar.count_user_instances uid in
+
+  if list <> [] then 
+    return $ Some (object
+      method list  = list
+      method count = count
+      method more  = if count <> List.length list then Some more else None
+    end)
+  else
+    long_user_instances user cuid 
+
+let () = define UrlMe.Account.def_home begin fun cuid  ->   
+
+  let  uid  = IUser.Deduce.can_view cuid in
+  let! user = ohm_req_or (O.Box.fill (Asset_Me_PageNotFound.render ())) $ MUser.get uid in
+ 
+  let! instances = O.Box.add begin
+    let! seg = O.Box.parse LengthSeg.seg in
+    O.Box.fill begin
+      let! instances = ohm begin match seg with 
+	| `short -> let! more = ohm $ O.Box.url [ fst LengthSeg.seg `long ] in 
+		    short_user_instances user cuid more
+	| `long  ->  long_user_instances user cuid
+      end in
+      Asset_MeAccount_Page_Instances.render (object
+	method instances = instances
+      end) 
+    end
+  end in
+
+  O.Box.fill begin
     
     let! pic  = ohm $ CPicture.large (user # picture) in
     
@@ -72,9 +116,7 @@ let () = define UrlMe.Account.def_home begin fun cuid  ->
 	`MeAccount_Detail_Country,                   user # country ;
 	`MeAccount_Detail_Gender,                    Some gender
       ]
-    in
-
-    let! instances = ohm $ user_instances user cuid in 
+    in    
     
     let data = object
       method url       = pic 

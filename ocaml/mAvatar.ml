@@ -303,6 +303,15 @@ let become_admin instance user =
 
 (* Identify an user for an instance ------------------------------------------------------- *)
 
+let status iid cuid = 
+  let  uid = IUser.Deduce.is_anyone cuid in
+  let  iid = IInstance.decay iid in 
+  let! result = ohm_req_or (return `Contact) $ _get iid uid in
+  match result # value with 
+    | `Admin -> return `Admin
+    | `Contact | `Nobody -> return `Contact
+    | `Token -> return `Token
+
 let do_identify_user instance user cuid = 
   let  usr = IUser.decay     user     in
   let  ins = IInstance.decay instance in 
@@ -592,6 +601,22 @@ let is_admin ?other_than uid =
   let! list  = ohm $ user_instances ~status:`Admin ~count uid in 
   let  iids  = List.map (snd |- IInstance.decay) list in 
   return $ List.exists (fun iid -> other_than <> Some iid) iids
+
+module CountByUserView = CouchDB.ReduceView(struct
+  module Key    = IUser
+  module Value  = Fmt.Int
+  module Design = Design
+  let name   = "count by_user"
+  let map    = "if (doc.t == 'avtr' && (doc.sta == 'mbr' || doc.sta == 'own')) emit(doc.who,1)"
+  let reduce = "return sum(values)"
+  let group  = true
+  let level  = None
+end)
+
+let count_user_instances uid =
+  let  uid = IUser.decay uid in
+  let! n   = ohm $ CountByUserView.reduce uid in
+  return $ BatOption.default 0 n 
 
 (* MAccess by status ----------------------------------------------------------------------- *)
 

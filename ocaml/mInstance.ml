@@ -407,26 +407,19 @@ module FindRecent = Fmt.Make(struct
   type json t = Id.t * int
 end) 
 
-module RecentView = CouchDB.DocView(struct
-  module Key    = FindRecent
-  module Value  = Fmt.Unit
-  module Doc    = Data    
-  module Design = Design
-  let name = "recent"
-  let map  = "if (doc.t == 'lavi') 
-                for (var k in doc.i) 
-                  emit([doc._id,parseInt(k)],{_id:doc.i[k]});" 
-end)
+let visited_max = 6
+
+let visited user = 
+
+  let id = ICurrentUser.to_id user in 
+  let! recent = ohm_req_or (return []) $ RecentTable.get id in
+
+  return (BatList.take visited_max (recent # i)) 
 
 let visit user inst = 
 
   let id = ICurrentUser.to_id user in
  
-  let recent =
-    RecentView.doc_query ~startkey:(id,0) ~endkey:(id,4) () 
-    |> Run.map (List.map (fun d -> extract (IInstance.of_id d # id) (d # doc)) )
-  in
-
   let add_recent inst = function
 
     | None -> let obj = object
@@ -451,7 +444,7 @@ let visit user inst =
 	(fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
   end in
 
-  recent
+  visited user
 
 (* The backdoor --------------------------------------------------------------------- *)
 

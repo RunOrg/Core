@@ -10,6 +10,7 @@
 | `MeAccount_Page_Title
 
 | `MeAccount_Instances
+| `MeAccount_Instances_More
 
 | `MeAccount_Admin_Title
 | `MeAccount_Admin_Edit_Link 
