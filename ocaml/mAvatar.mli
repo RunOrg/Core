@@ -86,7 +86,7 @@ val user_instances :
      ?status:Status.t
   -> ?count:int
   ->  [`ViewInstances] IUser.id
-  ->  (Status.t * [`IsContact] IInstance.id) list O.run
+  ->  ( #Ohm.CouchDB.ctx, (Status.t * [`IsContact] IInstance.id) list ) Ohm.Run.t
 
 val list_members : 
      ?start:string

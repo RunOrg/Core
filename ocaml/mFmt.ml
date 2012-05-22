@@ -6,6 +6,17 @@ module Gender = Fmt.Make(struct
   type json t = [`m|`f]
 end)
 
+let dmy_of_date date = 
+  try 
+    let yyyy = int_of_string (String.sub date 0 4) 
+    and mm   = int_of_string (String.sub date 4 2)
+    and dd   = int_of_string (String.sub date 6 2) in
+    Some (dd,mm,yyyy) 
+  with _ -> None
+
+let date_of_dmy d m y = 
+  Printf.sprintf "%04d%02d%02d" y m d
+    
 let format_amount = 
   function `Fr ->
     (fun amount ->

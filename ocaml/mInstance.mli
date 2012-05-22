@@ -134,7 +134,7 @@ val by_url        : string -> IInstance.t option O.run
 
 val key_of_servername : string -> string 
 
-val get : 'any IInstance.id -> t option O.run
+val get : 'any IInstance.id -> (#Ohm.CouchDB.ctx, t option) Ohm.Run.t
 
 val get_free_space : [`SeeUsage] IInstance.id -> float O.run
 

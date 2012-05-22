@@ -3,6 +3,7 @@
     <img src="{url}"/>
   </div>
   <div class="-body">
+  
     <ul class="actions">
       <li class="-r">
 	<a href="{edit}" class="action-button -admin">{ `MeAccount_Button_Edit }</a>
@@ -12,6 +13,24 @@
     <div class="-details">
       {#details}<span class="-detail">{ key | Ohm.AdLib.get | ohm | esc }&ensp;<em>{value}</em>&ensp;&middot;&ensp;</span>{/#}<span class="-detail">{ `MeAccount_Detail_Email }&ensp;<em>{email}</em></span>
     </div>
+    
+    {?instances} 
+      <h3 class="-instances">{ `MeAccount_Instances } ({count|string_of_int|esc})</h3>
+      <ul class="-instances">
+	{#list}
+          <li>
+	    <a href="{url}">
+	      {?pic}
+	        <span class="-pic"><img src="{this}"/></span>
+	      {/?}
+              <span class="-name">{name}</span>
+	      <span class="-status">{ status | Asset_Status_Tag.render | ohm }</span>
+	    </a>
+	  </li>
+	{/#}
+      </ul>
+    {/?}
+
   </div>
 </div>
 
@@ -20,6 +39,54 @@
 .account-page {
 
   overflow: hidden;
+
+  h3.-instances { 
+    margin: 20px 50px 0;
+    padding: 3px 6px;
+    border: 1px solid #CCC;
+    font-weight: normal;
+    font-size: 16.99px;
+    color: #333;
+  }
+
+  ul.-instances {
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0 50px;
+
+    li {
+      margin: -1px 0 0;
+    }
+
+    a {     
+      border: 1px solid #CCC;
+      display: block;
+      height: 50px;
+      padding: 6px;
+
+      span.-name { 
+        color: #333;
+        font-size: 16.99px;
+        margin-top: 4px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+   
+      > span { 
+        display: block;
+        margin-left: 57px;
+      }
+    
+      .-pic {
+        margin: 0;
+        width: 50px;
+        height: 50px;
+        float: left;
+        img { display: block } 
+      }
+    }
+  }
 
   .actions {
     float: right;

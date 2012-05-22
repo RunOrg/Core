@@ -1,0 +1,43 @@
+<span class="status { this | VStatus.css | raw}">{this | VStatus.label | Ohm.AdLib.write | ohm}</span> 
+
+<style>
+span.status {
+
+  display: inline-block;
+  color: white;
+  font-size: 9.99px;
+  vertical-align: top;
+  font-family: 'Verdana', 'Arial', sans-serif;
+  font-weight: bold;
+  padding: 0px 5px;
+  border-radius: 3px;
+  line-height: 14px;
+  height: 15px;
+
+  &.-private {
+    background-color: #D22;
+    text-shadow: 0 -1px 0 #B00;
+  }
+
+  &.-website, &.-member {
+    background-color: #2A2;
+    text-shadow: 0 -1px 0 #080;
+  }
+
+  &.-draft {
+    background-color: #D70;
+    text-shadow: 0 -1px 0 #B60;
+  }
+
+  &.-admin {
+    background-color: #E70079;
+    text-shadow: 0 -1px 0 #C60067;
+  }
+
+  &.-visitor {
+    background-color: #CCC;
+    text-shadow: 0 -1px 0 #888;
+  }
+
+}
+</style>

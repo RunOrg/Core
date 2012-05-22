@@ -24,13 +24,35 @@
     }
   }
 
-  .joy-field-label label {
-    padding: 4px 5px;
-    display: block;
-    color: #888;
+  .joy-field-radio {
+    overflow: hidden;
+    .joy-field-label label {
+      color: #333;
+      display: block;
+      font-weight: bold;
+      margin-left: 3px;
+    }
+    .joy-field-list label {
+      display: block;
+    }
+
+    &.-horizontal { 
+      .joy-field-label label, .joy-field-list label { 
+        float: left;
+        margin-right: 8px;
+      } 
+    }
   }
 
   .joy-field {
+
+    .joy-field-label label {
+      padding: 4px 5px 3px;
+      background-color: white;
+      display: block;
+      color: #888;
+    }
+
     position: relative;
     margin-bottom: 6px;
   }
@@ -50,7 +72,7 @@
   }
 
   .joy-field-error {
-    padding: 0;    
+    padding: 0;   
     margin: -6px 3px 3px;
     position: relative;
     display: none;
