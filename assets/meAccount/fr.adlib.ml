@@ -8,6 +8,8 @@
 | `MeAccount_Detail_Gender -> "Sexe"
 | `MeAccount_Button_Edit -> "Paramètres"
 | `MeAccount_Page_Title -> "Mon Compte"
+| `MeAccount_Button_Picture -> "Changer la photo"
+| `MeAccount_Explain -> "Ceci est votre profil privé. Vous pouvez choisir de partager tout ou partie de ces informations avec les associations dont vous devenez membre."
 
 | `MeAccount_Instances -> "Mes associations"
 | `MeAccount_Instances_More -> "Afficher le reste"
@@ -19,6 +21,8 @@
 | `MeAccount_Admin_Pass_Sub  -> "Entrez un nouveau mot de passe pour vous connecter"
 | `MeAccount_Admin_Privacy_Link -> "Vie Privée"
 | `MeAccount_Admin_Privacy_Sub  -> "Définissez quelles informations sont visibles et par qui"
+| `MeAccount_Admin_Picture_Link -> "Photo de profil"
+| `MeAccount_Admin_Picture_Sub -> "Aidez vos interlocuteurs à mettre un visage sur votre nom"
 
 | `MeAccount_Edit_AboutYou -> "À propos de vous"
 | `MeAccount_Edit_Title -> "Profil"

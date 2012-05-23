@@ -32,6 +32,7 @@ module Account = struct
   let edit,    def_edit    = child def_admin "edit/profile"
   let pass,    def_pass    = child def_admin "edit/password"
   let privacy, def_privacy = child def_admin "edit/privacy"
+  let picture, def_picture = child def_admin "edit/picture"
 end
   
 module Network = struct

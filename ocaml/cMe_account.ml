@@ -119,6 +119,7 @@ let () = define UrlMe.Account.def_home begin fun cuid  ->
     in    
     
     let data = object
+      method picedit   = Action.url UrlMe.Account.picture () ()
       method url       = pic 
       method fullname  = user # fullname
       method details   = details
@@ -151,6 +152,13 @@ let () = define UrlMe.Account.def_admin begin fun cuid ->
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Pass_Sub)
        end) ;
       
+      (object
+	method img      = VIcon.Large.user_silhouette
+	method url      = Action.url UrlMe.Account.picture () () 
+	method title    = AdLib.get `MeAccount_Admin_Picture_Link
+	method subtitle = Some (AdLib.get `MeAccount_Admin_Picture_Sub)
+       end) ;
+
       (object
 	method img      = VIcon.Large.lock
 	method url      = Action.url UrlMe.Account.privacy () () 

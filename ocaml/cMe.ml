@@ -15,8 +15,8 @@ let () = UrlMe.def_root begin fun req res ->
   let uid = 
     match CSession.check req with 
       | `None     -> None
-      | `Old cuid -> Some (IUser.Deduce.can_view cuid) 
-      | `New cuid -> Some (IUser.Deduce.can_view cuid)
+      | `Old cuid -> Some (ICurrentUser.decay cuid) 
+      | `New cuid -> Some (ICurrentUser.decay cuid)
   in
 
   let html = Asset_Me_Page.render (object

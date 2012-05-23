@@ -5,7 +5,7 @@
       <div class="-left">
 	<a href="{home}">RUN<strong>ORG</strong></a>
 	{?account}
-          <a href="{url}"><strong>{name}</strong></a>
+          <a href="{url}"><img src="{pic}" style="margin-right:5px"/><strong>{name}</strong></a>
         {/?}
       </div>
       {?menu}
@@ -13,7 +13,9 @@
   	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
 	  <a href="{network}">{ `PageLayout_Navbar_Network }</a>
 	  <a href="{news}">{ `PageLayout_Navbar_News }</a>
-	  <a href="{account}">{ `PageLayout_Navbar_Account }</a>
+	  {#instances} 
+	    <a style="padding: 8px 4px" href="{url}"><img src="{pic}"/></a>
+	  {/#}
         </div>
       {/?}
     </div>
@@ -63,7 +65,7 @@
   box-shadow: 0 1px 3px #888;
   background: #E70079 url(/public/img/degrade-rose.png) center center;
   font-size: 14px;
-  overflow: hidden;
+  height: 33px;
 
   .-inner {
     width: 966px;
@@ -77,9 +79,17 @@
     display: block;
     padding: 8px;
     float: left;
+    position: relative;
 
     &:hover {
       background: #fc0084 none;
+    }
+
+    img {
+      width: 26px;
+      margin: -8px 0 -5px;
+      vertical-align: middle;
+      border-radius: 4px;
     }
   }
 

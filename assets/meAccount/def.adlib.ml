@@ -8,6 +8,8 @@
 | `MeAccount_Detail_Gender
 | `MeAccount_Button_Edit
 | `MeAccount_Page_Title
+| `MeAccount_Button_Picture
+| `MeAccount_Explain
 
 | `MeAccount_Instances
 | `MeAccount_Instances_More
@@ -19,6 +21,8 @@
 | `MeAccount_Admin_Pass_Sub  
 | `MeAccount_Admin_Privacy_Link
 | `MeAccount_Admin_Privacy_Sub 
+| `MeAccount_Admin_Picture_Link
+| `MeAccount_Admin_Picture_Sub
 
 | `MeAccount_Edit_AboutYou
 | `MeAccount_Edit_Title 
