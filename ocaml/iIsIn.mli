@@ -12,8 +12,6 @@ module Assert : sig
     role:[`Admin|`Token|`Contact|`Nobody]
     -> id:[`IsSelf] IAvatar.id option
     -> ins:'any IInstance.id 
-    -> light:bool
-    -> trial:bool 
     -> usr:[`Old] ICurrentUser.id
     -> 'any id
 end

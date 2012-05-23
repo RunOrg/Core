@@ -26,8 +26,6 @@ type t = <
   pic     : [`GetPic] IFile.id option ;
   install : bool ;
   version : string ;
-  light   : bool ; 
-  trial   : bool ;
   stub    : bool ;
   white   : IWhite.t option
 > ;; 
@@ -45,9 +43,6 @@ let extract id i = Data.(object
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
   method install = i.install
   method version = i.version
-  method light = i.light && not i.stub
-  method trial = i.light && (Unix.gettimeofday () -. 30. *. 24. *. 3600. < i.create) 
-    && i.ver <> IVertical.light && not i.stub
   method stub = i.stub
   method white = i.white
 end)
@@ -189,7 +184,6 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
   let! () = ohm $ Profile.update id info in 
   let! _  = ohm $ MyTable.put id obj in
   let! () = ohm $ Signals.on_create_call cid in
-  let! () = ohm $ MRunOrg.Client.create now cid in
 
   return cid
 
@@ -249,22 +243,6 @@ let refresh_profile iid =
 
   return ()
     
-let () = 
-  let! _,client = Sig.listen MRunOrg.Client.Signals.update in
-    
-  let today = MRunOrg.Client.today () in
-  
-  let update ins = 
-    MRunOrg.Client.Data.({
-      ins with 
-	Data.disk  = if today > client.last_day then 50.0 else float_of_int client.memory ;
-	Data.seats = if today > client.last_day then 30 else client.seats ;
-	Data.light =    today > client.last_day ;
-    }) in
-  
-  MyTable.transaction (client.MRunOrg.Client.Data.instance) 
-    (MyTable.update update) |> Run.map ignore ;
-
 module ViewByKey = CouchDB.DocView(struct
   module Key    = Fmt.String
   module Value  = Fmt.Unit
@@ -388,7 +366,6 @@ let create_stub ~who ~name ~desc ~site ~profile =
   let! () = ohm $ Profile.update iid info in 
   let! _  = ohm $ MyTable.put iid obj in
   let! () = ohm $ Signals.on_create_call cid in
-  let! () = ohm $ MRunOrg.Client.create now cid in
 
   return cid
 

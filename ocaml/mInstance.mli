@@ -13,8 +13,6 @@ type t = <
   pic     : [`GetPic] IFile.id option ;
   version : string ;
   install : bool ;
-  light   : bool ;
-  trial   : bool ;
   stub    : bool ;
   white   : IWhite.t option
 > ;;

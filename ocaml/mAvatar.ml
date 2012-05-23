@@ -176,10 +176,8 @@ let _update_status status ins usr =
     let  aid = IAvatar.Assert.is_self aid in
     let  usr = IUser.Assert.is_old usr in
     let! instance = ohm $ MInstance.get ins in 
-    let  light    = BatOption.default false (BatOption.map (#light) instance) in
-    let  trial    = BatOption.default false (BatOption.map (#trial) instance) in
     match 
-      IIsIn.Assert.make ~id:(Some aid) ~role ~ins ~light ~trial ~usr 
+      IIsIn.Assert.make ~id:(Some aid) ~role ~ins ~usr 
       |> IIsIn.Deduce.is_contact
     with None -> assert false | Some isin -> return isin 
   in
@@ -318,8 +316,6 @@ let do_identify_user instance user cuid =
   let! result = ohm $ _get ins usr in
         
   let! inst = ohm $ MInstance.get ins in 
-  let  light    = BatOption.default false (BatOption.map (#light) inst) in
-  let  trial    = BatOption.default false (BatOption.map (#trial) inst) in
   
   let id, role = match result with 
     | None      -> None,    `Nobody
@@ -333,7 +329,7 @@ let do_identify_user instance user cuid =
   in
   
   (* The database said so... *)
-  return $ IIsIn.Assert.make ~id ~role ~ins:instance ~light ~trial ~usr:cuid
+  return $ IIsIn.Assert.make ~id ~role ~ins:instance ~usr:cuid
  
 let identify_user instance user = 
   do_identify_user instance user (IUser.Deduce.self_is_current user)
@@ -353,11 +349,9 @@ let identify_avatar id =
   let usr  = IUser.Assert.is_old (avatar # who) in 
   
   let! instance = ohm $ MInstance.get ins in 
-  let  light    = BatOption.default false (BatOption.map (#light) instance) in
-  let  trial    = BatOption.default false (BatOption.map (#trial) instance) in
 
   (* The database said so *)
-  return $ Some (IIsIn.Assert.make ~id:(Some id) ~role ~ins ~light ~trial ~usr)
+  return $ Some (IIsIn.Assert.make ~id:(Some id) ~role ~ins ~usr)
 
 let profile aid = 
   let  selfsame = IProfile.of_string (IAvatar.to_string aid) in

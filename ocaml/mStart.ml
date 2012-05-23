@@ -15,8 +15,7 @@ module Data = struct
       add_picture    "p" : bool ;
       create_event   "e" : bool ;
       another_event  "a" : bool ;
-     ?invite_network "n" : bool = false ;
-     ?buy            "b" : bool = false
+     ?invite_network "n" : bool = false 
     }
   end
   include T
@@ -33,8 +32,7 @@ module Step = Fmt.Make(struct
     | `CreateEvent
     | `CreateAG
     | `AnotherEvent 
-    | `InviteNetwork
-    | `Buy ]
+    | `InviteNetwork ]
 end)
 
 module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
@@ -48,10 +46,6 @@ let compute iid =
 
   let! event    = ohm $ MEntity.get_last_real_event_date iid in 
   let  date     = BatOption.default "99991231" $ BatOption.bind identity event in
-
-  let  buy      = match instance with None -> true | Some instance ->
-    instance # ver = IVertical.light || not instance # light 
-  in
   
   let! fid  = ohm $ MFeed.bot_find (IInstance.decay iid) None in 
   let! post = ohm begin 
@@ -74,7 +68,6 @@ let compute iid =
     another_event  = (date    >  recent_date) ;
     write_post     =  post ;
     invite_network = (network # following > 0) ; 
-    buy            ;
     broadcast      = (broadcast <> [])
   })
 
@@ -83,7 +76,6 @@ let merge old t =
     invite_members = old.invite_members || t.invite_members ;
     write_post     = old.write_post     || t.write_post ;
     create_event   = old.create_event   || t.create_event ;
-    buy            = old.buy            || t.buy ;
     broadcast      = old.broadcast      || t.broadcast
   })
 
@@ -117,7 +109,6 @@ let step_allowed data = function
   | `InviteNetwork -> not data.Data.invite_network 
   | `CreateAG
   | `CreateEvent   -> not data.Data.create_event 
-  | `Buy           -> not data.Data.buy
   | `AnotherEvent  -> not data.Data.another_event
   | `Broadcast     -> not data.Data.broadcast
 
@@ -133,8 +124,7 @@ let numbered_step = function
   | `CreateEvent   
   | `Broadcast
   | `CreateAG
-  | `AGInvite
-  | `Buy           -> true
+  | `AGInvite      -> true
   | `AnotherEvent  -> false
 
 let step_number step steps = 

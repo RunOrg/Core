@@ -8,8 +8,7 @@ module Data : sig
     add_picture    : bool ;
     create_event   : bool ;
     another_event  : bool ;
-    invite_network : bool ; 
-    buy            : bool
+    invite_network : bool 
   }
 end
 
@@ -22,8 +21,7 @@ module Step : Ohm.Fmt.FMT with type t =
   | `CreateAG
   | `AnotherEvent
   | `InviteNetwork
-  | `Broadcast
-  | `Buy ]
+  | `Broadcast ]
 
 val get : ?force:bool -> [`IsAdmin] IInstance.id -> Data.t O.run
 

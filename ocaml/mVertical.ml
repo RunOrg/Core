@@ -173,8 +173,14 @@ module Step = Fmt.Make(struct
     | `CreateAG
     | `AnotherEvent 
     | `InviteNetwork
-    | `Broadcast
-    | `Buy ]
+    | `Broadcast ]
+end)
+
+module StepList = Fmt.Make(struct
+  type json t = Step.t list
+  let t_of_json = function 
+    | Json_type.Array l -> BatList.filter_map Step.of_json_safe l
+    | _ -> assert false
 end)
 
 let default_steps = 
@@ -184,7 +190,6 @@ let default_steps =
   ; `InviteNetwork
   ; `Broadcast
   ; `CreateEvent
-  ; `Buy 
   ; `AnotherEvent 
   ]
 
@@ -215,7 +220,7 @@ module Data = Fmt.Make(struct
    ?subtitle : string option ;
    ?url      : string option ;
    ?wording  : string option ;
-   ?steps    : Step.t list = default_steps 
+   ?steps    : StepList.t = default_steps 
   > 
 end)
 

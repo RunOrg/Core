@@ -21,12 +21,12 @@ let avatar   t = t.avatar
   
 module Assert = struct
     
-  let make ~role ~id ~ins ~light ~trial ~usr = {
+  let make ~role ~id ~ins ~usr = {
     role     = begin match role with 
       | `Contact -> `Contact
       | `Nobody  -> `Nobody
       | `Admin   -> `Admin
-      | `Token   -> if light && not trial then `Admin else `Token 
+      | `Token   -> `Token 
     end ;
     avatar   = id ;
     instance = ins ;

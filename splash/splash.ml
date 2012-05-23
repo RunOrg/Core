@@ -78,9 +78,100 @@ let rec headers () = [ (* --------------------------------------------------- *)
 ] and pages () = [ (* ------------------------------------------------------- *)
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
+  page "/improvisation" "RunOrg Troupes d'Improvisation"
+    ~section:"associations" 
+    [ backdrop_head 
+	~title:"Improvisation, 2000 joueurs par équipe."
+	~image:"/public/img/2000joueurs.jpg"
+	~text:"RunOrg vous permet d'organiser tous vos évènements d'improvisation, simplement et gratuitement.
+(Si vous êtes moins de 2000)" 
+	~action:"Essayer gratuitement"
+	~url:"/start/1/v:impro"
+    ;
+
+      composite `LLR
+	(video 
+	   ~height:350
+	   ~poster:"/public/img/2012-04-12-video-poster.png"
+	   [ "/public/videos/2012-04-13.mp4", "video/mp4" ;
+	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
+	(bullets 
+	   ~title:"Viens, on est bien !"
+	   ~subtitle:"Regarde tout ce qu'on peut faire..."
+	   [ "Gérer les membres, l'annuaire et les adhésions." ;
+	     "Organiser des matchs, des spectacles, des réunions, des AG." ;
+	     "Permettre à chacun de participer tout en gardant la structure de l'association." ;
+	     "Diffuser votre actualité à vos membres, à votre public, à vos animaux, etc."
+		  ]) ;
+      
+      hr () ;
+
+      composite `LR
+	(pride
+	   ~title:"Prise en main immédiate"
+	   ~subtitle:"Essayez, ça ira plus vite qu'une explication"
+	   "L'interface de RunOrg est intuitive, facile à maîtriser et conçue pour les associations : vos membres l'adopteront rapidement pour communiquer entre eux et avec les responsables.
+
+Nous le constatons partout : en quelques jours, leur intranet RunOrg devient la façon la plus simple de communiquer et de s'organiser."
+	)
+	(image "/public/img/2012-04-12-1-cut.png") ;
+
+      ribbon 
+	(important 
+	   "Respect de la vie privée"
+	   "Chez RunOrg, les données privées de nos utilisateurs leur appartiennent, 
+elles ne seront jamais vendues à des annonceurs ou des entreprises.
+En plus, vous pouvez les exporter facilement à tout moment : ce sont les vôtres."
+	) ;
+
+      composite `LLR
+	(pride
+	   ~title:"Mais pourquoi est-il si gentil ?"
+	   ~subtitle:"Parce que c'est pour la bonne cause"
+	   "Gratuit et soucieux de la vie privée ? À l'origine, nous voulions 
+proposer RunOrg pour un petit prix. Mais pour une petite association,
+il y a un monde entre pas cher et gratuit.
+
+Nous vendons RunOrg aux grosses structures, mais n'oublions pas
+notre objectif de base : simplifier la vie des associations.
+Gratuit, c'est plus simple, non ?"
+	)
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") ; 
+      
+      recommend 
+	~title:"Ils recommandent RunOrg"
+	~subtitle:"Ça marche pour tout le monde"
+	[ ( "François Villard" ,
+	    "Homme à tout faire des N'Improtequoi" ,
+	    "RunOrg est un excellent outil pour l'organisation de notre équipe. Les membres s'investissent davantage et sont mieux informés... Tout est simplifié !" ) ;
+	  ( "Antoine Pierchon" ,
+	    "Président de la Fédé B", 
+	    "Grâce à RunOrg j’ai pu récupérer très rapidement les informations des participants, les mini-sondages sont parfaits pour planifier des réunions." ) ;
+	  ( "Cédric Esserméant" , 
+	    "Président des Centaures de Grenoble" ,
+	    "RunOrg me permet de confier l’administration des cours et l’organisation des matchs ! Je peux enfin déléguer en gardant la visibilité dessus." ) 
+	] ;
+      
+      hr () ;
+      
+      composite `LR 
+	(pride 
+	   ~title:"Conçu par des experts"
+	   ~subtitle:"Des années d'expérience associative"
+	   ~link:("http://runorg.com/blog"," Et suivez nos conseils com' sur notre blog !")
+	   "La communication dans les associations, c'est compliqué, et on ne sait pas toujours à qui s'adresser. 
+
+	   Notre équipe répond à vos questions ! Devenez fan de notre page Facebook et posez-nous vos questions sur notre mur.")
+	   (facebook ()) ;
+	
+    ] ;
+
   page "/" "RunOrg Associations"
     ~section:"associations" 
-    ~head:"associations"
+    ~head:"associations" 
     ~subsection:"accueil"
     [ composite `LLR
 	(video 
@@ -988,6 +1079,14 @@ and offer ~title ~price text inc =
 	    "text",  string text ;
 	    "inc",   list (List.map string inc) ;
 	    "price", string price ] ]
+
+and backdrop_head ~title ~image ~text ~url ~action = 
+  call "VSplashBlocks.BackdropHead.render"
+    [ obj [ "title",  string title ;
+	    "text",   string text ;
+	    "image",  string image ;
+	    "action", string action ;
+	    "url",    string url ] ]
 
 and pricing ~foot cols rows = 
 

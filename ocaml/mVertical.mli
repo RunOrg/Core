@@ -35,8 +35,7 @@ module Step : Ohm.Fmt.FMT with type t =
   | `CreateAG
   | `AnotherEvent
   | `InviteNetwork
-  | `Broadcast
-  | `Buy ]
+  | `Broadcast ]
 
 type t = <
   t : MType.t ;
