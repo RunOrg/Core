@@ -6,6 +6,7 @@ open BatPervasives
 
 module Login  = CLogin_login
 module Signup = CLogin_signup
+module Logout = CLogin_logout
 
 let () = UrlLogin.def_login begin fun req res -> 
 
