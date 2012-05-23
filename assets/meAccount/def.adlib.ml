@@ -19,8 +19,6 @@
 | `MeAccount_Admin_Edit_Sub  
 | `MeAccount_Admin_Pass_Link 
 | `MeAccount_Admin_Pass_Sub  
-| `MeAccount_Admin_Privacy_Link
-| `MeAccount_Admin_Privacy_Sub 
 | `MeAccount_Admin_Picture_Link
 | `MeAccount_Admin_Picture_Sub
 
@@ -50,5 +48,3 @@
 | `MeAccount_Pass_Submit
 
 | `MeAccount_Picture_Title
-
-| `MeAccount_Privacy_Title

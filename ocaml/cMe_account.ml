@@ -159,13 +159,6 @@ let () = define UrlMe.Account.def_admin begin fun cuid ->
 	method title    = AdLib.get `MeAccount_Admin_Picture_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Picture_Sub)
        end) ;
-
-      (object
-	method img      = VIcon.Large.lock
-	method url      = Action.url UrlMe.Account.privacy () () 
-	method title    = AdLib.get `MeAccount_Admin_Privacy_Link
-	method subtitle = Some (AdLib.get `MeAccount_Admin_Privacy_Sub)
-       end) ;
       
     ] in
     
