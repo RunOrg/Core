@@ -11,7 +11,9 @@ end
 
 open UrlMe.Account
 
-let home   = make `MeAccount_Page_Title  home
-let admin  = make `MeAccount_Admin_Title admin
-let edit   = make `MeAccount_Edit_Title  edit
-let pass   = make `MeAccount_Pass_Title  pass
+let home    = make `MeAccount_Page_Title    home
+let admin   = make `MeAccount_Admin_Title   admin
+let edit    = make `MeAccount_Edit_Title    edit
+let pass    = make `MeAccount_Pass_Title    pass
+let picture = make `MeAccount_Picture_Title picture
+let privacy = make `MeAccount_Privacy_Title privacy

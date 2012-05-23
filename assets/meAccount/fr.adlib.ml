@@ -49,3 +49,6 @@
 | `MeAccount_Pass_Required -> "Champ obligatoire"
 | `MeAccount_Pass_Submit -> "Enregistrer"
 
+| `MeAccount_Picture_Title -> "Photo"
+
+| `MeAccount_Privacy_Title -> "Vie Privée"

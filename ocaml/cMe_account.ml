@@ -9,6 +9,7 @@ open CMe_common
 module Parents = CMe_account_parents
 module Edit    = CMe_account_edit
 module Pass    = CMe_account_pass
+module Picture = CMe_account_picture
 
 module LengthSeg = OhmBox.Seg.OfJson(struct
   type json t = [ `long | `short ]
