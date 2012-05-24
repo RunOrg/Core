@@ -1,6 +1,6 @@
-<div id="topbar">
+<div id="topbar" {if public} class="-public" {/if}>
   
-  <div id="navbar">
+  <div id="navbar" {?account} class="-with-account" {/?}>
     <div class="-inner">
       <div class="-left">
 	<a href="{home}">RUN<strong>ORG</strong></a>
@@ -31,24 +31,21 @@
       <div class="-main">
         <h1><a href="{url}">{name}</a></h1>
         <ul>
-          {?menu}
+          {#menu}
   	    <li class="-root">
-	      <a href="{home}">{ `PageLayout_Navbar_Home }</a>
-	    </li>
-	    <li class="-root">
-	      <a href="{members}">{ `PageLayout_Navbar_Members }</a>
-	    </li>
-	    <li class="-root">
-	      <a href="{events}">{ `PageLayout_Navbar_Events }</a>
-	    </li>
-	    <li class="-root">
-	      <a href="{forums}">{ `PageLayout_Navbar_Forums }</a>
+	      <a href="{url}">{label|ohm}</a>
 	    </li>
           {else}
   	    {?desc}<li class="-desc">{this}</li>{/?}            
-          {/?}
+          {/#}
 	  <li class="-website">
-	    <a href="{website}" class="action-button">{ `PageLayout_Navbar_Website }</a>
+	    <a href="{website}" class="action-button">
+	      {if public}
+	        { `PageLayout_Navbar_Intranet }
+	      {else} 
+	        { `PageLayout_Navbar_Website }
+	      {/if}
+	    </a>
 	  </li>
 	</ul>
       </div>
@@ -101,11 +98,12 @@
 
 #topbar {
   background-color: #EEE;
-  background: -webkit-linear-gradient(top,white 0%,#CCC 100%);
-  background: -moz-linear-gradient(top,white 0%,#CCC 100%);
+  background: -webkit-linear-gradient(bottom, #CCC 0px, #EEE 75px);
+  background: -moz-linear-gradient(bottom, #CCC 0px, #EEE 75px);
   border-bottom: 1px solid #555;
   box-shadow: 0 1px 3px #CCC;
   margin-bottom: 10px;
+  overflow: hidden;
 
   .-asso {
     width: 950px;

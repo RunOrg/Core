@@ -6,7 +6,7 @@ open BatPervasives
 
 type t = ICurrentUser.t option * IInstance.t option 
 
-let render (cuid,iid) = 
+let render ~public ~menu (cuid,iid) = 
 
   let  uid      = BatOption.map IUser.Deduce.can_view cuid in
   let! user     = ohm $ Run.opt_bind MUser.get uid in
@@ -40,30 +40,18 @@ let render (cuid,iid) =
     end visited 
   end cuid in
 
-  let  menu = if user = None then None else Some (object
-    method instances = List.rev $ BatOption.default [] instances
-    method network   = Action.url UrlMe.Network.home () ()
-    method news      = Action.url UrlMe.News.home () ()
-    method logout    = Action.url UrlLogin.logout () ()
-  end) in
-
   let! asso = ohm begin match instance with None -> return None | Some instance -> 
 
     let  key = instance # key in
-    let  url = if user = None then Action.url UrlClient.website key [] else UrlClient.home key in
+    let  url = if public || user = None then Action.url UrlClient.website key [] else UrlClient.home key in
 
-    let! pic = ohm $ Run.opt_bind (fun fid -> MFile.Url.get fid `Small) (instance # pic) in
+    let! pic = ohm $ CPicture.small_opt (instance # pic) in
     let  pic = BatOption.map (fun pic -> (object
       method pic = pic
       method url = url
     end)) pic in
 
-    let menu = if user = None then None else Some (object
-      method home    = UrlClient.home key
-      method members = UrlClient.members key
-      method forums  = UrlClient.forums key
-      method events  = UrlClient.events key
-    end) in
+    let menu = if not public && user = None then [] else menu key in
 
     let! desc = ohm begin 
       if user <> None then return None else
@@ -72,19 +60,69 @@ let render (cuid,iid) =
 	return $ profile # desc
     end in
 	  
+    let website = 
+      if public then 
+	Action.url UrlClient.website key [] 
+      else
+	UrlClient.home key 
+    in
+
     return $ Some (object
       method picture = pic
+      method public  = public
       method url     = url
       method menu    = menu
       method desc    = desc
       method name    = instance # name
-      method website = Action.url UrlClient.website key [] 
+      method website = website
     end)
+
   end in
+
+  let  menu = if user = None then None else Some (object
+    method instances = List.rev $ BatOption.default [] instances
+    method network   = Action.url UrlMe.Network.home () ()
+    method news      = Action.url UrlMe.News.home () ()
+    method logout    = Action.url UrlLogin.logout () ()
+  end) in
 
   Asset_PageLayout_Navbar.render (object
     method home    = home
+    method public  = public
     method account = account
     method menu    = menu
     method asso    = asso
   end)
+
+let intranet (cuid,iid) = 
+
+  let menu key = 
+    List.map (fun (url,label) -> (object
+      method url = url 
+      method label = AdLib.write label
+    end)) [
+      UrlClient.home    key, `PageLayout_Navbar_Home ;
+      UrlClient.members key, `PageLayout_Navbar_Members ;
+      UrlClient.events  key, `PageLayout_Navbar_Events ;
+      UrlClient.forums  key, `PageLayout_Navbar_Forums ;
+    ]
+  in
+  
+  render ~public:false ~menu (cuid,iid) 
+
+let public ~left ~main ~cuid instance = 
+
+  let! pic = ohm $ CPicture.small (instance # pic) in
+  
+  let menu key = [] in
+  let navbar = render ~public:true ~menu (cuid,Some (instance # id)) in
+      
+  let data = object
+    method navbar = navbar
+    method left   = left
+    method main   = main 
+    method home   = Action.url UrlClient.website (instance # key) []
+    method pic    = pic
+  end in
+
+  Asset_PageLayout_Public.render data

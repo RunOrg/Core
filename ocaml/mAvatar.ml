@@ -305,10 +305,7 @@ let status iid cuid =
   let  uid = IUser.Deduce.is_anyone cuid in
   let  iid = IInstance.decay iid in 
   let! result = ohm_req_or (return `Contact) $ _get iid uid in
-  match result # value with 
-    | `Admin -> return `Admin
-    | `Contact | `Nobody -> return `Contact
-    | `Token -> return `Token
+  return (result # value)
 
 let do_identify_user instance user cuid = 
   let  usr = IUser.decay     user     in
