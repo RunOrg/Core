@@ -45,7 +45,7 @@ module MFile = Fmt.Make(struct
     key      : Id.t ;
    ?item     : IItem.t option ;
    ?name     : string option = Some "untitled.txt" ;
-    versions : (string * VersionData.t) assoc 
+    versions : (!string, VersionData.t) ListAssoc.t 
   > 
 end)
 

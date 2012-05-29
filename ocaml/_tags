@@ -1,4 +1,4 @@
-<*> or <**/*>: package(curl), package(json-wheel), package(json-static), package(netcgi2), package(netclient), package(batteries), package(sha), package(netstring), package(xmlm), syntax(camlp4o), custom-pp
+<*> or <**/*>: package(camlp4), syntax(camlp4o), custom-pp, package(curl), package(netcgi2), package(netclient), package(batteries), package(sha), package(netstring), package(xmlm)
 <*>: include
 <gen>: include
 <plugins/*>: include

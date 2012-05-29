@@ -5,7 +5,7 @@ open BatPervasives
 open Ohm.Universal
 
 module PropagateArgs = Fmt.Make(struct
-  type json t = IAvatar.t * IAvatar.t * IGroup.t 
+  type json t = (IAvatar.t * IAvatar.t * IGroup.t) 
 end)
 
 let _ = 

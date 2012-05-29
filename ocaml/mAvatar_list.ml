@@ -9,7 +9,7 @@ open MAvatar_common
 
 module PictureView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    type json t = IInstance.t * Id.t
+    type json t = (IInstance.t * Id.t)
   end)
 
   module Value  = Fmt.Unit

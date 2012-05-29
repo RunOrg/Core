@@ -56,7 +56,6 @@
 
 <style>
 
-
 #navbar {
   border-bottom: 1px solid #555;
   box-shadow: 0 1px 3px #888;
@@ -104,6 +103,18 @@
   box-shadow: 0 1px 3px #CCC;
   margin-bottom: 10px;
   overflow: hidden;
+
+  &.-public { 
+    #navbar { 
+      display: none;
+      &.-with-account { display: block } 
+    }     
+
+    .-asso {
+      .-main { margin-left: 246px } 
+      .-pic { display: none } 
+    }
+  } 
 
   .-asso {
     width: 950px;

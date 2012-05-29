@@ -381,7 +381,7 @@ end)
 module RecentTable = CouchDB.Table(MyDB)(Id)(Recent)
 
 module FindRecent = Fmt.Make(struct
-  type json t = Id.t * int
+  type json t = (Id.t * int)
 end) 
 
 let visited ~count user = 

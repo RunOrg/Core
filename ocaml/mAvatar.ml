@@ -22,19 +22,19 @@ module Design    = Common.Design
 include Common.Data
 
 module InsSta = Fmt.Make(struct
-  type json t = IInstance.t * Status.t
+  type json t = (IInstance.t * Status.t)
 end) 
 
 module UsrSta = Fmt.Make(struct
-  type json t = IUser.t * Status.t
+  type json t = (IUser.t * Status.t)
 end) 
 
 module InsUsr = Fmt.Make(struct
-  type json t = IInstance.t * IUser.t
+  type json t = (IInstance.t * IUser.t)
 end)
 
 module Search = Fmt.Make(struct
-  type json t = IInstance.t * string
+  type json t = (IInstance.t * string)
 end)
 
 (* Refresh avatar cached data ------------------------------------------------------------- *)
@@ -378,8 +378,7 @@ let usage iid =
 
 module MembersView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    module IInstance = IInstance
-    type json t = IInstance.t * string
+    type json t = (IInstance.t * string)
   end)
 
   module Value  = Fmt.Unit
@@ -426,8 +425,7 @@ let list_members ?start ~count instance =
 
 module AdminsView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    module IInstance = IInstance
-    type json t = IInstance.t * string
+    type json t = (IInstance.t * string)
   end)
 
   module Value  = Fmt.Unit
@@ -475,8 +473,7 @@ let list_administrators ?start ~count instance =
 
 module ContactsView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    module IInstance = IInstance
-    type json t = IInstance.t * string
+    type json t = (IInstance.t * string)
   end)
 
   module Value  = Fmt.Unit
@@ -737,7 +734,7 @@ module Backdoor = struct
   module AllView = CouchDB.MapView(struct
     module Key    = Fmt.Unit
     module Value  = Fmt.Make(struct
-      type json t = IUser.t * IInstance.t * Status.t
+      type json t = (IUser.t * IInstance.t * Status.t)
     end)  
     module Design = Design
     let name = "backdoor-all"

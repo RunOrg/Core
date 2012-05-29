@@ -33,7 +33,7 @@ type 'a update =
        ?draft:bool 
     -> ?public:bool 
     -> ?name:[`text of string | `label of string] option 
-    -> ?data:(string * Json_type.t) list
+    -> ?data:(string * Ohm.Json.t) list
     -> ?config:MEntityConfig.Diff.t list
     -> unit 
     -> 'a

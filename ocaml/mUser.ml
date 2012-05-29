@@ -41,7 +41,7 @@ module Data = struct
       lastname   : string ;
       passhash   : string option ;
       email      : string ;
-     ?emails     : (string * bool) assoc = [] ;
+     ?emails     : (!string, bool) Ohm.ListAssoc.t = [] ;
       confirmed  : bool   ;
      ?destroyed  : Float.t option ;
      ?autologin  : bool = true ; 

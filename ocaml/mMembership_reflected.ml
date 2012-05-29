@@ -8,20 +8,24 @@ module Details = MMembership_details
 
 module T = struct
 
-  module Float = Fmt.Float
-
-  type json data = {
+  type json t = {
     grant     : [ `Admin "a" | `Token "t" ] option ;
     admin_act : bool ;
     user_act  : bool ;
-    time      : Float.t ;
+    time      : float ;
     status    : Status.t ; 
     mustpay   : bool 
   }
 
-  type t = data
-  let json_of_t = json_of_data
-  let t_of_json = data_of_json
+  type data = t = {
+    grant     : [ `Admin | `Token ] option ;
+    admin_act : bool ;
+    user_act  : bool ;
+    time      : float ;
+    status    : Status.t ; 
+    mustpay   : bool 
+  }
+
 
 end
 

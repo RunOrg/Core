@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
   
@@ -8,7 +8,7 @@ module Float   = Fmt.Float
   
 module T = struct
 
-  type json data = {
+  type json t = {
     where   : IGroup.t  ;
     who     : IAvatar.t ;
     admin   : (bool * Float.t * IAvatar.t) option ; 
@@ -17,10 +17,14 @@ module T = struct
     paid    : (bool * Float.t * IAvatar.t) option 
   }
 
-  type t = data
-
-  let t_of_json = data_of_json
-  let json_of_t = json_of_data
+  type data = t = {
+    where   : IGroup.t  ;
+    who     : IAvatar.t ;
+    admin   : (bool * Float.t * IAvatar.t) option ; 
+    user    : (bool * Float.t * IAvatar.t) option ;
+    invited : (bool * Float.t * IAvatar.t) option ;
+    paid    : (bool * Float.t * IAvatar.t) option 
+  }
 
 end 
 include T

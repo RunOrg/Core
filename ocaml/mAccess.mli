@@ -22,8 +22,8 @@ type t =
   | `Union   of t list                         (* ["u",[a,b,c,d]] *)
   ]
 
-val of_json : Json_type.t -> t
-val to_json : t -> Json_type.t
+val of_json : Ohm.Json.t -> t
+val to_json : t -> Ohm.Json.t
 val fmt : t Ohm.Fmt.t
 
 type of_entity  = IEntity.t -> Action.t -> t O.run

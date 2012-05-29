@@ -159,13 +159,8 @@ let refresh_forwards bid =
   return () 
 
 let refresh_forwards_later = 
-  let task = Task.register "broadcast-refresh-forwards" IBroadcast.fmt begin fun bid _ -> 
-    let! () = ohm $ refresh_forwards bid in 
-    return $ Task.Finished bid
-  end in
-  fun bid -> 
-    let! _ = ohm $ MModel.Task.call task bid in
-    return () 
+  let task = O.async # define "broadcast-refresh-forwards" IBroadcast.fmt refresh_forwards in
+  fun bid -> task bid
 
 (* Perform an actual forwarding ------------------------------------------------------------ *)
 
@@ -220,8 +215,7 @@ let forwards bid =
 module SummaryView = CouchDB.MapView(struct
   module Key    = IBroadcast
   module Value  = Fmt.Make(struct
-    module Float = Fmt.Float
-    type json t = Float.t * string
+    type json t = float * string
   end)
   module Design = Design
   let name = "summary"
@@ -241,8 +235,7 @@ let get_summary bid =
 
 module ByInstanceView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    module Float = Fmt.Float
-    type json t = IInstance.t * Float.t
+    type json t = (IInstance.t * float)
   end)
   module Value  = Fmt.Unit
   module Doc    = Item
@@ -251,17 +244,29 @@ module ByInstanceView = CouchDB.DocView(struct
   let map  = "if (!doc.d) emit([doc.f,doc.t])"
 end)
 
-let current iid ~count = 
+let latest ?start ~count iid = 
 
-  let startkey = iid, Unix.gettimeofday () +. 3600. and endkey = iid, 0.0 in
+  let! now = ohmctx (#time) in
+
+  let start = BatOption.default (now +. 3600.) start in   
+  let startkey = iid, start and endkey = iid, 0.0 in
+  
+  let limit = count + 1 in
+
   let! raw_list = ohm $ ByInstanceView.doc_query 
-    ~startkey ~endkey ~descending:true ~limit:count ()
+    ~startkey ~endkey ~descending:true ~limit ()
   in
 
-  let  extract i = extract (IBroadcast.of_id (i#id)) (i#doc) in
+  let  extract i = 
+    let! extract = ohm $ extract (IBroadcast.of_id (i#id)) (i#doc) in
+    return (snd (i#key),extract)
+  in
+
   let! list = ohm $ Run.list_map extract raw_list in
 
-  return $ BatList.filter_map identity list
+  let list, next = OhmPaging.slice ~count list in 
+  
+  return (BatList.filter_map snd list, BatOption.map fst next) 
 
 let previous iid time = 
   
@@ -276,8 +281,7 @@ let previous iid time =
 
 module IdByInstanceView = CouchDB.MapView(struct
   module Key = Fmt.Make(struct
-    module Float = Fmt.Float
-    type json t = IInstance.t * Float.t
+    type json t = (IInstance.t * float)
   end)
   module Value  = Fmt.Unit
   module Design = Design 

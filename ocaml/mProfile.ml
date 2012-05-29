@@ -94,21 +94,20 @@ module Data = struct
  
   let fmt = to_json, Fmt.protect of_json
 
-  open Json_type
  
   let extract v (e:extract) = match e with 
-    | `firstname -> Build.string (v.firstname)
-    | `lastname  -> Build.string (v.lastname)
-    | `email     -> Build.optional Build.string (v.email)
-    | `birthdate -> Build.optional Build.string (v.birthdate) 
-    | `phone     -> Build.optional Build.string (v.phone) 
-    | `cellphone -> Build.optional Build.string (v.cellphone) 
-    | `address   -> Build.optional Build.string (v.address) 
-    | `zipcode   -> Build.optional Build.string (v.zipcode) 
-    | `city      -> Build.optional Build.string (v.city) 
-    | `country   -> Build.optional Build.string (v.country) 
-    | `gender    -> Build.optional 
-      (function `m -> Build.string "m" | `f -> Build.string "f") (v.gender) 
+    | `firstname -> Json.of_string (v.firstname)
+    | `lastname  -> Json.of_string (v.lastname)
+    | `email     -> Json.of_opt Json.of_string (v.email)
+    | `birthdate -> Json.of_opt Json.of_string (v.birthdate) 
+    | `phone     -> Json.of_opt Json.of_string (v.phone) 
+    | `cellphone -> Json.of_opt Json.of_string (v.cellphone) 
+    | `address   -> Json.of_opt Json.of_string (v.address) 
+    | `zipcode   -> Json.of_opt Json.of_string (v.zipcode) 
+    | `city      -> Json.of_opt Json.of_string (v.city) 
+    | `country   -> Json.of_opt Json.of_string (v.country) 
+    | `gender    -> Json.of_opt 
+      (function `m -> Json.of_string "m" | `f -> Json.of_string "f") (v.gender) 
       
 end
 
@@ -227,7 +226,7 @@ let create_from_user iid uid =
   return pid
 
 module Find = Fmt.Make(struct
-  type json t = IInstance.t * IUser.t
+  type json t = (IInstance.t * IUser.t)
 end)
 
 module FindView = CouchDB.DocView(struct

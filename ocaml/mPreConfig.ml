@@ -40,8 +40,7 @@ module Saved = functor (Version:VERSION_DEF) -> struct
   module VPayload = Version.Payload
 
   let typekey = 
-    Json_io.string_of_json ~compact:true ~recursive:true
-      (MType.to_json Version.t)
+    Json.to_string (MType.to_json Version.t)
 
   module Data = Fmt.Make(struct
     type json t = <
@@ -50,7 +49,7 @@ module Saved = functor (Version:VERSION_DEF) -> struct
       version : string ;
       applies : VId.t list ;
       payload : VPayload.t list ;
-     ?names : (string * (string list)) assoc = []
+     ?names : (!string, (string list)) ListAssoc.t = []
     >
   end)
 

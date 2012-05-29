@@ -35,6 +35,6 @@ type t = [
 | `PreConfigNamer
 ]
 
-val of_json : Json_type.t -> t
-val to_json : t -> Json_type.t
+val of_json : Ohm.Json.t -> t
+val to_json : t -> Ohm.Json.t
 

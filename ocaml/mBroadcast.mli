@@ -45,7 +45,11 @@ val get : IBroadcast.t -> t option O.run
 
 val forwards : IBroadcast.t -> forward list O.run
 
-val current : IInstance.t -> count:int -> t list O.run
+val latest : 
+     ?start:float
+  ->  count:int
+  -> IInstance.t 
+  -> (#Ohm.CouchDB.ctx, t list * float option) Ohm.Run.t
 
 val recent_ids : IInstance.t -> count:int -> IBroadcast.t list O.run
 

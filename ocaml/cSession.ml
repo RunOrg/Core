@@ -26,3 +26,8 @@ let check req =
 
 let close res = 
   Action.with_cookie ~name:session ~value:"" ~life:0 res
+
+let decay = function 
+  | `None -> None
+  | `New cuid -> Some (ICurrentUser.decay cuid) 
+  | `Old cuid -> Some (ICurrentUser.decay cuid) 

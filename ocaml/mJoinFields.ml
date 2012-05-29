@@ -137,3 +137,4 @@ let apply_diff (fields : Field.t list) (diffs : Diff.t list) =
   let assoc = List.map (fun f -> f # name, f) fields in 
   let assoc = List.fold_left apply assoc diffs in
   List.map snd assoc 
+

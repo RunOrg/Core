@@ -57,8 +57,8 @@ let unformat_date =
 (* Internal : yyyymmdd *)
 let date lang = 
   let format = format_date lang and unformat = unformat_date lang in 
-  let to_json date = Json_type.Build.optional Json_type.Build.string (format date) in
-  let of_json json = try unformat (Json_type.Browse.string json) with _ -> None in  
+  let to_json date = Json.of_opt Json.of_string (format date) in
+  let of_json json = try unformat (Json.to_string json) with _ -> None in  
   Ohm.Fmt.({ to_json ; of_json })
 
 let float_of_date d = 

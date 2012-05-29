@@ -39,16 +39,16 @@ module Data = Fmt.Make(struct
 
 
   module Previous = Fmt.Make(struct
-    type json t = (string * <
+    type json t = (!string, <
       section "s" : string ;
-      items   "i" : (string * <
+      items   "i" : (!string, <
        ?label  "l" : string option ;
-        fields "f" : (string * <
+        fields "f" : (!string, <
           field  "n" : string ;
 	  format "f" : Format.t
-        >) assoc   
-      >) assoc
-    >) assoc
+        >) ListAssoc.t   
+      >) ListAssoc.t
+    >) ListAssoc.t
   end)
 
   let t_of_json json = 

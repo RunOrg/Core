@@ -204,7 +204,7 @@ let () =
 (* Propagate group refresh --------------------------------------------------------------- *)
 
 module GroupIter = Fmt.Make(struct
-  type json t = IGroup.t * Id.t option
+  type json t = (IGroup.t * Id.t option)
 end)
 
 let () = 

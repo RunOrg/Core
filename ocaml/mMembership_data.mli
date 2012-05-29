@@ -1,11 +1,11 @@
 (* © 2012 RunOrg *)
 
-val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Json_type.t) list O.run
+val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Ohm.Json.t) list O.run
 
 val restore_update : 
      IGroup.t
   -> IAvatar.t
-  -> (string * Json_type.t) list
+  -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val self_update :
@@ -13,7 +13,7 @@ val self_update :
   -> [`IsSelf] IAvatar.id
   -> MUpdateInfo.t
   -> ?irreversible:string list
-  -> (string * Json_type.t) list
+  -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val admin_update :
@@ -21,12 +21,12 @@ val admin_update :
   -> [<`Write|`Admin|`Bot] IGroup.id
   -> 'any IAvatar.id
   -> MUpdateInfo.t
-  -> (string * Json_type.t) list
+  -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val count :
      [<`Admin|`Write|`List] IGroup.id
   -> string
-  -> (Json_type.t * int) list O.run
+  -> (Ohm.Json.t * int) list O.run
 
 val obliterate : IMembership.t -> unit O.run

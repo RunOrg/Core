@@ -1,4 +1,6 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
+
+open Ohm
 
 include Ohm.Fmt.Make(struct
   type json t = 

@@ -7,9 +7,8 @@ module Unique = MMembership_unique
 
 module Data = struct
   module T = struct
-    module Json = Fmt.Json
     type json t = {
-      data   "d" : (string * Json.t) assoc ;
+      data   "d" : (!string, Json.t) ListAssoc.t ;
       group  "g" : IGroup.t ;
       avatar "a" : IAvatar.t
     } 
@@ -36,11 +35,10 @@ module Config = struct
   module Data = Data
 
   module Diff = Fmt.Make(struct
-    module Json = Fmt.Json
     type json t = <
-      self  "s"        : (string * Json.t) assoc ;
-      admin "a"        : (string * Json.t) assoc ;
-      irreversible "i" : (string * Json.t) assoc 
+      self  "s"        : (!string, Json.t) ListAssoc.t ;
+      admin "a"        : (!string, Json.t) ListAssoc.t ;
+      irreversible "i" : (!string, Json.t) ListAssoc.t 
     >
   end)
 
@@ -111,8 +109,7 @@ module Design = struct
 end
 
 module ByField = Fmt.Make(struct
-  module Json = Fmt.Json
-  type json t = IGroup.t * string * Json.t
+  type json t = (IGroup.t * string * Json.t)
 end)
 
 module ByFieldView = CouchDB.ReduceView(struct
@@ -137,8 +134,8 @@ module ByFieldView = CouchDB.ReduceView(struct
 let count gid name =
   let  gid  = IGroup.decay gid in 
   let! list = ohm $ ByFieldView.reduce_query
-    ~startkey:(gid,name,Json_type.Build.int min_int)
-    ~endkey:(gid,name,Json_type.Build.string "~~~~")
+    ~startkey:(gid,name,Json_type.Int min_int)
+    ~endkey:(gid,name,Json_type.String "~~~~")
     ~endinclusive:true
     ()
   in

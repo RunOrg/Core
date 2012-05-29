@@ -31,12 +31,12 @@ include Fmt.Make(struct
   >
 end)
 
-let default = of_json (Json_type.Build.objekt [
-  "group",  Json_type.Build.objekt [] ;
-  "wall",   Json_type.Build.objekt [] ;
-  "album",  Json_type.Build.objekt [] ;
-  "folder", Json_type.Build.objekt [] ;
-  "votes",  Json_type.Build.objekt [] 
+let default = of_json (Json.Object [
+  "group",  Json.Object [] ;
+  "wall",   Json.Object [] ;
+  "album",  Json.Object [] ;
+  "folder", Json.Object [] ;
+  "votes",  Json.Object [] 
 ]) 
 
 let default_group  = BatOption.get default # group

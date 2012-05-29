@@ -1,3 +1,7 @@
+(* © 2012 Runorg *)
+
+open Ohm
+
 type json t = [
   `List                "list"
 | `Group               "grup"

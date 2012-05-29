@@ -110,14 +110,14 @@ end
 
 module Data : sig
 
-  val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Json_type.t) list O.run
+  val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Ohm.Json.t) list O.run
 
   val self_update :
         'any IGroup.id
     -> [`IsSelf] IAvatar.id
     -> MUpdateInfo.t
     -> ?irreversible:string list
-    -> (string * Json_type.t) list
+    -> (string * Ohm.Json.t) list
     -> unit O.run
 
   val admin_update :
@@ -125,13 +125,13 @@ module Data : sig
     -> [<`Write|`Admin|`Bot] IGroup.id
     -> 'any IAvatar.id
     -> MUpdateInfo.t
-    -> (string * Json_type.t) list
+    -> (string * Ohm.Json.t) list
     -> unit O.run
 
   val count :
        [<`Admin|`Write|`List] IGroup.id
     -> string
-    -> (Json_type.t * int) list O.run
+    -> (Ohm.Json.t * int) list O.run
 
 end
 

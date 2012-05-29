@@ -25,7 +25,7 @@ let access () avatar group expect =
 
 module AllView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = IGroup.t * bool
+    type json t = (IGroup.t * bool)
   end)
   module Value  = IAvatar
   module Design = Versioned.Design
@@ -126,7 +126,7 @@ let list_everyone ?start ~count group =
 
 module AvatarView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = IGroup.t * IAvatar.t
+    type json t = (IGroup.t * IAvatar.t)
   end)
   module Value  = Fmt.Unit
   module Design = Versioned.Design

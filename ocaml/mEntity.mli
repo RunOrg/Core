@@ -107,7 +107,7 @@ module Data : sig
 
   val get : 'any IEntity.id -> 'any t option O.run
     
-  val data   : [<`View|`Admin|`Bot] t -> (string * Json_type.t) list
+  val data   : [<`View|`Admin|`Bot] t -> (string * Ohm.Json.t) list
   val name   : [<`View|`Admin|`Bot] t -> [ `label of string | `text of string ] option
   val info   : 'any t -> MEntityInfo.t
   val fields : 'any t -> MEntityFields.t    
@@ -122,7 +122,7 @@ val try_update :
      [`Admin] t
   -> status:[ `Active | `Delete | `Draft ]
   -> name:[ `label of string | `text of string ] option 
-  -> data:(string * Json_type.t) list
+  -> data:(string * Ohm.Json.t) list
   -> 'any IIsIn.id
   -> unit O.run
 
@@ -150,7 +150,7 @@ val bot_update :
   -> ?draft:bool 
   -> ?public:bool 
   -> ?name:[ `label of string | `text of string ] option 
-  -> ?data:(string * Json_type.t) list
+  -> ?data:(string * Ohm.Json.t) list
   -> ?config:MEntityConfig.Diff.t list
   -> unit 
   -> unit O.run

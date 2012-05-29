@@ -124,9 +124,7 @@ module ConfirmedHistoryView = CouchDB.MapView(struct
 
   module Design = Design
   module Key    = Fmt.Make(struct
-    module IInstance = IInstance
-    module Float = Fmt.Float
-    type json t = IInstance.t * Float.t
+    type json t = (IInstance.t * float)
   end)
   module Value  = Fmt.Unit
 

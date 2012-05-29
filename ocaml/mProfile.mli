@@ -29,7 +29,7 @@ module Data : sig
 		 | `country
 		 | `gender ]
       
-  val extract : t -> extract -> Json_type.t
+  val extract : t -> extract -> Ohm.Json.t
     
 end
 

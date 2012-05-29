@@ -20,7 +20,7 @@ module Update = Fmt.Make(struct
     title : string option ;
     public : bool option ;
     draft : bool option ;
-    data : (string * string) assoc
+    data : (!string, string) ListAssoc.t
   >
 end)
 
@@ -74,7 +74,7 @@ let update changes (f:'a update) =
   f ?draft:(args.draft)
     ?public:(args.public)
     ?name:(BatOption.map (fun t -> Some (`label t)) args.name)
-    ~data:(List.map (fun (k,v) -> k, Json_type.Build.string v) args.data)
+    ~data:(List.map (fun (k,v) -> k, Json.String v) args.data)
     ~config:(args.config)
     ()
       

@@ -28,10 +28,10 @@ module Info = struct
       facebook : string option ;
       phone    : string option ;
       tags     : string list ;
-      pic      : IFile.t option = None ;
-      search   : bool = false ;
+     ?pic      : IFile.t option = None ;
+     ?search   : bool = false ;
      ?unbound  : bool = false ;
-     ?pub_rss  : ( string * RSS.t ) assoc = [] 
+     ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] 
     }
   end
   include T

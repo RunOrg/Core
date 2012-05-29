@@ -177,7 +177,7 @@ module Step = Fmt.Make(struct
 end)
 
 module StepList = Fmt.Make(struct
-  type json t = Step.t list
+  type json t = (Step.t list)
   let t_of_json = function 
     | Json_type.Array l -> BatList.filter_map Step.of_json_safe l
     | _ -> assert false
@@ -325,11 +325,11 @@ let by_parent id =
   ) list)
 
 module InVertical = Fmt.Make(struct
-  type json t = IVertical.t * MEntityKind.t
+  type json t = (IVertical.t * MEntityKind.t)
 end)
 
 module InVerticalTemplates = Fmt.Make(struct
-  type json t = ITemplate.t list
+  type json t = (ITemplate.t list)
 end)
 
 module InVerticalView = CouchDB.MapView(struct

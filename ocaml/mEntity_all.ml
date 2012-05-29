@@ -11,8 +11,7 @@ module Get = MEntity_get
 type 'relation t = 'relation Can.t
 
 module Active = Fmt.Make(struct
-  module IInstance = IInstance
-  type json t = IInstance.t * MEntityKind.t
+  type json t = (IInstance.t * MEntityKind.t)
 end)
 
 module ActiveView = CouchDB.DocView(struct
@@ -78,7 +77,7 @@ end)
 
 module CalendarView = CouchDB.DocView(struct
   module Key   = Fmt.Make(struct
-    type json t = IInstance.t * string
+    type json t = (IInstance.t * string)
   end)
   module Value = Fmt.Unit
   module Doc = E.Format

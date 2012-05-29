@@ -1,0 +1,55 @@
+{ navbar | ohm } 
+
+<div id="public">
+  <div class="-left">
+
+    <div class="-pic-wrap">
+      <div class="-pic">
+	<a href="{home}"><img src="{pic}"/></a>
+      </div>
+    </div>
+
+    { left | ohm } 
+
+  </div>
+  <div class="-main">
+
+    { main | ohm } 
+
+  </div>
+</div>
+
+{ Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+#public {
+  width: 950px;
+  margin: 10px auto;
+
+  .-left { 
+    float: left;
+    width: 236px;
+    margin-right: 10px;
+    position: relative;
+    top: -80px;
+    .-pic-wrap {
+      min-height: 76px;
+      .-pic { 
+        width: 230px;
+        padding: 2px;
+        box-shadow: 0 0 3px #888;
+        border: 1px solid #555;
+        background-color: white;
+        img { 
+          display: block;
+          margin: auto;
+        }
+      }
+    } 
+  } 
+
+  .-main { 
+    overflow: hidden;
+  } 
+}
+</style>

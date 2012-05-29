@@ -7,10 +7,9 @@ open Ohm.Universal
 
 module Data = struct
   module T = struct
-    module Json = Fmt.Json
     type json t = {
       name   : [`label "l" of string | `text "t" of string] option ;
-      data   : (string * Json.t) assoc ;
+      data   : (!string, Json.t) ListAssoc.t ;
       fields : MEntityFields.t ;
       info   : MEntityInfo.t 
     }
@@ -31,13 +30,10 @@ module EntityDataConfig = struct
   let couchDB ctx = (ctx :> CouchDB.ctx) 
 
   module Diff = Fmt.Make(struct
-    module Json = Fmt.Json
-    module FieldDiff = MEntityFields.Diff
-    module InfoDiff  = MEntityInfo.Diff
     type json t = 
-      [ `Set    of (string * Json.t) assoc 
-      |	`Fields of FieldDiff.t list
-      | `Info   of InfoDiff.t list
+      [ `Set    of (!string, Json.t) ListAssoc.t 
+      |	`Fields of MEntityFields.Diff.t list
+      | `Info   of MEntityInfo.Diff.t list
       | `Name   of [`label "l" of string | `text "t" of string] option
       ]
   end)
@@ -102,7 +98,7 @@ let update ~id ~who ?name ~data () =
 
   let data = 
     (* Only keep data CHANGES *)    
-    List.filter (fun (k,v) -> v <> (try List.assoc k current.Data.data with Not_found -> Json_type.Null)) data
+    List.filter (fun (k,v) -> v <> (try List.assoc k current.Data.data with Not_found -> Json.Null)) data
   in
 
   let diffs = match data with [] -> [] | data -> [`Set data] in    
@@ -128,7 +124,7 @@ let get id = Store.get (IEntity.decay id) |> Run.map (BatOption.map Store.curren
 let description t = 
   try let field = fst (List.find (fun (name,field) -> field # mean = Some `description) t.Data.fields) in
       let value = List.assoc field t.Data.data in
-      Some (Json_type.Browse.string value)
+      Some (Json.to_string value)
   with _ -> None
 
 let data   t = t.Data.data

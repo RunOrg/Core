@@ -54,7 +54,7 @@ let render ~public ~menu (cuid,iid) =
     let menu = if not public && user = None then [] else menu key in
 
     let! desc = ohm begin 
-      if user <> None then return None else
+      if public || user <> None then return None else
 	let! iid = req_or (return None) iid in
 	let! profile = ohm_req_or (return None) $ MInstance.Profile.get iid in
 	return $ profile # desc
@@ -62,9 +62,9 @@ let render ~public ~menu (cuid,iid) =
 	  
     let website = 
       if public then 
-	Action.url UrlClient.website key [] 
-      else
 	UrlClient.home key 
+      else
+	Action.url UrlClient.website key [] 	  
     in
 
     return $ Some (object
@@ -112,7 +112,7 @@ let intranet (cuid,iid) =
 
 let public ~left ~main ~cuid instance = 
 
-  let! pic = ohm $ CPicture.small (instance # pic) in
+  let! pic = ohm $ CPicture.large (instance # pic) in
   
   let menu key = [] in
   let navbar = render ~public:true ~menu (cuid,Some (instance # id)) in

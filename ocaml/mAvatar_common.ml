@@ -13,20 +13,13 @@ end
 
 (* Data types & formats -------------------------------------------------------------------- *)
 
-module PUser     = IUser
-module PInstance = IInstance
-module PGroup    = IGroup
-module PAvatar   = IAvatar
-module IFile     = IFile
-module Json      = Fmt.Json
-module Float     = Fmt.Float
 
 module Data = Fmt.Make(struct
   type json t = <
     (* Definition *)
     t         : MType.t ;
-    who       : PUser.t ;
-    ins       : PInstance.t ;
+    who       : IUser.t ;
+    ins       : IInstance.t ;
     (* Own values *)
     sta       : MAvatar_status.t ;
     (* Cached values *)

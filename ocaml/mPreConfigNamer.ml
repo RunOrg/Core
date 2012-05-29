@@ -9,8 +9,8 @@ module Data = Fmt.Make(struct
   module IEntity = IEntity
   type json t = <
     t : MType.t ;
-    groups   "g" : (string * IGroup.t) assoc ;
-    entities "e" : (string * IEntity.t) assoc
+    groups   "g" : (!string, IGroup.t) ListAssoc.t ;
+    entities "e" : (!string, IEntity.t) ListAssoc.t
   >
 end)
 
