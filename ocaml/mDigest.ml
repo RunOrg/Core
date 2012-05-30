@@ -19,7 +19,7 @@ module Subscription = struct
   let digest_follows = follows
 
   let follows cuid iid = 
-    let  uid = IUser.Deduce.current_is_anyone cuid in 
+    let  uid = IUser.Deduce.is_anyone cuid in 
     let! did = ohm $ OfUser.get uid in
     follows did iid
 
@@ -28,11 +28,11 @@ module Subscription = struct
     subscribe did iid 
 
   let subscribe cuid iid =
-    let uid = IUser.Deduce.current_is_anyone cuid in 
+    let uid = IUser.Deduce.is_anyone cuid in 
     user_subscribe uid iid 
 
   let unsubscribe cuid iid = 
-    let  uid = IUser.Deduce.current_is_anyone cuid in 
+    let  uid = IUser.Deduce.is_anyone cuid in 
     let! did = ohm $ OfUser.get uid in
     unsubscribe did iid
 
@@ -66,20 +66,16 @@ module Connection = Fmt.Make(struct
 end)
 
 let on_network_connect = 
-  let task = Task.register "digest-network-connect" Connection.fmt begin fun connect _ ->
-    let  finish = return $ Task.Finished connect in 
+  let task = O.async # define "digest-network-connect" Connection.fmt begin fun connect ->
     (* Acting as bot to subscribe all members of the instance *)
     let  iid    = IInstance.Assert.bot (connect # follower) in 
     let! list   = ohm $ MAvatar.List.all_members iid in
-    let! _      = ohm $ Run.list_map begin fun aid ->
+    Run.list_iter begin fun aid ->
       let! did = ohm_req_or (return ()) $ digest_of_avatar aid in
       Subscription.add_through did (connect # followed) ~through:(connect # follower) 
-    end list in
-    finish 
+    end list
   end in
-  fun connect ->
-    let! _ = ohm $ MModel.Task.call task (connect :> Connection.t) in
-    return () 
+  fun connect -> task (connect :> Connection.t) 
 
 let _ = Sig.listen MRelatedInstance.Signals.after_connect on_network_connect
 
@@ -95,43 +91,35 @@ let _ = Sig.listen MUser.Signals.on_confirm (fun (uid,_) -> follow_runorg uid)
 (* React to listening and unlistening ------------------------------------------------------ *)
   
 module Following = Fmt.Make(struct
-  type json t = IDigest.t * IInstance.t
+  type json t = (IDigest.t * IInstance.t)
 end)
 
 let on_unfollow = 
-  let task = Task.register "digest-network-unfollow" Following.fmt begin fun (did,iid) _ ->
-
-    let  finish  = return $ Task.Finished (did,iid) in 
+  let task = O.async # define "digest-network-unfollow" Following.fmt begin fun (did,iid) ->
 
     (* This is asynchronous processing, so check that we are STILL not following
        the instance we are unfollowing. *)
     let! follows = ohm $ Subscription.digest_follows did iid in 
-    let! ()      = true_or finish (not follows) in
+    let! ()      = true_or (return ()) (not follows) in
 
     let! bids    = ohm $ MBroadcast.recent_ids iid ~count:Data.max_items in
 
-    let! ()      = ohm $ Data.remove_items did bids in 
-
-    finish 
+    Data.remove_items did bids 
 
   end in
-  fun (did,iid) ->
-    let! _ = ohm $ MModel.Task.call task (did,iid) in
-    return () 
+  fun (did,iid) -> task (did,iid)
 
 let _ = Sig.listen Subscription.Signals.on_unfollow on_unfollow
 
 let on_follow = 
-  let task = Task.register "digest-network-follow" Following.fmt begin fun (did,iid) _ ->
-
-    let  finish  = return $ Task.Finished (did,iid) in 
+  let task = O.async # define "digest-network-follow" Following.fmt begin fun (did,iid) ->
 
     (* This is asynchronous processing, so check that we are STILL following
        the instance we are subscribing to. *)
     let! follows = ohm $ Subscription.digest_follows did iid in 
-    let! ()      = true_or finish follows in
+    let! ()      = true_or (return ()) follows in
 
-    let! items   = ohm $ MBroadcast.current iid ~count:Data.max_items in
+    let! items, _ = ohm $ MBroadcast.latest iid ~count:Data.max_items in
 
     let _, timed = List.fold_right begin fun item (last,list) -> 
       let timed = last , item in
@@ -151,29 +139,24 @@ let on_follow =
       })
     end timed in
 
-    let! () = ohm $ Data.add_items did items in 
-
-    finish 
+    Data.add_items did items
 
   end in
-  fun (did,iid) ->
-    let! _ = ohm $ MModel.Task.call task (did,iid) in
-    return () 
+  fun (did,iid) -> task (did,iid)
 
 let _ = Sig.listen Subscription.Signals.on_follow on_follow
 
 (* React to broadcasts being posted -------------------------------------------------------- *)
 
 module CreateTask = Fmt.Make(struct
-  type json t = IBroadcast.t * IDigest.t option
+  type json t = (IBroadcast.t * IDigest.t option)
 end)
 
 let on_create = 
-  let task = Task.register "digest-network-create" CreateTask.fmt begin fun (bid,did_opt) _ ->
+  let task, define = O.async # declare "digest-network-create" CreateTask.fmt in
+  let () = define begin fun (bid,did_opt) ->
 
-    let  finish  = return $ Task.Finished (bid,did_opt) in 
-
-    let! post = ohm_req_or finish $ MBroadcast.get bid in
+    let! post = ohm_req_or (return ()) $ MBroadcast.get bid in
     let! last = ohm $ MBroadcast.previous (post # from) (post # time) in
     let  last = BatOption.default 0.0 last in
 
@@ -198,13 +181,11 @@ let on_create =
     
     let! _ = ohm $ Run.list_map (fun did -> Data.add_items did [item]) list in 
 
-    if did_opt = None then finish else 
-      return $ Task.Partial ((bid,did_opt),0,1)
+    if did_opt = None then return () else
+      task (bid,did_opt)
 
   end in
-  fun bid ->
-    let! _ = ohm $ MModel.Task.call task (bid,None) in
-    return () 
+  fun bid -> task (bid,None)
 
 let _ = Sig.listen MBroadcast.Signals.on_create on_create
 
@@ -284,10 +265,10 @@ end
 
 let send_next =
   let! () = ohm $ return () in
-  let! did  = ohm_req_or (return false) $ Data.next_sendable () in
+  let! did  = ohm_req_or (return (Some 3600.0)) $ Data.next_sendable () in
   let! uids = ohm $ OfUser.reverse did in
   let! summary = ohm $ get_summary_for_sending did in 
   let! _ = ohm $ Run.list_map (fun uid -> Signals.on_send_call (uid, summary)) uids in
-  return true
+  return None
 
-let () = Task.Background.register 1 send_next
+let () = O.async # periodic 1 send_next

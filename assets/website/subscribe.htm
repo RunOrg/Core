@@ -1,0 +1,27 @@
+<div class="subscribe">
+  <div class="-head">
+    <div style="float: left">
+      <span>{num_sbs | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Subscribers num_sbs}</small>
+    </div>
+    <div style="float: right">
+      <span>{num_brc | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Articles num_brc}</small>
+    </div>
+  </div>
+</div> 
+
+<style>
+.subscribe {
+  margin-top: 40px;
+  .-head {
+    overflow: hidden;
+    padding-top: 2px;
+    border-top: 1px solid #CCC; 
+    border-bottom: 1px solid #CCC;
+    div { 
+      width: 50%; 
+      text-align: center;
+    } 
+    small { color: #888 } 
+  }
+}
+</style>

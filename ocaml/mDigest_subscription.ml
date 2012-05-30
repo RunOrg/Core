@@ -122,7 +122,7 @@ let count_followers iid =
 
 module ListFollowersView = CouchDB.MapView(struct
   module Key = Fmt.Make(struct
-    type json t = IInstance.t * IDigest.t
+    type json t = (IInstance.t * IDigest.t)
   end)
   module Value = Fmt.Unit
   module Design = Design 
@@ -144,7 +144,7 @@ let followers ?start ~count iid =
 
 module ThroughView = CouchDB.DocView(struct
   module Key = Fmt.Make(struct
-    type json t = IDigest.t * IInstance.t
+    type json t = (IDigest.t * IInstance.t)
   end)
   module Value = Fmt.Unit
   module Doc = Sbs

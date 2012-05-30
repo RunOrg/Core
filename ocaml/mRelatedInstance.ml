@@ -72,25 +72,19 @@ module Signals = struct
   let after_connect_call, after_connect = Sig.make (Run.list_iter identity) 
 
   let connect_call = 
-    let task = Task.register "after-network-connect" Connection.fmt begin fun c _ -> 
+    let task = O.async # define "after-network-connect" Connection.fmt begin fun c -> 
 
       let  lock_id = IRelatedInstance.to_id (c # relation) in
       let! lock = ohm $ MyUnique.lock (connection (c # follower) (c # followed)) lock_id in
-      
-      let! ()   = ohm begin 
-	if lock = lock_id then
-	  after_connect_call c
-	else
-	  let! _ = ohm $ MyTable.transaction (c # relation) MyTable.remove in
-	  return () 
-      end in
-
-      return $ Task.Finished c
+            
+      if lock = lock_id then
+	after_connect_call c
+      else
+	let! _ = ohm $ MyTable.transaction (c # relation) MyTable.remove in
+	return () 
 
     end in
-    fun c -> 
-      let! _ = ohm $ MModel.Task.call task c in
-      return ()
+    fun c -> task c
     
 end
 
@@ -215,7 +209,7 @@ let get_all iid =
   return $ List.rev_map assert_viewable list
 
 let get_all_mine cuid = 
-  let uid = IUser.Deduce.current_is_anyone cuid in 
+  let uid = IUser.Deduce.is_anyone cuid in 
   let! list = ohm $ MineView.doc uid in 
   (* I can always see items I own *)
   return $ List.rev_map assert_viewable list
@@ -261,7 +255,7 @@ let get ctx rid =
 	    return `None
 
 let get_own cuid rid = 
-  let  uid = IUser.Deduce.current_is_anyone cuid in 
+  let  uid = IUser.Deduce.is_anyone cuid in 
   let! data = ohm_req_or (return None) $ MyTable.get (IRelatedInstance.decay rid) in 
   match data.Data.bind with 
     | `Bound   _ -> return None
@@ -295,7 +289,7 @@ let bind_to rid iid =
   connect rid iid' iid 
 
 let decline rid uid = 
-  let uid = IUser.Deduce.current_is_anyone uid in 
+  let uid = IUser.Deduce.is_anyone uid in 
   let rid = IRelatedInstance.decay rid in
   let update rid = 
     let! data = ohm_req_or (return ((),`keep)) $ MyTable.get rid in 
