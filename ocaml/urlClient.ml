@@ -10,7 +10,8 @@ let website, def_website = O.declare O.client ""         A.none
 
 (* Articles =============================================================================================== *)
 
-let article, def_article = O.declare O.client "b" (A.roi IBroadcast.arg A.string)
+let articles, def_articles = O.declare O.client "h" (A.ri A.float) 
+let article,  def_article  = O.declare O.client "b" (A.roi IBroadcast.arg A.string)
 
 let article_url_key b = 
   let title = match b # content with 

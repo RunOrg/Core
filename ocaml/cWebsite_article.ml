@@ -28,3 +28,13 @@ let render_list server list =
   Asset_Broadcast_List.render (object
     method list = list
   end)
+
+let render_page iid server start = 
+  let! broadcasts, next = ohm $ MBroadcast.latest ?start ~count:5 iid in
+  let! list = ohm $ render_list server broadcasts in 
+  let! more = ohm begin match next with 
+    | None -> return $ Html.str "" 
+    | Some time -> let url = Action.url UrlClient.articles server time in
+		   Asset_Broadcast_More.render url
+  end in 
+  return (Html.concat [ list ; more ]) 

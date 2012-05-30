@@ -16,11 +16,26 @@ let () = UrlClient.def_website begin fun req res ->
   let! iid      = ohm_req_or p404 $ MInstance.by_key key in
   let! instance = ohm_req_or p404 $ MInstance.get iid in
 
-  let! broadcasts, next = ohm $ MBroadcast.latest ~count:5 iid in
-
-  let main = Article.render_list key broadcasts in
+  let main = Article.render_page iid key None in
   let left = Left.render iid in 
-  let html = VNavbar.public ~cuid:None ~left ~main instance in
+  let html = VNavbar.public ~cuid ~left ~main instance in
+
+  CPageLayout.core (`Website_Title (instance # name)) html res
+
+end
+
+let () = UrlClient.def_articles begin fun req res -> 
+
+  let  cuid = CSession.decay (CSession.check req) in
+  let  p404 = C404.render cuid res in
+
+  let  key      = req # server in
+  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
+  let! instance = ohm_req_or p404 $ MInstance.get iid in
+
+  let main = Article.render_page iid key (Some (req # args)) in
+  let left = Left.render iid in 
+  let html = VNavbar.public ~cuid ~left ~main instance in
 
   CPageLayout.core (`Website_Title (instance # name)) html res
 
@@ -45,7 +60,7 @@ let () = UrlClient.def_article begin fun req res ->
 
   let main = Article.render_list key [broadcast] in
   let left = Left.render iid in 
-  let html = VNavbar.public ~cuid:None ~left ~main instance in
+  let html = VNavbar.public ~cuid ~left ~main instance in
 
   let title = match broadcast # content with 
     | `Post p -> p # title
