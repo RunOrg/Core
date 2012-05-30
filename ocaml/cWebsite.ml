@@ -4,35 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-open CMe_common
-
-module Account = CMe_account
-
-let render_broadcasts server list = 
-
-  let! list = ohm $ Run.list_filter begin fun b -> 
-    let! instance = ohm_req_or (return None) $ MInstance.get (b # from) in
-    let! pic = ohm $ CPicture.small (instance # pic) in     
-    let! now = ohmctx (#time) in
-    return $ Some (object
-      method title = match b # content with 
-	| `Post p -> p # title
-	| `RSS  r -> r # title
-      method html  = match b # content with 
-	| `Post p -> p # body
-	| `RSS  r -> OhmSanitizeHtml.html (r # body)
-      method from  = instance # name
-      method pic   = pic
-      method time  = (b # time,now)
-      method url_asso = Action.url UrlClient.website server ()
-      method url_article = UrlClient.article_url server b  
-    end) 
-  end list in
-  
-  Asset_Broadcast_List.render (object
-    method list = list
-  end)
-
+module Article = CWebsite_article
+module Left    = CWebsite_left
 
 let () = UrlClient.def_website begin fun req res -> 
 
@@ -45,12 +18,11 @@ let () = UrlClient.def_website begin fun req res ->
 
   let! broadcasts, next = ohm $ MBroadcast.latest ~count:5 iid in
 
-  let  main = render_broadcasts key broadcasts in
+  let main = Article.render_list key broadcasts in
+  let left = Left.render iid in 
+  let html = VNavbar.public ~cuid:None ~left ~main instance in
 
-  let  left = return $ Html.esc "LEFT" in
-  let  html = VNavbar.public ~cuid:None ~left ~main instance in
-
-  CPageLayout.core `Me_Title html res
+  CPageLayout.core (`Website_Title (instance # name)) html res
 
 end
    
@@ -71,10 +43,15 @@ let () = UrlClient.def_article begin fun req res ->
   let! () = true_or (return (Action.redirect canonical_url res))
     (str = Some (UrlClient.article_url_key broadcast)) in
 
-  let main = render_broadcasts key [broadcast] in
-  let left = return $ Html.esc "LEFT" in
+  let main = Article.render_list key [broadcast] in
+  let left = Left.render iid in 
   let html = VNavbar.public ~cuid:None ~left ~main instance in
 
-  CPageLayout.core `Me_Title html res
+  let title = match broadcast # content with 
+    | `Post p -> p # title
+    | `RSS  r -> r # title
+  in 
+
+  CPageLayout.core (`Website_Article_Title (instance # name, title)) html res
 
 end
