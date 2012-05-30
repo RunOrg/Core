@@ -20,18 +20,28 @@ let () = UrlClient.def_website begin fun req res ->
   let! broadcasts, next = ohm $ MBroadcast.latest ~count:5 iid in
 
   let  main = 
+
+    let! list = ohm $ Run.list_filter begin fun b -> 
+      let! instance = ohm_req_or (return None) $ MInstance.get (b # from) in
+      let! pic = ohm $ CPicture.small (instance # pic) in     
+      let! now = ohmctx (#time) in
+      return $ Some (object
+	method title = match b # content with 
+	  | `Post p -> p # title
+	  | `RSS  r -> r # title
+	method html  = match b # content with 
+	  | `Post p -> p # body
+	  | `RSS  r -> OhmSanitizeHtml.html (r # body)
+	method from  = instance # name
+	method pic   = pic
+	method time  = (b # time,now)
+      end) 
+    end broadcasts in
+
     Asset_Broadcast_List.render (object
-      method list = List.map (fun b -> 
-	(object
-	  method title = match b # content with 
-	    | `Post p -> p # title
-	    | `RSS  r -> r # title
-	  method html  = match b # content with 
-	    | `Post p -> p # body
-	    | `RSS  r -> OhmSanitizeHtml.html (r # body)
-	 end) 
-      ) broadcasts
+      method list = list
     end)
+
   in
 
   let  left = return $ Html.esc "LEFT" in
