@@ -43,7 +43,7 @@ let render ~public ~menu (cuid,iid) =
   let! asso = ohm begin match instance with None -> return None | Some instance -> 
 
     let  key = instance # key in
-    let  url = if public || user = None then Action.url UrlClient.website key [] else UrlClient.home key in
+    let  url = if public || user = None then Action.url UrlClient.website key () else UrlClient.home key in
 
     let! pic = ohm $ CPicture.small_opt (instance # pic) in
     let  pic = BatOption.map (fun pic -> (object
@@ -64,7 +64,7 @@ let render ~public ~menu (cuid,iid) =
       if public then 
 	UrlClient.home key 
       else
-	Action.url UrlClient.website key [] 	  
+	Action.url UrlClient.website key () 	  
     in
 
     return $ Some (object
@@ -121,7 +121,7 @@ let public ~left ~main ~cuid instance =
     method navbar = navbar
     method left   = left
     method main   = main 
-    method home   = Action.url UrlClient.website (instance # key) []
+    method home   = Action.url UrlClient.website (instance # key) ()
     method pic    = pic
   end in
 

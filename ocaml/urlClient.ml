@@ -6,7 +6,24 @@ open BatPervasives
 
 module A = Action.Args
 
-let website, def_website = O.declare O.client "" (A.n A.string)
+let website, def_website = O.declare O.client ""         A.none
+
+(* Articles =============================================================================================== *)
+
+let article, def_article = O.declare O.client "b" (A.rri IBroadcast.arg A.string)
+
+let article_url_key b = 
+  let title = match b # content with 
+    | `Post p -> p # title
+    | `RSS  r -> r # title
+  in
+  OhmSlug.make title
+
+let article_url key b = 
+  Action.url article key (b # id, article_url_key b)
+
+(* Intranet =============================================================================================== *)
+
 let root,    def_root    = O.declare O.client "intranet" A.none
 
 let intranet key list = 

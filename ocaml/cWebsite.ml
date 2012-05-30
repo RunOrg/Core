@@ -35,6 +35,8 @@ let () = UrlClient.def_website begin fun req res ->
 	method from  = instance # name
 	method pic   = pic
 	method time  = (b # time,now)
+	method url_asso = Action.url UrlClient.website (req # server) ()
+	method url_article = UrlClient.article_url (req # server) b  
       end) 
     end broadcasts in
 

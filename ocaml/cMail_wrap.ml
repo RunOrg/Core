@@ -9,7 +9,7 @@ let render ?iid uid (body:Html.writer O.run) =
   let unsubscribe = Action.url UrlMail.unsubscribe () 
     (IUser.decay uid, iid) in
   let instance = BatOption.map (fun ins -> (object
-    method url  = Action.url UrlClient.website (ins # key) []  
+    method url  = Action.url UrlClient.website (ins # key) ()  
     method name = ins # name
   end )) ins in 
   let writer = Asset_Mail_Template.render (object
