@@ -8,3 +8,6 @@
 | `PageLayout_Navbar_Website
 | `PageLayout_Navbar_Intranet
 | `PageLayout_Foot_PoweredBy
+| `PageLayout_Navbar_Public_Website
+| `PageLayout_Navbar_Public_Calendar
+

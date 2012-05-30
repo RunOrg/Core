@@ -17,8 +17,8 @@ let () = UrlClient.def_website begin fun req res ->
   let! instance = ohm_req_or p404 $ MInstance.get iid in
 
   let main = Article.render_page iid key None in
-  let left = Left.render iid in 
-  let html = VNavbar.public ~cuid ~left ~main instance in
+  let left = Left.render iid key in 
+  let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
   CPageLayout.core (`Website_Title (instance # name)) html res
 
@@ -34,8 +34,8 @@ let () = UrlClient.def_articles begin fun req res ->
   let! instance = ohm_req_or p404 $ MInstance.get iid in
 
   let main = Article.render_page iid key (Some (req # args)) in
-  let left = Left.render iid in 
-  let html = VNavbar.public ~cuid ~left ~main instance in
+  let left = Left.render iid key in 
+  let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
   CPageLayout.core (`Website_Title (instance # name)) html res
 
@@ -59,8 +59,8 @@ let () = UrlClient.def_article begin fun req res ->
     (str = Some (UrlClient.article_url_key broadcast)) in
 
   let main = Article.render_list key [broadcast] in
-  let left = Left.render iid in 
-  let html = VNavbar.public ~cuid ~left ~main instance in
+  let left = Left.render iid key in 
+  let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
   let title = match broadcast # content with 
     | `Post p -> p # title

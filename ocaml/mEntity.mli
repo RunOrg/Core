@@ -196,6 +196,10 @@ module All : sig
        'any # MAccess.context
     -> [`View] t list O.run
 
+  val get_public_future :
+       IInstance.t
+    -> [`View] t list O.run
+
   val get_public_granting :
        IInstance.t
     -> [`View] t list O.run

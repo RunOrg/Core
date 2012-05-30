@@ -59,9 +59,11 @@ let domain = match environment with
   | `Dev     -> "dev.runorg.com"
   | `Retheme -> "runorg.local"
 
-let core   = Action.Convenience.single_domain_server domain
-let client = Action.Convenience.sub_domain_server ("." ^ domain)
-let secure = Action.Convenience.single_domain_server ~secure:true domain
+let cookies = "." ^ domain
+
+let core   = Action.Convenience.single_domain_server ~cookies domain
+let client = Action.Convenience.sub_domain_server ~cookies ("." ^ domain)
+let secure = Action.Convenience.single_domain_server ~secure:true ~cookies domain
 
 let action f req res = 
   Run.with_context (ctx `FR) (f req res)

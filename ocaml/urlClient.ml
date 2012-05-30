@@ -6,7 +6,7 @@ open BatPervasives
 
 module A = Action.Args
 
-let website, def_website = O.declare O.client ""         A.none
+let website, def_website = O.declare O.client "" A.none
 
 (* Articles =============================================================================================== *)
 
@@ -22,6 +22,11 @@ let article_url_key b =
 
 let article_url key b = 
   Action.url article key (b # id, Some (article_url_key b))
+
+(* Public calendar ======================================================================================== *)
+
+let calendar, def_calendar = O.declare O.client "calendar" A.none
+let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 
 (* Intranet =============================================================================================== *)
 

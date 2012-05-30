@@ -98,7 +98,8 @@ let intranet (cuid,iid) =
 
   let menu key = 
     List.map (fun (url,label) -> (object
-      method url = url 
+      method url = url
+      method sel = false 
       method label = AdLib.write label
     end)) [
       UrlClient.home    key, `PageLayout_Navbar_Home ;
@@ -110,11 +111,21 @@ let intranet (cuid,iid) =
   
   render ~public:false ~menu (cuid,iid) 
 
-let public ~left ~main ~cuid instance = 
+let public menu ~left ~main ~cuid instance = 
 
   let! pic = ohm $ CPicture.large (instance # pic) in
   
-  let menu key = [] in
+  let menu key = 
+    List.map (fun (url,label,id) -> (object
+      method url = url 
+      method sel = id = menu
+      method label = AdLib.write label 
+    end)) [
+      Action.url UrlClient.website  key (), `PageLayout_Navbar_Public_Website,  `Home ;
+      Action.url UrlClient.calendar key (), `PageLayout_Navbar_Public_Calendar, `Calendar ;
+    ]
+  in
+
   let navbar = render ~public:true ~menu (cuid,Some (instance # id)) in
       
   let data = object

@@ -56,6 +56,5 @@ let notify error =
 let on_frontend ~server ~url ~user ~exn = 
   let error = make ~server ~url ~user ~exn in
   let id = Id.gen () in
-  MyTable.transaction id (MyTable.insert error) |> Run.bind 
-notify
+  MyTable.transaction id (MyTable.insert error) |> Run.bind notify
 

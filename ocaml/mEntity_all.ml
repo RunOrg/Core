@@ -159,3 +159,13 @@ let get_future ctx =
    ()
  in
  Run.list_filter (as_visible ctx) list
+
+let get_public_future iid = 
+  let! now = ohmctx (#time) in
+  let  now = MFmt.date_of_float 0. (* now *) in 
+  let! list = ohm $ CalendarView.doc_query
+    ~startkey:(iid,now)
+    ~endkey:(iid,"99991231")
+    ()
+  in
+  return $ BatList.filter_map as_public list

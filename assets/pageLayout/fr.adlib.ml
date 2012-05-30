@@ -8,3 +8,5 @@
 | `PageLayout_Navbar_Website -> "Site Web"
 | `PageLayout_Navbar_Intranet -> "Espace Membres"
 | `PageLayout_Foot_PoweredBy -> "Propulsé par"
+| `PageLayout_Navbar_Public_Website -> "Accueil"
+| `PageLayout_Navbar_Public_Calendar -> "Agenda"
