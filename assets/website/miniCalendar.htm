@@ -1,0 +1,56 @@
+<div class="mini-calendar">
+  <ul>  
+    {#list}
+      <li>
+	<a href="{url}">
+	  {?pic}<img src="{this}"/>{/?}
+	  <span class="-name">{name}</span>
+	  <span class="-date">{ `Date date }</span>
+	</a>
+      </li>
+    {/#}
+  </ul>
+  <a class="action-button" href="{url}">{`Website_MiniCalendar_Go}</a>
+</div>
+
+<style>
+.mini-calendar {
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 6px;
+    font-size: 14px;
+
+    li {
+      margin: 8px 0; 
+
+      a { 
+        display: block;
+        height: 35px;
+        &:hover { background-color: #EEE; } 
+      }
+
+      img { 
+        float: left;
+        width: 35px; 
+        height: 35px; 
+      } 
+
+      span {
+        color: #333;
+        display: block; 
+        margin-left: 43px;
+        overflow: hidden;
+        white-space: nowrap;
+        &.-date { 
+          font-size: 12px;
+          color: #888;
+        } 
+      }
+ 
+    }
+  }
+
+}
+</style>
