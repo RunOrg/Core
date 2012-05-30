@@ -69,7 +69,7 @@ let () = UrlClient.def_article begin fun req res ->
   let canonical_url = (UrlClient.article_url key broadcast)  in
 
   let! () = true_or (return (Action.redirect canonical_url res))
-    (str = UrlClient.article_url_key broadcast) in
+    (str = Some (UrlClient.article_url_key broadcast)) in
 
   let main = render_broadcasts key [broadcast] in
   let left = return $ Html.esc "LEFT" in

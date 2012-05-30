@@ -10,7 +10,7 @@ let website, def_website = O.declare O.client ""         A.none
 
 (* Articles =============================================================================================== *)
 
-let article, def_article = O.declare O.client "b" (A.rri IBroadcast.arg A.string)
+let article, def_article = O.declare O.client "b" (A.roi IBroadcast.arg A.string)
 
 let article_url_key b = 
   let title = match b # content with 
@@ -20,7 +20,7 @@ let article_url_key b =
   OhmSlug.make title
 
 let article_url key b = 
-  Action.url article key (b # id, article_url_key b)
+  Action.url article key (b # id, Some (article_url_key b))
 
 (* Intranet =============================================================================================== *)
 
