@@ -16,11 +16,15 @@ let render iid =
    
 let () = UrlClient.def_subscribe begin fun req res -> 
 
+  let! cuid, key, iid, instance = CClient.extract req res in
+
   return res
 
 end
 
 let () = UrlClient.def_unsubscribe begin fun req res -> 
+
+  let! cuid, key, iid, instance = CClient.extract req res in
 
   return res
 
