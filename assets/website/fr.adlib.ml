@@ -4,4 +4,5 @@
 
 | `Website_Count_Subscribers i -> if i = 1 then "Abonné" else "Abonnés"
 | `Website_Count_Articles i -> if i = 1 then "Article" else "Articles"
-| `Website_Subscribe_Call -> "Abonnez-vous pour recevoir par e-mail les nouveaux articles publiés sur ce blog !"
+| `Website_Subscribe_Call -> "Abonnez-vous et recevez par e-mail les nouveaux articles publiés sur ce blog !"
+| `Website_Subscribe_Button -> "Abonnement"

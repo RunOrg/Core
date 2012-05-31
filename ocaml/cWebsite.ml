@@ -4,17 +4,13 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Article = CWebsite_article
-module Left    = CWebsite_left
+module Article   = CWebsite_article
+module Left      = CWebsite_left
+module Subscribe = CWebsite_subscribe
 
 let () = UrlClient.def_website begin fun req res -> 
 
-  let  cuid = CSession.decay (CSession.check req) in
-  let  p404 = C404.render cuid res in
-
-  let  key      = req # server in
-  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
-  let! instance = ohm_req_or p404 $ MInstance.get iid in
+  let! cuid, key, iid, instance = CClient.extract req res in
 
   let main = Article.render_page iid key None in
   let left = Left.render iid key in 
@@ -26,12 +22,7 @@ end
 
 let () = UrlClient.def_articles begin fun req res -> 
 
-  let  cuid = CSession.decay (CSession.check req) in
-  let  p404 = C404.render cuid res in
-
-  let  key      = req # server in
-  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
-  let! instance = ohm_req_or p404 $ MInstance.get iid in
+  let! cuid, key, iid, instance = CClient.extract req res in
 
   let main = Article.render_page iid key (Some (req # args)) in
   let left = Left.render iid key in 
@@ -43,15 +34,10 @@ end
    
 let () = UrlClient.def_article begin fun req res -> 
 
-  let  cuid = CSession.decay (CSession.check req) in
-  let  p404 = C404.render cuid res in
-
-  let  key      = req # server in
-  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
-  let! instance = ohm_req_or p404 $ MInstance.get iid in
+  let! cuid, key, iid, instance = CClient.extract req res in
 
   let  bid, str  = req # args in
-  let! broadcast = ohm_req_or p404 $ MBroadcast.get bid in
+  let! broadcast = ohm_req_or (C404.render cuid res) $ MBroadcast.get bid in
   
   let canonical_url = (UrlClient.article_url key broadcast)  in
 

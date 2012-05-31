@@ -9,16 +9,17 @@
   </div>
   <div class="-body">
     <p>{`Website_Subscribe_Call}</p>
+    <center><a href="javascript:void(0)" class="action-button -green">{`Website_Subscribe_Button}</a></center>
   </div>
 </div> 
 
 <style>
 .subscribe {
   margin-top: 60px;
+  border: 1px solid #CCC; 
   .-head {
     overflow: hidden;
     padding-top: 2px;
-    border-top: 1px solid #CCC; 
     border-bottom: 1px solid #CCC;
     div { 
       width: 50%; 
@@ -30,10 +31,14 @@
       vertical-align: top
     } 
   }
-  .-body p {     
-    color: #555555;
-    margin: 10px 0;
-    font-size: 13px;
-  } 
+  .-body {
+    padding: 0 7px 7px;
+    .action-button { display: inline-block } 
+    p {     
+      color: #555555;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+  }  
 }
 </style>
