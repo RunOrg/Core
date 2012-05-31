@@ -1,28 +1,26 @@
 class SubStack 
 
-  constructor: (ctx,sel) -> 
+  constructor: ($old) -> 
     
-    @$ = ctx.$.find(sel)
-    @w  = @$.width()
+    @$ = $('<div/>').insertAfter $old
+    @w = $old.outerWidth()
     @stack = []
 
-    if @$.children().length	
-      $old = @$.children().detach()
+    $old.detach()
             
     @$l = $('<div/>').css { position: 'relative', overflow: 'hidden', left: '0px' } 
     @$c = $('<div/>').append(@$l).css { overflow: 'hidden' }
     @$.append(@$c) 
     @i  = 0
 
-    if $old
-      @push 'initial', $old
+    @push 'initial', $old
 
   pop: () ->
     while @stack.length > 1 + @i
       j = @stack.length - 1
       do @stack[j][1].parent().remove
       @stack.length = j      
-    @$l.css { width: @w * @stack.length } 
+    @$l.css { width: (@w + 15) * @stack.length } 
   
   push: (key,$what,data) ->
     do @pop 
@@ -30,15 +28,16 @@ class SubStack
     $box = $('<div/>').append($what).css 
       width: @w + 'px'  
       float: 'left' 
+      marginRight: 15
       overflow: 'hidden' 
     @$l.append $box
-    @$l.css { width: @w * @stack.length } 
+    @$l.css { width: (@w + 15) * @stack.length } 
     @move(@stack.length-1)
 
   move: (i) ->
     @show(i)  
     @i = i
-    @$l.stop().animate { left : (- @i * @w) + 'px' }, 'fast', () => 
+    @$l.stop().animate { left : (- @i * (@w + 15)) + 'px' }, 'fast', () => 
       do @pop
       do @hide
 
@@ -75,19 +74,19 @@ class SubStack
 theStack = null
 getStack = () -> 
   if theStack is null
-    theStack = new SubStack { $: $('body') }, '#substack'
+    theStack = new SubStack $ '#substack'
   theStack
 
 #>> stackPush(?key:string,html:html) 
 
-window.stackPush = (key,html) ->
+@stackPush = (key,html) ->
   key = key || 'dialog' 
   s = getStack()
   $h = $(html.html) 
   s.goto(key,$h)
-  call { $: $h }, html.code
+  call html.code
 
 #>> stackBack()
 
-window.stackBack = () -> 
+@stackBack = () -> 
   do getStack().back

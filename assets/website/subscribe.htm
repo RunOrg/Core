@@ -1,22 +1,61 @@
-<div class="subscribe">
-  <div class="-head">
-    <div style="float: left">
-      <span>{num_sbs | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Subscribers num_sbs}</small>
+<div {$full} class="subscribe {if follows}-follows{/if}">
+  <div class="-wrap">
+    <div class="-head">
+      <div style="float: left">
+	<span>{num_sbs | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Subscribers num_sbs}</small>
+      </div>
+      <div style="float: right">
+	<span>{num_brc | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Articles num_brc}</small>
+      </div>
     </div>
-    <div style="float: right">
-      <span>{num_brc | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Articles num_brc}</small>
+    <div {$body} class="-body">
+      {if follows} 
+        <p>{`Website_Unsubscribe_Call}</p>
+	<center>
+	  <a href="javascript:void(0)" class="action-button">{`Website_Unsubscribe_Button}</a>
+	</center>
+      {else}
+        <p>{`Website_Subscribe_Call}</p>
+	<center>
+	  <a href="javascript:void(0)" class="action-button -green">{`Website_Subscribe_Button}</a>
+	</center>
+      {/if} 
     </div>
-  </div>
-  <div class="-body">
-    <p>{`Website_Subscribe_Call}</p>
-    <center><a href="javascript:void(0)" class="action-button -green">{`Website_Subscribe_Button}</a></center>
-  </div>
-</div> 
+  </div> 
+</div>
+
+<script type="url:string,follows:bool">
+here.$body.find('a').click () -> 
+  $.post url, {_:0}, (result) -> 
+    call result.code if result.code
+    (if follows then unslide else slide) here.$full, result.replace if result.replace 
+</script>
 
 <style>
 .subscribe {
-  margin-top: 60px;
-  border: 1px solid #CCC; 
+
+  &.-follows {
+    .-wrap {
+      background-color: #EFE;
+      border: 1px solid #070;
+      box-shadow: 0 0 3px #888;
+    }
+    .-head { 
+      background-color: #4C4;
+      background: -webkit-linear-gradient(center top , #4C4 0%, #2A2 100%) repeat scroll 0 0 transparent;
+      background: -moz-linear-gradient(center top , #4C4 0%, #2A2 100%) repeat scroll 0 0 transparent;
+      border-bottom: 1px solid #070;
+      color: white;    
+      text-shadow: 0 -1px 0 #007700;
+      small { color: white } 
+    } 
+  }
+
+  padding-top: 60px;
+ 
+  .-wrap {
+    border: 1px solid #CCC; 
+  }
   .-head {
     overflow: hidden;
     padding-top: 2px;

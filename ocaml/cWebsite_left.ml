@@ -6,7 +6,7 @@ open BatPervasives
 
 module Subscribe = CWebsite_subscribe
 
-let render iid key = 
+let render cuid key iid = 
 
   let! calendar = ohm begin 
     
@@ -43,6 +43,6 @@ let render iid key =
 
   end in 
 
-  let! subscribe = ohm $ Subscribe.render iid in
+  let! subscribe = ohm $ Subscribe.render cuid key iid in
 
   return ( Html.concat [ calendar ; subscribe ] )

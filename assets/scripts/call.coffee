@@ -1,4 +1,3 @@
-call = (ctx,code) ->
+@call = (code) ->
   for e,i in code
-    f = eval('(' + e[0] + ')')
-    f.apply(ctx,e[1..])
+    eval('(' + e[0] + ')').apply(@,e[1..])
