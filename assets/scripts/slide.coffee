@@ -37,7 +37,7 @@ doSlide = (dir,$s,what) ->
 
   $l.css({ left: if dir then 0 else -15 - w }).animate 
     left: if dir then - 15 - w else 0, 
-    500,
+    'fast',
     () -> 
       $l.css { left : 0 } 
       do $o.remove

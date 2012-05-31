@@ -29,16 +29,30 @@ let respond cuid key iid res =
    
 let () = UrlClient.def_subscribe begin fun req res -> 
 
-  let! cuid, key, iid, _ = CClient.extract_ajax req res in
+  if req # post = None then return res else 
 
-  respond cuid key iid res
+    let! cuid, key, iid, _ = CClient.extract_ajax req res in
+    
+    let! () = ohm begin match cuid with 
+      | None -> return () 
+      | Some cuid -> MDigest.Subscription.subscribe cuid iid 
+    end in
+    
+    respond cuid key iid res
 
 end
 
 let () = UrlClient.def_unsubscribe begin fun req res -> 
 
-  let! cuid, key, iid, _ = CClient.extract_ajax req res in
+  if req # post = None then return res else 
 
-  respond cuid key iid res
+    let! cuid, key, iid, _ = CClient.extract_ajax req res in
+    
+    let! () = ohm begin match cuid with 
+      | None -> return () 
+      | Some cuid -> MDigest.Subscription.unsubscribe cuid iid 
+    end in
+    
+    respond cuid key iid res
 
 end
