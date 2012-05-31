@@ -7,11 +7,14 @@
       <span>{num_brc | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Articles num_brc}</small>
     </div>
   </div>
+  <div class="-body">
+    <p>{`Website_Subscribe_Call}</p>
+  </div>
 </div> 
 
 <style>
 .subscribe {
-  margin-top: 40px;
+  margin-top: 60px;
   .-head {
     overflow: hidden;
     padding-top: 2px;
@@ -27,5 +30,10 @@
       vertical-align: top
     } 
   }
+  .-body p {     
+    color: #555555;
+    margin: 10px 0;
+    font-size: 13px;
+  } 
 }
 </style>

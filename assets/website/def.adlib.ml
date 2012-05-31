@@ -4,3 +4,4 @@
 
 | `Website_Count_Subscribers of int
 | `Website_Count_Articles of int
+| `Website_Subscribe_Call 
