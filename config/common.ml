@@ -10,29 +10,61 @@ let infoField src kind = src, kind
 let infoItem ?label fields = label, fields
 let infoSection label items = label, items
 
+type groupConfig = [`Group|`Event] * [`Manual|`None] * [`Viewers|`Registered |`Managers] * [`Yes|`No]
+type collabConfig = [`Viewers|`Registered|`Managers] * [`Viewers|`Registered|`Managers] 
+
+type join = { 
+  j_name  : string ;
+  j_label : adlib ;
+  j_req   : bool ;
+  j_type  : [ `Checkbox | `Textarea | `LongText | `Date | `PickOne of adlib list | `PickMany of adlib list ]
+}
+
+let join ~name ~label ?(required=false) typ = {
+  j_name  = name ;
+  j_label = label ;
+  j_req   = required ;
+  j_type  = typ
+} 
+
 type template = string
 type template_data = {
   t_id : template ;
   t_old : string option ;
   t_name : adlib ;
   t_desc : adlib ;
+  t_join : join list ;
   t_page : infoSection list ;
+  t_group  : groupConfig option ;
+  t_wall   : collabConfig option ;
+  t_folder : collabConfig option ;
+  t_album  : collabConfig option
 } 
 
 let templates = ref []
 let adlibs    = ref [] 
 
-let adlib key (fr:string) = 
+let adlib key ?(old:string) (fr:string) = 
   try ignore (List.assoc key !adlibs) ; key
-  with Not_found ->  adlibs := (key, fr) :: !adlibs ; key
+  with Not_found ->  adlibs := (key, (old,fr)) :: !adlibs ; key
 
-let template id ?old ~kind ~name ~desc ~page () = 
+let groupConfig ~semantics ~validation ~read ~grant = semantics, validation, read,  grant
+let wallConfig ~read ~post = read, post
+let folderConfig = wallConfig
+let albumConfig = wallConfig
+
+let template id ?old ~kind ~name ~desc ?(join=[]) ?group ?wall ?folder ?album ~page () = 
   templates := {
-    t_id   = id  ;
-    t_old  = old ;
-    t_name = adlib ("Template_"^id^"_Name") name ;
-    t_desc = adlib ("Template_"^id^"_Desc") desc ;
-    t_page = page ;
+    t_id     = id  ;
+    t_old    = old ;
+    t_name   = adlib ("Template_"^id^"_Name") name ;
+    t_desc   = adlib ("Template_"^id^"_Desc") desc ;
+    t_join   = join ;
+    t_page   = page ;
+    t_group  = group ;
+    t_wall   = wall ;
+    t_folder = folder ;
+    t_album  = album
   } :: !templates ;
   id 
 
@@ -40,16 +72,20 @@ module Build = struct
 
   let adlibs_mli () =
     "include Ohm.Fmt.FMT with type t = \n  [ "
-    ^ String.concat "\n  | " (List.map (fun (key,value) -> "`" ^ key) (!adlibs))
-    ^ " ]\n\nval fr : t -> string"
+    ^ String.concat "\n  | " (List.map (fun (key,_) -> "`" ^ key) (!adlibs))
+    ^ " ]\n\nval fr : t -> string\n\nval recover: string -> t option\n"
 
   let adlibs_ml () = 
     "include Ohm.Fmt.Make(struct \n  type json t =\n    [ "
-    ^ String.concat "\n    | " (List.map (fun (key,value) -> "`" ^ key) (!adlibs))
+    ^ String.concat "\n    | " (List.map (fun (key,_) -> "`" ^ key) (!adlibs))
     ^ " ]\nend)\n\nlet fr = function "
-    ^ String.concat "" (List.map (fun (key,value) -> 
+    ^ String.concat "" (List.map (fun (key,(_,value)) -> 
       Printf.sprintf "\n  | `%s -> %S" key value) (!adlibs))
-    ^ "\n"
+    ^ "\n\nlet recover = function"
+    ^ String.concat "" (BatList.filter_map (fun (key,(old,_)) -> 
+      match old with None -> None | Some old -> 
+	Printf.sprintf "\n  | %S -> `%s" old key) (!adlibs))
+    ^ "\n  | _ -> None\n"
 
   let templateId_ml () = 
     "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
@@ -70,13 +106,53 @@ module Build = struct
       let old = match t.t_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
       Printf.sprintf "%S%s -> Some `%s" t.t_id old t.t_id) (!templates))
     ^ "\n  | _ -> None\n" 
+
+  let access = function
+    | `Registered -> "`Registered"
+    | `Viewers    -> "`Viewers"
+    | `Managers   -> "`Managers"
+
+  let template_ml () = 
+    "let group = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
+	| None -> "None"
+	| Some (semantics,valid,read,grant) -> Printf.sprintf 
+	  "Some (object method semantics = %s method validation = %s method read = %s method grant = %s end)"
+	  (match semantics with `Event -> "`Event" | `Group -> "`Group")
+	  (match valid with `Manual -> "`Manual" | `None -> "`None")
+	  (access read)
+	  (match grant with `Yes -> "`Yes" | `No -> "`No"))) (!templates))
+    ^ "\n\nlet wall = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_wall with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (!templates))
+    ^ "\n\nlet folder = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_folder with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (!templates))
+    ^ "\n\nlet album = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_album with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (!templates))
+
 end
 
 let build dir = 
   let list = [
     "preConfig_Adlibs.mli", Build.adlibs_mli () ;
     "preConfig_Adlibs.ml" , Build.adlibs_ml  () ;
-    "preConfig_TemplateId.ml", Build.templateId_ml () 
+    "preConfig_TemplateId.ml", Build.templateId_ml () ;
+    "preConfig_Template.ml", Build.template_ml () 
   ] in
   
   List.iter (fun (file,code) ->

@@ -6,6 +6,16 @@
        "Août" ; "Septembre" ; "Octobre" ; "Novembre" ; "Décembre" |].(t.Unix.tm_mon) 
     (t.Unix.tm_year + 1900) 
 
+| `WeekDate t -> 
+  let t = Unix.localtime t in
+  Printf.sprintf "%s %d %s %d"
+    [| "Dimanche" ; "Lundi" ; "Mardi" ; "Mercredi" ; "Jeudi" ; 
+       "Vendredi" ; "Samedi"  |].(t.Unix.tm_wday)
+    (t.Unix.tm_mday)
+    [| "Janvier" ; "Février" ; "Mars" ; "Avril" ; "Mai" ; "Juin" ; "Juillet" ;
+       "Août" ; "Septembre" ; "Octobre" ; "Novembre" ; "Décembre" |].(t.Unix.tm_mon) 
+    (t.Unix.tm_year + 1900) 
+
 | `DateRelative (time,now) -> 
   let default () = 
     let dnow  = Unix.gmtime now and dtime = Unix.gmtime time in

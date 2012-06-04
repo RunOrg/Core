@@ -2,6 +2,8 @@
 
 open Ohm
 
+module Defaults = PreConfig_Template
+
 module WithDefault = struct
   type 'a t = [ `Some of 'a | `None | `Default ] 
   let to_json json_of_t = function
@@ -17,12 +19,10 @@ end
 include Fmt.Make(struct
   type json t = <
    ?group : <
-     ?waiting_list : [`manual|`none] = `none ;
-     ?payment      : [`none] = `none ;
-     ?validation   : [`manual|`none] = `none ;
+     ?validation   : [`Manual "manual"|`None "none"] = `None ;
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
-     ?semantics    : [`group|`event] = `event ;
-     ?grant_tokens : [`yes|`no] = `no 
+     ?grant "grant_tokens" : [`Yes "yes"|`No "no"] = `No ;
+     ?semantics    : [`Group "group"|`Event "event"] = `Group ;
     > WithDefault.t = `None;
    ?wall : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
@@ -43,7 +43,7 @@ include Fmt.Make(struct
   >
 end)
 
-let default = of_json (Json.Object [
+let defaults = of_json (Json.Object [
   "group",  Json.Object [] ;
   "wall",   Json.Object [] ;
   "album",  Json.Object [] ;
@@ -51,21 +51,33 @@ let default = of_json (Json.Object [
   "votes",  Json.Object [] 
 ]) 
 
-let default_group  = BatOption.get default # group
-let default_wall   = BatOption.get default # wall
-let default_album  = BatOption.get default # album
-let default_folder = BatOption.get default # folder
-let default_votes  = BatOption.get default # votes 
+let get = function
+  | `Some x -> x
+  | _ -> assert false
+
+let default_group  = get defaults # group
+let default_wall   = get defaults # wall
+let default_album  = get defaults # album
+let default_folder = get defaults # folder
+let default_votes  = get defaults # votes 
+
+let default = object
+  method group  = `Default
+  method wall   = `Default
+  method album  = `Default
+  method folder = `Default
+  method votes  = `Default
+end
 
 module Diff = Fmt.Make(struct
   type json t = 
     [ `NoGroup 
     | `Group_WaitingList of [`manual|`none]
     | `Group_Payment of [`none]
-    | `Group_Validation of [`manual|`none]
+    | `Group_Validation of [`Manual "manual"|`None "none"]
     | `Group_PublicList of bool
-    | `Group_Semantics of [`group|`event]
-    | `Group_GrantTokens of [`yes|`no]
+    | `Group_Semantics of [`Group "group"|`Event "event"]
+    | `Group_GrantTokens of [`Yes "yes"|`No "no"]
     | `Group_Read of [`Viewers|`Registered|`Managers] 
     | `NoWall
     | `Wall_Hidden of bool
@@ -89,26 +101,20 @@ let names _ = []
 
 class editable_group ?(group=default_group) () = object
 
-  val waiting_list = group # waiting_list
-  val payment      = group # payment
   val validation   = group # validation
-  val semantics    = group # semantics
-  val grant_tokens = group # grant_tokens 
+  val grant        = group # grant
   val read         = group # read
+  val semantics    = group # semantics
 
-  method waiting_list = ( waiting_list : [`manual|`none])
-  method payment      = ( payment      : [`none])
-  method validation   = ( validation   : [`manual|`none])
-  method semantics    = ( semantics    : [`group|`event])
-  method grant_tokens = ( grant_tokens : [`yes|`no] )
-  method read         = ( read         : [`Viewers|`Registered|`Managers])
+  method semantics  = ( semantics    : [`Group|`Event])
+  method validation = ( validation   : [`Manual|`None])
+  method grant      = ( grant        : [`Yes|`No] )
+  method read       = ( read         : [`Viewers|`Registered|`Managers])
 
-  method set_waiting_list x = {< waiting_list = x >}
-  method set_payment      x = {< payment      = x >}
-  method set_validation   x = {< validation   = x >}
-  method set_semantics    x = {< semantics    = x >}
-  method set_grant_tokens x = {< grant_tokens = x >}
-  method set_read         x = {< read         = x >}
+  method set_validation x = {< validation = x >}
+  method set_grant      x = {< grant      = x >}
+  method set_read       x = {< read       = x >}
+  method set_semantics  x = {< semantics  = x >}
 
 end
 
@@ -156,13 +162,23 @@ let default_album  = new editable_album  ()
 let default_folder = new editable_folder ()
 let default_votes  = new editable_votes  ()
 
-class editable_config config = object (self)
+let default_map f = function
+  | `Some  x -> `Some (f x) 
+  | `None    -> `None
+  | `Default -> `Default
 
-  val group  = BatOption.map (fun group  -> new editable_group  ~group  ()) (config # group)
-  val wall   = BatOption.map (fun wall   -> new editable_wall   ~wall   ()) (config # wall)
-  val album  = BatOption.map (fun album  -> new editable_album  ~album  ()) (config # album) 
-  val folder = BatOption.map (fun folder -> new editable_folder ~folder ()) (config # folder)
-  val votes  = BatOption.map (fun votes  -> new editable_votes  ~votes  ()) (config # votes)
+let default_get f if_def if_none = function
+  | `Some x  -> x
+  | `None    -> if_none
+  | `Default -> match if_def with None -> if_none | Some def -> f def 
+ 
+class editable_config template config = object (self)
+
+  val group  = default_map (fun group  -> new editable_group  ~group  ()) (config # group)
+  val wall   = default_map (fun wall   -> new editable_wall   ~wall   ()) (config # wall)
+  val album  = default_map (fun album  -> new editable_album  ~album  ()) (config # album) 
+  val folder = default_map (fun folder -> new editable_folder ~folder ()) (config # folder)
+  val votes  = default_map (fun votes  -> new editable_votes  ~votes  ()) (config # votes)
 
   method group  = group
   method votes  = votes
@@ -170,47 +186,82 @@ class editable_config config = object (self)
   method album  = album
   method folder = folder
 
-  method edit_group  f = {< group  = Some (f (BatOption.default default_group  group )) >}
-  method edit_wall   f = {< wall   = Some (f (BatOption.default default_wall   wall  )) >}
-  method edit_album  f = {< album  = Some (f (BatOption.default default_album  album )) >}
-  method edit_folder f = {< folder = Some (f (BatOption.default default_folder folder)) >}
-  method edit_votes  f = {< votes  = Some (f (BatOption.default default_votes  votes )) >}
+  method edit_group  f = {< group  = `Some (f (default_get 
+						 (fun group  -> new editable_group  ~group ())
+						 (Defaults.group  template) default_group  group )) >}
+  method edit_wall   f = {< wall   = `Some (f (default_get 
+						 (fun wall   -> new editable_wall   ~wall ())
+						 (Defaults.wall   template) default_wall   wall  )) >}
+  method edit_album  f = {< album  = `Some (f (default_get 
+						 (fun album  -> new editable_album  ~album ()) 
+						 (Defaults.album  template) default_album  album )) >}
+  method edit_folder f = {< folder = `Some (f (default_get 
+						 (fun folder -> new editable_folder ~folder ())
+						 (Defaults.folder template) default_folder folder)) >}
+  method edit_votes  f = {< votes  = `Some (f (default_get 
+						 (fun votes  -> new editable_votes  ~votes  ())
+						 (None)                     default_votes  votes )) >}
 
   method apply : Diff.t -> 'a = function 
 
-    | `NoGroup -> {< group = None >}
-    | `Group_WaitingList x -> self # edit_group (fun g -> g # set_waiting_list x)
-    | `Group_Payment     x -> self # edit_group (fun g -> g # set_payment      x)
-    | `Group_Validation  x -> self # edit_group (fun g -> g # set_validation   x)
+    | `NoGroup -> {< group = `None >}
+    | `Group_WaitingList x -> self
+    | `Group_Payment     x -> self
+    | `Group_Validation  x -> self # edit_group (fun g -> g # set_validation x)
     | `Group_PublicList  x -> self 
-    | `Group_Semantics   x -> self # edit_group (fun g -> g # set_semantics    x)
-    | `Group_GrantTokens x -> self # edit_group (fun g -> g # set_grant_tokens x) 
-    | `Group_Read        x -> self # edit_group (fun g -> g # set_read         x)
+    | `Group_Semantics   x -> self # edit_group (fun g -> g # set_semantics  x)
+    | `Group_GrantTokens x -> self # edit_group (fun g -> g # set_grant      x) 
+    | `Group_Read        x -> self # edit_group (fun g -> g # set_read       x)
 
-    | `NoWall -> {< wall = None >}
+    | `NoWall -> {< wall = `None >}
     | `Wall_Hidden x -> self 
     | `Wall_Read   x -> self # edit_wall (fun w -> w # set_read x)
     | `Wall_Write  x -> self # edit_wall (fun w -> w # set_post x)
 
-    | `NoAlbum -> {< album = None >}
+    | `NoAlbum -> {< album = `None >}
     | `Album_Hidden x -> self
     | `Album_Read   x -> self # edit_album (fun a -> a # set_read x)
     | `Album_Write  x -> self # edit_album (fun a -> a # set_post x)
 
-    | `NoFolder -> {< folder = None >}
+    | `NoFolder -> {< folder = `None >}
     | `Folder_Hidden x -> self
     | `Folder_Read   x -> self # edit_folder (fun f -> f # set_read x)
     | `Folder_Write  x -> self # edit_folder (fun f -> f # set_post x)
 
-    | `NoVotes -> {< votes = None >}
+    | `NoVotes -> {< votes = `None >}
     | `Votes_Read x -> self # edit_votes (fun v -> v # set_read x)
     | `Votes_Vote x -> self # edit_votes (fun v -> v # set_vote x)    
     
 end
 
-let apply_diff config list = 
+let apply_diff template config list = 
   let result = 
     List.fold_left
-      (fun config diff -> config # apply diff) (new editable_config config) list
+      (fun config diff -> config # apply diff) (new editable_config template config) list
   in 
   ( result :> t )
+
+let group template t = match t # group with 
+  | `None    -> None
+  | `Some  x -> Some x
+  | `Default -> Defaults.group template
+
+let wall template t = match t # wall with 
+  | `None    -> None
+  | `Some  x -> Some x
+  | `Default -> Defaults.wall template
+
+let folder template t = match t # folder with 
+  | `None    -> None
+  | `Some  x -> Some x
+  | `Default -> Defaults.folder template
+
+let album template t = match t # album with 
+  | `None    -> None
+  | `Some  x -> Some x
+  | `Default -> Defaults.album template
+
+let votes template t = match t # votes with 
+  | `None    -> None
+  | `Some  x -> Some x
+  | `Default -> None

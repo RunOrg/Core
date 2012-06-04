@@ -1,6 +1,6 @@
 (* © 2012 RunOrg *)
 
-type 'rel id
+type 'rel id = PreConfig_TemplateId.t
 
 include Ohm.Fmt.FMT with type t = [`Unknown] id
   

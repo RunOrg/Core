@@ -5,7 +5,7 @@
     }
 
     function camelCase(s) {
-	var segs = s.split('-');
+	var segs = s.split(/[-.]/);
 	for (var k = 1; k < segs.length; ++k) 
 	    segs[k] = ucfirst(segs[k]);	
 	return segs.join('');
@@ -41,6 +41,13 @@
 	    return -1;
 	}
 
+	var join = [];
+	function join_field(key) {
+	    for (var i = 0; i < join.length; ++i) 
+		if (join[i].name == key) return i;
+	    return -1;
+	}
+
 	var config = {
 	    Group: null,
 	    Folder:  null,
@@ -54,6 +61,36 @@
 	    if (-1 === version.applies.indexOf(id)) continue;
 	    for (var p = 0; p < version.payload.length; ++p) {
 		var payload = version.payload[p];
+		if (payload[0] == 'Join') {
+		    var data = payload[1][1];
+		    switch (payload[1][0]) {
+		    case 'Move': 
+			var what = join_field(data[0]);
+			if (what < 0) break;
+			var to = data[1] ? join_field(data[1]) : 0;
+			if (to < 0) break;
+			while (what < to) {
+			    var temp = join[what];
+			    join[what] = join[what+1];
+			    join[what+1] = temp;
+			    ++what;
+			}
+			while (what > to) {
+			    var temp = join[what];
+			    join[what] = join[what-1];
+			    join[what-1] = temp;
+			    --what;
+			}
+			break;			
+		    case 'Add': 
+			var pos = join_field(data.name);
+			if (pos < 0) join.push(data);
+			else join[pos] = data;
+			break;
+		    default:
+			console.log(payload[1]);
+		    }
+		}
 		if (payload[0] == 'Config') {
 		    var key = payload[1][0].split('_');
 		    if (key.length == 2) {
@@ -174,7 +211,6 @@
 	    }
 	}
 
-
 	var key = camelCase(id);
 	var Id = ucfirst(key); 
 
@@ -187,7 +223,8 @@
 	console.log('  ~desc:"%s"', i18n[t.desc]);
 
 	if (config.Group !== null) {
-	    console.log('  ~group:(groupConfig ~validation:`%s ~read:`%s ~grant:`%s)',
+	    console.log('  ~group:(groupConfig ~semantics:`%s ~validation:`%s ~read:`%s ~grant:`%s)',
+			ucfirst(config.Group.Semantics || 'group'),
 			ucfirst(config.Group.Validation || 'none'),
 			config.Group.Read || 'Viewers',
 			ucfirst(config.Group.GrantTokens || 'no'));
@@ -207,6 +244,36 @@
 	    console.log('  ~album:(albumConfig ~read:`%s ~post:`%s)',
 			config.Album.Read || 'Viewers', config.Album.Post || 'Viewers');
 	}
+
+	console.log('  ~join:[');
+	
+	for (var j = 0; j < join.length; ++j) {
+
+	    var edit = '';
+	    if (join[j].edit == 'longtext') edit = '`LongText';
+	    if (join[j].edit == 'date') edit = '`Date';
+	    if (join[j].edit == 'textarea') edit = '`Textarea';
+	    if (join[j].edit == 'checkbox') edit = '`Checkbox';
+	    if (join[j].edit[0] == 'pickOne' || join[j].edit[0] == 'pickMany') {
+		edit = ["\n      (`", ucfirst(join[j].edit[0]), " ["];
+		for (var k = 0; k < join[j].edit[1].length; ++k) {
+		    if (k != 0) edit.push(' ;');
+		    edit.push("\n         adlib \"", ucfirst(camelCase(join[j].edit[1][k])),
+			      '" "', i18n[join[j].edit[1][k]], '"');
+		}
+		edit.push(' ] )');
+		edit = edit.join('');
+	    }
+
+	    var s = ['    join ~name:"',join[j].name,'" ~label:(adlib "', 
+		     ucfirst(camelCase(join[j].label)), '" "',
+		     i18n[join[j].label],'")',
+		     join[j].required ? ' ~required:true' : '', " ", edit, ' ;'];
+
+	    console.log(s.join(''));
+	}
+
+	console.log('  ]');
 
 	console.log('  ~page:[');
 

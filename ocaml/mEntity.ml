@@ -111,11 +111,6 @@ let bot_update id ?draft ?public ?name ?data ?(config=[]) () =
 
 let _create ?(admin=false) ?name template iid creator_opt = 
 
-  let! tmpl = req_or 
-    (Run.of_lazy (lazy (raise (UnknownTemplate (ITemplate.decay template)))))
-    (MVertical.Template.get (ITemplate.decay template)) 
-  in
-
   let! id, gid = ohm (
     match name with 
       | None      -> return (IEntity.gen (), IGroup.gen ()) 
@@ -143,10 +138,8 @@ let _create ?(admin=false) ?name template iid creator_opt =
     BatOption.default MPreConfig.last_template_version $
       BatOption.map (#version) instance
   in
-
-  let diffs = MEntity_version.get_preconfig_diffs (tmpl # diffs) min_version max_version in  
   
-  let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,admin,diffs,creator_opt) in
+  let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,admin,template,creator_opt) in
 
   let! data = ohm begin
     MEntity_data.create
@@ -203,7 +196,7 @@ let set_grants ctx eids =
   let to_add    = List.filter (fun eid -> not (List.mem eid current)) eids in 
 
   let set_grant grant id = 
-    let  diffs    = [ `Config [`Group_GrantTokens (if grant then `yes else `no)] ] in
+    let  diffs    = [ `Config [`Group_GrantTokens (if grant then `Yes else `No)] ] in
     let! previous = ohm_req_or (return ()) $ E.Table.get id in
     if previous.E.instance <> iid then return () else  
       let! _ = ohm $ E.Store.update ~id ~info ~diffs () in

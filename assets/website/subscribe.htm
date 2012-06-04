@@ -8,28 +8,35 @@
 	<span>{num_brc | string_of_int | esc}</span>&ensp;<small>{`Website_Count_Articles num_brc}</small>
       </div>
     </div>
-    <div {$body} class="-body">
-      {if follows} 
-        <p>{`Website_Unsubscribe_Call}</p>
-	<center>
-	  <a href="javascript:void(0)" class="action-button">{`Website_Unsubscribe_Button}</a>
-	</center>
-      {else}
+    {?form}
+      <div class="-body">
         <p>{`Website_Subscribe_Call}</p>
-	<center>
-	  <a href="javascript:void(0)" class="action-button -green">{`Website_Subscribe_Button}</a>
-	</center>
-      {/if} 
-    </div>
-  </div> 
-</div>
-
-<script type="url:string,follows:bool">
+	{ this | ohm } 
+      </div>
+    {else}
+      <div {$body} class="-body">      
+        {if follows} 
+          <p>{`Website_Unsubscribe_Call}</p>
+  	  <center>
+	    <a href="javascript:void(0)" class="action-button">{`Website_Unsubscribe_Button}</a>
+	  </center>
+        {else}
+          <p>{`Website_Subscribe_Call}</p>
+	  <center>
+	    <a href="javascript:void(0)" class="action-button -green">{`Website_Subscribe_Button}</a>
+	  </center>
+        {/if} 
+      </div>
+      <script type="url:string,follows:bool">
 here.$body.find('a').click () -> 
   $.post url, {_:0}, (result) -> 
     call result.code if result.code
-    (if follows then unslide else slide) here.$full, result.replace if result.replace 
-</script>
+      (if follows then unslide else slide) here.$full, result.replace if result.replace 
+      </script>
+    {/?}
+  </div> 
+</div>
+
 
 <style>
 .subscribe {
@@ -51,7 +58,7 @@ here.$body.find('a').click () ->
     } 
   }
 
-  padding-top: 60px;
+  padding-bottom: 60px;
  
   .-wrap {
     border: 1px solid #CCC; 

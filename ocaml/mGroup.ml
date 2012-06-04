@@ -404,20 +404,20 @@ let _refresh_token_grant =
       let! t      = ohm_req_or finish $ MEntity.bot_get eid in
       
       let  config       = MEntity.Get.config t in
-      let! group_config = req_or finish (config # group) in
+      let! group_config = req_or finish (MEntityConfig.group (MEntity.Get.template t) config) in
       let  gid          = MEntity.Get.group  t in
       
       let grants = 
-	(match group_config # grant_tokens with 
-	  | `yes -> true
-	  | `no -> false
+	(match group_config # grant with 
+	  | `Yes -> true
+	  | `No -> false
 	) && not (MEntity.Get.inactive t) 
       in
       
       let manual = 
 	(match group_config # validation with 
-	  | `manual -> true
-	  | `none   -> false)
+	  | `Manual -> true
+	  | `None   -> false)
       in
       
       let! () = ohm $ refresh (IGroup.Assert.bot gid) ~grants ~manual in

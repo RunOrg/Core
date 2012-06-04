@@ -86,7 +86,8 @@ module EntityCoreConfig = struct
 
   let apply = function
     | `Admin  a     -> return (fun id time t -> return (apply_admin t a))
-    | `Config diffs -> return (fun id time t -> return Data.({ t with config = MEntityConfig.apply_diff t.config diffs }))
+    | `Config diffs -> return (fun id time t -> return Data.({ t with config = 
+	MEntityConfig.apply_diff t.template t.config diffs }))
     | `Access set   -> return (fun id time t -> return (apply_access t set))
     | `Status set   -> return (fun id time t -> return (apply_status t set))       
     | `Version v    -> return (fun id time t -> return Data.({ t with version = v }))

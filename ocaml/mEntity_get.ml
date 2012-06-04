@@ -31,7 +31,7 @@ let real_access   t =
   let e = get t in
   if e.E.public then `Public else
     let access = MAccess.summarize e.E.view in
-    if config # group <> None then 
+    if MEntityConfig.group e.E.template config <> None then 
       match access with 
 	| `Admin -> `Invite
 	| any    -> any 
@@ -40,17 +40,19 @@ let real_access   t =
 
 let grants t = 
   let config = config t in 
-  match config # group with None -> false | Some config -> 
-    match config # grant_tokens with 
-      | `yes -> true
-      | `no  -> false
+  let e = get t in
+  match MEntityConfig.group e.E.template config with None -> false | Some config -> 
+    match config # grant with 
+      | `Yes -> true
+      | `No  -> false
 
 let on_add t = 
-  let config = config t in 
-  match config # group with None -> `ignore | Some config ->
+  let config = config t in
+  let e = get t in 
+  match MEntityConfig.group e.E.template config with None -> `ignore | Some config ->
     match config # semantics with 
-      | `group -> `add
-      | `event -> `invite
+      | `Group -> `add
+      | `Event -> `invite
 
 let group t = (get t).E.group
       	

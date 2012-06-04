@@ -1,31 +1,60 @@
 (* © 2012 MRunOrg *)
 
+module WithDefault : sig
+  type 'a t = [ `Some of 'a | `None | `Default ]
+end
+
 include Ohm.Fmt.FMT with type t = <
   group : <
-    waiting_list : [`manual|`none] ;
-    payment      : [`none] ;
-    validation   : [`manual|`none] ;
-    semantics    : [`group|`event] ;
-    grant_tokens : [`yes|`no] ;
-    read         : [`Viewers|`Registered|`Managers] ;
-  > option ;
+    validation : [`Manual|`None] ;
+    grant      : [`Yes|`No] ;
+    semantics  : [`Group|`Event] ;
+    read       : [`Viewers|`Registered|`Managers] ;
+  > WithDefault.t ;
   wall : <
     read         : [`Viewers|`Registered|`Managers] ;
     post         : [`Viewers|`Registered|`Managers] ;
-  > option ;
+  > WithDefault.t ;
   folder : <
     read         : [`Viewers|`Registered|`Managers] ;
     post         : [`Viewers|`Registered|`Managers] ;
-  > option ;
+  > WithDefault.t ;
   album : <
     read         : [`Viewers|`Registered|`Managers] ;
     post         : [`Viewers|`Registered|`Managers] ;
-  > option ;
+  > WithDefault.t ;
   votes : <
     read         : [`Viewers|`Registered|`Managers] ;
     vote         : [`Viewers|`Registered|`Managers] ;
-  > option 
+  > WithDefault.t 
 >
+
+val group : ITemplate.t -> t -> <
+  validation : [`Manual|`None] ;
+  semantics  : [`Group|`Event] ;
+  grant      : [`Yes|`No] ;
+  read       : [`Viewers|`Registered|`Managers]
+> option
+
+val wall : ITemplate.t -> t -> <
+  read : [`Viewers|`Registered|`Managers] ;
+  post : [`Viewers|`Registered|`Managers] ;
+> option
+
+val folder : ITemplate.t -> t -> <
+  read : [`Viewers|`Registered|`Managers] ;
+  post : [`Viewers|`Registered|`Managers] ;
+> option
+
+val album : ITemplate.t -> t -> <
+  read : [`Viewers|`Registered|`Managers] ;
+  post : [`Viewers|`Registered|`Managers] ;
+> option
+
+val votes : ITemplate.t -> t -> <
+  read : [`Viewers|`Registered|`Managers] ;
+  vote : [`Viewers|`Registered|`Managers] ;
+> option
 
 val default : t
 
@@ -33,10 +62,10 @@ module Diff : Ohm.Fmt.FMT with type t =
   [ `NoGroup 
   | `Group_WaitingList of [`manual|`none]
   | `Group_Payment of [`none]
-  | `Group_Validation of [`manual|`none]
+  | `Group_Validation of [`Manual|`None]
   | `Group_PublicList of bool
-  | `Group_Semantics of [`group|`event]
-  | `Group_GrantTokens of [`yes|`no]
+  | `Group_Semantics of [`Group|`Event]
+  | `Group_GrantTokens of [`Yes|`No]
   | `Group_Read of [`Viewers|`Registered|`Managers] 
   | `NoWall
   | `Wall_Hidden of bool
@@ -57,4 +86,4 @@ module Diff : Ohm.Fmt.FMT with type t =
 
 val names : Diff.t -> (string * string) list
 
-val apply_diff : t -> Diff.t list -> t
+val apply_diff : ITemplate.t -> t -> Diff.t list -> t
