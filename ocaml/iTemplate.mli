@@ -1,13 +1,20 @@
-(* © 2012 IRunOrg *)
+(* © 2012 RunOrg *)
 
-include Ohm.Id.PHANTOM
+type 'rel id
+
+include Ohm.Fmt.FMT with type t = [`Unknown] id
   
+val to_string : 'any id -> string
+val of_string : string -> t option
+
+val decay : 'any id -> t
+
 module Assert : sig
   val can_create       : 'any id -> [`Create] id
 end
   
 module Deduce : sig
-  val make_create_token : [`Create] id -> [<`IsContact|`IsMember|`IsAdmin] IIsIn.id -> string
-  val from_create_token : 'any id      -> [<`IsContact|`IsMember|`isAdmin] IIsIn.id -> string -> [`Create] id option
+  val make_create_token : [`Create] id -> [<`IsMember|`IsAdmin] IIsIn.id -> string
+  val from_create_token : 'any id      -> [<`IsMember|`isAdmin] IIsIn.id -> string -> [`Create] id option
 end
 

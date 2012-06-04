@@ -7,6 +7,7 @@ open BatPervasives
 module Article   = CWebsite_article
 module Left      = CWebsite_left
 module Subscribe = CWebsite_subscribe
+module Calendar  = CWebsite_calendar
 
 let () = UrlClient.def_website begin fun req res -> 
 

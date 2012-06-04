@@ -323,7 +323,11 @@ let listener_create email =
       (id, false), `put obj
   in
   
-  MyTable.transaction id (fun id -> MyTable.get id |> Run.map update) 
+  let! id, exists = ohm $ MyTable.transaction id (fun id -> MyTable.get id |> Run.map update) in
+  
+  if exists then return None else
+    (* We have created or retrieved a new, unconfirmed listener *)
+    return $ Some (IUser.Assert.is_new id)
 
 let _facebook_update uid facebook details = 
 

@@ -1,6 +1,18 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
+
+module WithDefault = struct
+  type 'a t = [ `Some of 'a | `None | `Default ] 
+  let to_json json_of_t = function
+    | `Some t  -> json_of_t t 
+    | `None    -> Json.Null
+    | `Default -> Json.String "d"
+  let of_json t_of_json = function
+    | Json.Null       -> `None
+    | Json.String "d" -> `Default
+    | json            -> `Some (t_of_json json)
+end
 
 include Fmt.Make(struct
   type json t = <
@@ -11,23 +23,23 @@ include Fmt.Make(struct
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?semantics    : [`group|`event] = `event ;
      ?grant_tokens : [`yes|`no] = `no 
-    > option ;
+    > WithDefault.t = `None;
    ?wall : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?post         : [`Viewers|`Registered|`Managers] = `Viewers 
-    > option ;
+    > WithDefault.t = `None ;
    ?folder : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?post         : [`Viewers|`Registered|`Managers] = `Viewers 
-    > option ;
+    > WithDefault.t = `None ;
    ?album : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?post         : [`Viewers|`Registered|`Managers] = `Viewers 
-    > option ;
+    > WithDefault.t = `None ;
    ?votes : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?vote         : [`Viewers|`Registered|`Managers] = `Viewers 
-    > option 
+    > WithDefault.t = `None
   >
 end)
 
@@ -46,86 +58,6 @@ let default_folder = BatOption.get default # folder
 let default_votes  = BatOption.get default # votes 
 
 module Diff = Fmt.Make(struct
-
-(*
-  let edit = JoyA.variant [
-    JoyA.alternative ~label:"Liste de membres : supprimer" "NoGroup";
-    JoyA.alternative ~label:"Liste de membres : validation"
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Validation manuelle" "manual" ;
-	JoyA.alternative ~label:"Validation automatique" "none" 
-      ]) "Group_Validation" ;
-    JoyA.alternative ~label:"Liste de membres : sémantique"
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"\"Membres\"" "group" ;
-	JoyA.alternative ~label:"\"Participants\"" "event" ;
-      ]) "Group_Semantics" ;
-    JoyA.alternative ~label:"Liste de membres : droits visibilité" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Group_Read" ;
-    JoyA.alternative ~label:"Liste des membres : attribution de jetons"
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Pas de jetons" "no" ;
-	JoyA.alternative ~label:"Les inscrits reçoivent un jeton" "yes"
-      ]) "Group_GrantTokens" ;
-    JoyA.alternative ~label:"Mur : supprimer" "NoWall" ;
-    JoyA.alternative ~label:"Mur : droits lecture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Wall_Read" ;
-    JoyA.alternative ~label:"Mur : droits écriture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Wall_Write" ;
-    JoyA.alternative ~label:"Album : supprimer" "NoAlbum" ;
-    JoyA.alternative ~label:"Album : droits lecture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Album_Read" ;
-    JoyA.alternative ~label:"Album : droits écriture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Album_Write" ;
-    JoyA.alternative ~label:"Fichiers : supprimer" "NoFolder" ;
-    JoyA.alternative ~label:"Fichiers : droits lecture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Folder_Read" ;
-    JoyA.alternative ~label:"Fichiers : droits écriture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Folder_Write" ;
-    JoyA.alternative ~label:"Votes : supprimer" "NoVotes" ;
-    JoyA.alternative ~label:"Votes : droits lecture" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Votes_Read" ;
-    JoyA.alternative ~label:"Votes : droits de vote" 
-      ~content:(JoyA.variant [
-	JoyA.alternative ~label:"Tous les membres qui voient l'entité" "Viewers" ;
-	JoyA.alternative ~label:"Tous les membres inscrits à l'entité" "Registered" ;
-	JoyA.alternative ~label:"Uniquement les responsables" "Managers" ;
-      ]) "Votes_Vote" ;
-  ] 
-*)
-
   type json t = 
     [ `NoGroup 
     | `Group_WaitingList of [`manual|`none]
