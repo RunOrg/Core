@@ -27,6 +27,24 @@ let join ~name ~label ?(required=false) typ = {
   j_type  = typ
 } 
 
+type field = {
+  f_label : adlib ;
+  f_help  : adlib option ;
+  f_mean  : [`Summary | `Picture | `Description | `Date | `Location | `Enddate ] option ;
+  f_edit  : [ `Textarea | `LongText | `Picture | `Date ] ;
+  f_key   : string ;
+  f_req   : bool 
+}
+
+let field ~label ?help ?mean ?(required=false) edit key = {
+  f_label = label ;
+  f_help  = help ;
+  f_mean  = mean ; 
+  f_req   = required ;
+  f_edit  = edit ;
+  f_key   = key 
+}
+
 type template = string
 type template_data = {
   t_id : template ;
@@ -39,7 +57,8 @@ type template_data = {
   t_group  : groupConfig option ;
   t_wall   : collabConfig option ;
   t_folder : collabConfig option ;
-  t_album  : collabConfig option
+  t_album  : collabConfig option ;
+  t_fields : field list ;
 } 
 
 let templates = ref []
@@ -55,7 +74,7 @@ let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
 
-let template id ?old ~kind ~name ~desc ?(join=[]) ?group ?wall ?folder ?album ~page () = 
+let template id ?old ~kind ~name ~desc ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
   templates := {
     t_id     = id  ;
     t_old    = old ;
@@ -67,7 +86,8 @@ let template id ?old ~kind ~name ~desc ?(join=[]) ?group ?wall ?folder ?album ~p
     t_group  = group ;
     t_wall   = wall ;
     t_folder = folder ;
-    t_album  = album
+    t_album  = album ;
+    t_fields = fields
   } :: !templates ;
   id 
 
