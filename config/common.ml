@@ -136,6 +136,8 @@ module Build = struct
     | `Managers   -> "`Managers"
 
   let template_ml () = 
+
+    (* Basic configuration data ============================================================================= *)
     "let group = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
@@ -167,6 +169,8 @@ module Build = struct
 	| Some (read,post) -> Printf.sprintf 
 	  "Some (object method read = %s method post = %s end)"
 	  (access read) (access post))) (!templates))
+
+      (* Join form fields =================================================================================== *)
     ^ "\n\nlet join = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> [\n    %s ]" t.t_id 
@@ -185,6 +189,8 @@ module Build = struct
 		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l)))
 	    ) t.t_join)
 	)) (!templates))
+
+      (* The kind of a template ============================================================================= *)
     ^ "\n\nlet kind = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> `%s" t.t_id (match t.t_kind with 
@@ -195,6 +201,27 @@ module Build = struct
 	| `Course -> "Course"
 	| `Poll -> "Poll"
 	| `Album -> "Album")) (!templates))
+
+      (* The field name, by meaning ========================================================================= *)
+    ^ "\n\nmodule Meaning = struct\n\n"
+    ^ String.concat "\n\n" begin
+      List.map (fun (mean,meanstr) -> 
+	Printf.sprintf "  let %s = function\n  | %s" meanstr 
+	  (String.concat "\n  | " (List.map (fun t -> 
+	    "`" ^ t.t_id ^ " -> " ^ begin 
+	      try let f = List.find (fun f -> f.f_mean = Some mean) t.t_fields in
+		  Printf.sprintf "Some %S" f.f_key
+	      with Not_found -> "None"
+	    end
+	   ) (!templates)))
+      ) [ `Description, "description" ;
+	  `Date,        "date" ;
+	  `Summary,     "summary" ;
+	  `Enddate,     "endDate" ;
+	  `Location,    "location" ;
+	  `Picture,     "picture" ] 
+    end
+    ^ "\n\nend"
 end
 
 let build dir = 
