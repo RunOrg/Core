@@ -10,7 +10,7 @@ let infoField src kind = src, kind
 let infoItem ?label fields = label, fields
 let infoSection label items = label, items
 
-type groupConfig = [`Group|`Event] * [`Manual|`None] * [`Viewers|`Registered |`Managers] * [`Yes|`No]
+type groupConfig = [`Group|`Event] * [`Manual|`None] * [`Viewers|`Registered|`Managers] * [`Yes|`No]
 type collabConfig = [`Viewers|`Registered|`Managers] * [`Viewers|`Registered|`Managers] 
 
 type join = { 
@@ -34,6 +34,7 @@ type template_data = {
   t_name : adlib ;
   t_desc : adlib ;
   t_join : join list ;
+  t_kind : [ `Group | `Subscription | `Event | `Album | `Forum | `Course | `Poll ] ;  
   t_page : infoSection list ;
   t_group  : groupConfig option ;
   t_wall   : collabConfig option ;
@@ -44,7 +45,8 @@ type template_data = {
 let templates = ref []
 let adlibs    = ref [] 
 
-let adlib key ?(old:string) (fr:string) = 
+let adlib key ?(old:string option) (fr:string) = 
+  let key = match key.[0] with '0' .. '9' -> "_" ^ key | _ -> key in
   try ignore (List.assoc key !adlibs) ; key
   with Not_found ->  adlibs := (key, (old,fr)) :: !adlibs ; key
 
@@ -57,6 +59,7 @@ let template id ?old ~kind ~name ~desc ?(join=[]) ?group ?wall ?folder ?album ~p
   templates := {
     t_id     = id  ;
     t_old    = old ;
+    t_kind   = kind ;
     t_name   = adlib ("Template_"^id^"_Name") name ;
     t_desc   = adlib ("Template_"^id^"_Desc") desc ;
     t_join   = join ;
@@ -82,8 +85,8 @@ module Build = struct
     ^ String.concat "" (List.map (fun (key,(_,value)) -> 
       Printf.sprintf "\n  | `%s -> %S" key value) (!adlibs))
     ^ "\n\nlet recover = function"
-    ^ String.concat "" (BatList.filter_map (fun (key,(old,_)) -> 
-      match old with None -> None | Some old -> 
+    ^ String.concat "" (List.map (fun (key,(old,_)) -> 
+      match old with None -> "" | Some old -> 
 	Printf.sprintf "\n  | %S -> `%s" old key) (!adlibs))
     ^ "\n  | _ -> None\n"
 
@@ -144,7 +147,34 @@ module Build = struct
 	| Some (read,post) -> Printf.sprintf 
 	  "Some (object method read = %s method post = %s end)"
 	  (access read) (access post))) (!templates))
-
+    ^ "\n\nlet join = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> [\n    %s ]" t.t_id 
+	(String.concat ";\n    " 
+	   (List.map (fun j -> Printf.sprintf 
+	     "(object\n      method name = %S\n      method label = `label `%s\n      method valid = [%s]\n      method edit = %s\n    end)"
+	     j.j_name j.j_label (if j.j_req then "`required" else "") 
+	     (match j.j_type with 
+	       | `Textarea -> "`Textarea"
+	       | `Checkbox -> "`Checkbox"
+	       | `LongText -> "`LongText"
+	       | `Date     -> "`Date"
+	       | `PickOne  l -> Printf.sprintf "`PickOne [%s]"
+		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l))
+	       | `PickMany l -> Printf.sprintf "`PickMany [%s]"
+		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l)))
+	    ) t.t_join)
+	)) (!templates))
+    ^ "\n\nlet kind = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> `%s" t.t_id (match t.t_kind with 
+	| `Group -> "Group"
+	| `Subscription -> "Subscription"
+	| `Event -> "Event"
+	| `Forum -> "Forum"
+	| `Course -> "Course"
+	| `Poll -> "Poll"
+	| `Album -> "Album")) (!templates))
 end
 
 let build dir = 

@@ -56,11 +56,58 @@
 	    Votes: null
 	};
 
+	var fields = [];
+	function find_field(key) {
+	    for (var i = 0; i < fields.length; ++i)
+		if (fields[i].key == key) return i;
+	    return -1;
+	}
+
 	for (var v = 0; v < versions.length; ++v) {
 	    var version = versions[v];
 	    if (-1 === version.applies.indexOf(id)) continue;
 	    for (var p = 0; p < version.payload.length; ++p) {
 		var payload = version.payload[p];
+		if (payload[0] == 'Field') {
+		    var data = payload[1][1];
+		    switch (payload[1][0]) {
+		    case 'Add':
+			var put = data[1]; put.key = data[0];
+			var pos = find_field(data[0]);
+			if (pos < 0) fields.push(put);
+			else fields[pos] = put;
+			break;
+		    case 'Remove':
+			var pos = find_field(data);
+			if (pos < 0) break;
+			while (pos < fields.length - 1) {
+			    fields[pos] = fields[pos+1];
+			    ++pos;
+			}
+			fields.length = fields.length - 1;
+			break;
+		    case 'Move':
+			var what = find_field(data[0]);
+			if (what < 0) break;
+			var to = data[1] ? find_field(data[1]) : 0;
+			if (to < 0) break;
+			while (what < to) {
+			    var temp = fields[what];
+			    fields[what] = fields[what+1];
+			    fields[what+1] = temp;
+			    ++what;
+			}
+			while (what > to) {
+			    var temp = fields[what];
+			    fields[what] = fields[what-1];
+			    fields[what-1] = temp;
+			    --what;
+			}
+			break;			
+		    default:
+			console.log(payload[1]);
+		    }
+		}
 		if (payload[0] == 'Join') {
 		    var data = payload[1][1];
 		    switch (payload[1][0]) {
@@ -245,6 +292,34 @@
 			config.Album.Read || 'Viewers', config.Album.Post || 'Viewers');
 	}
 
+	console.log('  ~fields:[');
+
+	for (var f = 0; f < fields.length; ++f) {
+	    var s = ['    field ~label:(adlib "', 
+		     ucfirst(camelCase(fields[f].label)), '" "',
+		     i18n[fields[f].label],'")'];
+
+	    if (fields[f].explain) 
+		s.push("\n",'          ~help:(adlib "', 
+		       ucfirst(camelCase(fields[f].explain)),'" "',
+		       i18n[fields[f].explain],'")');
+
+
+	    if (fields[f].valid.length > 0) 
+		s.push("\n",'          ~required:true');
+
+	    if (fields[f].mean) 
+		s.push("\n",'          ~mean:`', ucfirst(fields[f].mean));
+
+	    s.push("\n",'          `', 
+		   (fields[f].edit == 'longtext' ? 'LongText' : ucfirst(fields[f].edit)),
+		   ' "', fields[f].key, '" ;');
+		       
+	    console.log(s.join(''));
+	}
+
+	console.log('  ]');
+
 	console.log('  ~join:[');
 	
 	for (var j = 0; j < join.length; ++j) {
@@ -259,6 +334,7 @@
 		for (var k = 0; k < join[j].edit[1].length; ++k) {
 		    if (k != 0) edit.push(' ;');
 		    edit.push("\n         adlib \"", ucfirst(camelCase(join[j].edit[1][k])),
+			      '" ~old:"', join[j].edit[1][k],
 			      '" "', i18n[join[j].edit[1][k]], '"');
 		}
 		edit.push(' ] )');
@@ -266,8 +342,9 @@
 	    }
 
 	    var s = ['    join ~name:"',join[j].name,'" ~label:(adlib "', 
-		     ucfirst(camelCase(join[j].label)), '" "',
-		     i18n[join[j].label],'")',
+		     ucfirst(camelCase(join[j].label)), 
+		     '" ~old:"', join[j].label,
+		     '" "', i18n[join[j].label],'")',
 		     join[j].required ? ' ~required:true' : '', " ", edit, ' ;'];
 
 	    console.log(s.join(''));

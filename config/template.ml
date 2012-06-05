@@ -12,6 +12,21 @@ let admin = template "Admin"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -34,6 +49,21 @@ let albumSimple = template "AlbumSimple"
   ~name:"Album Photo Simple"
   ~desc:"Contribution libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -59,31 +89,63 @@ let course12sessions = template "Course12sessions"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldTeacher" "Formateur")
+          `LongText "teacher" ;
+    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
+          `Textarea "curriculum" ;
+    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
+          `Textarea "prerequisite" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" "Date séance 1") `Date ;
-    join ~name:"comment-session1" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session2" ~label:(adlib "JoinFormDateSession2" "Date séance 2") `Date ;
-    join ~name:"comment-session2" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session3" ~label:(adlib "JoinFormDateSession3" "Date séance 3") `Date ;
-    join ~name:"comment-session3" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session4" ~label:(adlib "JoinFormDateSession4" "Date séance 4") `Date ;
-    join ~name:"comment-session4" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session5" ~label:(adlib "JoinFormDateSession5" "Date séance 5") `Date ;
-    join ~name:"comment-session5" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session6" ~label:(adlib "JoinFormDateSession6" "Date séance 6") `Date ;
-    join ~name:"comment-session6" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session7" ~label:(adlib "JoinFormDateSession7" "Date séance 7") `Date ;
-    join ~name:"comment-session7" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session8" ~label:(adlib "JoinFormDateSession8" "Date séance 8") `Date ;
-    join ~name:"comment-session8" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session9" ~label:(adlib "JoinFormDateSession9" "Date séance 9") `Date ;
-    join ~name:"comment-session9" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session10" ~label:(adlib "JoinFormDateSession10" "Date séance 10") `Date ;
-    join ~name:"comment-session10" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session11" ~label:(adlib "JoinFormDateSession11" "Date séance 11") `Date ;
-    join ~name:"comment-session11" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" "Date séance 12") `Date ;
-    join ~name:"comment-session12" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
+    join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1") `Date ;
+    join ~name:"comment-session1" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session2" ~label:(adlib "JoinFormDateSession2" ~old:"join.form.date-session2" "Date séance 2") `Date ;
+    join ~name:"comment-session2" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session3" ~label:(adlib "JoinFormDateSession3" ~old:"join.form.date-session3" "Date séance 3") `Date ;
+    join ~name:"comment-session3" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session4" ~label:(adlib "JoinFormDateSession4" ~old:"join.form.date-session4" "Date séance 4") `Date ;
+    join ~name:"comment-session4" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session5" ~label:(adlib "JoinFormDateSession5" ~old:"join.form.date-session5" "Date séance 5") `Date ;
+    join ~name:"comment-session5" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session6" ~label:(adlib "JoinFormDateSession6" ~old:"join.form.date-session6" "Date séance 6") `Date ;
+    join ~name:"comment-session6" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session7" ~label:(adlib "JoinFormDateSession7" ~old:"join.form.date-session7" "Date séance 7") `Date ;
+    join ~name:"comment-session7" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session8" ~label:(adlib "JoinFormDateSession8" ~old:"join.form.date-session8" "Date séance 8") `Date ;
+    join ~name:"comment-session8" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session9" ~label:(adlib "JoinFormDateSession9" ~old:"join.form.date-session9" "Date séance 9") `Date ;
+    join ~name:"comment-session9" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session10" ~label:(adlib "JoinFormDateSession10" ~old:"join.form.date-session10" "Date séance 10") `Date ;
+    join ~name:"comment-session10" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session11" ~label:(adlib "JoinFormDateSession11" ~old:"join.form.date-session11" "Date séance 11") `Date ;
+    join ~name:"comment-session11" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
+    join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -152,103 +214,135 @@ let course12sessionsFitness = template "Course12sessionsFitness"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldTeacher" "Formateur")
+          `LongText "teacher" ;
+    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
+          `Textarea "curriculum" ;
+    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
+          `Textarea "prerequisite" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"feedback-session1" ~label:(adlib "JoinFormFeedbackSession1" "Feedback séance 1") 
+    join ~name:"feedback-session1" ~label:(adlib "JoinFormFeedbackSession1" ~old:"join.form.feedback-session1" "Feedback séance 1") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session1" ~label:(adlib "JoinFormRefSession1" "Ref séance 1") `LongText ;
-    join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" "Date séance 1") `Date ;
-    join ~name:"comment-session1" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session2" ~label:(adlib "JoinFormFeedbackSession2" "Feedback séance 2") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session1" ~label:(adlib "JoinFormRefSession1" ~old:"join.form.ref-session1" "Ref séance 1") `LongText ;
+    join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1") `Date ;
+    join ~name:"comment-session1" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session2" ~label:(adlib "JoinFormFeedbackSession2" ~old:"join.form.feedback-session2" "Feedback séance 2") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session2" ~label:(adlib "JoinFormRefSession2" "Ref séance 2") `LongText ;
-    join ~name:"date-session2" ~label:(adlib "JoinFormDateSession2" "Date séance 2") `Date ;
-    join ~name:"comment-session2" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session3" ~label:(adlib "JoinFormFeedbackSession3" "Feedback séance 3") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session2" ~label:(adlib "JoinFormRefSession2" ~old:"join.form.ref-session2" "Ref séance 2") `LongText ;
+    join ~name:"date-session2" ~label:(adlib "JoinFormDateSession2" ~old:"join.form.date-session2" "Date séance 2") `Date ;
+    join ~name:"comment-session2" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session3" ~label:(adlib "JoinFormFeedbackSession3" ~old:"join.form.feedback-session3" "Feedback séance 3") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session3" ~label:(adlib "JoinFormRefSession3" "Ref séance 3") `LongText ;
-    join ~name:"date-session3" ~label:(adlib "JoinFormDateSession3" "Date séance 3") `Date ;
-    join ~name:"comment-session3" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session4" ~label:(adlib "JoinFormFeedbackSession4" "Feedback séance 4") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session3" ~label:(adlib "JoinFormRefSession3" ~old:"join.form.ref-session3" "Ref séance 3") `LongText ;
+    join ~name:"date-session3" ~label:(adlib "JoinFormDateSession3" ~old:"join.form.date-session3" "Date séance 3") `Date ;
+    join ~name:"comment-session3" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session4" ~label:(adlib "JoinFormFeedbackSession4" ~old:"join.form.feedback-session4" "Feedback séance 4") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session4" ~label:(adlib "JoinFormRefSession4" "Ref séance 4") `LongText ;
-    join ~name:"date-session4" ~label:(adlib "JoinFormDateSession4" "Date séance 4") `Date ;
-    join ~name:"comment-session4" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session5" ~label:(adlib "JoinFormFeedbackSession5" "Feedback séance 5") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session4" ~label:(adlib "JoinFormRefSession4" ~old:"join.form.ref-session4" "Ref séance 4") `LongText ;
+    join ~name:"date-session4" ~label:(adlib "JoinFormDateSession4" ~old:"join.form.date-session4" "Date séance 4") `Date ;
+    join ~name:"comment-session4" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session5" ~label:(adlib "JoinFormFeedbackSession5" ~old:"join.form.feedback-session5" "Feedback séance 5") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session5" ~label:(adlib "JoinFormRefSession5" "Ref séance 5") `LongText ;
-    join ~name:"date-session5" ~label:(adlib "JoinFormDateSession5" "Date séance 5") `Date ;
-    join ~name:"comment-session5" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session6" ~label:(adlib "JoinFormFeedbackSession6" "Feedback séance 6") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session5" ~label:(adlib "JoinFormRefSession5" ~old:"join.form.ref-session5" "Ref séance 5") `LongText ;
+    join ~name:"date-session5" ~label:(adlib "JoinFormDateSession5" ~old:"join.form.date-session5" "Date séance 5") `Date ;
+    join ~name:"comment-session5" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session6" ~label:(adlib "JoinFormFeedbackSession6" ~old:"join.form.feedback-session6" "Feedback séance 6") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session6" ~label:(adlib "JoinFormRefSession6" "Ref séance 6") `LongText ;
-    join ~name:"date-session6" ~label:(adlib "JoinFormDateSession6" "Date séance 6") `Date ;
-    join ~name:"comment-session6" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session7" ~label:(adlib "JoinFormFeedbackSession7" "Feedback séance 7") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session6" ~label:(adlib "JoinFormRefSession6" ~old:"join.form.ref-session6" "Ref séance 6") `LongText ;
+    join ~name:"date-session6" ~label:(adlib "JoinFormDateSession6" ~old:"join.form.date-session6" "Date séance 6") `Date ;
+    join ~name:"comment-session6" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session7" ~label:(adlib "JoinFormFeedbackSession7" ~old:"join.form.feedback-session7" "Feedback séance 7") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session7" ~label:(adlib "JoinFormRefSession7" "Ref séance 7") `LongText ;
-    join ~name:"date-session7" ~label:(adlib "JoinFormDateSession7" "Date séance 7") `Date ;
-    join ~name:"comment-session7" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session8" ~label:(adlib "JoinFormFeedbackSession8" "Feedback séance 8") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session7" ~label:(adlib "JoinFormRefSession7" ~old:"join.form.ref-session7" "Ref séance 7") `LongText ;
+    join ~name:"date-session7" ~label:(adlib "JoinFormDateSession7" ~old:"join.form.date-session7" "Date séance 7") `Date ;
+    join ~name:"comment-session7" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session8" ~label:(adlib "JoinFormFeedbackSession8" ~old:"join.form.feedback-session8" "Feedback séance 8") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session8" ~label:(adlib "JoinFormRefSession8" "Ref séance 8") `LongText ;
-    join ~name:"date-session8" ~label:(adlib "JoinFormDateSession8" "Date séance 8") `Date ;
-    join ~name:"comment-session8" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session9" ~label:(adlib "JoinFormFeedbackSession9" "Feedback séance 9") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session8" ~label:(adlib "JoinFormRefSession8" ~old:"join.form.ref-session8" "Ref séance 8") `LongText ;
+    join ~name:"date-session8" ~label:(adlib "JoinFormDateSession8" ~old:"join.form.date-session8" "Date séance 8") `Date ;
+    join ~name:"comment-session8" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session9" ~label:(adlib "JoinFormFeedbackSession9" ~old:"join.form.feedback-session9" "Feedback séance 9") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session9" ~label:(adlib "JoinFormRefSession9" "Ref séance 9") `LongText ;
-    join ~name:"date-session9" ~label:(adlib "JoinFormDateSession9" "Date séance 9") `Date ;
-    join ~name:"comment-session9" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session10" ~label:(adlib "JoinFormFeedbackSession10" "Feedback séance 10") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session9" ~label:(adlib "JoinFormRefSession9" ~old:"join.form.ref-session9" "Ref séance 9") `LongText ;
+    join ~name:"date-session9" ~label:(adlib "JoinFormDateSession9" ~old:"join.form.date-session9" "Date séance 9") `Date ;
+    join ~name:"comment-session9" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session10" ~label:(adlib "JoinFormFeedbackSession10" ~old:"join.form.feedback-session10" "Feedback séance 10") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session10" ~label:(adlib "JoinFormRefSession10" "Ref séance 10") `LongText ;
-    join ~name:"date-session10" ~label:(adlib "JoinFormDateSession10" "Date séance 10") `Date ;
-    join ~name:"comment-session10" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session11" ~label:(adlib "JoinFormFeedbackSession11" "Feedback séance 11") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session10" ~label:(adlib "JoinFormRefSession10" ~old:"join.form.ref-session10" "Ref séance 10") `LongText ;
+    join ~name:"date-session10" ~label:(adlib "JoinFormDateSession10" ~old:"join.form.date-session10" "Date séance 10") `Date ;
+    join ~name:"comment-session10" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session11" ~label:(adlib "JoinFormFeedbackSession11" ~old:"join.form.feedback-session11" "Feedback séance 11") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session11" ~label:(adlib "JoinFormRefSession11" "Ref séance 11") `LongText ;
-    join ~name:"date-session11" ~label:(adlib "JoinFormDateSession11" "Date séance 11") `Date ;
-    join ~name:"comment-session11" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
-    join ~name:"feedback-session12" ~label:(adlib "JoinFormFeedbackSession12" "Feedback séance 12") 
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session11" ~label:(adlib "JoinFormRefSession11" ~old:"join.form.ref-session11" "Ref séance 11") `LongText ;
+    join ~name:"date-session11" ~label:(adlib "JoinFormDateSession11" ~old:"join.form.date-session11" "Date séance 11") `Date ;
+    join ~name:"comment-session11" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
+    join ~name:"feedback-session12" ~label:(adlib "JoinFormFeedbackSession12" ~old:"join.form.feedback-session12" "Feedback séance 12") 
       (`PickOne [
-         adlib "JoinFormValuesEasy" "Facile" ;
-         adlib "JoinFormValuesSuitable" "Adapté" ;
-         adlib "JoinFormValuesHard" "Difficile" ] ) ;
-    join ~name:"ref-session12" ~label:(adlib "JoinFormRefSession12" "Ref séance 12") `LongText ;
-    join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" "Date séance 12") `Date ;
-    join ~name:"comment-session12" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
+         adlib "JoinFormValuesEasy" ~old:"join.form.values.easy" "Facile" ;
+         adlib "JoinFormValuesSuitable" ~old:"join.form.values.suitable" "Adapté" ;
+         adlib "JoinFormValuesHard" ~old:"join.form.values.hard" "Difficile" ] ) ;
+    join ~name:"ref-session12" ~label:(adlib "JoinFormRefSession12" ~old:"join.form.ref-session12" "Ref séance 12") `LongText ;
+    join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
+    join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -317,6 +411,39 @@ let courseSimple = template "CourseSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldTeacher" "Formateur")
+          `LongText "teacher" ;
+    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
+          `Textarea "curriculum" ;
+    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
+          `Textarea "prerequisite" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -386,6 +513,43 @@ let courseStage = template "CourseStage"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
+          `Textarea "meal-accomodation" ;
+    field ~label:(adlib "EntityFieldTeacher" "Formateur")
+          `LongText "teacher" ;
+    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
+          `Textarea "curriculum" ;
+    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
+          `Textarea "prerequisite" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -465,6 +629,41 @@ let courseTraining = template "CourseTraining"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
+          `Textarea "meal-accomodation" ;
+    field ~label:(adlib "EntityFieldTeacher" "Formateur")
+          `LongText "teacher" ;
+    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
+          `Textarea "curriculum" ;
+    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
+          `Textarea "prerequisite" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -540,6 +739,67 @@ let eventAfterwork = template "EventAfterwork"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
+          `Textarea "invitations-discounts" ;
+    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
+          `Textarea "ticketing" ;
+    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
+          `Textarea "price-info" ;
+    field ~label:(adlib "EntityFieldSpecialOffer" "Offre spéciale")
+          `Textarea "special-offer" ;
+    field ~label:(adlib "EntityFieldBuffet" "Buffet")
+          `LongText "buffet" ;
+    field ~label:(adlib "EntityFieldDressCode" "Dress code")
+          `LongText "dress-code" ;
+    field ~label:(adlib "EntityFieldDjs" "DJs")
+          `LongText "djs" ;
+    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
+          `LongText "kind-of-music" ;
+    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
+          `Textarea "ambiance" ;
+    field ~label:(adlib "EntityFieldTheme" "Thème")
+          `LongText "theme" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
+          `Textarea "transportation-service" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
+          `LongText "cloakroom" ;
+    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
+          `LongText "reservation-contact" ;
+    field ~label:(adlib "EntityFieldContactInfo" "Contact")
+          `LongText "contact-info" ;
+    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
+          `Textarea "sponsors-partners" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -717,6 +977,67 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
+          `Textarea "invitations-discounts" ;
+    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
+          `Textarea "ticketing" ;
+    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
+          `Textarea "price-info" ;
+    field ~label:(adlib "EntityFieldSpecialOffer" "Offre spéciale")
+          `Textarea "special-offer" ;
+    field ~label:(adlib "EntityFieldBuffet" "Buffet")
+          `LongText "buffet" ;
+    field ~label:(adlib "EntityFieldDressCode" "Dress code")
+          `LongText "dress-code" ;
+    field ~label:(adlib "EntityFieldDjs" "DJs")
+          `LongText "djs" ;
+    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
+          `LongText "kind-of-music" ;
+    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
+          `Textarea "ambiance" ;
+    field ~label:(adlib "EntityFieldTheme" "Thème")
+          `LongText "theme" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
+          `Textarea "transportation-service" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
+          `LongText "cloakroom" ;
+    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
+          `LongText "reservation-contact" ;
+    field ~label:(adlib "EntityFieldContactInfo" "Contact")
+          `LongText "contact-info" ;
+    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
+          `Textarea "sponsors-partners" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -894,9 +1215,44 @@ let eventAg = template "EventAg"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" "Sujets que vous désirez aborder") `Textarea ;
-    join ~name:"othervoice" ~label:(adlib "JoinFieldAgOthervoice" "Si vous ne venez pas, inscrivez ici le nom de la personne à laquelle vous transmettez votre pouvoir") `LongText ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"othervoice" ~label:(adlib "JoinFieldAgOthervoice" ~old:"join.field.ag.othervoice" "Si vous ne venez pas, inscrivez ici le nom de la personne à laquelle vous transmettez votre pouvoir") `LongText ;
   ]
   ~page:[
     infoSection
@@ -987,9 +1343,46 @@ let eventCampaignAction = template "EventCampaignAction"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldActionType" "Type d'opération")
+          ~help:(adlib "EntityFieldActionCrExplain" "Tractage, boitage, porte à porte, affichage, phoning, etc.")
+          ~required:true
+          `LongText "action-type" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldActionZone" "Zones, rues, quartiers")
+          `LongText "action-zone" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldActionDetails" "Détails techniques de l'opération")
+          `Textarea "action-details" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"perimeter" ~label:(adlib "JoinFieldPerimeter" "Périmètre couvert lors de l'opération") `Textarea ;
-    join ~name:"action-cr" ~label:(adlib "JoinFieldActionCr" "Compte rendu d'opération") `Textarea ;
+    join ~name:"perimeter" ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" "Périmètre couvert lors de l'opération") `Textarea ;
+    join ~name:"action-cr" ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -1084,9 +1477,44 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"theme" ~label:(adlib "JoinFieldTheme" "Thèmes que vous voulez voir aborder") `Textarea ;
-    join ~name:"question" ~label:(adlib "JoinFieldQuestion" "Questions que vous souhaitez poser") `Textarea ;
+    join ~name:"theme" ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" "Thèmes que vous voulez voir aborder") `Textarea ;
+    join ~name:"question" ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -1177,6 +1605,63 @@ let eventClubbing = template "EventClubbing"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
+          `Textarea "transportation-service" ;
+    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
+          `LongText "cloakroom" ;
+    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
+          `LongText "reservation-contact" ;
+    field ~label:(adlib "EntityFieldContactInfo" "Contact")
+          `LongText "contact-info" ;
+    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
+          `Textarea "invitations-discounts" ;
+    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
+          `Textarea "ticketing" ;
+    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
+          `Textarea "price-info" ;
+    field ~label:(adlib "EntityFieldDressCode" "Dress code")
+          `LongText "dress-code" ;
+    field ~label:(adlib "EntityFieldDjs" "DJs")
+          `LongText "djs" ;
+    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
+          `LongText "kind-of-music" ;
+    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
+          `Textarea "ambiance" ;
+    field ~label:(adlib "EntityFieldTheme" "Thème")
+          `LongText "theme" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
+          `Textarea "sponsors-partners" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -1336,6 +1821,63 @@ let eventClubbingAuto = template "EventClubbingAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
+          `Textarea "invitations-discounts" ;
+    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
+          `Textarea "ticketing" ;
+    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
+          `Textarea "price-info" ;
+    field ~label:(adlib "EntityFieldDressCode" "Dress code")
+          `LongText "dress-code" ;
+    field ~label:(adlib "EntityFieldDjs" "DJs")
+          `LongText "djs" ;
+    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
+          `LongText "kind-of-music" ;
+    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
+          `Textarea "ambiance" ;
+    field ~label:(adlib "EntityFieldTheme" "Thème")
+          `LongText "theme" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
+          `Textarea "transportation-service" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
+          `LongText "cloakroom" ;
+    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
+          `LongText "reservation-contact" ;
+    field ~label:(adlib "EntityFieldContactInfo" "Contact")
+          `LongText "contact-info" ;
+    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
+          `Textarea "sponsors-partners" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -1495,8 +2037,43 @@ let eventComiteEnt = template "EventComiteEnt"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -1587,8 +2164,43 @@ let eventCoproMeeting = template "EventCoproMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -1679,19 +2291,59 @@ let eventImproSimple = template "EventImproSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
+          `LongText "player-time" ;
+    field ~label:(adlib "EntityFieldAgainstTeam" "Equipe rencontrée")
+          `LongText "against-team" ;
+    field ~label:(adlib "EntityFieldAgainstTeamUrl" "Son site web")
+          `LongText "against-team-url" ;
+    field ~label:(adlib "EntityFieldMc" "MC")
+          `LongText "mc" ;
+    field ~label:(adlib "EntityFieldReferee" "Arbitre")
+          `LongText "referee" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" "Ok pour être…") 
+    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…") 
       (`PickMany [
-         adlib "JoinFormOkForPositionPlayer" "Joueur(se)" ;
-         adlib "JoinFormOkForPositionCoach" "Coach" ;
-         adlib "JoinFormOkForPositionReferee" "Arbitre (et assistant)" ;
-         adlib "JoinFormOkForPositionMc" "MC" ] ) ;
-    join ~name:"ok-for-help" ~label:(adlib "JoinFormOkForHelp" "Ok pour aider...") 
+         adlib "JoinFormOkForPositionPlayer" ~old:"join.form.ok-for-position.player" "Joueur(se)" ;
+         adlib "JoinFormOkForPositionCoach" ~old:"join.form.ok-for-position.coach" "Coach" ;
+         adlib "JoinFormOkForPositionReferee" ~old:"join.form.ok-for-position.referee" "Arbitre (et assistant)" ;
+         adlib "JoinFormOkForPositionMc" ~old:"join.form.ok-for-position.mc" "MC" ] ) ;
+    join ~name:"ok-for-help" ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...") 
       (`PickMany [
-         adlib "JoinFormOkForHelpTicket" "Caisse" ;
-         adlib "JoinFormOkForHelpMusic" "Musique & sono" ;
-         adlib "JoinFormOkForHelpSupply" "Courses et nourriture" ;
-         adlib "JoinFormOkForHelpOther" "Autre (selon les besoins)" ] ) ;
+         adlib "JoinFormOkForHelpTicket" ~old:"join.form.ok-for-help.ticket" "Caisse" ;
+         adlib "JoinFormOkForHelpMusic" ~old:"join.form.ok-for-help.music" "Musique & sono" ;
+         adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
+         adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
   ~page:[
     infoSection
@@ -1798,19 +2450,57 @@ let eventImproSpectacle = template "EventImproSpectacle"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
+          `LongText "player-time" ;
+    field ~label:(adlib "EntityFieldAgainstTeam" "Equipe rencontrée")
+          `LongText "against-team" ;
+    field ~label:(adlib "EntityFieldAgainstTeamUrl" "Son site web")
+          `LongText "against-team-url" ;
+    field ~label:(adlib "EntityFieldMc" "MC")
+          `LongText "mc" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" "Ok pour être…") 
+    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…") 
       (`PickMany [
-         adlib "JoinFormOkForPositionPlayer" "Joueur(se)" ;
-         adlib "JoinFormOkForPositionCoach" "Coach" ;
-         adlib "JoinFormOkForPositionReferee" "Arbitre (et assistant)" ;
-         adlib "JoinFormOkForPositionMc" "MC" ] ) ;
-    join ~name:"ok-for-help" ~label:(adlib "JoinFormOkForHelp" "Ok pour aider...") 
+         adlib "JoinFormOkForPositionPlayer" ~old:"join.form.ok-for-position.player" "Joueur(se)" ;
+         adlib "JoinFormOkForPositionCoach" ~old:"join.form.ok-for-position.coach" "Coach" ;
+         adlib "JoinFormOkForPositionReferee" ~old:"join.form.ok-for-position.referee" "Arbitre (et assistant)" ;
+         adlib "JoinFormOkForPositionMc" ~old:"join.form.ok-for-position.mc" "MC" ] ) ;
+    join ~name:"ok-for-help" ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...") 
       (`PickMany [
-         adlib "JoinFormOkForHelpTicket" "Caisse" ;
-         adlib "JoinFormOkForHelpMusic" "Musique & sono" ;
-         adlib "JoinFormOkForHelpSupply" "Courses et nourriture" ;
-         adlib "JoinFormOkForHelpOther" "Autre (selon les besoins)" ] ) ;
+         adlib "JoinFormOkForHelpTicket" ~old:"join.form.ok-for-help.ticket" "Caisse" ;
+         adlib "JoinFormOkForHelpMusic" ~old:"join.form.ok-for-help.music" "Musique & sono" ;
+         adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
+         adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
   ~page:[
     infoSection
@@ -1900,8 +2590,43 @@ let eventMeeting = template "EventMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -1992,8 +2717,33 @@ let eventPetition = template "EventPetition"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldClosingdate" "Date de clôture")
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldSite" "Site web")
+          `LongText "url" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"comment" ~label:(adlib "JoinFormComment" "Commentaire") `Textarea ;
+    join ~name:"comment" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2088,8 +2838,43 @@ let eventPublicComity = template "EventPublicComity"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2180,6 +2965,39 @@ let eventSimple = template "EventSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2266,6 +3084,39 @@ let eventSimpleAuto = template "EventSimpleAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2352,6 +3203,21 @@ let forumPublic = template "ForumPublic"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2377,36 +3243,51 @@ let groupCheerleading = template "GroupCheerleading"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") ~required:true `LongText ;
-    join ~name:"sex" ~label:(adlib "JoinFormSex" "Sexe") ~required:true 
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
+    join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
       (`PickOne [
-         adlib "JoinFormSexMale" "Masculin" ;
-         adlib "JoinFormSexFemale" "Féminin" ] ) ;
-    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
-    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" "Lieu de naissance") `LongText ;
-    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" "Tel domicile") `LongText ;
-    join ~name:"categories-chearleading" ~label:(adlib "JoinFormCategoriesChearleading" "Catégories") ~required:true 
+         adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
+         adlib "JoinFormSexFemale" ~old:"join.form.sex.female" "Féminin" ] ) ;
+    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
+    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"categories-chearleading" ~label:(adlib "JoinFormCategoriesChearleading" ~old:"join.form.categories-chearleading" "Catégories") ~required:true 
       (`PickOne [
-         adlib "JoinFormCategoriesChearleadingLess11fun" "Cheer -11 ans - Loisir" ;
-         adlib "JoinFormCategoriesChearleadingLess15fun" "Cheer -15 ans - Loisir" ;
-         adlib "JoinFormCategoriesChearleadingMore15fun" "Cheer + 15 ans Loisir" ;
-         adlib "JoinFormCategoriesChearleadingMore15compete" "Cheer +15 ans Compétition" ] ) ;
-    join ~name:"other-sport-info" ~label:(adlib "JoinFormOtherSportInfo" "Durée, niveau et fréquences des sports déjà pratiqués (ex : natation / confirmé / 2 fois semaine)") `Textarea ;
-    join ~name:"job" ~label:(adlib "JoinFormJob" "Profession") `LongText ;
-    join ~name:"address" ~label:(adlib "JoinFormAddress" "Adresse") `LongText ;
-    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" "Tel portable") `LongText ;
-    join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
-    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" "Si mineur : téléphone, email et profession du père") `Textarea ;
-    join ~name:"position-desired" ~label:(adlib "JoinFormPositionDesired" "Poste joué/souhaité") 
+         adlib "JoinFormCategoriesChearleadingLess11fun" ~old:"join.form.categories-chearleading.less11fun" "Cheer -11 ans - Loisir" ;
+         adlib "JoinFormCategoriesChearleadingLess15fun" ~old:"join.form.categories-chearleading.less15fun" "Cheer -15 ans - Loisir" ;
+         adlib "JoinFormCategoriesChearleadingMore15fun" ~old:"join.form.categories-chearleading.more15fun" "Cheer + 15 ans Loisir" ;
+         adlib "JoinFormCategoriesChearleadingMore15compete" ~old:"join.form.categories-chearleading.more15compete" "Cheer +15 ans Compétition" ] ) ;
+    join ~name:"other-sport-info" ~label:(adlib "JoinFormOtherSportInfo" ~old:"join.form.other-sport-info" "Durée, niveau et fréquences des sports déjà pratiqués (ex : natation / confirmé / 2 fois semaine)") `Textarea ;
+    join ~name:"job" ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession") `LongText ;
+    join ~name:"address" ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
+    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père") `Textarea ;
+    join ~name:"position-desired" ~label:(adlib "JoinFormPositionDesired" ~old:"join.form.position-desired" "Poste joué/souhaité") 
       (`PickMany [
-         adlib "JoinFormPositionDesiredSpot" "Spot" ;
-         adlib "JoinFormPositionDesiredBase" "Base" ;
-         adlib "JoinFormPositionDesiredFlyer" "Flyer" ;
-         adlib "JoinFormPositionDesiredCoach" "Coach" ] ) ;
-    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
-    join ~name:"other" ~label:(adlib "JoinFormOther" "Autres remarques") `Textarea ;
+         adlib "JoinFormPositionDesiredSpot" ~old:"join.form.position-desired.spot" "Spot" ;
+         adlib "JoinFormPositionDesiredBase" ~old:"join.form.position-desired.base" "Base" ;
+         adlib "JoinFormPositionDesiredFlyer" ~old:"join.form.position-desired.flyer" "Flyer" ;
+         adlib "JoinFormPositionDesiredCoach" ~old:"join.form.position-desired.coach" "Coach" ] ) ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2431,6 +3312,21 @@ let groupCollaborative = template "GroupCollaborative"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2456,6 +3352,21 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2481,6 +3392,21 @@ let groupContact = template "GroupContact"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2506,14 +3432,29 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") `LongText ;
-    join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" "Tel professionnel") `LongText ;
-    join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" "Portable professionnel") `LongText ;
-    join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" "Email professionnel") `LongText ;
-    join ~name:"resposabilities-tasks" ~label:(adlib "JoinFormResposabilitiesTasks" "Responsabilités / tâches") `Textarea ;
-    join ~name:"day-time-working" ~label:(adlib "JoinFormDayTimeWorking" "Jours et heures d'interventions") `Textarea ;
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
+    join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
+    join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel") `LongText ;
+    join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
+    join ~name:"resposabilities-tasks" ~label:(adlib "JoinFormResposabilitiesTasks" ~old:"join.form.resposabilities-tasks" "Responsabilités / tâches") `Textarea ;
+    join ~name:"day-time-working" ~label:(adlib "JoinFormDayTimeWorking" ~old:"join.form.day-time-working" "Jours et heures d'interventions") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2538,12 +3479,27 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") `LongText ;
-    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" "Tel domicile") `LongText ;
-    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" "Tel portable") `LongText ;
-    join ~name:"appartment" ~label:(adlib "JoinFormAppartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"appartment" ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
   ]
   ~page:[
     infoSection
@@ -2568,12 +3524,27 @@ let groupCoproManager = template "GroupCoproManager"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") `LongText ;
-    join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" "Tel professionnel") `LongText ;
-    join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" "Portable professionnel") `LongText ;
-    join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" "Email professionnel") `LongText ;
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
+    join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
+    join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel") `LongText ;
+    join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
   ]
   ~page:[
     infoSection
@@ -2598,17 +3569,32 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") `LongText ;
-    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" "Tel domicile") `LongText ;
-    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" "Tel portable") `LongText ;
-    join ~name:"appartment" ~label:(adlib "JoinFormAppartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
-    join ~name:"nb-copro-part" ~label:(adlib "JoinFormNbCoproPart" "Nombre de millièmes") `LongText ;
-    join ~name:"live-copro" ~label:(adlib "JoinFormLiveCopro" "Habitez-vous cet appartement ?") 
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"appartment" ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
+    join ~name:"nb-copro-part" ~label:(adlib "JoinFormNbCoproPart" ~old:"join.form.nb-copro-part" "Nombre de millièmes") `LongText ;
+    join ~name:"live-copro" ~label:(adlib "JoinFormLiveCopro" ~old:"join.form.live-copro" "Habitez-vous cet appartement ?") 
       (`PickOne [
-         adlib "Yes" "Oui" ;
-         adlib "No" "Non" ] ) ;
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
   ]
   ~page:[
     infoSection
@@ -2633,63 +3619,78 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"phone" ~label:(adlib "ProfileShareConfigPhone" "Numéro de téléphone") ~required:true `LongText ;
-    join ~name:"dateofbirth" ~label:(adlib "ProfileShareConfigBirth" "Date de naissance") ~required:true `LongText ;
-    join ~name:"size" ~label:(adlib "JoinFormSize" "Taille") ~required:true `LongText ;
-    join ~name:"weight" ~label:(adlib "JoinFormWeight" "Poids") ~required:true `LongText ;
-    join ~name:"waist-size" ~label:(adlib "JoinFormWaistSize" "Mensuration : tour de taille") `LongText ;
-    join ~name:"thigh-size" ~label:(adlib "JoinFormThighSize" "Mensuration : tour de cuisse") `LongText ;
-    join ~name:"actual-level-sport" ~label:(adlib "JoinFormActualLevelSport" "Niveau de pratique sportive actuel") ~required:true 
+    join ~name:"phone" ~label:(adlib "ProfileShareConfigPhone" ~old:"profile.share.config.phone" "Numéro de téléphone") ~required:true `LongText ;
+    join ~name:"dateofbirth" ~label:(adlib "ProfileShareConfigBirth" ~old:"profile.share.config.birth" "Date de naissance") ~required:true `LongText ;
+    join ~name:"size" ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille") ~required:true `LongText ;
+    join ~name:"weight" ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids") ~required:true `LongText ;
+    join ~name:"waist-size" ~label:(adlib "JoinFormWaistSize" ~old:"join.form.waist-size" "Mensuration : tour de taille") `LongText ;
+    join ~name:"thigh-size" ~label:(adlib "JoinFormThighSize" ~old:"join.form.thigh-size" "Mensuration : tour de cuisse") `LongText ;
+    join ~name:"actual-level-sport" ~label:(adlib "JoinFormActualLevelSport" ~old:"join.form.actual-level-sport" "Niveau de pratique sportive actuel") ~required:true 
       (`PickOne [
-         adlib "JoinFormValuesBeginner" "Débutant" ;
-         adlib "JoinFormValuesAthletic" "Sportif" ;
-         adlib "JoinFormValuesConfirmed" "Confirmé" ] ) ;
-    join ~name:"objectives" ~label:(adlib "JoinFormObjectives" "Objectifs") ~required:true 
+         adlib "JoinFormValuesBeginner" ~old:"join.form.values.beginner" "Débutant" ;
+         adlib "JoinFormValuesAthletic" ~old:"join.form.values.athletic" "Sportif" ;
+         adlib "JoinFormValuesConfirmed" ~old:"join.form.values.confirmed" "Confirmé" ] ) ;
+    join ~name:"objectives" ~label:(adlib "JoinFormObjectives" ~old:"join.form.objectives" "Objectifs") ~required:true 
       (`PickMany [
-         adlib "JoinFormObjectivesLoseWeight" "Perte de poids" ;
-         adlib "JoinFormObjectivesRelaxingWellfare" "Relaxation & bien être" ;
-         adlib "JoinFormObjectivesRelaxation" "Assouplissement" ;
-         adlib "JoinFormObjectivesToning" "Tonification" ;
-         adlib "JoinFormObjectivesPerformance" "Performance" ;
-         adlib "JoinFormObjectivesPhysicalPreparation" "Préparation physique générale individualisée" ] ) ;
-    join ~name:"actual-sports" ~label:(adlib "JoinFormActualSports" "Sports pratiqués (ou déjà pratiqués)") 
+         adlib "JoinFormObjectivesLoseWeight" ~old:"join.form.objectives.lose-weight" "Perte de poids" ;
+         adlib "JoinFormObjectivesRelaxingWellfare" ~old:"join.form.objectives.relaxing-wellfare" "Relaxation & bien être" ;
+         adlib "JoinFormObjectivesRelaxation" ~old:"join.form.objectives.relaxation" "Assouplissement" ;
+         adlib "JoinFormObjectivesToning" ~old:"join.form.objectives.toning" "Tonification" ;
+         adlib "JoinFormObjectivesPerformance" ~old:"join.form.objectives.performance" "Performance" ;
+         adlib "JoinFormObjectivesPhysicalPreparation" ~old:"join.form.objectives.physical-preparation" "Préparation physique générale individualisée" ] ) ;
+    join ~name:"actual-sports" ~label:(adlib "JoinFormActualSports" ~old:"join.form.actual-sports" "Sports pratiqués (ou déjà pratiqués)") 
       (`PickMany [
-         adlib "JoinFormActualSportsJogging" "Jogging" ;
-         adlib "JoinFormActualSportsBiking" "Vélo" ;
-         adlib "JoinFormActualSportsRacketSport" "Sport de raquette" ;
-         adlib "JoinFormActualSportsCombatSport" "Sport de Combat" ;
-         adlib "JoinFormActualSportsIndoorSport" "Sport en Salle" ;
-         adlib "JoinFormActualSportsTeamSport" "Sport Collectif" ] ) ;
-    join ~name:"othersports" ~label:(adlib "JoinFormOthersports" "autres sports pratiqués ou déjà pratiqués") `Textarea ;
-    join ~name:"session-type" ~label:(adlib "JoinFormSessionType" "Type de séance") ~required:true 
+         adlib "JoinFormActualSportsJogging" ~old:"join.form.actual-sports.jogging" "Jogging" ;
+         adlib "JoinFormActualSportsBiking" ~old:"join.form.actual-sports.biking" "Vélo" ;
+         adlib "JoinFormActualSportsRacketSport" ~old:"join.form.actual-sports.racket-sport" "Sport de raquette" ;
+         adlib "JoinFormActualSportsCombatSport" ~old:"join.form.actual-sports.combat-sport" "Sport de Combat" ;
+         adlib "JoinFormActualSportsIndoorSport" ~old:"join.form.actual-sports.indoor-sport" "Sport en Salle" ;
+         adlib "JoinFormActualSportsTeamSport" ~old:"join.form.actual-sports.team-sport" "Sport Collectif" ] ) ;
+    join ~name:"othersports" ~label:(adlib "JoinFormOthersports" ~old:"join.form.othersports" "autres sports pratiqués ou déjà pratiqués") `Textarea ;
+    join ~name:"session-type" ~label:(adlib "JoinFormSessionType" ~old:"join.form.session-type" "Type de séance") ~required:true 
       (`PickMany [
-         adlib "JoinFormSessionTypePrivate" "Individuel" ;
-         adlib "JoinFormSessionTypeCollectif" "collectif" ;
-         adlib "JoinFormSessionTypeAlone" "Seul (sans coach)" ] ) ;
-    join ~name:"course-type" ~label:(adlib "JoinFormCourseType" "Types de cours souhaités") ~required:true 
+         adlib "JoinFormSessionTypePrivate" ~old:"join.form.session-type.private" "Individuel" ;
+         adlib "JoinFormSessionTypeCollectif" ~old:"join.form.session-type.collectif" "collectif" ;
+         adlib "JoinFormSessionTypeAlone" ~old:"join.form.session-type.alone" "Seul (sans coach)" ] ) ;
+    join ~name:"course-type" ~label:(adlib "JoinFormCourseType" ~old:"join.form.course-type" "Types de cours souhaités") ~required:true 
       (`PickMany [
-         adlib "JoinFormCourseTypeAbsButt" "Abdos-fessiers" ;
-         adlib "JoinFormCourseTypeSoftGym" "Gym souple" ;
-         adlib "JoinFormCourseTypeStep" "Step" ;
-         adlib "JoinFormCourseTypeCardio" "Cardio" ;
-         adlib "JoinFormCourseTypeBoxe" "Boxe" ;
-         adlib "JoinFormCourseTypeBodybuilding" "Musculation" ] ) ;
-    join ~name:"nb-session" ~label:(adlib "JoinFormNbSession" "Nombre séances envisagées hebdomadaires") ~required:true 
+         adlib "JoinFormCourseTypeAbsButt" ~old:"join.form.course-type.abs-butt" "Abdos-fessiers" ;
+         adlib "JoinFormCourseTypeSoftGym" ~old:"join.form.course-type.soft-gym" "Gym souple" ;
+         adlib "JoinFormCourseTypeStep" ~old:"join.form.course-type.step" "Step" ;
+         adlib "JoinFormCourseTypeCardio" ~old:"join.form.course-type.cardio" "Cardio" ;
+         adlib "JoinFormCourseTypeBoxe" ~old:"join.form.course-type.boxe" "Boxe" ;
+         adlib "JoinFormCourseTypeBodybuilding" ~old:"join.form.course-type.bodybuilding" "Musculation" ] ) ;
+    join ~name:"nb-session" ~label:(adlib "JoinFormNbSession" ~old:"join.form.nb-session" "Nombre séances envisagées hebdomadaires") ~required:true 
       (`PickOne [
-         adlib "1" "1" ;
-         adlib "2" "2" ;
-         adlib "3" "3" ;
-         adlib "4" "4" ;
-         adlib "5" "5" ] ) ;
-    join ~name:"prefered-session-time" ~label:(adlib "JoinFormPreferedSessionTime" "Horaires envisagés pour les séances") ~required:true 
+         adlib "1" ~old:"1" "1" ;
+         adlib "2" ~old:"2" "2" ;
+         adlib "3" ~old:"3" "3" ;
+         adlib "4" ~old:"4" "4" ;
+         adlib "5" ~old:"5" "5" ] ) ;
+    join ~name:"prefered-session-time" ~label:(adlib "JoinFormPreferedSessionTime" ~old:"join.form.prefered-session-time" "Horaires envisagés pour les séances") ~required:true 
       (`PickMany [
-         adlib "JoinFormValuesMorning" "Matin" ;
-         adlib "JoinFormValuesNoon" "Midi" ;
-         adlib "JoinFormValuesAfternoon" "Après-midi" ;
-         adlib "JoinFormValuesEvening" "Soir" ] ) ;
-    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
-    join ~name:"other" ~label:(adlib "JoinFormOther" "Autres remarques") `Textarea ;
+         adlib "JoinFormValuesMorning" ~old:"join.form.values.morning" "Matin" ;
+         adlib "JoinFormValuesNoon" ~old:"join.form.values.noon" "Midi" ;
+         adlib "JoinFormValuesAfternoon" ~old:"join.form.values.afternoon" "Après-midi" ;
+         adlib "JoinFormValuesEvening" ~old:"join.form.values.evening" "Soir" ] ) ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2714,36 +3715,51 @@ let groupFootus = template "GroupFootus"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") ~required:true `LongText ;
-    join ~name:"sex" ~label:(adlib "JoinFormSex" "Sexe") ~required:true 
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
+    join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
       (`PickOne [
-         adlib "JoinFormSexMale" "Masculin" ;
-         adlib "JoinFormSexFemale" "Féminin" ] ) ;
-    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
-    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" "Lieu de naissance") `LongText ;
-    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" "Tel domicile") `LongText ;
-    join ~name:"job" ~label:(adlib "JoinFormJob" "Profession") `LongText ;
-    join ~name:"address" ~label:(adlib "JoinFormAddress" "Adresse") `LongText ;
-    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" "Tel portable") `LongText ;
-    join ~name:"size" ~label:(adlib "JoinFormSize" "Taille") `LongText ;
-    join ~name:"experience-footus" ~label:(adlib "JoinFormExperienceFootus" "Expérience Football Américain") `LongText ;
-    join ~name:"weight" ~label:(adlib "JoinFormWeight" "Poids") `LongText ;
-    join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
-    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" "Si mineur : téléphone, email et profession du père") `Textarea ;
-    join ~name:"position-desired" ~label:(adlib "JoinFormPositionDesired" "Poste joué/souhaité") 
+         adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
+         adlib "JoinFormSexFemale" ~old:"join.form.sex.female" "Féminin" ] ) ;
+    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
+    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"job" ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession") `LongText ;
+    join ~name:"address" ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"size" ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille") `LongText ;
+    join ~name:"experience-footus" ~label:(adlib "JoinFormExperienceFootus" ~old:"join.form.experience-footus" "Expérience Football Américain") `LongText ;
+    join ~name:"weight" ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids") `LongText ;
+    join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
+    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père") `Textarea ;
+    join ~name:"position-desired" ~label:(adlib "JoinFormPositionDesired" ~old:"join.form.position-desired" "Poste joué/souhaité") 
       (`PickMany [
-         adlib "JoinFormPositionDesiredQb" "QB" ;
-         adlib "JoinFormPositionDesiredWr" "WR" ;
-         adlib "JoinFormPositionDesiredRb" "RB" ;
-         adlib "JoinFormPositionDesiredOl" "OL" ;
-         adlib "JoinFormPositionDesiredDl" "DL" ;
-         adlib "JoinFormPositionDesiredLb" "LB" ;
-         adlib "JoinFormPositionDesiredDb" "DB" ;
-         adlib "JoinFormPositionDesiredCoach" "Coach" ] ) ;
-    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
-    join ~name:"other" ~label:(adlib "JoinFormOther" "Autres remarques") `Textarea ;
+         adlib "JoinFormPositionDesiredQb" ~old:"join.form.position-desired.qb" "QB" ;
+         adlib "JoinFormPositionDesiredWr" ~old:"join.form.position-desired.wr" "WR" ;
+         adlib "JoinFormPositionDesiredRb" ~old:"join.form.position-desired.rb" "RB" ;
+         adlib "JoinFormPositionDesiredOl" ~old:"join.form.position-desired.ol" "OL" ;
+         adlib "JoinFormPositionDesiredDl" ~old:"join.form.position-desired.dl" "DL" ;
+         adlib "JoinFormPositionDesiredLb" ~old:"join.form.position-desired.lb" "LB" ;
+         adlib "JoinFormPositionDesiredDb" ~old:"join.form.position-desired.db" "DB" ;
+         adlib "JoinFormPositionDesiredCoach" ~old:"join.form.position-desired.coach" "Coach" ] ) ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2768,47 +3784,62 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" "Prénom") ~required:true `LongText ;
-    join ~name:"sex" ~label:(adlib "JoinFormSex" "Sexe") ~required:true 
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
+    join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
       (`PickOne [
-         adlib "JoinFormSexMale" "Masculin" ;
-         adlib "JoinFormSexFemale" "Féminin" ] ) ;
-    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
-    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" "Lieu de naissance") `LongText ;
-    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" "Tel domicile") `LongText ;
-    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" "Tel portable") `LongText ;
-    join ~name:"size" ~label:(adlib "JoinFormSize" "Taille") ~required:true `LongText ;
-    join ~name:"weight" ~label:(adlib "JoinFormWeight" "Poids") ~required:true `LongText ;
-    join ~name:"grade-judo-jujitsu" ~label:(adlib "JoinFormGradeJudoJujitsu" "Grade Judo / Jujitsu") ~required:true 
+         adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
+         adlib "JoinFormSexFemale" ~old:"join.form.sex.female" "Féminin" ] ) ;
+    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
+    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"size" ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille") ~required:true `LongText ;
+    join ~name:"weight" ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids") ~required:true `LongText ;
+    join ~name:"grade-judo-jujitsu" ~label:(adlib "JoinFormGradeJudoJujitsu" ~old:"join.form.grade-judo-jujitsu" "Grade Judo / Jujitsu") ~required:true 
       (`PickOne [
-         adlib "JoinFormGradeJudoJujitsuNoneBeginner" "Aucun / débutant" ;
-         adlib "JoinFormGradeJudoJujitsuWhite" "Ceinture blanche" ;
-         adlib "JoinFormGradeJudoJujitsuWhiteYellow" "Ceinture blanche/jaune " ;
-         adlib "JoinFormGradeJudoJujitsuYellow" "Ceinture jaune" ;
-         adlib "JoinFormGradeJudoJujitsuYellowOrange" "Ceinture jaune/orange" ;
-         adlib "JoinFormGradeJudoJujitsuOrange" "Ceinture orange" ;
-         adlib "JoinFormGradeJudoJujitsuOrangeGreen" "Ceinture orange/verte" ;
-         adlib "JoinFormGradeJudoJujitsuGreen" "Ceinture verte" ;
-         adlib "JoinFormGradeJudoJujitsuBlue" "Ceinture bleue" ;
-         adlib "JoinFormGradeJudoJujitsuBrown" "Ceinture marron" ;
-         adlib "JoinFormGradeJudoJujitsuBlack" "Ceinture noire" ] ) ;
-    join ~name:"grade-judo-jujitsu-dan" ~label:(adlib "JoinFormGradeJudoJujitsuDan" "Si ceinture noire, quel dan ?") 
+         adlib "JoinFormGradeJudoJujitsuNoneBeginner" ~old:"join.form.grade-judo-jujitsu.none-beginner" "Aucun / débutant" ;
+         adlib "JoinFormGradeJudoJujitsuWhite" ~old:"join.form.grade-judo-jujitsu.white" "Ceinture blanche" ;
+         adlib "JoinFormGradeJudoJujitsuWhiteYellow" ~old:"join.form.grade-judo-jujitsu.white-yellow" "Ceinture blanche/jaune " ;
+         adlib "JoinFormGradeJudoJujitsuYellow" ~old:"join.form.grade-judo-jujitsu.yellow" "Ceinture jaune" ;
+         adlib "JoinFormGradeJudoJujitsuYellowOrange" ~old:"join.form.grade-judo-jujitsu.yellow-orange" "Ceinture jaune/orange" ;
+         adlib "JoinFormGradeJudoJujitsuOrange" ~old:"join.form.grade-judo-jujitsu.orange" "Ceinture orange" ;
+         adlib "JoinFormGradeJudoJujitsuOrangeGreen" ~old:"join.form.grade-judo-jujitsu.orange-green" "Ceinture orange/verte" ;
+         adlib "JoinFormGradeJudoJujitsuGreen" ~old:"join.form.grade-judo-jujitsu.green" "Ceinture verte" ;
+         adlib "JoinFormGradeJudoJujitsuBlue" ~old:"join.form.grade-judo-jujitsu.blue" "Ceinture bleue" ;
+         adlib "JoinFormGradeJudoJujitsuBrown" ~old:"join.form.grade-judo-jujitsu.brown" "Ceinture marron" ;
+         adlib "JoinFormGradeJudoJujitsuBlack" ~old:"join.form.grade-judo-jujitsu.black" "Ceinture noire" ] ) ;
+    join ~name:"grade-judo-jujitsu-dan" ~label:(adlib "JoinFormGradeJudoJujitsuDan" ~old:"join.form.grade-judo-jujitsu-dan" "Si ceinture noire, quel dan ?") 
       (`PickOne [
-         adlib "JoinFormGradeJudoJujitsuDan1dan" "1er dan" ;
-         adlib "JoinFormGradeJudoJujitsuDan2dan" "2nd dan" ;
-         adlib "JoinFormGradeJudoJujitsuDan3dan" "3eme dan" ;
-         adlib "JoinFormGradeJudoJujitsuDan4dan" "4eme dan" ;
-         adlib "JoinFormGradeJudoJujitsuDan5dan" "5eme dan" ;
-         adlib "JoinFormGradeJudoJujitsuDan6dan" "6eme dan" ] ) ;
-    join ~name:"passport-judo" ~label:(adlib "JoinFormPassportJudo" "Disposez-vous d'un passeport Judo ?") ~required:true 
+         adlib "JoinFormGradeJudoJujitsuDan1dan" ~old:"join.form.grade-judo-jujitsu-dan.1dan" "1er dan" ;
+         adlib "JoinFormGradeJudoJujitsuDan2dan" ~old:"join.form.grade-judo-jujitsu-dan.2dan" "2nd dan" ;
+         adlib "JoinFormGradeJudoJujitsuDan3dan" ~old:"join.form.grade-judo-jujitsu-dan.3dan" "3eme dan" ;
+         adlib "JoinFormGradeJudoJujitsuDan4dan" ~old:"join.form.grade-judo-jujitsu-dan.4dan" "4eme dan" ;
+         adlib "JoinFormGradeJudoJujitsuDan5dan" ~old:"join.form.grade-judo-jujitsu-dan.5dan" "5eme dan" ;
+         adlib "JoinFormGradeJudoJujitsuDan6dan" ~old:"join.form.grade-judo-jujitsu-dan.6dan" "6eme dan" ] ) ;
+    join ~name:"passport-judo" ~label:(adlib "JoinFormPassportJudo" ~old:"join.form.passport-judo" "Disposez-vous d'un passeport Judo ?") ~required:true 
       (`PickOne [
-         adlib "Yes" "Oui" ;
-         adlib "No" "Non" ] ) ;
-    join ~name:"license-number" ~label:(adlib "JoinFormLicenseNumber" "Numéro de license (si vous en avez un)") `LongText ;
-    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
-    join ~name:"other" ~label:(adlib "JoinFormOther" "Autres remarques") `Textarea ;
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
+    join ~name:"license-number" ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)") `LongText ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
   ~page:[
     infoSection
@@ -2833,6 +3864,21 @@ let groupRespo = template "GroupRespo"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2855,6 +3901,21 @@ let groupSimple = template "GroupSimple"
   ~name:"Groupe simple"
   ~desc:"Type de groupe dédié à la gestion des membres. Il comporte une simple liste de membre aucun objet collaboratif (mur, albums, documents, etc.)"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2880,8 +3941,16 @@ let groupTest = template "GroupTest"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"test" ~label:(adlib "JoinFieldTest" "Est-ce que ce test marche ?") `Checkbox ;
+    join ~name:"test" ~label:(adlib "JoinFieldTest" ~old:"join.field.test" "Est-ce que ce test marche ?") `Checkbox ;
   ]
   ~page:[
     infoSection
@@ -2903,6 +3972,21 @@ let pollSimple = template "PollSimple"
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2925,32 +4009,47 @@ let pollYearly = template "PollYearly"
   ~name:"Bilan de l'année écoulée"
   ~desc:"Proposition de questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
-    join ~name:"bestevent" ~label:(adlib "JoinPollYearlyBestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?") `LongText ;
-    join ~name:"assiduity" ~label:(adlib "JoinPollYearlyAssiduity" "Comment qualifieriez-vous votre participation dans notre association cette année ?") 
+    join ~name:"bestevent" ~label:(adlib "JoinPollYearlyBestevent" ~old:"join.poll-yearly.bestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?") `LongText ;
+    join ~name:"assiduity" ~label:(adlib "JoinPollYearlyAssiduity" ~old:"join.poll-yearly.assiduity" "Comment qualifieriez-vous votre participation dans notre association cette année ?") 
       (`PickOne [
-         adlib "JoinFormValuesHuge" "Grande" ;
-         adlib "JoinFormValuesBig" "Importante" ;
-         adlib "JoinFormValuesOk" "Adéquate" ;
-         adlib "JoinFormValuesPoor" "Faible" ;
-         adlib "JoinFormValuesNull" "Inexistante" ] ) ;
-    join ~name:"satisfaction" ~label:(adlib "JoinPollYearlySatisfaction" "Etes-vous satisfait de l'année qui vient de se passer ?") 
+         adlib "JoinFormValuesHuge" ~old:"join.form.values.huge" "Grande" ;
+         adlib "JoinFormValuesBig" ~old:"join.form.values.big" "Importante" ;
+         adlib "JoinFormValuesOk" ~old:"join.form.values.ok" "Adéquate" ;
+         adlib "JoinFormValuesPoor" ~old:"join.form.values.poor" "Faible" ;
+         adlib "JoinFormValuesNull" ~old:"join.form.values.null" "Inexistante" ] ) ;
+    join ~name:"satisfaction" ~label:(adlib "JoinPollYearlySatisfaction" ~old:"join.poll-yearly.satisfaction" "Etes-vous satisfait de l'année qui vient de se passer ?") 
       (`PickOne [
-         adlib "Yes" "Oui" ;
-         adlib "JoinFormValuesMostly" "Plutôt oui" ;
-         adlib "JoinFormValuesMostlyno" "Plutôt non" ;
-         adlib "No" "Non" ] ) ;
-    join ~name:"3qualtities" ~label:(adlib "JoinPollYearly3qualtities" "Selon vous, quels sont les 3 points forts de notre association ?") `Textarea ;
-    join ~name:"3improvements" ~label:(adlib "JoinPollYearly3improvements" "Proposez-nous 3 points d'améliorations pour notre association") `Textarea ;
-    join ~name:"comingback" ~label:(adlib "JoinPollYearlyComingback" "On compte sur vous l'année prochaine ?") 
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "JoinFormValuesMostly" ~old:"join.form.values.mostly" "Plutôt oui" ;
+         adlib "JoinFormValuesMostlyno" ~old:"join.form.values.mostlyno" "Plutôt non" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
+    join ~name:"3qualtities" ~label:(adlib "JoinPollYearly3qualtities" ~old:"join.poll-yearly.3qualtities" "Selon vous, quels sont les 3 points forts de notre association ?") `Textarea ;
+    join ~name:"3improvements" ~label:(adlib "JoinPollYearly3improvements" ~old:"join.poll-yearly.3improvements" "Proposez-nous 3 points d'améliorations pour notre association") `Textarea ;
+    join ~name:"comingback" ~label:(adlib "JoinPollYearlyComingback" ~old:"join.poll-yearly.comingback" "On compte sur vous l'année prochaine ?") 
       (`PickOne [
-         adlib "Yes" "Oui" ;
-         adlib "JoinFormValuesDontknow" "Je ne sais pas" ;
-         adlib "No" "Non" ] ) ;
-    join ~name:"involvement" ~label:(adlib "JoinPollYearlyInvolvement" "Voulez-vous vous impliquer dans l'organisation ?") 
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "JoinFormValuesDontknow" ~old:"join.form.values.dontknow" "Je ne sais pas" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
+    join ~name:"involvement" ~label:(adlib "JoinPollYearlyInvolvement" ~old:"join.poll-yearly.involvement" "Voulez-vous vous impliquer dans l'organisation ?") 
       (`PickOne [
-         adlib "Yes" "Oui" ;
-         adlib "No" "Non" ] ) ;
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
   ]
   ~page:[
     infoSection
@@ -2972,6 +4071,21 @@ let subscriptionAuto = template "SubscriptionAuto"
   ~name:"Adhésion Automatique"
   ~desc:"Sans validation par un responsable"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -2994,6 +4108,29 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~name:"Adhésion date à date (annuelle, semestrielle, autre)"
   ~desc:"Adhésion pour laquelle vous définissez une date de début et de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldStartdate" "Date de début")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
+          ~required:true
+          ~mean:`Enddate
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -3124,6 +4261,29 @@ let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldStartdate" "Date de début")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
+          ~required:true
+          ~mean:`Enddate
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -3209,6 +4369,21 @@ let subscriptionForever = template "SubscriptionForever"
   ~name:"Adhésion Permanente"
   ~desc:"Adhésion sans date de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -3231,6 +4406,21 @@ let subscriptionForeverAuto = template "SubscriptionForeverAuto"
   ~name:"Adhésion permanente automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion sans date de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -3253,6 +4443,27 @@ let subscriptionSemester = template "SubscriptionSemester"
   ~name:"Adhésion Semestrielle"
   ~desc:"Dure six mois, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
+          ~required:true
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
@@ -3288,6 +4499,27 @@ let subscriptionYear = template "SubscriptionYear"
   ~name:"Adhésion Annuelle"
   ~desc:"Dure un an, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
+          ~required:true
+          `Date "enddate" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
   ~join:[
   ]
   ~page:[
