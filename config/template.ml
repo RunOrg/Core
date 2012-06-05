@@ -12,6 +12,23 @@ let admin = template "Admin"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -49,6 +66,20 @@ let albumSimple = template "AlbumSimple"
   ~name:"Album Photo Simple"
   ~desc:"Contribution libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -89,6 +120,92 @@ let course12sessions = template "Course12sessions"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1")
+      (`Self (`Field "date-session1")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session1")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession2" ~old:"join.form.date-session2" "Date séance 2")
+      (`Self (`Field "date-session2")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session2")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession3" ~old:"join.form.date-session3" "Date séance 3")
+      (`Self (`Field "date-session3")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session3")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession4" ~old:"join.form.date-session4" "Date séance 4")
+      (`Self (`Field "date-session4")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session4")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession5" ~old:"join.form.date-session5" "Date séance 5")
+      (`Self (`Field "date-session5")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session5")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession6" ~old:"join.form.date-session6" "Date séance 6")
+      (`Self (`Field "date-session6")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session6")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession7" ~old:"join.form.date-session7" "Date séance 7")
+      (`Self (`Field "date-session7")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session7")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession8" ~old:"join.form.date-session8" "Date séance 8")
+      (`Self (`Field "date-session8")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session8")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession9" ~old:"join.form.date-session9" "Date séance 9")
+      (`Self (`Field "date-session9")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session9")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession10" ~old:"join.form.date-session10" "Date séance 10")
+      (`Self (`Field "date-session10")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session10")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession11" ~old:"join.form.date-session11" "Date séance 11")
+      (`Self (`Field "date-session11")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session11")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12")
+      (`Self (`Field "date-session12")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session12")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -214,6 +331,164 @@ let course12sessionsFitness = template "Course12sessionsFitness"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1")
+      (`Self (`Field "date-session1")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession1" ~old:"join.form.ref-session1" "Ref séance 1")
+      (`Self (`Field "ref-session1")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession1" ~old:"join.form.feedback-session1" "Feedback séance 1")
+      (`Self (`Field "feedback-session1")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session1")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession2" ~old:"join.form.date-session2" "Date séance 2")
+      (`Self (`Field "date-session2")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession2" ~old:"join.form.ref-session2" "Ref séance 2")
+      (`Self (`Field "ref-session2")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession2" ~old:"join.form.feedback-session2" "Feedback séance 2")
+      (`Self (`Field "feedback-session2")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session2")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession3" ~old:"join.form.date-session3" "Date séance 3")
+      (`Self (`Field "date-session3")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession3" ~old:"join.form.ref-session3" "Ref séance 3")
+      (`Self (`Field "ref-session3")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession3" ~old:"join.form.feedback-session3" "Feedback séance 3")
+      (`Self (`Field "feedback-session3")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session3")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession4" ~old:"join.form.date-session4" "Date séance 4")
+      (`Self (`Field "date-session4")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession4" ~old:"join.form.ref-session4" "Ref séance 4")
+      (`Self (`Field "ref-session4")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession4" ~old:"join.form.feedback-session4" "Feedback séance 4")
+      (`Self (`Field "feedback-session4")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session4")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession5" ~old:"join.form.date-session5" "Date séance 5")
+      (`Self (`Field "date-session5")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession5" ~old:"join.form.ref-session5" "Ref séance 5")
+      (`Self (`Field "ref-session5")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession5" ~old:"join.form.feedback-session5" "Feedback séance 5")
+      (`Self (`Field "feedback-session5")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session5")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession6" ~old:"join.form.date-session6" "Date séance 6")
+      (`Self (`Field "date-session6")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession6" ~old:"join.form.ref-session6" "Ref séance 6")
+      (`Self (`Field "ref-session6")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession6" ~old:"join.form.feedback-session6" "Feedback séance 6")
+      (`Self (`Field "feedback-session6")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session6")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession7" ~old:"join.form.date-session7" "Date séance 7")
+      (`Self (`Field "date-session7")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession7" ~old:"join.form.ref-session7" "Ref séance 7")
+      (`Self (`Field "ref-session7")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession7" ~old:"join.form.feedback-session7" "Feedback séance 7")
+      (`Self (`Field "feedback-session7")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session7")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession8" ~old:"join.form.date-session8" "Date séance 8")
+      (`Self (`Field "date-session8")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession8" ~old:"join.form.ref-session8" "Ref séance 8")
+      (`Self (`Field "ref-session8")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession8" ~old:"join.form.feedback-session8" "Feedback séance 8")
+      (`Self (`Field "feedback-session8")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session8")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession9" ~old:"join.form.date-session9" "Date séance 9")
+      (`Self (`Field "date-session9")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession9" ~old:"join.form.ref-session9" "Ref séance 9")
+      (`Self (`Field "ref-session9")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession9" ~old:"join.form.feedback-session9" "Feedback séance 9")
+      (`Self (`Field "feedback-session9")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session9")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession10" ~old:"join.form.date-session10" "Date séance 10")
+      (`Self (`Field "date-session10")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession10" ~old:"join.form.ref-session10" "Ref séance 10")
+      (`Self (`Field "ref-session10")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession10" ~old:"join.form.feedback-session10" "Feedback séance 10")
+      (`Self (`Field "feedback-session10")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session10")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession11" ~old:"join.form.date-session11" "Date séance 11")
+      (`Self (`Field "date-session11")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession11" ~old:"join.form.ref-session11" "Ref séance 11")
+      (`Self (`Field "ref-session11")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession11" ~old:"join.form.feedback-session11" "Feedback séance 11")
+      (`Self (`Field "feedback-session11")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session11")) ;
+    column ~view:`Date
+      ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12")
+      (`Self (`Field "date-session12")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRefSession12" ~old:"join.form.ref-session12" "Ref séance 12")
+      (`Self (`Field "ref-session12")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormFeedbackSession12" ~old:"join.form.feedback-session12" "Feedback séance 12")
+      (`Self (`Field "feedback-session12")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment-session12")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -411,6 +686,20 @@ let courseSimple = template "CourseSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -513,6 +802,20 @@ let courseStage = template "CourseStage"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -629,6 +932,20 @@ let courseTraining = template "CourseTraining"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -739,6 +1056,23 @@ let eventAfterwork = template "EventAfterwork"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -977,6 +1311,23 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -1215,6 +1566,29 @@ let eventAg = template "EventAg"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldAgOthervoiceShort" ~old:"join.field.ag.othervoice.short" "Pouvoir")
+      (`Self (`Field "othervoice")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
+      (`Self (`Field "subject")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -1343,6 +1717,29 @@ let eventCampaignAction = template "EventCampaignAction"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" "Périmètre couvert lors de l'opération")
+      (`Self (`Field "perimeter")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération")
+      (`Self (`Field "action-cr")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -1477,6 +1874,29 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" "Thèmes que vous voulez voir aborder")
+      (`Self (`Field "theme")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser")
+      (`Self (`Field "question")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -1605,6 +2025,23 @@ let eventClubbing = template "EventClubbing"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -1821,6 +2258,23 @@ let eventClubbingAuto = template "EventClubbingAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2037,6 +2491,26 @@ let eventComiteEnt = template "EventComiteEnt"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
+      (`Self (`Field "subject")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2164,6 +2638,26 @@ let eventCoproMeeting = template "EventCoproMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
+      (`Self (`Field "subject")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2291,6 +2785,29 @@ let eventImproSimple = template "EventImproSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
+      (`Self (`Field "ok-for-position")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
+      (`Self (`Field "ok-for-help")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2450,6 +2967,29 @@ let eventImproSpectacle = template "EventImproSpectacle"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
+      (`Self (`Field "ok-for-position")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
+      (`Self (`Field "ok-for-help")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2590,6 +3130,26 @@ let eventMeeting = template "EventMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
+      (`Self (`Field "subject")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2717,6 +3277,32 @@ let eventPetition = template "EventPetition"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "MemberFieldBirthdate" ~old:"member.field.birthdate" "Date de Naissance")
+      (`Profile `Birthdate) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "MemberFieldZipcode" ~old:"member.field.zipcode" "Code Postal")
+      (`Profile `Zipcode) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
+      (`Self (`Field "comment")) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2838,6 +3424,26 @@ let eventPublicComity = template "EventPublicComity"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
+      (`Self (`Field "subject")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -2965,6 +3571,23 @@ let eventSimple = template "EventSimple"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3084,6 +3707,23 @@ let eventSimpleAuto = template "EventSimpleAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3203,6 +3843,23 @@ let forumPublic = template "ForumPublic"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3243,6 +3900,71 @@ let groupCheerleading = template "GroupCheerleading"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
+      (`Self (`Field "sex")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance")
+      (`Self (`Field "placeofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
+      (`Self (`Field "mobilephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse")
+      (`Self (`Field "address")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession")
+      (`Self (`Field "job")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOtherSportInfo" ~old:"join.form.other-sport-info" "Durée, niveau et fréquences des sports déjà pratiqués (ex : natation / confirmé / 2 fois semaine)")
+      (`Self (`Field "other-sport-info")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormCategoriesChearleading" ~old:"join.form.categories-chearleading" "Catégories")
+      (`Self (`Field "categories-chearleading")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormPositionDesired" ~old:"join.form.position-desired" "Poste joué/souhaité")
+      (`Self (`Field "position-desired")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père")
+      (`Self (`Field "info-father")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère")
+      (`Self (`Field "info-mother")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3312,6 +4034,23 @@ let groupCollaborative = template "GroupCollaborative"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3352,6 +4091,23 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3392,6 +4148,23 @@ let groupContact = template "GroupContact"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3432,6 +4205,44 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
+      (`Self (`Field "workphone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel")
+      (`Self (`Field "workmobile")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
+      (`Self (`Field "workemail")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormResposabilitiesTasks" ~old:"join.form.resposabilities-tasks" "Responsabilités / tâches")
+      (`Self (`Field "resposabilities-tasks")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormDayTimeWorking" ~old:"join.form.day-time-working" "Jours et heures d'interventions")
+      (`Self (`Field "day-time-working")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3479,6 +4290,38 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "Mobilephone" ~old:"mobilephone" "")
+      (`Self (`Field "mobilephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)")
+      (`Self (`Field "appartment")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3524,6 +4367,38 @@ let groupCoproManager = template "GroupCoproManager"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
+      (`Self (`Field "workphone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel")
+      (`Self (`Field "workmobile")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
+      (`Self (`Field "workemail")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3569,6 +4444,44 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "Mobilephone" ~old:"mobilephone" "")
+      (`Self (`Field "mobilephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)")
+      (`Self (`Field "appartment")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormNbCoproPart" ~old:"join.form.nb-copro-part" "Nombre de millièmes")
+      (`Self (`Field "nb-copro-part")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormLiveCopro" ~old:"join.form.live-copro" "Habitez-vous cet appartement ?")
+      (`Self (`Field "live-copro")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3619,6 +4532,71 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ProfileShareConfigPhone" ~old:"profile.share.config.phone" "Numéro de téléphone")
+      (`Self (`Field "phone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ProfileShareConfigBirth" ~old:"profile.share.config.birth" "Date de naissance")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille")
+      (`Self (`Field "size")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids")
+      (`Self (`Field "weight")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormWaistSize" ~old:"join.form.waist-size" "Mensuration : tour de taille")
+      (`Self (`Field "waist-size")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormThighSize" ~old:"join.form.thigh-size" "Mensuration : tour de cuisse")
+      (`Self (`Field "thigh-size")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormActualLevelSport" ~old:"join.form.actual-level-sport" "Niveau de pratique sportive actuel")
+      (`Self (`Field "actual-level-sport")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormObjectives" ~old:"join.form.objectives" "Objectifs")
+      (`Self (`Field "objectives")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormActualSports" ~old:"join.form.actual-sports" "Sports pratiqués (ou déjà pratiqués)")
+      (`Self (`Field "actual-sports")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOthersports" ~old:"join.form.othersports" "autres sports pratiqués ou déjà pratiqués")
+      (`Self (`Field "othersports")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormSessionType" ~old:"join.form.session-type" "Type de séance")
+      (`Self (`Field "session-type")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormCourseType" ~old:"join.form.course-type" "Types de cours souhaités")
+      (`Self (`Field "course-type")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormNbSession" ~old:"join.form.nb-session" "Nombre séances envisagées hebdomadaires")
+      (`Self (`Field "nb-session")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormPreferedSessionTime" ~old:"join.form.prefered-session-time" "Horaires envisagés pour les séances")
+      (`Self (`Field "prefered-session-time")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3715,6 +4693,74 @@ let groupFootus = template "GroupFootus"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
+      (`Self (`Field "sex")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance")
+      (`Self (`Field "placeofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
+      (`Self (`Field "mobilephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse")
+      (`Self (`Field "address")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession")
+      (`Self (`Field "job")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille")
+      (`Self (`Field "size")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids")
+      (`Self (`Field "weight")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormExperienceFootus" ~old:"join.form.experience-footus" "Expérience Football Américain")
+      (`Self (`Field "experience-footus")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormPositionDesired" ~old:"join.form.position-desired" "Poste joué/souhaité")
+      (`Self (`Field "position-desired")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père")
+      (`Self (`Field "info-father")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère")
+      (`Self (`Field "info-mother")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3784,6 +4830,68 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
+      (`Self (`Field "sex")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance")
+      (`Self (`Field "placeofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
+      (`Self (`Field "mobilephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille")
+      (`Self (`Field "size")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids")
+      (`Self (`Field "weight")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormGradeJudoJujitsu" ~old:"join.form.grade-judo-jujitsu" "Grade Judo / Jujitsu")
+      (`Self (`Field "grade-judo-jujitsu")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormGradeJudoJujitsuDan" ~old:"join.form.grade-judo-jujitsu-dan" "Si ceinture noire, quel dan ?")
+      (`Self (`Field "grade-judo-jujitsu-dan")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormPassportJudo" ~old:"join.form.passport-judo" "Disposez-vous d'un passeport Judo ?")
+      (`Self (`Field "passport-judo")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)")
+      (`Self (`Field "license-number")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3864,6 +4972,23 @@ let groupRespo = template "GroupRespo"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3901,6 +5026,23 @@ let groupSimple = template "GroupSimple"
   ~name:"Groupe simple"
   ~desc:"Type de groupe dédié à la gestion des membres. Il comporte une simple liste de membre aucun objet collaboratif (mur, albums, documents, etc.)"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3941,6 +5083,11 @@ let groupTest = template "GroupTest"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`
+      ~label:(adlib "JoinFieldTestShort" ~old:"join.field.test.short" "Test marche ?")
+      (`Self (`Field "test")) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -3972,6 +5119,23 @@ let pollSimple = template "PollSimple"
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4009,6 +5173,41 @@ let pollYearly = template "PollYearly"
   ~name:"Bilan de l'année écoulée"
   ~desc:"Proposition de questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~show:true ~view:`Text
+      ~label:(adlib "JoinPollYearlyBestevent" ~old:"join.poll-yearly.bestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?")
+      (`Self (`Field "bestevent")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinPollYearlyAssiduity" ~old:"join.poll-yearly.assiduity" "Comment qualifieriez-vous votre participation dans notre association cette année ?")
+      (`Self (`Field "assiduity")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinPollYearly3qualtities" ~old:"join.poll-yearly.3qualtities" "Selon vous, quels sont les 3 points forts de notre association ?")
+      (`Self (`Field "3qualtities")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinPollYearly3improvements" ~old:"join.poll-yearly.3improvements" "Proposez-nous 3 points d'améliorations pour notre association")
+      (`Self (`Field "3improvements")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinPollYearlyComingback" ~old:"join.poll-yearly.comingback" "On compte sur vous l'année prochaine ?")
+      (`Self (`Field "comingback")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinPollYearlyInvolvement" ~old:"join.poll-yearly.involvement" "Voulez-vous vous impliquer dans l'organisation ?")
+      (`Self (`Field "involvement")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinPollYearlySatisfaction" ~old:"join.poll-yearly.satisfaction" "Etes-vous satisfait de l'année qui vient de se passer ?")
+      (`Profile `Firstname) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4071,6 +5270,23 @@ let subscriptionAuto = template "SubscriptionAuto"
   ~name:"Adhésion Automatique"
   ~desc:"Sans validation par un responsable"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4108,6 +5324,23 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~name:"Adhésion date à date (annuelle, semestrielle, autre)"
   ~desc:"Adhésion pour laquelle vous définissez une date de début et de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldDesc" "Description")
           ~required:true
@@ -4261,6 +5494,23 @@ let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldDesc" "Description")
           ~required:true
@@ -4369,6 +5619,23 @@ let subscriptionForever = template "SubscriptionForever"
   ~name:"Adhésion Permanente"
   ~desc:"Adhésion sans date de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4406,6 +5673,23 @@ let subscriptionForeverAuto = template "SubscriptionForeverAuto"
   ~name:"Adhésion permanente automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion sans date de fin de validité"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4443,6 +5727,23 @@ let subscriptionSemester = template "SubscriptionSemester"
   ~name:"Adhésion Semestrielle"
   ~desc:"Dure six mois, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
@@ -4499,6 +5800,23 @@ let subscriptionYear = template "SubscriptionYear"
   ~name:"Adhésion Annuelle"
   ~desc:"Dure un an, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `State) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
   ~fields:[
     field ~label:(adlib "EntityFieldSummary" "Résumé")
           ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")

@@ -99,7 +99,7 @@ module Build = struct
     ^ " ]\n\nval fr : t -> string\n\nval recover: string -> t option\n"
 
   let adlibs_ml () = 
-    "include Ohm.Fmt.Make(struct \n  type json t =\n    [ "
+    "open Ohm\ninclude Ohm.Fmt.Make(struct \n  type json t =\n    [ "
     ^ String.concat "\n    | " (List.map (fun (key,_) -> "`" ^ key) (!adlibs))
     ^ " ]\nend)\n\nlet fr = function "
     ^ String.concat "" (List.map (fun (key,(_,value)) -> 
@@ -107,7 +107,7 @@ module Build = struct
     ^ "\n\nlet recover = function"
     ^ String.concat "" (List.map (fun (key,(old,_)) -> 
       match old with None -> "" | Some old -> 
-	Printf.sprintf "\n  | %S -> `%s" old key) (!adlibs))
+	Printf.sprintf "\n  | %S -> Some `%s" old key) (!adlibs))
     ^ "\n  | _ -> None\n"
 
   let templateId_ml () = 
@@ -201,6 +201,10 @@ module Build = struct
 	| `Course -> "Course"
 	| `Poll -> "Poll"
 	| `Album -> "Album")) (!templates))
+
+      (* The name (adlib) of the template =================================================================== *)
+    ^ "\n\nlet name = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (!templates))
 
       (* The field name, by meaning ========================================================================= *)
     ^ "\n\nmodule Meaning = struct\n\n"

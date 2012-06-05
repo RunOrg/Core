@@ -63,11 +63,55 @@
 	    return -1;
 	}
 
+	var columns = [];
+	function find_column(key) {
+	    for (var i = 0; i < columns.length; ++i) 
+		if (columns[i].key == key) return i;
+	    return -1;
+	}
+
 	for (var v = 0; v < versions.length; ++v) {
 	    var version = versions[v];
 	    if (-1 === version.applies.indexOf(id)) continue;
 	    for (var p = 0; p < version.payload.length; ++p) {
 		var payload = version.payload[p];
+		if (payload[0] == 'Column') {
+		    if (payload[1][0] != 'Add') continue;
+		    var d = payload[1][1];
+		    var c = { 
+			sort: d.sort, 
+			show: d.show,
+			label: d.label,
+			eval: d.eval,
+			key: ''+d.eval,
+			view: ({
+			    t: 'Text', 
+			    s: 'Status', 
+			    dt: 'DateTime', 
+			    d: 'Date',
+			    po: 'PickOne'
+			})[d.view]
+		    };		   
+		    
+		    var exists = find_column(c.key);
+		    if (exists >= 0) {
+			while (exists < columns.length - 1) {
+			    columns[exists] = columns[exists+1];
+			    ++exists;
+			}
+			columns.length = columns.length - 1;
+		    }
+		  
+		    var after = d.after ? find_column(''+d.after) + 1 : 0;
+
+		    var n = columns.length;
+		    while (n > after) {
+			columns[n] = columns[n-1];
+			--n;
+		    }
+
+		    columns[after] = c;		    
+		}
 		if (payload[0] == 'Field') {
 		    var data = payload[1][1];
 		    switch (payload[1][0]) {
@@ -291,6 +335,31 @@
 	    console.log('  ~album:(albumConfig ~read:`%s ~post:`%s)',
 			config.Album.Read || 'Viewers', config.Album.Post || 'Viewers');
 	}
+
+	console.log('  ~columns:[');
+
+	for (var c = 0; c < columns.length; ++c) {
+	    
+	    var Eval = ["\n",'      (`',ucfirst(columns[c].eval[0]),' '];
+	    if (typeof columns[c].eval[1] == 'string') {
+		Eval.push('`',ucfirst(columns[c].eval[1]));
+	    } else {
+		Eval.push('(`Field "',columns[c].eval[1][1],'")');
+	    }
+	    Eval.push(')');
+	    var s = ['    column', 
+		     (columns[c].sort ? ' ~sort:true' : ''),
+		     (columns[c].show ? ' ~show:true' : ''),
+		     ' ~view:`', columns[c].view,
+		     "\n",'      ~label:(adlib "',
+		     ucfirst(camelCase(columns[c].label)),
+		     '" ~old:"', columns[c].label,
+		     '" "', i18n[columns[c].label], '")',
+		     Eval.join(''),' ;'];
+	    console.log(s.join(''));
+	}
+
+	console.log('  ]'); 
 
 	console.log('  ~fields:[');
 
