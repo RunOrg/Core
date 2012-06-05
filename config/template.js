@@ -89,9 +89,13 @@
 			    s: 'Status', 
 			    dt: 'DateTime', 
 			    d: 'Date',
-			    po: 'PickOne'
+			    po: 'PickOne',
+			    c: 'Checkbox'
 			})[d.view]
-		    };		   
+		    };
+
+
+		    if (!c.view) console.log('MISSING ',d.view); 
 		    
 		    var exists = find_column(c.key);
 		    if (exists >= 0) {
@@ -342,7 +346,10 @@
 	    
 	    var Eval = ["\n",'      (`',ucfirst(columns[c].eval[0]),' '];
 	    if (typeof columns[c].eval[1] == 'string') {
-		Eval.push('`',ucfirst(columns[c].eval[1]));
+		if (columns[c].eval[1] == 'state') 
+		    Eval.push('`Status');
+		else
+		    Eval.push('`',ucfirst(columns[c].eval[1]));
 	    } else {
 		Eval.push('(`Field "',columns[c].eval[1][1],'")');
 	    }

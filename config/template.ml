@@ -24,7 +24,7 @@ let admin = template "Admin"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -75,7 +75,7 @@ let albumSimple = template "AlbumSimple"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -129,7 +129,7 @@ let course12sessions = template "Course12sessions"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -340,7 +340,7 @@ let course12sessionsFitness = template "Course12sessionsFitness"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -695,7 +695,7 @@ let courseSimple = template "CourseSimple"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -811,7 +811,7 @@ let courseStage = template "CourseStage"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -941,7 +941,7 @@ let courseTraining = template "CourseTraining"
       (`Profile `Lastname) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -1068,7 +1068,7 @@ let eventAfterwork = template "EventAfterwork"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -1323,7 +1323,7 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -1581,7 +1581,7 @@ let eventAg = template "EventAg"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -1729,7 +1729,7 @@ let eventCampaignAction = template "EventCampaignAction"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -1886,7 +1886,7 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -2037,7 +2037,7 @@ let eventClubbing = template "EventClubbing"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -2270,7 +2270,7 @@ let eventClubbingAuto = template "EventClubbingAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -2503,7 +2503,7 @@ let eventComiteEnt = template "EventComiteEnt"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -2650,7 +2650,7 @@ let eventCoproMeeting = template "EventCoproMeeting"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -2797,7 +2797,7 @@ let eventImproSimple = template "EventImproSimple"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
@@ -2979,7 +2979,7 @@ let eventImproSpectacle = template "EventImproSpectacle"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
@@ -3142,7 +3142,7 @@ let eventMeeting = template "EventMeeting"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3298,7 +3298,7 @@ let eventPetition = template "EventPetition"
       (`Self (`Field "comment")) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3436,7 +3436,7 @@ let eventPublicComity = template "EventPublicComity"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3583,7 +3583,7 @@ let eventSimple = template "EventSimple"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3719,7 +3719,7 @@ let eventSimpleAuto = template "EventSimpleAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3855,7 +3855,7 @@ let forumPublic = template "ForumPublic"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -3912,7 +3912,7 @@ let groupCheerleading = template "GroupCheerleading"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4046,7 +4046,7 @@ let groupCollaborative = template "GroupCollaborative"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4103,7 +4103,7 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4160,7 +4160,7 @@ let groupContact = template "GroupContact"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4238,7 +4238,7 @@ let groupCoproEmployes = template "GroupCoproEmployes"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4317,7 +4317,7 @@ let groupCoproLodger = template "GroupCoproLodger"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4394,7 +4394,7 @@ let groupCoproManager = template "GroupCoproManager"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4477,7 +4477,7 @@ let groupCorproOwner = template "GroupCorproOwner"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4544,7 +4544,7 @@ let groupFitnessMembers = template "GroupFitnessMembers"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4705,7 +4705,7 @@ let groupFootus = template "GroupFootus"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4842,7 +4842,7 @@ let groupJudoMembers = template "GroupJudoMembers"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -4984,7 +4984,7 @@ let groupRespo = template "GroupRespo"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5038,7 +5038,7 @@ let groupSimple = template "GroupSimple"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5084,7 +5084,7 @@ let groupTest = template "GroupTest"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:[
-    column ~sort:true ~show:true ~view:`
+    column ~sort:true ~show:true ~view:`Checkbox
       ~label:(adlib "JoinFieldTestShort" ~old:"join.field.test.short" "Test marche ?")
       (`Self (`Field "test")) ;
   ]
@@ -5131,7 +5131,7 @@ let pollSimple = template "PollSimple"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5182,7 +5182,7 @@ let pollYearly = template "PollYearly"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5282,7 +5282,7 @@ let subscriptionAuto = template "SubscriptionAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5336,7 +5336,7 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5506,7 +5506,7 @@ let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5631,7 +5631,7 @@ let subscriptionForever = template "SubscriptionForever"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5685,7 +5685,7 @@ let subscriptionForeverAuto = template "SubscriptionForeverAuto"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5739,7 +5739,7 @@ let subscriptionSemester = template "SubscriptionSemester"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
@@ -5812,7 +5812,7 @@ let subscriptionYear = template "SubscriptionYear"
       (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `State) ;
+      (`Self `Status) ;
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;

@@ -45,6 +45,23 @@ let field ~label ?help ?mean ?(required=false) edit key = {
   f_key   = key 
 }
 
+type column = { 
+  c_show  : bool ;
+  c_sort  : bool ;
+  c_label : adlib ;
+  c_view  : [ `Text | `Date | `DateTime | `Status | `PickOne | `Checkbox ] ;
+  c_eval  : [ `Profile of [ `Zipcode | `Birthdate | `Firstname | `Lastname | `Email ] 
+	    | `Self of [ `Status | `Date | `Field of string ] ] 
+}
+
+let column ?(show=false) ?(sort=false) ~label ~view eval = {
+  c_show  = show ;
+  c_sort  = sort ;
+  c_label = label ;
+  c_view  = view ;
+  c_eval  = eval
+}
+
 type template = string
 type template_data = {
   t_id : template ;
@@ -59,6 +76,7 @@ type template_data = {
   t_folder : collabConfig option ;
   t_album  : collabConfig option ;
   t_fields : field list ;
+  t_cols   : column list ;
 } 
 
 let templates = ref []
@@ -74,7 +92,8 @@ let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
 
-let template id ?old ~kind ~name ~desc ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
+let template id ?old ~kind ~name ~desc 
+    ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
   templates := {
     t_id     = id  ;
     t_old    = old ;
@@ -87,7 +106,8 @@ let template id ?old ~kind ~name ~desc ?(fields=[]) ?(join=[]) ?group ?wall ?fol
     t_wall   = wall ;
     t_folder = folder ;
     t_album  = album ;
-    t_fields = fields
+    t_fields = fields ;
+    t_cols   = columns 
   } :: !templates ;
   id 
 
@@ -206,6 +226,36 @@ module Build = struct
     ^ "\n\nlet name = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (!templates))
 
+      (* Initial grid columns =============================================================================== *)
+    ^ "\n\nlet columns iid gid = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> [\n   %s ]" t.t_id
+	(String.concat ";\n    "
+	   (List.map (fun c -> Printf.sprintf 
+	     "MAvatarGrid.Column.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
+	     c.c_label (if c.c_show then "true" else "false") 
+	     (match c.c_view with 
+	       | `Text -> "Text"
+	       | `Date -> "Date"
+	       | `DateTime -> "DateTime"
+	       | `Status -> "Status"
+	       | `PickOne -> "PickOne"
+	       | `Checkbox -> "Checkbox")
+	     (match c.c_eval with 
+	       | `Profile sub -> Printf.sprintf "`Profile (iid,%s)"
+		 (match sub with 
+		   | `Firstname -> "`Firstname"
+		   | `Lastname  -> "`Lastname"
+		   | `Zipcode   -> "`Zipcode"
+		   | `Birthdate -> "`Birthdate"
+		   | `Email     -> "`Email")
+	       | `Self sub -> Printf.sprintf "`Group (gid,%s)"
+		 (match sub with 
+		   | `Status  -> "`Status"
+		   | `Date    -> "`Date"
+		   | `Field s -> Printf.sprintf "`Field %S" s))) t.t_cols))
+    ) (!templates))
+      
       (* The field name, by meaning ========================================================================= *)
     ^ "\n\nmodule Meaning = struct\n\n"
     ^ String.concat "\n\n" begin
