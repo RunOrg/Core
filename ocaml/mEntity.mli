@@ -42,13 +42,12 @@ end
 module Signals : sig
     
   val on_update : ([`Bot] IEntity.id, unit O.run) Ohm.Sig.channel
-  val on_upgrade : ([`Bot] IEntity.id * MPreConfig.entity_diffs, unit O.run) Ohm.Sig.channel
 
   val on_bind_group : (   IInstance.t
                         * [`Created] IEntity.id
 		        * [`Bot] IGroup.id
 			* bool
-                        * MPreConfig.entity_diffs
+                        * ITemplate.t 
 			* [`IsSelf] IAvatar.id option, unit O.run) Ohm.Sig.channel
     
 end
@@ -64,16 +63,16 @@ module Get : sig
   val template      :            'any t -> ITemplate.t
   val instance      :            'any t -> IInstance.t
   val kind          :            'any t -> MEntityKind.t
-  val template_name :            'any t -> [ `label of string | `text of string ]
+  val template_name :            'any t -> TextOrAdlib.t
   val id            :            'any t -> 'any IEntity.id
   val draft         :            'any t -> bool
   val public        :            'any t -> bool
   val grants        :            'any t -> bool
   val group         : [<`Admin|`View|`Bot] t -> IGroup.t
-  val name          : [<`Admin|`View] t -> [ `label of string | `text of string ] option
+  val name          : [<`Admin|`View] t -> TextOrAdlib.t option
   val on_add        :            'any t -> [ `ignore | `invite | `add ] 
   val picture       : [<`Admin|`View] t -> [`GetPic] IFile.id option
-  val summary       : [<`Admin|`View] t -> [ `label of string | `text of string ] 
+  val summary       : [<`Admin|`View] t -> TextOrAdlib.t
   val date          : [<`Admin|`View] t -> string option
   val end_date      : [<`Admin|`View] t -> string option
   val admin         :       [<`Admin] t -> MAccess.t 
@@ -108,11 +107,9 @@ module Data : sig
   val get : 'any IEntity.id -> 'any t option O.run
     
   val data   : [<`View|`Admin|`Bot] t -> (string * Ohm.Json.t) list
-  val name   : [<`View|`Admin|`Bot] t -> [ `label of string | `text of string ] option
-  val info   : 'any t -> MEntityInfo.t
-  val fields : 'any t -> MEntityFields.t    
+  val name   : [<`View|`Admin|`Bot] t -> TextOrAdlib.t option
 
-  val description :  [<`View|`Admin|`Bot] t -> string option
+  val description : ITemplate.t -> [<`View|`Admin|`Bot] t -> string option
 
 end
 
@@ -121,7 +118,7 @@ end
 val try_update : 
      [`Admin] t
   -> status:[ `Active | `Delete | `Draft ]
-  -> name:[ `label of string | `text of string ] option 
+  -> name:TextOrAdlib.t option 
   -> data:(string * Ohm.Json.t) list
   -> 'any IIsIn.id
   -> unit O.run
@@ -144,16 +141,6 @@ val bot_create :
      [`Bot] IInstance.id 
   -> MInstanceEntity.Create.t
   -> [`Created] IEntity.id O.run
-
-val bot_update : 
-     [`Bot] IEntity.id 
-  -> ?draft:bool 
-  -> ?public:bool 
-  -> ?name:[ `label of string | `text of string ] option 
-  -> ?data:(string * Ohm.Json.t) list
-  -> ?config:MEntityConfig.Diff.t list
-  -> unit 
-  -> unit O.run
 
 val set_grants : [`IsAdmin] # MAccess.context -> 'any IEntity.id list -> unit O.run
 

@@ -13,8 +13,7 @@ type entity = {
   instance : IInstance.t ;
   config   : MEntityConfig.t ;
   deleted  : IAvatar.t option ;
-  version  : string ;
-  name     : [`label of string | `text of string] option ; 
+  name     : TextOrAdlib.t option ; 
   summary  : string ;
   date     : string option ;
   end_date : string option ;
@@ -36,7 +35,6 @@ module Init : sig
 	instance : IInstance.t ;
 	config   : MEntityConfig.t ;
 	deleted  : IAvatar.t option ;
-	version  : string ;
       }
 end
 

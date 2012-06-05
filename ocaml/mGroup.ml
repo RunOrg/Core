@@ -74,7 +74,7 @@ let managers_of_data data =
     return (`Union [ f `Write ; f `Manage ])
   end
 
-let create gid admin iid eid diffs = 
+let create gid admin iid eid tmpl = 
 
   let namer = MPreConfigNamer.load iid in 
 
@@ -83,9 +83,12 @@ let create gid admin iid eid diffs =
   let eid = IEntity.decay   eid in 
 
   let list = IAvatarGrid.gen () in 
-  let! ()  = ohm $ Signals.on_create_list_call (list,gid,iid,diffs # columns) in
+  let! ()  = ohm $ Signals.on_create_list_call (list,gid,iid,PreConfig_Template.columns iid gid tmpl) in
 
-  let! propg = ohm $ MGroupPropagate.Entity.apply_diffs [] namer (diffs # propagate) in
+  let! propg = ohm $ Run.list_map 
+    (fun name -> MPreConfigNamer.group name namer) 
+    (PreConfig_Template.propagate tmpl)
+  in
   
   let o = object
     method t      = `Group
@@ -95,7 +98,7 @@ let create gid admin iid eid diffs =
     method manual = true
     method entity = Some eid
     method list   = list
-    method fields = MJoinFields.apply_diff [] (diffs # join)
+    method fields = PreConfig_Template.join tmpl
     method propg  = propg
   end in
   
@@ -112,49 +115,6 @@ let create gid admin iid eid diffs =
 
 let _get id = 
   MyTable.get (IGroup.decay id)
-
-let version_update gid diffs =
-
-  let! group = ohm_req_or (return ()) $ _get gid in
-
-  let namer = MPreConfigNamer.load (group # ins) in
-  
-  (* Update group fields *)
-  let! () = ohm begin 
-    if diffs # join = [] && diffs # propagate = [] then return () else
-      
-      let update gid =
-	
-	let! group = ohm_req_or (return ((),`keep)) $ MyTable.get gid in 
-	let! propg = ohm $ MGroupPropagate.Entity.apply_diffs
-	  (group # propg) namer (diffs # propagate)
-	in
-
-	return ((), `put (object
-	  method t      = `Group
-	  method ins    = group # ins
-	  method admins = group # admins
-	  method grants = group # grants
-	  method manual = group # manual
-	  method entity = group # entity
-	  method list   = group # list
-	  method propg  = propg
-	  method fields = MJoinFields.apply_diff (group # fields) (diffs # join) 
-	end))
-      in
-      
-      MyTable.transaction (IGroup.decay gid) update
-	
-  end in
-  
-  (* Update group columns *)
-  let! () = ohm begin
-    if diffs # columns = [] then return () else 
-      Signals.on_upgrade_list_call
-	(group # list, IGroup.decay gid, group # ins, diffs # columns) 
-  end in
-  
-  return ()
 
 let try_get context id =
   let! group = ohm_req_or (return None) $ _get id in
@@ -433,13 +393,7 @@ let () =
   _refresh_token_grant eid
   
 let () = 
-  let! eid, diffs = Sig.listen MEntity.Signals.on_upgrade in 
-  let! t   = ohm_req_or (return ()) $ MEntity.bot_get eid in
-  let  gid = MEntity.Get.group t in
-  version_update gid diffs
-
-let () = 
-  let! iid, eid, gid, admin, diffs, _ = Sig.listen MEntity.Signals.on_bind_group in 
-  let! _ = ohm $ create gid admin iid (IEntity.decay eid) diffs in
+  let! iid, eid, gid, admin, template, _ = Sig.listen MEntity.Signals.on_bind_group in 
+  let! _ = ohm $ create gid admin iid (IEntity.decay eid) template in
   return () 
 

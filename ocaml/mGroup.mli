@@ -12,12 +12,8 @@ module Signals : sig
     ([`IsSelf] IAvatar.id option * IAvatar.t * IGroup.t * bool, unit O.run) Ohm.Sig.channel
 
   val on_create_list  :
-    ( IAvatarGrid.t * IGroup.t * IInstance.t * MGroupColumn.Diff.t list,
+    ( IAvatarGrid.t * IGroup.t * IInstance.t * MAvatarGridColumn.t list,
       unit O.run ) Ohm.Sig.channel
-
-  val on_upgrade_list :
-    ( IAvatarGrid.t * IGroup.t * IInstance.t * MGroupColumn.Diff.t list, 
-      unit O.run) Ohm.Sig.channel
 
 end
 
@@ -62,8 +58,6 @@ module Propagate : sig
   val rem : 'any IGroup.id -> [`Admin] IGroup.id -> unit O.run
   val get : [`Admin] IGroup.id -> 'any # MAccess.context -> [`Unknown] t list O.run
   val get_direct : IGroup.t -> IGroup.t list O.run 
-
-  val upgrade : src:[`Bot] IGroup.id -> dest:[`Bot] IGroup.id -> [`add|`remove] -> unit O.run 
 
 end
 

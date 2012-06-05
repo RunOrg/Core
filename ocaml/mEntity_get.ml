@@ -58,9 +58,7 @@ let group t = (get t).E.group
       	
 let instance      t = (get t).E.instance
 let template      t = (get t).E.template
-let template_name t = match MVertical.Template.get (template t) with
-  | None      -> `label ""
-  | Some tmpl -> `label (tmpl # name)
+let template_name t = `label (PreConfig_Template.name (template t))
 
 let kind          t = (get t).E.kind
 let draft         t = (get t).E.draft

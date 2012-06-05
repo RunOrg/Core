@@ -8,6 +8,7 @@ let admin = template "Admin"
   ~kind:`Group
   ~name:"Groupe des Administrateurs RunOrg"
   ~desc:"Groupe des administrateurs RunOrg. Les personnes inscrites dans ce groupe ont toute la visibilité et tous les droits dans l'espace Runorg de l'organisation. Ce groupe ne doit pas être supprimé."
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -3273,6 +3274,7 @@ let eventPetition = template "EventPetition"
   ~kind:`Event
   ~name:"Pétition"
   ~desc:"Organisez une pétition et personnalisez les informations demandées aux signataires. Les pétitions sont accessibles à vos contacts"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Event ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -3896,6 +3898,7 @@ let groupCheerleading = template "GroupCheerleading"
   ~kind:`Group
   ~name:"Sportifs cheerleaders"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du cheerleading"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4030,6 +4033,7 @@ let groupCollaborative = template "GroupCollaborative"
   ~kind:`Group
   ~name:"Groupe collaboratif"
   ~desc:"Ce type de groupe peut être utilisé comme un espace collaboratif. Il comporte tous les objets collaboratifs (mur, albums, documents, etc.)"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4087,6 +4091,7 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~kind:`Group
   ~name:"Groupe collaboratif inscriptions automatiques"
   ~desc:"Groupe collaboratif avec validation automatique des inscriptions pour les non-invités"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4144,6 +4149,7 @@ let groupContact = template "GroupContact"
   ~kind:`Group
   ~name:"Contacts"
   ~desc:"Groupe en accès public et validé automatiquement de personnes n'ayant pas accès à votre espace, mais qui peuvent être contactées via RunOrg"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4201,6 +4207,7 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~kind:`Group
   ~name:"Gardiens / employés"
   ~desc:"Groupe collabroratif dédié aux gardiens et salariés"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4286,6 +4293,7 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~kind:`Group
   ~name:"Locataires"
   ~desc:"Groupe collabroratif dédié aux locataires"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4363,6 +4371,7 @@ let groupCoproManager = template "GroupCoproManager"
   ~kind:`Group
   ~name:"Gestionnaires"
   ~desc:"Groupe collabroratif dédié aux gestionnaires"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4440,6 +4449,7 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~kind:`Group
   ~name:"Propriétaires"
   ~desc:"Groupe collaboratif dédié aux propriétaires"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4528,6 +4538,7 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~kind:`Group
   ~name:"Sportifs fitness"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre d'une salle de sport ou d'un coaching sportif"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4689,6 +4700,7 @@ let groupFootus = template "GroupFootus"
   ~kind:`Group
   ~name:"Sportifs football américain"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du football américain"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4826,6 +4838,7 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~kind:`Group
   ~name:"Sportifs judo et jujitsu"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre de la pratique du judo et du jujitsu"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -4968,6 +4981,7 @@ let groupRespo = template "GroupRespo"
   ~kind:`Group
   ~name:"Responsables"
   ~desc:"Un groupe de responsables"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -5025,6 +5039,7 @@ let groupSimple = template "GroupSimple"
   ~kind:`Group
   ~name:"Groupe simple"
   ~desc:"Type de groupe dédié à la gestion des membres. Il comporte une simple liste de membre aucun objet collaboratif (mur, albums, documents, etc.)"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text
@@ -5079,6 +5094,7 @@ let groupTest = template "GroupTest"
   ~kind:`Group
   ~name:"Groupe Test"
   ~desc:"Un groupe pour tester les préconfigs"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
@@ -5323,6 +5339,7 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~kind:`Subscription
   ~name:"Adhésion date à date (annuelle, semestrielle, autre)"
   ~desc:"Adhésion pour laquelle vous définissez une date de début et de fin de validité"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text
@@ -5493,6 +5510,7 @@ let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
   ~kind:`Subscription
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text
@@ -5618,6 +5636,7 @@ let subscriptionForever = template "SubscriptionForever"
   ~kind:`Subscription
   ~name:"Adhésion Permanente"
   ~desc:"Adhésion sans date de fin de validité"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text
@@ -5672,6 +5691,7 @@ let subscriptionForeverAuto = template "SubscriptionForeverAuto"
   ~kind:`Subscription
   ~name:"Adhésion permanente automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion sans date de fin de validité"
+  ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text

@@ -70,11 +70,16 @@
 	    return -1;
 	}
 
+	var propagate = false;
+
 	for (var v = 0; v < versions.length; ++v) {
 	    var version = versions[v];
 	    if (-1 === version.applies.indexOf(id)) continue;
 	    for (var p = 0; p < version.payload.length; ++p) {
 		var payload = version.payload[p];
+		if (payload[0] == 'Propagate') {
+		    propagate = true;
+		}
 		if (payload[0] == 'Column') {
 		    if (payload[1][0] != 'Add') continue;
 		    var d = payload[1][1];
@@ -317,6 +322,9 @@
 	console.log('  ~name:"%s"', i18n[t.name]);
 	console.log('  ~desc:"%s"', i18n[t.desc]);
 
+	if (propagate) 
+	    console.log('  ~propagate:"members"');
+	
 	if (config.Group !== null) {
 	    console.log('  ~group:(groupConfig ~semantics:`%s ~validation:`%s ~read:`%s ~grant:`%s)',
 			ucfirst(config.Group.Semantics || 'group'),

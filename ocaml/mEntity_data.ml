@@ -8,10 +8,8 @@ open Ohm.Universal
 module Data = struct
   module T = struct
     type json t = {
-      name   : [`label "l" of string | `text "t" of string] option ;
-      data   : (!string, Json.t) ListAssoc.t ;
-      fields : MEntityFields.t ;
-      info   : MEntityInfo.t 
+      name   : TextOrAdlib.t option ;
+      data   : (!string, Json.t) ListAssoc.t 
     }
   end
   include T
@@ -32,9 +30,9 @@ module EntityDataConfig = struct
   module Diff = Fmt.Make(struct
     type json t = 
       [ `Set    of (!string, Json.t) ListAssoc.t 
-      |	`Fields of MEntityFields.Diff.t list
-      | `Info   of MEntityInfo.Diff.t list
-      | `Name   of [`label "l" of string | `text "t" of string] option
+      |	`Fields of Json.t
+      | `Info   of Json.t 
+      | `Name   of TextOrAdlib.t option
       ]
   end)
 
@@ -47,8 +45,8 @@ module EntityDataConfig = struct
 
   let apply = function
     | `Set    data  -> return (fun id time t -> return { t with Data.data = merge data t.Data.data })
-    | `Fields diffs -> return (fun id time t -> return { t with Data.fields = MEntityFields.apply_diff t.Data.fields diffs })
-    | `Info   diffs -> return (fun id time t -> return { t with Data.info = MEntityInfo.apply_diff t.Data.info diffs })
+    | `Fields diffs -> return (fun id time t -> return t)
+    | `Info   diffs -> return (fun id time t -> return t)
     | `Name   name  -> return (fun id time t -> return { t with Data.name = name })
 
   let reflect id data = return ()
@@ -57,33 +55,18 @@ end
 
 module Store = OhmCouchVersioned.Make(EntityDataConfig)
 
-let create ~id ~who ?name ?data ~fields ~info () = 
+let create ~id ~who ?name ?data () = 
 
   let diffs = match data with None -> [] | Some data -> [`Set data] in
   let diffs = match name with None -> diffs | Some name -> (`Name name) :: diffs in
 
   Store.create ~id:(IEntity.decay id)
-    ~init:{ Data.data = [] ; Data.fields = MEntityFields.default ; Data.info = MEntityInfo.default ; Data.name = None }
-    ~diffs:( (`Info info) :: (`Fields fields) :: diffs )
+    ~init:{ Data.data = [] ; Data.name = None }
+    ~diffs:(diffs)
     ~info:(MUpdateInfo.info ~who)
     ()
 
   |> Run.map ignore
-
-let upgrade ~id ?name ?(data=[]) ?(fields=[]) ?(info=[]) () = 
-  
-  let diffs = match data   with [] -> [] | data -> [`Set data] in
-  let diffs = match fields with [] -> diffs | fields -> (`Fields fields) :: diffs in
-  let diffs = match info   with [] -> diffs | info -> (`Info info) :: diffs in
-  let diffs = match name   with None -> diffs | Some name -> (`Name name) :: diffs in 
-
-  if diffs = [] then return () else 
-    
-    let! _ = ohm $ Store.update
-      ~id:(IEntity.decay id) ~diffs ~info:(MUpdateInfo.info ~who:`preconfig) ()
-    in
-
-    return ()
   
 let update ~id ~who ?name ~data () = 
   
@@ -109,28 +92,20 @@ let update ~id ~who ?name ~data () =
     Store.update ~id:(IEntity.decay id) ~diffs ~info:(MUpdateInfo.info ~who) ()
     |> Run.map ignore
 
-let recover ~id ~name ~data ~fields ~info () = 
-
-  Store.create ~id
-    ~init:Data.({ data = data ; fields = fields ; info = info ; name = name })
-    ~diffs:[]
-    ~info:(MUpdateInfo.info ~who:`preconfig)
-    () |> Run.map ignore
-
 type 'a t = Data.t 
 
 let get id = Store.get (IEntity.decay id) |> Run.map (BatOption.map Store.current)
 
-let description t = 
-  try let field = fst (List.find (fun (name,field) -> field # mean = Some `description) t.Data.fields) in
-      let value = List.assoc field t.Data.data in
-      Some (Json.to_string value)
-  with _ -> None
+let description tmpl t = 
+  match PreConfig_Template.Meaning.description tmpl with 
+    | None -> None
+    | Some field -> 
+      try let value = List.assoc field t.Data.data in
+	  Some (Json.to_string value)
+      with _ -> None
 
 let data   t = t.Data.data
 let name   t = t.Data.name
-let info   t = t.Data.info
-let fields t = t.Data.fields
 
 module Signals = struct
 

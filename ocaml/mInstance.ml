@@ -25,7 +25,6 @@ type t = <
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
   install : bool ;
-  version : string ;
   stub    : bool ;
   white   : IWhite.t option
 > ;; 
@@ -42,7 +41,6 @@ let extract id i = Data.(object
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
   method install = i.install
-  method version = i.version
   method stub = i.stub
   method white = i.white
 end)
@@ -52,89 +50,8 @@ end)
 module Signals = struct
 
   let on_create_call, on_create = Sig.make (Run.list_iter identity) 
-
-  let on_upgrade_call, on_upgrade = Sig.make (Run.list_iter identity)
     
 end
-
-(* Update an instance to a provided version. ---------------------------------------------- *)
-
-module VersionView = CouchDB.DocView(struct
-  module Key = Fmt.String
-  module Value = Fmt.Unit
-  module Doc = Data
-  module Design = Design
-  let name = "by_version"
-  let map = "if (doc.t == 'inst') emit(doc.version || '',null);"
-end)
-
-let apply_version version ins = 
-  Data.({
-    ins with 
-      install = ins.install && version < MPreConfig.last_vertical_version ;
-      version
-  }) 
-
-let sorted_versions_above vid version = 
-  let applicable_versions = MPreConfig.applies_to vid MPreConfig.vertical_versions in 
-  let versions_above = 
-    List.filter (fun v -> v # version > version) applicable_versions 
-  in
-  List.sort (fun a b -> compare a # version b # version) versions_above
-
-let allowed_versions_above vid upto version = 
-  let applicable_versions = MPreConfig.applies_to vid MPreConfig.vertical_versions in 
-  let versions_above = 
-    List.filter (fun v -> v # version > version && upto >= v # version) applicable_versions 
-  in
-  List.sort (fun a b -> compare a # version b # version) versions_above
-
-let upgrade ?upto iid = 
-
-  let! instance = ohm_req_or (return ()) $ MyTable.get iid in 
-  let  upto = BatOption.default MPreConfig.last_vertical_version upto in 
- 
-  match allowed_versions_above instance.Data.ver upto instance.Data.version with 
-    | [] ->
-      
-      log "No-op update of instance %s from version `%s` to version `%s`" 
-	(IInstance.to_string iid) (instance.Data.version) (upto) ;
-      
-      let! _ = ohm $ MyTable.transaction iid (MyTable.update (apply_version upto)) in
-      
-      return ()
-	
-    | list ->
-      
-      log "Updating Instance %s from version `%s` to version `%s` out of `%s`..."
-	(IInstance.to_string iid) (instance.Data.version)
-	(upto) (MPreConfig.last_vertical_version) ;
-      
-      let sorted_diffs_above = 
-	List.concat (List.map MPreConfig.payload list) 
-      in
-      
-      let! () = ohm $ Signals.on_upgrade_call (iid,sorted_diffs_above) in
-      let! _  = ohm $ MyTable.transaction iid (MyTable.update (apply_version upto)) 
-      in
-      
-      return ()
-	
-let first_unapplied_version = 
-  let! list = ohm $ VersionView.doc_query ~limit:1 () in
-  match list with [] -> return (None, MPreConfig.last_vertical_version) | h :: _ ->
-
-    let instance = h # doc in 
-    if instance.Data.version >= MPreConfig.last_vertical_version 
-    then return (None, MPreConfig.last_vertical_version) 
-    else 
-
-      let iid = IInstance.of_id (h # id) in
-      let vid = instance.Data.ver in 
-
-      match sorted_versions_above vid instance.Data.version with 
-	| []     -> return $ (Some iid, MPreConfig.last_vertical_version)
-	| h :: _ -> return $ (Some iid, h # version)
 
 (* Various functions --------------------------------------------------------------------- *)
 
@@ -156,7 +73,6 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
     ver     = vertical ;
     pic     = BatOption.map IFile.decay pic ;
     install = true ;
-    version = ""  ;
     light   = true ;
     stub    = false ;
     address = None ;
@@ -342,7 +258,6 @@ let create_stub ~who ~name ~desc ~site ~profile =
     ver     = IVertical.stub ;
     pic     = None ;
     install = false ;
-    version = MPreConfig.last_vertical_version ;
     light   = true ;
     stub    = true ;
     address = None ;

@@ -38,6 +38,14 @@ let get iid =
 
 let group name iid = 
 
+  (* Reverse compatibility with silly old name for the all-members group name.
+     NEVER let a non-techie name things... again. *)
+  let rec find list name = 
+    match ListAssoc.try_get list name with 
+      | Some id -> Some id 
+      | None -> if name = "members" then find list "entity.sample.group-simple.allmembers.name" else None
+  in
+	  
   let update iid = 
     let! data = ohm $ get iid in
     match ListAssoc.try_get (data # groups) name with 

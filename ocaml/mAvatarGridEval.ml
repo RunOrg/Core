@@ -1,5 +1,7 @@
 (* © 2012 RunOrg *)
 
+open Ohm
+
 include Ohm.Fmt.Make(struct
   type json t = 
     [ `Avatar  of IInstance.t * [ `Name ] 
@@ -46,27 +48,3 @@ let from_generic iid gid = function
       | `inList  -> `InList
       | `field n -> `Field n
   end)
-
-(* DELETE THIS
-let to_generic srcpos = function 
-  | `Avatar (_,`Name) -> `profile `fullname
-  | `Profile (_,what) -> `profile begin match what with 
-      | `Firstname -> `firstname
-      | `Lastname  -> `lastname
-      | `Email     -> `email
-      | `Birthdate -> `birthdate
-      | `City      -> `city
-      | `Address   -> `address
-      | `Zipcode   -> `zipcode
-      | `Country   -> `country
-      | `Phone     -> `phone
-      | `Cellphone -> `cellphone
-      | `Gender    -> `gender
-  end
-  | `Join (_,what) -> `join (srcpos, begin match what with 
-      | `Status  -> `state
-      | `Date    -> `date
-      | `InList  -> `inList
-      | `Field n -> `field n
-  end)
-*)

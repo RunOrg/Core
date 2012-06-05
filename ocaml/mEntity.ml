@@ -81,31 +81,6 @@ let try_update t ~status ~name ~data isin =
   in
 
   MEntity_data.update ~id:(Get.id t) ~who ~name ~data ()
-
-let bot_update id ?draft ?public ?name ?data ?(config=[]) () = 
-  
-  let! () = ohm $ MEntity_data.upgrade ~id ?name ?data () in
-
-  let diffs =
-    match draft with None -> [] | Some draft ->
-      [ `Status (if draft then `Draft else `Active) ]
-  in
-
-  let diffs = 
-    match public with None -> diffs | Some public ->
-      (`Access (if public then `Public else `Normal)) :: diffs 
-  in  
-
-  let diffs = 
-    if config = [] then diffs else ( `Config config ) :: diffs
-  in
-
-  if diffs = [] then return () else
-    E.Store.update
-      ~id:(IEntity.decay id) 
-      ~diffs
-      ~info:(MUpdateInfo.info ~who:`preconfig)
-      () |> Run.map ignore
   
 (* Creating entities ----------------------------------------------------------------------- *)
 
@@ -133,22 +108,9 @@ let _create ?(admin=false) ?name template iid creator_opt =
 
   let! instance = ohm $ MInstance.get iid in 
 
-  let min_version = "" in
-  let max_version = 
-    BatOption.default MPreConfig.last_template_version $
-      BatOption.map (#version) instance
-  in
-  
   let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,admin,template,creator_opt) in
 
-  let! data = ohm begin
-    MEntity_data.create
-      ~id:eid
-      ~who
-      ~info:(diffs # info) 
-      ~fields:(diffs # fields)
-      ()
-  end in
+  let! data = ohm $ MEntity_data.create ~id:eid ~who () in
   
   let init = E.Init.({
     archive  = false ;
@@ -158,17 +120,16 @@ let _create ?(admin=false) ?name template iid creator_opt =
     view     = `Token ;
     group    = IGroup.decay gid ;
     config   = MEntityConfig.default ;
-    kind     = tmpl # kind ;
+    kind     = PreConfig_Template.kind template ;
     template = ITemplate.decay template ;
     instance = IInstance.decay iid ;
-    version  = max_version ;
     deleted  = None ;
     creator  = BatOption.map IAvatar.decay creator_opt 
   }) in
       
   let! _ = ohm $ E.Store.create
     ~id:(IEntity.decay eid) ~info:(MUpdateInfo.info ~who) ~init 
-    ~diffs:[ `Config (diffs # config) ] ()
+    ~diffs:[ ] ()
   in
 	
   return eid
@@ -227,13 +188,12 @@ let _ =
   
   let! instance = ohm_req_or (return ()) $ MInstance.get iid in
   let! creator  = ohm $ MAvatar.become_contact iid (instance # usr) in
-  let! vertical = ohm_req_or (return ()) $ MVertical.get (instance # ver) in
   
   (* Act as the creator... *)
   let creator = IAvatar.Assert.is_self creator in
   
   let! _        = ohm $
-    _create ~admin:true ~name:"admin" (vertical # admin) (IInstance.decay iid) (Some creator)
+    _create ~admin:true ~name:"admin" ITemplate.admin (IInstance.decay iid) (Some creator)
   in
   
   return ()  

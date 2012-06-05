@@ -1,13 +1,13 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 include MJoinFields.Field
   
 let has_stats field = 
   match field # edit with
-    | `textarea   
-    | `longtext
-    | `hide       -> false
-    | `checkbox
-    | `date
-    | `pickOne  _ 
-    | `pickMany _ -> true
+    | `Textarea   
+    | `LongText
+    | `Hide       -> false
+    | `Checkbox
+    | `Date
+    | `PickOne  _ 
+    | `PickMany _ -> true

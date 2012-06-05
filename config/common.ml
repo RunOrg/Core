@@ -77,6 +77,7 @@ type template_data = {
   t_album  : collabConfig option ;
   t_fields : field list ;
   t_cols   : column list ;
+  t_propg  : string option 
 } 
 
 let templates = ref []
@@ -92,7 +93,7 @@ let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
 
-let template id ?old ~kind ~name ~desc 
+let template id ?old ~kind ~name ~desc ?propagate 
     ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
   templates := {
     t_id     = id  ;
@@ -107,7 +108,8 @@ let template id ?old ~kind ~name ~desc
     t_folder = folder ;
     t_album  = album ;
     t_fields = fields ;
-    t_cols   = columns 
+    t_cols   = columns ;
+    t_propg  = propagate
   } :: !templates ;
   id 
 
@@ -226,13 +228,18 @@ module Build = struct
     ^ "\n\nlet name = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (!templates))
 
+      (* The name (adlib) of the template =================================================================== *)
+    ^ "\n\nlet propagate = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> [%s]" t.t_id 
+      (match t.t_propg with None -> "" | Some g -> Printf.sprintf "%S" g)) (!templates))
+
       (* Initial grid columns =============================================================================== *)
     ^ "\n\nlet columns iid gid = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> [\n   %s ]" t.t_id
 	(String.concat ";\n    "
 	   (List.map (fun c -> Printf.sprintf 
-	     "MAvatarGrid.Column.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
+	     "MAvatarGridColumn.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
 	     c.c_label (if c.c_show then "true" else "false") 
 	     (match c.c_view with 
 	       | `Text -> "Text"

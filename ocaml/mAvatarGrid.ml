@@ -5,8 +5,8 @@ open Ohm.Universal
 open BatPervasives
 
 module Config  = MAvatarGrid_config
-module Column  = MAvatarGrid_column
-module Eval    = MAvatarGrid_eval
+module Column  = MAvatarGridColumn
+module Eval    = MAvatarGridEval
 
 module MyGrid  = OhmCouchTabular.Make(Config)
 
@@ -39,24 +39,12 @@ let list_id (id : [`List] IAvatarGrid.id) =
   MyGrid.ListId.of_id (IAvatarGrid.to_id $ IAvatarGrid.decay id)
 
 let _ = 
-  let create_list (lid,gid,iid,diffs) = 
-    let  namer = MPreConfigNamer.load iid in
+  let create_list (lid,gid,iid,cols) = 
     let  lid   = MyGrid.ListId.of_id $ IAvatarGrid.to_id lid in 
-    let! cols  = ohm $ Column.apply_diffs [] gid iid namer diffs in
     MyGrid.set_list lid 
       ~columns:cols
       ~source:(`Group gid)
       ~filter:(Some (`Group (gid, `InList)))
   in
   Sig.listen MGroup.Signals.on_create_list create_list
-
-let _ = 
-  let upgrade_list (lid,gid,iid,diffs) = 
-    let namer = MPreConfigNamer.load iid in
-    let lid = MyGrid.ListId.of_id $ IAvatarGrid.to_id lid in 
-    let! columns, _, _ = ohm_req_or (return ()) $ MyGrid.get_list lid in 
-    let! new_columns = ohm $ Column.apply_diffs columns gid iid namer diffs in
-    MyGrid.set_columns lid new_columns
-  in
-  Sig.listen MGroup.Signals.on_upgrade_list upgrade_list
 

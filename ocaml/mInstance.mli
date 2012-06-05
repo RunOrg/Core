@@ -11,7 +11,6 @@ type t = <
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
-  version : string ;
   install : bool ;
   stub    : bool ;
   white   : IWhite.t option
@@ -87,9 +86,6 @@ module Signals : sig
 
   val on_create  : ( [`Created] IInstance.id, 
 		     unit O.run ) Ohm.Sig.channel
-
-  val on_upgrade : ( [`Unknown] IInstance.id * MPreConfig.VerticalDiff.t list, 
-		     unit O.run ) Ohm.Sig.channel
 end
 
 val create : 
@@ -140,9 +136,6 @@ val free_name : string -> string O.run
 
 val visited : count:int -> 'any ICurrentUser.id -> (#Ohm.CouchDB.ctx, IInstance.t list) Ohm.Run.t
 val visit : count:int -> 'any ICurrentUser.id -> IInstance.t option -> IInstance.t list O.run
-
-val first_unapplied_version : (IInstance.t option * string) O.run
-val upgrade : ?upto:string -> IInstance.t -> unit O.run
 
 module Backdoor : sig
 

@@ -20,7 +20,6 @@ module T = struct
     site    : string option ;
     desc    : string option ;
    ?install : bool = false ;
-   ?version : string = "" ;
    ?light   : bool = true ;
    ?stub    : bool = false ;
    ?white   : IWhite.t option 

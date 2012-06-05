@@ -8,6 +8,8 @@ type 'rel id = t
 
 let decay id = id
 
+let admin = `Admin
+
 module Assert = struct 
   let can_create id = id
 end
