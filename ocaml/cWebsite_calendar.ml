@@ -46,9 +46,22 @@ let () = UrlClient.def_event begin fun req res ->
 
   let  eid = req # args in
   let! entity = ohm_req_or (C404.render cuid res) $ MEntity.get_if_public eid in  
-  let! name = ohm $ VEntityUtil.name entity in
 
-  let html = VNavbar.event (cuid,Some iid) in
+  let! name = ohm $ CEntityUtil.name entity in
+  let! pic  = ohm $ CEntityUtil.pic_large entity in
+
+  let data = object
+    method navbar   = cuid, Some iid 
+    method side     = []
+    method info     = []
+    method name     = name
+    method instance = instance # name
+    method desc     = ""
+    method pic      = pic 
+    method home     = Action.url UrlClient.website (instance # key) ()
+  end in
+ 
+  let html = Asset_Entity_Public.render data in
   CPageLayout.core (`Website_Event_Title (instance # name, name)) html res
 
 end

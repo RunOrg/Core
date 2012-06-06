@@ -8,3 +8,6 @@ let name entity =
   let unnamed = AdLib.get `Entity_Unnamed in
   let! name = ohm_req_or unnamed $ Run.opt_map TextOrAdlib.to_string (MEntity.Get.name entity) in
   return name
+
+let pic_large entity = 
+  CPicture.large (MEntity.Get.picture entity)
