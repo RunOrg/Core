@@ -46,6 +46,8 @@ let () = UrlClient.def_event begin fun req res ->
 
   let  eid = req # args in
   let! entity = ohm_req_or (C404.render cuid res) $ MEntity.get_if_public eid in  
+
+  
   
   let html = VNavbar.event (cuid,Some iid) in
   CPageLayout.core (`Website_Event_Title (instance # name, "The Event")) html res
