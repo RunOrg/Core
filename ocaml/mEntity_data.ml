@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Util
@@ -59,42 +59,43 @@ let create ~id ~who ?name ?data () =
 
   let diffs = match data with None -> [] | Some data -> [`Set data] in
   let diffs = match name with None -> diffs | Some name -> (`Name name) :: diffs in
-
+  
   Store.create ~id:(IEntity.decay id)
     ~init:{ Data.data = [] ; Data.name = None }
     ~diffs:(diffs)
     ~info:(MUpdateInfo.info ~who)
     ()
-
-  |> Run.map ignore
-  
+    
+  |> Run.map ignore  
+    
 let update ~id ~who ?name ~data () = 
   
   let! obj = ohm_req_or (return ()) $ Store.get (IEntity.decay id) in
   let current = Store.current obj in
-
+  
   let name =
     (* Only update name if it changed *)
     match name with None -> None | Some name ->
       if name = current.Data.name then None else Some name
   in
-
+    
   let data = 
     (* Only keep data CHANGES *)    
     List.filter (fun (k,v) -> v <> (try List.assoc k current.Data.data with Not_found -> Json.Null)) data
   in
-
+    
   let diffs = match data with [] -> [] | data -> [`Set data] in    
   let diffs = match name with None -> diffs | Some name -> (`Name name) :: diffs in
-
+  
   if diffs = [] then return () else
-
+    
     Store.update ~id:(IEntity.decay id) ~diffs ~info:(MUpdateInfo.info ~who) ()
     |> Run.map ignore
-
+    
 type 'a t = Data.t 
 
-let get id = Store.get (IEntity.decay id) |> Run.map (BatOption.map Store.current)
+let get id = 
+  Store.get (IEntity.decay id) |> Run.map (BatOption.map Store.current)
 
 let description tmpl t = 
   match PreConfig_Template.Meaning.description tmpl with 

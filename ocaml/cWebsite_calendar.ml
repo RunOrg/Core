@@ -49,6 +49,7 @@ let () = UrlClient.def_event begin fun req res ->
 
   let! name = ohm $ CEntityUtil.name entity in
   let! pic  = ohm $ CEntityUtil.pic_large entity in
+  let! desc = ohm $ CEntityUtil.desc entity in
 
   let data = object
     method navbar   = cuid, Some iid 
@@ -56,7 +57,7 @@ let () = UrlClient.def_event begin fun req res ->
     method info     = []
     method name     = name
     method instance = instance # name
-    method desc     = ""
+    method desc     = BatOption.default "" desc
     method pic      = pic 
     method home     = Action.url UrlClient.website (instance # key) ()
   end in
