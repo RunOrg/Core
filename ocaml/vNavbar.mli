@@ -4,6 +4,8 @@ type t = ICurrentUser.t option * IInstance.t option
 
 val intranet : t -> Ohm.Html.writer O.run 
 
+val event : t -> Ohm.Html.writer O.run
+
 val public :
      [>`Home|`Calendar] 
   -> left:Ohm.Html.writer O.run

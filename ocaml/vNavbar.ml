@@ -6,7 +6,7 @@ open BatPervasives
 
 type t = ICurrentUser.t option * IInstance.t option 
 
-let render ~public ~menu (cuid,iid) = 
+let render ?(hidepic=false) ~public ~menu (cuid,iid) = 
 
   let  uid      = BatOption.map IUser.Deduce.can_view cuid in
   let! user     = ohm $ Run.opt_bind MUser.get uid in
@@ -68,6 +68,7 @@ let render ~public ~menu (cuid,iid) =
     in
 
     return $ Some (object
+      method hidepic = hidepic
       method picture = pic
       method public  = public
       method url     = url
@@ -111,22 +112,24 @@ let intranet (cuid,iid) =
   
   render ~public:false ~menu (cuid,iid) 
 
+let public_menu menu key = 
+  List.map (fun (url,label,id) -> (object
+    method url = url 
+    method sel = id = menu
+    method label = AdLib.write label 
+  end)) [
+    Action.url UrlClient.website  key (), `PageLayout_Navbar_Public_Website,  `Home ;
+    Action.url UrlClient.calendar key (), `PageLayout_Navbar_Public_Calendar, `Calendar ;
+  ]
+
+let event (cuid,iid) = 
+  render ~public:true ~menu:(public_menu `Calendar) (cuid,iid)
+  
 let public menu ~left ~main ~cuid instance = 
 
   let! pic = ohm $ CPicture.large (instance # pic) in
-  
-  let menu key = 
-    List.map (fun (url,label,id) -> (object
-      method url = url 
-      method sel = id = menu
-      method label = AdLib.write label 
-    end)) [
-      Action.url UrlClient.website  key (), `PageLayout_Navbar_Public_Website,  `Home ;
-      Action.url UrlClient.calendar key (), `PageLayout_Navbar_Public_Calendar, `Calendar ;
-    ]
-  in
 
-  let navbar = render ~public:true ~menu (cuid,Some (instance # id)) in
+  let navbar = render ~public:true ~hidepic:true ~menu:(public_menu menu) (cuid,Some (instance # id)) in
       
   let data = object
     method navbar = navbar

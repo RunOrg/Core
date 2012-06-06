@@ -22,7 +22,7 @@
   </div>
 
   {?asso}
-    <div class="-asso">
+    <div class="-asso{if hidepic} -hidepic{/if}">
       {?picture}
         <a href="{url}" class="-pic">
   	  <img src="{pic}"/>
@@ -110,7 +110,7 @@
       &.-with-account { display: block } 
     }     
 
-    .-asso {
+    .-asso.-hidepic {
       .-main { margin-left: 246px } 
       .-pic { display: none } 
     }
