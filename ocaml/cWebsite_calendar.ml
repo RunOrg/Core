@@ -49,6 +49,6 @@ let () = UrlClient.def_event begin fun req res ->
   let! name = ohm $ VEntityUtil.name entity in
 
   let html = VNavbar.event (cuid,Some iid) in
-  CPageLayout.core (`Website_Event_Title (instance # name, "The Event")) html res
+  CPageLayout.core (`Website_Event_Title (instance # name, name)) html res
 
 end
