@@ -267,8 +267,8 @@ module Build = struct
     ^ "\n\nmodule Meaning = struct\n\n"
     ^ String.concat "\n\n" begin
       List.map (fun (mean,meanstr) -> 
-	Printf.sprintf "  let %s = function\n  | %s" meanstr 
-	  (String.concat "\n  | " (List.map (fun t -> 
+	Printf.sprintf "  let %s = function\n    | %s" meanstr 
+	  (String.concat "\n    | " (List.map (fun t -> 
 	    "`" ^ t.t_id ^ " -> " ^ begin 
 	      try let f = List.find (fun f -> f.f_mean = Some mean) t.t_fields in
 		  Printf.sprintf "Some %S" f.f_key
