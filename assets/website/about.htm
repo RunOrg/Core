@@ -1,6 +1,12 @@
 <div class="public-about">
   <div class="-desc">
-    {html|raw}
+    {?html}
+      {this|raw}
+    {else}
+      <p class="empty-text">
+	{`Website_About_NoDesc} 
+      </p>
+    {/?}
   </div>
 </div>
 

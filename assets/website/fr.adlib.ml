@@ -11,6 +11,7 @@
 | `Website_Event_Where -> "Où ?"
 
 | `Website_About_Title website -> "À propos - " ^ website
+| `Website_About_NoDesc -> "Cette association n'a pas renseigné de description."
 
 | `Website_Count_Subscribers i -> if i = 1 then "Abonné" else "Abonnés"
 | `Website_Count_Articles i -> if i = 1 then "Article" else "Articles"
