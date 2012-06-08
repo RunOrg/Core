@@ -3,6 +3,7 @@
 | `Website_MiniCalendar_Go
 
 | `Website_Calendar_Title of string
+| `Website_Calendar_List
 
 | `Website_Event_Title of string * string
 | `Website_Event_When

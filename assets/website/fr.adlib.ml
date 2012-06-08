@@ -3,6 +3,7 @@
 | `Website_MiniCalendar_Go -> "Aller à l'agenda"
 
 | `Website_Calendar_Title website -> "Agenda - " ^ website
+| `Website_Calendar_List -> "Activités prévues"
 
 | `Website_Event_Title (website,event) -> event ^ " - " ^ website
 | `Website_Event_When -> "Quand ?"

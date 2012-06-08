@@ -24,7 +24,7 @@
 
     {@!instances} 
       {?instances} 
-        <h3 class="-instances">{ `MeAccount_Instances } ({count|string_of_int|esc})</h3>
+        <h3 class="list-title">{ `MeAccount_Instances } ({count|string_of_int|esc})</h3>
 	<ul class="-instances">
 	  {#list}
             <li class="-item">
@@ -55,13 +55,9 @@
 .account-page {
 
   overflow: hidden;
-
-  h3.-instances { 
+ 
+  .list-title { 
     margin: 40px 50px 0;
-    padding: 3px 6px;
-    font-weight: normal;
-    font-size: 16.99px;
-    color: #BBB;
   }
 
   ul.-instances {
