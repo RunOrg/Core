@@ -1,4 +1,9 @@
 <div class="public-about">
+
+  <div class="-tags">
+    {#tags}{ this | Asset_Network_Tag.render | ohm }{/#} 
+  </div>
+
   <div class="-desc">
     {?html}
       {this|raw}
@@ -8,13 +13,20 @@
       </p>
     {/?}
   </div>
+
 </div>
 
 <style>
 .public-about { 
   .-desc {
     color: #555; 
-    margin: 16px 16px 48px;
+    margin: 0 250px 16px 16px;
+    p { margin-top: 0 }
   }
+  .-tags {
+    width: 230px;
+    float: right;
+    text-align: center;
+  } 
 }
 </style>

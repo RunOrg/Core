@@ -12,8 +12,14 @@ let () = UrlClient.def_about begin fun req res ->
   
   let! profile = ohm_req_or (C404.render cuid res) $ MInstance.Profile.get iid in  
 
+  let tags = List.map (fun tag -> (object
+    method url  = "" 
+    method text = tag
+  end)) (profile # tags) in
+
   let main = Asset_Website_About.render (object
     method html = None (* profile # desc *)
+    method tags = tags
   end) in
 
   let left = Left.render ~calendar:false cuid key iid in 
