@@ -162,7 +162,7 @@ let get_future ctx =
 
 let get_public_future iid = 
   let! now = ohmctx (#time) in
-  let  now = MFmt.date_of_float 0. (* now *) in 
+  let  now = MFmt.date_of_float now in 
   let! list = ohm $ CalendarView.doc_query
     ~startkey:(iid,now)
     ~endkey:(iid,"99991231")

@@ -4,6 +4,7 @@
 
 | `Website_Calendar_Title website -> "Agenda - " ^ website
 | `Website_Calendar_List -> "Activités prévues"
+| `Website_Calendar_Empty -> "Aucune activité n'est prévue."
 
 | `Website_Event_Title (website,event) -> event ^ " - " ^ website
 | `Website_Event_When -> "Quand ?"

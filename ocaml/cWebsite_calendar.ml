@@ -29,9 +29,7 @@ let () = UrlClient.def_calendar begin fun req res ->
     end)      
   end future in 
   
-  let main = Asset_Website_Calendar.render (object
-    method list = list
-  end) in
+  let main = Asset_Website_Calendar.render list in
 
   let left = Left.render ~calendar:false cuid key iid in 
   let html = VNavbar.public `Calendar ~cuid ~left ~main instance in
