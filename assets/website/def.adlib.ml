@@ -5,6 +5,8 @@
 | `Website_Calendar_Title of string
 
 | `Website_Event_Title of string * string
+| `Website_Event_When
+| `Website_Event_Where
 
 | `Website_Count_Subscribers of int
 | `Website_Count_Articles of int

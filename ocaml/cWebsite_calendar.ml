@@ -101,6 +101,7 @@ let () = UrlClient.def_event begin fun req res ->
   let! info = ohm $ render_info (PreConfig_Template.Info.rest tmpl) in
 
   let url = Action.url UrlClient.event (req # server) (req # args) in
+  let parent = Action.url UrlClient.website (req # server) () in
   let twitter = 
     "http://platform.twitter.com/widgets/tweet_button.html?count=vertical&size=small&url="
     ^ Netencoding.Url.encode url 
@@ -111,18 +112,31 @@ let () = UrlClient.def_event begin fun req res ->
   and googleplus = 
     "https://plusone.google.com/_/+1/fastbutton?bsv=pr&url="
     ^ Netencoding.Url.encode url 
+    ^ "&parent="
+    ^ Netencoding.Url.encode parent
     ^ "&size=tall&count=true&hl=en-US&jsh=m%3B%2F_%2Fapps-static%2F_%2Fjs%2Fgapi%2F__features__%2Frt%3Dj%2Fver%3DEnTGPTISmWk.fr.%2Fsv%3D1%2Fam%3D!PemfnfjrL2yI81ARQg%2Fd%3D1%2Frs%3DAItRSTOVJ7YMlvCOv0BPtI0JpvYXm1nDxw#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart"
   in
- 
+
+  let! map = ohm begin
+    let! loc  = req_or (return None) (PreConfig_Template.Meaning.location tmpl) in 
+    let! addr = req_or (return None) 
+      (try Some (Json.to_string (List.assoc loc data)) with _ -> None) in
+    let  addr = Netencoding.Url.encode addr in
+    return $ Some (object (self)
+      method enlarge = "http://maps.google.fr/maps?f=q&hl=fr&q="^addr
+      method iframe  = self # enlarge ^ "&hnear="^addr^"&iwloc=N&t=m&output=embed&ie=UTF8"
+    end)
+  end in 
+
   let data = object
     method navbar   = cuid, Some iid 
-    method side     = [ (object
-      method title = return $ Html.str "Quand ?"
+    method side     = List.filter (#info|-(<>)[]) [ (object
+      method title = AdLib.write `Website_Event_When
       method map   = None
       method info  = side_when
     end) ; (object
-      method title = return $ Html.str "Où ?"
-      method map   = None
+      method title = AdLib.write `Website_Event_Where
+      method map   = map
       method info  = side_where
     end) ]
     method info     = []

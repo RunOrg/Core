@@ -5,6 +5,8 @@
 | `Website_Calendar_Title website -> "Agenda - " ^ website
 
 | `Website_Event_Title (website,event) -> event ^ " - " ^ website
+| `Website_Event_When -> "Quand ?"
+| `Website_Event_Where -> "Où ?"
 
 | `Website_Count_Subscribers i -> if i = 1 then "Abonné" else "Abonnés"
 | `Website_Count_Articles i -> if i = 1 then "Article" else "Articles"
