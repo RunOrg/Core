@@ -17,3 +17,8 @@ let desc entity =
   let! data = ohm_req_or (return None) $ MEntity.Data.get eid in 
   let  tmpl = MEntity.Get.template entity in
   return (MEntity.Data.description tmpl data) 
+
+let data entity = 
+  let  eid  = MEntity.Get.id entity in
+  let! data = ohm_req_or (return []) $ MEntity.Data.get eid in 
+  return $ MEntity.Data.data data

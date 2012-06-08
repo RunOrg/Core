@@ -47,13 +47,47 @@ let () = UrlClient.def_event begin fun req res ->
   let  eid = req # args in
   let! entity = ohm_req_or (C404.render cuid res) $ MEntity.get_if_public eid in  
 
+  let  tmpl = MEntity.Get.template entity in 
   let! name = ohm $ CEntityUtil.name entity in
   let! pic  = ohm $ CEntityUtil.pic_large entity in
   let! desc = ohm $ CEntityUtil.desc entity in
+  let! data = ohm $ CEntityUtil.data entity in
+
+  let render_side format = 
+    Run.list_filter begin fun field -> 
+      let! items = ohm $ Run.list_filter begin fun (source,kind) -> 
+	let json = try List.assoc source data with Not_found -> Json.Null in
+	if json = Json.Null then return None else
+	  match kind with 
+	    | `LongText
+	    | `Text     -> return (try Some (Json.to_string json) with _ -> None)
+	    | `Url      -> return (try Some (Json.to_string json) with _ -> None)
+	    | `Address  -> return (try Some (Json.to_string json) with _ -> None)
+	    | `Date     -> try let  date = Json.to_string json in
+			       let! time = req_or (return None) $ MFmt.float_of_date date in
+			       let! text = ohm $ AdLib.get (`WeekDate time) in
+			       return (Some text)
+	                   with _ -> return None
+      end field in
+      if items = [] then return None else return 
+	(Some (String.concat " · " items))
+    end format
+  in
+
+  let! side_when  = ohm $ render_side (PreConfig_Template.Info.eventWhen tmpl) in
+  let! side_where = ohm $ render_side (PreConfig_Template.Info.eventWhere tmpl) in
 
   let data = object
     method navbar   = cuid, Some iid 
-    method side     = []
+    method side     = [ (object
+      method title = return $ Html.str "Quand ?"
+      method map   = None
+      method info  = side_when
+    end) ; (object
+      method title = return $ Html.str "Où ?"
+      method map   = None
+      method info  = side_where
+    end) ]
     method info     = []
     method name     = name
     method instance = instance # name

@@ -262,6 +262,97 @@ module Build = struct
 		   | `Date    -> "`Date"
 		   | `Field s -> Printf.sprintf "`Field %S" s))) t.t_cols))
     ) (!templates))
+
+      (* The information display ============================================================================ *)
+    ^ "\n\nmodule Info = struct"
+    ^ "\n\n  let eventWhen = function\n    | "
+    ^ String.concat "\n    | " begin List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id 
+	(try let field = List.find 
+	       (fun f -> f.f_mean = Some `Date) t.t_fields in
+	     let fieldname = field.f_key in	     
+	     let _, section = List.find 
+	       (fun (_,items) -> List.exists 
+		 (fun (_,fields) -> List.exists (fun (name,_) -> name = fieldname) fields)
+		 items) t.t_page in
+	     Printf.sprintf "[%s]"
+	       (String.concat ";" (List.map (fun (_,fields) -> 
+		 Printf.sprintf "[%s]" 
+		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
+		     src (match kind with 
+		       | `LongText -> "LongText"
+		       | `Text     -> "Text"
+		       | `Url      -> "Url"
+		       | `Date     -> "Date"
+		       | `Address  -> "Address")) fields
+		    ))) section
+		) )
+	 with Not_found -> "[]")					 
+    ) (!templates) end 
+    ^ "\n\n  let eventWhere = function\n    | "
+    ^ String.concat "\n    | " begin List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id 
+	(try let field = List.find 
+	       (fun f -> f.f_mean = Some `Location) t.t_fields in
+	     let fieldname = field.f_key in	     
+	     let _, section = List.find 
+	       (fun (_,items) -> List.exists 
+		 (fun (_,fields) -> List.exists (fun (name,_) -> name = fieldname) fields)
+		 items) t.t_page in
+	     Printf.sprintf "[%s]"
+	       (String.concat ";" (List.map (fun (_,fields) -> 
+		 Printf.sprintf "[%s]" 
+		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
+		     src (match kind with 
+		       | `LongText -> "LongText"
+		       | `Text     -> "Text"
+		       | `Url      -> "Url"
+		       | `Date     -> "Date"
+		       | `Address  -> "Address")) fields
+		    ))) section
+		) )
+	 with Not_found -> "[]")					 
+    ) (!templates) end 
+    ^ "\n\n  let rest = function\n    | "
+    ^ String.concat "\n    | " begin List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id 
+	(let date_fieldname = 
+	   try let f = List.find 
+		 (fun f -> f.f_mean = Some `Date) t.t_fields in
+	       f.f_key
+	   with _ -> "*"
+	 in	     
+	 let loc_fieldname = 
+	   try let f = List.find 
+		 (fun f -> f.f_mean = Some `Location) t.t_fields in
+	       f.f_key 
+	   with _ -> "-" 
+	 in	    
+	 let sections = List.filter 
+	   (fun (_,items) -> List.for_all
+	     (fun (_,fields) -> List.for_all 
+	       (fun (name,_) -> name <> date_fieldname && name <> loc_fieldname) 
+	       fields)
+	     items) t.t_page 
+	 in
+	 Printf.sprintf "[%s]"
+	   (String.concat ";" (List.map (fun (label,items) -> 
+	     Printf.sprintf "`%s,[%s]" label 
+	       (String.concat ";" (List.map (fun (label,fields) -> 
+		 Printf.sprintf "%s,[%s]"
+		   (match label with Some s -> "Some `"^s | None -> "None")
+		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
+		     src (match kind with 
+		       | `LongText -> "LongText"
+		       | `Text     -> "Text"
+		       | `Url      -> "Url"
+		       | `Date     -> "Date"
+		       | `Address  -> "Address")) fields
+		    ))) items
+		))) sections))	
+	)) (!templates) end 
+
+    ^ "\n\nend"
       
       (* The field name, by meaning ========================================================================= *)
     ^ "\n\nmodule Meaning = struct\n\n"
