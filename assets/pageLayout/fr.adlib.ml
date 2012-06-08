@@ -10,3 +10,4 @@
 | `PageLayout_Foot_PoweredBy -> "Propulsé par"
 | `PageLayout_Navbar_Public_Website -> "Accueil"
 | `PageLayout_Navbar_Public_Calendar -> "Agenda"
+| `PageLayout_Navbar_Public_About -> "À propos"

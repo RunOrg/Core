@@ -7,7 +7,7 @@ val intranet : t -> Ohm.Html.writer O.run
 val event : t -> Ohm.Html.writer O.run
 
 val public :
-     [>`Home|`Calendar] 
+     [>`Home|`Calendar|`About] 
   -> left:Ohm.Html.writer O.run
   -> main:Ohm.Html.writer O.run 
   -> cuid:ICurrentUser.t option

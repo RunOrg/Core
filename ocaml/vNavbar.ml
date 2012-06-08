@@ -120,6 +120,7 @@ let public_menu menu key =
   end)) [
     Action.url UrlClient.website  key (), `PageLayout_Navbar_Public_Website,  `Home ;
     Action.url UrlClient.calendar key (), `PageLayout_Navbar_Public_Calendar, `Calendar ;
+    Action.url UrlClient.about    key (), `PageLayout_Navbar_Public_About,    `About
   ]
 
 let event (cuid,iid) = 

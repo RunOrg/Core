@@ -7,6 +7,7 @@ open BatPervasives
 module A = Action.Args
 
 let website, def_website = O.declare O.client "" A.none
+let about,   def_about   = O.declare O.client "about" A.none
 
 (* Subscribe and unsubscribe ============================================================================== *)
 

@@ -10,4 +10,5 @@
 | `PageLayout_Foot_PoweredBy
 | `PageLayout_Navbar_Public_Website
 | `PageLayout_Navbar_Public_Calendar
+| `PageLayout_Navbar_Public_About
 
