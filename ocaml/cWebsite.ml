@@ -4,6 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module About     = CWebsite_about
 module Article   = CWebsite_article
 module Left      = CWebsite_left
 module Subscribe = CWebsite_subscribe
