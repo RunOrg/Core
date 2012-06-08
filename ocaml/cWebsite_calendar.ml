@@ -53,30 +53,67 @@ let () = UrlClient.def_event begin fun req res ->
   let! desc = ohm $ CEntityUtil.desc entity in
   let! data = ohm $ CEntityUtil.data entity in
 
+  let render_fields fields = 
+    Run.list_filter begin fun (source,kind) -> 
+      let json = try List.assoc source data with Not_found -> Json.Null in
+      if json = Json.Null then return None else
+	match kind with 
+	  | `LongText
+	  | `Text     -> return (try Some (Json.to_string json) with _ -> None)
+	  | `Url      -> return (try Some (Json.to_string json) with _ -> None)
+	  | `Address  -> return (try Some (Json.to_string json) with _ -> None)
+	  | `Date     -> try let  date = Json.to_string json in
+			     let! time = req_or (return None) $ MFmt.float_of_date date in
+			     let! text = ohm $ AdLib.get (`WeekDate time) in
+			     return (Some text)
+	    with _ -> return None
+    end fields
+  in
+
   let render_side format = 
-    Run.list_filter begin fun field -> 
-      let! items = ohm $ Run.list_filter begin fun (source,kind) -> 
-	let json = try List.assoc source data with Not_found -> Json.Null in
-	if json = Json.Null then return None else
-	  match kind with 
-	    | `LongText
-	    | `Text     -> return (try Some (Json.to_string json) with _ -> None)
-	    | `Url      -> return (try Some (Json.to_string json) with _ -> None)
-	    | `Address  -> return (try Some (Json.to_string json) with _ -> None)
-	    | `Date     -> try let  date = Json.to_string json in
-			       let! time = req_or (return None) $ MFmt.float_of_date date in
-			       let! text = ohm $ AdLib.get (`WeekDate time) in
-			       return (Some text)
-	                   with _ -> return None
-      end field in
-      if items = [] then return None else return 
-	(Some (String.concat " · " items))
+    Run.list_filter begin fun item -> 
+      let! fields = ohm $ render_fields item in
+      if fields = [] then return None else return 
+	(Some (String.concat " · " fields))
     end format
   in
+
+  let render_info format = 
+    Run.list_filter begin fun (label,items) -> 
+      let! items = ohm $ Run.list_filter begin fun (labelopt,fields) -> 
+	let! fields = ohm $ render_fields fields in
+	if fields = [] then return None else return 
+	  (Some (object
+	    method label = BatOption.map AdLib.write labelopt 
+	    method data  = String.concat " · " fields
+	  end))
+      end items in
+      return (if items = [] then None else Some (object
+	method title = AdLib.write label
+	method items = items
+      end))
+    end format
+  in    
 
   let! side_when  = ohm $ render_side (PreConfig_Template.Info.eventWhen tmpl) in
   let! side_where = ohm $ render_side (PreConfig_Template.Info.eventWhere tmpl) in
 
+  let! info = ohm $ render_info (PreConfig_Template.Info.rest tmpl) in
+
+  let url = Action.url UrlClient.event (req # server) (req # args) in
+  let twitter = 
+    "http://platform.twitter.com/widgets/tweet_button.html?count=vertical&size=small&url="
+    ^ Netencoding.Url.encode url 
+  and facebook = 
+    "http://www.facebook.com/plugins/like.php?href="
+    ^ Netencoding.Url.encode url 
+    ^ "&send=false&layout=box_count&width=70&show_faces=false&action=like&colorscheme=light&height=65"
+  and googleplus = 
+    "https://plusone.google.com/_/+1/fastbutton?bsv=pr&url="
+    ^ Netencoding.Url.encode url 
+    ^ "&size=tall&count=true&hl=en-US&jsh=m%3B%2F_%2Fapps-static%2F_%2Fjs%2Fgapi%2F__features__%2Frt%3Dj%2Fver%3DEnTGPTISmWk.fr.%2Fsv%3D1%2Fam%3D!PemfnfjrL2yI81ARQg%2Fd%3D1%2Frs%3DAItRSTOVJ7YMlvCOv0BPtI0JpvYXm1nDxw#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart"
+  in
+ 
   let data = object
     method navbar   = cuid, Some iid 
     method side     = [ (object
@@ -94,7 +131,10 @@ let () = UrlClient.def_event begin fun req res ->
     method desc     = BatOption.default "" desc
     method pic      = pic 
     method home     = Action.url UrlClient.website (instance # key) ()
-  end in
+    method twitter  = twitter
+    method facebook = facebook
+    method googleplus = googleplus
+ end in
  
   let html = Asset_Entity_Public.render data in
   CPageLayout.core (`Website_Event_Title (instance # name, name)) html res
