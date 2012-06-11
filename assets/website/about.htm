@@ -1,7 +1,43 @@
 <div class="public-about">
 
-  <div class="-tags">
-    {#tags}{ this | Asset_Network_Tag.render | ohm }{/#} 
+  <div class="-side">
+
+    {if tags | OhmAsset.notEmpty } 
+      <div class="-tags">
+        {#tags}{ this | Asset_Network_Tag.render | ohm }{/#} 
+      </div>
+    {/if}
+
+    {?site}
+      <div class="-link"> 
+        <a style="background-image:url(/public/icon/world_link.png)" 
+	   href="{this}">{ `Website_About_Site }</a>
+      </div>
+    {/?}
+    
+    {?twitter}
+      <div class="-link"> 
+        <a style="background-image:url(/public/icon/twitter.png)"
+	   href="{this}">{ `Website_About_Twitter }</a>
+      </div>
+    {/?}
+    
+    {?facebook}
+      <div class="-link"> 
+        <a style="background-image:url(/public/icon/facebook.png)"
+	   href="{this}">{ `Website_About_Facebook }</a>
+      </div>
+    {/?}
+
+    {?map}
+      <div class="-map">
+	<span>{address}</span>
+	<iframe width="230" height="230" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+		src="{iframe}" style="border:1px solid #888"></iframe>
+	<a target="_blank" href="{enlarge}">{`Entity_Map_Enlarge}</a>
+      </div>
+    {/?}
+
   </div>
 
   <div class="-desc">
@@ -20,13 +56,32 @@
 .public-about { 
   .-desc {
     color: #555; 
-    margin: 0 250px 16px 16px;
+    margin: 0 250px 0 0;
     p { margin-top: 0 }
   }
-  .-tags {
-    width: 230px;
+  .-side {
+    width: 232px;
     float: right;
-    text-align: center;
+    > div  { margin-bottom: 4px }       
+    .-tags { margin-bottom: 20px } 
+    .-map  { 
+      margin-top: 20px; 
+      font-size: 13px;
+      span { 
+        display: block; 
+        margin-bottom: 5px;
+      }
+      a { 
+        display: block; 
+        text-align: center
+      }
+    } 
+    .-link a {
+      font-size: 13px;
+      display: block; 
+      padding-left: 22px;
+      background: url() left center no-repeat;
+    } 
   } 
 }
 </style>

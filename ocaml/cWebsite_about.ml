@@ -17,11 +17,26 @@ let () = UrlClient.def_about begin fun req res ->
     method text = tag
   end)) (profile # tags) in
 
-  let main = Asset_Website_About.render (object
-    method html = profile # desc 
-    method tags = tags
-  end) in
+  let! map = ohm begin
+    let! addr = req_or (return None) (profile # address) in 
+    let  akey = Netencoding.Url.encode addr in
+    return $ Some (object (self)
+      method address = addr
+      method enlarge = "http://maps.google.fr/maps?f=q&hl=fr&q="^akey
+      method iframe  = self # enlarge ^ "&hnear="^akey^"&iwloc=N&t=m&output=embed&ie=UTF8"
+    end)
+  end in 
 
+  let main = Asset_Website_About.render (object
+    method html     = profile # desc 
+    method tags     = tags
+    method site     = profile # site
+    method twitter  = profile # twitter
+    method facebook = profile # facebook
+    method map      = map
+    method phone    = profile # phone
+  end) in
+  
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `About ~cuid ~left ~main instance in
 

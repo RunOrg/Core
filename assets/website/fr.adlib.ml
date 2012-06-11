@@ -12,6 +12,9 @@
 
 | `Website_About_Title website -> "À propos - " ^ website
 | `Website_About_NoDesc -> "Cette association n'a pas renseigné de description."
+| `Website_About_Site -> "Site Officiel"
+| `Website_About_Twitter -> "Twitter"
+| `Website_About_Facebook -> "Facebook"
 
 | `Website_Count_Subscribers i -> if i = 1 then "Abonné" else "Abonnés"
 | `Website_Count_Articles i -> if i = 1 then "Article" else "Articles"

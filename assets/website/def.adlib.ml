@@ -12,6 +12,9 @@
 
 | `Website_About_Title of string
 | `Website_About_NoDesc
+| `Website_About_Site
+| `Website_About_Twitter
+| `Website_About_Facebook
 
 | `Website_Count_Subscribers of int
 | `Website_Count_Articles of int
