@@ -1,7 +1,7 @@
 <div class="block-pride">
   <h2>{title}</h2>
   {?subtitle}<h3>{this}</h3>{/?}
-  <p>{text}</p>
+  {text|raw}
   {?link}<p><a href="{url}">{text}</a></p>{/?}
 </div>
 

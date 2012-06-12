@@ -7,6 +7,19 @@ let mapi f l =
 let string str = 
   Printf.sprintf "%S" str
 
+let html str = 
+  let amp     = Str.regexp "&" in
+  let lt      = Str.regexp "<" in
+  let parskip = Str.regexp "\n[ \t\n]*\n" in
+  let break   = Str.regexp "\n" in
+  let str = Str.global_replace amp "&amp;" str in
+  let str = Str.global_replace lt  "&lt;"  str in
+  let paragraphs = Str.split parskip str in 
+  let paragraphs = List.filter (fun s -> s <> "") paragraphs in
+  let paragraphs = List.map (Str.global_replace break "<br/>") paragraphs in
+  let html = "<p>" ^ String.concat "</p><p>" paragraphs ^ "</p>" in
+  string html
+
 let list l = 
   "[" ^ String.concat ";" l ^ "]"
 
@@ -54,10 +67,10 @@ let bulletize items =
 
 let bullets ~title ~subtitle ?(ordered=true) items = 
   call "Asset_Splash_Bullets.render"
-    [ obj [ "title", string title ;
+    [ obj [ "title",    string title ;
 	    "subtitle", string subtitle ;
-	    "ordered", bool ordered ; 
-	    "bullets", list (bulletize items) ]]
+	    "ordered",  bool ordered ; 
+	    "bullets",  list (bulletize items) ]]
 
 let pride ~title ?subtitle ?link text = 
   call "Asset_Splash_Pride.render"
@@ -65,7 +78,7 @@ let pride ~title ?subtitle ?link text =
 	    "subtitle", ( match subtitle with 
 	    | None -> "None"
 	    | Some subtitle -> "Some " ^ string subtitle ) ;
-	    "text", string text ;
+	    "text", html text ;
 	    "link", (match link with 
 	    | None -> "None"
 	    | Some (link,text) -> 
@@ -74,9 +87,9 @@ let pride ~title ?subtitle ?link text =
 
 let price title subtitle text = 
   call "Asset_Splash_Price.render"
-    [ obj [ "title", string title ;
+    [ obj [ "title",    string title ;
 	    "subtitle", string subtitle ;
-	    "text", string text ]]
+	    "text",     html   text ]]
 
 let image ?copyright url = 
   call "Asset_Splash_Image.render" 
@@ -96,7 +109,7 @@ let facebook () =
 let important title text = 
   call "Asset_Splash_Important.render"
     [ obj [ "title", string title ;
-	    "text", string text ]]  
+	    "text",  html text ]]  
 
 let marklast f l = 
   let rec aux = function
@@ -119,7 +132,7 @@ let recommend ~title ~subtitle items =
 let offer ~title ~price text inc = 
   call "Asset_Splash_Offer.render"
     [ obj [ "title",    string title ;
-	    "text",     string text ;
+	    "text",     html text ;
 	    "includes", list (List.map string inc) ;
 	    "price",    string price ] ]
 
@@ -163,7 +176,7 @@ let header id ~title ~text ?trynow menu =
   id, fun subsection -> 
     ( call "Asset_Splash_Pagehead.render" 
 	[ obj [ "title", string title ;
-		"text",  string text 
+		"text",  html text 
 	      ] ] 	
     ) :: begin if (trynow, menu) = (None, []) then [] else 
 	
