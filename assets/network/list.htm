@@ -23,7 +23,7 @@
 	  <li>
   	    <a href="{url}">
 	      {?pic}<img src="{this}"/>{/?}
-	      <span class="-title">{name}</span>
+	      <span class="-name">{name}</span>
 	      {?desc}<span class="-desc">{this}</span>{/?}
 	    </a>
 	    {if tags | OhmAsset.notEmpty} 
@@ -66,7 +66,7 @@
     color: #555;
   }
 
-  .-tags {
+  > .-tags {
     width: 300px;
     float: right;
     ul {
@@ -79,6 +79,37 @@
 
   .-list {
     margin-right: 330px;
+
+    ul { 
+      list-style-type : none; 
+      margin : 0; 
+      padding : 0
+    }
+
+    li {
+      padding: 16px 4px;
+      border-bottom: 1px solid #CCC;
+      > a { 
+        display: block; 
+        overflow: hidden;
+        img { float: left; width: 50px; height: 50px; } 
+      }
+      .-tags, .-name, .-desc { 
+        display: block;
+        margin-left: 66px;
+      }
+
+      .-name { 
+        color: #333;
+      } 
+
+      .-desc { 
+        color: #555;
+        font-size: 13px;
+      }
+
+      .-tags { margin-top: 6px }
+    }
   }
 }
 </style>

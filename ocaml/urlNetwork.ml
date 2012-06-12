@@ -6,4 +6,5 @@ open BatPervasives
 
 module A = Action.Args
 
-let tag, def_tag = O.declare O.core "network/tag" (A.r A.string)
+let root, def_root = O.declare O.core "network/all" A.none
+let tag,  def_tag  = O.declare O.core "network/tag" (A.r A.string)
