@@ -10,6 +10,7 @@ module Actions = struct
   open CLogin
   open CMe
   open CWebsite
+  open CNetwork
 end
 
 module Main = Ohm.Main.Make(O.Reset)
