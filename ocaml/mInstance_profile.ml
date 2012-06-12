@@ -118,7 +118,7 @@ module TagView = CouchDB.DocView(struct
   module Doc    = Info
   module Design = Design
   let name = "by_tag"
-  let map  = "if (doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
+  let map  = "if (!doc.unbound && doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
 end)
 
 let by_tag ?start ~count tag = 
@@ -143,7 +143,7 @@ module TagStatsView = CouchDB.ReduceView(struct
   module Value  = Fmt.Int
   module Design = Design
   let name = "stats_by_tag"
-  let map  = "if (doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
+  let map  = "if (!doc.unbound && doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
   let reduce = "return sum(values)"
   let group  = true
   let level  = None
@@ -161,7 +161,7 @@ module AllView = CouchDB.DocView(struct
   module Doc    = Info
   module Design = Design
   let name = "searchable"
-  let map  = "if (doc.search) emit(null)"
+  let map  = "if (!doc.unbound && doc.search) emit(null)"
 end)
 
 let all ?start ~count () = 
