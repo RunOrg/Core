@@ -7,6 +7,15 @@
     <h1>{ `Network_List_All }</h1> 
   {/?}
 
+  <div class="-tags">
+    <h2>{`Network_List_Filter}</h2> 
+    <ul>
+      {#tags}
+        <li>{tag | Asset_Network_Tag.render | ohm} &times; {count|string_of_int|esc} </li>
+      {/#}
+    </ul>
+  </div>
+
   <div class="-list">
     {if list | OhmAsset.notEmpty} 
       <ul>
@@ -32,13 +41,23 @@
     {/if}
   </div>
 
-  <div class="-tags">
-    <h2>{`Network_List_Filter}</h2> 
-    <ul>
-      {#tags}
-        <li>{tag | Asset_Network_Tag.render | ohm} &times; {count|string_of_int|esc} </li>
-      {/#}
-    </ul>
-  </div>
-
 </div>
+
+{ Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+.network-list {
+  width: 950px;
+  margin: auto;
+  overflow: hidden;
+
+  .-tags {
+    width: 300px;
+    float: right;
+  }
+
+  .-list {
+    margin-right: 330px;
+  }
+}
+</style>
