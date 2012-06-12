@@ -1,0 +1,93 @@
+<div class="footer-zone">
+  <div class="-top"></div>
+  <div class="-inner">
+    <ul> 
+      {#this}<li><a href="{url}">{name}</a></li>{/#}
+      <li class="-login"><a href="/me">{ `Splash_Footer_Login }</a></li>
+    </ul>
+    <ul> 
+      <li><b>
+	  { `Splash_Footer_Blogs } 
+      </b></li>
+      <li><a href="http://runorg.com/blog/">
+	  { `Splash_Footer_Blog }   
+      </a></li>
+      <li><a href="http://runorg.com/actu/">
+	  { `Splash_Footer_Actu } 
+      </a></li>
+      <li><a href="http://runorg-tech.tumblr.com/">
+	  { `Splash_Footer_Tech } 
+      </a></li>
+      <li><b>
+	  { `Splash_Footer_Online } 
+      </b></li>
+      <li><a href="http://www.facebook.com/pages/RunOrg/150971591580879">
+	  { `Splash_Footer_Facebook } 
+      </a></li>
+      <li><a href="https://twitter.com/runorg">
+	  { `Splash_Footer_Twitter }   
+      </a></li>
+      <li><a href="http://eepurl.com/dtg6H">
+	  { `Splash_Footer_Newsletter }  
+      </a></li>
+    </ul>
+    <p>
+      &copy; 2012 RunOrg &ndash; <a href="/mentions-legales">{ `Splash_Footer_Legal }</a>
+    </p>
+  </div>
+</div>
+
+<script>
+@_gaq = [['_setAccount','UA-17992452-1'],['_setDomainName','.runorg.com'],['_trackPageview']]
+do () -> 
+  ga = document.createElement 'script'
+  ga.type  = 'text/javascript'
+  ga.async = true
+  ga.src   = 'http://www.google-analytics.com/ga.js'
+  s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore ga, s
+</script>
+
+<style>
+.theme-splash .footer-zone {
+  min-height: 100px;
+  margin-top: 40px;
+  background-color: #222;
+  overflow: hidden;
+  box-shadow: 0 0 9px black;
+  color: white;
+
+  .-inner {
+    margin: 10px auto;
+    width: 950px;
+  }
+
+  ul {
+    margin: 10px 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+  }
+
+  li {
+    margin-right: 20px;
+    float: left;
+    font-size: 11px;
+  }
+
+  li.-login {
+    margin-right: 0px;
+    float: right;
+    font-weight: bold;
+  }
+
+  p {
+    text-align: center;
+    font-size: 11px;
+  }
+
+  a {
+    color: white;
+  }
+}
+</style>

@@ -1,0 +1,36 @@
+<div class="block-composite {kind}">
+  <div class="-right">
+    {right | ohm}
+  </div>
+  <div class="-left">
+    {left | ohm}
+  </div>
+</div>
+
+<style>
+.theme-splash .block-composite {
+  overflow: hidden;
+  width: 950px;
+  margin: 25px auto;
+
+  .-left {
+    float: left;
+  }
+
+  .-right {
+    float: right;
+  }
+
+  &.-LRR .-left, &.-LLR .-right {
+    width: 310px;
+  }
+
+  &.-LRR .-right, &.-LLR .-left {
+    width: 630px;
+  }
+
+  &.-LR .-right, &.-LR .-left {
+    width: 470px;
+  }
+}
+</style>

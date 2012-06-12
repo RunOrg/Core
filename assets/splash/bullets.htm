@@ -1,0 +1,68 @@
+<div class="block-bullets">
+  <h2>{title}</h2>
+  <h3>{subtitle}</h3>
+  {#bullets}
+    <p>
+      <span>{number|string_of_int|esc}</span>
+      {text}
+    </p>
+  {/#}
+</div>
+
+<style>
+.theme-splash .block-bullets {
+  padding: 12px;
+  max-width: 475px;
+  margin: auto;
+
+  h2 {
+    color: black;
+    text-transform: none;
+    text-shadow: #BBB 0px 1px 0px;
+    margin: 0 0 15px;
+    text-align: left;
+    line-height:30px;
+    font-size: 24px;
+    height: 30px;
+    font-weight: normal;
+  }
+
+  h3 {
+    color: #555;
+    text-transform: none;
+    margin: 0;
+    position: relative;
+    top: -15px;
+    text-align:left;
+    line-height:18px;
+    font-size: 18px;
+    height: 18px;
+    font-weight: normal;
+  }
+
+  p {
+    color: #777;
+    text-align: left;
+    margin: 0 0 14px;
+    padding-left: 25px;
+    line-height:25px;
+    font-size: 15px;
+    font-weight: normal;
+    position: relative;
+  }
+
+  span {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    background-color: #E70079;
+    border-radius: 9px;
+  }
+}
+</style>
