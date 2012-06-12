@@ -1,0 +1,11 @@
+| `Splash_Footer_Actu
+| `Splash_Footer_Blog
+| `Splash_Footer_Blogs
+| `Splash_Footer_Facebook
+| `Splash_Footer_Legal
+| `Splash_Footer_Login
+| `Splash_Footer_Newsletter
+| `Splash_Footer_Online
+| `Splash_Footer_Tech
+| `Splash_Footer_Twitter
+| `Splash_Price
