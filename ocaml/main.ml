@@ -11,6 +11,7 @@ module Actions = struct
   open CMe
   open CWebsite
   open CNetwork
+  open Splash
 end
 
 module Main = Ohm.Main.Make(O.Reset)
