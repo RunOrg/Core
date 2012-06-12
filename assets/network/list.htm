@@ -2,7 +2,11 @@
 
 <div class="network-list">
   {?tag}
-    <h1>{ `Network_List_WithTag } <span class="network-tag -large">{this}</span></h1> 
+    <h1>
+      { `Network_List_WithTag } 
+      <span class="network-tag -large">{tag}</span> 
+      <a href="{home}">&times;</a>
+    </h1> 
   {else}
     <h1>{ `Network_List_All }</h1> 
   {/?}
@@ -57,6 +61,21 @@
     font-weight: normal;
     margin: 20px 0 0;
     padding-bottom: 28px;
+   
+    a {
+      background-color: #EEE;
+      border-radius: 20px;
+      color: white;
+      display: inline-block;
+      font-size: 20px;
+      margin-left: 3px;
+      padding: 0 8px;
+      width: 11px;
+      height: 27px;
+      &:hover { 
+        background-color: #BBB;
+      } 
+    }
   }
 
   h2 {
