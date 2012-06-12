@@ -2,7 +2,7 @@
 
 <div class="network-list">
   {?tag}
-    <h1>{ `Network_List_WithTag } <span class="tag -large">{this}</span></h1> 
+    <h1>{ `Network_List_WithTag } <span class="network-tag -large">{this}</span></h1> 
   {else}
     <h1>{ `Network_List_All }</h1> 
   {/?}
@@ -50,6 +50,21 @@
   width: 950px;
   margin: auto;
   overflow: hidden;
+
+  h1 {
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 20px;
+    font-weight: normal;
+    margin: 20px 0;
+    padding-bottom: 28px;
+  }
+
+  h2 {
+    margin: 0 0 16px 0;
+    font-weight: normal;
+    font-size: 18px;
+    color: #555;
+  }
 
   .-tags {
     width: 300px;
