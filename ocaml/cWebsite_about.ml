@@ -12,10 +12,7 @@ let () = UrlClient.def_about begin fun req res ->
   
   let! profile = ohm_req_or (C404.render cuid res) $ MInstance.Profile.get iid in  
 
-  let tags = List.map (fun tag -> (object
-    method url  = Action.url UrlNetwork.tag () (String.lowercase tag) 
-    method text = tag
-  end)) (profile # tags) in
+  let tags = List.map CTag.prepare (profile # tags) in
 
   let! map = ohm begin
     let! addr = req_or (return None) (profile # address) in 
