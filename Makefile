@@ -4,6 +4,8 @@ REAL=www/server.real
 full: server put reset
 
 server:
+	splash/gen.sh
+	config/gen.sh
 	make -C ocaml
 	cp $(EXE) $(REAL)
 
