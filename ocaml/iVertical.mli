@@ -9,6 +9,8 @@ val of_string : string -> t option
 
 val decay : 'any id -> t
     
+val arg : t Ohm.Action.Args.cell
+
 module Assert : sig 
 end
 
