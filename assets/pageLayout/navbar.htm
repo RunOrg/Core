@@ -4,18 +4,17 @@
     <div class="-inner">
       <div class="-left">
 	<a href="{home}">RUN<strong>ORG</strong></a>
-	{?account}
-          <a href="{url}"><img src="{pic}" style="margin-right:5px"/><strong>{name}</strong></a>
-        {/?}
-      </div>
-      {?menu}
-        <div class="-right">
-  	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
 	  <a href="{network}">{ `PageLayout_Navbar_Network }</a>
 	  <a href="{news}">{ `PageLayout_Navbar_News }</a>
 	  {#instances} 
 	    <a style="padding: 8px 4px" href="{url}"><img src="{pic}"/></a>
 	  {/#}
+      </div>
+      {?account}
+        <div class="-right">
+  	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
+          <a href="{url}"><strong>{name}</strong><img src="{pic}" style="margin-left: 10px"/></a>
+	  <a id="notifications" href="{notif}"><span>0</span></a>
         </div>
       {/?}
     </div>
@@ -55,6 +54,28 @@
 </div>
 
 <style>
+
+#notifications {
+  padding: 4px 6px 3px ! important;
+  span {
+    border: 1px solid white;
+    border-radius: 4px 4px 4px 4px;
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    min-width: 20px;
+    padding: 0 3px;
+    &.-on {
+      background-color: #FA0;
+      background: -moz-linear-gradient(center top , #FA0 0%, #D70 100%);
+      background: -webkit-linear-gradient(center top , #FA0 0%, #D70 100%);
+      border: 1px solid #AA5500;
+      text-shadow: 0 -1px 0 #AA5500;
+      font-weight: bold;
+    }
+  }
+}
 
 #navbar {
   border-bottom: 1px solid #555;

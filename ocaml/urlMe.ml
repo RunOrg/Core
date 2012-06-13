@@ -33,11 +33,11 @@ module Account = struct
   let pass,    def_pass    = child def_admin "edit/password"
   let picture, def_picture = child def_admin "edit/picture"
 end
-  
-module Network = struct
-  let home, def_home = root "network"
-end
 
+module Notif = struct
+  let home, def_home = root "notifications"
+end
+  
 module News = struct
   let home, def_home = root "news"
 end

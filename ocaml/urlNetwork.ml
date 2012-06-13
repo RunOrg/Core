@@ -8,3 +8,5 @@ module A = Action.Args
 
 let root, def_root = O.declare O.core "network/all" A.none
 let tag,  def_tag  = O.declare O.core "network/tag" (A.r A.string)
+
+let news, def_news = O.declare O.core "network/news" A.none

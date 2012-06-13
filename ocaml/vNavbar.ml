@@ -20,9 +20,11 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
   let! account = ohm $ Run.opt_map begin fun user -> 
     let! pic = ohm $ CPicture.small (user # picture) in
     return (object 
-       method url = Action.url UrlMe.Account.home () ()
-       method name = user # fullname
-       method pic  = pic
+       method url    = Action.url UrlMe.Account.home () ()
+       method name   = user # fullname
+       method pic    = pic
+       method notif  = Action.url UrlMe.Notif.home () ()
+       method logout = Action.url UrlLogin.logout () ()
      end)
    end user in
   
@@ -80,19 +82,20 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
 
   end in
 
-  let  menu = if user = None then None else Some (object
-    method instances = List.rev $ BatOption.default [] instances
-    method network   = Action.url UrlMe.Network.home () ()
-    method news      = Action.url UrlMe.News.home () ()
-    method logout    = Action.url UrlLogin.logout () ()
-  end) in
+  let news = if user = None then
+      Action.url UrlNetwork.news () ()
+    else 
+      Action.url UrlMe.News.home () ()
+  in
 
   Asset_PageLayout_Navbar.render (object
-    method home    = home
-    method public  = public
-    method account = account
-    method menu    = menu
-    method asso    = asso
+    method home      = home
+    method public    = public
+    method account   = account
+    method instances = BatOption.default [] instances
+    method network   = Action.url UrlNetwork.root () ()
+    method news      = news
+    method asso      = asso
   end)
 
 let intranet (cuid,iid) = 
