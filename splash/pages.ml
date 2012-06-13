@@ -485,7 +485,7 @@ Conformément à la loi \"Informatique et Libertés\", le traitement de vos info
     [ (* "VSplash.CguCgv.render ()" *) ] ;
   
   page "/contact" "RunOrg - Nous Contacter"
-    [ (* "VSplash.Contact.render ()" *) ] ;
+    [ "Asset_Splash_Contact.render ()" ] ;
 
   page "/press" "RunOrg - Presse"
     ~head:"press"

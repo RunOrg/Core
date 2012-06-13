@@ -1,0 +1,109 @@
+<div class="block-pagehead">
+  <h1>{`Splash_Contact_Title}</h1>
+  <p>{`Splash_Contact_Subtitle}</p>
+</div>
+
+<div style="overflow:hidden;width:950px;margin:auto" class="splash-contact">
+
+  <div style="width:250px;float:left;font-size:13px">    
+    <table>
+      <tr>
+	<td><span>{`Splash_Contact_Email}</span></td>
+	<td><a href="mailto:contact@runorg.com">contact@runorg.com</a></td>
+      </tr>
+      <tr>
+	<td><span>{`Splash_Contact_Facebook}</span></td>
+	<td><a href="http://www.facebook.com/RunOrg">facebook.com/RunOrg</a></td>
+      </tr>
+      <tr>
+	<td><span>{`Splash_Contact_Twitter}</span></td>
+	<td><a href="https://twitter.com/#!/runorg">@runorg</a></td>
+      </tr>
+      <tr>
+	<td style="vertical-align:top"><span>{`Splash_Contact_Phone}</span></td>
+	<td>{`Splash_Contact_Phone_Subtitle}<br/>09 70 40 80 01</td>
+      </tr>
+      <tr>
+	<td style="vertical-align:top"><span>{`Splash_Contact_Mail}</span></td>
+	<td>RUNORG<br/>22 rue Planchat<br/>75020 Paris</td>
+      </tr>
+    </table>
+  </div>
+  
+  <div style="margin:0 140px 50px 405px">
+    <h2 style="color:black;font-weight:normal;margin:0">{`Splash_Contact_Callback}</h2>
+    <p style="margin-top:0;font-size:13px;">{`Splash_Contact_Callback_Subtitle}</p> 
+    <div {$after} style="display:none;padding:0 10px;font-size:14px;border:1px solid #CCC;background-color:#EEE">
+      <p>{`Splash_Contact_Ok}</p>
+      <p><span>{`Splash_Contact_Ok_Subtitle}</span></p>
+      <p>{`Splash_Contact_Ok_Thanks}</p>
+      <p style="text-align:right">{`Splash_Contact_Ok_Sign}</p>
+    </div>
+    <form {$form}>
+      <div>
+	<label>
+	  <span>{`Splash_Contact_Form_Phone}</span>&emsp;<small>({`Splash_Contact_Form_Required})</small><br/>
+	  <input type="text" name="phone"/>
+	</label>
+      </div>
+      <div>
+	<label>
+	  <span>{`Splash_Contact_Form_Name}</span>&emsp;<small>({`Splash_Contact_Form_Required})</small><br/>
+	  <input type="text" name="name"/>
+	</label>
+      </div>
+      <div>
+	<label>
+	  <span>{`Splash_Contact_Form_Email}</span><br/>
+	  <input type="text" name="email"/>
+	</label>
+      </div>
+      <div>
+	<label>
+	  <span>{`Splash_Contact_Form_Organization}</span><br/>
+	  <input type="text" name="org"/>
+	</label>
+      </div>
+      <div>
+	<label>
+	  <span>{`Splash_Contact_Form_Message}</span><br/>
+	  <textarea name="message"></textarea>
+	</label>
+      </div>
+      <button type="submit" style="float:right">
+	<span>{`Splash_Contact_Form_Submit}</span>
+      </button>
+    </form>
+  </div>
+  
+</div>  
+
+<style>
+.splash-contact {
+  color: #555;
+  label > span, td > span { color: black } 
+  td { padding: 3px }
+ form div { margin-bottom: 10px }  
+  input { 
+    border: 1px solid #BBB;
+    width: 300px;
+  }
+  textarea {
+    border: 1px solid #BBB;
+    width: 400px;
+    height: 200px;
+  }
+}
+</style>
+
+<script>
+here.$form.submit () -> 
+  $me = $ @
+  do $me.hide
+  do here.$after.show
+  data = {}
+  $me.find('input, textarea').each () -> 
+    data[$(@).attr 'name'] = $(@).val()
+  $.post '/post-contact', data
+  return false
+</script>
