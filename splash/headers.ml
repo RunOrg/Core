@@ -6,7 +6,7 @@ let headers = [
   header "associations" 
     ~title:"L'intranet de votre association"
     ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
-    ~trynow:( "Essayer Gratuitement", "/start/1/v:simple" ) 
+    ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
     [ "Accueil",         "accueil",         "/" ;
       "Avantages",       "avantages",       "/associations/benefits";
       "Fonctionnalités", "fonctionnalites", "/features";
@@ -51,7 +51,7 @@ let headers = [
   header "network"
     ~title:"Le réseau des associations"
     ~text:"Un annuaire et un réseau social qui donne la parole aux associations, aux fédérations et à l'écosystème associatif."
-    ~trynow:("Explorez le réseau !","/network/explore") 
+    ~trynow:("Explorez le réseau !","/network/all") 
     [ "Pour les membres",      "membres",      "/network" ;
       "Pour les associations", "associations", "/network/asso" 
     ] ;
@@ -59,7 +59,7 @@ let headers = [
   header "network-asso"
     ~title:"Le réseau des associations"
     ~text:"Un annuaire et un réseau social qui donne la parole aux associations, aux fédérations et à l'écosystème associatif."
-    ~trynow:("Créez votre profil !","/start/1/v:simple") 
+    ~trynow:("Créez votre profil !","/start/Simple") 
     [ "Pour les membres",      "membres",      "/network" ;
       "Pour les associations", "associations", "/network/asso" 
     ] ;

@@ -304,7 +304,7 @@ Sur le réseau RunOrg, votre association apparaît dans un annuaire public acces
 	~text:"RunOrg vous permet d'organiser tous vos évènements d'improvisation, simplement et gratuitement.
 (Si vous êtes moins de 2000)" 
 	~action:"Essayer gratuitement"
-	~url:"/start/1/v:impro"
+	~url:"/start/Impro"
     ;
 
       composite `LLR
@@ -395,7 +395,7 @@ Gratuit, c'est plus simple, non ?"
 	(pride 
 	   ~title:"Des associations dynamiques"
 	   ~subtitle:"Notre annuaire s'enrichit chaque jour"
-	   ~link:("/network/explore","Consultez l'annuaire des associations.") 
+	   ~link:("/network/all","Consultez l'annuaire des associations.") 
 	   "Notre réseau comprend uniquement des associations et des acteurs de l'écosystème associatif : mairies, maisons des associations... 
 
 Chacune dispose d'un profil où vous retrouverez ses informations de contact et ses actualités récentes. 
