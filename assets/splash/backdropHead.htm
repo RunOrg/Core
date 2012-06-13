@@ -1,0 +1,47 @@
+<div class="block-backdrop-head" style="background-image:url({image});">
+  <h1>{title}</h1>
+  <p>{text}</p>
+  <p><a href="{url}">{action}</a></p>
+</div>
+
+<style>
+.theme-splash .block-backdrop-head {
+  height:422px; 
+  text-align:center;
+  background:url('') center center no-repeat;
+  width: 950px;
+  margin: 25px auto;
+  overflow: hidden;
+
+  h1 {
+    color:#FFF; 
+    font-size:36px; 
+    margin:16px 0 2px 0;
+  }
+
+  p {
+    font-size:16px; 
+    color:#CCC;
+  }
+
+  a {
+    display:inline-block;
+    font-size: 12px; 
+    background: url("/public/img/green_gradient.png") repeat scroll top center #8F8;
+    border:1px solid #484;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    padding: 0 10px;
+    line-height: 21px;
+    margin: 1px;
+    text-shadow: 0 -1px 0 #888;
+    box-shadow: 1px 1px 2px #888;
+
+    &:hover {
+      text-decoration: none;
+      background-position-y: center;
+    }
+  }
+}
+</style>

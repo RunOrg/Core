@@ -171,6 +171,14 @@ let pricing ~foot cols rows =
   
   call "Asset_Splash_Pricing.render"
     [ obj [ "columns", list cols ; "lines", list rows ; "foot", string foot ]] 
+
+let backdrop_head ~title ~image ~text ~url ~action = 
+  call "Asset_Splash_BackdropHead.render"
+    [ obj [ "title",  string title ;
+	    "text",   string text ;
+	    "image",  string image ;
+	    "action", string action ;
+	    "url",    string url ] ]
       
 let header id ~title ~text ?trynow menu = 
   id, fun subsection -> 
