@@ -175,7 +175,7 @@ let pricing ~foot cols rows =
 let backdrop_head ~title ~image ~text ~url ~action = 
   call "Asset_Splash_BackdropHead.render"
     [ obj [ "title",  string title ;
-	    "text",   string text ;
+	    "text",   html   text ;
 	    "image",  string image ;
 	    "action", string action ;
 	    "url",    string url ] ]
