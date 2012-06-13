@@ -80,6 +80,22 @@ type template_data = {
   t_propg  : string option 
 } 
 
+type vertical = string
+type vertical_data = {
+  v_id   : vertical ;
+  v_old  : string option ;
+  v_name : adlib ;
+  v_tmpl : template list ;
+  v_arch : bool 
+}
+
+type catalog = 
+  [ `SubCatalog of adlib * (catalog list)     
+  | `InCatalog  of vertical * adlib * (adlib option)
+  ]
+
+let catalog   = ref None
+let verticals = ref []
 let templates = ref []
 let adlibs    = ref [] 
 
@@ -112,6 +128,20 @@ let template id ?old ~kind ~name ~desc ?propagate
     t_propg  = propagate
   } :: !templates ;
   id 
+
+let vertical id ?old ?(archive=false) ~name tmpl = 
+  verticals := {
+    v_id   = id ;
+    v_old  = old ;
+    v_name = adlib ("Vertical_"^id^"_Name") name ;
+    v_tmpl = tmpl ;
+    v_arch = archive ;
+  } :: !verticals ;
+  id
+
+let inCatalog v name forwho = `InCatalog (v,name,forwho)
+let subCatalog ~name list = `SubCatalog (name,list)
+let catalog (list : catalog list) = catalog := Some list
 
 module Build = struct
 
@@ -150,6 +180,26 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun t -> 
       let old = match t.t_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
       Printf.sprintf "%S%s -> Some `%s" t.t_id old t.t_id) (!templates))
+    ^ "\n  | _ -> None\n" 
+
+  let verticalId_ml () = 
+    "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
+    ^ String.concat "\n    | " (List.map (fun v -> "`" ^ v.v_id) (!verticals))
+    ^ " ]\n\n  let json_of_t = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun v -> 
+      Printf.sprintf "`%s -> Ohm.Json.String %S" v.v_id v.v_id) (!verticals))
+    ^ "\n\n  let t_of_json = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun v -> 
+      let old = match v.v_old with None -> "" | Some old -> Printf.sprintf " | Ohm.Json.String %S" old in
+      Printf.sprintf " Ohm.Json.String %S%s -> `%s" v.v_id old v.v_id) (!verticals))
+    ^ "\n    | json -> Ohm.Json.parse_error \"vertical-id\" json"
+    ^ "\nend)\n\nlet to_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun v -> 
+      Printf.sprintf "`%s -> %S" v.v_id v.v_id) (!verticals))
+    ^ "\n\nlet of_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun v -> 
+      let old = match v.v_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
+      Printf.sprintf "%S%s -> Some `%s" v.v_id old v.v_id) (!verticals))
     ^ "\n  | _ -> None\n" 
 
   let access = function
@@ -381,6 +431,7 @@ let build dir =
     "preConfig_Adlibs.mli", Build.adlibs_mli () ;
     "preConfig_Adlibs.ml" , Build.adlibs_ml  () ;
     "preConfig_TemplateId.ml", Build.templateId_ml () ;
+    "preConfig_VerticalId.ml", Build.verticalId_ml () ;
     "preConfig_Template.ml", Build.template_ml () 
   ] in
   

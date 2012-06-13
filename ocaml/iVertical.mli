@@ -1,11 +1,13 @@
 (* © 2012 RunOrg *)
 
-include Ohm.Id.PHANTOM
+type 'rel id = PreConfig_VerticalId.t
 
-val standard : t
-val light    : t
-val stub     : t
-val ag       : t
+include Ohm.Fmt.FMT with type t = [`Unknown] id
+  
+val to_string : 'any id -> string
+val of_string : string -> t option
+
+val decay : 'any id -> t
     
 module Assert : sig 
 end

@@ -2,12 +2,11 @@
 
 open Ohm
 
-include Id.Phantom
+include PreConfig_VerticalId
 
-let standard = of_string "v:simple"
-let light    = of_string "v:light"
-let stub     = of_string "v:stub"
-let ag       = of_string "v:ag"
+type 'rel id = t
+
+let decay id = id
 
 module Assert = struct
 end
