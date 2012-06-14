@@ -1,0 +1,236 @@
+
+<h1 class="heading">Créez votre espace collaboratif RunOrg !</h1>
+
+<form class="start">
+  
+  <div class="-col" style="float:left">
+    <h2 class="numbered">
+      <span>1</span> Choisissez le type de votre espace
+    </h2>
+    
+    <ul style="float:left">
+      <li><a href="">Associations</a></li>
+      <li><a href="">Clubs de sport</a></li>
+      <li><a class="-selected" href="">Collectivités territoriales</a></li>
+      <li><a href="">Entreprises</a></li>
+      <li><a href="">Comités d'entreprise</a></li>
+      <li><a href="">Copropriétés</a></li>
+      <li><a href="">Fédérations</a></li>
+      <li><a href="">Autres</a></li>
+    </ul>
+    
+    <div class="-list">
+      <label>
+	<input type="radio" name="vertical" />
+	<span>
+	  <em>Généraliste</em>
+	  Espace adapté à tous les types d'association.
+	  <span>
+      </label>
+      <label>
+	<input type="radio" name="vertical" />
+	<span>
+	  <em>Théâtre d'improvisation</em>
+	</span>
+      </label>
+      <label class="-last">
+	<input type="radio" name="vertical" />
+	<span>
+	  <em>Économie Solidaire et Sociale</em>
+	  Associations et acteurs associatifs de l'ESS
+	</span>
+      </label>
+    </div>
+  </div>
+  
+  <div class="-col" style="float:right">
+    <h2 class="numbered">
+      <span>2</span> Complétez ses informations de profil 
+    </h2>
+    
+    <div class="-field">
+      <label>
+	Le nom de votre espace
+      </label>
+      <br/>
+      <input style="width:400px" type="text" name="name"/>
+    </div>
+    
+    <div class="-field">
+      <label>
+	L'adresse web pour y accéder
+	<br/>
+	<code>http://</code>
+	<input style="width:200px;text-align:center" type="text" name="key"/>
+	<code>.runorg.com/</code>
+      </label>
+    </div>
+    
+    <a class="-more" href="">Ajouter un logo ou une photo...</a>
+    
+    <div style="display:none" class="-field">
+      Le logo ou la photo de l'espace
+      <input type="hidden" name="pic"/>
+      <div class="-images">
+	<img class="-l" src="http://runorg.com/public/img/404_large.png"/>
+	<img class="-s" src="http://runorg.com/public/img/404_small.png"/>
+	<a class="action-button" style="float:right" href="">Modifier<a>
+      </div>
+    </div>
+    
+    <a class="-more" href="">Ajouter une description...</a>
+    
+    <div style="display:none" class="-field">
+      <label>
+	Une courte description
+      </label>
+      <br/>
+      <textarea style="width:400px;height:200px" name="desc"></textarea>
+    </div>
+    
+    <div style="text-align:right; padding-right:27px;">
+      <button type="submit"><span>Créer votre espace</span></button>
+      <a style="display:inline-block" href="" class="action-button">Annuler</a>
+    </div>
+    
+  </div>
+  
+</form>
+
+<style>
+.start {
+  width: 950px;
+  margin: 20px auto;
+  overflow: hidden;
+
+  .-col {
+    padding: 10px;
+    width: 455px;
+  }
+
+  ul {
+    float: left;
+    width: 90px;
+    margin: 0;
+    font-size: 13px;
+    padding: 10px 0;
+    list-style-type: none;
+  
+    li {
+      margin-bottom: 10px;
+      text-align: right;
+    }
+
+    .-selected {  
+      color: black;
+      display: block;
+      position: relative;
+    
+      &:after, &:before { 
+        right: -21px; 
+        border: solid transparent; 
+        content: " "; 
+        height: 0; 
+        width: 0; 
+        position: absolute; 
+        pointer-events: none; 
+      } 
+
+      &:after { 
+        border-right-color: white; 
+        border-width: 10px; 
+        top: 50%; 
+        margin-top: -10px; 
+      } 
+
+      &:before { 
+        border-right-color: #AAA; 
+        border-width: 11px; 
+        top: 50%; 
+        margin-top: -11px; 
+      }
+    }
+  }
+
+  .-list {
+    border: 1px solid #BBB;
+    margin-left: 110px;
+    padding: 0 11px 0 11px;
+    overflow: hidden;
+    min-height: 270px;
+   
+    label {
+      display: block ;
+      padding: 10px 5px 11px;
+      border-top: 1px solid #CCC;
+      position: relative;
+      margin-top: -1px;
+
+      span {
+        display: block;
+        color: #555;
+        font-size: 13px;
+        margin-left: 30px;
+      }
+
+      em {
+        display: block;
+        color: black;
+        font-size: 16px;
+        font-style: normal;
+      }
+    }
+
+    input {
+      position: absolute;
+      top: 50%;
+      margin-top: -7px;
+      height: 13px;
+    }
+  }
+  
+  .-field {
+    display: block;
+    padding: 4px 16px;
+    margin: 12px 0;
+    color: #888;
+
+    input, textarea {
+      border: 1px solid #CCC;
+      padding: 3px;
+      font-family: "Oxygen", "Arial", sans-serif;
+      font-size: 14px;
+    }
+  }
+
+  .-images {
+    border: 1px solid #CCC;
+    padding: 8px;
+    overflow: hidden;
+    position: relative;
+    width: 390px;
+    min-height: 105px;
+    
+    .-l {
+      width: 230px;
+      display: block;
+      float: left;
+    }
+
+    .-s {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      left: 295px;
+      top: 50%;
+      margin-top: -25px;
+    }
+  }
+
+  .-more {
+    padding: 4px 16px;
+    font-size: 13px;
+    display: block;
+  }
+}
+</style>
