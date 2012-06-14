@@ -61,7 +61,7 @@
       <div class="-images">
 	<img class="-l" src="/public/img/404_large.png"/>
 	<img class="-s" src="/public/img/404_small.png"/>
-	<a class="action-button" style="float:right" href="javascript:void(0)">
+	<a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
 	  { `Start_Edit_Picture } 
 	</a>
       </div>
@@ -88,10 +88,9 @@
 
 { Asset_PageLayout_Footer.render | ohm }
 
-<script type="free:string,init:string option">
+<script type="free:string,init:string option,upload:string">
 
 $f = here.$form
-$n = here.$name
 $k = here.$key 
 
 $f.find(".-more").click -> 
@@ -117,9 +116,13 @@ fresh = ->
     return if xhr is not x
     $k.val(data.key)
 
-$n.change fresh
+here.$name.change fresh
 $k.change fresh
 
+here.$upload.click -> 
+  $iframe = $ "<iframe/>", {src : upload}  
+  $(@).parent(".-images").addClass("-up -loading").prepend($iframe)
+  
 xhr = null
 
 </script>
@@ -239,6 +242,23 @@ xhr = null
     position: relative;
     width: 390px;
     min-height: 105px;
+
+    iframe { 
+      background-color: white;
+      border: medium none;
+      display: block;
+      height: 121px;
+      margin: -8px;
+      overflow: hidden;
+      width: 406px;
+    }
+
+    &.-up a { display: none } 
+
+    &.-loading {
+      background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+      img { display: none } 
+    }
     
     .-l {
       width: 230px;

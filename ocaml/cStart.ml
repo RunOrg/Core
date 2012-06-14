@@ -19,7 +19,8 @@ let () = UrlStart.def_home begin fun req res ->
     method navbar     = (uid,None)
     method back       = "/" 
     method categories = PreConfig_Vertical.Catalog.list
-    method url        = "/" 
+    method url        = "/"
+    method upload     = Action.url UrlUpload.Core.root () ()  
     method free       = Action.url UrlStart.free () ()
     method init       = PreConfig_Vertical.Catalog.init vertical
   end) in
