@@ -88,7 +88,7 @@
 
 { Asset_PageLayout_Footer.render | ohm }
 
-<script type="free:string">
+<script type="free:string,init:string option">
 
 $f = here.$form
 $n = here.$name
@@ -105,8 +105,10 @@ $f.find("ul a").click ->
   $f.find("ul a").removeClass("-selected")
   $f.find(".-list").hide()
   $(id).show()
-  $(@).addClass("-selected")
+  $(@).blur().addClass("-selected")
 
+id = $f.find("input[name='vertical'][value='"+init+"']").attr("checked","checked").closest(".-list").attr("id")
+do $(id.replace("of-","#")).click
 
 fresh = -> 
   v = $(@).val()

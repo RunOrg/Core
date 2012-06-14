@@ -443,6 +443,27 @@ module Build = struct
       end (!the_catalog) 		
     end
     ^ " ]"
+    ^ "\n\n  let init = function\n    | "
+    ^ String.concat "\n    | "  begin
+
+      let found = 
+	let hash = Hashtbl.create 50 in
+	fun k -> try Hashtbl.find hash k ; true with Not_found -> Hashtbl.add hash k () ; false
+      in
+ 
+      let list = 
+	BatList.mapi begin fun i (_,verticals) -> 
+	  BatList.mapi begin fun j (vertical,name,desc) -> 
+	    if found vertical then [] else 
+	      [ Printf.sprintf "`%s -> Some \"%d-%d\"" vertical i j ] 
+	  end verticals
+	end (!the_catalog)
+      in
+
+      List.concat (List.concat list)
+ 		
+    end
+    ^ "\n    |  _ -> None"
     ^ "\n\nend"
 
       
