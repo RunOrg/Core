@@ -1,56 +1,43 @@
+{ navbar | VNavbar.intranet | ohm } 
 
-<h1 class="heading">Créez votre espace collaboratif RunOrg !</h1>
+<h1 class="heading">{ `Start_Heading }</h1>
 
-<form class="start">
+<form {$form} action="{url}" method="POST" class="start">
   
   <div class="-col" style="float:left">
     <h2 class="numbered">
-      <span>1</span> Choisissez le type de votre espace
+      <span>1</span> { `Start_Step_One }
     </h2>
     
     <ul style="float:left">
-      <li><a href="">Associations</a></li>
-      <li><a href="">Clubs de sport</a></li>
-      <li><a class="-selected" href="">Collectivités territoriales</a></li>
-      <li><a href="">Entreprises</a></li>
-      <li><a href="">Comités d'entreprise</a></li>
-      <li><a href="">Copropriétés</a></li>
-      <li><a href="">Fédérations</a></li>
-      <li><a href="">Autres</a></li>
+      {#categories}
+        <li><a id="{id}" href="javascript:void(0)">{ `PreConfig name }</a></li>
+      {/#}
     </ul>
-    
-    <div class="-list">
-      <label>
-	<input type="radio" name="vertical" />
-	<span>
-	  <em>Généraliste</em>
-	  Espace adapté à tous les types d'association.
-	  <span>
-      </label>
-      <label>
-	<input type="radio" name="vertical" />
-	<span>
-	  <em>Théâtre d'improvisation</em>
-	</span>
-      </label>
-      <label class="-last">
-	<input type="radio" name="vertical" />
-	<span>
-	  <em>Économie Solidaire et Sociale</em>
-	  Associations et acteurs associatifs de l'ESS
-	</span>
-      </label>
-    </div>
+
+    {#categories}
+      <div id="of-{id}" class="-list">
+        {#items}
+          <label>
+	    <input type="radio" name="vertical" value="{value}"/>
+            <span>
+	      <em>{ `PreConfig name } </em>
+	      {?desc}{ `PreConfig this }{/?}  
+	    </span>
+          </label>
+        {/#}
+      </div>
+    {/#} 
   </div>
-  
+
   <div class="-col" style="float:right">
     <h2 class="numbered">
-      <span>2</span> Complétez ses informations de profil 
+      <span>2</span> { `Start_Step_Two } 
     </h2>
     
     <div class="-field">
       <label>
-	Le nom de votre espace
+	{ `Start_Field_Name }
       </label>
       <br/>
       <input style="width:400px" type="text" name="name"/>
@@ -58,7 +45,7 @@
     
     <div class="-field">
       <label>
-	L'adresse web pour y accéder
+	{ `Start_Field_Key } 
 	<br/>
 	<code>http://</code>
 	<input style="width:200px;text-align:center" type="text" name="key"/>
@@ -66,36 +53,50 @@
       </label>
     </div>
     
-    <a class="-more" href="">Ajouter un logo ou une photo...</a>
+    <a class="-more" href="javascript:void(0)">{ `Start_Add_Picture }</a>
     
     <div style="display:none" class="-field">
-      Le logo ou la photo de l'espace
+      { `Start_Field_Picture } 
       <input type="hidden" name="pic"/>
       <div class="-images">
-	<img class="-l" src="http://runorg.com/public/img/404_large.png"/>
-	<img class="-s" src="http://runorg.com/public/img/404_small.png"/>
-	<a class="action-button" style="float:right" href="">Modifier<a>
+	<img class="-l" src="/public/img/404_large.png"/>
+	<img class="-s" src="/public/img/404_small.png"/>
+	<a class="action-button" style="float:right" href="javascript:void(0)">
+	  { `Start_Edit_Picture } 
+	</a>
       </div>
     </div>
     
-    <a class="-more" href="">Ajouter une description...</a>
+    <a class="-more" href="javascript:void(0)">{ `Start_Add_Description }</a>
     
     <div style="display:none" class="-field">
       <label>
-	Une courte description
+	{ `Start_Field_Description } 
       </label>
       <br/>
-      <textarea style="width:400px;height:200px" name="desc"></textarea>
+      <textarea style="width:400px;height:100px" name="desc"></textarea>
     </div>
     
     <div style="text-align:right; padding-right:27px;">
-      <button type="submit"><span>Créer votre espace</span></button>
-      <a style="display:inline-block" href="" class="action-button">Annuler</a>
+      <button type="submit"><span>{ `Start_Submit }</span></button>
+      <a style="display:inline-block" href="{back}" class="action-button">{ `Start_Cancel }</a>
     </div>
     
   </div>
   
 </form>
+
+{ Asset_PageLayout_Footer.render | ohm }
+
+<script>
+
+here.$form.find(".-more").click -> 
+  $(@).hide().next().show()
+
+here.$form.submit -> 
+  false
+
+</script>
 
 <style>
 .start {

@@ -1,0 +1,13 @@
+| `Start_Title
+| `Start_Heading
+| `Start_Step_One
+| `Start_Step_Two
+| `Start_Field_Name
+| `Start_Field_Key
+| `Start_Add_Picture
+| `Start_Field_Picture
+| `Start_Edit_Picture 
+| `Start_Add_Description
+| `Start_Field_Description
+| `Start_Submit 
+| `Start_Cancel 
