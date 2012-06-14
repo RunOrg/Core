@@ -1,0 +1,18 @@
+.numbered { 
+  font-size: 20px;
+  margin: 0 0 16px 0;
+  font-weight: normal;
+  span {
+    color: white;
+    float: left;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    font-size: 18px;
+    margin: 0 10px 0 0;
+    background: #E70079;
+    border-radius: 40px;
+  }
+}
+
