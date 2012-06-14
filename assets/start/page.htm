@@ -38,9 +38,9 @@
     <div class="-field">
       <label>
 	{ `Start_Field_Name }
+	<br/>
+	<input {$name} style="width:400px" type="text" name="name"/>
       </label>
-      <br/>
-      <input style="width:400px" type="text" name="name"/>
     </div>
     
     <div class="-field">
@@ -48,7 +48,7 @@
 	{ `Start_Field_Key } 
 	<br/>
 	<code>http://</code>
-	<input style="width:200px;text-align:center" type="text" name="key"/>
+	<input {$key} style="width:200px;text-align:center" type="text" name="key"/>
 	<code>.runorg.com/</code>
       </label>
     </div>
@@ -88,13 +88,37 @@
 
 { Asset_PageLayout_Footer.render | ohm }
 
-<script>
+<script type="free:string">
 
-here.$form.find(".-more").click -> 
+$f = here.$form
+$n = here.$name
+$k = here.$key 
+
+$f.find(".-more").click -> 
   $(@).hide().next().show()
 
-here.$form.submit -> 
+$f.submit -> 
   false
+
+$f.find("ul a").click ->
+  id = "#of-" + $(@).attr("id")
+  $f.find("ul a").removeClass("-selected")
+  $f.find(".-list").hide()
+  $(id).show()
+  $(@).addClass("-selected")
+
+
+fresh = -> 
+  v = $(@).val()
+  return if !v
+  xhr = $.getJSON free, {name:$(@).val()}, (data,s,x) -> 
+    return if xhr is not x
+    $k.val(data.key)
+
+$n.change fresh
+$k.change fresh
+
+xhr = null
 
 </script>
 
@@ -179,6 +203,8 @@ here.$form.submit ->
         color: black;
         font-size: 16px;
         font-style: normal;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
 

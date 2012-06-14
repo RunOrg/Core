@@ -430,8 +430,16 @@ module Build = struct
     ^ String.concat " ;\n    "  begin
       BatList.mapi begin fun i (name,verticals) -> 
 	Printf.sprintf 
-	  "(object\n      method id = \"cat%d\"\n      method name = `%s\n      method items = []\n    end)" 
-	  i name
+	  "(object\n      method id = \"cat%d\"\n      method name = `%s\n      method items = [\n        %s]\n    end)" 
+	  i name (String.concat ";\n        " begin
+	    BatList.mapi begin fun j (vertical,name,desc) -> 
+	      Printf.sprintf
+		"(object\n          method value = \"%d-%d\"\n          method name = `%s\n          method desc = %s\n        end)"
+		i j name (match desc with 
+		  | None -> "None"
+		  | Some desc -> "Some `" ^ desc)
+	    end verticals
+	  end)
       end (!the_catalog) 		
     end
     ^ " ]"
