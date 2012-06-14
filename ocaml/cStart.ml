@@ -6,17 +6,22 @@ open BatPervasives
 
 let () = UrlStart.def_home begin fun req res -> 
 
-  let uid = 
+  let login = 
+    let url = UrlLogin.save_url (BatString.nsplit req # path "/") in
+    return $ Action.redirect (Action.url UrlLogin.login () url) res
+  in
+  
+  let! cuid = req_or login begin 
     match CSession.check req with 
       | `None     -> None
       | `Old cuid -> Some (ICurrentUser.decay cuid) 
       | `New cuid -> Some (ICurrentUser.decay cuid)
-  in
+  end in
 
   let vertical = BatOption.default `Simple (req # args) in
 
   let html = Asset_Start_Page.render (object
-    method navbar     = (uid,None)
+    method navbar     = (Some cuid,None)
     method back       = "/" 
     method categories = PreConfig_Vertical.Catalog.list
     method url        = "/"

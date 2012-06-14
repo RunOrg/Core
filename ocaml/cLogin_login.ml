@@ -40,7 +40,8 @@ let attempt fail email password req res =
   
   let  url  = match ins, path with 
     | None, []   -> Action.url UrlMe.News.home () ()
-    | None, path -> UrlMe.url path 
+    | None, "me" :: path -> UrlMe.url path 
+    | None, path -> Action.url UrlSplash.index () path
     | Some ins, [] -> UrlClient.home (ins # key) 
     | Some ins, path -> UrlClient.intranet (ins # key) path 
   in

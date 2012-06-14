@@ -44,8 +44,10 @@ let _do_prepare ~usr ~lift ?ins ?item () =
   let! _ = ohm $ erase_if_still_temp id in
   return real_id
 
-let prepare_pic ~usr = 
-      
+let prepare_pic ~cuid = 
+  
+  let usr = IUser.Deduce.is_anyone cuid in
+    
   let! used, free = ohm $ MFile_usage.user usr in
     
   if used >= free then 

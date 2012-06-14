@@ -16,16 +16,19 @@ let lost,        def_lost        = O.declare O.secure "lost"         args
 let post_lost,   def_post_lost   = O.declare O.secure "lost/post"    args
 
 let instance_of = function
-  | []        -> None
-  | "me" :: _ -> None
-  | iid  :: _ -> Some (IInstance.of_string iid) 
+  | []           -> None
+  | "me"    :: _ -> None
+  | "start" :: _ -> None
+  | iid     :: _ -> Some (IInstance.of_string iid) 
 
 let path_of = function
-  | []        -> []
-  | _ :: path -> path
+  | []              -> []
+  | "me"    :: path -> "me" :: path
+  | "start" :: path -> "start" :: path 
+  | _       :: path -> path
 
 let save_url ?iid path = 
-  (match iid with None -> "me" | Some iid -> IInstance.to_string iid) 
-  :: path 
-
+  match iid with 
+    | Some iid -> IInstance.to_string iid :: path
+    | None     -> path
 

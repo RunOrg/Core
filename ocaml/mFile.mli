@@ -35,7 +35,7 @@ module Upload : sig
   end
 
   val prepare_pic :
-       usr:[`IsSelf] IUser.id 
+       cuid:'any ICurrentUser.id 
     -> [`PutPic] IFile.id option O.run
 
   val prepare_client_pic : 

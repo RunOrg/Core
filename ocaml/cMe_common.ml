@@ -23,7 +23,7 @@ let action f req res =
 
   (* Redirect or run action *)
   match user with 
-    | None -> let url = UrlLogin.save_url path in
+    | None -> let url = UrlLogin.save_url ("me" :: path) in
 	      let js  = Js.redirect (Action.url UrlLogin.login () url) () in
 	      return $ Action.javascript js res
     | Some cuid -> f cuid req res
