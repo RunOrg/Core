@@ -16,7 +16,7 @@ let () = UrlStart.def_home begin fun req res ->
   let html = Asset_Start_Page.render (object
     method navbar = (uid,None)
     method back = "" 
-    method categories = []
+    method categories = PreConfig_Vertical.Catalog.list
     method url = "" 
   end) in
 

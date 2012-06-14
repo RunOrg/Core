@@ -89,15 +89,12 @@ type vertical_data = {
   v_arch : bool 
 }
 
-type catalog = 
-  [ `SubCatalog of adlib * (catalog list)     
-  | `InCatalog  of vertical * adlib * (adlib option)
-  ]
+type catalog = (adlib * (vertical * adlib * (adlib option)) list) list
 
-let catalog   = ref None
-let verticals = ref []
-let templates = ref []
-let adlibs    = ref [] 
+let the_catalog = ref []
+let verticals   = ref []
+let templates   = ref []
+let adlibs      = ref [] 
 
 let adlib key ?(old:string option) (fr:string) = 
   let key = match key.[0] with '0' .. '9' -> "_" ^ key | _ -> key in
@@ -139,9 +136,9 @@ let vertical id ?old ?(archive=false) ~name tmpl =
   } :: !verticals ;
   id
 
-let inCatalog v name forwho = `InCatalog (v,name,forwho)
-let subCatalog ~name list = `SubCatalog (name,list)
-let catalog (list : catalog list) = catalog := Some list
+let inCatalog v name forwho = (v,name,forwho)
+let subCatalog ~name list =  (name,list)
+let catalog (list : catalog) = the_catalog := list
 
 module Build = struct
 
@@ -424,6 +421,24 @@ module Build = struct
 	  `Picture,     "picture" ] 
     end
     ^ "\n\nend"
+
+  let vertical_ml () =   
+
+    (* The field name, by meaning ========================================================================= *)
+    "module Catalog = struct\n\n"
+    ^ "  let list = [\n    "
+    ^ String.concat " ;\n    "  begin
+      BatList.mapi begin fun i (name,verticals) -> 
+	Printf.sprintf 
+	  "(object\n      method id = \"cat%d\"\n      method name = `%s\n      method items = []\n    end)" 
+	  i name
+      end (!the_catalog) 		
+    end
+    ^ " ]"
+    ^ "\n\nend"
+
+      
+
 end
 
 let build dir = 
@@ -432,7 +447,8 @@ let build dir =
     "preConfig_Adlibs.ml" , Build.adlibs_ml  () ;
     "preConfig_TemplateId.ml", Build.templateId_ml () ;
     "preConfig_VerticalId.ml", Build.verticalId_ml () ;
-    "preConfig_Template.ml", Build.template_ml () 
+    "preConfig_Template.ml", Build.template_ml () ;
+    "preConfig_Vertical.ml", Build.vertical_ml () ;
   ] in
   
   List.iter (fun (file,code) ->

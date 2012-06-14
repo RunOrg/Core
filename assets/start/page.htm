@@ -16,7 +16,7 @@
     </ul>
 
     {#categories}
-      <div id="of-{id}" class="-list">
+      <div style="display:none" id="of-{id}" class="-list">
         {#items}
           <label>
 	    <input type="radio" name="vertical" value="{value}"/>
@@ -158,7 +158,7 @@ here.$form.submit ->
     margin-left: 110px;
     padding: 0 11px 0 11px;
     overflow: hidden;
-    min-height: 270px;
+    min-height: 290px;
    
     label {
       display: block ;
