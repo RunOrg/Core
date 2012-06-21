@@ -34,7 +34,7 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
       let! () = true_or (return None) (Some iid' <> iid) in 
       let! instance = ohm_req_or (return None) $ MInstance.get iid' in
       let! pic = ohm_req_or (return None) $ CPicture.small_opt (instance # pic) in
-      let  url = Action.url UrlClient.Home.home (instance # key) () in
+      let  url = Action.url UrlClient.Home.home (instance # key) [] in
       return $ Some (object
 	method url = url 
 	method pic = pic
@@ -46,7 +46,7 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
 
     let  key = instance # key in
     let  url = if public || user = None then Action.url UrlClient.website key () else 
-	Action.url UrlClient.Home.home key () in
+	Action.url UrlClient.Home.home key [] in
 
     let! pic = ohm $ CPicture.small_opt (instance # pic) in
     let  pic = BatOption.map (fun pic -> (object
@@ -65,7 +65,7 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
 	  
     let website = 
       if public then 
-	Action.url UrlClient.Home.home key ()
+	Action.url UrlClient.Home.home key []
       else
 	Action.url UrlClient.website key () 	  
     in
@@ -107,10 +107,10 @@ let intranet (cuid,iid) =
       method sel = false 
       method label = AdLib.write label
     end)) [
-      Action.url UrlClient.Home.home    key (), `PageLayout_Navbar_Home ;
-      Action.url UrlClient.Members.home key (), `PageLayout_Navbar_Members ;
-      Action.url UrlClient.Events.home  key (), `PageLayout_Navbar_Events ;
-      Action.url UrlClient.Forums.home  key (), `PageLayout_Navbar_Forums ;
+      Action.url UrlClient.Home.home    key [], `PageLayout_Navbar_Home ;
+      Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members ;
+      Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events ;
+      Action.url UrlClient.Forums.home  key [], `PageLayout_Navbar_Forums ;
     ]
   in
   

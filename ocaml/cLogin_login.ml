@@ -42,7 +42,7 @@ let attempt fail email password req res =
     | None, []   -> Action.url UrlMe.News.home () ()
     | None, "me" :: path -> UrlMe.url path 
     | None, path -> Action.url UrlSplash.index () path
-    | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) () 
+    | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
     | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
   in
 

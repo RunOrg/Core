@@ -32,7 +32,7 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
 	method pic    = pic
 	method status = status 
 	method title  = name
-	method url    = Action.url UrlClient.Events.see (access # instance # key) () 
+	method url    = Action.url UrlClient.Events.see (access # instance # key) [] 
       end)
     end list in 
     let list = List.map snd (List.sort (fun a b -> compare (fst b) (fst a)) list) in

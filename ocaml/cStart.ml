@@ -81,7 +81,7 @@ let () = UrlStart.def_create begin fun req res ->
     ~vertical
   in
 
-  let url = Action.url UrlClient.Home.home key () in
+  let url = Action.url UrlClient.Home.home key [] in
   
   return $ Action.javascript (Js.redirect ~url ()) res
 

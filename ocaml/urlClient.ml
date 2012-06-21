@@ -43,7 +43,7 @@ let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
 let declare ?p url = 
   let endpoint, define = O.declare O.client ("intranet/ajax/" ^ url) (A.n A.string) in
-  let endpoint = Action.setargs (Action.rewrite endpoint "intranet/ajax" "intranet/#") [] in
+  let endpoint = Action.rewrite endpoint "intranet/ajax" "intranet/#" in
   let root key = Action.url root key () in
   let prefix = "/" ^ url in
   let parents = match p with 
