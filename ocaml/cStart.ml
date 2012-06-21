@@ -63,8 +63,14 @@ let () = UrlStart.def_create begin fun req res ->
 
   let! key = ohm $ MInstance.free_name (post # key) in 
 
+  let! pic = ohm begin 
+    let! pic = req_or (return None) (post # pic) in
+    let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
+    MFile.own_pic cuid (IFile.of_string fid) 
+  end in
+
   let! iid = ohm $ MInstance.create
-    ~pic:None
+    ~pic
     ~who:cuid
     ~key
     ~name:(post # name)

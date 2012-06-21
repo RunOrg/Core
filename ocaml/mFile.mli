@@ -71,7 +71,7 @@ end
 
 val set_facebook_pic : [`PutPic] IFile.id -> [`IsSelf] IUser.id -> OhmFacebook.details -> unit O.run
 
-val own_pic : [`IsSelf] IUser.id -> 'any IFile.id -> [`OwnPic] IFile.id option O.run
+val own_pic : 'any ICurrentUser.id -> 'any IFile.id -> [`OwnPic] IFile.id option O.run
 
 val give_pic : [`OwnPic] IFile.id -> [`Upload] IInstance.id -> unit O.run
 

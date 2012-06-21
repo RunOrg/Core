@@ -14,7 +14,8 @@ module Extension = MFile_extension
 
 type version = MFile_common.version
 
-let own_pic usr id = 
+let own_pic cuid id = 
+  let usr = IUser.Deduce.is_anyone cuid in 
   MyTable.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->
     if file # usr = IUser.decay usr && file # ins = None && file # k = `Picture then 
       Some (IFile.Assert.own_pic id)
