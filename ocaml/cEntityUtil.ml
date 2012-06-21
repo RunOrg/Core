@@ -12,6 +12,9 @@ let name entity =
 let pic_large entity = 
   CPicture.large (MEntity.Get.picture entity)
 
+let pic_small_opt entity = 
+  CPicture.small_opt (MEntity.Get.picture entity)
+
 let desc entity = 
   let  eid  = MEntity.Get.id entity in
   let! data = ohm_req_or (return None) $ MEntity.Data.get eid in 

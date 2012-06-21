@@ -46,13 +46,15 @@
     {#list}
       <div class="short-private-event">
 	<span class="-status">
-	  {status}
 	</span>
-	<a href="javascript:void(0)">
+	<a href="{url}">
 	  {?pic}<img src="{this}"/>{/?}
 	  <span class="-title">{title}</span>
 	  <span class="-details">
-	    {?date}{`ShortWeekDate this}{else}{`Events_NoDate}{/?} &middot; {`Events_CountComing coming} &emsp;{status}</span>
+	    {?date}{`ShortWeekDate this}{else}{`Events_NoDate}{/?} 
+	    {?coming}&middot; {`Events_CountComing this}{/?} 
+	    {?status}&emsp;{ this | Asset_Status_Tag.render | ohm }{/?}
+	  </span>
 	</a>
       </div>
     {else}
