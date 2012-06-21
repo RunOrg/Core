@@ -13,6 +13,7 @@ module Actions = struct
   open CNetwork
   open CStart
   open CUpload
+  open CEvents
   open Splash
 end
 

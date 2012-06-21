@@ -1,4 +1,4 @@
-| `Status_Private
+| `Status_Secret
 | `Status_Website
 | `Status_Draft
 | `Status_Member  of Ohm.AdLib.gender 

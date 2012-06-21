@@ -37,7 +37,7 @@ let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 (* Intranet =============================================================================================== *)
 
 let root,    def_root      = O.declare O.client "intranet" A.none
-let ajax,    def_ajax      = O.declare O.client "internet/ajax" (A.n A.string)
+let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
@@ -54,6 +54,12 @@ let declare ?p url =
 
 let root url = declare url 
 let child p url = declare ~p url 
+
+type definition = (string -> string) * string * string list * 
+    (   (   (string, string list) Ohm.Action.request
+          -> Ohm.Action.response 
+          -> (O.ctx, Ohm.Action.response) Ohm.Run.t)
+     -> unit)
 
 module Home = struct
   let home, def_home = root "home"

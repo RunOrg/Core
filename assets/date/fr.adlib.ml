@@ -16,6 +16,16 @@
        "Août" ; "Septembre" ; "Octobre" ; "Novembre" ; "Décembre" |].(t.Unix.tm_mon) 
     (t.Unix.tm_year + 1900) 
 
+| `ShortWeekDate (time,now) -> 
+  let t = Unix.localtime time in
+  let now = Unix.localtime now in 
+  Printf.sprintf "%s %02d/%02d%s"
+    [| "Dim" ; "Lun" ; "Mar" ; "Mer" ; "Jeu" ; 
+       "Ven" ; "Sam"  |].(t.Unix.tm_wday)
+    (t.Unix.tm_mday)
+    (t.Unix.tm_mon + 1) 
+    (if now.Unix.tm_year = t.Unix.tm_year then "" else "/" ^ string_of_int (t.Unix.tm_year - 100)) 
+
 | `DateRelative (time,now) -> 
   let default () = 
     let dnow  = Unix.gmtime now and dtime = Unix.gmtime time in

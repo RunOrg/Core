@@ -35,7 +35,8 @@ let () = UrlClient.def_root begin fun req res ->
     CPageLayout.core (`Client_Title (instance # name)) html res
   in
 
-  let if_old () = 
+  let if_old () =
+
     let url = Action.url UrlClient.ajax key [] in
     let default = "/home" in
     
@@ -55,7 +56,8 @@ let () = UrlClient.def_root begin fun req res ->
     | `Old cuid -> begin 
       let! access_opt = ohm $ CAccess.make cuid iid instance in
       match access_opt with 
-	| Some _ -> if_old ()
+	| Some _ -> let! () = ohm $ MInstance.visit cuid iid in 
+		    if_old ()
 	| None   -> if_no_token ()
     end
     | `New cuid -> if_new ()
@@ -69,3 +71,41 @@ let () = UrlClient.def_ajax begin fun req res ->
   O.Box.response ~prefix:"/404" ~parents:[] "" O.BoxCtx.make body req res 
 
 end
+
+let action f req res = 
+
+  (* Find current location *)
+  let! _, key, iid, instance = extract_ajax req res in  
+
+  let if_no_login () = 
+    
+    (* Drop "intranet/ajax" from the path. *)
+    let path = BatList.drop 2 (BatString.nsplit (req # path) "/") in
+
+    (* Redirect or run action *)
+    let url = UrlLogin.save_url ~iid path in
+    let js  = Js.redirect (Action.url UrlLogin.login () url) () in
+    return $ Action.javascript js res
+
+  in
+
+  let panic () = 
+    (* Reload, so the main page may deal with it. *)
+    return $ Action.javascript (Js.reload ()) res
+  in
+  
+  match CSession.check req with 
+    | `Old cuid -> begin 
+      let! access_opt = ohm $ CAccess.make cuid iid instance in
+      match access_opt with 
+	| Some access -> f access req res
+	| None        -> panic ()
+    end
+    | `New cuid -> panic ()
+    | `None     -> if_no_login ()
+
+let define (base,prefix,parents,define) body =
+  define (action (fun access req res -> 
+    let base = base (req # server) in
+    O.Box.response ~prefix ~parents base O.BoxCtx.make (body access) req res
+  ))

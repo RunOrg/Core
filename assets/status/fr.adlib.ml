@@ -1,4 +1,4 @@
-| `Status_Private -> "Privé"
+| `Status_Secret -> "Secret"
 | `Status_Website -> "Site Web"
 | `Status_Draft  -> "Brouillon"
 | `Status_Member _ -> "Membre"

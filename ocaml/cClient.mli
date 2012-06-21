@@ -11,3 +11,8 @@ val extract_ajax :
   -> Ohm.Action.response
   -> (ICurrentUser.t option * string * IInstance.t * MInstance.t -> Ohm.Action.response O.run) 
   -> Ohm.Action.response O.run
+
+val define : 
+     UrlClient.definition
+  -> ([ `IsToken ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
+  -> unit 

@@ -306,7 +306,7 @@ let visited ~count user =
 
   return (BatList.take count (recent # i)) 
 
-let visit ~count user inst = 
+let visit user inst = 
 
   let id = ICurrentUser.to_id user in
  
@@ -327,14 +327,8 @@ let visit ~count user inst =
 		  (), `put obj
   in
 
-  let! () = ohm begin
-    match inst with 
-      | None      -> return ()
-      | Some inst -> RecentTable.transaction id
-	(fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
-  end in
-
-  visited count user
+  RecentTable.transaction id
+    (fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
 
 (* The backdoor --------------------------------------------------------------------- *)
 

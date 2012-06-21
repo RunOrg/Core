@@ -1,7 +1,7 @@
 (* © 2012 RunOrg *)
 
 type t = 
-  [ `Private
+  [ `Secret
   | `Website
   | `Draft
   | `Member  of Ohm.AdLib.gender 

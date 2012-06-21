@@ -5,7 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 type t = 
-  [ `Private
+  [ `Secret
   | `Website
   | `Draft
   | `Member  of AdLib.gender 
@@ -14,7 +14,7 @@ type t =
   ] 
 
 let css = function
-  | `Private -> "-private"
+  | `Secret  -> "-secret"
   | `Website -> "-website"
   | `Draft   -> "-draft"
   | `Member  _ -> "-member"
@@ -22,7 +22,7 @@ let css = function
   | `Visitor _ -> "-visitor"
 
 let label = function
-  | `Private -> `Status_Private
+  | `Secret  -> `Status_Secret
   | `Website -> `Status_Website
   | `Draft   -> `Status_Draft
   | `Member  g -> `Status_Member  g 
