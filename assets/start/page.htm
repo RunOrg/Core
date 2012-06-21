@@ -137,7 +137,7 @@ refresh = ->
   return if !id || !proof 
   $i = $p.next().addClass("-loading")
   $.getJSON pics, {id:id,proof:proof}, (data) -> 
-    return if id != $p.val() 
+    return if id != $p.val().split("/")[0] 
     return setTimeout refresh, 1000 if !data.large
     $i.find(".-l").attr("src",data.large)
     $i.find(".-s").attr("src",data.small)
