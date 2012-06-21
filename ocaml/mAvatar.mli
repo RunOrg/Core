@@ -63,8 +63,7 @@ val change_to_member     :
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
 val become_contact : 'a IInstance.id -> 'b IUser.id -> IAvatar.t O.run
-val become_admin   : 
-  [`Created] IInstance.id -> [`IsSelf] IUser.id -> [`IsAdmin] IIsIn.id option O.run
+val become_admin   : [`Created] IInstance.id -> 'any IUser.id -> IAvatar.t O.run
 
 val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> 'any IIsIn.id O.run
 val identify_user : 'a IInstance.id -> [`IsSelf] IUser.id -> 'a IIsIn.id O.run

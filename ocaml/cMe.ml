@@ -12,12 +12,7 @@ let () = UrlMe.def_root begin fun req res ->
 
   let url = Action.url UrlMe.ajax () [] in
   let default = "/account" in
-  let uid = 
-    match CSession.check req with 
-      | `None     -> None
-      | `Old cuid -> Some (ICurrentUser.decay cuid) 
-      | `New cuid -> Some (ICurrentUser.decay cuid)
-  in
+  let uid = CSession.get req in
 
   let html = Asset_Me_Page.render (object
     method navbar = (uid,None)

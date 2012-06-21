@@ -85,8 +85,6 @@ val user :
 
 module InGroup : sig
 
-  val access : unit -> MAccess.in_group
-
   val all :
        [<`Admin|`Write|`List|`Bot] IGroup.id
     -> MAccess.State.t 

@@ -36,7 +36,7 @@ let create ~payload ~delayed ~where ~iid (itid:[`Created] IItem.id) =
 let image ctx album =  
 
   let  instance = MAlbum.Get.write_instance album in 
-  let  user     = IIsIn.user (ctx # myself) in 
+  let  user     = IIsIn.user (ctx # isin) in 
   let! self     = ohm $ ctx # self in
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
@@ -65,7 +65,7 @@ let image ctx album =
 let doc ctx folder =  
 
   let  instance = MFolder.Get.write_instance folder in 
-  let  user     = IIsIn.user (ctx # myself) in 
+  let  user     = IIsIn.user (ctx # isin) in 
   let! self     = ohm $ ctx # self in
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 

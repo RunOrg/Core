@@ -11,7 +11,8 @@ module Reflected = MMembership_reflected
 
 (* Find a member status by its group + avatar --------------------------------------------- *)
 
-let access () avatar group expect = 
+let () = 
+  let! avatar, group, expect = Sig.listen MAccess.Signals.in_group in  
   let! id    = ohm_req_or (return false) $ Unique.find_if_exists group avatar in
   let! value = ohm_req_or (return false) $ Versioned.get id in
   let  valid = `Member    = (Versioned.reflected value).Reflected.status in

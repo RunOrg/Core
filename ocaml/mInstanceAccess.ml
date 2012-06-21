@@ -37,7 +37,7 @@ let view_directory id =
   return (MAccess.summarize t.Data.directory)
 
 let can_view_directory ctx = 
-  let id = IIsIn.instance (ctx # myself) in
+  let id = IIsIn.instance (ctx # isin) in
   let! t = ohm $ get (IInstance.decay id) in
   let! allowed = ohm $ MAccess.test ctx [ t.Data.directory ; `Admin ] in
   return (if allowed then Some (IInstance.Assert.see_contacts id) else None)

@@ -16,8 +16,6 @@ module All       = MEntity_all
 module Satellite = MEntity_satellite
 module Signals   = MEntity_signals
 
-let access = MEntity_can.access
-
 type 'relation t = 'relation MEntity_can.t
 
 (* Attempt to load an entity --------------------------------------------------------------- *)
@@ -29,7 +27,7 @@ let naked_get id =
   MyTable.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_naked id)) 
   
 let try_get context id = 
-  let isin = context # myself in
+  let isin = context # isin in
   let instance = IInstance.decay (IIsIn.instance isin) in
   let! entity = ohm_req_or (return None) $ MyTable.get (IEntity.decay id) in
   if instance  <> entity.E.instance then 
@@ -84,7 +82,7 @@ let try_update t ~status ~name ~data isin =
   
 (* Creating entities ----------------------------------------------------------------------- *)
 
-let _create ?(admin=false) ?name template iid creator_opt = 
+let _create ?name template iid creator = 
 
   let! id, gid = ohm (
     match name with 
@@ -101,14 +99,11 @@ let _create ?(admin=false) ?name template iid creator_opt =
   (* And the matching group *)
   let gid = IGroup.Assert.bot gid in  
 
-  let who = 
-    match creator_opt with None -> `preconfig | Some avatar -> 
-      `user (Id.gen (), IAvatar.decay avatar)
-  in
+  let who = `user (Id.gen (), IAvatar.decay creator) in
 
   let! instance = ohm $ MInstance.get iid in 
 
-  let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,admin,template,creator_opt) in
+  let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,template,creator) in
 
   let! data = ohm $ MEntity_data.create ~id:eid ~who () in
   
@@ -124,7 +119,7 @@ let _create ?(admin=false) ?name template iid creator_opt =
     template = ITemplate.decay template ;
     instance = IInstance.decay iid ;
     deleted  = None ;
-    creator  = BatOption.map IAvatar.decay creator_opt 
+    creator  = Some (IAvatar.decay creator) 
   }) in
       
   let! _ = ohm $ E.Store.create
@@ -137,17 +132,14 @@ let _create ?(admin=false) ?name template iid creator_opt =
 let create template isin =
   let  iid     = IIsIn.instance isin in
   let! avatar  = ohm $ MAvatar.get isin in
-  _create template (IInstance.decay iid) (Some avatar)
-
-let bot_create iid diff = 
-  _create ~name:(diff # name) (diff # template) (IInstance.decay iid) None
+  _create template (IInstance.decay iid) avatar
 
 let set_grants ctx eids = 
 
-  let! self = ohm $ ctx # self in 
+  let  self = ctx # self in 
   let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay self)) in
 
-  let  iid     = IInstance.decay (IIsIn.instance (ctx # myself)) in 
+  let  iid     = IInstance.decay (IIsIn.instance (ctx # isin)) in 
   let! current = ohm $ All.get_granting ctx in 
 
   let eids    = List.map IEntity.decay eids in 
@@ -187,15 +179,15 @@ let _ =
   let! iid = Sig.listen MInstance.Signals.on_create in
   
   let! instance = ohm_req_or (return ()) $ MInstance.get iid in
-  let! creator  = ohm $ MAvatar.become_contact iid (instance # usr) in
   
+  let! aid = ohm $ MAvatar.become_admin iid (instance # usr) in
+
   (* Act as the creator... *)
-  let creator = IAvatar.Assert.is_self creator in
+  let creator = IAvatar.Assert.is_self aid in
   
-  let! _        = ohm $
-    _create ~admin:true ~name:"admin" ITemplate.admin (IInstance.decay iid) (Some creator)
-  in
-  
+  let! _ = ohm $ _create ~name:"admin"   ITemplate.admin   (IInstance.decay iid) creator in
+  let! _ = ohm $ _create ~name:"members" ITemplate.members (IInstance.decay iid) creator in
+
   return ()  
 
 (* List the dates of real entities *)

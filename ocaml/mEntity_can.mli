@@ -2,7 +2,6 @@
 
 val has_manage_access : MEntity_core.entity -> 'any # MAccess.context -> bool O.run
 val has_view_access   : MEntity_core.entity -> 'any # MAccess.context -> bool O.run
-val access : unit -> MAccess.of_entity
 
 type 'relation t 
 

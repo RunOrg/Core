@@ -26,7 +26,8 @@ let view_access entity =
 let has_view_access entity context = 
   MAccess.test context (view_access entity)
 
-let access () id kind =
+let () = 
+  let! id, kind = Sig.listen MAccess.Signals.of_entity in 
   let! entity = ohm_req_or (return `Nobody) $ E.Table.get (IEntity.decay id) in
   return ( `Union ((match kind with `View -> view_access | `Manage -> manage_access) entity))
 

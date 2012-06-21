@@ -90,7 +90,7 @@ end
 
 val create : 
      pic:[`OwnPic] IFile.id option
-  -> who:([`IsSelf] IUser.id)
+  -> who:('any ICurrentUser.id)
   -> key:string 
   -> name:string 
   -> address:string option 

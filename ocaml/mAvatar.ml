@@ -296,8 +296,8 @@ let become_contact instance user =
   return id
 
 let become_admin instance user =
-  let! _, isin, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
-  return (IIsIn.Deduce.is_admin isin)
+  let! id, _, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
+  return id
 
 (* Identify an user for an instance ------------------------------------------------------- *)
 

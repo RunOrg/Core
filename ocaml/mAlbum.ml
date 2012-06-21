@@ -138,7 +138,7 @@ let get_for_entity ctx eid =
 	let doc = object
 	  method t     = `Album
 	  method owner = `entity eid
-	  method ins   = IIsIn.instance (ctx # myself) |> IInstance.decay 
+	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
 	let! _ = ohm (MyTable.transaction id (MyTable.insert doc)) in

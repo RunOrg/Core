@@ -36,12 +36,38 @@ let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 
 (* Intranet =============================================================================================== *)
 
-let root,    def_root    = O.declare O.client "intranet" A.none
+let root,    def_root      = O.declare O.client "intranet" A.none
+let ajax,    def_ajax      = O.declare O.client "internet/ajax" (A.n A.string)
 
-let intranet key list = 
-  OhmBox.url (Action.url root key ()) list
+let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
-let home    key = intranet key ["home"] 
-let members key = intranet key ["members"] 
-let forums  key = intranet key ["forums"] 
-let events  key = intranet key ["events"]
+let declare ?p url = 
+  let endpoint, define = O.declare O.client ("intranet/ajax" ^ url) (A.n A.string) in
+  let endpoint = Action.setargs (Action.rewrite endpoint "intranet/ajax" "intranet/#") [] in
+  let root key = Action.url root key () in
+  let prefix = "/" ^ url in
+  let parents = match p with 
+    | None -> [] 
+    | Some (_,prefix,parents,_) -> parents @ [prefix] 
+  in
+  endpoint, (root,prefix,parents,define)
+
+let root url = declare url 
+let child p url = declare ~p url 
+
+module Home = struct
+  let home, def_home = root "home"
+end
+
+module Members = struct
+  let home, def_home = root "members"
+end
+  
+module Forums = struct
+  let home, def_home = root "forums"
+end
+
+module Events = struct
+  let home, def_home = root "events"
+end
+

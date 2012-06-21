@@ -8,3 +8,5 @@ module A = Action.Args
 
 let home, def_home = O.declare O.core "start" (A.o IVertical.arg) 
 let free, def_free = O.declare O.core "start/free" A.none
+
+let create, def_create = O.declare O.core "start/create" A.none

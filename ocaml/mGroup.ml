@@ -74,7 +74,9 @@ let managers_of_data data =
     return (`Union [ f `Write ; f `Manage ])
   end
 
-let create gid admin iid eid tmpl = 
+let create gid iid eid tmpl = 
+
+  let admin = tmpl = ITemplate.admin in 
 
   let namer = MPreConfigNamer.load iid in 
 
@@ -393,7 +395,7 @@ let () =
   _refresh_token_grant eid
   
 let () = 
-  let! iid, eid, gid, admin, template, _ = Sig.listen MEntity.Signals.on_bind_group in 
-  let! _ = ohm $ create gid admin iid (IEntity.decay eid) template in
+  let! iid, eid, gid, template, _ = Sig.listen MEntity.Signals.on_bind_group in 
+  let! _ = ohm $ create gid iid (IEntity.decay eid) template in
   return () 
 

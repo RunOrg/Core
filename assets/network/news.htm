@@ -1,0 +1,32 @@
+{ navbar | VNavbar.intranet | ohm }
+
+<div class="network-news">
+
+  <div class="-side">
+    <div class="grey-text">
+      <p>{ `Network_News_Explain }</p>
+    </div>
+  </div>
+
+  <div class="-news">
+    { news | verbatim }
+  </div>
+
+</div>
+
+{ Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+.network-news {
+  width: 950px;
+  margin: auto;
+  .-news {
+    width: 694px;
+    float: right;
+  } 
+  .-side {
+    width: 230px;
+    float: left;
+  }
+}
+</style>

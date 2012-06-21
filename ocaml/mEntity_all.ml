@@ -100,7 +100,7 @@ let as_public item =
     
 let get_by_kind context kind = 
   
-  let isin = context # myself in
+  let isin = context # isin in
   let instance   = IInstance.decay (IIsIn.instance isin) in
   
   let! all = ohm $ ActiveView.doc (instance,kind) in
@@ -108,7 +108,7 @@ let get_by_kind context kind =
 
 let get_administrable_by_kind context kind = 
   
-  let isin = context # myself in
+  let isin = context # isin in
   let instance   = IInstance.decay (IIsIn.instance isin) in
   
   let! all = ohm $ ActiveView.doc (instance,kind) in
@@ -116,7 +116,7 @@ let get_administrable_by_kind context kind =
 
 let get context = 
   
-  let isin     = context # myself in
+  let isin     = context # isin in
   let instance = IInstance.decay (IIsIn.instance isin) in
   
   let! all = ohm $ AllView.doc instance in
@@ -129,19 +129,19 @@ let get_public instance kind =
 
 let get_with_members ctx = 
 
-  let   iid = IInstance.decay $ IIsIn.instance (ctx # myself) in
+  let   iid = IInstance.decay $ IIsIn.instance (ctx # isin) in
   let! list = ohm $ WithMemberView.doc iid in 
   Run.list_filter (as_visible ctx) list 
 
 let get_granting ctx = 
 
-  let  iid  = IInstance.decay $ IIsIn.instance (ctx # myself) in
+  let  iid  = IInstance.decay $ IIsIn.instance (ctx # isin) in
   let! list = ohm $ PotentialGrantView.doc iid in 
   Run.list_filter (as_visible ctx) list
 
 let get_administrable_granting ctx = 
 
-  let  iid      = IInstance.decay $ IIsIn.instance (ctx # myself) in
+  let  iid      = IInstance.decay $ IIsIn.instance (ctx # isin) in
   let! list     = ohm $ PotentialGrantView.doc iid in 
   Run.list_filter (as_administrable ctx) list 
 
@@ -152,7 +152,7 @@ let get_public_granting iid =
 
 let get_future ctx = 
  let  now = MFmt.date_of_float $ Unix.gettimeofday () in
- let  iid = IInstance.decay $ IIsIn.instance (ctx # myself) in
+ let  iid = IInstance.decay $ IIsIn.instance (ctx # isin) in
  let! list = ohm $ CalendarView.doc_query
    ~startkey:(iid,now)
    ~endkey:(iid,"99991231")

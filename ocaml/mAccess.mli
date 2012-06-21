@@ -26,17 +26,16 @@ val of_json : Ohm.Json.t -> t
 val to_json : t -> Ohm.Json.t
 val fmt : t Ohm.Fmt.t
 
-type of_entity  = IEntity.t -> Action.t -> t O.run
-type in_group   = IAvatar.t -> IGroup.t  -> State.t  -> bool O.run
-type in_message = IAvatar.t -> IMessage.t -> bool O.run
+module Signals : sig
 
-class type ['any] context = object
-  method self_if_exists   : [`IsSelf] IAvatar.id option 
-  method self             : [`IsSelf] IAvatar.id O.run
-  method myself           : 'any IIsIn.id 
-  method access_of_entity : of_entity 
-  method avatar_in_group  : in_group 
-  method accesses_message : in_message
+  val of_entity : (IEntity.t * Action.t, t O.run) Ohm.Sig.channel
+  val in_group  : (IAvatar.t * IGroup.t * State.t, bool O.run) Ohm.Sig.channel
+
+end
+
+class type ['any] context = object 
+  method self             : [`IsSelf] IAvatar.id 
+  method isin             : 'any IIsIn.id 
 end
 
 val test : 'any #context  -> t list -> bool O.run

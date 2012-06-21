@@ -46,7 +46,7 @@ let () = UrlClient.def_article begin fun req res ->
   let! () = true_or (return (Action.redirect canonical_url res))
     (str = Some (UrlClient.article_url_key broadcast)) in
 
-  let main = Article.render_list key [broadcast] in
+  let main = CBroadcast.render_list [broadcast] in
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `Home ~cuid ~left ~main instance in
 

@@ -1,0 +1,32 @@
+<div class="upload-form">  
+  {this|ohm} 
+  {@!inner}
+    <div class="-field">
+      {inner | verbatim}
+    </div>
+    <div class="-buttons">
+      <button type="submit"><span>{ `Upload_Submit }</span></button>
+      <a style="display:inline-block" class="action-button" href="{cancel}">{ `Upload_Cancel }</a>
+    </div>
+  {/@}
+</div>
+
+<style>
+.upload-form {
+  background-color: #EEEEEE;
+  height: 121px;
+  overflow: hidden;
+  width: 406px;
+  box-shadow: inset 2px 2px 2px #DDD;
+
+  .-field {
+    margin: 25px;
+    text-align: center;
+  }
+
+  .-buttons {
+    margin: 20px;
+    text-align: center;
+  }
+} 
+</style>

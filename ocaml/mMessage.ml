@@ -691,7 +691,7 @@ let get_instance mid =
 
 let create_and_post ~ctx ~invited ~title ~post = 
   
-  let instance = ctx # myself |> IIsIn.instance |> IInstance.decay in
+  let instance = ctx # isin |> IIsIn.instance |> IInstance.decay in
   
   let! who = ohm (ctx # self) in 
     

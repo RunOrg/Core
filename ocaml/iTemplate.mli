@@ -10,6 +10,7 @@ val of_string : string -> t option
 val decay : 'any id -> t
 
 val admin : t
+val members : t 
 
 module Assert : sig
   val can_create       : 'any id -> [`Create] id

@@ -160,7 +160,7 @@ let get_for_owner ctx own =
   let  id = match own with 
     | Some (`of_entity  eid) -> IEntity.to_id  eid   
     | Some (`of_message mid) -> IMessage.to_id mid 
-    | None                   -> IIsIn.instance (ctx # myself) |> IInstance.to_id
+    | None                   -> IIsIn.instance (ctx # isin) |> IInstance.to_id
   in 
 
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
@@ -174,7 +174,7 @@ let get_for_owner ctx own =
 	let doc = object
 	  method t     = `Feed
 	  method own   = own
-	  method ins   = IIsIn.instance (ctx # myself) |> IInstance.decay 
+	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
 	let! _ = ohm (MyTable.transaction id (MyTable.insert doc)) in

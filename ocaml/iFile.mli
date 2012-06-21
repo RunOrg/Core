@@ -20,14 +20,14 @@ module Deduce : sig
   val get_img : [<`PutImg|`GetImg] id -> [`GetImg] id
   val get_doc : [<`PutDoc|`GetDoc] id -> [`GetDoc] id
 
-  val make_getPic_token : [`Unsafe] ICurrentUser.id -> [`GetPic] id -> string
-  val from_getPic_token : [`Unsafe] ICurrentUser.id -> 'any id      -> string -> [`GetPic] id option
+  val make_getPic_token : 'any ICurrentUser.id -> [`GetPic] id -> string
+  val from_getPic_token : 'any ICurrentUser.id -> 'any id      -> string -> [`GetPic] id option
 
-  val make_getImg_token : [`Unsafe] ICurrentUser.id -> [`GetImg] id -> string
-  val from_getImg_token : [`Unsafe] ICurrentUser.id -> 'any id      -> string -> [`GetImg] id option
+  val make_getImg_token : 'any ICurrentUser.id -> [`GetImg] id -> string
+  val from_getImg_token : 'any ICurrentUser.id -> 'any id      -> string -> [`GetImg] id option
 
-  val make_getDoc_token : [`Unsafe] ICurrentUser.id -> [`GetDoc] id -> string
-  val from_getDoc_token : [`Unsafe] ICurrentUser.id -> 'any id      -> string -> [`GetDoc] id option
+  val make_getDoc_token : 'any ICurrentUser.id -> [`GetDoc] id -> string
+  val from_getDoc_token : 'any ICurrentUser.id -> 'any id      -> string -> [`GetDoc] id option
 
 end
 

@@ -51,6 +51,11 @@ val latest :
   -> IInstance.t 
   -> (#Ohm.CouchDB.ctx, t list * float option) Ohm.Run.t
 
+val all_latest : 
+     ?start:float
+  ->  int
+  -> (#Ohm.CouchDB.ctx, t list * float option) Ohm.Run.t
+
 val recent_ids : IInstance.t -> count:int -> IBroadcast.t list O.run
 
 val count : IInstance.t -> int O.run

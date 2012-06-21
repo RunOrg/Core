@@ -31,3 +31,5 @@ let decay = function
   | `None -> None
   | `New cuid -> Some (ICurrentUser.decay cuid) 
   | `Old cuid -> Some (ICurrentUser.decay cuid) 
+
+let get req = decay (check req)

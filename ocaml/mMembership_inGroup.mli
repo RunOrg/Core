@@ -1,6 +1,4 @@
 (* © 2012 RunOrg *)
-
-val access : unit -> MAccess.in_group
   
 val all :
      [<`Admin|`Write|`List|`Bot] IGroup.id

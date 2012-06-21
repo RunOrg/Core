@@ -233,12 +233,12 @@ let get_follower rid =
 let get ctx rid = 
   let! data = ohm_req_or (return `None) $ MyTable.get (IRelatedInstance.decay rid) in
 
-  if data.Data.related_to <> IInstance.decay (IIsIn.instance (ctx # myself)) then
+  if data.Data.related_to <> IInstance.decay (IIsIn.instance (ctx # isin)) then
     return `None
   else
     if 
-      None <> IIsIn.Deduce.is_admin (ctx # myself)
-      || Some data.Data.created_by = BatOption.map IAvatar.decay (ctx # self_if_exists)
+      None <> IIsIn.Deduce.is_admin (ctx # isin)
+      || data.Data.created_by = IAvatar.decay (ctx # self)
     then
       (* We just found out it's an admin *)
       return $ `Admin (IRelatedInstance.Assert.admin rid, data) 
@@ -248,7 +248,7 @@ let get ctx rid =
 	  (* It's public *)
 	  return $ `View (IRelatedInstance.Assert.view rid, data) 
 	| `Private -> 
-	  if None <> IIsIn.Deduce.is_token (ctx # myself) then 
+	  if None <> IIsIn.Deduce.is_token (ctx # isin) then 
 	    (* A member can view private related instances *)
 	    return $ `View (IRelatedInstance.Assert.view rid, data)
 	  else

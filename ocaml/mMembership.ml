@@ -63,7 +63,7 @@ let get mid =
 
 let status ctx gid = 
   let  default = return `NotMember in
-  let! aid  = req_or     default $ ctx # self_if_exists in
+  let  aid  = ctx # self in
   let! mid  = ohm_req_or default $ Unique.find_if_exists gid aid in 
   let! data = ohm_req_or default $ get mid in 
   return data.status  
@@ -270,8 +270,7 @@ let () =
 (* Propagate admin group binding ----------------------------------------------- *)
 
 let () = 
-  let! _, _, gid, isadmin, _, creator_opt = Sig.listen MEntity.Signals.on_bind_group in 
-  if isadmin then  
-    let! creator = req_or (return ()) creator_opt in
+  let! _, _, gid, tmpl, creator = Sig.listen MEntity.Signals.on_bind_group in 
+  if tmpl = ITemplate.admin || tmpl = ITemplate.members then  
     admin ~from:creator gid creator [ `Accept true ; `Default true ]   
   else return ()

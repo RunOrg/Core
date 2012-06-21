@@ -46,9 +46,8 @@ module Signals : sig
   val on_bind_group : (   IInstance.t
                         * [`Created] IEntity.id
 		        * [`Bot] IGroup.id
-			* bool
                         * ITemplate.t 
-			* [`IsSelf] IAvatar.id option, unit O.run) Ohm.Sig.channel
+			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     
 end
 
@@ -137,11 +136,6 @@ val create :
   -> [<`IsContact|`IsMember|`IsOwner] IIsIn.id
   -> [`Created] IEntity.id O.run
 
-val bot_create :
-     [`Bot] IInstance.id 
-  -> MInstanceEntity.Create.t
-  -> [`Created] IEntity.id O.run
-
 val set_grants : [`IsAdmin] # MAccess.context -> 'any IEntity.id list -> unit O.run
 
 val get_last_real_event_date : [`IsAdmin] IInstance.id -> string option option O.run
@@ -194,8 +188,6 @@ module All : sig
 end
 
 val get_if_public : 'any IEntity.id -> [`View] t option O.run
-
-val access : unit -> MAccess.of_entity 
 
 module Backdoor : sig
 

@@ -10,6 +10,7 @@ module Core = struct
 
   let root,   def_root   = O.declare O.core "upload" A.none
   let cancel, def_cancel = O.declare O.core "upload/cancel" A.none
-  let ok,     def_ok     = O.declare O.core "upload/success" (A.r IFile.arg) 
+  let ok,     def_ok     = O.declare O.core "upload/confirm" (A.rr IFile.arg A.string) 
+  let find,   def_find   = O.declare O.core "upload/find" A.none
 
 end

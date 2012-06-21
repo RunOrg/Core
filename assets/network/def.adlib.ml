@@ -5,3 +5,5 @@
 | `Network_Title
 | `Network_Title_WithTag of string
 
+| `Network_News_Title
+| `Network_News_Explain

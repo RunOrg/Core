@@ -424,7 +424,7 @@ module Build = struct
 
   let vertical_ml () =   
 
-    (* The field name, by meaning ========================================================================= *)
+    (* List of verticals in the catalog. ------------------------------------------------------------- *)
     "module Catalog = struct\n\n"
     ^ "  let list = [\n    "
     ^ String.concat " ;\n    "  begin
@@ -443,6 +443,25 @@ module Build = struct
       end (!the_catalog) 		
     end
     ^ " ]"
+
+      (* Vertical based on catalog position -------------------------------------------------------- *)
+    ^ "\n\n  let vertical = function\n    | "
+    ^ String.concat "\n    | "  begin
+
+      let list = 
+	BatList.mapi begin fun i (_,verticals) -> 
+	  BatList.mapi begin fun j (vertical,name,desc) -> 
+	    Printf.sprintf "\"%d-%d\" -> Some `%s" i j vertical 
+	  end verticals
+	end (!the_catalog)
+      in
+
+      List.concat list
+
+    end
+    ^ "\n    | _ -> None"
+
+      (* First catalog position of vertical -------------------------------------------------------- *)
     ^ "\n\n  let init = function\n    | "
     ^ String.concat "\n    | "  begin
 

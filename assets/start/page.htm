@@ -57,7 +57,7 @@
     
     <div style="display:none" class="-field">
       { `Start_Field_Picture } 
-      <input type="hidden" name="pic"/>
+      <input {$pic} type="hidden" name="pic"/>
       <div class="-images">
 	<img class="-l" src="/public/img/404_large.png"/>
 	<img class="-s" src="/public/img/404_small.png"/>
@@ -78,7 +78,7 @@
     </div>
     
     <div style="text-align:right; padding-right:27px;">
-      <button type="submit"><span>{ `Start_Submit }</span></button>
+      <button {$submit} type="submit"><span>{ `Start_Submit }</span></button>
       <a style="display:inline-block" href="{back}" class="action-button">{ `Start_Cancel }</a>
     </div>
     
@@ -88,15 +88,28 @@
 
 { Asset_PageLayout_Footer.render | ohm }
 
-<script type="free:string,init:string option,upload:string">
+<script type="free:string,init:string option,upload:string,pics:string">
 
 $f = here.$form
 $k = here.$key 
+$p = here.$pic
 
 $f.find(".-more").click -> 
   $(@).hide().next().show()
 
+here.$submit.attr("disabled",false)
+
 $f.submit -> 
+  data = 
+    vertical: $("input[name='vertical']:checked").val()
+    name: here.$name.val()
+    key: $k.val()
+    pic: $p.val() || null
+    desc: $("textarea[name='desc']").val() || null
+  return false if !data.vertical || !data.name
+  here.$submit.attr("disabled","disabled")
+  post $(@).attr("action"), data, () -> 
+    here.$submit.attr("disabled",false)
   false
 
 $f.find("ul a").click ->
@@ -119,10 +132,33 @@ fresh = ->
 here.$name.change fresh
 $k.change fresh
 
+refresh = -> 
+  [id,proof] = $p.val().split("/")
+  return if !id || !proof 
+  $i = $p.next().addClass("-loading")
+  $.getJSON pics, {id:id,proof:proof}, (data) -> 
+    return if id != $p.val() 
+    return setTimeout refresh, 1000 if !data.large
+    $i.find(".-l").attr("src",data.large)
+    $i.find(".-s").attr("src",data.small)
+    $i.removeClass("-loading")
+        
 here.$upload.click -> 
   $iframe = $ "<iframe/>", {src : upload}  
-  $(@).parent(".-images").addClass("-up -loading").prepend($iframe)
-  
+  close = -> 
+    $iframe.parent(".-images").removeClass("-up")
+    do $iframe.remove
+  $(@).parent(".-images").addClass("-up").prepend($iframe)
+  $iframe.load -> 
+    location = $iframe.contents().get(0).location.href
+    do close if /cancel/.test location
+    if /confirm/.test location      
+      what = /[a-zA-Z0-9]*\/[a-zA-Z0-9]*\?/.exec(location)[0]            
+      what = what.substr 0, what.length-1
+      $p.val(what)
+      do close
+      do refresh
+ 
 xhr = null
 
 </script>
@@ -244,7 +280,6 @@ xhr = null
     min-height: 105px;
 
     iframe { 
-      background-color: white;
       border: medium none;
       display: block;
       height: 121px;
@@ -253,7 +288,10 @@ xhr = null
       width: 406px;
     }
 
-    &.-up a { display: none } 
+    &.-up {
+      background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+      a, img { display: none } 
+    } 
 
     &.-loading {
       background: url(/public/icon/ajax-load.gif) center center no-repeat white;

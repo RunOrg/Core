@@ -14,12 +14,7 @@ let action f req res =
   let path = BatList.drop 2 (BatString.nsplit (req # path) "/") in
 
   (* Extract user from cookie *)
-  let user = CSession.check req in 
-  let user = match user with 
-    | `None     -> None
-    | `Old cuid -> Some (ICurrentUser.decay cuid)
-    | `New cuid -> Some (ICurrentUser.decay cuid)
-  in
+  let user = CSession.get req in
 
   (* Redirect or run action *)
   match user with 

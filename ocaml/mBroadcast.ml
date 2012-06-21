@@ -231,6 +231,43 @@ let get_summary bid =
   let! list = ohm $ SummaryView.by_key bid in 
   match list with [] -> return None | h :: _ -> return $ Some (h # value) 
 
+(* Display the latest values for the entire system. ---------------------------------------- *)
+
+module AllView = CouchDB.DocView(struct
+  module Key = Fmt.Make(struct
+    type json t = float
+  end)
+  module Value  = Fmt.Unit
+  module Doc    = Item
+  module Design = Design 
+  let name = "all"
+  let map  = "if (!doc.d) emit(doc.t)"
+end)
+
+let all_latest ?start count = 
+
+  let! now = ohmctx (#time) in
+
+  let startkey = BatOption.default (now +. 3600.) start in   
+  let endkey   = 0.0 in
+  
+  let limit = count + 1 in
+
+  let! raw_list = ohm $ AllView.doc_query 
+    ~startkey ~endkey ~descending:true ~limit ()
+  in
+
+  let  extract i = 
+    let! extract = ohm $ extract (IBroadcast.of_id (i#id)) (i#doc) in
+    return (i#key,extract)
+  in
+
+  let! list = ohm $ Run.list_map extract raw_list in
+
+  let list, next = OhmPaging.slice ~count list in 
+  
+  return (BatList.filter_map snd list, BatOption.map fst next) 
+
 (* Display the latest values for a given instance. ------------------------------------------ *)
 
 module ByInstanceView = CouchDB.DocView(struct

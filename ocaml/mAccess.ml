@@ -55,46 +55,43 @@ let optimize access =
     | [e] -> e
     | any -> `Union any
       
-type of_entity  = IEntity.t -> Action.t -> t O.run
-type in_group   = IAvatar.t -> IGroup.t -> State.t -> bool O.run
-type in_message = IAvatar.t -> IMessage.t -> bool O.run
+module Signals = struct
+  let in_group_call,  in_group  = Sig.make (Run.list_exists identity) 
+  let of_entity_call, of_entity = Sig.make 
+    (fun list -> let! list = ohm $ Run.list_map identity list in return (`Union list)) 
+end
 
-class type ['any] context = object
-  method self_if_exists   : [`IsSelf] IAvatar.id option 
-  method self             : [`IsSelf] IAvatar.id O.run
-  method myself           : 'any IIsIn.id 
-  method access_of_entity : of_entity 
-  method avatar_in_group  : in_group
-  method accesses_message : in_message
+class type ['any] context = object 
+  method self             : [`IsSelf] IAvatar.id 
+  method isin             : 'any IIsIn.id 
 end
 
 let test (context : 'any #context) accesses = 
 
   let access     = optimize (`Union accesses) in
-  let of_entity  = context # access_of_entity in
-  let in_group   = context # avatar_in_group  in
-  let in_message = context # accesses_message in
   
-  let isin = context # myself in 
-  let aid_opt = BatOption.map IAvatar.decay (context # self_if_exists) in
+  let in_group aid gid status = 
+    Signals.in_group_call (aid,gid,status)
+  in
+
+  let of_entity entity action = 
+    Signals.of_entity_call (entity,action)     
+  in
+
+  let isin = context # isin in
+  let aid  = IAvatar.decay (context # self) in
 
   let rec aux = function 
     | `Nobody        -> return false
-    | `List       l  -> ( match aid_opt with 
-	| None     -> return false
-	| Some aid -> return (List.mem aid l))
-    | `Groups  (s,l) -> ( match aid_opt with 
-	| None     -> return false
-	| Some aid -> Run.list_exists (fun g -> in_group aid g s) l) 
+    | `List       l  -> return (List.mem aid l)
+    | `Groups  (s,l) -> Run.list_exists (fun g -> in_group aid g s) l
     | `Union      l  -> Run.list_exists aux l
     | `Admin         -> return (None <> IIsIn.Deduce.is_admin isin)
     | `Token         -> return (None <> IIsIn.Deduce.is_token isin)
     | `Contact       -> return true 
     | `TokOnly    t  -> if None = IIsIn.Deduce.is_token isin then return false else aux t
     | `Entity  (e,a) -> of_entity e a |> Run.bind aux
-    | `Message    m  -> ( match aid_opt with 
-	| None     -> return false
-	| Some aid -> in_message aid m )
+    | `Message    m  -> return false
   in
   
   aux access

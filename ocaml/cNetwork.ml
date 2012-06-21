@@ -6,12 +6,7 @@ open BatPervasives
 
 let render ?tag title list req res = 
 
-  let uid = 
-    match CSession.check req with 
-      | `None     -> None
-      | `Old cuid -> Some (ICurrentUser.decay cuid) 
-      | `New cuid -> Some (ICurrentUser.decay cuid)
-  in
+  let uid = CSession.get req in
 
   let! stats = ohm $ MInstance.Profile.tag_stats () in
   let tags = List.map (fun (tag,count) -> (object
@@ -62,3 +57,28 @@ let () = UrlNetwork.def_tag begin fun req res ->
 
 end
     
+let () = UrlNetwork.def_news begin fun req res -> 
+
+  let uid = CSession.get req in
+
+  let start = req # args in
+
+  let! broadcasts, next = ohm $ MBroadcast.all_latest ?start 15 in
+  let! list = ohm $ CBroadcast.render_list broadcasts in
+
+  let! more = ohm begin match next with 
+    | None -> return $ Html.str "" 
+    | Some time -> let url = Action.url (req # self) () (Some time) in
+		   Asset_Broadcast_More.render url
+  end in 
+  
+  let news = (Html.concat [ list ; more ]) in
+
+  let html = Asset_Network_News.render (object
+    method news = news
+    method navbar = (uid, None)
+  end) in 
+
+  CPageLayout.core `Network_News_Title html res
+
+end
