@@ -7,7 +7,7 @@ module Assert : sig
   val is_contact   : 'any id -> [`IsContact] id
   val is_token     : 'any id -> [`IsToken] id
   val is_admin     : 'any id -> [`IsAdmin] id
-  val create_local : 'any id -> [`CreateLocal] id      
+  val create_event : 'any id -> [`CreateEvent] id      
   val upload       : 'any id -> [`Upload] id
   val rights       : 'any id -> [`Rights] id
   val bot          : 'any id -> [`Bot] id

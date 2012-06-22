@@ -9,6 +9,7 @@ module Data = struct
     type json t = 
 	{
 	  directory : MAccess.t ;
+	 ?events    : MAccess.t = `Admin ; 
 	  freeze    : bool 
 	}
   end
@@ -21,6 +22,7 @@ module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let default = Data.({
   directory = `Token ;
+  events    = `Token ;
   freeze    = false
 })
 
@@ -41,6 +43,16 @@ let can_view_directory ctx =
   let! t = ohm $ get (IInstance.decay id) in
   let! allowed = ohm $ MAccess.test ctx [ t.Data.directory ; `Admin ] in
   return (if allowed then Some (IInstance.Assert.see_contacts id) else None)
+
+let create_event id = 
+  let! t = ohm $ get (IInstance.decay id) in
+  return (MAccess.summarize t.Data.events)
+
+let can_create_event ctx = 
+  let id = IIsIn.instance (ctx # isin) in
+  let! t = ohm $ get (IInstance.decay id) in
+  let! allowed = ohm $ MAccess.test ctx [ t.Data.events ; `Admin ] in
+  return (if allowed then Some (IInstance.Assert.create_event id) else None)
 
 let wall_post id = 
   let! t = ohm $ get (IInstance.decay id) in
