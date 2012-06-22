@@ -23,7 +23,7 @@ val date          : 'any t -> string option
 val end_date      : 'any t -> string option
 val admin         : 'any t -> MAccess.t
 
-val real_access   : 'any t -> [ `Admin | `Normal | `Invite | `Registered | `Public ]
+val real_access   : 'any t -> [ `Admin | `Member | `Invite | `Registered | `Public ]
   
 val inactive      : 'any t -> bool
 

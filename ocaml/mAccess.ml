@@ -97,28 +97,13 @@ let test (context : 'any #context) accesses =
   aux access
 
 let summary_reduce a b =
-  if a = `Public then a else
-    if b = `Public then b else
-      if a = `Normal then a else
-	if b = `Normal then b else
-	  `Admin
-
-let summary_invite_reduce a b = 
-  if a = `Public then a else
-    if b = `Public then b else
-      if a = `Normal then a else
-	if b = `Normal then b else
-	  if a = `Invite then a else
-	    if b = `Invite then b else
-	      if a = `Registered then a else
-		if b = `Registered then b else
-		  `Admin
+  if a = `Member then a else
+    if b = `Member then b else
+      `Admin
 	    
 let rec summarize = function
   | `Union   l -> List.fold_left summary_reduce `Admin $ List.map summarize l
-  | `TokOnly t -> let sub = summarize t in 
-		  if sub = `Public then `Normal else sub
-  | `Token     -> `Normal
-  | `Contact   -> `Public
+  | `TokOnly t -> summarize t
+  | `Token     -> `Member
   | _          -> `Admin
 

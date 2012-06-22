@@ -1,0 +1,37 @@
+.elite-form {
+  width: 722px;
+  margin: 10px auto;
+
+  button span, .action-button {
+    font-size: 16px;
+    height: 16px;
+    line-height: 14px;
+  }
+}
+
+.elite-field {
+  overflow: hidden;
+
+  > * {
+    margin-left: 320px;
+  }
+
+  > .elite-field-label {
+    margin-left: 0px;
+  }
+}
+
+.elite-field-label {
+  float: left;
+  width: 300px;
+  text-align: right;
+
+  span {
+    color: #888888;
+    display: block;
+    font-size: 13px;
+    line-height: 14px;
+    padding: 0 6px;
+  }
+}
+

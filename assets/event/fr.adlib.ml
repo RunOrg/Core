@@ -16,3 +16,10 @@
 | `Events_NoDate -> "Pas de date"
 
 | `Events_Options_Title -> "Paramètres"
+| `Events_Options_CanCreate -> "Qui peut organiser des activités ?"
+| `Events_Options_CanCreate_Detail -> "Seuls les administrateurs peuvent publier des activités sur le site web ou modifier des activités créées par les autres."
+| `Events_Options_Admin -> "Uniquement les administrateurs"
+| `Events_Options_Member -> "Tout le monde"
+| `Events_Options_Submit -> "Enregistrer"
+
+| `Events_Create_Title -> "Organiser"

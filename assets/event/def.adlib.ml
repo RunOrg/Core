@@ -16,3 +16,10 @@
 | `Events_NoDate 
 
 | `Events_Options_Title
+| `Events_Options_CanCreate
+| `Events_Options_CanCreate_Detail
+| `Events_Options_Admin
+| `Events_Options_Member
+| `Events_Options_Submit
+
+| `Events_Create_Title

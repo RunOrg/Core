@@ -42,5 +42,5 @@ val test : 'any #context  -> t list -> bool O.run
 
 val optimize : t -> t
 
-val summarize : t -> [> `Admin | `Normal | `Public ]
+val summarize : t -> [> `Admin | `Member ]
 
