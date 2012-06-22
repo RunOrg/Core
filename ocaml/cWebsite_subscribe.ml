@@ -32,7 +32,7 @@ let render cuid key iid =
   let  form =
     if cuid <> None then None else 
       let form = OhmForm.create ~template ~source:OhmForm.empty in
-      Some (Asset_Form_Small.render (OhmForm.render form the_url))
+      Some (Asset_Form_Small.render (OhmForm.Convenience.render form the_url))
   in
 
   Asset_Website_Subscribe.render (object

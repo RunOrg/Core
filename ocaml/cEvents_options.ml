@@ -16,15 +16,17 @@ let template =
      ~format:AccessFmt.fmt
      ~source:[ `Admin,  (AdLib.write `Events_Options_Admin) ;
 	       `Member, (AdLib.write `Events_Options_Member) ]
-     return OhmForm.keep)
+     (fun iid -> let! access = ohm $ MInstanceAccess.create_event iid in
+		 return (Some access))
+     OhmForm.keep)
       
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
 
 let () = CClient.define UrlClient.Events.def_options begin fun access -> 
   O.Box.fill $ O.decay begin
 
-    let form = OhmForm.create ~template ~source:OhmForm.empty in
-    let url  = "" in
+    let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # iid)) in
+    let url  = JsCode.Endpoint.of_url "" in
 
     Asset_Admin_Page.render (object
       method parents = [ object

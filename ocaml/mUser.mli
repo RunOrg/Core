@@ -122,7 +122,7 @@ val confirm : [`Confirm] IUser.id -> bool O.run
 val confirmed : 'any IUser.id -> bool O.run
 val confirmed_time : [<`Bot] IUser.id -> float option O.run
 
-val set_password : string -> [`IsSelf] IUser.id -> unit O.run
+val set_password : string -> 'any ICurrentUser.id -> unit O.run
 
 val set_notifications : [`Edit] IUser.id -> blocked:Notification.t list -> autologin:bool -> unit O.run
 

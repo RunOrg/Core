@@ -619,20 +619,16 @@ let update uid t =
       Signals.on_update_call (updated , extract o) 
     | _             -> return ()
 
-let set_password pass uid = 
+let set_password pass cuid = 
 
-  let id = IUser.decay uid in
+  let id = IUser.Deduce.is_anyone cuid in
   let update user = 
-    let confirmed = user.Data.email <> "" in
-    let o = Data.({ user with passhash = Some (ConfigKey.passhash pass) ; confirmed }) in
-    (if confirmed && not user.Data.confirmed then Some o else None), `put o
+    let o = Data.({ user with passhash = Some (ConfigKey.passhash pass) }) in
+    (), `put o
   in
   
-  let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
-  match result with
-    | Some (Some o) -> let data = extract o in
-		       Signals.on_confirm_call (IUser.decay uid, data)
-    | _             -> return ()
+  let ! _ = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  return () 
 
 let _get id = MyTable.get (IUser.decay id)
 

@@ -64,7 +64,7 @@ let () = UrlLogin.def_lost
       Asset_Dialog_Dialog.render (object
 	method width = "600"
 	method title = AdLib.get `Login_Lost_Title
-	method body  = Asset_Form_Clean.render (OhmForm.render form url)  
+	method body  = Asset_Form_Clean.render (OhmForm.Convenience.render form url)  
       end)
     in
     

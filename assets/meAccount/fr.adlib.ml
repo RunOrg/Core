@@ -45,6 +45,7 @@
 | `MeAccount_Pass_Password -> "Mot de passe"
 | `MeAccount_Pass_Pass2 -> "Mot de passe (vérification)"
 | `MeAccount_Pass_Required -> "Champ obligatoire"
+| `MeAccount_Pass_Mismatch -> "Les deux mots de passe sont différents"
 | `MeAccount_Pass_Submit -> "Enregistrer"
 
 | `MeAccount_Picture_Title -> "Photo"

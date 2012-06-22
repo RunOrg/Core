@@ -13,13 +13,13 @@ let () = UrlLogin.def_login begin fun req res ->
   let login = 
     let form = OhmForm.create ~template:Login.template ~source:OhmForm.empty in
     let url  = Action.url UrlLogin.post_login () (req # args) in
-    Asset_Form_Clean.render (OhmForm.render form url)
+    Asset_Form_Clean.render (OhmForm.Convenience.render form url)
   in 
   
   let signup = 
     let form = OhmForm.create ~template:Signup.template ~source:OhmForm.empty in
     let url  = Action.url UrlLogin.post_signup () (req # args) in
-    Asset_Form_Clean.render (OhmForm.render form url)
+    Asset_Form_Clean.render (OhmForm.Convenience.render form url)
   in
 
   let iid = UrlLogin.instance_of (req # args) in

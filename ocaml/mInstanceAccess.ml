@@ -56,4 +56,4 @@ let can_create_event ctx =
 
 let wall_post id = 
   let! t = ohm $ get (IInstance.decay id) in
-  return (if t.Data.freeze then `Admin else `Token) 
+  return (if t.Data.freeze then `Admin else `Member) 

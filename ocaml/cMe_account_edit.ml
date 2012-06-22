@@ -139,7 +139,7 @@ let () = define UrlMe.Account.def_edit begin fun cuid ->
     let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
 
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed user) in
-    let url  = "" in
+    let url  = JsCode.Endpoint.of_url "" in
 
     Asset_Admin_Page.render (object
       method parents = [ Parents.home ; Parents.admin ] 
