@@ -6,6 +6,8 @@ open BatPervasives
 
 let () = CClient.define UrlClient.Events.def_home begin fun access -> 
   O.Box.fill $ O.decay begin 
+
+    (* Construct the list of entities to be displayed *)
     let! now  = ohmctx (#time) in
     let! list = ohm $ MEntity.All.get_by_kind access `Event in
     let! list = ohm $ Run.list_map begin fun entity -> 
@@ -37,15 +39,28 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
       end)
     end list in 
     let list = List.map snd (List.sort (fun a b -> compare (fst b) (fst a)) list) in
+
+    (* The URL of the options page *)
+    let options = 
+      if None = CAccess.admin access then None else 
+	Some (Action.url UrlClient.Events.options (access # instance # key) [])
+    in
+
     Asset_Event_ListPrivate.render (object
-      method list = list
+      method list        = list
       method url_new     = "#"
-      method url_options = Some "#" 
+      method url_options = options
     end) 
   end
 end
 
 let () = CClient.define UrlClient.Events.def_see begin fun access -> 
+  O.Box.fill $ O.decay begin
+    return (Ohm.Html.str "O HAI")
+  end
+end
+
+let () = CClient.define UrlClient.Events.def_options begin fun access -> 
   O.Box.fill $ O.decay begin
     return (Ohm.Html.str "O HAI")
   end

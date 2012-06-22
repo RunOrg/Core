@@ -74,7 +74,9 @@ module Forums = struct
 end
 
 module Events = struct
-  let home, def_home = root "calendar"
-  let see,  def_see  = child def_home "event"
+  let home,    def_home    = root "calendar"
+  let options, def_options = child def_home "cal/options"
+  let see,     def_see     = child def_home "event"
+  let admin,   def_admin   = child def_see  "ev/admin"
 end
 
