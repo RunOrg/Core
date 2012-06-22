@@ -1,7 +1,9 @@
 | `Events_Link_New -> "Organiser une activité"
-| `Events_Link_Options -> "Options"
+| `Events_Link_Options -> "Paramètres"
 
 | `Events_List_Empty -> "Aucune activité disponible"
+
+| `Events_Title -> "Activités"
 
 | `Events_Help_Title -> "Visibilité"
 | `Events_Help_Default -> "Par défaut, tous les membres de l'association peuvent voir les activités et demander à s'y inscrire." 
@@ -12,3 +14,5 @@
 | `Events_CountComing n -> Printf.sprintf "%d %s" n (if n = 1 then "inscrit" else "inscrits") 
 
 | `Events_NoDate -> "Pas de date"
+
+| `Events_Options_Title -> "Paramètres"

@@ -62,6 +62,13 @@ end
 
 let () = CClient.define UrlClient.Events.def_options begin fun access -> 
   O.Box.fill $ O.decay begin
-    return (Ohm.Html.str "O HAI")
+    Asset_Admin_Page.render (object
+      method parents = [ object
+	method title = AdLib.get `Events_Title
+	method url   = Action.url UrlClient.Events.home (access # instance # key) []
+      end ]
+      method here = AdLib.get `Events_Options_Title
+      method body = return (Ohm.Html.str "O HAI")
+    end)
   end
 end
