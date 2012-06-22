@@ -22,7 +22,7 @@ let template =
       
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
 
-let () = CClient.define UrlClient.Events.def_options begin fun access -> 
+let () = CClient.define_admin UrlClient.Events.def_options begin fun access -> 
   O.Box.fill $ O.decay begin
 
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # iid)) in

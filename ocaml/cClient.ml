@@ -109,3 +109,10 @@ let define (base,prefix,parents,define) body =
     let base = base (req # server) in
     O.Box.response ~prefix ~parents base O.BoxCtx.make (body access) req res
   ))
+
+let define_admin def body = 
+  define def begin fun access -> 
+    match CAccess.admin access with 
+      | None -> O.Box.fill (Asset_Client_PageForbidden.render ()) 
+      | Some access -> body access
+  end
