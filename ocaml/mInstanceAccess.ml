@@ -34,6 +34,14 @@ let set id data =
   let! _ = ohm $ MyTable.transaction (IInstance.decay id) (MyTable.insert data) in
   return ()
 
+let update id f = 
+  MyTable.transaction (IInstance.decay id) begin fun id -> 
+    let! data_opt = ohm $ MyTable.get id in 
+    let  data = BatOption.default default data_opt in 
+    let  real = f data in 
+    if data = real then return ((),`keep) else return ((),`put real)
+  end 
+
 let view_directory id = 
   let! t = ohm $ get (IInstance.decay id) in
   return (MAccess.summarize t.Data.directory)

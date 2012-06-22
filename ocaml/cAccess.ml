@@ -8,7 +8,7 @@ class type ['level] t = object
   method self             : [`IsSelf] IAvatar.id
   method isin             : 'level IIsIn.id 
   method instance         : MInstance.t
-  method iid              : IInstance.t 
+  method iid              : 'level IInstance.id 
 end
 
 let make cuid iid instance = 
@@ -19,7 +19,7 @@ let make cuid iid instance =
     method self = self
     method isin = isin
     method instance = instance
-    method iid = IInstance.decay iid
+    method iid = IIsIn.instance isin
   end)
 
 let admin (access : 'any t) = 
@@ -28,6 +28,6 @@ let admin (access : 'any t) =
     method self     = access # self
     method isin     = isin 
     method instance = access # instance
-    method iid      = access # iid
+    method iid      = IIsIn.instance isin 
   end)
 

@@ -4,7 +4,7 @@ class type ['level] t = object
   method self             : [`IsSelf] IAvatar.id
   method isin             : 'level IIsIn.id 
   method instance         : MInstance.t
-  method iid              : IInstance.t 
+  method iid              : 'level IInstance.id 
 end
 
 val make : 

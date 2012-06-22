@@ -4,6 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Create  = CEvents_create
 module Options = CEvents_options
 
 let () = CClient.define UrlClient.Events.def_home begin fun access -> 
@@ -59,18 +60,5 @@ end
 let () = CClient.define UrlClient.Events.def_see begin fun access -> 
   O.Box.fill $ O.decay begin
     return (Ohm.Html.str "O HAI")
-  end
-end
-
-let () = CClient.define UrlClient.Events.def_create begin fun access -> 
-  O.Box.fill $ O.decay begin
-    Asset_Admin_Page.render (object
-      method parents = [ object
-	method title = AdLib.get `Events_Title
-	method url   = Action.url UrlClient.Events.home (access # instance # key) []
-      end ]
-      method here = AdLib.get `Events_Create_Title
-      method body = return (Ohm.Html.str "O HAI")
-    end)
   end
 end

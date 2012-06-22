@@ -8,7 +8,7 @@ module AccessFmt = Fmt.Make(struct
   type json t = [ `Admin | `Member ]
 end)
 
-let template = 
+let template : (O.BoxCtx.t,'a,'b) OhmForm.template = 
 
   (VEliteForm.radio     
      ~label:(AdLib.get `Events_Options_CanCreate)
@@ -16,17 +16,50 @@ let template =
      ~format:AccessFmt.fmt
      ~source:[ `Admin,  (AdLib.write `Events_Options_Admin) ;
 	       `Member, (AdLib.write `Events_Options_Member) ]
-     (fun iid -> let! access = ohm $ MInstanceAccess.create_event iid in
+     (fun iid -> let! access = ohm $ O.decay (MInstanceAccess.create_event iid) in
 		 return (Some access))
      OhmForm.keep)
       
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
 
 let () = CClient.define_admin UrlClient.Events.def_options begin fun access -> 
-  O.Box.fill $ O.decay begin
+
+  let! save = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
+
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template ~source:src in
+        
+    (* Extract the result for the form *)
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+    let events = match result with 
+      | None -> `Admin
+      | Some `Admin -> `Admin
+      | Some `Member -> `Token
+    in
+
+    let! () = ohm $ O.decay 
+      (MInstanceAccess.update (access # iid)
+	 (fun data -> MInstanceAccess.Data.({ data with events })))
+    in 
+    
+    (* Return to main page *) 
+
+    let url = Action.url UrlClient.Events.home (access # instance # key) [] in
+    return $ Action.javascript (Js.redirect url ()) res
+
+  end in
+
+  O.Box.fill begin
 
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # iid)) in
-    let url  = JsCode.Endpoint.of_url "" in
+    let url  = OhmBox.reaction_endpoint save () in
 
     Asset_Admin_Page.render (object
       method parents = [ object

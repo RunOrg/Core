@@ -1,0 +1,212 @@
+<form {$form} action="{url}" method="POST" class="create-event">
+  
+  <div class="-col" style="float:left">
+    <h2 class="numbered">
+      <span>1</span> { `Events_Create_Step_One }
+    </h2>
+    
+    <div class="-list">
+      {#templates}
+        <label>
+	  <input type="radio" name="template" value="{value}"/>
+          <span>
+	    <em>{ `PreConfig name } </em>
+	    {?desc}{ `PreConfig this }{/?}  
+	  </span>
+        </label>
+      {/#}
+    </div>
+    
+  </div>
+
+  <div class="-col" style="float:right">
+    <h2 class="numbered">
+      <span>2</span> { `Events_Create_Step_Two } 
+    </h2>
+    
+    <div class="-field">
+      <label>
+	{ `Events_Create_Field_Name }
+	<br/>
+	<input {$name} style="width:400px" type="text" name="name"/>
+      </label>
+    </div>     
+    
+    <div class="-field">
+      { `Events_Create_Field_Picture } 
+      <input {$pic} type="hidden" name="pic"/>
+      <div class="-images">
+	<img class="-l" src="/public/img/404_large.png"/>
+	<img class="-s" src="/public/img/404_small.png"/>
+	<a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
+	  { `Events_Create_Edit_Picture } 
+	</a>
+      </div>
+    </div>
+        
+    <div style="text-align:right; padding-right:27px;">
+      <button {$submit} type="submit"><span>{ `Events_Create_Submit }</span></button>
+      <a style="display:inline-block" href="{back}" class="action-button">{ `Events_Create_Cancel }</a>
+    </div>
+    
+  </div>
+  
+</form>
+
+<script type="upload:string,pics:string">
+
+$f = here.$form
+$p = here.$pic
+
+here.$submit.attr("disabled",false)
+
+$f.submit -> 
+  data = 
+    template: $("input[name='template']:checked").val()
+    name: here.$name.val()
+    pic: $p.val() || null
+  return false if !data.vertical || !data.name
+  here.$submit.attr("disabled","disabled")
+  post $(@).attr("action"), data, () -> 
+    here.$submit.attr("disabled",false)
+  false
+
+refresh = -> 
+  [id,proof] = $p.val().split("/")
+  return if !id || !proof 
+  $i = $p.next().addClass("-loading")
+  $.getJSON pics, {id:id,proof:proof}, (data) -> 
+    return if id != $p.val().split("/")[0] 
+    return setTimeout refresh, 1000 if !data.large
+    $i.find(".-l").attr("src",data.large)
+    $i.find(".-s").attr("src",data.small)
+    $i.removeClass("-loading")
+        
+here.$upload.click -> 
+  $iframe = $ "<iframe/>", {src : upload}  
+  close = -> 
+    $iframe.parent(".-images").removeClass("-up")
+    do $iframe.remove
+  $(@).parent(".-images").addClass("-up").prepend($iframe)
+  $iframe.load -> 
+    location = $iframe.contents().get(0).location.href
+    do close if /cancel/.test location
+    if /confirm/.test location      
+      what = /[a-zA-Z0-9]*\/[a-zA-Z0-9]*\?/.exec(location)[0]            
+      what = what.substr 0, what.length-1
+      $p.val(what)
+      do close
+      do refresh
+
+</script>
+
+<style>
+.create-event {
+  overflow: hidden;
+
+  .-col {
+    padding: 10px;
+    width: 455px;
+  }
+
+  .-list {
+    border: 1px solid #BBB;
+    padding: 0 11px 0 11px;
+    overflow: hidden;
+   
+    label {
+      display: block ;
+      padding: 10px 5px 11px;
+      border-top: 1px solid #CCC;
+      position: relative;
+      margin-top: -1px;
+
+      span {
+        display: block;
+        color: #555;
+        font-size: 13px;
+        margin-left: 30px;
+      }
+
+      em {
+        display: block;
+        color: black;
+        font-size: 16px;
+        font-style: normal;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    input {
+      position: absolute;
+      top: 50%;
+      margin-top: -7px;
+      height: 13px;
+    }
+  }
+  
+  .-field {
+    display: block;
+    padding: 4px 16px;
+    margin: 12px 0;
+    color: #888;
+
+    input, textarea {
+      border: 1px solid #CCC;
+      padding: 3px;
+      font-family: "Oxygen", "Arial", sans-serif;
+      font-size: 14px;
+    }
+  }
+
+  .-images {
+    border: 1px solid #CCC;
+    padding: 8px;
+    overflow: hidden;
+    position: relative;
+    width: 390px;
+    min-height: 105px;
+
+    iframe { 
+      border: medium none;
+      display: block;
+      height: 121px;
+      margin: -8px;
+      overflow: hidden;
+      width: 406px;
+    }
+
+    &.-up {
+      background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+      a, img { display: none } 
+    } 
+
+    &.-loading {
+      background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+      img { display: none } 
+    }
+    
+    .-l {
+      width: 230px;
+      display: block;
+      float: left;
+    }
+
+    .-s {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      left: 295px;
+      top: 50%;
+      margin-top: -25px;
+    }
+  }
+
+  .-more {
+    padding: 4px 16px;
+    font-size: 13px;
+    display: block;
+  }
+}
+</style>

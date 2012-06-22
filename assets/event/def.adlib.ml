@@ -23,3 +23,16 @@
 | `Events_Options_Submit
 
 | `Events_Create_Title
+| `Events_Create_Step_One
+| `Events_Create_Step_Two
+| `Events_Create_Field_Name
+| `Events_Create_Field_Picture
+| `Events_Create_Edit_Picture 
+| `Events_Create_Submit 
+| `Events_Create_Cancel 
+
+| `Events_CreateForbidden_Title
+| `Events_CreateForbidden_Problem 
+| `Events_CreateForbidden_Solution
+| `Events_CreateForbidden_Back
+

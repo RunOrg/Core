@@ -22,4 +22,16 @@
 | `Events_Options_Member -> "Tout le monde"
 | `Events_Options_Submit -> "Enregistrer"
 
-| `Events_Create_Title -> "Organiser"
+| `Events_Create_Title -> "Organiser une nouvelle activité"
+| `Events_Create_Step_One -> "Choisissez le type d'activité"
+| `Events_Create_Step_Two -> "Complétez ces informations"
+| `Events_Create_Field_Name -> "Le nom de votre activité"
+| `Events_Create_Field_Picture -> "Le logo ou la photo de l'activité" 
+| `Events_Create_Edit_Picture -> "Modifier"
+| `Events_Create_Submit -> "Continuer"
+| `Events_Create_Cancel -> "Annuler"
+
+| `Events_CreateForbidden_Title -> "Organiser une nouvelle activité"
+| `Events_CreateForbidden_Problem -> "Les responsables de cet espace ont choisi d'interdire l'organisation de nouvelles activités par des non-administrateurs. Vous ne disposez pas des droits nécessaires pour organiser une activité."
+| `Events_CreateForbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou de créer une nouvelle activité à votre place et de vous en nommer responsable."
+| `Events_CreateForbidden_Back -> "Retour"
