@@ -124,14 +124,50 @@ let template =
       
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `MeAccount_Edit_Submit) 
 
-(* let save uid = *)
-
 let () = define UrlMe.Account.def_edit begin fun cuid -> 
 
-(*
   let  uid  = IUser.Deduce.can_edit cuid in
-  let! post = OhmBox.react Fmt.unit (save uid) in
-*)
+  let! save = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
+
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template ~source:src in
+        
+    (* Extract the result for the form *)
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+
+    (* Save the changes to the database *)
+
+    let not_empty = function
+      | ""  -> None
+      | str -> Some str
+    in
+
+    let! () = ohm $ O.decay (MUser.update uid (object
+      method firstname = result # info # firstname
+      method lastname  = result # info # lastname
+      method birthdate = result # info # birthdate
+      method phone     = not_empty result # contact # phone
+      method cellphone = not_empty result # contact # cellphone
+      method address   = not_empty result # contact # address
+      method zipcode   = not_empty result # contact # zipcode
+      method city      = not_empty result # contact # city
+      method country   = not_empty result # contact # country
+      method gender    = result # info # gender
+    end)) in
+
+    (* Redirect to main page *)
+
+    let url = Parents.home # url in 
+    return $ Action.javascript (Js.redirect url ()) res
+
+  end in 
 
   O.Box.fill begin
     
@@ -139,7 +175,7 @@ let () = define UrlMe.Account.def_edit begin fun cuid ->
     let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
 
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed user) in
-    let url  = JsCode.Endpoint.of_url "" in
+    let url  = OhmBox.reaction_endpoint save () in
 
     Asset_Admin_Page.render (object
       method parents = [ Parents.home ; Parents.admin ] 

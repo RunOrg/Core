@@ -107,9 +107,22 @@ class type user_full = object
   method white     : IWhite.t option 
 end
 
+class type user_edit = object
+  method firstname : string
+  method lastname  : string
+  method birthdate : string option
+  method phone     : string option
+  method cellphone : string option
+  method address   : string option
+  method zipcode   : string option
+  method city      : string option
+  method country   : string option
+  method gender    : [`m|`f] option
+end
+
 val user_bind : user_full -> IUser.t O.run
 
-val update : [`Edit] IUser.id -> user_full -> unit O.run
+val update : [`Edit] IUser.id -> user_edit -> unit O.run
 
 val get : [`View] IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
 

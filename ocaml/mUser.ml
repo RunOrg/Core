@@ -588,7 +588,21 @@ module Share = struct
   
 end
 
-let update uid t = 
+class type user_edit = object
+  method firstname : string
+  method lastname  : string
+  method birthdate : string option
+  method phone     : string option
+  method cellphone : string option
+  method address   : string option
+  method zipcode   : string option
+  method city      : string option
+  method country   : string option
+  method gender    : [`m|`f] option
+end
+
+
+let update uid (t:user_edit) = 
 
   let id = IUser.decay uid in
   let clip  n s = if String.length s > n then String.sub s 0 n else s in
@@ -605,7 +619,6 @@ let update uid t =
 	zipcode   = oclip 10  (t # zipcode) ;
 	city      = oclip 80  (t # city) ;
 	country   = oclip 80  (t # country) ;
-	picture   = BatOption.map IFile.decay (t # picture) ;
 	gender    = t # gender ;
     }) in
     if o <> e then Some o, `put o else None, `keep 

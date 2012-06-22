@@ -6,20 +6,26 @@ module Gender = Fmt.Make(struct
   type json t = [`m|`f]
 end)
 
+let year yyyy =  
+  if yyyy < 15 then 2000 + yyyy else
+    if yyyy < 100 then 1900 + yyyy else yyyy
+
 let dmy_of_date date = 
   try 
-    let yyyy = int_of_string (String.sub date 0 4) 
+    let yyyy = year (int_of_string (String.sub date 0 4)) 
     and mm   = int_of_string (String.sub date 4 2)
     and dd   = int_of_string (String.sub date 6 2) in
+
     Some (dd,mm,yyyy) 
+
   with _ -> None
 
 let date_of_dmy d m y = 
-  Printf.sprintf "%04d%02d%02d" y m d
+  Printf.sprintf "%04d%02d%02d" (year y) m d
     
 let float_of_date d = 
   try 
-    let yyyy = int_of_string (String.sub d 0 4) 
+    let yyyy = year (int_of_string (String.sub d 0 4)) 
     and mm   = int_of_string (String.sub d 4 2)
     and dd   = int_of_string (String.sub d 6 2) in
 
