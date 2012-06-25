@@ -10,10 +10,10 @@ val prepare_pic :
      cuid:'any ICurrentUser.id
   -> [ `PutPic ] IFile.id option O.run
 
-val prepare_client_pic :
-     ins:[ `Upload ] IInstance.id
-  -> usr:'a IUser.id
-  -> [ `PutPic ] IFile.id option O.run
+val prepare_client_pic : 
+     iid:[`Upload] IInstance.id
+  -> cuid:'any ICurrentUser.id
+  -> [`PutPic] IFile.id option O.run
 
 val prepare_img :
      ins:[ `Upload ] IInstance.id

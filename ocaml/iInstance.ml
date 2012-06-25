@@ -34,6 +34,8 @@ module Deduce = struct
   let admin_create_course id = id
   let admin_view_profile id = id
 
+  let upload = identity
+
   let is_admin = identity
 
   let see_contacts = identity

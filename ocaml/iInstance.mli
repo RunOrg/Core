@@ -22,6 +22,8 @@ module Deduce : sig
 
   val is_admin : [`Created] id -> [`IsAdmin] id
     
+  val upload : [<`IsAdmin|`IsToken] id -> [`Upload] id
+
   val admin_view_members : [`IsAdmin] id -> [`ViewMembers] id
   val admin_upload       : [`IsAdmin] id -> [`Upload] id
   val admin_edit         : [`IsAdmin] id -> [`Update] id

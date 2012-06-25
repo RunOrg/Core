@@ -4,12 +4,17 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+(* Cancelling an upload ------------------------------------------------------------------------------------- *)
+
 let white req res = 
   CPageLayout.core `EMPTY (return ignore) res 
 
 let () = UrlUpload.Core.def_cancel white
+let () = UrlUpload.Client.def_cancel white
 
-let () = UrlUpload.Core.def_ok begin fun req res -> 
+(* Confirming an upload ------------------------------------------------------------------------------------- *)
+
+let confirm req res = 
 
   let white = white req res in 
   let fid, proof = req # args in
@@ -21,19 +26,15 @@ let () = UrlUpload.Core.def_ok begin fun req res ->
 
   white
 
-end 
+let () = UrlUpload.Core.def_ok confirm
+let () = UrlUpload.Client.def_ok confirm
 
-let () = UrlUpload.Core.def_root begin fun req res -> 
+(* Preparing an upload ------------------------------------------------------------------------------------- *) 
 
-  let! cuid = req_or (white req res) $ CSession.get req in
-    
-  let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
-  
+let form cuid fid cancel ok res = 
+
   let proof = IFile.Deduce.make_getPic_token cuid (IFile.Deduce.get_pic fid) in 
-
-  let redirect = 
-    Action.url UrlUpload.Core.ok () (IFile.decay fid, proof) 
-  in
+  let redirect = ok (IFile.decay fid, proof) in
 
   let html = 
     Asset_Upload_Form.render 
@@ -41,7 +42,7 @@ let () = UrlUpload.Core.def_root begin fun req res ->
 	 (MFile.Upload.configure fid redirect)
 	 (fun inner -> 
 	   Asset_Upload_Form_Inner.render (object
-	     method cancel = Action.url UrlUpload.Core.cancel () ()
+	     method cancel = cancel 
 	     method inner  = inner
 	   end))
       )
@@ -49,10 +50,37 @@ let () = UrlUpload.Core.def_root begin fun req res ->
 
   CPageLayout.core `EMPTY html res
 
+let () = UrlUpload.Core.def_root begin fun req res -> 
+
+  let! cuid = req_or (white req res) $ CSession.get req in
+    
+  let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
+  
+  form cuid fid 
+    (Action.url UrlUpload.Core.cancel () ())
+    (Action.url UrlUpload.Core.ok ())
+    res
+
 end
 
-let () = UrlUpload.Core.def_find begin fun req res -> 
+let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res -> 
 
+  let cuid = IIsIn.user access # isin in
+  let iid  = IInstance.Deduce.upload (access # iid) in
+    
+  let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
+  
+  form cuid fid 
+    (Action.url UrlUpload.Client.cancel (req # server) ())
+    (Action.url UrlUpload.Client.ok (req # server))
+    res
+
+end
+
+
+(* Find a picture based on its identifier (and key) --------------------------------------------------------- *)
+
+let find req res = 
   let fail = return res in
 
   let! cuid  = req_or fail $ CSession.get req in
@@ -69,4 +97,5 @@ let () = UrlUpload.Core.def_find begin fun req res ->
     "large", Json.String large ;
   ] res
 
-end 
+let () = UrlUpload.Core.def_find find
+let () = UrlUpload.Client.def_find find

@@ -24,13 +24,13 @@ let erase_if_still_temp =
     end in
   task ~delay:600.
 
-let _do_prepare ~usr ~lift ?ins ?item () =   
+let _do_prepare ~usr ~lift ?iid ?item () =   
   let id = IFile.gen () in
   let file = object
     method t        = `File
     method k        = `Temp
     method usr      = IUser.decay usr
-    method ins      = BatOption.map IInstance.decay ins
+    method ins      = BatOption.map IInstance.decay iid
     method key      = IFile.to_id id
     method name     = None
     method item     = BatOption.map IItem.decay item 
@@ -56,9 +56,9 @@ let prepare_pic ~cuid =
     let! id = ohm $ _do_prepare ~usr ~lift:IFile.Assert.put_pic () in
     return $ Some id
 
-let prepare_if_allowed ~ins ~prepare = 
+let prepare_if_allowed ~iid ~prepare = 
 
-  let  see_usage_ins = IInstance.Deduce.can_see_usage ins in
+  let  see_usage_ins = IInstance.Deduce.can_see_usage iid in
   let! used, free = ohm $ MFile_usage.instance see_usage_ins in
   
   if used >= free then 
@@ -67,17 +67,18 @@ let prepare_if_allowed ~ins ~prepare =
     let! id = ohm $ prepare in
     return $ Some id
 
-let prepare_client_pic ~ins ~usr = 
-  prepare_if_allowed ~ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_pic ~usr ~ins ())
+let prepare_client_pic ~iid ~cuid =
+  let usr = IUser.Deduce.is_anyone cuid in 
+  prepare_if_allowed ~iid
+    ~prepare:(_do_prepare ~lift:IFile.Assert.put_pic ~usr ~iid ())
 
 let prepare_img ~ins ~usr ~item = 
-  prepare_if_allowed ~ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_img ~usr ~ins ~item ())
+  prepare_if_allowed ~iid:ins
+    ~prepare:(_do_prepare ~lift:IFile.Assert.put_img ~usr ~iid:ins ~item ())
 
 let prepare_doc ~ins ~usr ~item = 
-  prepare_if_allowed ~ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_doc ~usr ~ins ~item ())
+  prepare_if_allowed ~iid:ins
+    ~prepare:(_do_prepare ~lift:IFile.Assert.put_doc ~usr ~iid:ins ~item ())
 
 let configure id ?filename ~redirect = 
   ConfigS3.upload 
