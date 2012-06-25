@@ -27,9 +27,9 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
     Asset_Event_Create.render (object
       method url = "" 
       method templates = templates
-      method upload = ""
-      method pics = "" 
-      method back = Action.url UrlClient.Events.home (access # instance # key) []
+      method upload = Action.url UrlUpload.Client.root (access # instance # key) ()
+      method pics   = Action.url UrlUpload.Client.find (access # instance # key) ()
+      method back   = Action.url UrlClient.Events.home (access # instance # key) []
     end)
 
   end
