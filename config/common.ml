@@ -276,6 +276,10 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (!templates))
 
       (* The name (adlib) of the template =================================================================== *)
+    ^ "\n\nlet desc = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_desc) (!templates))
+
+      (* The propagation ruless of the template ============================================================= *)
     ^ "\n\nlet propagate = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> [%s]" t.t_id 
       (match t.t_propg with None -> "" | Some g -> Printf.sprintf "%S" g)) (!templates))
@@ -424,8 +428,24 @@ module Build = struct
 
   let vertical_ml () =   
 
+    (* List of event templates in a vertical, in order ----------------------------------------------- *)
+    "let events = function\n  | "
+    ^ String.concat "\n  | " begin
+      List.map begin fun (vertical) -> 
+      
+	Printf.sprintf "`%s -> [%s]" vertical.v_id
+	  (String.concat ";" 
+	     (List.map (Printf.sprintf "`%s") 
+		(List.filter begin fun template -> 
+		  try let data = List.find (fun t -> t.t_id = template) (!templates) in
+		      data.t_kind = `Event
+		  with Not_found -> false
+		end vertical.v_tmpl)))
+      end (!verticals)
+    end
+
     (* List of verticals in the catalog. ------------------------------------------------------------- *)
-    "module Catalog = struct\n\n"
+    ^ "\n\nmodule Catalog = struct\n\n"
     ^ "  let list = [\n    "
     ^ String.concat " ;\n    "  begin
       BatList.mapi begin fun i (name,verticals) -> 
@@ -459,7 +479,7 @@ module Build = struct
       List.concat list
 
     end
-    ^ "\n    | _ -> None"
+    ^ "\n    | _ -> None"      
 
       (* First catalog position of vertical -------------------------------------------------------- *)
     ^ "\n\n  let init = function\n    | "

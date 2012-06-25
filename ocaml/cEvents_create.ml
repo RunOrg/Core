@@ -15,9 +15,18 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
 
   O.Box.fill $ O.decay begin
 
+    let templates = 
+      List.map (fun tid -> (object
+	method name  = PreConfig_Template.name tid
+	method desc  = PreConfig_Template.desc tid 
+	method value = ITemplate.to_string tid 
+      end))
+	(PreConfig_Vertical.events (access # instance # ver)) 
+    in
+
     Asset_Event_Create.render (object
       method url = "" 
-      method templates = []
+      method templates = templates
       method upload = ""
       method pics = "" 
       method back = Action.url UrlClient.Events.home (access # instance # key) []
