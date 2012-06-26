@@ -23,6 +23,7 @@ let own_pic cuid id =
   end)
 
 let instance_pic ins id = 
+  let ins = IInstance.decay ins in 
   MyTable.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
     if file # ins = Some ins && file # k = `Picture then 
       Some (IFile.Assert.ins_pic id)

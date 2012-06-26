@@ -36,3 +36,18 @@
 | `Events_CreateForbidden_Solution
 | `Events_CreateForbidden_Back
 
+| `Event_Section_Wall
+| `Event_Section_People
+| `Event_Section_Album
+| `Event_Section_Folder
+| `Event_Section_Chat 
+| `Event_Section_Votes
+
+| `Event_Pic_Change 
+| `Event_Admin 
+| `Event_Invite
+
+| `Event_Desc_Empty 
+| `Event_When 
+| `Event_Where
+| `Event_More_Details

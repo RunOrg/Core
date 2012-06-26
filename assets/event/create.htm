@@ -1,4 +1,4 @@
-<form {$form} action="{url}" method="POST" class="create-event">
+<form {$form} action="" method="POST" class="create-event">
   
   <div class="-col" style="float:left">
     <h2 class="numbered">
@@ -53,7 +53,7 @@
   
 </form>
 
-<script type="upload:string,pics:string">
+<script type="url:json,upload:string,pics:string">
 
 $f = here.$form
 $p = here.$pic
@@ -65,9 +65,9 @@ $f.submit ->
     template: $("input[name='template']:checked").val()
     name: here.$name.val()
     pic: $p.val() || null
-  return false if !data.vertical || !data.name
+  return false if !data.template || !data.name
   here.$submit.attr("disabled","disabled")
-  post $(@).attr("action"), data, () -> 
+  boxPost url, data, () -> 
     here.$submit.attr("disabled",false)
   false
 

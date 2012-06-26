@@ -1,0 +1,100 @@
+<div class="event-page">
+  
+  <div class="-sidebar">
+    
+    <div class="-picture">
+      <img src="{pic}"/>
+
+      {?pic_change}
+        <ul class="actions">
+	  <li class="-stack">
+	    <a class="action-button -admin" href="{this}">
+	      {`Event_Pic_Change}
+	    </a>
+	  </li>
+	</ul>
+      {/?}
+    </div>
+    
+    <ul class="-navig">
+      {#navig}
+        <li class="{cls}">
+	  <a href="{url}">
+	    <span class="{size}">{count}</span> { label | ohm | esc } 
+	  </a>
+	</li>
+      {/#}
+    </ul>
+
+  </div>
+  
+  <div class="-main">
+    
+    <div class="-head">
+      {?admin}
+        <ul class="actions">
+	  <li class="-r">
+	    <a class="action-button -admin" href="{url}">
+	      {`Event_Admin}
+	    </a>
+	  </li>
+	  <li class="-r">
+	    <a class="action-button -green" href="{invite}">
+	      {`Event_Invite}
+	    </a>
+	  </li>
+	</ul>
+      {/?}
+      <h2>{title}</h2>
+      <div class="-details">
+	{?date}{this}{else}{`Events_NoDate}{/?}
+	{?status}&emsp;{ this | Asset_Status_Tag.render | ohm } {/?}
+      </div>
+    </div>
+    
+    <div class="entity-info">
+      
+      <div class="-main">
+	{?desc}<p>{this}</p>{else}
+  	  <div class="empty-text">{`Event_Desc_Empty}</div>
+	{/?}
+      </div>
+      
+      <div class="-side">
+	<dl>
+	  {?time}
+	    <dt>
+	      {`Event_When} 
+	    </dt>
+	    <dd>
+	      {this}
+	    </dd>
+	  {/?}
+	  {?location}
+	    <dt>
+	      {`Event_Where}
+	    </dt>
+	    <dd>
+	      <a href="{url}">{name}</a>
+	    </dd>
+	  {/?}
+	</dl>
+      </div>
+      
+      <div class="actions">
+	<li class="-r">
+	  <a href="{details}" class="action-button">{`Event_More_Details}</a>
+	</li>
+      </div>
+      
+    </div>
+    
+    <div class="-contents">
+      
+      {box|verbatim}
+      
+    </div>
+  </div>
+  
+</div>
+  

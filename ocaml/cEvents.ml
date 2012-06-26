@@ -4,6 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module See     = CEvents_see
 module Create  = CEvents_create
 module Options = CEvents_options
 
@@ -57,8 +58,3 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
   end
 end
 
-let () = CClient.define UrlClient.Events.def_see begin fun access -> 
-  O.Box.fill $ O.decay begin
-    return (Ohm.Html.str "O HAI")
-  end
-end

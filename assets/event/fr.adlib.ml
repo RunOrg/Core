@@ -35,3 +35,19 @@
 | `Events_CreateForbidden_Problem -> "Les responsables de cet espace ont choisi d'interdire l'organisation de nouvelles activités par des non-administrateurs. Vous ne disposez pas des droits nécessaires pour organiser une activité."
 | `Events_CreateForbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou de créer une nouvelle activité à votre place et de vous en nommer responsable."
 | `Events_CreateForbidden_Back -> "Retour"
+
+| `Event_Section_Wall -> "Discussions"
+| `Event_Section_People -> "Inscrits"
+| `Event_Section_Album -> "Photos"
+| `Event_Section_Folder -> "Fichiers"
+| `Event_Section_Chat -> "Chat"
+| `Event_Section_Votes -> "Votes"
+
+| `Event_Pic_Change -> "Changer l'image"
+| `Event_Admin -> "Administration"
+| `Event_Invite -> "Inviter des participants"
+
+| `Event_Desc_Empty -> "Pas de description"
+| `Event_When -> "Quand ?"
+| `Event_Where -> "Où ?"
+| `Event_More_Details -> "Plus de Détails"

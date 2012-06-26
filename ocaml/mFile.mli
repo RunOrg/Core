@@ -75,7 +75,7 @@ val own_pic : 'any ICurrentUser.id -> 'any IFile.id -> [`OwnPic] IFile.id option
 
 val give_pic : [`OwnPic] IFile.id -> [`Upload] IInstance.id -> unit O.run
 
-val instance_pic : IInstance.t -> 'any IFile.id -> [`InsPic] IFile.id option O.run
+val instance_pic : 'a IInstance.id -> 'b IFile.id -> [`InsPic] IFile.id option O.run
 
 val delete_now : [`Bot] IFile.id -> unit O.run
 

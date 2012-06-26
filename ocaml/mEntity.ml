@@ -82,15 +82,15 @@ let try_update t ~status ~name ~data isin =
   
 (* Creating entities ----------------------------------------------------------------------- *)
 
-let _create ?name template iid creator = 
+let _create ?pcname ?name ?pic template iid creator = 
 
   let! id, gid = ohm (
-    match name with 
-      | None      -> return (IEntity.gen (), IGroup.gen ()) 
-      | Some name -> let namer = MPreConfigNamer.load iid in 
-		     let! eid = ohm $ MPreConfigNamer.entity name namer in
-		     let! gid = ohm $ MPreConfigNamer.group  name namer in
-		     return (eid,gid)
+    match pcname with 
+      | None        -> return (IEntity.gen (), IGroup.gen ()) 
+      | Some pcname -> let namer = MPreConfigNamer.load iid in 
+		       let! eid = ohm $ MPreConfigNamer.entity pcname namer in
+		       let! gid = ohm $ MPreConfigNamer.group  pcname namer in
+		       return (eid,gid)
   ) in
 
   (* We are creating this entity *)
@@ -105,7 +105,12 @@ let _create ?name template iid creator =
 
   let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,template,creator) in
 
-  let! data = ohm $ MEntity_data.create ~id:eid ~who () in
+  let data = match pic with None -> None | Some pic -> 
+    match PreConfig_Template.Meaning.picture template with None -> None | Some key -> 
+      Some [ key, pic ]    
+  in
+
+  let! data = ohm $ MEntity_data.create ~id:eid ~who ?name ?data () in
   
   let init = E.Init.({
     archive  = false ;
@@ -129,10 +134,9 @@ let _create ?name template iid creator =
 	
   return eid
  
-let create template isin =
-  let  iid     = IIsIn.instance isin in
-  let! avatar  = ohm $ MAvatar.get isin in
-  _create template (IInstance.decay iid) avatar
+let create self ~name ~pic ~iid template =
+  _create template (IInstance.decay iid) self 
+  
 
 let set_grants ctx eids = 
 
@@ -185,8 +189,8 @@ let _ =
   (* Act as the creator... *)
   let creator = IAvatar.Assert.is_self aid in
   
-  let! _ = ohm $ _create ~name:"admin"   ITemplate.admin   (IInstance.decay iid) creator in
-  let! _ = ohm $ _create ~name:"members" ITemplate.members (IInstance.decay iid) creator in
+  let! _ = ohm $ _create ~pcname:"admin"   ITemplate.admin   (IInstance.decay iid) creator in
+  let! _ = ohm $ _create ~pcname:"members" ITemplate.members (IInstance.decay iid) creator in
 
   return ()  
 
