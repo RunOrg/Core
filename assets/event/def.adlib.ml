@@ -36,12 +36,7 @@
 | `Events_CreateForbidden_Solution
 | `Events_CreateForbidden_Back
 
-| `Event_Section_Wall
-| `Event_Section_People
-| `Event_Section_Album
-| `Event_Section_Folder
-| `Event_Section_Chat 
-| `Event_Section_Votes
+| `Event_Section of [`Wall|`People|`Album|`Folder|`Votes]
 
 | `Event_Pic_Change 
 | `Event_Admin 

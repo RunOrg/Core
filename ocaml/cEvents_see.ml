@@ -13,6 +13,23 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
   let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
   let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
 
+  let! navig = ohm $ Run.list_map (fun seg -> 
+    let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Events.tabs seg ] in
+    return (object
+      method url   = url
+      method cls   = "-" ^ fst UrlClient.Events.tabs seg 
+      method size  = "-d0"
+      method count = "" 
+      method label = seg
+    end))
+    [ `Wall ;
+      `People ;
+      `Album ;
+      `Folder ;
+      `Votes 
+    ]
+  in
+      
   O.Box.fill $ O.decay begin
 
     let! now  = ohmctx (#time) in
@@ -38,7 +55,7 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 
     Asset_Event_Page.render (object
       method pic        = pic
-      method navig      = []
+      method navig      = navig
       method admin      = None
       method title      = name
       method pic_change = None 

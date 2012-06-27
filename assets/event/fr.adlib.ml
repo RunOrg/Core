@@ -36,12 +36,11 @@
 | `Events_CreateForbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou de créer une nouvelle activité à votre place et de vous en nommer responsable."
 | `Events_CreateForbidden_Back -> "Retour"
 
-| `Event_Section_Wall -> "Discussions"
-| `Event_Section_People -> "Inscrits"
-| `Event_Section_Album -> "Photos"
-| `Event_Section_Folder -> "Fichiers"
-| `Event_Section_Chat -> "Chat"
-| `Event_Section_Votes -> "Votes"
+| `Event_Section `Wall -> "Discussions"
+| `Event_Section `People -> "Inscrits"
+| `Event_Section `Album -> "Photos"
+| `Event_Section `Folder -> "Fichiers"
+| `Event_Section `Votes -> "Votes"
 
 | `Event_Pic_Change -> "Changer l'image"
 | `Event_Admin -> "Administration"
