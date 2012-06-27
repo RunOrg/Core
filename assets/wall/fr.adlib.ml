@@ -5,4 +5,8 @@
 
 | `Feed_Post_Message_Label -> "Écrire un nouveau message..."
 
-| `Feed_RW_Empty -> "Aucun message dans cette discussion"
+| `Feed_Is_ReadOnly -> "Vous n'êtes pas autorisé à publier de messages ici"
+
+| `Feed_RW_Empty -> "Aucune discussion disponible"
+| `Feed_RO_Empty -> "Aucune discussion disponible"
+| `Feed_None -> "Aucune discussion disponible"

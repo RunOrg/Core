@@ -5,4 +5,8 @@
 
 | `Feed_Post_Message_Label 
 
+| `Feed_Is_ReadOnly
+
 | `Feed_RW_Empty
+| `Feed_RO_Empty
+| `Feed_None

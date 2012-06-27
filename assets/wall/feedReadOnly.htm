@@ -1,0 +1,33 @@
+<div class="feed -readonly">
+
+  <div class="-message">
+    { `Feed_Is_ReadOnly } 
+  </div>
+
+  {#items}
+
+  {else}
+
+    <div style="position:relative">
+      <div class="shadow -top"><div class="-inner"></div></div>
+      <div class="empty-list">
+	{`Feed_RO_Empty}
+      </div>
+    </div>
+
+  {/#}
+
+</div>
+
+
+<style>
+.feed.-readonly {
+  .-message {
+    background-color: #EEE;
+    padding: 7px 20px;
+    color: black;
+    text-align: center; 
+    text-shadow: 0 1px 0 white;
+  }
+}
+</style>
