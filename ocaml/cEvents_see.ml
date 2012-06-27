@@ -13,22 +13,47 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
   let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
   let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
 
-  let! navig = ohm $ Run.list_map (fun seg -> 
-    let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Events.tabs seg ] in
-    return (object
-      method url   = url
-      method cls   = "-" ^ fst UrlClient.Events.tabs seg 
-      method size  = "-d0"
-      method count = "" 
-      method label = seg
-    end))
-    [ `Wall ;
-      `People ;
-      `Album ;
-      `Folder ;
-      `Votes 
-    ]
-  in
+  let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
+  let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
+
+  let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
+  let! album  = ohm $ O.decay (MAlbum.Can.read album) in
+  
+  let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
+  let! folder = ohm $ O.decay (MFolder.Can.read folder) in
+
+  let! sidebar = O.Box.add begin 
+
+    let! the_seg = O.Box.parse UrlClient.Events.tabs in
+
+    let! navig = ohm $ Run.list_map (fun seg -> 
+      let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Events.tabs seg ] in
+      return (object
+	method url   = url
+	method cls   = if seg = the_seg then "-selected" else "" 
+	method size  = "-d0"
+	method count = "" 
+	method label = seg
+      end))
+      (BatList.filter_map identity 
+	 [ Some `Wall ;
+	   Some `People ;
+	   Some `Album ;
+	   Some `Folder ;
+	   Some `Votes ])
+    in
+
+    O.Box.fill (Asset_Event_Page_Sidebar.render navig)
+
+  end in
+
+  let! contents = O.Box.add begin 
+
+    let! the_seg = O.Box.parse UrlClient.Events.tabs in 
+    match the_seg with 
+      | _ -> O.Box.fill (return (Html.str "O HAI, AGAINZ!"))
+
+  end in
       
   O.Box.fill $ O.decay begin
 
@@ -55,7 +80,7 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 
     Asset_Event_Page.render (object
       method pic        = pic
-      method navig      = navig
+      method sidebar    = O.Box.render sidebar
       method admin      = None
       method title      = name
       method pic_change = None 
@@ -65,7 +90,7 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
       method time       = date
       method location   = location
       method details    = "/"
-      method box        = Html.str "O Hai" 
+      method box        = O.Box.render contents 
     end)
   end
 end

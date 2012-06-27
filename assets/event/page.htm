@@ -15,16 +15,20 @@
 	</ul>
       {/?}
     </div>
-    
-    <ul class="-navig">
-      {#navig}
-        <li class="{cls}">
-	  <a href="{url}">
-	    <span class="{size}">{count}</span> { `Event_Section label } 
-	  </a>
-	</li>
-      {/#}
-    </ul>
+
+    {sidebar | verbatim} 
+
+    {@!sidebar}
+      <ul class="-navig">
+        {#this}
+          <li class="{cls}">
+  	    <a href="{url}">
+	      <span class="{size}">{count}</span> { `Event_Section label } 
+	    </a>
+	  </li>
+        {/#}
+      </ul>
+    {/@}
 
   </div>
   
@@ -146,6 +150,24 @@
         background-color: transparent;
       }
 
+      a:hover {
+        color: #333;
+
+        span {
+          background-color: #333;
+          text-shadow: 0 -1px 0 black;
+        }
+      }
+
+      .-selected a, .-selected a:hover {
+        color: black;
+
+        span {
+          background-color: black;
+          text-shadow: 0 -1px 0 #888;
+        }
+      }
+
       li span {
         width: 30px;
         height: 30px;
@@ -165,25 +187,7 @@
 
         &.-d2 { font-size: 15px; }
         &.-d3 { font-size: 13px; }
-        &.-d0 { background-color: white; }
-      }
-
-      a:hover {
-        color: #333;
-
-        span {
-          background-color: #333;
-          text-shadow: 0 -1px 0 black;
-        }
-      }
-
-      .-selected a, .-selected a:hover {
-        color: black;
-
-        span {
-          background-color: black;
-          text-shadow: 0 -1px 0 #888;
-        }
+        &.-d0 { background-color: white !important; }
       }
 
       .-selected:after, 
@@ -252,6 +256,7 @@
       margin: 12px 3px 20px 0;
       border: 1px solid #CCC;
       border-radius: 4px;
+      min-height: 450px;
     }
   }
 }

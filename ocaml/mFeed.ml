@@ -48,7 +48,7 @@ let _access iid = function
     let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
     return (function
       | `Read   -> `Token
-      | `Write  -> wall_post
+      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
       | `Manage -> `Admin)
   end
     
