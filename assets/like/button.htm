@@ -1,0 +1,44 @@
+<a href="javascript:void(0)" class="likebtn {if likes}-like{/if}">
+  ★ <span>{ count | string_of_int | esc }</span>
+</a>
+
+<style>
+.likebtn {
+  border: 1px solid #777;
+  display: inline-block;
+  padding: 1px 4px;
+  color: #555;
+  text-shadow: 0 1px 0 white;
+  font-weight: bold;
+  font-family: 'Open Sans Condensed', sans-serif;
+  border-radius: 2px;
+  background-color: #EEE;
+  background: -webkit-linear-gradient(top, #FFF 0%,#EEE 100%);
+  background: -moz-linear-gradient(top, #FFF 0%,#EEE 100%);
+  box-shadow: 0 0 3px #BBB;
+  
+  &:hover {
+    background-color: #DDD;
+    background: -webkit-linear-gradient(top, #FFF 0%,#EEE 100%);
+    background: -moz-linear-gradient(top, #FFF 0%,#EEE 100%);
+    box-shadow: 0 0 3px #555;
+    color: #333;
+  }
+
+  &.-like {
+    color: white;
+    text-shadow: 0 -1px 0 #070;
+    background-color: #4C4;
+    background: -webkit-linear-gradient(top, #4C4 0%,#2A2 100%);
+    background: -moz-linear-gradient(top, #4C4 0%,#2A2 100%);
+    border-color: #070;
+
+    &:hover {
+      background-color: #2A2;
+      background: -webkit-linear-gradient(top, #4C4 0%,#2A2 100%);
+      background: -moz-linear-gradient(top, #4C4 0%,#2A2 100%);
+      box-shadow: 0 0 3px #222;
+    }
+  }
+}
+</style>

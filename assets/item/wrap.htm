@@ -11,7 +11,7 @@
     { body | ohm } 
     <div class="-foot">
       {`DateRelative time}
-      {?like}&middot; {this}{/?}
+      {?like}&middot; {this | ohm}{/?}
       <span class="-actions">
 	{?reply}
 	  &middot; <a href="javascript:void(0)">{ `Item_Reply }</a>
@@ -24,9 +24,11 @@
 	{/?}
       </span>
     </div>
-    <div class="-comments">
-      {comments}
-    </div>
+    {?comments}
+      <div class="-comments">
+        {this}
+      </div>
+    {/?}
   </div>
   
 </div>
