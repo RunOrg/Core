@@ -47,7 +47,7 @@
       {/?}
       <h2>{title}</h2>
       <div class="-details">
-	{?date}{this}{else}{`Events_NoDate}{/?}
+	{?date}{`ShortWeekDate this}{else}{`Events_NoDate}{/?}
 	{?status}&emsp;{ this | Asset_Status_Tag.render | ohm } {/?}
       </div>
     </div>
@@ -67,7 +67,7 @@
 	      {`Event_When} 
 	    </dt>
 	    <dd>
-	      {this}
+	      {`WeekDate this}
 	    </dd>
 	  {/?}
 	  {?location}
@@ -101,7 +101,6 @@
 <style>
   
 .event-page {
-  margin-top: 10px;
 
   .-sidebar {
     width: 230px;
@@ -265,7 +264,7 @@
 
   .-main {
     float: left;
-    max-width: 360px;
+    width: 360px;
     margin: 0 12px;
   
     p { margin: 12px 0; }
