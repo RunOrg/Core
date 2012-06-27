@@ -1,0 +1,46 @@
+<div class="comment">
+  {=author}<a href="{url}"><img src="{pic}"/></a>{/=}
+  <div class="-body"> 
+    {=author}<a class="-author" href="{url}">{name}</a>{/=} { `Comment_Action } 
+    <div class="-message">
+      { body | raw } 
+    </div>
+    <div class="-foot"> 
+      {`DateRelative time}
+      {?like}&middot; {this | ohm}{/?}
+      <span class="-actions">
+	{?remove}
+	  &middot; <a href="javascript:void(0)">{ `Comment_Remove }</a> 
+	{/?}
+      </span>
+    </div>
+  </div>
+</div>
+
+<style>
+.comment {
+  border: 1px solid #CCC;
+  padding: 8px;
+  margin-bottom: -1px;
+
+  > a {
+    float: left;
+    margin-right: 8px;
+  }
+
+  .-body {
+    overflow: hidden;
+  }
+
+  .-message {
+    border: none;
+    padding: 0;
+  }
+
+  .-foot {
+    font-family: "Arial", sans-serif;
+    font-size: 10px;
+    color: #888;
+  }
+}
+</style>

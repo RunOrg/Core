@@ -29,12 +29,20 @@ let render item =
 
   let! author = ohm $ CAvatar.mini_profile author in 
 
+  let comments = 
+    if item # ncomm > 0 then
+      Some (object
+	method list = Run.list_filter CComment.render_by_id (item # ccomm) 
+      end)
+    else None
+  in
+
   let! html = ohm $ Asset_Item_Wrap.render (object
     method author   = author
     method body     = body
     method action   = action
     method time     = (item # time,now)
-    method comments = None
+    method comments = comments
     method like     = Some (CLike.render false (item # nlike)) 
     method reply    = Some ()
     method remove   = Some ()
