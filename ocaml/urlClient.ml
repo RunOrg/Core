@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal 
 open BatPervasives
 
-module A = Action.Args
+include UrlClient_common
 
 let website, def_website = O.declare O.client "" A.none
 let about,   def_about   = O.declare O.client "about" A.none
@@ -36,30 +36,9 @@ let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 
 (* Intranet =============================================================================================== *)
 
-let root,    def_root      = O.declare O.client "intranet" A.none
 let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
-
-let declare ?p url = 
-  let endpoint, define = O.declare O.client ("intranet/ajax/" ^ url) (A.n A.string) in
-  let endpoint = Action.rewrite endpoint "intranet/ajax" "intranet/#" in
-  let root key = Action.url root key () in
-  let prefix = "/" ^ url in
-  let parents = match p with 
-    | None -> [] 
-    | Some (_,prefix,parents,_) -> parents @ [prefix] 
-  in
-  endpoint, (root,prefix,parents,define)
-
-let root url = declare url 
-let child p url = declare ~p url 
-
-type definition = (string -> string) * string * string list * 
-    (   (   (string, string list) Ohm.Action.request
-          -> Ohm.Action.response 
-          -> (O.ctx, Ohm.Action.response) Ohm.Run.t)
-     -> unit)
 
 module Home = struct
   let home, def_home = root "home"
@@ -73,11 +52,4 @@ module Forums = struct
   let home, def_home = root "forums"
 end
 
-module Events = struct
-  let home,    def_home    = root "calendar"
-  let create,  def_create  = child def_home   "ev/create"
-  let options, def_options = child def_home   "ev/options"
-  let see,     def_see     = child def_create "event"
-  let admin,   def_admin   = child def_see    "ev/admin"
-end
-
+module Events = UrlClient_events
