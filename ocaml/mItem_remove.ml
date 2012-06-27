@@ -9,9 +9,9 @@ open MItem_db
 
 let schedule_deletion = 
 
-  let task = Task.register "scheduled-item-deletion" IItem.fmt begin fun itid _ ->
+  let task = O.async # define "scheduled-item-deletion" IItem.fmt begin fun itid ->
     
-    let  finish = return (Task.Finished itid) in
+    let  finish = return () in
     let! item   = ohm_req_or finish (MyTable.get itid) in
     let! ()     = true_or finish (item # del) in
 
@@ -32,7 +32,7 @@ let schedule_deletion =
 
   end in
 
-  fun itid -> MModel.Task.delay 30.0 task itid |> Run.map ignore
+  fun itid -> task ~delay:30.0 itid
 
 let moderate itid from =
 

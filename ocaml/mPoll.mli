@@ -1,12 +1,12 @@
 (* © 2012 RunOrg *)
 
 type details = <
-  questions : Ohm.I18n.text list ;
+  questions : TextOrAdlib.t list ;
   multiple  : bool
 >
 
 type stats = <
-  answers : (Ohm.I18n.text * int) list ;
+  answers : (TextOrAdlib.t * int) list ;
   total : int ;
 >
 

@@ -34,7 +34,7 @@ end
   
 module MLike = Fmt.Make(struct
   module PAvatar = IAvatar
-  type json t = Id.t * PAvatar.t
+  type json t = (Id.t * PAvatar.t)
 end)
 
 module LikeView = CouchDB.DocView(struct

@@ -37,60 +37,56 @@ module Signals = struct
   let on_create_call, on_create = Sig.make (Run.list_iter identity)
 end
 
-let check_activity_task = Task.declare "chat-room-check-deactivate" IChat.Room.fmt
+let check_activity_task, define_check_activity = 
+  O.async # declare "chat-room-check-deactivate" IChat.Room.fmt
 
 let check_activity delay crid =
-    let! _ = ohm $ MModel.Task.delay delay check_activity_task (IChat.Room.decay crid) in
-    return () 
+  check_activity_task ~delay (IChat.Room.decay crid)
 
-let () = 
-  Task.define check_activity_task
-    begin fun crid _ -> 
+let () = define_check_activity begin fun crid -> 
       
-      let! latest, _ = ohm $ Feed.list ~count:1 crid in
-      
-      let  last_message_time = 
-	match latest with [] -> 0.0 | h :: _ -> 
-	  match h # payload with 
-	    | `text t -> t.Line.text_time
-      in
-
-      let activity_delay = 60. *. 10. in (* 10 minutes *)
-
-      let! () = ohm $ begin
-	if Unix.gettimeofday () -. activity_delay > last_message_time then
-	  let deactivate room = Data.({ room with active = false }) in
-	  let! _ = ohm $ MyTable.transaction crid (MyTable.update deactivate) in
-	  return ()
-	else
-	  check_activity 60. crid
-      end in 
-
-      return $ Task.Finished crid
- 
-    end
-
-let check_appear_task = Task.declare "chat-room-check-appear" IChat.Room.fmt	
-let check_appear crid = 
-  let! _ = ohm $ MModel.Task.delay 30. check_appear_task (IChat.Room.decay crid) in
-  return ()
-
-let () = 
-  Task.define check_appear_task begin fun crid _ -> 
-
-    let! data = ohm_req_or (return $ Task.Finished crid) $ MyTable.get crid in 
-    let! ()   = true_or (return $ Task.Finished crid) data.Data.active in 
-
-    let! _, next = ohm $ Feed.list ~count:0 crid in
-    
-    if next <> None then 
-      let! () = ohm $ Signals.on_appear_call crid in
-      return $ Task.Finished crid
+  let! latest, _ = ohm $ Feed.list ~count:1 crid in
+  
+  let  last_message_time = 
+    match latest with [] -> 0.0 | h :: _ -> 
+      match h # payload with 
+	| `text t -> t.Line.text_time
+  in
+  
+  let activity_delay = 60. *. 10. in (* 10 minutes *)
+  
+  let! () = ohm $ begin
+    if Unix.gettimeofday () -. activity_delay > last_message_time then
+      let deactivate room = Data.({ room with active = false }) in
+      let! _ = ohm $ MyTable.transaction crid (MyTable.update deactivate) in
+      return ()
     else
-      let! () = ohm $ check_appear crid in 
-      return $ Task.Finished crid
-      
-  end 
+      check_activity 60. crid
+  end in 
+  
+  return ()
+    
+end
+  
+let check_appear_task, define_check_appear = 
+  O.async # declare "chat-room-check-appear" IChat.Room.fmt	
+
+let check_appear crid = 
+  check_appear_task ~delay:30. (IChat.Room.decay crid)
+
+let () = define_check_appear begin fun crid -> 
+
+  let! data = ohm_req_or (return ()) $ MyTable.get crid in 
+  let! ()   = true_or (return ()) data.Data.active in 
+  
+  let! _, next = ohm $ Feed.list ~count:0 crid in
+  
+  if next <> None then 
+    Signals.on_appear_call crid 
+  else
+    check_appear crid
+
+end 
   
 let create feed = 
 
@@ -127,7 +123,7 @@ let all_active iid =
   return $ List.map (#value) list
 
 module RecentView = CouchDB.DocView(struct
-  module Key    = Fmt.Make(struct type json t = IFeed.t * Float.t end)
+  module Key    = Fmt.Make(struct type json t = (IFeed.t * Float.t) end)
   module Value  = Fmt.Unit
   module Doc    = Data
   module Design = Design

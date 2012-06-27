@@ -57,7 +57,7 @@ let count crid =
 module ListView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
     open IChat
-    type json t = Room.t * IAvatar.t 
+    type json t = (Room.t * IAvatar.t) 
   end)
   module Value  = Fmt.Unit
   module Design = Design

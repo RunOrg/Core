@@ -37,13 +37,13 @@ let image ctx album =
 
   let  instance = MAlbum.Get.write_instance album in 
   let  user     = IIsIn.user (ctx # isin) in 
-  let! self     = ohm $ ctx # self in
+  let  self     = ctx # self in
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create image-uploader on this instance *)
   let! img = ohm_req_or (return None) $ MFile.Upload.prepare_img 
     ~ins:instance
-    ~usr:(IUser.Deduce.unsafe_is_anyone user)
+    ~usr:(IUser.Deduce.is_anyone user)
     ~item:itid
   in
   
@@ -66,13 +66,13 @@ let doc ctx folder =
 
   let  instance = MFolder.Get.write_instance folder in 
   let  user     = IIsIn.user (ctx # isin) in 
-  let! self     = ohm $ ctx # self in
+  let  self     = ctx # self in
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create file-uploader on this instance. *)
   let! doc = ohm_req_or (return None) $ MFile.Upload.prepare_doc 
     ~ins:instance
-    ~usr:(IUser.Deduce.unsafe_is_anyone user)
+    ~usr:(IUser.Deduce.is_anyone user)
     ~item:itid
   in
 

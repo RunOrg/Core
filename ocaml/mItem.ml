@@ -24,7 +24,7 @@ module PrevNextView = CouchDB.MapView(struct
 
   module Key = Fmt.Make(struct
     module Float = Fmt.Float
-    type json t = Id.t * Float.t
+    type json t = (Id.t * Float.t)
   end)
 
   module Value  = Fmt.Unit
@@ -78,7 +78,7 @@ module InListView = CouchDB.DocView(struct
 
   module Key = Fmt.Make(struct
     module Float = Fmt.Float
-    type json t = Id.t * Float.t
+    type json t = (Id.t * Float.t)
   end)
 
   module Value  = Fmt.Unit
@@ -121,7 +121,7 @@ module LastInListView = CouchDB.DocView(struct
 
   module Key = Fmt.Make(struct
     module Float = Fmt.Float
-    type json t = Id.t * Float.t
+    type json t = (Id.t * Float.t)
   end)
 
   module Value  = Fmt.Unit
@@ -159,8 +159,8 @@ let interested itid =
 
 let try_get context item = 
 
-  let self = context # self_if_exists in
-  let who = BatOption.map IAvatar.decay self in 
+  let self = context # self in
+  let who  = Some (IAvatar.decay self) in 
   let item = IItem.decay item in
 
   let! data = ohm_req_or (return None) $ MyTable.get item in
@@ -183,6 +183,6 @@ let try_get context item =
   if data # del || data # delayed then return None else 
     let! visible = ohm $ is_visible_in (data # where) in 
     if visible || who <> None && who = MItem_data.author data then 
-      return $ Some (item_of_data item ?self data) 
+      return $ Some (item_of_data item ~self data) 
     else 
       return None

@@ -52,7 +52,7 @@ let count crid =
 module ListView = CouchDB.DocView(struct
   module Key   = Fmt.Make(struct
     open IChat
-    type json t = Room.t * Line.t 
+    type json t = (Room.t * Line.t) 
   end)
   module Value = Fmt.Unit
   module Doc   = Data

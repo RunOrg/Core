@@ -1,0 +1,32 @@
+<div class="item">
+
+  <div class="shadow -top"><div class="-inner"></div></div>
+
+  {=author}<a href="{url}"><img src="{pic}"/></a>{/=}
+
+  <div class="-body">
+    <span class="-info">
+      {=author}<a class="-author" href="url}">{name}</a>{/=} { `Item_Author_Action action }
+    </span>
+    { body | ohm } 
+    <div class="-foot">
+      {`DateRelative time}
+      {?like}&middot; {this}{/?}
+      <span class="-actions">
+	{?reply}
+	  &middot; <a href="javascript:void(0)">{ `Item_Reply }</a>
+	{/?}
+	{?remove}
+	  &middot; <a href="javascript:void(0)">{ `Item_Remove }</a> 
+	{/?}
+	{?hide}
+  	  &middot; <a href="javascript:void(0)">{ `Item_Hide }</a> 
+	{/?}
+      </span>
+    </div>
+    <div class="-comments">
+      {comments}
+    </div>
+  </div>
+  
+</div>

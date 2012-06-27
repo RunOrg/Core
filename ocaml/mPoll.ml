@@ -14,7 +14,7 @@ end
 module Data = Fmt.Make(struct
   type json t = <
     t         : MType.t ;
-    questions : [`label "l" of string | `text "t" of string] list ;
+    questions : TextOrAdlib.t list ;
     answers   : int list ;
     multiple  : bool ;
     total     : int 
@@ -24,12 +24,12 @@ end)
 module MyTable = CouchDB.Table(MyDB)(IPoll)(Data)
 
 type details = <
-  questions : I18n.text list ;
+  questions : TextOrAdlib.t list ;
   multiple : bool
 > ;;
 
 type stats = <
-  answers : (I18n.text * int) list ;
+  answers : (TextOrAdlib.t * int) list ;
   total : int ;
 > ;;
 
@@ -138,15 +138,12 @@ let refresh id =
 
 module Answer = struct
 
-  module PAvatar = IAvatar
-  module PPoll   = IPoll
-
   module Answer = Fmt.Make(struct
     type json t = <
       t           : MType.t ;
-      who "w"     : PAvatar.t ;
+      who "w"     : IAvatar.t ;
       answers "a" : int list ;
-      poll "p"    : PPoll.t
+      poll "p"    : IPoll.t
     > 
   end)
 
@@ -160,7 +157,7 @@ module Answer = struct
     return $ BatOption.is_some answer_opt
 
   module ByAnswer = Fmt.Make(struct
-    type json t = IPoll.t * int
+    type json t = (IPoll.t * int)
   end)
 
   module ByAvatar = CouchDB.DocView(struct

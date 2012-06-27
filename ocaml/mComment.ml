@@ -83,7 +83,7 @@ let _ =
   Sig.listen MAvatar.Signals.on_obliterate on_obliterate_avatar
 
 module InFeed = Fmt.Make(struct
-  type json t = IFeed.t * IItem.t
+  type json t = (IFeed.t * IItem.t)
 end)
       
 module AllView = CouchDB.DocView(struct
