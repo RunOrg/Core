@@ -1,0 +1,20 @@
+.shadow {
+  border-top: 1px solid #CCC;
+  height: 6px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  .-inner {
+    border-radius: ~"2500px / 20px";
+    box-shadow: 0 2px 5px #AAA;
+    height: 50px;
+    margin: 0 10px;
+    position: relative;
+    top: -52px;
+  }
+  &.-top {
+    top:0;
+    left:0;
+  }
+}

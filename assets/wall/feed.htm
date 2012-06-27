@@ -1,0 +1,145 @@
+<div class="feed">
+  
+  <div class="-form -collapsed">
+    
+    <ul class="-what">
+      <li class="-selected"><a href="javascript:void(0)">{`Feed_Post_Message}</a></li>
+      <li><a href="javascript:void(0)">{`Feed_Post_MiniPoll}</a></li>
+    </ul>
+    
+    <div class="-area -area1">
+      <form>
+	<label class="-under">{`Feed_Post_Message_Label}</label>
+	<textarea></textarea>
+      </form>
+    </div>
+    
+  </div>
+
+  {#items}
+
+  {else}
+
+    <div style="position:relative">
+      <div class="shadow -top"><div class="-inner"></div></div>
+      <div class="empty-list">
+	{`Feed_RW_Empty}
+      </div>
+    </div>
+
+  {/#}
+
+</div>
+
+
+<style>
+.feed {
+
+  .-form {
+    background-color: #EEE;
+    padding: 7px 20px 10px;
+    text-shadow: 0 1px 0 white;
+  
+    .-what {
+      overflow: hidden;
+      margin: 0;
+      width: 400px;
+      padding: 0;
+      list-style-type: none;
+    
+      li {
+        float: left;
+        width: 100px;
+        text-align: center;
+        font-size: 13px;
+
+        &.-selected a { color: black; }
+      }
+    }
+
+    .-area {
+       border: 1px solid #BBB;
+       background-color: white;
+       margin-top: 6px;
+       min-height: 20px;
+       position: relative;
+    }
+
+    .-area1:after, 
+    .-area1:before,
+    .-area2:after, 
+    .-area2:before,
+    .-area3:after, 
+    .-area3:before,
+    .-area4:after, 
+    .-area4:before {
+      bottom: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }  
+
+    .-area1:after,
+    .-area2:after,
+    .-area3:after,
+    .-area4:after {
+      border-bottom-color: white;
+      border-width: 6px;
+      margin-left: -6px;
+    }
+
+    .-area1:before,
+    .-area2:before,
+    .-area3:before,
+    .-area4:before {
+      border-bottom-color: #BBB;
+      border-width: 7px;
+      margin-left: -7px;
+    }
+
+    .-area1:after,
+    .-area1:before  {
+      left: 50px;
+    }
+
+    .-area2:after,
+    .-area2:before  {
+      left: 150px;
+    }
+
+    .-area3:after,
+    .-area3:before {
+      left: 250px;
+    }
+
+    .-area4:after,
+    .-area4:before {
+      left: 350px;
+    }
+
+    textarea {
+      display: block;
+      border-width: 0;
+      font-family: "Oxygen","Arial",sans-serif;
+      font-size: 13px;
+      padding: 5px;
+      width: 630px;
+    }
+
+    &.-collapsed textarea {
+      height: 17px;
+    }
+
+    label {
+      position: absolute; 
+      padding: 5px 6px;
+      font-family: "Oxygen","Arial",sans-serif;
+      font-size: 13px;
+      color: #888;
+    }
+  }
+}
+</style>
