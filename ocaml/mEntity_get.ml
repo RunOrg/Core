@@ -13,9 +13,12 @@ let get = MEntity_can.data
 let id  = MEntity_can.id
 
 let status t = 
-  if (get t).E.deleted <> None then `Delete else
-    if (get t).E.draft then `Draft else
-      `Active
+  let e = get t in 
+  if e.E.draft then Some `Draft else 
+    if e.E.public then Some `Website else
+      match MAccess.summarize e.E.view with 
+	| `Admin  -> Some `Secret
+	| `Member -> None
 	
 let deleted       t = (get t).E.deleted 
   

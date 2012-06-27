@@ -55,7 +55,7 @@ end
 
 module Get : sig 
 
-  val status : 'any t -> [`Draft | `Active | `Delete ]
+  val status : 'any t -> [> `Draft | `Website | `Secret ] option
 
   val deleted       :            'any t -> IAvatar.t option
   val config        :            'any t -> MEntityConfig.t

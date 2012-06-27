@@ -26,12 +26,8 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
 	let  gid   = MGroup.Get.id group in 
 	let! count = ohm $ MMembership.InGroup.count gid in
 	return $ Some (count # count) 
-      end in      
-      let status = 
-	if MEntity.Get.draft entity then Some `Draft else 
-	  if MEntity.Get.public entity then Some `Website else
-	    None
-      in
+      end in            
+      let status = MEntity.Get.status entity in
       return (BatOption.default now date, object
 	method coming = coming 
 	method date   = BatOption.map (fun t -> (t,now)) date
