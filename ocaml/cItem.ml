@@ -14,7 +14,7 @@ module Message = struct
 
 end
 
-let render item = 
+let render self item = 
 
   let! now = ohmctx (#time) in
 
@@ -32,10 +32,17 @@ let render item =
   let comments = 
     if item # ncomm > 0 then
       Some (object
+	method more = if item # ncomm > List.length (item # ccomm) then Some () else None 
 	method list = Run.list_filter CComment.render_by_id (item # ccomm) 
       end)
     else None
   in
+
+  let! likes = ohm begin
+    if List.mem (IAvatar.decay self) (item # clike) then return true else
+      if item # nlike = List.length (item # clike) then return false else
+	MLike.likes self (`item (item # id))
+  end in
 
   let! html = ohm $ Asset_Item_Wrap.render (object
     method author   = author
@@ -43,7 +50,7 @@ let render item =
     method action   = action
     method time     = (item # time,now)
     method comments = comments
-    method like     = Some (CLike.render false (item # nlike)) 
+    method like     = Some (CLike.render likes (item # nlike)) 
     method reply    = Some ()
     method remove   = Some ()
     method hide     = None 

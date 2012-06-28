@@ -1,3 +1,3 @@
 (* © 2012 RunOrg *)
 
-val render : MItem.item -> Ohm.Html.writer option O.run
+val render : [`IsSelf] IAvatar.id -> MItem.item -> Ohm.Html.writer option O.run

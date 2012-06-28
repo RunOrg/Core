@@ -1,3 +1,3 @@
 (* © 2012 RunOrg *)
 
-val box : [`Read] MFeed.t option -> O.Box.result O.boxrun
+val box : [`IsSelf] IAvatar.id -> [`Read] MFeed.t option -> O.Box.result O.boxrun
