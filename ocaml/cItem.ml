@@ -29,16 +29,17 @@ let render access item =
 
   let! author = ohm $ CAvatar.mini_profile author in 
 
-  let comments = 
-    if item # ncomm > 0 then
-      Some (object
-	method more = if item # ncomm > List.length (item # ccomm) then Some () else None 
-	method list = Run.list_filter CComment.render_by_id (item # ccomm) 
-      end)
-    else None
-  in
+  let comments = object
+    method more = if item # ncomm > List.length (item # ccomm) then Some () else None 
+    method list = Run.list_filter CComment.render_by_id (item # ccomm) 
+  end in
 
-  let self = access # self in
+  let  self = access # self in
+  let! myself = ohm $ CAvatar.mini_profile self in
+
+  let reply = object
+    method picture = myself # pic
+  end in
 
   let! likes = ohm begin
     if List.mem (IAvatar.decay self) (item # clike) then return true else
@@ -54,6 +55,7 @@ let render access item =
     method comments = comments
     method like     = Some (CLike.render (CLike.item access (item # id)) likes (item # nlike)) 
     method remove   = Some ()
+    method reply    = reply
   end) in
 
   return (Some html)

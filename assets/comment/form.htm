@@ -1,0 +1,93 @@
+<div class="comments-reply">
+  <img src="{picture}"/>
+  <form>
+    <label>{ `Comment_Post_Label }</label>
+    <textarea {$t}></textarea>
+    <div class="-button">
+      <button type="submit"><span>{ `Comment_Post_Submit }</span>
+    </div>
+  </form>
+</div>
+
+<script>
+init = false
+here.$t.val('').focus () -> 
+  return if init 
+  init = true
+  $f = here.$t.closest("form")
+  $a = $f.parent()
+  here.$t.keydown () -> 
+    full = here.$t.val().length > 0
+    $f.toggleClass("-active",full)
+  $f.submit () -> 
+    text = here.$t.val()
+    return if text.length == 0
+    post "/", text, (data) -> 
+      $a.before(data.html) if data.html
+    here.$t.val("")
+    $f.removeClass("-active")
+    false
+</script>
+
+<style>
+.comments-reply {
+  border: 1px solid #CCC;
+  display: block;
+  line-height: 52px;
+  padding: 3px;
+  position: relative;
+  background-color: #EEE;
+  height: 52px;
+
+  label {
+    background-color: white;
+    color: #BBBBBB;
+    display: block;
+    float: left;
+    height: 44px;
+    line-height: 17px;
+    margin: 1px 0;
+    padding: 3px 6px;
+    width: 414px;
+  }
+
+  img {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin: 1px 5px 1px 5px;
+  }
+
+  .-button {
+    overflow: hidden;
+    text-align: center;
+    line-height:52px;
+  }
+
+  button {
+    display: none;
+    vertical-align: middle;
+  }
+
+  textarea {
+    border: 1px solid #BBB;
+    font-family: "Oxygen","Arial",sans-serif;
+    font-size: 12px;
+    height: 44px;
+    line-height: 14px;
+    overflow: hidden;
+    padding: 2px;
+    position: absolute;
+    top: 3px;
+    width: 420px;
+    background-color: transparent;
+    left: 63px;
+  }
+
+  .-active textarea, textarea:focus {
+     background-color: white;
+  }
+  
+  .-active button { display: inline-block } 
+}
+</style>

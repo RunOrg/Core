@@ -18,14 +18,15 @@
 	{/?}
       </span>
     </div>
-    {?comments}
-      <div class="-comments">
-	{?more}
+    <div class="-comments">
+      {=comments}
+        {?more}
   	  <a href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
 	{/?}
         {#list | ohm}{ this | verbatim }{/#}
-      </div>
-    {/?}
+      {/=}
+      { reply | Asset_Comment_Form.render | ohm }
+    </div>
   </div>
   
 </div>
