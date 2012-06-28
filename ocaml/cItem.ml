@@ -14,6 +14,22 @@ module Message = struct
 
 end
 
+let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -> 
+ 
+  let  fail = return res in
+  let  cuid = IIsIn.user (access # isin) in
+
+  let  itid, proof = req # args in
+  let! itid = req_or fail $ IItem.Deduce.from_read_token cuid itid proof in
+  
+  let! comments = ohm $ MComment.all itid in
+  let! htmls = ohm $ Run.list_map (snd |- CComment.render) comments in
+  let  html = Html.concat htmls in
+
+  return $ Action.json ["all", Html.to_json html] res
+
+end
+
 let render access item = 
 
   let! now = ohmctx (#time) in
@@ -29,9 +45,21 @@ let render access item =
 
   let! author = ohm $ CAvatar.mini_profile author in 
 
+  let more_comments = 
+      Action.url UrlClient.Item.comments (access # instance # key) 
+    ( let cuid = IIsIn.user (access # isin) in
+      let proof = IItem.Deduce.(make_read_token cuid (item # id)) in
+      (IItem.decay (item # id), proof) ) 
+  in
+
   let comments = object
-    method more = if item # ncomm > List.length (item # ccomm) then Some () else None 
-    method list = Run.list_filter CComment.render_by_id (item # ccomm) 
+    method more = 
+      if item # ncomm > List.length (item # ccomm) then 
+	Some (object
+	  method url = more_comments
+	end) 
+      else None 
+    method list = Run.list_filter CComment.render_by_id (List.rev (item # ccomm)) 
   end in
 
   let  self = access # self in

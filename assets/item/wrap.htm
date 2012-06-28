@@ -18,10 +18,23 @@
 	{/?}
       </span>
     </div>
-    <div class="-comments">
+    <div {$c} class="-comments">
       {=comments}
         {?more}
-  	  <a href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
+  	  <a {$a} href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
+	  <script type="url:string">
+lock = false
+here.$a.click () -> 
+  return if lock
+  lock = true
+  post url, {}, (data) -> 
+    lock = false
+    return if !data.all
+    here.$a.remove() 
+    here.$c.find(".comment").remove()
+    here.$c.prepend(data.all.html)
+    call data.all.code
+	  </script>
 	{/?}
         { list | ohm | Ohm.Html.concat }
       {/=}
