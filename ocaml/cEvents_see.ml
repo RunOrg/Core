@@ -13,14 +13,19 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
   let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
   let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
 
+  let  draft  = MEntity.Get.draft entity in 
+
   let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
   let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
+  let  feed   = if draft then None else feed in
 
   let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
   let! album  = ohm $ O.decay (MAlbum.Can.read album) in
-  
+  let  album  = if draft then None else album in 
+
   let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
+  let  folder = if draft then None else folder in 
 
   let! sidebar = O.Box.add begin 
 
@@ -38,8 +43,8 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
       (BatList.filter_map identity 
 	 [ Some `Wall ;
 	   Some `People ;
-	   Some `Album ;
-	   Some `Folder ;
+	   ( if album  <> None then Some `Album  else None ) ;
+	   ( if folder <> None then Some `Folder else None ) ;
 	   Some `Votes ])
     in
 
