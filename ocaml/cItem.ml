@@ -14,7 +14,7 @@ module Message = struct
 
 end
 
-let render self item = 
+let render access item = 
 
   let! now = ohmctx (#time) in
 
@@ -38,6 +38,8 @@ let render self item =
     else None
   in
 
+  let self = access # self in
+
   let! likes = ohm begin
     if List.mem (IAvatar.decay self) (item # clike) then return true else
       if item # nlike = List.length (item # clike) then return false else
@@ -50,7 +52,7 @@ let render self item =
     method action   = action
     method time     = (item # time,now)
     method comments = comments
-    method like     = Some (CLike.render likes (item # nlike)) 
+    method like     = Some (CLike.render (CLike.item access (item # id)) likes (item # nlike)) 
     method reply    = Some ()
     method remove   = Some ()
     method hide     = None 

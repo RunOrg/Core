@@ -1,6 +1,27 @@
-<a href="javascript:void(0)" class="likebtn {if likes}-like{/if}">
+<a {$a} href="javascript:void(0)" class="likebtn {if likes}-like{/if}">
   ★ <span>{ count | string_of_int | esc }</span>
 </a>
+
+<script type="url:string,likes:bool,count:int">
+
+lock = false
+
+here.$a.click () -> 
+
+  return if lock
+  lock = true
+
+  apply = (data) ->  
+    here.$a.toggleClass("-like",likes=data.like) if "like" of data
+    here.$a.find("span").text(count=data.count) if "count" of data
+
+  post url, !likes, (data) -> 
+    lock = false
+    apply data
+
+  apply { like:!likes, count:count + (if likes then -1 else 1) } 
+
+</script>
 
 <style>
 .likebtn {

@@ -56,7 +56,7 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 
     let! the_seg = O.Box.parse UrlClient.Events.tabs in 
     match the_seg with
-      | `Wall -> CWall.box (access # self) feed     
+      | `Wall -> CWall.box access feed     
       | _     -> O.Box.fill (return (Html.str "O HAI, AGAINZ!"))
 
   end in

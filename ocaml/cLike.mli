@@ -1,3 +1,7 @@
 (* © 2012 RunOrg *)
 
-val render : bool -> int -> Ohm.Html.writer O.run
+type what 
+
+val render : what -> bool -> int -> Ohm.Html.writer O.run
+
+val item : 'any CAccess.t -> [`Read] IItem.id -> what

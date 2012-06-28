@@ -5,7 +5,7 @@ window.post = (url,data,callback) ->
     data: $.toJSON data
     type: 'POST'
     success: (data) -> 
-      do callback
+      callback data
       call data.code
 
 window.boxPost = (url,data,callback) -> 

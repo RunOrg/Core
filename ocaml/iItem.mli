@@ -22,15 +22,15 @@ module Deduce : sig
   val created_can_reply  : [`Created] id -> [`Reply] id
   val created_can_remove : [`Created] id -> [`Remove] id
     
-  val make_like_token  : [`Unsafe] ICurrentUser.id -> [`Like] id  -> string
-  val from_like_token  : [`Unsafe] ICurrentUser.id -> 'any id     -> string -> [`Like] id option
+  val make_like_token  : 'u ICurrentUser.id -> [`Like] id  -> string
+  val from_like_token  : 'u ICurrentUser.id -> 'any id     -> string -> [`Like] id option
     
-  val make_read_token  : [`Unsafe] ICurrentUser.id -> [`Read] id  -> string
-  val from_read_token  : [`Unsafe] ICurrentUser.id -> 'any id     -> string -> [`Read] id option
+  val make_read_token  : 'u ICurrentUser.id -> [`Read] id  -> string
+  val from_read_token  : 'u ICurrentUser.id -> 'any id     -> string -> [`Read] id option
     
-  val make_reply_token : [`Unsafe] ICurrentUser.id -> [`Reply] id -> string
-  val from_reply_token : [`Unsafe] ICurrentUser.id -> 'any id     -> string -> [`Reply] id option
+  val make_reply_token : 'u ICurrentUser.id -> [`Reply] id -> string
+  val from_reply_token : 'u ICurrentUser.id -> 'any id     -> string -> [`Reply] id option
     
-  val make_remove_token : [`Unsafe] ICurrentUser.id -> [`Remove] id -> string
-  val from_remove_token : [`Unsafe] ICurrentUser.id -> 'any id      -> string -> [`Remove] id option
+  val make_remove_token : 'u ICurrentUser.id -> [`Remove] id -> string
+  val from_remove_token : 'u ICurrentUser.id -> 'any id      -> string -> [`Remove] id option
 end
