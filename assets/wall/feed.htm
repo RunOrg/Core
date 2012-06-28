@@ -132,15 +132,23 @@
     }
 
     &.-collapsed textarea {
-      height: 17px;
+      height: 13px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: transparent;
     }
 
-    label {
-      position: absolute; 
-      padding: 5px 6px;
-      font-family: "Oxygen","Arial",sans-serif;
+    &.-collapsed label.-under {      
+      padding: 5px 6px;      
       font-size: 13px;
       color: #888;
+      display: block;
+      height: 15px;
+    }
+
+    label.-under {
+      display: none
     }
   }
 }
