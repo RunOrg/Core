@@ -21,7 +21,7 @@ val create :
      [`Reply] IItem.id
   -> [`IsSelf] IAvatar.id 
   -> string
-  -> [`Created] IComment.id option O.run
+  -> ([`Created] IComment.id * t) O.run
 
 val all : [`Read] IItem.id -> ([`Read] IComment.id * t) list O.run
   

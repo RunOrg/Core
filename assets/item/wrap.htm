@@ -23,9 +23,9 @@
         {?more}
   	  <a href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
 	{/?}
-        {#list | ohm}{ this | verbatim }{/#}
+        { list | ohm | Ohm.Html.concat }
       {/=}
-      { reply | Asset_Comment_Form.render | ohm }
+      { reply | ohm }
     </div>
   </div>
   

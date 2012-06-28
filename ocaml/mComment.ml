@@ -41,7 +41,7 @@ let create on who what =
   
   let id = IComment.gen () in    
   
-  let insert : t = object
+  let comment : t = object
     method t     = `Comment
     method who   = IAvatar.decay who
     method on    = IItem.decay on
@@ -49,14 +49,12 @@ let create on who what =
     method time  = Unix.gettimeofday ()
   end in
   
-  let! result = ohm $ MyTable.put id insert in
+  let! _ = ohm $ MyTable.transaction id (MyTable.insert comment) in
   
-  match result with 
-    | `collision -> return None
-    | `ok -> let id = IComment.Assert.created id in	
-	     let! () = ohm $ Signals.on_create_call (id, insert) in 
-             return $ Some id
-
+  let id = IComment.Assert.created id in	
+  let! () = ohm $ Signals.on_create_call (id, comment) in 
+  return (id, comment)
+    
 let remove cid = 
   let  cid     = IComment.decay cid in 
   let! comment = ohm_req_or (return ()) $ MyTable.get cid in

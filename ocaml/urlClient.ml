@@ -41,6 +41,7 @@ let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
 module Like = UrlClient_like
+module Comment = UrlClient_comment
 
 module Home = struct
   let home, def_home = root "home"
