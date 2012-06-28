@@ -53,9 +53,7 @@ let render access item =
     method time     = (item # time,now)
     method comments = comments
     method like     = Some (CLike.render (CLike.item access (item # id)) likes (item # nlike)) 
-    method reply    = Some ()
     method remove   = Some ()
-    method hide     = None 
   end) in
 
   return (Some html)
