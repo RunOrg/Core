@@ -77,7 +77,7 @@ here.$f.submit () ->
       v = $(@).val()
       data.poll.push v if v 
     return false if data.poll.length == 0
-    data.multi = here.$p.find(".multi").is(":checked")
+    data.multi = here.$p.find("input[name='multi']").is(":checked")
 
   here.$p.find("-clone").remove()
   here.$p.children("input").val("")
