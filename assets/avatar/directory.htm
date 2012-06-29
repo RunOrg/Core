@@ -1,0 +1,69 @@
+<div class="avatars">
+  {#letters}
+    <div class="-letter">
+      <h3>{letter}</h3>
+    
+      {#people}
+        <div class="-item">
+	  {?pic}<img src="{this}">{/?}
+	  <span>
+	    <a href="{url}">{name}</a>
+	    <br>{ status | Asset_Status_Tag.render | ohm } 
+	  </span>
+	</div>
+      {/#}
+
+    </div>
+  {/#}
+</div>
+
+<style>
+.avatar {
+  padding: 20px;
+  overflow: hidden;
+
+  .-letter {
+    border-top: 1px solid #BBB;
+    overflow: hidden;
+    padding: 0 5px;
+    margin-bottom: -1px;
+  
+    h3 {
+      font-size: 40px;
+      float: left;
+      color: #BBB;
+      width: 30px;
+      margin: 0 50px;
+      text-align: center;
+    }
+  }
+
+  .status.-member {
+    display: none
+  }
+
+  .-item {
+    overflow: hidden;
+    margin-left: 130px;
+    height: 50px;
+    border-bottom: 1px solid #DDD;
+    padding: 4px;
+
+    img {
+      float: left; 
+      width: 50px;
+      height: 50px;
+    }
+
+    > span {
+      display: block;
+      margin-left: 54px;
+      padding: 4px;
+    }
+
+    a {
+      color: #333;
+    }
+  }
+}
+</style>

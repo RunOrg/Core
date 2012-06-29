@@ -7,3 +7,5 @@ type mini_profile = <
 >
 
 val mini_profile : 'any IAvatar.id -> mini_profile O.run
+
+val directory : 'any IAvatar.id list -> Ohm.Html.writer O.run
