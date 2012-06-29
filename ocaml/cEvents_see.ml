@@ -27,6 +27,11 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
   let  folder = if draft then None else folder in 
 
+  let  gid = MEntity.Get.group entity in
+  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
+  let  group = if draft then None else group in   
+
   let! sidebar = O.Box.add begin 
 
     let! the_seg = O.Box.parse UrlClient.Events.tabs in
@@ -42,7 +47,7 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
       end))
       (BatList.filter_map identity 
 	 [ Some `Wall ;
-	   Some `People ;
+	   ( if group  <> None then Some `People else None ) ;
 	   ( if album  <> None then Some `Album  else None ) ;
 	   ( if folder <> None then Some `Folder else None ) ;
 	   Some `Votes ])
@@ -56,8 +61,9 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 
     let! the_seg = O.Box.parse UrlClient.Events.tabs in 
     match the_seg with
-      | `Wall -> CWall.box access feed     
-      | _     -> O.Box.fill (return (Html.str "O HAI, AGAINZ!"))
+      | `Wall   -> CWall.box access feed     
+      | `People -> CPeople.event_box access group 
+      | _       -> O.Box.fill (return (Html.str "O HAI, AGAINZ!"))
 
   end in
       
