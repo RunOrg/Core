@@ -82,7 +82,7 @@ module Poll = struct
 
 end
 
-let render access item = 
+let render ?moderate access item = 
 
   let! now = ohmctx (#time) in
 
@@ -101,7 +101,7 @@ let render access item =
     Action.url UrlClient.Item.comments (access # instance # key) 
       ( let cuid = IIsIn.user (access # isin) in
 	let proof = IItem.Deduce.(make_read_token cuid (item # id)) in
-	(IItem.decay (item # id), proof) ) 
+	(IItem.decay (item # id), proof) )
   in
 
   let comments = object
@@ -122,6 +122,18 @@ let render access item =
 	MLike.likes self (`item (item # id))
   end in
 
+  let remove = match item # own with 
+    | Some own -> Some (object
+      method url = Action.url UrlClient.Item.remove (access # instance # key) 
+	( let cuid = IIsIn.user (access # isin) in
+	  let proof = IItem.Deduce.(make_remove_token cuid (own_can_remove own)) in
+	  (IItem.decay (item # id), proof) ) 
+    end)
+    | None -> match moderate with 
+	| Some url -> Some (object method url = url end)
+	| None     -> None
+  in
+
   let! html = ohm $ Asset_Item_Wrap.render (object
     method author   = author
     method body     = body
@@ -129,7 +141,7 @@ let render access item =
     method time     = (item # time,now)
     method comments = comments
     method like     = Some (CLike.render (CLike.item access (item # id)) likes (item # nlike)) 
-    method remove   = Some ()
+    method remove   = remove
     method reply    = CComment.reply access (IItem.Deduce.read_can_reply (item # id)) 
   end) in
 
@@ -181,3 +193,18 @@ let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -
   return $ Action.json ["all", Html.to_json html] res
 
 end
+
+let () = UrlClient.Item.def_remove $ CClient.action begin fun access req res -> 
+ 
+  let  fail = return res in
+  let  cuid = IIsIn.user (access # isin) in
+
+  let  itid, proof = req # args in
+  let! itid = req_or fail $ IItem.Deduce.from_remove_token cuid itid proof in
+  
+  let!  () = ohm $ MItem.Remove.delete itid in
+
+  return res
+
+end
+

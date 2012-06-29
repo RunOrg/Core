@@ -14,7 +14,14 @@
       {?like}&middot; {this | ohm}{/?}
       <span class="-actions">
 	{?remove}
-	  &middot; <a href="javascript:void(0)">{ `Item_Remove }</a> 
+	  &middot; <a {$a} href="javascript:void(0)">{ `Item_Remove }</a> 
+	  <script type="url:string">
+here.$a.click ->
+  post url, {}, ->
+    false  
+  here.$a.closest(".item").slideUp () -> 
+    $(@).remove()
+	  </script>
 	{/?}
       </span>
     </div>

@@ -7,4 +7,4 @@ val post :
   -> Ohm.Action.response
   -> Ohm.Action.response O.run
 
-val render : 'any CAccess.t -> MItem.item -> Ohm.Html.writer option O.run
+val render : ?moderate:string -> 'any CAccess.t -> MItem.item -> Ohm.Html.writer option O.run

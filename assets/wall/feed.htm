@@ -79,16 +79,16 @@ here.$f.submit () ->
     return false if data.poll.length == 0
     data.multi = here.$p.find("input[name='multi']").is(":checked")
 
-  here.$p.find("-clone").remove()
+  here.$p.find(".-clone").remove()
   here.$p.children("input").val("")
   here.$t.val("").blur()
 
-  here.$f.find("ul li:first").click()
+  here.$f.find("ul li a:first").click()
 
   OhmBox.remote url, data, (data) -> 
     if data.post
       here.$f.parent().children(".-empty").remove()      
-      here.$f.after(data.post.html) 
+      $h = $(data.post.html).insertAfter(here.$f)
       call data.post.code
     call data.code
 

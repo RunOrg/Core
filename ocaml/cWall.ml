@@ -5,7 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 let items access feed = 
-  let! items, _ = ohm $ MItem.list (`feed (MFeed.Get.id feed)) ~count:8 None in
+  let! items, _ = ohm $ MItem.list ~self:(access # self) (`feed (MFeed.Get.id feed)) ~count:8 None in
   let! htmls = ohm $ Run.list_filter (CItem.render access) items in 
   return htmls
 
