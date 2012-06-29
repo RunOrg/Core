@@ -1,10 +1,10 @@
 <div class="-message">{ body | raw }</div>
 <div class="poll">
-  <form>
+  <form {$f} >
     {#questions}
       <label>
 	{if multi}
-	  <input type="checkbox" name="{ n | string_of_int | esc }"/>
+	  <input type="checkbox" value="{ n | string_of_int | esc }"/>
 	{else}
 	  <input type="radio" name="vote" value="{ n | string_of_int | esc }"/>
 	{/if} {label}
@@ -19,6 +19,58 @@
     {/#}
   </form>
 </div>
+
+<script type="count: int list, total: int, answers: int list option, url: string"> 
+n = here.$f.children().length
+
+fill = () -> 
+  div = 100 / Math.max(total, 1) 
+  here.$f.children().each (i) -> 
+    $t = $ @
+    p = count[i] * div
+
+    $i = $t.find("input")
+    ic = $i.is ":checked" 
+    sc = answers && i in answers
+    $i.attr "checked", sc if ic != sc 
+
+    $t.find(".-bar div").css "width", p.toFixed(2) + "%"
+    $t.find(".-bar span").text count[i]
+    $t.find(".-bar").toggleClass "-s", p < 5
+
+do fill
+
+update = () -> 
+
+  sel = []
+
+  here.$f.find("input:checked").each () -> 
+    sel.push parseInt $(@).val(), 10
+
+  return if answers is sel 
+
+  mySendId = ++sendId
+  setTimeout send(mySendId), 1000 
+
+  if answers is null
+    total++
+  else
+    count[i]-- for i in answers
+
+  answers = sel
+  count[i]++ for i in answers
+  do fill
+
+here.$f.find("input").change update 
+
+sendId = 0
+send = (mySendId) ->
+  () ->   
+    return if mySendId != sendId
+    post url, answers, () -> 
+      false
+
+</script> 
 
 <style>
 .poll {

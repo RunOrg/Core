@@ -14,6 +14,6 @@ module Deduce : sig
   val read_can_answer   : [`Read] id    -> [`Answer] id
   val answer_can_read   : [`Answer] id  -> [`Read] id
     
-  val make_answer_token : [`Unsafe] ICurrentUser.id -> [`Answer] id -> string
-  val from_answer_token : [`Unsafe] ICurrentUser.id -> 'any id     -> string -> [`Answer] id option
+  val make_answer_token : 'u ICurrentUser.id -> [`Answer] id -> string
+  val from_answer_token : 'u ICurrentUser.id -> 'any id     -> string -> [`Answer] id option
 end

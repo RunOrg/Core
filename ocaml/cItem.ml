@@ -16,8 +16,35 @@ end
 
 module Poll = struct
 
+  module AnswerFmt = Fmt.Make(struct type json t = int list end)
+
+  let () = UrlClient.MiniPoll.def_vote $ CClient.action begin fun access req res -> 
+    
+    let  fail = return res in
+    let  cuid = IIsIn.user (access # isin) in
+    
+    let  pid, proof = req # args in
+    let! pid = req_or fail $ IPoll.Deduce.from_answer_token cuid pid proof in
+  
+    let! json = req_or fail $ Action.Convenience.get_json req in
+    let! answers = req_or fail $ AnswerFmt.of_json_safe json in
+    
+    let! () = ohm $ MPoll.Answer.set (access # self) pid answers in
+
+    return res
+
+  end
+
   let render access item poll = 
     let body = 
+
+      let pid  = IPoll.Deduce.read_can_answer (poll # poll) in
+      let vote = 
+	Action.url UrlClient.MiniPoll.vote (access # instance # key) 
+	  ( let cuid = IIsIn.user (access # isin) in
+	    let proof = IPoll.Deduce.make_answer_token cuid pid in
+	    (IPoll.decay pid, proof) ) 
+      in
 
       let display answers count total questions = Asset_Item_Poll.render (object
 	method body = OhmText.format ~nl2br:true ~skip2p:true ~mailto:true ~url:true (poll # text)
@@ -25,6 +52,7 @@ module Poll = struct
 	method count = count
 	method total = total
 	method answers = answers
+	method url = vote
       end) in
 
       let! p       = ohm_req_or (display None [] 0 []) $ MPoll.get (poll # poll) in
@@ -70,10 +98,10 @@ let render access item =
   let! author = ohm $ CAvatar.mini_profile author in 
 
   let more_comments = 
-      Action.url UrlClient.Item.comments (access # instance # key) 
-    ( let cuid = IIsIn.user (access # isin) in
-      let proof = IItem.Deduce.(make_read_token cuid (item # id)) in
-      (IItem.decay (item # id), proof) ) 
+    Action.url UrlClient.Item.comments (access # instance # key) 
+      ( let cuid = IIsIn.user (access # isin) in
+	let proof = IItem.Deduce.(make_read_token cuid (item # id)) in
+	(IItem.decay (item # id), proof) ) 
   in
 
   let comments = object
