@@ -4,6 +4,12 @@
 | `Feed_Post_MiniPoll -> "Sondage"
 
 | `Feed_Post_Message_Label -> "Écrire un nouveau message..."
+| `Feed_Post_MiniPoll_Label -> "Le sujet de votre sondage..."
+| `Feed_Post_MiniPoll_Multiple -> "Question à choix multiples"
+| `Feed_Post_MiniPoll_Yes -> "Oui"
+| `Feed_Post_MiniPoll_No  -> "Non"
+
+| `Feed_Post_Submit -> "Envoyer"
 
 | `Feed_Is_ReadOnly -> "Vous n'êtes pas autorisé à publier de messages ici"
 

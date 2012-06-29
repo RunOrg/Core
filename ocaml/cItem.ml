@@ -14,19 +14,43 @@ module Message = struct
 
 end
 
-let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -> 
- 
-  let  fail = return res in
-  let  cuid = IIsIn.user (access # isin) in
+module Poll = struct
 
-  let  itid, proof = req # args in
-  let! itid = req_or fail $ IItem.Deduce.from_read_token cuid itid proof in
-  
-  let! comments = ohm $ MComment.all itid in
-  let! htmls = ohm $ Run.list_map (snd |- CComment.render) comments in
-  let  html = Html.concat htmls in
+  let render access item poll = 
+    let body = 
 
-  return $ Action.json ["all", Html.to_json html] res
+      let display answers count total questions = Asset_Item_Poll.render (object
+	method body = OhmText.format ~nl2br:true ~skip2p:true ~mailto:true ~url:true (poll # text)
+	method questions = questions
+	method count = count
+	method total = total
+	method answers = answers
+      end) in
+
+      let! p       = ohm_req_or (display None [] 0 []) $ MPoll.get (poll # poll) in
+      let  details = MPoll.Get.details p in
+      let! questions = ohm $ Run.list_map begin fun (i,q) -> 
+	let! label = ohm $ TextOrAdlib.to_string q in
+	return (object
+	  method n = i
+	  method label = label 
+	  method multi = details # multiple
+	end)
+      end (BatList.mapi (fun i x -> i,x) (details # questions))	in
+
+      let stats = MPoll.Get.stats p in
+      let count = List.map snd (stats # answers) in
+      
+      let  self = access # self in
+      let! answered = ohm $ MPoll.Answer.answered self (poll # poll) in
+      let! answers  = ohm $ MPoll.Answer.get self (poll # poll) in
+      
+      let  answers = if answered then Some answers else None in 
+
+      display answers count (stats # total) questions
+
+    in
+    (poll # author, `MiniPoll, body)
 
 end
 
@@ -36,7 +60,7 @@ let render access item =
 
   let! author, action, body = req_or (return None) $ match item # payload with 
     | `Message  m -> Some (Message.render item m) 
-    | `MiniPoll m -> None
+    | `MiniPoll m -> Some (Poll.render access item m)
     | `Image    i -> None
     | `Doc      d -> None
     | `Chat     c -> None
@@ -83,4 +107,49 @@ let render access item =
 
   return (Some html)
 
+module PostForm = Fmt.Make(struct
+  type json t = <
+    text  : string ;
+   ?poll  : string list = [] ;
+   ?multi : bool = false
+  > 
+end)
+
+let post access feed json res = 
+  
+  let! post = req_or (return res) $ PostForm.of_json_safe json in 
+  let  self = access # self and iid = IInstance.decay access # iid and fid = MFeed.Get.id feed in 
+
+  let! itid = ohm begin 
+    if post # poll = [] then 
+      MItem.Create.message self (post # text) iid fid 
+    else
+      let! poll = ohm $ MPoll.create (object
+	method multiple = post # multi
+	method questions = List.map (fun t -> `text t)
+	  (List.filter (function "" -> false | _ -> true) 
+	     (List.map BatString.strip (post # poll)))
+      end) in
+      MItem.Create.poll self (post # text) poll iid fid
+  end in
+
+  let! item = ohm_req_or (return res) $ MItem.try_get access itid in
+  let! html = ohm_req_or (return res) $ render access item in 
+  
+  return $ Action.json ["post", Html.to_json html] res
+  
+let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -> 
  
+  let  fail = return res in
+  let  cuid = IIsIn.user (access # isin) in
+
+  let  itid, proof = req # args in
+  let! itid = req_or fail $ IItem.Deduce.from_read_token cuid itid proof in
+  
+  let! comments = ohm $ MComment.all itid in
+  let! htmls = ohm $ Run.list_map (snd |- CComment.render) comments in
+  let  html = Html.concat htmls in
+
+  return $ Action.json ["all", Html.to_json html] res
+
+end

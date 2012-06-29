@@ -1,5 +1,6 @@
 | `Item_Author_Action what -> begin match what with 
     | `Message -> "a écrit :"
+    | `MiniPoll -> "a organisé un sondage :"
 end 
 
 | `Item_Remove -> "Supprimer"

@@ -4,6 +4,12 @@
 | `Feed_Post_MiniPoll 
 
 | `Feed_Post_Message_Label 
+| `Feed_Post_MiniPoll_Label
+| `Feed_Post_MiniPoll_Multiple
+| `Feed_Post_MiniPoll_Yes
+| `Feed_Post_MiniPoll_No 
+
+| `Feed_Post_Submit
 
 | `Feed_Is_ReadOnly
 

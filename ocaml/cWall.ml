@@ -10,10 +10,18 @@ let items access feed =
   return htmls
 
 let feed_rw access feed wfeed = 
-  let! items = ohm $ O.decay (items access feed) in 
-  O.Box.fill (Asset_Wall_Feed.render (object
-    method items = items
-  end))
+
+  let! post = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
+    O.decay $ CItem.post access wfeed json res
+  end in
+
+  O.Box.fill begin 
+    let! items = ohm $ O.decay (items access feed) in 
+    Asset_Wall_Feed.render (object
+      method url   = OhmBox.reaction_json post ()
+      method items = items
+    end)
+  end
 
 let feed_ro access feed = 
   let! items = ohm $ O.decay (items access feed) in 

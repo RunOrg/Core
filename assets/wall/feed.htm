@@ -1,20 +1,32 @@
 <div class="feed">
   
-  <div class="-form -collapsed">
-    
+  <form {$f} class="-form -collapsed">
+
     <ul class="-what">
       <li class="-selected"><a href="javascript:void(0)">{`Feed_Post_Message}</a></li>
       <li><a href="javascript:void(0)">{`Feed_Post_MiniPoll}</a></li>
     </ul>
     
     <div class="-area -area1">
-      <form>
-	<label class="-under">{`Feed_Post_Message_Label}</label>
-	<textarea></textarea>
-      </form>
+      <label class="-under">
+	<span class="-in-area1">{`Feed_Post_Message_Label}</span>
+	<span class="-in-area2">{`Feed_Post_MiniPoll_Label}</span>
+      </label>
+      <textarea {$t} ></textarea>      
+      <div {$p} class="-poll">
+	<input type="text" value="{`Feed_Post_MiniPoll_Yes}"></input>
+	<input type="text" value="{`Feed_Post_MiniPoll_No}"></input>
+	<input type="text"></input>
+	<label>
+	  <input name="multi" style="vertical-align:bottom" type="checkbox"> {`Feed_Post_MiniPoll_Multiple} 
+	</label>
+      </div>
+      <div class="-bottom">
+	<button type="submit"><span>{`Feed_Post_Submit}</span></button>
+      </div>
     </div>
     
-  </div>
+  </form>
 
   {#items}
 
@@ -22,7 +34,7 @@
 
   {else}
 
-    <div style="position:relative">
+    <div class="-empty" style="position:relative">
       <div class="shadow -top"><div class="-inner"></div></div>
       <div class="empty-list">
 	{`Feed_RW_Empty}
@@ -33,14 +45,66 @@
 
 </div>
 
+<script type="url:json">
+
+here.$f.find("li a").click () -> 
+  n = $(@).parent().prevAll().length + 1
+  $(@).closest("ul").children().removeClass("-selected")
+  $(@).parent().addClass("-selected")
+  here.$f.find(".-area").attr("class","-area -area"+n)
+
+here.$t.focus () -> 
+  here.$f.removeClass("-collapsed")
+
+here.$t.blur () -> 
+  here.$f.addClass("-collapsed") if here.$t.val().length == 0 
+
+here.$p.children("input").focus () -> 
+  $i = $ @
+  if $i.next().is("label")
+    $i.clone(true).addClass("-clone").insertAfter($i)
+
+here.$f.submit () -> 
+
+  data = 
+    text: here.$t.val()
+
+  return false if !data.text
+
+  if here.$p.is(":visible")
+    data.poll = []
+    here.$p.children("input").each () ->
+      v = $(@).val()
+      data.poll.push v if v 
+    return false if data.poll.length == 0
+    data.multi = here.$p.find(".multi").is(":checked")
+
+  here.$p.find("-clone").remove()
+  here.$p.children("input").val("")
+  here.$t.val("").blur()
+
+  here.$f.find("ul li:first").click()
+
+  OhmBox.remote url, data, (data) -> 
+    if data.post
+      here.$f.parent().children(".-empty").remove()      
+      here.$f.after(data.post.html) 
+      call data.post.code
+    call data.code
+
+  false
+
+</script>
 
 <style>
 .feed {
 
   .-form {
-    background-color: #EEE;
+    background-color: #E4E4E4;
     padding: 7px 20px 10px;
     text-shadow: 0 1px 0 white;
+
+    height: 51px;
   
     .-what {
       overflow: hidden;
@@ -65,6 +129,7 @@
        margin-top: 6px;
        min-height: 20px;
        position: relative;
+       z-index: 2;
     }
 
     .-area1:after, 
@@ -128,7 +193,34 @@
       font-family: "Oxygen","Arial",sans-serif;
       font-size: 13px;
       padding: 5px;
-      width: 630px;
+      width: 653px;
+      outline: none
+    }
+
+    .-poll { 
+      display: none;
+      input[type="text"] {
+        border: none;
+        border-bottom: 1px solid #EEE;
+        padding: 3px 6px;
+        display: block;
+        width: 643px;
+        font-family: "Oxygen", "Arial", sans-serif;
+        font-size: 13px;
+        outline: none
+      }
+      label { 
+        display: block;
+        font-size: 13px; 
+        height: 19px; 
+        color: #555;
+      } 
+    } 
+
+    .-area2 .-poll {
+      display: block;
+      border-top: 1px dashed #CCC;
+      min-height: 20px; 
     }
 
     &.-collapsed textarea {
@@ -148,8 +240,19 @@
     }
 
     label.-under {
-      display: none
+      display: none;
+      span { display: none } 
+    } 
+
+    .-area1 .-in-area1, .-area2 .-in-area2 { display: block !important; } 
+
+    .-bottom {
+      background-color: #EEEEEE;
+      border-top: 1px solid #DDDDDD;
+      text-align: right;
     }
+
+    &.-collapsed .-area1 .-bottom { display: none } 
   }
 }
 </style>
