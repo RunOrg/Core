@@ -40,7 +40,6 @@
 | `Event_Section `People -> "Inscrits"
 | `Event_Section `Album -> "Photos"
 | `Event_Section `Folder -> "Fichiers"
-| `Event_Section `Votes -> "Votes"
 
 | `Event_Pic_Change -> "Changer l'image"
 | `Event_Admin -> "Administration"

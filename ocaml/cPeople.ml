@@ -13,5 +13,5 @@ let event_box_content access group =
     
 let event_box access group =
   match group with 
-    | None -> O.Box.fill (return $ Html.str "")
+    | None -> O.Box.fill (return ignore) 
     | Some group -> event_box_content access group

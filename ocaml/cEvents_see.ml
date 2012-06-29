@@ -49,8 +49,8 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 	 [ Some `Wall ;
 	   ( if group  <> None then Some `People else None ) ;
 	   ( if album  <> None then Some `Album  else None ) ;
-	   ( if folder <> None then Some `Folder else None ) ;
-	   Some `Votes ])
+	   ( if folder <> None then Some `Folder else None ) ; 
+	 ])
     in
 
     O.Box.fill (Asset_Event_Page_Sidebar.render navig)

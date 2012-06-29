@@ -36,7 +36,7 @@
 | `Events_CreateForbidden_Solution
 | `Events_CreateForbidden_Back
 
-| `Event_Section of [`Wall|`People|`Album|`Folder|`Votes]
+| `Event_Section of [`Wall|`People|`Album|`Folder]
 
 | `Event_Pic_Change 
 | `Event_Admin 

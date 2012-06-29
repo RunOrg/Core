@@ -13,18 +13,18 @@ let create,  def_create  = child def_home   "ev/create"
 let options, def_options = child def_home   "ev/options"
 let see,     def_see     = child def_create "event"
 let admin,   def_admin   = child def_see    "ev/admin"
+let edit,    def_edit    = child def_admin  "ev/edit"
+let picture, def_picture = child def_admin  "ev/picture"
 
 let tabs = 
   (function 
     | `Wall   -> "wall"
     | `Album  -> "album" 
-    | `Votes  -> "votes"
     | `Folder -> "folder"
     | `People -> "people"), 
   (function
     | "wall"   -> `Wall
     | "album"  -> `Album
-    | "votes"  -> `Votes
     | "folder" -> `Folder
     | "people" -> `People
     | other    -> `Wall)
