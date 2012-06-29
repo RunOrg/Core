@@ -49,3 +49,13 @@
 | `Event_When -> "Quand ?"
 | `Event_Where -> "Où ?"
 | `Event_More_Details -> "Plus de Détails"
+
+| `Event_Admin_Title -> "Administration"
+
+| `Event_Edit_Title -> "Modifier"
+
+| `Event_Picture_Title -> "Photo"
+
+| `Event_People_Title -> "Participants"
+
+| `Event_Access_Title -> "Visibilité et droits"

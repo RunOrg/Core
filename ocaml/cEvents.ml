@@ -7,6 +7,7 @@ open BatPervasives
 module See     = CEvents_see
 module Create  = CEvents_create
 module Options = CEvents_options
+module Admin   = CEvents_admin
 
 let () = CClient.define UrlClient.Events.def_home begin fun access -> 
   O.Box.fill $ O.decay begin 

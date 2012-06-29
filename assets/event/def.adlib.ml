@@ -46,3 +46,13 @@
 | `Event_When 
 | `Event_Where
 | `Event_More_Details
+
+| `Event_Admin_Title 
+
+| `Event_Edit_Title 
+
+| `Event_Picture_Title
+
+| `Event_People_Title
+
+| `Event_Access_Title
