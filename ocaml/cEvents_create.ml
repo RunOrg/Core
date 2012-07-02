@@ -38,7 +38,9 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
 
     let! eid = ohm $ O.decay (MEntity.create (access # self) ~name ~pic ~iid (post # template)) in
 
-    return res
+    let  url = Action.url UrlClient.Events.edit (access # instance # key) [ IEntity.to_string eid ] in
+
+    return $ Action.javascript (Js.redirect url ()) res
 
   end in
 

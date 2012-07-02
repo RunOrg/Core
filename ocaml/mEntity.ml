@@ -114,7 +114,7 @@ let _create ?pcname ?name ?pic template iid creator =
   
   let init = E.Init.({
     archive  = false ;
-    draft    = false ;
+    draft    = true ;
     public   = false ;
     admin    = `Admin ;
     view     = `Token ;
@@ -135,8 +135,8 @@ let _create ?pcname ?name ?pic template iid creator =
   return eid
  
 let create self ~name ~pic ~iid template =
-  _create template (IInstance.decay iid) self 
-  
+  let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
+  _create template ~name ?pic (IInstance.decay iid) self 
 
 let set_grants ctx eids = 
 
