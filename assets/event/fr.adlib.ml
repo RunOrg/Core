@@ -36,6 +36,10 @@
 | `Events_CreateForbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou de créer une nouvelle activité à votre place et de vous en nommer responsable."
 | `Events_CreateForbidden_Back -> "Retour"
 
+| `Event_Forbidden_Title -> "Page inaccessible"
+| `Event_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
+| `Event_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer une nouvelle activité.."
+
 | `Event_Section `Wall -> "Discussions"
 | `Event_Section `People -> "Inscrits"
 | `Event_Section `Album -> "Photos"
@@ -53,9 +57,17 @@
 | `Event_Admin_Title -> "Administration"
 
 | `Event_Edit_Title -> "Modifier"
+| `Event_Edit_Link -> "Modifier cette activité"
+| `Event_Edit_Sub -> "Changez le nom, le lieu, la date et les autres informations"
 
 | `Event_Picture_Title -> "Photo"
+| `Event_Picture_Link -> "Changer de photo"
+| `Event_Picture_Sub -> "Sélectionnez un nouveau logo ou photo pour cette activité"
 
 | `Event_People_Title -> "Participants"
+| `Event_People_Link -> "Gestion des participants"
+| `Event_People_Sub -> "Invitez des participants et validez les demandes d'inscription"
 
 | `Event_Access_Title -> "Visibilité et droits"
+| `Event_Access_Link -> "Visibilité et droits"
+| `Event_Access_Sub -> "Déterminez qui peut voir, s'inscrire ou administrer cette activité"

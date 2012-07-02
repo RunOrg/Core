@@ -36,6 +36,10 @@
 | `Events_CreateForbidden_Solution
 | `Events_CreateForbidden_Back
 
+| `Event_Forbidden_Title 
+| `Event_Forbidden_Problem 
+| `Event_Forbidden_Solution
+
 | `Event_Section of [`Wall|`People|`Album|`Folder]
 
 | `Event_Pic_Change 
@@ -49,10 +53,18 @@
 
 | `Event_Admin_Title 
 
-| `Event_Edit_Title 
+| `Event_Edit_Title
+| `Event_Edit_Link
+| `Event_Edit_Sub 
 
 | `Event_Picture_Title
+| `Event_Picture_Link
+| `Event_Picture_Sub
 
 | `Event_People_Title
+| `Event_People_Link
+| `Event_People_Sub
 
 | `Event_Access_Title
+| `Event_Access_Link
+| `Event_Access_Sub

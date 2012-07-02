@@ -13,6 +13,8 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
   let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
   let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
 
+  let! admin  = ohm $ O.decay (MEntity.Can.admin entity ) in
+
   let  draft  = MEntity.Get.draft entity in 
 
   let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
@@ -69,6 +71,8 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
       
   O.Box.fill $ O.decay begin
 
+    (* Top and side details ------------------------------------------------------------------------------ *)
+
     let! now  = ohmctx (#time) in
 
     let  tmpl = MEntity.Get.template entity in 
@@ -90,12 +94,40 @@ let () = CClient.define UrlClient.Events.def_see begin fun access ->
 	 end)
     in
 
+    (* Administrator URLs -------------------------------------------------------------------------------- *)
+
+    let pic_change = 
+      if admin <> None then 
+	Some (Action.url UrlClient.Events.picture (access # instance # key) [ IEntity.to_string eid ] )
+      else 
+	None
+    in
+
+    let invite = 
+      if admin <> None && not draft then 
+	Some (Action.url UrlClient.Events.invite (access # instance # key) [ IEntity.to_string eid ] )
+      else 
+	None
+    in
+
+    let admin = 
+      if admin <> None then 
+	Some (object
+	  method invite = invite
+	  method url = Action.url UrlClient.Events.admin (access # instance # key) [ IEntity.to_string eid ]
+	end)
+      else 
+	None
+    in
+
+    (* Render the page ----------------------------------------------------------------------------------- *)
+
     Asset_Event_Page.render (object
       method pic        = pic
       method sidebar    = O.Box.render sidebar
-      method admin      = None
+      method admin      = admin
       method title      = name
-      method pic_change = None 
+      method pic_change = pic_change 
       method date       = BatOption.map (fun t -> (t,now)) date
       method status     = MEntity.Get.status entity 
       method desc       = BatOption.map (OhmText.cut ~ellipsis:"…" 180) desc
