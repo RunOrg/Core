@@ -67,8 +67,9 @@ $f.submit ->
     pic: $p.val() || null
   return false if !data.template || !data.name
   here.$submit.attr("disabled","disabled")
-  boxPost url, data, () -> 
+  boxPost url, data, (result) -> 
     here.$submit.attr("disabled",false)
+    call result.code
   false
 
 refresh = -> 
