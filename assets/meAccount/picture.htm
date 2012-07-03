@@ -1,6 +1,6 @@
 <form {$form} style="width:408px;margin:auto" action="" method="POST">
   
-  <input {$pic} type="hidden" name="pic"/>
+  <input {$pic} type="hidden" name="pic" value="{id}"/>
   <div class="upload-picture">
     <img class="-l" src="/public/img/404_large.png"/>
     <img class="-s" src="/public/img/404_small.png"/>
@@ -49,9 +49,9 @@ refresh = ->
 here.$upload.click -> 
   $iframe = $ "<iframe/>", {src : upload}  
   close = -> 
-    $iframe.parent(".-images").removeClass("-up")
+    $iframe.parent(".upload-picture").removeClass("-up")
     do $iframe.remove
-  $(@).parent(".-images").addClass("-up").prepend($iframe)
+  $(@).parent(".upload-picture").addClass("-up").prepend($iframe)
   $iframe.load -> 
     location = $iframe.contents().get(0).location.href
     do close if /cancel/.test location
@@ -61,5 +61,7 @@ here.$upload.click ->
       $p.val(what)
       do close
       do refresh
+
+do refresh
 
 </script>

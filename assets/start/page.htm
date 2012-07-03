@@ -146,9 +146,9 @@ refresh = ->
 here.$upload.click -> 
   $iframe = $ "<iframe/>", {src : upload}  
   close = -> 
-    $iframe.parent(".-images").removeClass("-up")
+    $iframe.parent(".upload-picture").removeClass("-up")
     do $iframe.remove
-  $(@).parent(".-images").addClass("-up").prepend($iframe)
+  $(@).parent(".upload-picture").addClass("-up").prepend($iframe)
   $iframe.load -> 
     location = $iframe.contents().get(0).location.href
     do close if /cancel/.test location
