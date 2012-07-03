@@ -12,10 +12,17 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
 
   O.Box.fill begin
 
+    let html = Asset_MeAccount_Picture.render (object
+      method url = Json.Null 
+      method upload = "" 
+      method pics = "" 
+      method back = Parents.home # url 
+    end) in
+
     Asset_Admin_Page.render (object
       method parents = [ Parents.home ; Parents.admin ] 
       method here  = Parents.picture # title
-      method body  = return $ Html.str "" 
+      method body  = html
     end)
 
   end

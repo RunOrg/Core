@@ -49,3 +49,6 @@
 | `MeAccount_Pass_Submit -> "Enregistrer"
 
 | `MeAccount_Picture_Title -> "Photo"
+| `MeAccount_Picture_Edit -> "Modifier"
+| `MeAccount_Picture_Submit -> "Enregistrer"
+| `MeAccount_Picture_Cancel -> "Annuler"

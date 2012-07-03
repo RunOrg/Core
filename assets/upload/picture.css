@@ -1,0 +1,43 @@
+.upload-picture { 
+  border: 1px solid #CCC;
+  background-color: white;
+  padding: 8px;
+  overflow: hidden;
+  position: relative;
+  width: 390px;
+  min-height: 105px;
+
+  iframe { 
+    border: medium none;
+    display: block;
+    height: 121px;
+    margin: -8px;
+    overflow: hidden;
+    width: 406px;
+  }
+
+  &.-up {
+    background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+    a, img { display: none } 
+  } 
+
+  &.-loading {
+    background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+    img { display: none } 
+  }
+    
+  .-l {
+    width: 230px;
+    display: block;
+    float: left;
+  }
+
+  .-s {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 295px;
+    top: 50%;
+    margin-top: -25px;
+  }
+}
