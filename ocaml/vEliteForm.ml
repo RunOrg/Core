@@ -4,7 +4,20 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let radio ~label ~detail ~format ~source seed parse = 
+let text ~label ?detail seed parse = 
+  OhmForm.wrap ".joy-fields"
+    (Asset_EliteForm_Input.render (object 
+      method kind   = "text" 
+      method css    = "" 
+      method detail = detail
+    end))
+    (OhmForm.string
+       ~field:"input" 
+       ~label:(".elite-field-label label",label)
+       ~error:(".elite-field-error label")
+       seed parse)
+    
+let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"
     (Asset_EliteForm_Radio.render (object 
       method detail = detail

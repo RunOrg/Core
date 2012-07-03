@@ -11,6 +11,7 @@
 
 .elite-field {
   overflow: hidden;
+  margin-bottom: 10px;
 
   > * {
     margin-left: 320px;

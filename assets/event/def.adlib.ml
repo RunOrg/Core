@@ -56,6 +56,14 @@
 | `Event_Edit_Title
 | `Event_Edit_Link
 | `Event_Edit_Sub 
+| `Event_Edit_Name
+| `Event_Edit_Publish
+| `Event_Edit_Publish_Detail 
+| `Event_Edit_Publish_Website
+| `Event_Edit_Publish_Member
+| `Event_Edit_Publish_Secret
+| `Event_Edit_Submit 
+| `Event_Edit_Required
 
 | `Event_Picture_Title
 | `Event_Picture_Link
