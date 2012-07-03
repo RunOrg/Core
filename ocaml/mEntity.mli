@@ -122,6 +122,12 @@ val try_update :
   -> 'any IIsIn.id
   -> unit O.run
 
+val set_picture : 
+     [`IsSelf] IAvatar.id 
+  -> [`Admin] t
+  -> [`InsPic] IFile.id option 
+  -> unit O.run 
+
 val bot_get : [`Bot] IEntity.id -> [`Bot] t option O.run
 
 val try_get : 

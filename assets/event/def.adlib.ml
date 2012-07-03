@@ -60,6 +60,9 @@
 | `Event_Picture_Title
 | `Event_Picture_Link
 | `Event_Picture_Sub
+| `Event_Picture_Edit
+| `Event_Picture_Submit
+| `Event_Picture_Cancel
 
 | `Event_People_Title
 | `Event_People_Link

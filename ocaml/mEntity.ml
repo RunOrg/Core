@@ -43,8 +43,6 @@ let () =
   Signals.on_update_call (IEntity.Assert.bot (E.Store.version_object v))
 	      
 (* Updating entities ----------------------------------------------------------------------- *)
-
-exception UnknownTemplate of ITemplate.t
     
 let try_update t ~status ~name ~data isin = 
 
@@ -80,6 +78,20 @@ let try_update t ~status ~name ~data isin =
 
   MEntity_data.update ~id:(Get.id t) ~who ~name ~data ()
   
+let set_picture self t pic = 
+
+  let  mod_id = Id.gen () in
+
+  let  avatar = IAvatar.decay self in
+  let  who    = `user (mod_id, avatar) in
+  
+  let! key = req_or (return ()) $ PreConfig_Template.Meaning.picture (Get.template t) in
+
+  let pic = match pic with None -> Json.Null | Some pic -> IFile.to_json $ IFile.decay pic in
+  let data = [ key, pic ] in
+
+  MEntity_data.update ~id:(Get.id t) ~who ~data ()
+
 (* Creating entities ----------------------------------------------------------------------- *)
 
 let _create ?pcname ?name ?pic template iid creator = 
