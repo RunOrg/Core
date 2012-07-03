@@ -16,7 +16,7 @@
   
 </form>
 
-<script type="url:json,upload:string,pics:string">
+<script type="url:string,upload:string,pics:string">
 
 $f = here.$form
 $p = here.$pic
@@ -24,13 +24,9 @@ $p = here.$pic
 here.$submit.attr("disabled",false)
 
 $f.submit -> 
-  data = 
-    template: $("input[name='template']:checked").val()
-    name: here.$name.val()
-    pic: $p.val() || null
-  return false if !data.template || !data.name
+  data = $p.val() || null
   here.$submit.attr("disabled","disabled")
-  boxPost url, data, (result) -> 
+  post url, data, (result) -> 
     here.$submit.attr("disabled",false)
     call result.code
   false

@@ -20,7 +20,7 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
     in
 
     let html = Asset_MeAccount_Picture.render (object
-      method url = Json.Null 
+      method url = Action.url UrlMe.Account.picpost () ()
       method upload = Action.url UrlUpload.Core.root () ()
       method pics = Action.url UrlUpload.Core.find () ()
       method back = Parents.home # url 
@@ -34,4 +34,23 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
     end)
 
   end
+end
+
+let () = UrlMe.Account.def_picpost begin fun req res -> 
+
+  let! cuid = req_or (return res) $ CSession.get req in 
+  
+  let! pic = ohm begin
+    let! json = req_or (return None) $ Action.Convenience.get_json req in 
+    let! pic = req_or (return None) (try Some (Json.to_string json) with _ -> None) in
+    let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
+    MFile.own_pic cuid (IFile.of_string fid) 
+  end in
+
+  let! () = ohm $ MUser.set_pic (IUser.Deduce.can_edit cuid) pic in 
+
+  let url = Parents.home # url in
+
+  return $ Action.javascript (Js.redirect url ()) res
+  
 end

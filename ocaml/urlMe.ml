@@ -32,6 +32,7 @@ module Account = struct
   let edit,    def_edit    = child def_admin "edit/profile"
   let pass,    def_pass    = child def_admin "edit/password"
   let picture, def_picture = child def_admin "edit/picture"
+  let picpost, def_picpost = O.declare O.core "edit/picture/post" A.none
 end
 
 module Notif = struct

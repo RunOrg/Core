@@ -632,6 +632,23 @@ let update uid (t:user_edit) =
       Signals.on_update_call (updated , extract o) 
     | _             -> return ()
 
+let set_pic uid pic = 
+
+  let id = IUser.decay uid in
+  let fid = BatOption.map IFile.decay pic in 
+  let update e = 
+    let o = Data.({ e with picture = fid }) in     
+    if o <> e then Some o, `put o else None, `keep 
+  in
+
+  let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  match result with 
+    | Some (Some o) ->
+      (* Updated above. *)
+      let updated = IUser.Assert.updated uid in
+      Signals.on_update_call (updated , extract o) 
+    | _             -> return ()
+
 let set_password pass cuid = 
 
   let id = IUser.Deduce.is_anyone cuid in

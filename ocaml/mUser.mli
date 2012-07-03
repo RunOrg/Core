@@ -124,6 +124,8 @@ val user_bind : user_full -> IUser.t O.run
 
 val update : [`Edit] IUser.id -> user_edit -> unit O.run
 
+val set_pic : [`Edit] IUser.id -> [`OwnPic] IFile.id option -> unit O.run
+
 val get : [`View] IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
 
 val admin_get : [`Admin] ICurrentUser.id -> 'any IUser.id -> t option O.run
