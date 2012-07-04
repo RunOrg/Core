@@ -1,0 +1,19 @@
+<div>
+  <div class="joy-fields"></div>
+  <div class="elite-buttons">
+    <a {$draft} style="display:inline-block" href="javascript:void(0)" class="action-button">{ `Event_Edit_SaveDraft }</a>
+    <a {$publish} style="display:inline-block" href="javascript:void(0)" class="action-button -green">{ `Event_Edit_SavePublish }</a>
+  </div>
+</div>
+
+<script type="draft:json,publish:json">
+here.$draft.click () -> 
+  $form = $(@).closest('form')
+  $form.data('ohmForm').setUrl draft
+  $form.submit()
+
+here.$publish.click () -> 
+  $form = $(@).closest('form')
+  $form.data('ohmForm').setUrl publish
+  $form.submit()
+</script>

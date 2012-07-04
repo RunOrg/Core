@@ -61,13 +61,15 @@
 | `Event_Edit_Sub -> "Changez le nom, le lieu, la date et les autres informations"
 | `Event_Edit_Name -> "Nom de l'activité"
 | `Event_Edit_Publish -> "Niveau de visibilité"
-| `Event_Edit_Publish_Detail -> "Détermine qui peut voir cette activité et demander à s'y inscrire. Les brouillons ne sont visibles que par les organisateurs."
+| `Event_Edit_Publish_Detail -> "Qui peut voir cette activité et s'y inscrire ?"
 | `Event_Edit_Publish_Label what -> begin match what with
     | `Public -> "Visible depuis internet"
     | `Normal -> "Visible par tous les membres"
     | `Private -> "Sur invitation uniquement"
 end
 | `Event_Edit_Submit -> "Enregistrer"
+| `Event_Edit_SavePublish -> "Publier"
+| `Event_Edit_SaveDraft -> "Enregistrer Brouillon"
 | `Event_Edit_Required -> "Champ obligatoire"
 
 | `Event_Picture_Title -> "Photo"

@@ -61,6 +61,8 @@
 | `Event_Edit_Publish_Detail 
 | `Event_Edit_Publish_Label of [ `Normal | `Private | `Public ] 
 | `Event_Edit_Submit 
+| `Event_Edit_SavePublish
+| `Event_Edit_SaveDraft
 | `Event_Edit_Required
 
 | `Event_Picture_Title

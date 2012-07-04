@@ -31,11 +31,12 @@ setDate = (s) ->
     $h.val (date + time)
   else
     $d.val "" 
-    $h.val "" 
-
-if $h.val().length > 8
-  time = $h.val().substring(8)
-  setDate $h.val().substring(0,0+8) 
+    $h.val ""
+ 
+$h.data 'onSet', (v) -> 
+  if v && v.length >= 8
+    time = v.substring(8)
+    setDate v.substring(0,0+8) 
 
 $n.click () -> 
   time = "" 

@@ -44,36 +44,34 @@ let () =
 	      
 (* Updating entities ----------------------------------------------------------------------- *)
     
-let try_update t ~status ~name ~data isin = 
+let try_update self t ~draft ~name ~data ~view = 
 
   let  mod_id = Id.gen () in
-  let! avatar = ohm $ MAvatar.get isin in
 
-  let  avatar = IAvatar.decay avatar in
+  let  avatar = IAvatar.decay self in
   let  who    = `user (mod_id, avatar) in
 
   let e = Can.data t in
 
-  let diffs = 
+  let draft = 
     (* Set the status only if not already correct *)
-    if status = `Draft && e.E.draft ||
-       status = `Active && not e.E.draft && e.E.deleted = None ||
-       status = `Delete && e.E.deleted <> None
+    if draft && e.E.draft ||
+       not draft && not e.E.draft && e.E.deleted = None
     then []
-    else [ `Status (match status with 
-      | `Delete -> `Delete avatar
-      | `Draft  -> `Draft
-      | `Active -> `Active
-    ) ]
+    else [ `Status (if draft then `Draft else `Active) ] 
   in  
 
-  let! () = ohm $
-    if diffs = [] then return () else    
+  let access = if Get.real_access t = view then [] else [ `Access view ] in
+
+  let diffs = draft @ access in 
+
+  let! _ = ohm $
+    if diffs = [] then return None else    
       E.Store.update
 	~id:(IEntity.decay (Get.id t)) 
 	~diffs
 	~info:(MUpdateInfo.info ~who)
-	() |> Run.map ignore
+	()
   in
 
   MEntity_data.update ~id:(Get.id t) ~who ~name ~data ()

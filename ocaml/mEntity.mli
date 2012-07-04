@@ -115,11 +115,12 @@ end
 (* procedures *)
 
 val try_update : 
-     [`Admin] t
-  -> status:[ `Active | `Delete | `Draft ]
+     [`IsSelf] IAvatar.id
+  -> [`Admin] t
+  -> draft:bool
   -> name:TextOrAdlib.t option 
   -> data:(string * Ohm.Json.t) list
-  -> 'any IIsIn.id
+  -> view:[`Private|`Normal|`Public]
   -> unit O.run
 
 val set_picture : 
