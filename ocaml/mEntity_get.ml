@@ -36,10 +36,10 @@ let real_access   t =
     let access = MAccess.summarize e.E.view in
     if MEntityConfig.group e.E.template config <> None then 
       match access with 
-	| `Admin -> `Invite
-	| any    -> any 
+	| `Admin -> `Private
+	| any    -> `Normal
     else
-      access
+      `Normal
 
 let grants t = 
   let config = config t in 

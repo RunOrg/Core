@@ -1,0 +1,262 @@
+<div class="elite-field -date">
+  <div class="elite-field-label"><label></label>{?detail}<span>{this | ohm | esc }</span>{/?}</div>
+  <div class="elite-field-date">
+    <input type="hidden"/>
+    <input type="text" class="-d" readonly="readonly"/>
+    <div class="-t" style="display:none">
+      <label>0:00</label>
+      <input type="text"/>
+    </div>
+    <div class="-calendar" style="display:none">
+    </div>
+    <a href="javascript:void(0)" class="-none">&times;</a>
+  </div>
+  <div class="elite-field-error error-root"><label></label></div>
+</div>
+
+<script>
+$c = @$.find ".-calendar"
+$d = @$.find "input.-d"
+$t = @$.find ".-t input"
+$h = @$.find "input[type='hidden']"
+$n = @$.find ".-none"
+
+time = "" 
+date = null
+
+setDate = (s) ->
+  date = s 
+  if date 
+    $d.val [ s.substring(6,6+2), s.substring(4,4+2), s.substring(0,0+4) ].join("/") 
+    $h.val (date + time)
+  else
+    $d.val "" 
+    $h.val "" 
+
+if $h.val().length > 8
+  time = $h.val().substring(8)
+  setDate $h.val().substring(0,0+8) 
+
+$n.click () -> 
+  time = "" 
+  setDate "" 
+  $c.hide()  
+
+y = (x) -> x.getFullYear()
+m = (x) -> x.getMonth()
+d = (x) -> x.getDate()
+w = (x) -> ( x.getDay() + 6 ) % 7 
+
+yy = y(new Date())
+mm = m(new Date())
+
+$d.focus () -> 
+  do $c.show
+  if date 
+    yy = parseInt(date.substring(0,0+4),10)
+    mm = parseInt(date.substring(4,4+2),10) - 1
+  do render
+
+nextDay = (x) -> 
+  new Date y(x), m(x), d(x)+1 
+
+fmt = (x) -> 
+  [ y(x), (if m(x) < 9 then '0' else ''), 1 + m(x), (if d(x) > 9 then '' else '0'), d(x) ].join "" 
+
+$c.click (ev) -> 
+  $t = $ ev.target 
+  if $t.is ".-p"
+    mm--
+    return render() 
+  if $t.is ".-n"
+    mm++
+    return render() 
+  if $t.is "a"
+    setDate $t.attr "name"
+    return $c.hide()
+
+render = () ->
+
+  while mm < 0
+    mm = mm + 12
+    yy = yy - 1
+
+  while mm > 11
+    mm = mm - 12
+    yy = yy + 1
+ 
+  today = new Date()
+  today = null if y(today) != yy || m(today) != mm
+  today = d today if today
+
+  h = ["<div class='-top'><a class='-p'>◀</a>", 1 + mm, " / ", yy, "<a class='-n'>▶</a></div>"]
+
+  x = new Date yy, mm, 1
+  if w(x) > 0
+    h.push "<div class='-w'>"
+    h.push "<span></span>" for i in [0 .. w(x)-1]
+
+  while m(x) is mm
+    day = d(x)
+    wdy = w(x)
+    txt = fmt(x) 
+    h.push "<div class='-w'>" if wdy is 0
+    h.push "<a name='", txt
+    h.push "' class='-sel" if txt == date
+    h.push "' class='-today" if day == today && txt != date
+    h.push "' class='-we" if wdy >= 5 && day != today && txt != date 
+    h.push "'>", day, "</span>" 
+    h.push "</div>" if wdy is 6
+    x = nextDay x
+
+  h.push "</div>" if w(x) != 0
+
+  $c.html h.join ""
+
+do render
+
+</script>
+
+<style>
+.elite-field.-date {
+  overflow: visible;
+  
+  .elite-field-label {
+    margin-top: 3px;
+  }
+}
+
+.elite-field-date {
+  width: 200px;
+  border: 1px solid #AAA;
+  background-color: white;
+  position: relative;
+  height: 25px;
+
+  input {
+    font-family: Oxygen, Arial, sans;
+    padding: 3px; 
+    border: none;
+    float: left;
+  }
+  
+  .-t {
+    position: relative;
+    width: 56px;
+    border-left: 1px dashed #CCC;
+    float: left;
+
+    label {
+      color: #888888;
+      display: block;
+      font-size: 13px;
+      padding: 4px 5px;
+    } 
+
+    input {
+      position: absolute; 
+      background-color: transparent;
+      top: 0;
+      left: 0;
+      width: 56px;
+    } 
+
+  }
+
+  .-none { 
+    background-color: #EEE;
+    background: -moz-linear-gradient(top, #FFF, #EEE);
+    background: -webkit-linear-gradient(top, #FFF, #EEE);
+    border: 1px solid #888;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 2px #CCC;
+    color: #555;
+    font-size: 25px;
+    height: 25px;
+    line-height: 24px;
+    margin: -1px;
+    position: absolute;
+    right: -27px;
+    text-align: center;
+    text-shadow: 0 1px 0 white;
+    top: 0;
+    width: 26px;
+    &:hover {
+      box-shadow: 0 0 3px #888;
+    } 
+  } 
+
+  .-calendar {
+    background-color: white;
+    border: 1px solid #BBBBBB;
+    margin: -1px;
+    padding: 2px;
+    position: absolute;
+    top: 0;
+    
+    .-w { overflow: hidden } 
+
+    .-top {
+      border-bottom: 1px solid #DDD;
+      color: #888;
+      font-size: 15px;
+      line-height: 21px;
+      margin-bottom: 2px;
+      overflow: hidden;
+      padding-bottom: 2px;
+      text-align: center;
+    }
+
+    .-n { float: right } 
+
+    span, a {
+      display: block;
+      float: left;
+      padding: 1px;
+      height: 19px;
+      line-height: 20px;
+      padding: 1px;
+      text-align: center;
+      width: 26px;
+      color: #888;
+      font-size: 12px;
+    }
+   
+    a { 
+      cursor: pointer;
+
+      &.-we {
+        color: #333;
+      } 
+
+      &.-sel, &.-sel:hover {
+        padding: 0;
+        width: 24px;
+        height: 17px;
+        line-height: 18px;
+        margin: 1px; 
+        border: 1px solid #070;
+        color: white;
+        background-color: #2A2;
+        background: -moz-linear-gradient(top, #4D4 0%, #2A2 100%);
+        background: -webkit-linear-gradient(top, #4D4 0%, #2A2 100%);
+        text-shadow: 0 -1px 0 #070; 
+        border-radius: 4px;
+        font-weight: bold;
+      } 
+
+      &.-today { 
+        color: black; 
+        font-weight: bold;
+      } 
+
+      &:hover {
+        color: black;
+        background-color: #EEE;
+        padding: 0;
+        border: 1px solid #CCC;      
+      } 
+    } 
+  }
+}
+</style>

@@ -28,6 +28,17 @@ let textarea ~label ?detail seed parse =
        ~error:(".elite-field-error label")
        seed parse)
     
+let date ~label ?detail seed parse = 
+  OhmForm.wrap ".joy-fields"
+    (Asset_EliteForm_Date.render (object 
+      method detail = detail
+    end))
+    (OhmForm.string
+       ~field:"input[type='hidden']" 
+       ~label:(".elite-field-label label",label)
+       ~error:(".elite-field-error label")
+       seed parse)
+
 let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"
     (Asset_EliteForm_Radio.render (object 

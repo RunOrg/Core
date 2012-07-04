@@ -59,9 +59,7 @@
 | `Event_Edit_Name
 | `Event_Edit_Publish
 | `Event_Edit_Publish_Detail 
-| `Event_Edit_Publish_Website
-| `Event_Edit_Publish_Member
-| `Event_Edit_Publish_Secret
+| `Event_Edit_Publish_Label of [ `Normal | `Private | `Public ] 
 | `Event_Edit_Submit 
 | `Event_Edit_Required
 

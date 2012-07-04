@@ -62,9 +62,11 @@
 | `Event_Edit_Name -> "Nom de l'activité"
 | `Event_Edit_Publish -> "Niveau de visibilité"
 | `Event_Edit_Publish_Detail -> "Détermine qui peut voir cette activité et demander à s'y inscrire. Les brouillons ne sont visibles que par les organisateurs."
-| `Event_Edit_Publish_Website -> "Sur le site web"
-| `Event_Edit_Publish_Member -> "Tous les membres"
-| `Event_Edit_Publish_Secret -> "Sur invitation uniquement"
+| `Event_Edit_Publish_Label what -> begin match what with
+    | `Public -> "Visible depuis internet"
+    | `Normal -> "Visible par tous les membres"
+    | `Private -> "Sur invitation uniquement"
+end
 | `Event_Edit_Submit -> "Enregistrer"
 | `Event_Edit_Required -> "Champ obligatoire"
 

@@ -76,7 +76,7 @@ module Get : sig
   val end_date      : [<`Admin|`View] t -> string option
   val admin         :       [<`Admin] t -> MAccess.t 
 
-  val real_access   : [<`Admin|`View] t -> [`Admin|`Member|`Invite|`Registered|`Public]
+  val real_access   : [<`Admin|`View] t -> [`Private|`Normal|`Public]
         
   val inactive      :            'any t -> bool
 
