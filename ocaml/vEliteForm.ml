@@ -16,6 +16,17 @@ let text ~label ?detail seed parse =
        ~label:(".elite-field-label label",label)
        ~error:(".elite-field-error label")
        seed parse)
+
+let textarea ~label ?detail seed parse = 
+  OhmForm.wrap ".joy-fields"
+    (Asset_EliteForm_Textarea.render (object 
+      method detail = detail
+    end))
+    (OhmForm.string
+       ~field:"textarea" 
+       ~label:(".elite-field-label label",label)
+       ~error:(".elite-field-error label")
+       seed parse)
     
 let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"

@@ -404,8 +404,32 @@ module Build = struct
 	)) (!templates) end 
 
     ^ "\n\nend"
+
+    (* Entity fields.  ==================================================================================== *)
       
-      (* The field name, by meaning ========================================================================= *)
+    ^ "\n\nlet fields = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> [\n    %s ]" (t.t_id) 
+	(String.concat " ;\n    " (BatList.filter_map (fun f ->
+	  let edit = match f.f_edit with 
+	    | `Textarea -> Some "Textarea"
+	    | `LongText -> Some "Input"
+	    | `Picture  -> None
+	    | `Date     -> Some "Date"
+	  in
+	  match edit with None -> None | Some edit -> 
+	    Some begin 
+	      Printf.sprintf "(object\n      method label = `%s\n      method detail = %s\n      method edit = `%s\n      method key = %S\n      method required = %s\n    end)"
+		f.f_label 
+		(match f.f_help with None -> "None" | Some s -> "Some `" ^ s) 
+		edit
+		f.f_key
+		(if f.f_req then "true" else "false")
+	    end
+	 ) (t.t_fields)))
+    ) (!templates))
+      
+    (* The field name, by meaning ========================================================================= *)
     ^ "\n\nmodule Meaning = struct\n\n"
     ^ String.concat "\n\n" begin
       List.map (fun (mean,meanstr) -> 
