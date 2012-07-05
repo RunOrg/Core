@@ -713,7 +713,7 @@ let () = catalog [
               (adlib "VerticalStudentsName" "Association étudiante")
               None ;
     inCatalog ess
-              (adlib "VerticalEssName" "Association Economie Sociale et Solidaire")
+              (adlib "VerticalEssName" "Economie Sociale et Solidaire")
               None ;
     inCatalog impro
               (adlib "VerticalImproName" "Théâtre d'Improvisation")
