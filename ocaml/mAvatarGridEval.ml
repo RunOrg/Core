@@ -4,7 +4,7 @@ open Ohm
 
 include Ohm.Fmt.Make(struct
   type json t = 
-    [ `Avatar  of IInstance.t * [ `Name ] 
+    [ `Avatar  of IInstance.t * [ `Info | `Name ] 
     | `Profile of IInstance.t * 
 	[ `Firstname 
 	| `Lastname
@@ -26,3 +26,4 @@ include Ohm.Fmt.Make(struct
 	]
     ]
 end)
+ 

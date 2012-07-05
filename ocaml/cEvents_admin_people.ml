@@ -6,6 +6,8 @@ open BatPervasives
 
 open CEvents_admin_common
 
+module Grid = MAvatarGrid
+
 let () = define UrlClient.Events.def_people begin fun parents entity access -> 
   
   O.Box.fill begin 

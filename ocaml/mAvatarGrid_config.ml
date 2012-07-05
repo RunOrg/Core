@@ -33,11 +33,30 @@ let sources_of_evaluator = function
     
 let apply_avatar aid what = 
   let! d = ohm $ MAvatar.details aid in
+  let! picture = ohm begin 
+    match d # picture with 
+      | None     -> return None 
+      | Some fid -> MFile.Url.get fid `Small
+  end in
   return begin match what with 
     | `Name -> begin 
       Json.of_opt Json.of_string (d # name),
       BatOption.map Json.of_string (d # sort)
     end 
+    | `Info -> begin 
+      Json.of_assoc 
+	(BatList.filter_map 
+	   (fun (k,o) -> match o with 
+	     | None -> None
+	     | Some json -> Some (k,json))
+	   [ 
+	     "n", BatOption.map Json.of_string         (d # name) ;
+	     "s", BatOption.map MAvatar.Status.to_json (d # status) ;
+	     "r", BatOption.map Json.of_string         (d # role) ; 
+	     "p", BatOption.map Json.of_string          picture 
+	   ]), 
+      BatOption.map Json.of_string (d # sort) 
+    end
   end
 
 type ctx = O.ctx
