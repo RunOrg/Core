@@ -3591,10 +3591,6 @@ let eventSimple = template "EventSimple"
       (`Self `Date) ;
   ]
   ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
     field ~label:(adlib "EntityFieldDesc" "Description")
           ~required:true
           ~mean:`Description
@@ -3602,69 +3598,24 @@ let eventSimple = template "EventSimple"
     field ~label:(adlib "EntityFieldPicture" "Image")
           ~mean:`Picture
           `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
     field ~label:(adlib "EntityFieldDate" "Date")
           ~required:true
           ~mean:`Date
           `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
     field ~label:(adlib "EntityFieldAddress" "Adresse")
           ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
           ~mean:`Location
           `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
   ]
   ~join:[
   ]
   ~page:[
     infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-      ];
-    infoSection
       (adlib "Info_Section_Where" "Où ?")
       [
         infoItem
           [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
             infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
           ];
       ];
     infoSection
@@ -3672,27 +3623,7 @@ let eventSimple = template "EventSimple"
       [
         infoItem
           [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
             infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
           ];
       ];
   ]

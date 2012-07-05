@@ -705,6 +705,10 @@ let students = vertical "Students"
 
 let () = catalog [
   subCatalog ~name:(adlib "Catalog_Asso" "Associations") [
+    inCatalog simple
+              (adlib "VerticalCatalogStandardName" "Standard")
+              (Some (adlib "VerticalCatalogStandardDesc" 
+		       "Une préconfiguration généraliste adaptée à toutes les associations")) ;
     inCatalog students
               (adlib "VerticalStudentsName" "Association étudiante")
               None ;
@@ -713,9 +717,6 @@ let () = catalog [
               None ;
     inCatalog impro
               (adlib "VerticalImproName" "Théâtre d'Improvisation")
-              None ;
-    inCatalog simple
-              (adlib "VerticalCatalogOtherName" "Autres")
               None ;
   ] ;
   subCatalog ~name:(adlib "Catalog_Sport" "Clubs de sport") [
