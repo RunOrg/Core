@@ -64,7 +64,7 @@ module Render = struct
 
   let empty = return ignore
 
-  let cell gender field json = function 
+  let cell url gender field json = function 
     | `Text -> let str = BatOption.default "" (Fmt.String.of_json_safe json) in
 	       Asset_Grid_Text.render str
     | `DateTime
@@ -88,8 +88,10 @@ module Render = struct
 		  let! items = ohm $ format_picker json field in 
 		  Asset_Grid_Text.render (String.concat ", " items)
     | `Full -> let! info = req_or empty $ MAvatarGridEval.FullProfile.of_json_safe json in
-	       Asset_Grid_FullInfo.render info
-
+	       Asset_Grid_FullInfo.render (object 
+		 method info = info 
+		 method url  = url 
+	       end)
 end 
 
 
@@ -118,8 +120,8 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
   let! group = req_or fail group in 
 
   let  grid  = MGroup.Get.list group in 
-  let lid = Grid.list_id grid in
-
+  let  lid = Grid.list_id grid in
+  
   (* Returning the rows for a given sort *)
 
   let! sort = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
@@ -149,6 +151,12 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
   end in
 
   (* Returning the data for the given rows *)
+
+  let join_url aid = 
+    Action.url UrlClient.Events.join (access # instance # key) 
+      [ IEntity.to_string (MEntity.Get.id entity) ;
+	IAvatar.to_string aid ] 
+  in
   
   let! rows = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
 
@@ -169,16 +177,17 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
       let! get, columns = ohm $ O.decay (Grid.MyGrid.read_lines lid (List.map snd rows)) in
 
-      let to_html_json json column = 
+      let to_html_json url json column = 
 	let gender = None in
 	let field  = O.decay $ Render.get_field column.MAvatarGridColumn.eval in 
-	let! html = ohm $ Render.cell gender field json column.MAvatarGridColumn.view in	
+	let! html = ohm $ Render.cell url gender field json column.MAvatarGridColumn.view in	
 	return $ Json.String (Html.to_html_string html) 
       in
 
       let! rows = ohm $ Run.list_filter begin fun (str, linid) -> 
 	let! line = req_or (return None) $ get linid in 
-	try let  cells = BatList.map2 to_html_json line.Grid.MyGrid.cells columns in
+	let  url  = join_url line.Grid.MyGrid.key in
+	try let  cells = BatList.map2 (to_html_json url) line.Grid.MyGrid.cells columns in
 	    let! cells = ohm $ Run.list_map identity cells in 
 	    return $ Some (str, Json.Array cells)
 	with _ -> return None
