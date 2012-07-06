@@ -117,17 +117,24 @@ load 0, true
 # == React to scrolling ===================================================
 onScroll = () -> 
 
-  $b = $ window
-  dt = $b.scrollTop()
-  db = dt + $b.height()
+  if here.$t.parent().is(":visible")
 
-  here.$t.find(".-loading").each () -> 
-    $t = $ @ 
-    et = $t.offset().top
-    eb = et + $t.height() 
+    $b = $ window
+    dt = $b.scrollTop()
+    db = dt + $b.height()
 
-    if (et <= db && eb >= dt)
-      loadRow $t.attr("id")      
+    here.$t.find(".-loading").each () -> 
+      $t = $ @ 
+      et = $t.offset().top
+      eb = et + $t.height() 
+
+      if (et <= db && eb >= dt)
+        loadRow $t.attr("id")      
+
+  else
+    $(window).unbind "scroll", onScroll
+
+$(window).bind "scroll", onScroll
 
 # == Toggle a column ======================================================
 here.$t.find("thead td").click () ->
@@ -152,8 +159,11 @@ here.$t.find("thead td").click () ->
     border: 1px solid #888;
 
     tbody td {
-      pading: 3px;
-      height: 40px;       
+      padding: 2px 6px;
+      overflow: hidden;
+      height: 44px;      
+      font-size: 13px;
+      border-top: 1px dashed #DDD;
     } 
 
     tbody .-loading td {
@@ -171,6 +181,8 @@ here.$t.find("thead td").click () ->
         display: block; 
         height: 22px;
         line-height: 22px;
+        padding: 0 5px;
+        overflow: hidden;
         background-color: #BBB;
         background: -webkit-linear-gradient(top,#BBB,#AAA);
         background: -moz-linear-gradient(top,#BBB,#AAA);
@@ -191,6 +203,13 @@ here.$t.find("thead td").click () ->
     background: url(/public/icon/ajax-load.gif) center 20% no-repeat white; 
     font-size: 24px;
     small { display: block; color: #BBB } 
+  }
+
+  .status {
+    width: 120px;
+    text-align: center;
+    margin: auto;
+    display: block;
   }
 
 }

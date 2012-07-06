@@ -1,0 +1,26 @@
+<a class="-fullinfo">
+  {?picture}<img src="{this}"/>{/?}
+  <span>{?fullname}{this}{else}{`Anonymous}{/?}</span>
+  {?email}<span class="-e">{this}</span>{/?}
+</a>
+
+<style>
+.grid .-fullinfo {
+  overflow: hidden;
+  display: block;
+  height: 40px;
+  padding: 2px 5px 2px 0; 
+  img { 
+    width: 40px;
+    height: 40px;
+    float: left;
+  } 
+  span { 
+    display: block;
+    margin-left: 48px;
+    color: black;
+    white-space: nowrap;
+  }
+  .-e { color: #888 }  
+}
+</style>

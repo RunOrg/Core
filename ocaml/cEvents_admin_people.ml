@@ -23,6 +23,76 @@ module RowsFmt = Fmt.Make(struct
   type json t = (string list)
 end)
 
+module Render = struct
+
+  let get_field = function
+    | `Group (gid,`Field name) ->
+      let! group = ohm_req_or (return None) $ MGroup.naked_get gid in  
+      let fields = MGroup.Fields.get group in 
+      let has_name f = f # name = name in
+      return (try Some (List.find has_name fields) with _ -> None)
+    | _ -> return None 
+
+  let format_picker json field =       
+    match field # edit with 
+      | `PickOne  list ->
+	let n    = 
+	  match json with 
+	    | Json.Int i -> i
+	    | Json.Array (Json.Int i :: _) -> i
+	    | _ -> -1 
+	in 
+	begin 
+	  try let! text = ohm $ TextOrAdlib.to_string (List.nth list n) in
+	      return [text] 
+	  with _ -> return [] 
+	end
+
+      | `PickMany list ->
+	let a = try Json.to_list Json.to_int json with _ -> [] in 
+	let text n = 
+	  try let! text = ohm $ TextOrAdlib.to_string (List.nth list n) in
+	      return $ Some text 
+	  with _ -> return None
+	in
+	Run.list_filter text a
+
+      | `LongText
+      | `Textarea
+      | `Date
+      | `Checkbox -> return []
+
+  let empty = return ignore
+
+  let cell gender field json = function 
+    | `Text -> let str = BatOption.default "" (Fmt.String.of_json_safe json) in
+	       Asset_Grid_Text.render str
+    | `DateTime
+    | `Date
+    | `Age       -> let! now  = ohmctx (#time) in
+		    let! time = req_or empty (Fmt.Float.of_json_safe json) in
+		    Asset_Grid_Date.render (time,now)
+    | `Status -> let! status = req_or empty (MMembership.Status.of_json_safe json) in		
+		 let! key = req_or empty begin match status with 
+		   | `NotMember -> None
+		   | `Unpaid -> Some (`Unpaid gender)
+		   | `Pending -> Some (`Pending gender)
+		   | `Invited -> Some (`Invited gender)
+		   | `Member -> Some (`GroupMember gender)
+		   | `Declined -> Some (`Declined gender)
+		 end in
+		 Asset_Status_Tag.render key
+    | `Checkbox -> let checked = json = Json.Bool true in 
+		   Asset_Grid_Checked.render checked
+    | `PickOne -> let! field = ohm_req_or empty field in 
+		  let! items = ohm $ format_picker json field in 
+		  Asset_Grid_Text.render (String.concat ", " items)
+    | `Full -> let! info = req_or empty $ MAvatarGridEval.FullProfile.of_json_safe json in
+	       Asset_Grid_FullInfo.render info
+
+end 
+
+
 let () = define UrlClient.Events.def_people begin fun parents entity access -> 
   
   (* What to do if the group is not available ? *)
@@ -56,20 +126,25 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
     let sort = SortFmt.of_json_safe json in 
     let sort = BatOption.default default_sort sort in
-    
-    let! list = ohm $ O.decay 
-      (Grid.MyGrid.read_summary lid 
-	 ~sort_column:(sort # col) ~descending:(not (sort # asc))
-	 ~count:max_size)
-    in
 
-    let list = List.map (fun (linid, rev) -> 
-      let linid = Id.str $ Grid.MyGrid.LineId.to_id linid in
-      let revnum = try fst $ BatString.split rev "-" with _ -> rev in
-      Json.String (linid ^ "-" ^ revnum)
-    ) list in
+    let! check = ohm $ O.decay (Grid.MyGrid.check_list lid) in
+
+    (* Don't display column-locked lists *)
+    match check with Some `ColumnLocked -> return res | _ -> 
     
-    return $ Action.json [ "list", Json.Array list ] res
+      let! list = ohm $ O.decay 
+	(Grid.MyGrid.read_summary lid 
+	   ~sort_column:(sort # col) ~descending:(not (sort # asc))
+	   ~count:max_size)
+      in
+      
+      let list = List.map (fun (linid, rev) -> 
+	let linid = Id.str $ Grid.MyGrid.LineId.to_id linid in
+	let revnum = try fst $ BatString.split rev "-" with _ -> rev in
+	Json.String (linid ^ "-" ^ revnum)
+      ) list in
+      
+      return $ Action.json [ "list", Json.Array list ] res
 
   end in
 
@@ -95,7 +170,10 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
       let! get, columns = ohm $ O.decay (Grid.MyGrid.read_lines lid (List.map snd rows)) in
 
       let to_html_json json column = 
-	return $ Json.of_string (Json.serialize json)
+	let gender = None in
+	let field  = O.decay $ Render.get_field column.MAvatarGridColumn.eval in 
+	let! html = ohm $ Render.cell gender field json column.MAvatarGridColumn.view in	
+	return $ Json.String (Html.to_html_string html) 
       in
 
       let! rows = ohm $ Run.list_filter begin fun (str, linid) -> 
@@ -115,9 +193,37 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
   O.Box.fill begin 
     
     let! columns = ohm $ O.decay begin 
+
       let! columns, _, _ = ohm_req_or (return []) $ Grid.MyGrid.get_list lid in
-      return columns
-    end in 
+
+      (* ==== This is some version recovery code that inserts the full-profile if missing *)
+      match columns with 
+	| { MAvatarGridColumn.eval = `Profile (_, `Full) } :: _ -> return columns
+	| other -> begin
+
+	  let columns = List.filter (fun c -> match c.MAvatarGridColumn.eval with 
+	    | `Avatar (_,`Name) 
+	    | `Profile (_,`Firstname)
+	    | `Profile (_,`Lastname)
+	    | `Profile (_,`Email) -> false
+	    | _ -> true) columns
+	  in
+	  
+	  let columns = MAvatarGridColumn.({
+	    eval  = `Profile (IInstance.decay access # iid,`Full) ;
+	    label = `text "" ;
+	    show  = true ;
+	    view  = `Full 
+	  }) :: columns in 
+	    
+	  let! () = ohm $ Grid.MyGrid.set_columns lid columns in
+
+	  return columns
+
+	end 
+      (* ==================================== *)
+
+    end in     
 
     let body = Asset_Grid_Block.render (object
       method columns = List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns

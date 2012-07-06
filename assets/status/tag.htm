@@ -20,12 +20,12 @@ span.status {
     text-shadow: 0 -1px 0 #B00;
   }
 
-  &.-website, &.-member {
+  &.-website, &.-member, &.-groupMember {
     background-color: #2A2;
     text-shadow: 0 -1px 0 #080;
   }
 
-  &.-draft {
+  &.-draft, &.-pending {
     background-color: #D70;
     text-shadow: 0 -1px 0 #B60;
   }
@@ -35,9 +35,14 @@ span.status {
     text-shadow: 0 -1px 0 #C60067;
   }
 
-  &.-visitor {
+  &.-visitor, &.-unpaid, &.-declined {
     background-color: #888;
     text-shadow: 0 -1px 0 #555;
+  } 
+
+  &.-invited { 
+    background-color: #22A;
+    text-shadow: 0 -1px 0 #008;
   }
 
 }

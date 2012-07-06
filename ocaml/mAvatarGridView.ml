@@ -14,6 +14,7 @@ include Fmt.Make(struct
     | `Status "s"
     | `Age  "a"
     | `PickOne "po"
+    | `Full "f"
     ]
 
 end)

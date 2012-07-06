@@ -4,7 +4,7 @@ open Ohm
 
 include Ohm.Fmt.Make(struct
   type json t = 
-    [ `Avatar  of IInstance.t * [ `Info | `Name ] 
+    [ `Avatar  of IInstance.t * [ `Name ] 
     | `Profile of IInstance.t * 
 	[ `Firstname 
 	| `Lastname
@@ -17,6 +17,7 @@ include Ohm.Fmt.Make(struct
 	| `Phone
 	| `Cellphone
 	| `Gender 
+	| `Full 
 	]
     | `Group   of IGroup.t * 
 	[ `Status 
@@ -27,3 +28,11 @@ include Ohm.Fmt.Make(struct
     ]
 end)
  
+module FullProfile = Fmt.Make(struct
+  type json t = <
+    fullname "n" : string option ;
+    gender   "g" : [`m|`f] option ;
+    picture  "p" : string option ;
+    email    "e" : string option ;
+  >
+end)

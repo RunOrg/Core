@@ -69,6 +69,13 @@ val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> 'any IIsIn.id O.ru
 val identify_user : 'a IInstance.id -> [`IsSelf] IUser.id -> 'a IIsIn.id O.run
 val identify_avatar : [`IsSelf] IAvatar.id -> [`IsContact] IIsIn.id option O.run
 
+val collect_profile : MProfile.Data.t -> < 
+  name : string option ;
+  sort : string list ; 
+  picture : IFile.t option ;
+  role : string option
+> 
+
 val status : 'a IInstance.id -> 'b ICurrentUser.id -> ( #Ohm.CouchDB.ctx, Status.t ) Ohm.Run.t 
 
 val profile : 'a IAvatar.id -> IProfile.t O.run

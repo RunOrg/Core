@@ -43,20 +43,6 @@ let apply_avatar aid what =
       Json.of_opt Json.of_string (d # name),
       BatOption.map Json.of_string (d # sort)
     end 
-    | `Info -> begin 
-      Json.of_assoc 
-	(BatList.filter_map 
-	   (fun (k,o) -> match o with 
-	     | None -> None
-	     | Some json -> Some (k,json))
-	   [ 
-	     "n", BatOption.map Json.of_string         (d # name) ;
-	     "s", BatOption.map MAvatar.Status.to_json (d # status) ;
-	     "r", BatOption.map Json.of_string         (d # role) ; 
-	     "p", BatOption.map Json.of_string          picture 
-	   ]), 
-      BatOption.map Json.of_string (d # sort) 
-    end
   end
 
 type ctx = O.ctx
@@ -68,14 +54,14 @@ let apply_profile aid what =
   (* We can view the profile to read columns from it. *)
   let  pid = IProfile.Assert.view pid in 
   let! _, profile = ohm_req_or (return empty) $ MProfile.data pid in
-  let retstring s = Json.String s, Some (Json.String (Util.fold_all s)) in
-  let retoptstr = function None -> empty | Some s -> retstring s in
+  let retstring s = return (Json.String s, Some (Json.String (Util.fold_all s))) in
+  let retoptstr = function None -> return empty | Some s -> retstring s in
   let gender    = function 
-    | Some `m -> Json.String "m", None
-    | Some `f -> Json.String "f", None
-    | None    -> empty
+    | Some `m -> return (Json.String "m", None)
+    | Some `f -> return (Json.String "f", None)
+    | None    -> return empty
   in
-  return MProfile.Data.(match what with 
+  MProfile.Data.(match what with 
     | `Firstname -> retstring profile.firstname
     | `Lastname  -> retstring profile.lastname
     | `Email     -> retoptstr profile.email
@@ -87,6 +73,27 @@ let apply_profile aid what =
     | `Country   -> retoptstr profile.country 
     | `City      -> retoptstr profile.city
     | `Gender    -> gender    profile.gender 
+    | `Full      -> begin 
+
+      let collected = MAvatar.collect_profile profile in 
+      let sort = Some begin match collected # sort with 
+	| [] -> Json.Null 
+	| h :: _ -> Json.String h 
+      end in 
+
+      let! pic = ohm $ Run.opt_bind (fun fid -> MFile.Url.get fid `Small) profile.picture in
+
+      let data = (object
+	method fullname = collected # name
+	method email    = profile.email
+	method gender   = profile.gender
+	method picture  = pic 
+      end) in
+
+      return (MAvatarGridEval.FullProfile.to_json data, sort) 
+
+    end
+
   )
     
 let apply_group_core mid what = 

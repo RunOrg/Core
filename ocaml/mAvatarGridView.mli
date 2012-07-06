@@ -8,5 +8,6 @@ include Ohm.Fmt.FMT with type t =
   | `Checkbox
   | `Age 
   | `PickOne
+  | `Full
   ]
 

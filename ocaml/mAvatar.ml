@@ -45,7 +45,7 @@ let email_username email =
       prefix ^ "..."
   with Not_found -> email 
 
-let data_from ~lastname ~firstname ~email ~picture = 
+let collect ~lastname ~firstname ~email ~picture = 
   let ln = Util.fold_all lastname and fn = Util.fold_all firstname in
   (object
     method name    = 
@@ -69,9 +69,9 @@ let data_from ~lastname ~firstname ~email ~picture =
 	else [ ln ; fn ; ln ^ " " ^ fn ; fn ^ " " ^ ln ]
    end)
 
-let data_from_profile details = 
+let collect_profile details = 
   MProfile.Data.(
-    data_from 
+    collect 
       ~lastname:details.lastname
       ~firstname:details.firstname
       ~email:details.email
@@ -89,7 +89,7 @@ let self_data isin =
   let! details = ohm $ MProfile.details profile in 
   match details with  
     | None         -> return default
-    | Some details -> return $ data_from 
+    | Some details -> return $ collect 
       ~lastname:(details # lastname)
       ~firstname:(details # firstname)
       ~email:(details # email)
@@ -654,7 +654,7 @@ let _ =
   let! id = ohm_req_or (return ()) $ _getid instance user in
   
   let update avatar = 
-    let data = data_from_profile data in
+    let data = collect_profile data in
     if 
       data # name <> avatar # name 
       || data # picture <> avatar # picture
