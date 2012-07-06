@@ -1,0 +1,198 @@
+<div class="grid">
+  <div {$w} class="-wait">
+    { `Grid_Block_Wait }
+    <small>{ `Grid_Block_Wait_Thanks }</small>
+  </div>
+  <div {$e} class="empty-list">
+    { `Grid_Block_Empty } 
+  </div>
+  <table {$t} style="display:none">
+    <thead>
+      <tr>
+	{#columns}
+	  <td><a href="javascript:void(0)">{this | ohm | esc}</a></td>
+	{/#}
+      </tr>
+    </thead>
+    <tbody>      
+    </tbody>
+  </table>
+</div> 
+
+<script type="cols:int,urlRows:json,urlSort:json"> 
+@gridCache = @gridCache || { 
+  odat : {}
+  ndat : {} 
+  nc   : 0
+  max  : 2048
+  add  : (key,value) -> 
+    return @ndat[key] = value if key of @ndat 
+    @ndat[key] = value
+    if ++@nc > @max 
+      @odat = @ndat
+      @ndat = {}
+      @nc   = 0
+    value
+  get  : (key) -> 
+    return @ndat[key] if key of @ndat  
+    if key of @odat
+      return @add key, @odat[key] 
+    null
+} 
+
+do here.$e.hide
+
+v = 0
+b = []
+w = false
+current = null
+
+sel = (idrev) -> 
+  $("#"+idrev)
+
+# == React to receiving content (HTML) data for a row from the server =======
+onRow = (idrev) => 
+  cells = gridCache.get(idrev) 
+  html = []
+  html.push("<td>",cell,"</td>") for cell in cells
+  sel(idrev).html(html.join("")).removeClass("-loading")  
+ 
+# == Load a list of rows from the server ====================================
+batch = () ->
+  return if w 
+  return if b.length < 1
+  w = true
+  OhmBox.remote urlRows, b, (data) -> 
+    if "list" of data
+      for row of data.list
+        gridCache.add row, data.list[row] 
+        onRow row 
+    w = false
+    do batch
+  b = []
+
+# == Add items to the batch list, waiting for a batch to start ==============
+loadRow = (idrev) -> 
+  return if idrev in b
+  b.push idrev
+  return if w 
+  setTimeout batch, 0
+
+# == Apply a list of items ==================================================
+apply = (ifv, list) -> 
+  do here.$w.remove
+  return if v > ifv
+  if list.length == 0
+    do here.$t.hide 
+    do here.$e.show
+  else
+    html = []
+    for idrev in list 
+      cells = gridCache.get idrev
+      if cells is null
+        html.push "<tr id='", idrev, "' class='-loading'>" 
+        html.push "<td colspan='", cols, "'></td>"
+        html.push "</tr>"
+      else
+        html.push "<tr id='", idrev, "'>"
+        html.push "<td>", cell, "</td>" for cell in cells
+        html.push "</tr>"
+    here.$t.children("tbody").html(html.join(""))
+    do here.$t.show
+    do here.$e.hide 
+    do onScroll
+
+# == Load a list from the server ===========================================
+load = (col,asc) -> 
+  ifv = ++v
+  current = [col,asc] 
+  OhmBox.remote urlSort, { col: col, asc: asc }, (data) ->  
+    if "list" of data
+      apply ifv, data.list 
+    else
+      load col, asc
+
+load 0, true
+
+# == React to scrolling ===================================================
+onScroll = () -> 
+
+  $b = $ window
+  dt = $b.scrollTop()
+  db = dt + $b.height()
+
+  here.$t.find(".-loading").each () -> 
+    $t = $ @ 
+    et = $t.offset().top
+    eb = et + $t.height() 
+
+    if (et <= db && eb >= dt)
+      loadRow $t.attr("id")      
+
+# == Toggle a column ======================================================
+here.$t.find("thead td").click () ->
+  col = $(@).prevAll().length 
+  load col, (if current[0] == col then !current[1] else true) 
+
+</script> 
+
+<style>
+
+.grid {
+
+  margin: 10px;
+  width: 906px;
+  background-color: white;
+  border: 1px solid #AAA;
+
+  table { 
+    margin: -1px;
+    width: 908px;
+    border-collapse: collapse;
+    border: 1px solid #888;
+
+    tbody td {
+      pading: 3px;
+      height: 40px;       
+    } 
+
+    tbody .-loading td {
+      background-color: #EEE;
+    }
+
+    thead td {
+      padding: 0;
+      border: 1px solid #888;
+      a { 
+        color: white;
+        font-size: 13px;
+        text-shadow: 0 -1px 0 #888888;
+        text-align: center;
+        display: block; 
+        height: 22px;
+        line-height: 22px;
+        background-color: #BBB;
+        background: -webkit-linear-gradient(top,#BBB,#AAA);
+        background: -moz-linear-gradient(top,#BBB,#AAA);
+        &:hover {
+          text-shadow: 0 -1px 0 #888;
+          background-color: #CCC;
+          background: -webkit-linear-gradient(top,#CCC,#BBB);
+          background: -moz-linear-gradient(top,#CCC,#BBB);
+        }
+      }  
+    } 
+  } 
+  
+  .-wait {
+    padding: 70px 0 20px;
+    color: #888;
+    text-align: center;
+    background: url(/public/icon/ajax-load.gif) center 20% no-repeat white; 
+    font-size: 24px;
+    small { display: block; color: #BBB } 
+  }
+
+}
+
+</style>
