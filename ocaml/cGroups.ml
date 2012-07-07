@@ -10,6 +10,13 @@ let contents access =
   
   O.Box.fill $ O.decay begin
 
+    let! eid = ohm begin 
+      if IEntity.to_string eid = "" then 
+	let  namer = MPreConfigNamer.load (access # iid) in
+	MPreConfigNamer.entity IEntity.members namer
+      else return eid
+    end in 
+      
     let! avatars = ohm begin
 
       let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in 
