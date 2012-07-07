@@ -1,8 +1,34 @@
-{?directory}
-  { this | ohm } 
-{else}
-  Forbidden
-{/?}
+<div class="group-contents">
+
+  {?actions}
+    <ul class="actions">
+      {?send} 
+        <li><a href="{this}" class="action-button">{ `Group_Action_Send }</a></li>
+      {/?}
+      {?admin}
+        <li class="-r"><a href="{admin}" class="action-button -admin">{ `Group_Action_Admin }</a></li>
+        <li class="-r"><a href="{invite}" class="action-button -green">{ `Group_Action_Invite }</a></li>
+      {/?}
+    </ul>
+  {/?}
+    
+  {?directory}
+    { this | ohm } 
+  {else}
+    Forbidden
+  {/?}
+</div>
+
+<style>
+
+.group-contents .actions {
+  background-color: #EEEEEE;
+  border-bottom: 1px solid #CCCCCC;
+  margin: 0;
+  padding: 5px 15px;
+}
+
+</style>
 
 
 <script type="id:IEntity.t">

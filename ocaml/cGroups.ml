@@ -17,24 +17,53 @@ let contents access =
       else return eid
     end in 
       
-    let! avatars = ohm begin
+    let! avatars, actions = ohm begin
 
-      let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in 
-      let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
+      let none = return (None, None) in
+
+      let! entity = ohm_req_or none $ MEntity.try_get access eid in 
+      let! entity = ohm_req_or none $ MEntity.Can.view entity in 
       let  gid    = MEntity.Get.group entity in 
 
-      let! group  = ohm_req_or (return None) $ MGroup.try_get access gid in
-      let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
+      let! group  = ohm_req_or none $ MGroup.try_get access gid in
+      let! group  = ohm_req_or none $ MGroup.Can.list group in
       let  gid    = MGroup.Get.id group in 
 
       let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
 
-      return (Some avatars) 
+      let no_wall = return (Some avatars, None) in
+
+      let! feed   = ohm $ MFeed.get_for_entity access eid in
+      let! feed   = ohm $ MFeed.Can.read feed in
+      let! feed   = req_or no_wall feed in 
+
+      let send_url = 
+	Action.url UrlClient.Forums.see (access # instance # key)
+	  [ IEntity.to_string eid ] 
+      in
+
+      let not_admin = return (Some avatars, if avatars = [] then None else Some (object
+	method admin = None
+	method send  = Some send_url
+      end)) in
+
+      let! admin = ohm_req_or not_admin $ MEntity.Can.admin entity in 
+      
+      return (Some avatars, Some (object
+	method send = if avatars = [] then None else Some send_url
+	method admin = Some (object
+	  method invite = Action.url UrlClient.Members.invite (access # instance # key) 
+	    [ IEntity.to_string eid ]
+	  method admin  = Action.url UrlClient.Members.admin (access # instance # key)
+	    [ IEntity.to_string eid ] 
+	end)
+      end))
 
     end in 
 
     Asset_Group_Page.render (object
       method id        = eid
+      method actions   = actions
       method directory = BatOption.map CAvatar.directory avatars
     end)
   end
