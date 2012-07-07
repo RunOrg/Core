@@ -14,6 +14,7 @@ module Actions = struct
   open CStart
   open CUpload
   open CEvents
+  open CGroups
   open Splash
 end
 
