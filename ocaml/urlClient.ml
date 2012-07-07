@@ -44,17 +44,13 @@ module Like = UrlClient_like
 module Comment = UrlClient_comment
 module Item = UrlClient_item
 module MiniPoll = UrlClient_miniPoll 
+module Members = UrlClient_members
+module Events = UrlClient_events
+module Forums = UrlClient_forums
 
 module Home = struct
   let home, def_home = root "home"
 end
-
-module Members = struct
-  let home, def_home = root "members"
-end
   
-module Forums = struct
-  let home, def_home = root "forums"
-end
 
-module Events = UrlClient_events
+
