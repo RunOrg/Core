@@ -1,11 +1,16 @@
-{ directory | ohm } 
+{?directory}
+  { this | ohm } 
+{else}
+  Forbidden
+{/?}
+
 
 <script type="id:IEntity.t">
 id = "#" + id
 $(id).closest("ul").find(".-selected").removeClass("-selected")
 $(id).addClass("-selected")
 
-top = $(id).position().top
+top = $(id).position()?.top || 0
 max = 200 - 30;
 
 $contents = $(id).closest(".groups").children(".-contents")

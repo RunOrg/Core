@@ -8,10 +8,27 @@ let contents access =
 
   let! eid = O.Box.parse IEntity.seg in
   
-  O.Box.fill begin
+  O.Box.fill $ O.decay begin
+
+    let! avatars = ohm begin
+
+      let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in 
+      let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
+      let  gid    = MEntity.Get.group entity in 
+
+      let! group  = ohm_req_or (return None) $ MGroup.try_get access gid in
+      let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
+      let  gid    = MGroup.Get.id group in 
+
+      let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
+
+      return (Some avatars) 
+
+    end in 
+
     Asset_Group_Page.render (object
-      method id = eid
-      method directory = return ignore
+      method id        = eid
+      method directory = BatOption.map CAvatar.directory avatars
     end)
   end
 
