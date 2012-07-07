@@ -1,0 +1,17 @@
+{ directory | ohm } 
+
+<script type="id:IEntity.t">
+id = "#" + id
+$(id).closest("ul").find(".-selected").removeClass("-selected")
+$(id).addClass("-selected")
+
+top = $(id).position().top
+max = 200 - 30;
+
+$contents = $(id).closest(".groups").children(".-contents")
+
+if top > max
+  $contents.css("margin-top",(top - max).toFixed() + "px")
+else
+  $contents.css("margin-top","auto")
+</script>
