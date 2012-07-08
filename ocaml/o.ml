@@ -42,6 +42,10 @@ end
 let ctx = function
   | `FR -> new ctx Asset_AdLib.fr
 
+let put action = 
+  if Ohm.Util.role = `Put then 
+    ignore (Ohm.Run.eval (ctx `FR) action) 
+
 type 'a run = (ctx,'a) Run.t
 
 module AsyncDB = CouchDB.Convenience.Config(struct let db = db "async" end)

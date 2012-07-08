@@ -15,6 +15,7 @@ module Access    = MEntity_access
 module All       = MEntity_all
 module Satellite = MEntity_satellite
 module Signals   = MEntity_signals
+module Migrate   = MEntity_migrate
 
 type 'relation t = 'relation MEntity_can.t
 

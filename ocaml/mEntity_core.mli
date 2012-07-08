@@ -74,6 +74,12 @@ module Store : sig
     -> unit
     -> t O.run
 
+  val migrate :
+        O.ctx # Ohm.Async.manager
+    ->  string
+    -> (IEntity.t -> Init.t -> Init.t option O.run)
+    -> (O.ctx,unit) Ohm.Async.task 
+
   module Signals : sig
     val version_create : (version, unit O.run) Ohm.Sig.channel
     val update : (t, unit O.run) Ohm.Sig.channel
