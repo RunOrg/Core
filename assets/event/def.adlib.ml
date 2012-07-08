@@ -75,6 +75,8 @@
 | `Event_People_Title
 | `Event_People_Link
 | `Event_People_Sub
+| `Event_DraftNoPeople
+| `Event_DraftNoPeople_Link 
 
 | `Event_Access_Title
 | `Event_Access_Link

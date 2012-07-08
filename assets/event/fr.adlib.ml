@@ -83,6 +83,9 @@ end
 | `Event_People_Link -> "Gestion des participants"
 | `Event_People_Sub -> "Invitez des participants et validez les demandes d'inscription"
 
+| `Event_DraftNoPeople -> "Cette activité n'a pas encore été publiée : vous ne pouvez pas encore y inviter des participants."
+| `Event_DraftNoPeople_Link -> "Publier cette activité"
+
 | `Event_Access_Title -> "Visibilité et droits"
 | `Event_Access_Link -> "Visibilité et droits"
 | `Event_Access_Sub -> "Déterminez qui peut voir, s'inscrire ou administrer cette activité"

@@ -101,10 +101,12 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
   let fail = O.Box.fill begin
 
+    let body = Asset_Event_DraftNoPeople.render (parents # edit # url) in
+
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ] 
       method here = parents # people # title
-      method body = return ignore
+      method body = body
     end)
 
   end in 
