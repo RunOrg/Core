@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let session = "R"
+let session = "S"
 
 let start cuid res = 
 
