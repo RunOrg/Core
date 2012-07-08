@@ -114,7 +114,7 @@ let albumSimple = template "AlbumSimple"
 
 let course12sessions = template "Course12sessions"
   ~old:"course-12sessions"
-  ~kind:`Course
+  ~kind:`Event
   ~name:"Cours 12 séances"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances. Peut être renseigné par l'élève ou le prof"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
@@ -325,7 +325,7 @@ let course12sessions = template "Course12sessions"
 
 let course12sessionsFitness = template "Course12sessionsFitness"
   ~old:"course-12sessions-fitness"
-  ~kind:`Course
+  ~kind:`Event
   ~name:"Cours 12 séances fitness"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances et de réccupérer les retours des élèves. Peut être renseigné par l'élève et/ou le prof"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
@@ -680,7 +680,7 @@ let course12sessionsFitness = template "Course12sessionsFitness"
 
 let courseSimple = template "CourseSimple"
   ~old:"course-simple"
-  ~kind:`Course
+  ~kind:`Event
   ~name:"Cours Simple"
   ~desc:"Ouvert à inscription, organisé à une date fixe."
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
@@ -796,7 +796,7 @@ let courseSimple = template "CourseSimple"
 
 let courseStage = template "CourseStage"
   ~old:"course-stage"
-  ~kind:`Course
+  ~kind:`Event
   ~name:"Stage"
   ~desc:"organisez un stage sur plusieurs jours"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
@@ -926,7 +926,7 @@ let courseStage = template "CourseStage"
 
 let courseTraining = template "CourseTraining"
   ~old:"course-training"
-  ~kind:`Course
+  ~kind:`Event
   ~name:"Formation"
   ~desc:"Organisez une formation"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
@@ -5213,7 +5213,7 @@ let pollYearly = template "PollYearly"
 
 let subscriptionAuto = template "SubscriptionAuto"
   ~old:"subscription-auto"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion Automatique"
   ~desc:"Sans validation par un responsable"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
@@ -5267,7 +5267,7 @@ let subscriptionAuto = template "SubscriptionAuto"
 
 let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~old:"subscription-datetodate"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion date à date (annuelle, semestrielle, autre)"
   ~desc:"Adhésion pour laquelle vous définissez une date de début et de fin de validité"
   ~propagate:"members"
@@ -5438,7 +5438,7 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
 
 let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
   ~old:"subscription-datetodate-auto"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
   ~propagate:"members"
@@ -5564,7 +5564,7 @@ let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
 
 let subscriptionForever = template "SubscriptionForever"
   ~old:"subscription-forever"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion Permanente"
   ~desc:"Adhésion sans date de fin de validité"
   ~propagate:"members"
@@ -5619,7 +5619,7 @@ let subscriptionForever = template "SubscriptionForever"
 
 let subscriptionForeverAuto = template "SubscriptionForeverAuto"
   ~old:"subscription-forever-auto"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion permanente automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion sans date de fin de validité"
   ~propagate:"members"
@@ -5674,7 +5674,7 @@ let subscriptionForeverAuto = template "SubscriptionForeverAuto"
 
 let subscriptionSemester = template "SubscriptionSemester"
   ~old:"subscription-semester"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion Semestrielle"
   ~desc:"Dure six mois, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
@@ -5747,7 +5747,7 @@ let subscriptionSemester = template "SubscriptionSemester"
 
 let subscriptionYear = template "SubscriptionYear"
   ~old:"subscription-year"
-  ~kind:`Subscription
+  ~kind:`Group
   ~name:"Adhésion Annuelle"
   ~desc:"Dure un an, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)

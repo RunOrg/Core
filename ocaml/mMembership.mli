@@ -142,7 +142,7 @@ module Field : sig
       name  : string ;
       label : TextOrAdlib.t ;
       edit  : FieldType.t ;
-      valid : [ `required ] list ;
+      required : bool
     > ;;
 
   val has_stats : t -> bool

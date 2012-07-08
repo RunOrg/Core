@@ -25,15 +25,48 @@
 
     for (var i = 0; i < verticals.length; ++i) {
 
+	var entities = {};
+
+	for (var v = 0; v < versions.length; ++v) {
+	    var version = versions[v];
+	    if (-1 === version.applies.indexOf(id)) continue;
+	    for (var p = 0; p < version.payload.length; ++p) {
+		switch(version.payload[p][0]) {
+		case 'Entities':
+		    var payload = version.payload[p][1];
+		    switch (payload[0]) {
+		    case 'Create':
+			var entity = entities[payload[1].name] || {};
+			entity.template = payload[1].template;
+			entities[payload[1].name] = entity;
+			break;
+		    case 'Update':
+			var entity = entities[payload[1].name] || {};
+			entity.title = payload[1].title;
+			entity.public = payload[1].public;
+			entity.draft = payload[1].draft;
+			entity.data = payload[1].data;
+			entities[payload[1].name] = entity;
+			break;
+		    default: 
+			// console.log(payload);			
+		    }
+		    break;
+		default: 
+		    // console.log(version.payload[p]);
+		}
+	    }
+	}
+
 	var doc = verticals[i];
 	var id  = doc._id;
 
 	var key = camelCase(id.replace('v:',''));
 	var Id = ucfirst(key); 
 
-	var entities = [];
+	var templates = [];
 	['group','forum','album','poll','course','event','subscription'].forEach(function(k) {
-	    entities.push.apply(entities,doc[k]);
+	    templates.push.apply(templates,doc[k]);
 	});
 
 	console.log('(* ========================================================================== *)\n');
@@ -47,7 +80,30 @@
 
 	console.log('  Template.([');
 	
-	entities.forEach(function(tmpl) {
+	for (id in entities) {
+
+	    if (!entities[id].title) continue;
+	    if (!entities[id].template) continue;
+
+	    console.log('    initial "%s" %s', id, camelCase(entities[id].template));
+	    console.log('      ~name:(adlib "%s" ~old:"%s" "%s") [', 
+			ucfirst(camelCase(entities[id].title)),
+			entities[id].title,
+			i18n[entities[id].title]);
+
+	    for (k in entities[id].data) {
+		var v = entities[id].data[k];
+		console.log('       "%s", "%s" ;',k,v.replace(/"/g,'\\"')); 
+	    } 
+
+	    console.log('      ] ;');
+	}
+
+	console.log('  ])');
+
+	console.log('  Template.([');
+	
+	templates.forEach(function(tmpl) {
 	    console.log('    %s ;', camelCase(tmpl));
 	});
 

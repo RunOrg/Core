@@ -51,12 +51,32 @@ module FieldType = Fmt.Make(struct
 end)
 
 module Field = Fmt.Make(struct
+
+  module Old = Fmt.Make(struct
+    type json t = <
+      name  : string ;
+      label : TextOrAdlib.t ;
+      edit  : FieldType.t ;
+      valid : [ `required | `max of int ] list 
+    > 
+  end)
+
   type json t = <
     name  : string ;
     label : TextOrAdlib.t ;
     edit  : FieldType.t ;
-    valid : [ `required ] list 
-  > 
+    required "req" : bool 
+  > ;;
+  
+  let t_of_json json = 
+    try t_of_json json with exn -> 
+      match Old.of_json_safe json with None -> raise exn | Some obj -> 
+	(object
+	  method name = obj # name
+	  method label = obj # label 
+	  method edit = obj # edit 
+	  method required = List.mem `required (obj # valid) 
+	 end)
 end)
 
 include Fmt.Make(struct

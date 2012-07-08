@@ -80,13 +80,25 @@ type template_data = {
   t_propg  : string option 
 } 
 
+type init = {
+  i_key : string ;
+  i_tmpl : template ;
+  i_name : adlib ;
+  i_data : (string * string) list ;
+}
+
+let initial i_key i_tmpl ~name i_data = {
+  i_key ; i_tmpl ; i_data ; i_name = name 
+}
+
 type vertical = string
 type vertical_data = {
   v_id   : vertical ;
   v_old  : string option ;
   v_name : adlib ;
   v_tmpl : template list ;
-  v_arch : bool 
+  v_arch : bool ;
+  v_init : init list ;
 }
 
 type catalog = (adlib * (vertical * adlib * (adlib option)) list) list
@@ -126,13 +138,14 @@ let template id ?old ~kind ~name ~desc ?propagate
   } :: !templates ;
   id 
 
-let vertical id ?old ?(archive=false) ~name tmpl = 
+let vertical id ?old ?(archive=false) ~name init tmpl = 
   verticals := {
     v_id   = id ;
     v_old  = old ;
     v_name = adlib ("Vertical_"^id^"_Name") name ;
     v_tmpl = tmpl ;
     v_arch = archive ;
+    v_init = init ;
   } :: !verticals ;
   id
 
@@ -245,8 +258,8 @@ module Build = struct
       Printf.sprintf "`%s -> [\n    %s ]" t.t_id 
 	(String.concat ";\n    " 
 	   (List.map (fun j -> Printf.sprintf 
-	     "(object\n      method name = %S\n      method label = `label `%s\n      method valid = [%s]\n      method edit = %s\n    end)"
-	     j.j_name j.j_label (if j.j_req then "`required" else "") 
+	     "(object\n      method name = %S\n      method label = `label `%s\n      method required = %s\n      method edit = %s\n    end)"
+	     j.j_name j.j_label (if j.j_req then "true" else "false") 
 	     (match j.j_type with 
 	       | `Textarea -> "`Textarea"
 	       | `Checkbox -> "`Checkbox"
