@@ -36,19 +36,18 @@ let get iid =
   let! data = ohm $ MyTable.get iid in
   return $ BatOption.default default data
 
-let group name iid = 
+(* Reverse compatibility with silly old name for the all-members group name.
+   NEVER let a non-techie name things... again. *)
+let rec find list name = 
+  match ListAssoc.try_get list name with 
+    | Some id -> Some id 
+    | None -> if name = "members" then find list "entity.sample.group-simple.allmembers.name" else None
 
-  (* Reverse compatibility with silly old name for the all-members group name.
-     NEVER let a non-techie name things... again. *)
-  let rec find list name = 
-    match ListAssoc.try_get list name with 
-      | Some id -> Some id 
-      | None -> if name = "members" then find list "entity.sample.group-simple.allmembers.name" else None
-  in
+let group name iid = 
 	  
   let update iid = 
     let! data = ohm $ get iid in
-    match ListAssoc.try_get (data # groups) name with 
+    match find (data # groups) name with 
       | Some id -> return (id, `keep)
       | None -> let id = IGroup.gen () in 
 		let data = object
@@ -65,7 +64,7 @@ let entity name iid =
 
   let update iid = 
     let! data = ohm $ get iid in
-    match ListAssoc.try_get (data # entities) name with 
+    match find (data # entities) name with 
       | Some id -> return (id, `keep )
       | None    -> let id = IEntity.gen () in 
 		   let data = object
