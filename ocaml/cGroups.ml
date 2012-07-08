@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Admin = CGroups_admin
+
 let contents access = 
 
   let! eid = O.Box.parse IEntity.seg in

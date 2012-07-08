@@ -38,7 +38,7 @@
 
 | `Event_Forbidden_Title -> "Page inaccessible"
 | `Event_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
-| `Event_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer une nouvelle activité.."
+| `Event_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer une nouvelle activité..."
 
 | `Event_Section `Wall -> "Discussions"
 | `Event_Section `People -> "Inscrits"
