@@ -1,0 +1,40 @@
+<div class="join-edit">
+
+  <div class="-top"> 
+    {?picture}<img src="{this}"/>{/?}
+    <span class="-name">{name}</span> 
+    {?status}{ this | Asset_Status_Tag.render | ohm }{/?}
+  </div>
+  
+</div>
+
+<style>
+.join-edit {
+
+  .-top {
+
+    background-color: white;
+    border: 1px solid #888888;
+    height: 40px;
+    margin: 5px;
+    padding: 5px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      float: left;
+    } 
+
+    span {
+      display: block;
+      margin-left: 48px;
+    }
+
+    .status {
+      float: right;
+      margin-top: 3px;
+    }
+
+  }
+}
+</style>
