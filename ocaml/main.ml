@@ -16,6 +16,7 @@ module Actions = struct
   open CEvents
   open CGroups
   open CHome
+  open CForums
   open Splash
 end
 

@@ -1,0 +1,137 @@
+<div class="forums">
+
+  {=pub}
+  <div class="-col">
+    <h2>{ `Forums_Public }</h2>
+    <div class="-subtitle">{ `Forums_Public_Subtitle }</div>
+    
+    {#list}
+    <a class="-forum" href="{url}">
+      {title}
+      <span class="-details">
+	<em>{messages | string_of_int | esc }</em> { `Forums_Messages messages }  
+	{?files}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Files this }{/?}  
+	{?pictures}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Pictures this }{/?}  
+      </span>
+    </a>
+    {else}
+    <div class="-empty">
+      { `Forums_Public_Empty } 
+    </div>
+    {/#}
+    
+    {?create}
+    <div class="-create">
+      <a href="{this}" class="action-button -green">
+	{ `Forums_Public_Create } 
+      </a>
+    </div>
+    {/?}
+    
+  </div>
+  {/=}  
+
+  {=priv}
+  <div class="-col" style="float:right">
+    <h2>{ `Forums_Private }</h2>
+    <div class="-subtitle">{ `Forums_Private_Subtitle }</div>
+
+    {#list}
+    <a class="-forum" href="{url}">
+      {if group}
+        <span class="-group">{ `Forums_OfGroup } &laquo; <em>{title}</em> &raquo;</span>
+      {else}
+	{title}
+      {/if}
+      <span class="-details">
+	<em>{messages | string_of_int | esc }</em> { `Forums_Messages messages }  
+	{?files}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Files this }{/?}  
+	{?pictures}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Pictures this }{/?}  
+      </span>
+    </a>
+    {else}
+    <div class="-empty">
+      { `Forums_Private_Empty } 
+    </div>
+    {/#}
+    
+    {?create}
+    <div class="-create">
+      <a href="{this}" class="action-button -green">
+	{ `Forums_Private_Create } 
+      </a>
+    </div>
+    {/?}
+    
+  </div>
+  {/=}
+  
+</div>
+
+<style>
+
+.forums {
+
+  .-col {
+    width: 460px;
+    float: left;
+  }
+
+  h2 {
+    font-weight: normal;
+    margin: 10px 0 2px;
+  }
+
+  .-subtitle {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 12px;
+  }
+
+  .-forum {
+    display: block;
+    color: black;
+    border-top: 1px solid #DDD;
+    padding: 12px 24px;
+  }
+
+  .-empty {
+    font-size: 30px;
+    color: #CCC;
+    border-top: 1px solid #DDD;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .-details {
+    display: block; 
+    font-size: 12px;
+    color: #888;
+
+    em {
+      font-style: normal;
+      color: #333;
+    }
+  }
+
+  .-group {
+    color: #555;
+
+    em {
+      font-style: normal;
+      color: #27A;
+    }
+  }
+
+  .-create {
+    border-top: 1px solid #DDD;
+    padding: 8px;
+    text-align: center;
+    background-color: #EEE;
+
+    .action-button {
+      display: inline-block;
+    }
+  }
+}
+</style>
