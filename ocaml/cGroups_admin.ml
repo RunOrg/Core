@@ -6,7 +6,11 @@ open BatPervasives
 
 open CGroups_admin_common
 
+module People = CGroups_admin_people
+module Join   = CGroups_admin_join
+
 let () = define UrlClient.Members.def_admin begin fun parents entity access -> 
+
   O.Box.fill begin 
     let choices = Asset_Admin_Choice.render [
 
@@ -32,4 +36,5 @@ let () = define UrlClient.Members.def_admin begin fun parents entity access ->
       method body  = choices
     end)
   end
+
 end

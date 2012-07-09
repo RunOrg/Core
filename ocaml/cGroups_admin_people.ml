@@ -4,15 +4,15 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-open CEvents_admin_common
+open CGroups_admin_common
 
-let () = define UrlClient.Events.def_people begin fun parents entity access -> 
+let () = define UrlClient.Members.def_people begin fun parents entity access -> 
   
   (* What to do if the group is not available ? *)
 
   let fail = O.Box.fill begin
 
-    let body = Asset_Event_DraftNoPeople.render (parents # edit # url) in
+    let body = Asset_Group_Missing.render (parents # home # url) in
 
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ] 
@@ -24,7 +24,7 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
 
   let join_url aid = 
-    Action.url UrlClient.Events.join (access # instance # key) 
+    Action.url UrlClient.Members.join (access # instance # key) 
       [ IEntity.to_string (MEntity.Get.id entity) ;
 	IAvatar.to_string aid ] 
   in

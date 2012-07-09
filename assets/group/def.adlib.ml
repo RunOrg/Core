@@ -22,3 +22,5 @@
 | `Group_Forbidden_Problem 
 | `Group_Forbidden_Solution
   
+| `Group_Missing
+| `Group_Missing_Link 

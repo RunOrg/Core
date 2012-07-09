@@ -21,3 +21,6 @@
 | `Group_Forbidden_Title -> "Page inaccessible"
 | `Group_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
 | `Group_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits."
+
+| `Group_Missing -> "Le contenu de ce groupe n'est pas disponible actuellement en raison d'un problème technique."
+| `Group_Missing_Link -> "Retour au groupe"
