@@ -63,7 +63,7 @@ let admin = template "Admin"
 
 let albumSimple = template "AlbumSimple"
   ~old:"album-simple"
-  ~kind:`Album
+  ~kind:`Forum
   ~name:"Album Photo Simple"
   ~desc:"Contribution libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
