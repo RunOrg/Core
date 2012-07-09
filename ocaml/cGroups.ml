@@ -9,15 +9,15 @@ module Admin = CGroups_admin
 let contents access = 
 
   let! eid = O.Box.parse IEntity.seg in
+
+  let! members_eid = ohm begin 
+    let  namer = MPreConfigNamer.load (access # iid) in
+    O.decay $ MPreConfigNamer.entity IEntity.members namer
+  end in 
+
+  let eid = if IEntity.to_string eid = "" then members_eid else eid in
   
   O.Box.fill $ O.decay begin
-
-    let! eid = ohm begin 
-      if IEntity.to_string eid = "" then 
-	let  namer = MPreConfigNamer.load (access # iid) in
-	MPreConfigNamer.entity IEntity.members namer
-      else return eid
-    end in 
       
     let! avatars, actions = ohm begin
 
@@ -33,26 +33,33 @@ let contents access =
 
       let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
 
-      let no_wall = return (Some avatars, None) in
+      let! send_url = ohm begin 
 
-      let! feed   = ohm $ MFeed.get_for_entity access eid in
-      let! feed   = ohm $ MFeed.Can.read feed in
-      let! feed   = req_or no_wall feed in 
+	if eid = members_eid then 
 
-      let send_url = 
-	Action.url UrlClient.Forums.see (access # instance # key)
-	  [ IEntity.to_string eid ] 
-      in
+	  return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
+
+	else 
+	  
+	  let! feed   = ohm $ MFeed.get_for_entity access eid in
+	  let! feed   = ohm $ MFeed.Can.read feed in
+	  let! feed   = req_or (return None) feed in 
+	  
+	  return $ Some 
+	    (Action.url UrlClient.Forums.see (access # instance # key)
+	       [ IEntity.to_string eid ])
+
+      end in 
 
       let not_admin = return (Some avatars, if avatars = [] then None else Some (object
 	method admin = None
-	method send  = Some send_url
+	method send  = send_url
       end)) in
 
       let! admin = ohm_req_or not_admin $ MEntity.Can.admin entity in 
       
       return (Some avatars, Some (object
-	method send = if avatars = [] then None else Some send_url
+	method send = if avatars = [] then None else send_url
 	method admin = Some (object
 	  method invite = Action.url UrlClient.Members.invite (access # instance # key) 
 	    [ IEntity.to_string eid ]
