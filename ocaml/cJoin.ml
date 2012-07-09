@@ -34,7 +34,7 @@ let template group =
 	end 
   ) (OhmForm.begin_object []) (MGroup.Fields.get group)
 
-let status_edit aid mid access group profile = fun edit _ self res ->
+let status_edit aid mid access kind group profile = fun edit _ self res ->
 
   let diffs = 
     (   match edit # invite with Some _ -> [ `Invite    ] | None -> [] ) 
@@ -49,8 +49,8 @@ let status_edit aid mid access group profile = fun edit _ self res ->
   let! mbr = ohm $ O.decay (MMembership.get mid) in 
   let  mbr = BatOption.default 
     (MMembership.default ~mustpay:false ~group:(IGroup.decay gid) ~avatar:aid) mbr in
-  
-  let! html = ohm $ Top.render profile mbr.MMembership.status self in   
+
+  let! html = ohm $ Top.render kind profile mbr.MMembership.status self in   
   return $ Action.json [ "top", Html.to_json html ] res
 
 let box entity access fail wrapper = 
@@ -58,6 +58,8 @@ let box entity access fail wrapper =
   let! aid = O.Box.parse IAvatar.seg in 
 
   let  draft  = MEntity.Get.draft entity in 
+
+  let  kind = MEntity.Get.kind entity in 
 
   let  gid = MEntity.Get.group entity in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
@@ -69,7 +71,7 @@ let box entity access fail wrapper =
 
   let! mid = ohm $ O.decay (MMembership.as_admin (MGroup.Get.id group) aid) in 
 
-  let! status_edit = O.Box.react StatusEditFmt.fmt (status_edit aid mid access group profile) in
+  let! status_edit = O.Box.react StatusEditFmt.fmt (status_edit aid mid access kind group profile) in
 
   let! data_edit = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     return res
@@ -93,7 +95,7 @@ let box entity access fail wrapper =
     end in 
 
     let body = Asset_Join_Edit.render (object
-      method top  = Top.render profile mbr.MMembership.status status_edit
+      method top  = Top.render kind profile mbr.MMembership.status status_edit
       method form = fields
     end) in
 
