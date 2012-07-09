@@ -31,7 +31,7 @@ let render_top profile status status_edit =
   let actions = match status with 
     | `NotMember -> [ action ~invite:true ~user:false ~admin:true  true  `Join_Edit_Event_Invite ;
 		      action              ~user:true  ~admin:true  false `Join_Edit_Event_Add ]
-    | `Declined  -> [ action              ~user:true  ~admin:true  false `Join_Edit_Event_Add ]
+    | `Declined  -> []
     | `Pending   -> [ action                          ~admin:true  true  `Join_Edit_Accept ;
 		      action                          ~admin:false false `Join_Edit_Decline ]
     | `Invited   -> [ action              ~user:true  ~admin:true  false `Join_Edit_Event_Add ] 
