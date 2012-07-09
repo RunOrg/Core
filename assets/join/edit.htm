@@ -1,11 +1,30 @@
 <div class="join-edit">
 
-  <div class="-top"> 
-    {?picture}<img src="{this}"/>{/?}
-    <span class="-name">{name}</span> 
-    {?status}{ this | Asset_Status_Tag.render | ohm }{/?}
-  </div>
-  
+  {@!top} 
+    <div {$top} class="-top"> 
+      <ul class="actions">
+        {#actions}
+          <li class="-r">
+	    <a {$a} class="action-button{if green} -green{/if}" href="javascript:void(0)">{ label | ohm }</a>
+	  </li>
+	  <script type="url:json">
+here.$a.click () -> 
+  OhmBox.remote url, {}, (data) -> 
+    if (data.top) 
+      here.$top.replaceWith(data.top.html)
+      call data.top.code
+    call data.code
+	  </script>
+        {/#}
+      </ul>
+      {?picture}<img src="{this}"/>{/?}
+      <span class="-name">{name}</span> 
+      {?status}{ this | Asset_Status_Tag.render | ohm }{/?}
+    </div>
+  {/@}
+
+  { top | ohm } 
+
 </div>
 
 <style>
@@ -31,9 +50,16 @@
     }
 
     .status {
-      float: right;
-      margin-top: 3px;
+      float: left;
+      margin-top: 1px;
+      margin-left: 8px;
     }
+
+    .actions {
+      float: right; 
+      width: 400px;
+      margin: 7px;
+    } 
 
   }
 }
