@@ -12,3 +12,13 @@
 | `Forum_Section of [`Wall|`People|`Album|`Folder]
 | `Forum_Admin
 | `Forum_Title_Group
+
+| `Forum_Admin_Title
+
+| `Forum_People_Title
+| `Forum_People_Link 
+| `Forum_People_Sub 
+
+| `Forum_Edit_Title 
+| `Forum_Edit_Link 
+| `Forum_Edit_Sub 

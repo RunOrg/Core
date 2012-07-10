@@ -16,3 +16,13 @@
 | `Forum_Admin -> "Administration"
 
 | `Forum_Title_Group -> "Forum du groupe"
+
+| `Forum_Admin_Title -> "Administration"
+
+| `Forum_People_Title -> "Participants"
+| `Forum_People_Link -> "Gestion des participants"
+| `Forum_People_Sub -> "Choisissez qui peut participer aux discussions"
+
+| `Forum_Edit_Title -> "Modifier"
+| `Forum_Edit_Link -> "Modifier ce forum"
+| `Forum_Edit_Sub -> "Changez le nom, la visibilité et les autres options"

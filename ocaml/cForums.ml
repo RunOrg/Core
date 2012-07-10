@@ -5,6 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 module See = CForums_see
+module Admin = CForums_admin
 
 let () = CClient.define UrlClient.Forums.def_home begin fun access -> 
   O.Box.fill $ O.decay begin 
