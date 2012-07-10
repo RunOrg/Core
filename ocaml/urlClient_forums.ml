@@ -10,7 +10,7 @@ open UrlClient_common
 
 let home,   def_home = root "forums"
 let create, def_create = child def_home   "frm/create"
-let see,    def_see    = child def_create "forum"
+let see,    def_see    = child def_create "discuss"
 let admin,  def_admin  = child def_see    "frm/admin"
 let edit,   def_edit   = child def_admin  "frm/edit"
 

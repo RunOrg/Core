@@ -10,3 +10,11 @@
 | `Forums_Files i -> if i = 1 then "fichier" else "fichiers"
 | `Forums_Pictures i -> if i = 1 then "photo" else "photos"
 | `Forums_OfGroup -> "Groupe"
+
+| `Forum_Section `Wall -> "Discussions"
+| `Forum_Section `People -> "Inscrits"
+| `Forum_Section `Album -> "Photos"
+| `Forum_Section `Folder -> "Fichiers"
+| `Forum_Admin -> "Administration"
+
+| `Forum_Title_Group -> "Forum du groupe"

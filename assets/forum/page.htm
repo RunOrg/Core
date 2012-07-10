@@ -1,0 +1,196 @@
+<div class="forum-page">
+  
+  <div class="-head">
+    {?admin}
+    <ul class="actions">
+      <li class="-r">
+	<a class="action-button -admin" href="{url}">
+	  {`Forum_Admin}
+	</a>
+      </li>
+    </ul>
+    {/?}
+
+    {?group}
+      <h2 class="-group">{ `Forum_Title_Group } &laquo; <a href="{this}">
+    {else} 
+      <h2>
+    {/?} 
+      {title}
+    {?group}
+      </a> &raquo; </h2>
+    {else}
+      </h2>
+    {/?}
+
+  </div>
+    
+  <div class="-sidebar">
+    
+    {sidebar | verbatim} 
+
+    {@!sidebar}
+      <ul class="-navig">
+        {#this}
+          <li class="{cls}">
+  	    <a href="{url}">
+	      <span class="{size}">{count}</span> { `Forum_Section label } 
+	    </a>
+	  </li>
+        {/#}
+      </ul>
+    {/@}
+
+  </div>
+  
+  <div class="-main">
+     
+    <div class="-contents">
+      
+      {box|verbatim}
+      
+    </div>
+  </div>
+  
+</div>
+  
+<style>
+  
+.forum-page {
+
+  .-sidebar {
+    width: 230px;
+    margin-right: 10px;
+    padding-bottom: 30px;
+    float: left;
+
+    .-navig {
+      list-style-type: none;
+      margin: 5px 0;
+      padding: 80px 0;
+
+      a {
+        display: block;
+        overflow: hidden;
+        margin: 4px -1px 4px 0;
+        padding: 5px 5px 5px 30px;
+        line-height: 30px;
+        font-size: 20px;
+        color: #888;
+        text-align: right;
+        background-color: transparent;
+      }
+
+      a:hover {
+        color: #333;
+
+        span {
+          background-color: #333;
+          text-shadow: 0 -1px 0 black;
+        }
+      }
+
+      .-selected a, .-selected a:hover {
+        color: black;
+
+        span {
+          background-color: black;
+          text-shadow: 0 -1px 0 #888;
+        }
+      }
+
+      li span {
+        width: 30px;
+        height: 30px;
+        margin: 0 8px;
+        border-radius: 30px;
+        background-color: #888;
+        display: block;
+        float: right;
+        line-height: 30px;
+        text-align: center;
+        color: white;
+        font-size: 21px;
+        text-shadow: 0 -1px 0 #333;
+        font-weight: bold;
+        font-family: 'Open Sans Condensed', sans-serif;
+        overflow: hidden;
+
+        &.-d2 { font-size: 15px; }
+        &.-d3 { font-size: 13px; }
+        &.-d0 { background-color: white !important; }
+      }
+
+      .-selected:after, 
+      .-selected:before {
+        border: medium solid transparent;
+        content: " ";
+        height: 0;
+        pointer-events: none;
+        position: absolute;
+        right: -11px;
+        width: 0;
+      }
+
+      .-selected:after {
+        border-right-color: white;
+        border-width: 14px;
+        margin-top: -14px;
+        top: 50%;
+      }
+
+      .-selected:before {
+        border-right-color: #BBB;
+        border-width: 15px;
+        margin-top: -15px;
+        top: 50%;
+      }
+
+      .-selected {
+        position: relative;
+      }
+    }
+  }
+
+  .-main {
+    overflow: hidden;
+
+    .-contents {
+      margin: 12px 3px 20px 0;
+      border: 1px solid #CCC;
+      border-radius: 4px;
+      min-height: 250px;
+    }
+  }
+
+  .-head {
+    background-color: #EEE;
+    border: 1px solid #CCC;
+    border-radius: 4px 4px;
+    margin-bottom: 7px;
+    overflow: hidden;
+    padding: 13px;
+    text-shadow: 0 1px 0 white;
+
+    .actions {
+      float: right;
+      width: 290px;
+      margin:  0 0 -5px 0;
+    }
+
+    h2 {
+      margin: 0;
+      font-weight: normal;
+      color: #333;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 21.5px;
+
+      &.-group {
+        color: #333;
+      }
+    }
+  }
+}
+
+</style>

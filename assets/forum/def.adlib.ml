@@ -10,3 +10,7 @@
 | `Forums_Files of int 
 | `Forums_Pictures of int
 | `Forums_OfGroup 
+
+| `Forum_Section of [`Wall|`People|`Album|`Folder]
+| `Forum_Admin
+| `Forum_Title_Group
