@@ -3,6 +3,7 @@
 type mini_profile = <
   url  : string ;
   pic  : string ;
+  pico : string option ;
   name : string 
 >
 

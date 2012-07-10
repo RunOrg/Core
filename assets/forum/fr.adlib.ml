@@ -6,10 +6,8 @@
 | `Forums_Private_Subtitle -> "Il faut être inscrit sur ces forums avant de pouvoir y participer."   
 | `Forums_Private_Create -> "Créer un forum privé"
 | `Forums_Private_Empty -> "Aucun forum privé"
-| `Forums_Messages i -> if i = 1 then "message" else "messages"
-| `Forums_Files i -> if i = 1 then "fichier" else "fichiers"
-| `Forums_Pictures i -> if i = 1 then "photo" else "photos"
 | `Forums_OfGroup -> "Groupe"
+| `Forums_NoMessage -> "Aucun message récent"
 
 | `Forum_Section `Wall -> "Discussions"
 | `Forum_Section `People -> "Inscrits"

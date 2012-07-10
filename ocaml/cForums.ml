@@ -20,22 +20,34 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
       in
       let! feed = ohm $ MFeed.get_for_entity access (MEntity.Get.id entity) in
       let! feed = ohm_req_or (return None) $ MFeed.Can.read feed in 
-      let! count = ohm $ MItem.count (`feed (MFeed.Get.id feed)) in
-      return $ Some (public,(entity,count))
+      let! last = ohm $ MItem.last (`feed (MFeed.Get.id feed)) in
+      return $ Some (public,(entity,last))
     end (forums @ groups) in
 
     let visible_public, visible_private = List.partition fst visible in 
 
-    let render (_,(entity,count)) =
+    let! now = ohmctx (#time) in
+
+    let render (_,(entity,last)) =
       let! title = ohm $ CEntityUtil.name entity in   
+      let! last = ohm begin 
+	match last with None -> return None | Some item -> 
+	  let! author = req_or (return None) (MItem.author (item # payload)) in
+	  let! p = ohm $ CAvatar.mini_profile author in
+	  return $ Some (object
+	    method pic  = p # pico
+	    method name = p # name
+	    method time = (item # time, now)
+	  end)
+      end in 
       return (object
 	method url = Action.url UrlClient.Forums.see (access # instance # key) 
 	  [ IEntity.to_string (MEntity.Get.id entity) ] 
 	method title = title
-	method messages = count
 	method group = MEntity.Get.kind entity = `Group 
 	method files = None
 	method pictures = None
+	method last = last
       end)
     in
 

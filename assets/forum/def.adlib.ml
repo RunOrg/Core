@@ -6,10 +6,8 @@
 | `Forums_Private_Subtitle
 | `Forums_Private_Create
 | `Forums_Private_Empty
-| `Forums_Messages of int 
-| `Forums_Files of int 
-| `Forums_Pictures of int
 | `Forums_OfGroup 
+| `Forums_NoMessage
 
 | `Forum_Section of [`Wall|`People|`Album|`Folder]
 | `Forum_Admin

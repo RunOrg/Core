@@ -9,9 +9,13 @@
     <a class="-forum" href="{url}">
       {title}
       <span class="-details">
-	<em>{messages | string_of_int | esc }</em> { `Forums_Messages messages }  
-	{?files}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Files this }{/?}  
-	{?pictures}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Pictures this }{/?}  
+	{?last}
+	  {?pic}<img src="{this}"/>{/?}
+  	  <span class="-name">{ name }</span>
+	  <span class="-date">{ `DateRelative time }</span>
+	{else}
+	  { `Forums_NoMessage } 
+	{/?}
       </span>
     </a>
     {else}
@@ -44,9 +48,13 @@
 	{title}
       {/if}
       <span class="-details">
-	<em>{messages | string_of_int | esc }</em> { `Forums_Messages messages }  
-	{?files}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Files this }{/?}  
-	{?pictures}&middot;<em>{this | string_of_int | esc }</em> { `Forums_Pictures this }{/?}  
+	{?last}
+	  {?pic}<img src="{this}"/>{/?}
+  	  <span class="-name">{ name }</span>
+	  <span class="-date">{ `DateRelative time }</span>
+	{else}
+	  { `Forums_NoMessage } 
+	{/?}
       </span>
     </a>
     {else}
@@ -109,10 +117,19 @@
     display: block; 
     font-size: 12px;
     color: #888;
+    margin-top: 3px;
+    line-height: 22px;
+    padding-left: 22px;
 
-    em {
-      font-style: normal;
+    .-name {
       color: #333;
+    }
+
+    img { 
+      float: left;
+      height: 22px;
+      margin-right: 6px;
+      width: 22px;
     }
   }
 

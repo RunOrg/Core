@@ -7,6 +7,7 @@ open BatPervasives
 type mini_profile = <
   url  : string ;
   pic  : string ;
+  pico : string option ;
   name : string 
 >
 
@@ -19,11 +20,13 @@ let mini_profile aid =
     | Some name -> return name
   end in 
   
-  let! pic = ohm $ CPicture.small (details # picture) in
+  let! pic  = ohm $ CPicture.small (details # picture) in
+  let! pico = ohm $ CPicture.small_opt (details # picture) in
 
   return (object
     method url = "javascript:void(0)"
     method pic = pic
+    method pico = pico
     method name = name
   end)
 
