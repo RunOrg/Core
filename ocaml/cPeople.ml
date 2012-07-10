@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let event_box_content access group = 
+let box_content access group = 
   let  gid = MGroup.Get.id group in 
   O.Box.fill $ O.decay begin 
     let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
@@ -14,4 +14,9 @@ let event_box_content access group =
 let event_box access group =
   match group with 
     | None -> O.Box.fill (return ignore) 
-    | Some group -> event_box_content access group
+    | Some group -> box_content access group
+
+let forum_box access group =
+  match group with 
+    | None -> O.Box.fill (return ignore) 
+    | Some group -> box_content access group

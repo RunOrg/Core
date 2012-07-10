@@ -29,6 +29,17 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
     let! folder = ohm $ O.decay (MFolder.Can.read folder) in
     let  folder = if draft then None else folder in 
+
+    let  gid = MEntity.Get.group entity in
+    let! group = ohm $ O.decay (MGroup.try_get access gid) in
+    let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
+    let  group = if draft then None else group in   
+    
+    let read = MEntity.Satellite.access entity (`Wall `Read) in 
+    let public = match MAccess.summarize read with 
+      | `Member -> true 
+      | `Admin  -> false 
+    in
     
     let! sidebar = O.Box.add begin 
       
@@ -47,6 +58,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	   [ Some `Wall ;
 	     ( if album  <> None then Some `Album  else None ) ;
 	     ( if folder <> None then Some `Folder else None ) ; 
+	     ( if public || MEntity.Get.kind entity = `Group then None else Some `People ) 
 	   ])
       in
       
@@ -59,6 +71,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       let! the_seg = O.Box.parse UrlClient.Forums.tabs in 
       match the_seg with
 	| `Wall   -> CWall.box access feed     
+	| `People -> CPeople.forum_box access group 
 	| _       -> O.Box.fill (return (Html.str "O HAI, AGAINZ!"))
 	  
     end in

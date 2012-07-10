@@ -10,7 +10,7 @@
 | `Forums_NoMessage -> "Aucun message récent"
 
 | `Forum_Section `Wall -> "Discussions"
-| `Forum_Section `People -> "Inscrits"
+| `Forum_Section `People -> "Participants"
 | `Forum_Section `Album -> "Photos"
 | `Forum_Section `Folder -> "Fichiers"
 | `Forum_Admin -> "Administration"
