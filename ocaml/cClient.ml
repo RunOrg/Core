@@ -104,14 +104,16 @@ let action f req res =
     | `New cuid -> panic ()
     | `None     -> if_no_login ()
 
-let define (base,prefix,parents,define) body =
+let define ?back (base,prefix,parents,define) body =
   define (action (fun access req res -> 
     let base = base (req # server) in
-    O.Box.response ~prefix ~parents base O.BoxCtx.make (body access) req res
+    let! res = ohm $ O.Box.response ~prefix ~parents base O.BoxCtx.make (body access) req res in
+    let back = BatOption.map (fun url -> url (access # instance # key) []) back in	 
+    return $ Action.javascript (Js.clientBack back ()) res 
   ))
 
-let define_admin def body = 
-  define def begin fun access -> 
+let define_admin ?back def body = 
+  define ?back def begin fun access -> 
     match CAccess.admin access with 
       | None -> O.Box.fill (Asset_Client_PageForbidden.render ()) 
       | Some access -> body access

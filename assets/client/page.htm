@@ -1,5 +1,27 @@
 { navbar | VNavbar.intranet | ohm } 
 
-<div style="width: 950px ; margin: 16px auto 40px auto">{box|verbatim}</div>
+<div class="client-page">
+  <a style="display:none" href="javascript:void(0)" id="back">&laquo;</a>    
+  {box|verbatim}
+</div>
 
 { Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+.client-page {
+  width: 950px;
+  margin: 16px auto 40px auto;
+  position : relative;
+}
+
+#back {
+  color: #EEEEEE;
+  cursor: pointer;
+  font-size: 40px;
+  line-height: 35px;
+  padding: 10px 10px 200px 800px;
+  position: absolute;
+  right: 100%;
+  &:hover { color: #888 } 
+}
+</style>

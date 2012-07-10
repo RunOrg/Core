@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let () = CClient.define UrlClient.Events.def_see begin fun access -> 
+let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Events.def_see begin fun access -> 
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 

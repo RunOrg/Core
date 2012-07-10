@@ -21,12 +21,14 @@ val action :
   -> Ohm.Action.response
   -> Ohm.Action.response O.run
 
-val define : 
-     UrlClient.definition
-  -> ([ `IsToken ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
-  -> unit 
+val define :
+     ?back:(string -> 'a list -> string)
+  ->  UrlClient.definition
+  ->  ([ `IsToken ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
+  ->  unit 
 
 val define_admin : 
-     UrlClient.definition
-  -> ([ `IsAdmin ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
-  -> unit 
+     ?back:(string -> 'a list -> string)
+  ->  UrlClient.definition
+  ->  ([ `IsAdmin ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
+  ->  unit 
