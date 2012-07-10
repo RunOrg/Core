@@ -9,4 +9,4 @@
 | `Forums_Messages i -> if i = 1 then "message" else "messages"
 | `Forums_Files i -> if i = 1 then "fichier" else "fichiers"
 | `Forums_Pictures i -> if i = 1 then "photo" else "photos"
-| `Forums_OfGroup -> "Forum du groupe"
+| `Forums_OfGroup -> "Groupe"

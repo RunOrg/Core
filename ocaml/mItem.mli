@@ -130,6 +130,8 @@ val list :
   -> float option
   -> (item list * float option) O.run
 
+val count : [`Read] source -> int O.run 
+
 val prev_next : item -> (IItem.t option * IItem.t option) O.run
 
 val exists : [`Read] source -> bool O.run

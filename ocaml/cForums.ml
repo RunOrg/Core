@@ -12,21 +12,25 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
 
     let! visible = ohm $ Run.list_filter begin fun entity -> 
       let read = MEntity.Satellite.access entity (`Wall `Read) in 
-      match MAccess.summarize read with 
-	| `Member -> return $ Some (true,entity)
-	| `Admin  -> let! ok = ohm $ MAccess.test access [read] in
-		     return (if ok then Some (false,entity) else None)
-    end (groups @ forums) in
+      let public = match MAccess.summarize read with 
+	| `Member -> true 
+	| `Admin  -> false 
+      in
+      let! feed = ohm $ MFeed.get_for_entity access (MEntity.Get.id entity) in
+      let! feed = ohm_req_or (return None) $ MFeed.Can.read feed in 
+      let! count = ohm $ MItem.count (`feed (MFeed.Get.id feed)) in
+      return $ Some (public,(entity,count))
+    end (forums @ groups) in
 
     let visible_public, visible_private = List.partition fst visible in 
 
-    let render (_,entity) =
+    let render (_,(entity,count)) =
       let! title = ohm $ CEntityUtil.name entity in   
       return (object
 	method url = Action.url UrlClient.Forums.see (access # instance # key) 
 	  [ IEntity.to_string (MEntity.Get.id entity) ] 
 	method title = title
-	method messages = 0
+	method messages = count
 	method group = MEntity.Get.kind entity = `Group 
 	method files = None
 	method pictures = None

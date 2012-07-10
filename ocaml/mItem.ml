@@ -117,6 +117,26 @@ let list ?self source ~count start =
 
   return (list,next)
 
+module CountInListView = CouchDB.ReduceView(struct
+
+  module Key    = Id
+  module Value  = Fmt.Int
+  module Doc    = Data
+  module Design = Design
+
+  let name = "count"
+  let map  = "if (!doc.d && !doc.del) emit(doc.w[1],1);"
+  let reduce = "return sum(values);" 
+  let group = true
+  let level = None
+
+end)
+
+let count source = 
+  let where = to_id source in 
+  let! result = ohm_req_or (return 0) $ CountInListView.reduce where in 
+  return result
+
 module LastInListView = CouchDB.DocView(struct
 
   module Key = Fmt.Make(struct
