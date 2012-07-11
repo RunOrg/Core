@@ -1,0 +1,25 @@
+<div class="website-page">
+
+  {if actions | OhmAsset.notEmpty }
+    <ul class="actions">
+      {#actions}
+        <li class="-r">
+	  <a href="{url}" class="action-button {if green}-green{else}-admin{/if}">
+	    { label | ohm }
+	  </a>
+	</li>
+      {/#}
+    </ul>
+  {/if}
+
+  { content | ohm } 
+
+</div>
+
+<style>
+.website-page .actions {
+  background-color: #EEE;
+  border-top: 1px solid #CCC;
+  padding: 4px;
+}
+</style>

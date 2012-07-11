@@ -2,6 +2,9 @@
 | `Website_Article_Title of string * string
 | `Website_MiniCalendar_Go
 
+| `Website_Article_New 
+| `Website_Article_Edit
+
 | `Website_Calendar_Title of string
 | `Website_Calendar_List
 | `Website_Calendar_Empty
@@ -15,6 +18,7 @@
 | `Website_About_Site
 | `Website_About_Twitter
 | `Website_About_Facebook
+| `Website_About_Edit
 
 | `Website_Count_Subscribers of int
 | `Website_Count_Articles of int

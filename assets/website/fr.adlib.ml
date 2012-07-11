@@ -2,6 +2,9 @@
 | `Website_Article_Title (website,article) -> article ^ " - " ^ website
 | `Website_MiniCalendar_Go -> "Aller à l'agenda"
 
+| `Website_Article_New -> "Publier un nouvel article"
+| `Website_Article_Edit -> "Modifier cet article"
+
 | `Website_Calendar_Title website -> "Agenda - " ^ website
 | `Website_Calendar_List -> "Activités prévues"
 | `Website_Calendar_Empty -> "Aucune activité n'est prévue."
@@ -15,6 +18,7 @@
 | `Website_About_Site -> "Site Officiel"
 | `Website_About_Twitter -> "Twitter"
 | `Website_About_Facebook -> "Facebook"
+| `Website_About_Edit -> "Modifier cette page"
 
 | `Website_Count_Subscribers i -> if i = 1 then "Abonné" else "Abonnés"
 | `Website_Count_Articles i -> if i = 1 then "Article" else "Articles"

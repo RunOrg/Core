@@ -12,6 +12,17 @@ let () = UrlClient.def_about begin fun req res ->
   
   let! profile = ohm_req_or (C404.render cuid res) $ MInstance.Profile.get iid in  
 
+  let! status = ohm $ Run.opt_map (MAvatar.status iid) cuid in 
+
+  let actions = if status = Some `Admin then
+      [ object
+	method green = false
+	method url   = Action.url UrlClient.Website.about key []
+	method label = AdLib.write `Website_About_Edit
+      end ] 
+    else []
+  in
+
   let tags = List.map CTag.prepare (profile # tags) in
 
   let! map = ohm begin
@@ -33,7 +44,12 @@ let () = UrlClient.def_about begin fun req res ->
     method map      = map
     method phone    = profile # phone
   end) in
-  
+
+  let main = Asset_Website_Page.render (object
+    method actions = actions
+    method content = main
+  end) in
+
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `About ~cuid ~left ~main instance in
 

@@ -47,6 +47,7 @@ module MiniPoll = UrlClient_miniPoll
 module Members = UrlClient_members
 module Events = UrlClient_events
 module Forums = UrlClient_forums
+module Website = UrlClient_website
 
 module Home = struct
   let home, def_home = root "home"
