@@ -87,7 +87,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
       name     = clip 80 name ;
       key      ;
       address  = BatOption.map (clip 300) address ;
-      desc     = BatOption.map (clip 3000) desc ;
+      desc     ;
       site     = BatOption.map (clip 256) site ;
       contact  = BatOption.map (clip 256) contact ;
       pic      = BatOption.map IFile.decay pic ;
@@ -103,7 +103,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
 
   return cid
 
-let update id ~pic ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tags = 
+let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tags = 
 
   let id = IInstance.decay id in 
   let clip n s = if String.length s > n then String.sub s 0 n else s in
@@ -111,7 +111,6 @@ let update id ~pic ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone
     ins with 
       name    = clip 80 name ;
       address = None ;
-      pic     = BatOption.map IFile.decay pic ;
       desc    = None ;
       site    = None ; 
       contact = None ;
@@ -124,14 +123,13 @@ let update id ~pic ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone
       name     = current.Data.name ;
       key      = current.Data.key ;
       address  = BatOption.map (clip 300)  address ;
-      desc     = BatOption.map (clip 3000) desc ;
+      desc     ;
       site     = BatOption.map (clip 256)  site ;
       contact  = BatOption.map (clip 256)  contact ;
       facebook = BatOption.map (clip 256)  facebook ;
       twitter  = BatOption.map (clip 256)  twitter ;
       phone    = BatOption.map (clip 30)   phone ;
       tags     = BatList.sort_unique compare (List.map (Util.fold_all |- clip 32) tags) ;
-      pic      = BatOption.map IFile.decay pic ;
       unbound  = false ;
   }) in
 
@@ -271,7 +269,7 @@ let create_stub ~who ~name ~desc ~site ~profile =
     old with 
       name     = clip 80 name ;
       key      ;
-      desc     = BatOption.map (clip 3000) desc ;
+      desc     ;
       site     = BatOption.map (clip 256) site ;
   }) in
 

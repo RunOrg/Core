@@ -75,7 +75,7 @@ let () = UrlStart.def_create begin fun req res ->
     ~key
     ~name:(post # name)
     ~address:None
-    ~desc:(post # desc)
+    ~desc:(BatOption.map (fun t -> `Text t) (post # desc))
     ~site:None
     ~contact:None
     ~vertical

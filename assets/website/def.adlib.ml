@@ -35,3 +35,14 @@
 | `Website_Admin_Article_New   
 | `Website_Admin_Article_Edit  
 | `Website_Admin_Article_Submit
+
+| `Website_Admin_About_Edit
+| `Website_Admin_About_Name
+| `Website_Admin_About_Description
+| `Website_Admin_About_Tags 
+| `Website_Admin_About_Tags_Detail
+| `Website_Admin_About_Facebook
+| `Website_Admin_About_Twitter
+| `Website_Admin_About_Website
+| `Website_Admin_About_Address
+| `Website_Admin_About_Submit 

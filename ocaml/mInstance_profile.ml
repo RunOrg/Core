@@ -23,7 +23,7 @@ module Info = struct
       address  : string option ;
       contact  : string option ;
       site     : string option ;
-      desc     : string option ;
+      desc     : MRich.OrText.t option ;
       twitter  : string option ;
       facebook : string option ;
       phone    : string option ;
@@ -45,7 +45,7 @@ type t = <
   address  : string option ;
   contact  : string option ;
   site     : string option ;
-  desc     : string option ;
+  desc     : MRich.OrText.t option ;
   twitter  : string option ;
   facebook : string option ;
   phone    : string option ;

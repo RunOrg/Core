@@ -36,7 +36,7 @@ let () = UrlClient.def_about begin fun req res ->
   end in 
 
   let main = Asset_Website_About.render (object
-    method html     = profile # desc 
+    method html     = BatOption.map MRich.OrText.to_html profile # desc 
     method tags     = tags
     method site     = profile # site
     method twitter  = profile # twitter

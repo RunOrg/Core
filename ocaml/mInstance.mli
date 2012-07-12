@@ -25,7 +25,7 @@ module Profile : sig
     address  : string option ;
     contact  : string option ;
     site     : string option ;
-    desc     : string option ;
+    desc     : MRich.OrText.t option ;
     twitter  : string option ;
     facebook : string option ;
     phone    : string option ;
@@ -67,7 +67,7 @@ module Profile : sig
       -> key:string 
       -> pic:IFile.t option
       -> phone:string option
-      -> desc:string option
+      -> desc:MRich.OrText.t option
       -> site:string option
       -> address:string option
       -> contact:string option
@@ -94,7 +94,7 @@ val create :
   -> key:string 
   -> name:string 
   -> address:string option 
-  -> desc:string option
+  -> desc:MRich.OrText.t option
   -> site:string option
   -> contact:string option 
   -> vertical:IVertical.t
@@ -103,16 +103,15 @@ val create :
 val create_stub : 
      who:([`IsSelf] IUser.id)
   -> name:string 
-  -> desc:string option
+  -> desc:MRich.OrText.t option
   -> site:string option
   -> profile:IInstance.t option
   -> [`Created] IInstance.id O.run
 
 val update : 
-     [`Update] IInstance.id
-  -> pic:[`InsPic] IFile.id option
+     [`IsAdmin] IInstance.id
   -> name:string
-  -> desc:string option
+  -> desc:MRich.OrText.t option
   -> address:string option
   -> site:string option
   -> contact:string option

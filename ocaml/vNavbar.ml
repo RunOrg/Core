@@ -76,7 +76,7 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
       method public  = public
       method url     = url
       method menu    = menu
-      method desc    = desc
+      method desc    = None
       method name    = instance # name
       method website = website
     end)

@@ -5,3 +5,4 @@ open Ohm.Universal
 open BatPervasives
 
 module Write = CWebsite_admin_write
+module About = CWebsite_admin_about

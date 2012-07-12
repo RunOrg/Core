@@ -19,7 +19,6 @@ let render ?tag title list req res =
     return (object
       method url  = Action.url UrlClient.website (profile # key) ()
       method pic  = pic 
-      method desc = profile # desc
       method name = profile # name
       method tags = List.map CTag.prepare (profile # tags)
     end)

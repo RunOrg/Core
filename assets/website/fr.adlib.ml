@@ -35,3 +35,15 @@
 | `Website_Admin_Article_New   -> "Nouvel article"
 | `Website_Admin_Article_Edit  -> "Modifier un article"
 | `Website_Admin_Article_Submit -> "Publier"
+
+
+| `Website_Admin_About_Edit -> "Modifier"
+| `Website_Admin_About_Name -> "Nom"
+| `Website_Admin_About_Description -> "Description"
+| `Website_Admin_About_Tags -> "Mots-clés"
+| `Website_Admin_About_Tags_Detail -> "Permettent aux internautes de vous trouver sur notre annuaire"
+| `Website_Admin_About_Facebook -> "Adresse Facebook"
+| `Website_Admin_About_Twitter -> "Adresse Twitter"
+| `Website_Admin_About_Website -> "Site web officiel"
+| `Website_Admin_About_Address -> "Adresse postale"
+| `Website_Admin_About_Submit -> "Enregistrer"
