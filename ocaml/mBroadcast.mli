@@ -1,7 +1,7 @@
 (* © 2012 RunOrg *)
 
 type content = 
-  [ `Post of < title : string ; body : string > 
+  [ `Post of < title : string ; body : MRich.OrText.t > 
   | `RSS  of < title : string ; body : OhmSanitizeHtml.Clean.t ; link : string > ] 
 
 type forward = <
@@ -30,6 +30,13 @@ val post :
   -> [`IsSelf] IAvatar.id
   -> content
   -> IBroadcast.t O.run
+
+val edit : 
+     [`IsAdmin] IInstance.id
+  -> [`IsSelf] IAvatar.id
+  -> IBroadcast.t
+  -> content
+  -> unit O.run  
 
 val forward : 
      [`IsAdmin] IInstance.id 

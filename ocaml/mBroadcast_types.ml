@@ -3,10 +3,9 @@
 open Ohm
 
 module Content = Fmt.Make(struct
-  module Clean = OhmSanitizeHtml.Clean
   type json t = 
-    [ `Post "p" of < title "t": string ; body "b": string > 
-    | `RSS  "r" of < title "t": string ; body "b": Clean.t ; link "l": string > ] 
+    [ `Post "p" of < title "t": string ; body "b": MRich.OrText.t > 
+    | `RSS  "r" of < title "t": string ; body "b": OhmSanitizeHtml.Clean.t ; link "l": string > ] 
 end) 
 
 type content = Content.t

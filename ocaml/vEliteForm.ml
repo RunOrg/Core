@@ -27,6 +27,17 @@ let textarea ~label ?detail seed parse =
        ~label:(".elite-field-label label",label)
        ~error:(".elite-field-error label")
        seed parse)
+
+let rich ~label ?detail seed parse = 
+  OhmForm.wrap ".joy-fields"
+    (Asset_EliteForm_Rich.render (object 
+      method detail = detail
+    end))
+    (OhmForm.string
+       ~field:"textarea" 
+       ~label:(".elite-field-label label",label)
+       ~error:(".elite-field-error label")
+       seed parse)
     
 let date ~label ?detail seed parse = 
   OhmForm.wrap ".joy-fields"

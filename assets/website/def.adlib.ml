@@ -29,3 +29,9 @@
 | `Website_Subscribe_Required
 | `Website_Unsubscribe_Call 
 | `Website_Unsubscribe_Button
+
+| `Website_Admin_Article_Title 
+| `Website_Admin_Article_Text  
+| `Website_Admin_Article_New   
+| `Website_Admin_Article_Edit  
+| `Website_Admin_Article_Submit

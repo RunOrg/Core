@@ -16,8 +16,8 @@ let render_list list =
 	| `Post p -> p # title
 	| `RSS  r -> r # title
       method html  = match b # content with 
-	| `Post p -> p # body
-	| `RSS  r -> OhmSanitizeHtml.html (r # body)
+	| `Post p -> MRich.OrText.to_html (p # body)
+	| `RSS  r -> Html.str (OhmSanitizeHtml.html (r # body))
       method from  = instance # name
       method pic   = pic
       method time  = (b # time,now)

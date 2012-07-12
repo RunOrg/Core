@@ -134,7 +134,7 @@ let on_follow =
 	time = item # time ;
 	last ;
 	size = (match item # content with 
-	          | `Post c -> String.length c # body 
+	          | `Post c -> MRich.OrText.length c # body 
 	 	  | `RSS  r -> OhmSanitizeHtml.length r # body) ;
       })
     end timed in
@@ -168,7 +168,7 @@ let on_create =
 	time = post # time ;
 	last ;
 	size =  (match post # content with 
-	          | `Post c -> String.length c # body 
+	          | `Post c -> MRich.OrText.length c # body 
 	 	  | `RSS  r -> OhmSanitizeHtml.length r # body) ;
       })
     in

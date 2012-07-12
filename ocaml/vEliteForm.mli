@@ -14,6 +14,13 @@ val textarea :
   ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
+val rich : 
+      label:('c,string) Ohm.Run.t
+  -> ?detail:('c,string) Ohm.Run.t
+  ->  ('s -> ('c,string) Ohm.Run.t)
+  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  ('c,'s,'r) OhmForm.template
+
 val date : 
       label:('c,string) Ohm.Run.t
   -> ?detail:('c,string) Ohm.Run.t

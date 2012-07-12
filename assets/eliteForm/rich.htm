@@ -1,0 +1,131 @@
+<div class="elite-field -rich">
+  <div class="elite-field-label"><label></label>{?detail}<span>{this | ohm | esc }</span>{/?}</div>
+  <div class="elite-field-actual">
+    <div class="-toolbar" style="display:none">
+      <a class="-b" style="background-image:url('/public/icon/text_bold.png')"></a>
+      <a class="-i" style="background-image:url('/public/icon/text_italic.png')"></a>
+      <a class="-ul" style="background-image:url('/public/icon/text_list_bullets.png')"></a>
+      <a class="-ol" style="background-image:url('/public/icon/text_list_numbers.png')"></a>
+      <a class="-ii" style="background-image:url('/public/icon/text_indent.png')"></a>
+      <a class="-io" style="background-image:url('/public/icon/text_indent_remove.png')"></a>
+    </div>
+    <iframe style="display:none" frameborder="0"></iframe>
+    <textarea></textarea>
+  </div>
+</div>
+
+<style>
+.elite-field.-rich {
+  .elite-field-label {
+    margin-top: 3px;
+    width: 100px;
+  }
+  .elite-field-actual {
+    margin-left: 120px;
+  }
+  iframe {
+    border: 1px solid #888;
+    width: 569px;
+    height: 300px;
+    float: right;
+  } 
+  .-toolbar {
+    float: left;
+    width: 30px;
+    border: 1px solid #888;
+    border-right: 0px;
+    a {
+      border-bottom: 1px solid #CCC;
+      background: url('/public/icon/shading.pn') center center no-repeat white; 
+      display: block;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      &:hover { 
+        background-color: #EEE;    
+      } 
+      &.-i, &.-ol { 
+        border-bottom-color: #888;
+      } 
+      &.-io {
+        border-bottom: 0px;
+      } 
+    }
+    
+  }
+}
+</style>
+
+<script>
+$t = @$.find "textarea"
+$i = @$.find "iframe"
+$b = @$.find ".-toolbar"
+
+rtw = $i[0].contentWindow
+rte = rtw.document
+
+ok = false
+
+$b.find(".-i").click -> 
+  run "italic"
+
+$b.find(".-b").click -> 
+  run "bold"
+
+$b.find(".-ul").click -> 
+  run "insertunorderedlist"
+
+$b.find(".-ol").click -> 
+  run "insertorderedlist"
+
+$b.find(".-ii").click -> 
+  run "indent"
+
+$b.find(".-io").click -> 
+  run "outdent"
+
+
+run = (what,opt) -> 
+  do rtw.focus
+  try 
+    rte.execCommand what, false, opt
+  do rtw.focus 
+
+enable = ->
+  do $i.show
+  do $b.show
+  do $t.hide
+  ok = true
+
+tryenable = ->
+
+  if (document.contentEditable) 
+    rte.designMode = "On"
+    return do enable
+    
+  if (document.designMode != null)
+    try
+      rte.designMode = "on"
+      return do enable
+      
+  setTimeout tryenable, 200
+
+do tryenable
+
+fill = (v) -> 
+  v = v || "<p><br/></p>" 
+  html = [
+    "<html><head><link type='text/css' rel='stylesheet' href='/public/elite-rte.css'/></head><body>",
+    v,
+    "</body></html>"
+  ]
+  rte.open()								     
+  rte.write(html.join(""))
+  rte.close()  
+
+$t.data 'onSet', fill
+
+$t.data 'onGet', -> 
+  $t.val rte.body.innerHTML
+
+</script>

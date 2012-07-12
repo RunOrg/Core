@@ -29,3 +29,9 @@
 | `Website_Subscribe_BadEmail -> "Cet e-mail semble être incorrect"
 | `Website_Unsubscribe_Call -> "Vous recevez par e-mail tous les nouveaux articles publiés sur ce blog."
 | `Website_Unsubscribe_Button -> "Se désabonner"
+
+| `Website_Admin_Article_Title -> "Titre de l'article"
+| `Website_Admin_Article_Text  -> "Texte"
+| `Website_Admin_Article_New   -> "Nouvel article"
+| `Website_Admin_Article_Edit  -> "Modifier un article"
+| `Website_Admin_Article_Submit -> "Publier"

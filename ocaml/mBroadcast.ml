@@ -374,6 +374,27 @@ let remove iid aid bid =
 
   return ()
 
+(* Edit a broadcasted item. ----------------------------------------------------------------- *)
+
+let edit iid aid bid content = 
+
+  let iid = IInstance.decay iid in
+
+  let edit bid = 
+    let whoops = return ((),`keep) in
+    let! item = ohm_req_or whoops $ MyTable.get bid in
+    if item.Item.delete <> None || item.Item.from <> iid then whoops else
+      match item.Item.kind with 
+	| `Content c -> let kind = `Content (object
+	                  method what = content
+			  method forwards = c # forwards
+	                end) in 
+			return ((), `put Item.({ item with kind }))
+	| `Forward _ -> whoops 
+  in
+  
+  MyTable.transaction bid edit
+
 module Backdoor = struct
 
   module PostCountView = CouchDB.ReduceView(struct
