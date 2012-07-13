@@ -93,7 +93,7 @@ let set_picture self t pic =
 
 (* Creating entities ----------------------------------------------------------------------- *)
 
-let _create ?pcname ?name ?pic template iid creator = 
+let _create ?pcname ?name ?pic ?access template iid creator = 
 
   let! id, gid = ohm (
     match pcname with 
@@ -121,11 +121,18 @@ let _create ?pcname ?name ?pic template iid creator =
       Some [ key, pic ]    
   in
 
+  let draft = PreConfig_Template.kind template = `Event in
+
+  let diffs = match access with 
+    | None   -> []
+    | Some a -> [ `Access a ]
+  in
+
   let! data = ohm $ MEntity_data.create ~id:eid ~who ?name ?data () in
   
   let init = E.Init.({
     archive  = false ;
-    draft    = true ;
+    draft    ;
     public   = false ;
     admin    = `Admin ;
     view     = `Token ;
@@ -140,14 +147,14 @@ let _create ?pcname ?name ?pic template iid creator =
       
   let! _ = ohm $ E.Store.create
     ~id:(IEntity.decay eid) ~info:(MUpdateInfo.info ~who) ~init 
-    ~diffs:[ ] ()
+    ~diffs ()
   in
 	
   return eid
  
 let create self ~name ?pic ~iid ?access template =
   let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
-  _create template ~name ?pic (IInstance.decay iid) self 
+  _create template ~name ?pic ?access (IInstance.decay iid) self 
 
 let set_grants ctx eids = 
 
@@ -200,8 +207,18 @@ let _ =
   (* Act as the creator... *)
   let creator = IAvatar.Assert.is_self aid in
   
-  let! _ = ohm $ _create ~pcname:"admin"   ITemplate.admin   (IInstance.decay iid) creator in
-  let! _ = ohm $ _create ~pcname:"members" ITemplate.members (IInstance.decay iid) creator in
+  let! _ = ohm $ _create 
+    ~pcname:"admin"  
+    ~name:(Some (`label `EntityAdminName))
+    ~access:`Private
+    ITemplate.admin (IInstance.decay iid) creator
+  in
+
+  let! _ = ohm $ _create 
+    ~pcname:"members" 
+    ~name:(Some (`label `EntityMembersName))
+    ITemplate.members (IInstance.decay iid) creator
+  in
 
   return ()  
 
