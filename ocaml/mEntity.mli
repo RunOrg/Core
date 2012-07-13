@@ -139,12 +139,13 @@ val try_get :
 val naked_get : 'some IEntity.id -> 'some t option O.run
 
 val create : 
-     [`IsSelf] IAvatar.id
-  -> name:TextOrAdlib.t option
-  -> pic:[`InsPic] IFile.id option
-  -> iid:[<`CreateEvent|`CreateGroup|`CreateForum] IInstance.id
-  -> ITemplate.t 
-  -> [`Created] IEntity.id O.run
+      [`IsSelf] IAvatar.id
+  ->  name:TextOrAdlib.t option
+  -> ?pic:[`InsPic] IFile.id 
+  ->  iid:[<`CreateEvent|`CreateGroup|`CreateForum] IInstance.id
+  -> ?access:[`Private|`Normal|`Public] 
+  ->  ITemplate.t 
+  ->  [`Created] IEntity.id O.run
 
 val set_grants : [`IsAdmin] # MAccess.context -> 'any IEntity.id list -> unit O.run
 

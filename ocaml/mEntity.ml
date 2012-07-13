@@ -145,7 +145,7 @@ let _create ?pcname ?name ?pic template iid creator =
 	
   return eid
  
-let create self ~name ~pic ~iid template =
+let create self ~name ?pic ~iid ?access template =
   let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
   _create template ~name ?pic (IInstance.decay iid) self 
 

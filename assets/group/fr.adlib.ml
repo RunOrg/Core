@@ -24,3 +24,16 @@
 
 | `Group_Missing -> "Le contenu de ce groupe n'est pas disponible actuellement en raison d'un problème technique."
 | `Group_Missing_Link -> "Retour au groupe"
+
+| `Groups_Create_Title -> "Créer un nouveau groupe"
+| `Groups_Create_Step_One -> "Choisissez le type de groupe"
+| `Groups_Create_Step_Two -> "Complétez ces informations"
+| `Groups_Create_Field_Name -> "Le nom de votre groupe"
+| `Groups_Create_Submit -> "Créer"
+| `Groups_Create_Cancel -> "Annuler"
+
+| `Group_Edit_Publish_Label what -> begin match what with
+    | `Public -> "Visible depuis internet"
+    | `Normal -> "Visible par tous les membres de l'association"
+    | `Private -> "Sur invitation uniquement"
+end

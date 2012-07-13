@@ -36,7 +36,7 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
       | str -> Some (`text str)
     in
 
-    let! eid = ohm $ O.decay (MEntity.create (access # self) ~name ~pic ~iid (post # template)) in
+    let! eid = ohm $ O.decay (MEntity.create (access # self) ~name ?pic ~iid (post # template)) in
 
     let  url = Action.url UrlClient.Events.edit (access # instance # key) [ IEntity.to_string eid ] in
 

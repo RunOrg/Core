@@ -4,7 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Admin = CGroups_admin
+module Admin  = CGroups_admin
+module Create = CGroups_create
 
 let contents access = 
 
@@ -116,8 +117,12 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 
     let isMember, isNotMember = List.partition fst list in
 
+    let create = if CAccess.admin access = None then None else
+	Some (Action.url UrlClient.Members.create (access # instance # key) [])
+    in
+
     Asset_Group_List.render (object
-      method create      = None
+      method create      = create
       method isMember    = List.map snd isMember 
       method isNotMember = List.map snd isNotMember
       method box         = O.Box.render contents 

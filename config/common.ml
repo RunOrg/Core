@@ -481,6 +481,22 @@ module Build = struct
       end (!verticals)
     end
 
+    (* List of group templates in a vertical, in order ----------------------------------------------- *)
+    ^"\n\nlet groups = function\n  | "
+    ^ String.concat "\n  | " begin
+      List.map begin fun (vertical) -> 
+      
+	Printf.sprintf "`%s -> [%s]" vertical.v_id
+	  (String.concat ";" 
+	     (List.map (Printf.sprintf "`%s") 
+		(List.filter begin fun template -> 
+		  try let data = List.find (fun t -> t.t_id = template) (!templates) in
+		      data.t_kind = `Group
+		  with Not_found -> false
+		end vertical.v_tmpl)))
+      end (!verticals)
+    end
+
     (* List of verticals in the catalog. ------------------------------------------------------------- *)
     ^ "\n\nmodule Catalog = struct\n\n"
     ^ "  let list = [\n    "

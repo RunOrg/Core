@@ -24,3 +24,12 @@
   
 | `Group_Missing
 | `Group_Missing_Link 
+
+| `Groups_Create_Title 
+| `Groups_Create_Step_One 
+| `Groups_Create_Step_Two 
+| `Groups_Create_Field_Name
+| `Groups_Create_Submit 
+| `Groups_Create_Cancel 
+
+| `Group_Edit_Publish_Label of [`Public|`Normal|`Private]
