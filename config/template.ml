@@ -15,7 +15,7 @@ let admin = template "Admin"
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:[
     column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      ~label:(Adlib.ColumnName.firstname)
       (`Profile `Firstname) ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
