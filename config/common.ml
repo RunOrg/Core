@@ -81,14 +81,12 @@ type template_data = {
 } 
 
 type init = {
-  i_key : string ;
   i_tmpl : template ;
   i_name : adlib ;
-  i_data : (string * string) list ;
 }
 
 let initial i_key i_tmpl ~name i_data = {
-  i_key ; i_tmpl ; i_data ; i_name = name 
+  i_tmpl ; i_name = name 
 }
 
 type vertical = string
@@ -148,6 +146,10 @@ let vertical id ?old ?(archive=false) ~name init tmpl =
     v_init = init ;
   } :: !verticals ;
   id
+
+let template_by_id id = 
+  try Some (List.find (fun t -> t.t_id = id) (!templates))
+  with _ -> None
 
 let inCatalog v name forwho = (v,name,forwho)
 let subCatalog ~name list =  (name,list)
@@ -510,6 +512,26 @@ module Build = struct
 		      data.t_kind = `Forum
 		  with Not_found -> false
 		end vertical.v_tmpl)))
+      end (!verticals)
+    end
+
+    (* Creating entities when the instance first appears ---------------------------------------------- *)
+    ^"\n\nlet create = function\n  | "
+    ^ String.concat "\n  | " begin
+      List.map begin fun (vertical) -> 
+      
+	Printf.sprintf "`%s -> [%s]" vertical.v_id
+	  (String.concat ";" 
+	     (BatList.filter_map begin fun i -> 
+	       match template_by_id i.i_tmpl with None -> None | Some t -> 
+		 match t.t_kind with 
+		   | `Group | `Forum -> Some (
+		     Printf.sprintf "`%s,`%s" 
+		       i.i_tmpl i.i_name
+		   )
+		   | _ -> None
+	     end vertical.v_init))
+
       end (!verticals)
     end
 

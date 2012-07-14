@@ -9,7 +9,7 @@ type 'rel id = t
 let decay id = id
 
 let admin   = `Admin
-let members = `Admin
+let members = `GroupSimple
 
 module Assert = struct 
   let can_create id = id

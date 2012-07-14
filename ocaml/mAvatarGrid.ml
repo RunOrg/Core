@@ -40,6 +40,14 @@ let list_id (id : [`List] IAvatarGrid.id) =
 
 let _ = 
   let create_list (lid,gid,iid,cols) = 
+
+    let cols = MAvatarGridColumn.({
+      eval  = `Profile (iid,`Full) ;
+      label = `text "" ;
+      show  = true ;
+      view  = `Full 
+    }) :: cols in 
+    
     let  lid   = MyGrid.ListId.of_id $ IAvatarGrid.to_id lid in 
     MyGrid.set_list lid 
       ~columns:cols

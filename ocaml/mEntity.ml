@@ -194,7 +194,22 @@ let get_if_public eid =
       let eid = IEntity.Assert.view eid in
       return $ Some (MEntity_can.make_visible eid entity)
       
-(* Create the administrators entity based on a vertical. ---------------------------------- *)
+(* Create the initial entities. ---------------------------------------------------------------------- *)
+
+let create_initial = 
+  let task = O.async # define "create-initial-entities" Fmt.(IInstance.fmt * IAvatar.fmt) 
+    begin fun (iid,aid) -> 
+    
+      let! instance = ohm_req_or (return ()) $ MInstance.get iid in 
+      let  created = PreConfig_Vertical.create (instance # ver) in
+      
+      Run.list_iter begin fun (tmpl,label) -> 
+	let! _ = ohm $ _create ~name:(Some (`label label)) tmpl iid aid in
+	return ()
+      end created
+	
+    end in 
+  fun iid aid -> task (IInstance.decay iid, aid)
 
 let _ = 
 
@@ -207,6 +222,8 @@ let _ =
   (* Act as the creator... *)
   let creator = IAvatar.Assert.is_self aid in
   
+  let! () = ohm $ create_initial iid creator in 
+
   let! _ = ohm $ _create 
     ~pcname:"admin"  
     ~name:(Some (`label `EntityAdminName))
