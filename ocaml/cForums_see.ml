@@ -34,12 +34,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     let! group = ohm $ O.decay (MGroup.try_get access gid) in
     let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
     let  group = if draft then None else group in   
-    
-    let read = MEntity.Satellite.access entity (`Wall `Read) in 
-    let public = match MAccess.summarize read with 
-      | `Member -> true 
-      | `Admin  -> false 
-    in
+
+    let  public = CEntityUtil.public_forum entity in 
     
     let! sidebar = O.Box.add begin 
       

@@ -5,3 +5,4 @@ val pic_large : [<`Admin|`View] MEntity.t -> (#Ohm.CouchDB.ctx, string) Ohm.Run.
 val pic_small_opt : [<`Admin|`View] MEntity.t -> (#Ohm.CouchDB.ctx, string option) Ohm.Run.t
 val desc : [<`Admin|`View] MEntity.t -> string option O.run
 val data : [<`Admin|`View] MEntity.t -> (string * Ohm.Json.t) list O.run
+val public_forum : [<`Admin|`View] MEntity.t -> bool 
