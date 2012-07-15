@@ -38,6 +38,11 @@ let athle = vertical "Athle"
   ~old:"v:athle"
   ~name:"Club d'athlétisme"
   Template.([
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
@@ -763,11 +768,10 @@ let footus = vertical "Footus"
   ~old:"v:footus"
   ~name:"Football américain et cheerleading"
   Template.([
-    initial "entity.sample.subscribtion-forever.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubscribtionForeverName" ~old:"entity.sample.subscribtion-forever.name" "Adhésion permanente") [
-       "desc", "Cette adhésion permet de donnéer accès à RunOrg aux employés, profs, membres honoraires et autres intervenants de votre association. " ;
-       "summary", "Accès salariés, professeurs et autre " ;
-       "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
       ] ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
@@ -900,11 +904,10 @@ let judo = vertical "Judo"
   ~old:"v:judo"
   ~name:"Club de judo et jujitsu"
   Template.([
-    initial "entity.sample.subscribtion-forever.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubscribtionForeverName" ~old:"entity.sample.subscribtion-forever.name" "Adhésion permanente") [
-       "desc", "Cette adhésion permet de donnéer accès à RunOrg aux employés, profs, membres honoraires et autres intervenants de votre association. " ;
-       "summary", "Accès salariés, professeurs et autre " ;
-       "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
       ] ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
@@ -1210,11 +1213,10 @@ let multiSports = vertical "MultiSports"
   ~old:"v:multi-sports"
   ~name:"Club multi-sports"
   Template.([
-    initial "entity.sample.subscribtion-forever.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubscribtionForeverName" ~old:"entity.sample.subscribtion-forever.name" "Adhésion permanente") [
-       "desc", "Cette adhésion permet de donnéer accès à RunOrg aux employés, profs, membres honoraires et autres intervenants de votre association. " ;
-       "summary", "Accès salariés, professeurs et autre " ;
-       "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
       ] ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
@@ -1514,7 +1516,7 @@ let spUsep = vertical "SpUsep"
   Template.([
     groupCollaborative ;
     groupSimple ;
-    forumPublic ;
+    forumPublic ;    
     albumSimple ;
     pollSimple ;
     pollYearly ;
@@ -1541,6 +1543,11 @@ let sports = vertical "Sports"
     initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
        "desc", "Groupe des responsables de l'association. Les administrateurs et les membres du bureau de l'association peuvent échanger en toute confidentialité dans ce groupe. Pour pouvoir accèder au contenu de ce groupe un administrateur doit inviter les personnes ou valider leur demande d'inscription." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
        "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
