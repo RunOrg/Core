@@ -10,6 +10,7 @@ let decay id = id
 
 let admin   = `Admin
 let members = `GroupSimple
+let forum   = `ForumPublic
 
 module Assert = struct 
   let can_create id = id

@@ -8,6 +8,33 @@ module See = CForums_see
 module Admin = CForums_admin
 
 let () = CClient.define UrlClient.Forums.def_home begin fun access -> 
+
+  let admin = CAccess.admin access in 
+
+  let! create = O.Box.react Fmt.Bool.fmt begin fun public json _ res ->
+
+    let name = try Json.to_string json with _ -> "" in
+    let name = BatString.strip name in
+    let name = if name = "" then None else Some (`text name) in 
+
+    let! admin = req_or (return res) admin in
+
+    let iid = IInstance.Deduce.admin_create_forum (admin # iid) in
+
+    let! eid = ohm $ O.decay begin MEntity.create
+	(access # self)
+	~name
+	~iid
+	~access:(if public then `Normal else `Private)
+	ITemplate.forum
+    end in 
+
+    let url = Action.url UrlClient.Forums.see (access # instance # key) [ IEntity.to_string eid] in
+
+    return $ Action.javascript (Js.redirect url ()) res
+
+  end in
+
   O.Box.fill $ O.decay begin 
 
     let! members_eid = ohm begin 
@@ -61,12 +88,10 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
     let! visible_public  = ohm $ Run.list_map render visible_public  in
     let! visible_private = ohm $ Run.list_map render visible_private in 
 
-    let admin = CAccess.admin access <> None in 
-
     let create public = 
-      if admin then Some (object
+      if admin <> None then Some (object
 	method public = public
-	method url = Json.Null
+	method url = OhmBox.reaction_json create public
       end) else None
     in
       

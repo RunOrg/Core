@@ -11,6 +11,7 @@ val decay : 'any id -> t
 
 val admin : t
 val members : t 
+val forum : t 
 
 module Assert : sig
   val can_create       : 'any id -> [`Create] id

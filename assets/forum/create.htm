@@ -14,7 +14,12 @@
 <script type="url:json">
 here.$a.click -> 
   $(@).hide()
-  here.$f.show()
+  here.$f.show().submit -> 
+    n = $(@).find("input").val() 
+    return false unless n.length
+    OhmBox.remote url, n, (d) -> 
+      call d.code
+    return false
 </script>
 
 <style>

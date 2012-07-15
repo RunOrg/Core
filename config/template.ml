@@ -3773,19 +3773,10 @@ let forumPublic = template "ForumPublic"
   ~name:"Forum Public"
   ~desc:"Participation libre et sans inscription"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Viewers ~post:`Viewers)
+  ~folder:(folderConfig ~read:`Viewers ~post:`Viewers)
+  ~album:(albumConfig ~read:`Viewers ~post:`Viewers)
   ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
       (`Self `Status) ;
@@ -3793,33 +3784,9 @@ let forumPublic = template "ForumPublic"
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
   ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~fields:[]
+  ~join:[]
+  ~page:[]
   ()
 
 (* ========================================================================== *)
@@ -3835,15 +3802,6 @@ let groupCheerleading = template "GroupCheerleading"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
     column ~sort:true ~show:true ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
       (`Self `Status) ;
