@@ -9,6 +9,9 @@
 | `Forums_OfGroup 
 | `Forums_NoMessage
 
+| `Forum_Create_Name
+| `Forum_Create_Submit
+
 | `Forum_Section of [`Wall|`People|`Album|`Folder]
 | `Forum_Admin
 | `Forum_Title_Group

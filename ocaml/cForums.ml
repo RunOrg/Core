@@ -64,7 +64,10 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
     let admin = CAccess.admin access <> None in 
 
     let create public = 
-      if admin then Some "" else None
+      if admin then Some (object
+	method public = public
+	method url = Json.Null
+      end) else None
     in
       
     Asset_Forum_List.render (object

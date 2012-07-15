@@ -9,6 +9,9 @@
 | `Forums_OfGroup -> "Groupe"
 | `Forums_NoMessage -> "Aucun message récent"
 
+| `Forum_Create_Name -> "Nom du forum"
+| `Forum_Create_Submit -> "Créer"
+
 | `Forum_Section `Wall -> "Discussions"
 | `Forum_Section `People -> "Participants"
 | `Forum_Section `Album -> "Photos"

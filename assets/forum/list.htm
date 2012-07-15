@@ -24,13 +24,7 @@
     </div>
     {/#}
     
-    {?create}
-    <div class="-create">
-      <a href="{this}" class="action-button -green">
-	{ `Forums_Public_Create } 
-      </a>
-    </div>
-    {/?}
+    {?create}{ this | Asset_Forum_Create.render | ohm }{/?}
     
   </div>
   {/=}  
@@ -62,14 +56,8 @@
       { `Forums_Private_Empty } 
     </div>
     {/#}
-    
-    {?create}
-    <div class="-create">
-      <a href="{this}" class="action-button -green">
-	{ `Forums_Private_Create } 
-      </a>
-    </div>
-    {/?}
+
+    {?create}{ this | Asset_Forum_Create.render | ohm }{/?}    
     
   </div>
   {/=}
@@ -139,17 +127,6 @@
     em {
       font-style: normal;
       color: #27A;
-    }
-  }
-
-  .-create {
-    border-top: 1px solid #DDD;
-    padding: 8px;
-    text-align: center;
-    background-color: #EEE;
-
-    .action-button {
-      display: inline-block;
     }
   }
 }

@@ -1,0 +1,42 @@
+<div class="-create">
+  <form {$f} style="display:none">
+    <label>
+      { `Forum_Create_Name }&ensp;
+      <input type="text"/>
+    </label>
+    <button type="submit"><span>{`Forum_Create_Submit}</span></button>
+  </form>
+  <a {$a} href="javascript:void(0)" class="action-button -green">
+    {if public} { `Forums_Public_Create } {else} { `Forums_Private_Create } {/if} 
+  </a>
+</div>
+
+<script type="url:json">
+here.$a.click -> 
+  $(@).hide()
+  here.$f.show()
+</script>
+
+<style>
+.forums .-create {
+  border-top: 1px solid #DDD;
+  padding: 8px;
+  text-align: center;
+  background-color: #EEE;
+
+  .action-button {
+    display: inline-block;
+  }
+
+  label {
+    font-size: 13px;
+  }
+
+  input {
+    border: 1px solid #CCCCCC;
+    padding: 2px;
+    width: 200px;
+  }
+}
+
+</style>
