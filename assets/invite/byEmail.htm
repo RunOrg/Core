@@ -1,0 +1,203 @@
+<div class="add-by-email">
+
+  <div {$import} class="-filled">
+
+    <div class="-step-input">
+      <h2 class="numbered"><span>1</span> { `Import_ByEmail_Step1 }</h2>
+      <div class="-left">
+	<div>
+	  <label>
+	    denis.diderot@email.fr<br/>edmond.rostand@bergerac.org
+	  </label>
+	  <textarea {$list} style="width:455px"></textarea>
+	</div>
+	<div style="text-align:right">
+	  <a href="javascript:void(0)" style="display:inline-block"
+	     class="action-button -green" {$continue}>{ `Import_ByEmail_Continue }</a>
+	</div>
+      </div>
+      <div>
+	{ Asset_Invite_Help.render | ohm }
+      </div>      
+    </div>
+
+    <div class="-step-check">
+      <div {$check}>
+	<h2 class="numbered"><span>2</span> { `Import_ByEmail_Step2 }</h2>
+	<table class="summary">
+	  <thead><tr>
+	      <td></td>
+	      <td>{ `Import_Column_Email }</td>
+	      <td>{ `Import_Column_Firstname }</td>
+	      <td>{ `Import_Column_Lastname }</td>
+	  </tr></thead>
+	  <tbody></tbody>
+	</table>
+      </div>
+      <div style="text-align:right">
+	<a href="javascript:void(0)" style="display:inline-block" 
+	   class="action-button -green" {$act}>{ `Import_ByEmail_Submit }</a>
+      </div>      
+    </div>
+  </div>
+
+</div>
+
+<script type="url:json">
+
+imported = []
+
+fill = (filled) -> 
+  filled = filled || here.$list.val().trim().length > 0
+  here.$import.toggleClass "-filled", filled
+
+fill false
+
+here.$list.focus () -> fill true
+here.$list.blur  () -> fill false
+
+send = () -> 
+  return
+
+email = (text) ->
+  text.trim().toLowerCase()
+
+parse = () ->
+  # Dis be clever parsing, bro!
+  imported = []
+  $.each here.$list.val().trim().split("\n"), (i,line) ->
+    o = {l:""}
+    $.each line.trim().split(/[\t;|<>]/), (i,cell) ->
+      return if cell.trim().length == 0 
+      return o.e = email cell if /@/.test cell
+      return o.f = cell.trim() if !o.f
+      return o.l = (o.l + " " + cell.trim()).trim()
+    return if !o.e
+    if !o.l && /[ ]/.test o.f
+      split = o.f.split(" ")
+      o.f = split.shift().trim()
+      o.l = split.join(" ").trim()
+    imported.push o
+
+here.$act.click  () ->
+  data = []
+  here.$check.find("tbody tr").each () ->
+    data.push [
+      $(@).find("input:nth(0)").val().trim(),
+      $(@).find("input:nth(1)").val().trim(),
+      $(@).find("input:nth(2)").val().trim()
+    ]
+  OhmBox.remote url, data, (r) -> 
+    call r.code
+  here.$import.html("").addClass("big-loading")
+
+here.$continue.click () ->
+  do parse
+  return if !imported.length 
+  
+  html = []
+  line = "<tr><td><a href='javascript:void(0)'></a></td><td><input type=text class=-email /></td><td><input type=text/></td><td><input type=text/></td></tr>"
+  html.push(line) for i in imported
+
+  here.$check.find("tbody").html(html.join "").find("input").each (i) ->
+    o = i % 3
+    i = (i - o) / 3
+    $(@).val(imported[i][["e","f","l"][o]]) 
+
+  here.$check.find("table a").click () ->
+    $(@).closest("tr").remove()
+    if !here.$check.find("tbody tr").length
+      here.$list.val("")       
+      fill false
+      here.$import.removeClass "-check"
+
+  here.$import.addClass "-check"
+
+
+</script>
+
+<style>
+.add-by-email {
+
+  overflow: hidden;
+  width: 723px;
+  margin: 20px auto;
+
+  .-step-input .-left { 
+    width: 468px;
+    float: left;
+  }
+
+  .-step-input label {
+    color: #888;
+    padding: 5px 7px;
+    display: block;
+    position: absolute;
+    font-size: 13px;
+  }
+
+  .-filled {
+    .-step-input label {
+      display: none;
+    }
+  }
+
+  .-step-check { display: none; }
+  .-check { .-step-check { display: block } .-step-input { display: none; } }
+
+  .-step-input textarea {
+    height: 275px;
+    margin: 0;
+    padding: 4px;
+    font-size: 13px;
+    border: 1px solid #555;
+    font-family: "Oxygen", "Verdana", sans;
+  }
+
+  .-step-check {
+
+    table {
+      border-collapse: collapse; 
+    }
+
+    input {
+      border: none;
+      width: 207px;
+      margin: 0px;
+      padding: 8px 2px;
+      font-family: Verdana, sans-serif;
+      font-size: 10px;
+
+      &:focus { background-color: #EEE; }
+      &.-email { width: 250px }
+    }
+
+    thead td { 
+      background-color: #BBB;
+      background: -moz-linear-gradient(top, #BBB, #AAA);
+      background: -webkit-linear-gradient(top, #BBB, #AAA);
+      color: white;
+      font-size: 13px;
+      padding: 2px 4px;
+      text-align: center;
+      text-shadow: 0 -1px 0 #888;
+    }
+
+    td {
+      border: 1px solid #888;
+      padding: 0;
+      background-color: white;
+   
+      a {
+        background: url("/public/icon/cross-grey.png") no-repeat scroll center center transparent;
+        display: block;
+        height: 28px;
+        width: 28px;
+
+        &:hover { background-image: url("/public/icon/cross.png") }
+      }
+    }
+  }
+}
+
+</style>
