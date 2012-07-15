@@ -38,6 +38,9 @@ let athle = vertical "Athle"
   ~old:"v:athle"
   ~name:"Club d'athlétisme"
   Template.([
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
 	initial "entity.sample.forum-public.classified.name" forumPublic
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
        "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
@@ -338,7 +341,44 @@ let companyTraining = vertical "CompanyTraining"
   ~old:"v:company-training"
   ~name:"Sociétés de formation"
   Template.([
-
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à la copro, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.group-simple.allmembers.name" groupSimple
+      ~name:(adlib "EntitySampleGroupSimpleAllmembersName" ~old:"entity.sample.group-simple.allmembers.name" "Tous les membres") [
+       "desc", "Il ne faut pas supprimer ce groupe. Ce groupe a pour objectif de regrouper toutes les personnes à qui vous donnez un accès à votre espace." ;
+       "summary", "Tous les membres" ;
+       "moreinfo", "Quand vous voulez communiquer vers tout vos membres ou tous les inviter à un évènement ou autre, c'est ce groupe que vous choississez. Cliquez sur \"créer un groupe\" pour voir les autres modèles disponibles." ;
+      ] ;
+    initial "entity.sample.group-collaborative.company-employees.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") [
+       "desc", "Groupe des salariés" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la mise à disposition de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.company-management.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") [
+       "desc", "Groupe de la direction et du management" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la mise à disposition de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.company-trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCompanyTrainersName" ~old:"entity.sample.group-collaborative.company-trainers.name" "Formateurs") [
+       "desc", "Groupe des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la mise à disposition de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.company-trainees.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCompanyTraineesName" ~old:"entity.sample.group-collaborative.company-trainees.name" "Stagiaires") [
+       "desc", "Groupe des Stagiaires" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la mise à disposition de votre espace RunOrg." ;
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -526,14 +566,8 @@ let ess = vertical "Ess"
   ~old:"v:ess"
   ~name:"Association Economie Sociale et Solidaire"
   Template.([
-    initial "entity.sample.subscribtion-forever.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubscribtionForeverName" ~old:"entity.sample.subscribtion-forever.name" "Adhésion permanente") [
-       "desc", "Cette adhésion permet de donnéer accès à RunOrg aux employés, profs, membres honoraires et autres intervenants de votre association. " ;
-       "summary", "Accès salariés, professeurs et autre " ;
-       "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
-      ] ;
-    initial "entity.sample.sub-test-runorg.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubTestRunorgName" ~old:"entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg") [
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
     initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
@@ -574,10 +608,6 @@ let ess = vertical "Ess"
        "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
        "summary", "Aide pour utiliser RunOrg" ;
        "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
-      ] ;
-    initial "entity.sample.subscription-datetodate.name" subscriptionDatetodate
-      ~name:(adlib "EntitySampleSubscriptionDatetodateName" ~old:"entity.sample.subscription-datetodate.name" "Adhésion annuelle 2011-2012") [
-       "enddate", "20120831" ;
       ] ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupSimpleAllmembersName" ~old:"entity.sample.group-simple.allmembers.name" "Tous les membres") [
@@ -636,7 +666,7 @@ let federations = vertical "Federations"
   ~name:"Fédérations"
   Template.([
     initial "entity.sample.poll-yearly.name" pollYearly
-      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2011-2012") [
+      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
        "desc", "Pour répondre à ce sondage cliquez sur \"inscription\". Vous pouvez ainsi utiliser immédiatement ce sondage que nous avons créé pour vous sous la forme d'un modèle réutilisable. Il vous est possible d'inviter vos membres à répondre à ce sondage en les ajoutant dans la liste des invités. " ;
        "summary", "Exemple de sondage" ;
        "moreinfo", "Ce sondage a été créé automatiquement lors de la mise en place de votre espace RunOrg. Cliquez sur créer un sondage pour voir les autres modèles disponibles." ;
@@ -739,8 +769,8 @@ let footus = vertical "Footus"
        "summary", "Accès salariés, professeurs et autre " ;
        "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
       ] ;
-    initial "entity.sample.sub-test-runorg.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubTestRunorgName" ~old:"entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg") [
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
     initial "entity.sample.group-footus.name" groupFootus
       ~name:(adlib "EntitySampleGroupFootusName" ~old:"entity.sample.group-footus.name" "Joueurs football américain") [
@@ -764,10 +794,6 @@ let footus = vertical "Footus"
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
-      ] ;
-    initial "entity.sample.course-simple.name" courseSimple
-      ~name:(adlib "EntitySampleCourseSimpleName" ~old:"entity.sample.course-simple.name" "Exemple de cours dans RunOrg") [
-       "enddate", "20221231" ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
       ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
@@ -793,10 +819,6 @@ let footus = vertical "Footus"
        "desc", "Que ce soit des offres ou des demandes d'emplois saisonniers, plus long terme, liés à notre sport ou autre : c'est ici qu'on les partage !. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. " ;
        "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg." ;
        "summary", "Venez poster ici vos offres et vos demandes" ;
-      ] ;
-    initial "entity.sample.subscription-datetodate.name" subscriptionDatetodate
-      ~name:(adlib "EntitySampleSubscriptionDatetodateName" ~old:"entity.sample.subscription-datetodate.name" "Adhésion annuelle 2011-2012") [
-       "enddate", "20120831" ;
       ] ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupSimpleAllmembersName" ~old:"entity.sample.group-simple.allmembers.name" "Tous les membres") [
@@ -884,8 +906,8 @@ let judo = vertical "Judo"
        "summary", "Accès salariés, professeurs et autre " ;
        "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
       ] ;
-    initial "entity.sample.sub-test-runorg.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubTestRunorgName" ~old:"entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg") [
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
     initial "entity.sample.group-judo-members.name" groupJudoMembers
       ~name:(adlib "EntitySampleGroupJudoMembersName" ~old:"entity.sample.group-judo-members.name" "Sportifs judo et jujitsu") [
@@ -904,10 +926,6 @@ let judo = vertical "Judo"
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
-      ] ;
-    initial "entity.sample.course-simple.name" courseSimple
-      ~name:(adlib "EntitySampleCourseSimpleName" ~old:"entity.sample.course-simple.name" "Exemple de cours dans RunOrg") [
-       "enddate", "20221231" ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
       ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
@@ -933,10 +951,6 @@ let judo = vertical "Judo"
        "desc", "Que ce soit des offres ou des demandes d'emplois saisonniers, plus long terme, liés à notre sport ou autre : c'est ici qu'on les partage !. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. " ;
        "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg." ;
        "summary", "Venez poster ici vos offres et vos demandes" ;
-      ] ;
-    initial "entity.sample.subscription-datetodate.name" subscriptionDatetodate
-      ~name:(adlib "EntitySampleSubscriptionDatetodateName" ~old:"entity.sample.subscription-datetodate.name" "Adhésion annuelle 2011-2012") [
-       "enddate", "20120831" ;
       ] ;
     initial "entity.sample.sport.group-petitssamourais.name" groupSimple
       ~name:(adlib "EntitySampleSportGroupPetitssamouraisName" ~old:"entity.sample.sport.group-petitssamourais.name" "Petits samouraïs") [
@@ -1202,8 +1216,8 @@ let multiSports = vertical "MultiSports"
        "summary", "Accès salariés, professeurs et autre " ;
        "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
       ] ;
-    initial "entity.sample.sub-test-runorg.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubTestRunorgName" ~old:"entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg") [
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
     initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
@@ -1217,10 +1231,6 @@ let multiSports = vertical "MultiSports"
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
-      ] ;
-    initial "entity.sample.course-simple.name" courseSimple
-      ~name:(adlib "EntitySampleCourseSimpleName" ~old:"entity.sample.course-simple.name" "Exemple de cours dans RunOrg") [
-       "enddate", "20221231" ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
       ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
@@ -1246,10 +1256,6 @@ let multiSports = vertical "MultiSports"
        "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
        "summary", "Aide pour utiliser RunOrg" ;
        "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
-      ] ;
-    initial "entity.sample.subscription-datetodate.name" subscriptionDatetodate
-      ~name:(adlib "EntitySampleSubscriptionDatetodateName" ~old:"entity.sample.subscription-datetodate.name" "Adhésion annuelle 2011-2012") [
-       "enddate", "20120831" ;
       ] ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
       ~name:(adlib "EntitySampleSportGroupPoussinsName" ~old:"entity.sample.sport.group-poussins.name" "Poussins") [
@@ -1398,6 +1404,9 @@ let simple = vertical "Simple"
   ~old:"v:simple"
   ~name:"RunOrg Standard"
   Template.([
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
     initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
        "desc", "Groupe des responsables de l'association. Les administrateurs et les membres du bureau de l'association peuvent échanger en toute confidentialité dans ce groupe. Pour pouvoir accèder au contenu de ce groupe un administrateur doit inviter les personnes ou valider leur demande d'inscription." ;
@@ -1526,14 +1535,8 @@ let sports = vertical "Sports"
   ~old:"v:sports"
   ~name:"Autre sport"
   Template.([
-    initial "entity.sample.subscribtion-forever.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubscribtionForeverName" ~old:"entity.sample.subscribtion-forever.name" "Adhésion permanente") [
-       "desc", "Cette adhésion permet de donnéer accès à RunOrg aux employés, profs, membres honoraires et autres intervenants de votre association. " ;
-       "summary", "Accès salariés, professeurs et autre " ;
-       "moreinfo", "Cette adhésion a été créée automatiquement lors de la création de votre espace RunOrg. " ;
-      ] ;
-    initial "entity.sample.sub-test-runorg.name" subscriptionForever
-      ~name:(adlib "EntitySampleSubTestRunorgName" ~old:"entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg") [
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
        ] ;
     initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
@@ -1547,10 +1550,6 @@ let sports = vertical "Sports"
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
-      ] ;
-    initial "entity.sample.course-simple.name" courseSimple
-      ~name:(adlib "EntitySampleCourseSimpleName" ~old:"entity.sample.course-simple.name" "Exemple de cours dans RunOrg") [
-       "enddate", "20221231" ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
       ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
