@@ -11,6 +11,7 @@ module Picture = CEvents_admin_picture
 module Access  = CEvents_admin_access
 module People  = CEvents_admin_people
 module Join    = CEvents_admin_join
+module Invite  = CEvents_admin_invite
 
 let () = define UrlClient.Events.def_admin begin fun parents entity access -> 
   O.Box.fill begin 

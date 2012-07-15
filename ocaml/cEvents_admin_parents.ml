@@ -22,5 +22,6 @@ let parents title key eid = object
   method picture = make `Event_Picture_Title picture  key eid 
   method people  = make `Event_People_Title  people   key eid 
   method access  = make `Event_Access_Title  access   key eid 
+  method invite  = make `Event_Invite_Title  invite   key eid 
 end
 

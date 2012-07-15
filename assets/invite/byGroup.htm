@@ -1,0 +1,89 @@
+<div {$f} class="add-by-group">
+
+  <div {$l} class="-list">
+    {#groups}
+      <a href="javascript:void(0)" id="{id}">
+        {name} <span>{ count | string_of_int | esc }</span> 
+      </a>
+    {/#}
+  </div>
+
+  <div class="-actions">
+    <span class="-count">
+      { `Import_ByGroup_Selected } <span {$count}>0</span>
+    </span> 
+    </span>
+    <a {$a} href="javascript:void(0)" class="action-button -green" style="display:inline-block">
+      { `Import_ByGroup_Submit how } 
+    </a>
+  </div>
+</div>
+
+<script type="url:json">
+here.$a.hide().click () -> 
+  ids = []
+  here.$l.find(".-sel").each () -> 
+    ids.push $(@).attr("id")
+  OhmBox.remote url, ids, (d) -> 
+    call d.code
+  here.$f.html("").addClass("-loading")
+
+here.$l.click (ev) -> 
+  $t = $ ev.target
+  if $t.is "a"
+    $t.toggleClass("-sel")
+    c = here.$l.find(".-sel").length
+    here.$count.text(c)
+    here.$a.toggle(c > 0)
+</script>
+
+<style>
+.add-by-group {
+  &.-loading {
+    background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+    min-height: 210px;
+  }  
+  padding: 20px;
+  .-list {
+    min-height: 150px;
+    overflow: hidden;
+  }
+  .-list a {
+    float: left;
+    margin: 10px;
+    background-color: #EEE;
+    padding: 7px 14px;
+    width: 190px;
+    color: #333;
+    font-size: 14px;
+    span { float: right; color: #888 }
+    &:hover { 
+      background-color: #DDD;
+    } 
+    &.-sel {
+      color: white; 
+      background-color: #356;
+      span { color: #DDD } 
+    } 
+  }
+  .-actions {
+    background-color: #EEEEEE;
+    border-top: 1px solid #CCCCCC;
+    margin: 10px;
+    padding: 5px;
+    text-align: right;
+    height: 28px;
+  }
+  .-count {
+    color: #555;
+    float: left;
+    font-size: 13px;
+    padding: 5px;
+    span { 
+      color: black;
+      font-weight: bold;
+      margin-left: 6px;
+    } 
+  }
+}
+</style>

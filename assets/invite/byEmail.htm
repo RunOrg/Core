@@ -89,7 +89,7 @@ here.$act.click  () ->
     ]
   OhmBox.remote url, data, (r) -> 
     call r.code
-  here.$import.html("").addClass("big-loading")
+  here.$import.html("").addClass("-loading")
 
 here.$continue.click () ->
   do parse
@@ -121,7 +121,12 @@ here.$continue.click () ->
 
   overflow: hidden;
   width: 723px;
-  margin: 20px auto;
+  margin: 20px 16px;
+
+  .-loading {
+    background: url(/public/icon/ajax-load.gif) center center no-repeat white;
+    height: 210px;
+  }  
 
   .-step-input .-left { 
     width: 468px;

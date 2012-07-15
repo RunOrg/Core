@@ -34,6 +34,11 @@ let invite who = `Invite (object
   method who = IAvatar.decay who
 end)
 
+let make from = function 
+  | `Accept  yes -> admin  from yes
+  | `Invite      -> invite from 
+  | `Default yes -> user   from yes
+
 let relevant_change data = function
   | `Admin  a -> begin match data.Details.admin with 
       | None -> true

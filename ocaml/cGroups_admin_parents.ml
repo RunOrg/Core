@@ -20,5 +20,6 @@ let parents title key eid = object
   method admin   = make `Group_Admin_Title   admin    key eid 
   method edit    = make `Group_Edit_Title    edit     key eid 
   method people  = make `Group_People_Title  people   key eid 
+  method invite  = make `Group_Invite_Title  invite   key eid 
 end
 

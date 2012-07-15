@@ -1,4 +1,9 @@
-#>> redirect(url:string) 
+#>> redirect(url:string,?delay:int) 
 
-@redirect = (url) -> 
-  document.location = url 
+@redirect = (url,delay) ->
+  act = ->  
+    document.location = url 
+  if delay > 0 
+    setTimeout act, delay 
+  else
+    do act 

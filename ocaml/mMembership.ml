@@ -17,6 +17,7 @@ module InGroup   = MMembership_inGroup
 module Backdoor  = MMembership_backdoor
 module Field     = MMembership_field
 module Grant     = MMembership_grant
+module Mass      = MMembership_mass
 
 module FieldType = MJoinFields.FieldType
 
@@ -151,13 +152,8 @@ let as_user gid aid =
 
 (* Perform changes ----------------------------------------------------------------------- *)
 
-let to_diff from = function 
-  | `Accept  yes -> Diff.admin  from yes
-  | `Invite      -> Diff.invite from 
-  | `Default yes -> Diff.user   from yes
-
 let admin ~from gid aid what = 
-  let list = List.map (to_diff from) what in
+  let list = List.map (Diff.make from) what in
   if list = [] then return () else 
     let! _ = ohm $ Versioned.apply gid aid list in
     return ()

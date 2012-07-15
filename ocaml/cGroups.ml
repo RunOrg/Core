@@ -63,7 +63,7 @@ let contents access =
 	method send = if avatars = [] then None else send_url
 	method admin = Some (object
 	  method invite = Action.url UrlClient.Members.invite (access # instance # key) 
-	    [ IEntity.to_string eid ]
+	    [ IEntity.to_string eid ; fst UrlClient.Invite.seg `ByEmail ]
 	  method admin  = Action.url UrlClient.Members.admin (access # instance # key)
 	    [ IEntity.to_string eid ] 
 	end)

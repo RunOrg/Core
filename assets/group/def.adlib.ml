@@ -18,6 +18,8 @@
 | `Group_People_Link 
 | `Group_People_Sub 
 
+| `Group_Invite_Title
+
 | `Group_Forbidden_Title
 | `Group_Forbidden_Problem 
 | `Group_Forbidden_Solution

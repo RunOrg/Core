@@ -40,6 +40,8 @@
 | `Event_Forbidden_Problem 
 | `Event_Forbidden_Solution
 
+| `Event_Invite_Title
+
 | `Event_Section of [`Wall|`People|`Album|`Folder]
 
 | `Event_Pic_Change 
