@@ -29,7 +29,12 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
 	ITemplate.forum
     end in 
 
-    let url = Action.url UrlClient.Forums.see (access # instance # key) [ IEntity.to_string eid] in
+    let url = 
+      if public then 
+	Action.url UrlClient.Forums.see (access # instance # key) [ IEntity.to_string eid ] 
+      else 
+	Action.url UrlClient.Forums.invite (access # instance # key) [ IEntity.to_string eid ] 
+    in
 
     return $ Action.javascript (Js.redirect url ()) res
 
