@@ -235,7 +235,7 @@ let campaigns = vertical "Campaigns"
       ] ;
    initial "entity.sample.event-campaign-meeting.sample" eventCampaignMeeting
       ~name:(adlib "EntitySampleEventCampaignMeetingName" ~old:"entity.sample.event-campaign-meeting.name" "Exemple de réunion électorale") [
-       "desc", "Ceci est un exemple de réunion électorale telle que vous pouvez les organisez dans RunOrg. Cliquez sur le bouton "inscription en haut à gauche de votre écran pour visualiser le formulaire d'inscription qui est proposé aux invités."" ;
+       "desc", "Ceci est un exemple de réunion électorale telle que vous pouvez les organisez dans RunOrg. Cliquez sur le bouton inscription en haut à gauche de votre écran pour visualiser le formulaire d'inscription qui est proposé aux invités." ;
        "date", "20221231" ;
        "location", "Maison de la mutualité" ;
        "address", "24 Rue Saint-Victor, 75005 Paris" ;
@@ -422,7 +422,7 @@ let comiteEnt = vertical "ComiteEnt"
       ] ;
    initial "entity.sample.event-meeting.comite-ent.name" eventComiteEnt
       ~name:(adlib "EntitySampleEventMeetingComiteEntName" ~old:"entity.sample.event-meeting.comite-ent.name" "Exemple de Comité d'Entreprise") [
-       "desc", "Cliquez sur l'onglet "Mon inscription" pour voir les informations qui sont demandées aux personnes qui souhaitent s'inscrire à cet évènement. Cet évènement de type "Comité d'entreprise" vous permet de visualiser à quoi ressemble un CE dans RunOrg." ;
+       "desc", "Cliquez sur l'onglet 'Mon inscription' pour voir les informations qui sont demandées aux personnes qui souhaitent s'inscrire à cet évènement. Cet évènement de type 'Comité d'entreprise' vous permet de visualiser à quoi ressemble un CE dans RunOrg." ;
        "date", "20221231" ;
        "location", "Salle de réunion" ;
        "address", "1 Place de la Défense 92800 Puteaux" ;
@@ -1646,7 +1646,7 @@ let salleSport = vertical "SalleSport"
        ] ;
     initial "entity.sample.group-fitness-members.name" groupFitnessMembers
       ~name:(adlib "EntitySampleGroupFitnessMembersName" ~old:"entity.sample.group-fitness-members.name" "Sportifs Fitness") [
-       "desc", "Groupe des sportifs, c'est dans ce groupe que se trouve le formulaire que les sportifs doivent renseigner pour s'inscrire au club. Ne pas supprimer ce groupe. Vous pouvez modifier les informations du formulaire dans "option > champs spécifiques"." ;
+       "desc", "Groupe des sportifs, c'est dans ce groupe que se trouve le formulaire que les sportifs doivent renseigner pour s'inscrire au club. Ne pas supprimer ce groupe. Vous pouvez modifier les informations du formulaire dans 'option > champs spécifiques'." ;
        "moreinfo", "Ce groupe a été créé automatiquement lors de la mise en place de votre espace RunOrg" ;
       ] ;
     initial "entity.sample.group-collaborative.staff.name" groupCollaborative
@@ -1654,7 +1654,7 @@ let salleSport = vertical "SalleSport"
        "desc", "Groupe des membres du staff" ;
        "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
       ] ;
-    initial "entity.sample.course-12sessions.name" course12Sessions
+    initial "entity.sample.course-12sessions.name" course12sessions
       ~name:(adlib "EntitySampleCourse12SessionsName" ~old:"entity.sample.course-12sessions.name" "Exemple de cours 12 séances") [
         "desc", "Exemple de cours avec un formulaire permettant d'assurer le suivi sur 12 séances pour l'ensemble des personnes inscrites. Les inscrits et les responsables peuvent modifier les informations du formulaire. L'ensemble des informations est téléchargeable dans un tableur.";
       ] ;

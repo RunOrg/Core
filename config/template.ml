@@ -1782,8 +1782,8 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
           `Textarea "moreinfo" ;
   ]
   ~join:[
-  join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `longtext ;
-  join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `longtext ;
+  join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `LongText ;
+  join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `LongText ;
   join ~name:"badminton-double" ~label:(adlib "JoinFieldBadmintonDouble" "Partenaire de double (nom, prénom, classement)") `Textarea ;
   join ~name:"badminton-mixte" ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)") `Textarea ;
   ]
