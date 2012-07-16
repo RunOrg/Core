@@ -47,7 +47,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid  ->
       method text = text
       method more = more  
       method seen = what # seen
-      method url  = "" 
+      method url  = Action.url UrlMe.Notify.follow () (what # id)  
     end)
   in
 
