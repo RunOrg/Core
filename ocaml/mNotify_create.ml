@@ -10,6 +10,24 @@ module Store   = MNotify_store
 let to_admins payload = 
   Run.list_iter (Store.create payload) (MAdmin.list ())
 
+let to_avatar payload aid = 
+  let! details = ohm $ MAvatar.details aid in 
+  let! uid = req_or (return ()) (details # who) in
+  Store.create payload uid 
+
+module ToAvatars = Fmt.Make(struct
+  type json t = ( (Payload.t * IAvatar.t) list ) 
+end)
+
+let to_avatars = 
+  let task = O.async # define "notify-to-avatars" ToAvatars.fmt
+    (Run.list_iter (fun (payload,aid) -> to_avatar payload aid))
+  in
+  function
+    | [] -> return ()
+    | [payload, aid] -> to_avatar payload aid
+    | list -> task list
+ 
 (* Create a notification when a new instance is created ----------------------------------------------------- *)
 
 let () = 
@@ -57,4 +75,21 @@ let () =
   let! uid = req_or (return ()) details # who in 
   Store.create (`NewFavorite (`ItemAuthor, aid, IItem.decay itid)) uid
 
+(* Notify owner and interested parties when a comment is posted --------------------------------------------- *)
 
+let () = 
+  let! cid, comm = Ohm.Sig.listen MComment.Signals.on_create in 
+
+  let  aid       = comm # who in
+  let  bot_itid  = IItem.Assert.bot (comm # on) in
+  let! it_author = ohm_req_or (return ()) $ MItem.author bot_itid in
+  let! it_others = ohm $ MItem.interested bot_itid in 
+  let  it_others = List.filter (fun aid' -> aid' <> it_author && aid' <> aid) it_others in 
+ 
+  let author_payload = (`NewComment (`ItemAuthor,   IComment.decay cid)) in
+  let others_payload = (`NewComment (`ItemFollower, IComment.decay cid)) in
+
+  let list = List.map (fun aid -> (others_payload, aid)) it_others in
+  let list = if it_author <> aid then (author_payload, it_author) :: list else list in
+
+  to_avatars list
