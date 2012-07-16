@@ -67,7 +67,7 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
       let! title = ohm $ CEntityUtil.name entity in   
       let! last = ohm begin 
 	match last with None -> return None | Some item -> 
-	  let! author = req_or (return None) (MItem.author (item # payload)) in
+	  let! author = req_or (return None) (MItem.author_by_payload (item # payload)) in
 	  let! p = ohm $ CAvatar.mini_profile author in
 	  return $ Some (object
 	    method pic  = p # pico

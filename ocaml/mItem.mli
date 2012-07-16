@@ -45,7 +45,7 @@ type payload = [ `Message  of message
 	       | `Chat     of chat
 	       | `ChatReq  of chat_request ] 
 
-val author : payload -> IAvatar.t option
+val author_by_payload : payload -> IAvatar.t option
 
 type item = < 
   where   : [`Unknown] MItem_common.source ; 
@@ -138,6 +138,8 @@ val exists : [`Read] source -> bool O.run
 
 val try_get : 
   'any # MAccess.context -> 'a IItem.id -> item option O.run
+
+val author : [`Bot] IItem.id -> IAvatar.t option O.run 
 
 val interested : [`Bot] IItem.id -> IAvatar.t list O.run
 

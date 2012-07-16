@@ -35,7 +35,7 @@ let author cuid =
       let! iid     = ohm_req_or (return None) $ MItem.iid itid in
       let! access  = ohm_req_or (return None) $ access cuid iid in
       let! item    = ohm_req_or (return None) $ MItem.try_get access itid in
-      let! author  = req_or (return None) $ MItem.author (item # payload) in
+      let! author  = req_or (return None) $ MItem.author_by_payload (item # payload) in
       return $ Some (`Person (author, item # iid))
 	
     | `NewFavorite (_,aid,_) -> 

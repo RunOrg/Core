@@ -43,7 +43,7 @@ type payload = [ `Message  of message
 	       | `Chat     of chat 
 	       | `ChatReq  of chat_request ] 
 
-let author = function 
+let author_by_payload = function 
   | `Message  m -> Some (m # author) 
   | `MiniPoll p -> Some (p # author) 
   | `Image    i -> Some (i # author) 

@@ -49,14 +49,27 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
 			     return (profile # pico, Some profile # name) 
     end in
 
-    let text, more = match what # payload with 
-      | `NewInstance  _ -> `NewInstance1, []
-      | `NewUser      _ -> `NewUser1, []
-      | `NewJoin      _ -> `NewJoin1, []
-      | `BecomeAdmin  _ -> `BecomeAdmin1 gender, []
-      | `BecomeMember _ -> `BecomeMember1, []
-      | _ -> `Whatever, []
-    in
+    let! text, more = ohm begin match what # payload with 
+      | `NewInstance  _ -> return (`NewInstance1, [])
+      | `NewUser      _ -> return (`NewUser1, [])
+      | `NewJoin      _ -> return (`NewJoin1, [])
+      | `BecomeAdmin  _ -> return (`BecomeAdmin1 gender, [])
+      | `BecomeMember _ -> return (`BecomeMember1, [])
+      | `NewFavorite  _ -> return (`NewFavorite1, [])
+      | `NewComment (`ItemAuthor,_) -> return (`NewCommentSelf1, [])
+      | `NewComment (`ItemFollower,cid) -> begin
+
+	let! name = ohm begin 
+	  let! itid    = ohm_req_or (return "") $ MComment.item cid in 
+	  let! author  = ohm_req_or (return "") $ MItem.author (IItem.Assert.bot itid) in
+	  let! details = ohm $ MAvatar.details author in 
+	  return $ BatOption.default "" (details # name) 
+	end in
+
+	return (`NewCommentOther1, [ name , `NewCommentOther2 ])
+      end
+      | `NewWallItem  _ -> return (`NewWallItem1, []) 
+    end in
 
     return (object
       method pic  = pic

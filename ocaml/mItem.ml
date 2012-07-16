@@ -181,6 +181,10 @@ let iid itid =
   let! data = ohm_req_or (return None) $ MyTable.get (IItem.decay itid) in
   return $ Some (data # iid) 
 
+let author itid = 
+  let! data = ohm_req_or (return None) $ MyTable.get (IItem.decay itid) in
+  return $ MItem_data.author data
+
 let try_get context item = 
 
   let self = context # self in

@@ -45,3 +45,16 @@ let () =
     (react (fun aid iid -> `BecomeAdmin (iid,aid))) ;
   Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_member
     (react (fun aid iid -> `BecomeMember (iid,aid)))
+
+(* Notify owner when an item is liked. ---------------------------------------------------------------------- *)
+
+let () = 
+  let! aid, what = Ohm.Sig.listen MLike.Signals.on_like in
+  let `item itid = what in 
+  let  bot_itid = IItem.Assert.bot itid in 
+  let! author = ohm_req_or (return ()) $ MItem.author bot_itid in 
+  let! details = ohm $ MAvatar.details author in 
+  let! uid = req_or (return ()) details # who in 
+  Store.create (`NewFavorite (`ItemAuthor, aid, IItem.decay itid)) uid
+
+

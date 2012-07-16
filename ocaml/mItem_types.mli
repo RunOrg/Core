@@ -40,7 +40,7 @@ type payload = [ `Message  of message
 	       | `Chat     of chat
 	       | `ChatReq  of chat_request ] 
 
-val author : payload -> IAvatar.t option
+val author_by_payload : payload -> IAvatar.t option
 
 type item = < 
   where   : [`Unknown] MItem_common.source ; 
