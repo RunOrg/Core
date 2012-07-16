@@ -27,6 +27,8 @@ type t = <
 
 val create : ?stats:INotifyStats.t -> MNotify_payload.t -> IUser.t -> unit O.run
 
+val get_mine : 'any ICurrentUser.id -> INotify.t -> t option O.run 
+
 val all_mine : count:int -> ?start:float -> 'any ICurrentUser.id -> (t list * float option) O.run  
 
 val count_mine : 'any ICurrentUser.id -> int O.run 

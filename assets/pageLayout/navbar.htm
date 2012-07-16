@@ -25,7 +25,7 @@ load = () ->
       setTimeout load, 10000
     dataType: 'jsonp'
 
-setTimeout load, 1000
+setTimeout load, 2000
 
 	  </script>
         </div>
@@ -80,6 +80,7 @@ setTimeout load, 1000
     text-align: center;
     min-width: 18px;
     padding: 0 3px;
+    opacity: 0.5;
     &.-on {
       background-color: #FA0;
       background: -moz-linear-gradient(center top , #FA0 0%, #D70 100%);
@@ -88,6 +89,7 @@ setTimeout load, 1000
       text-shadow: 0 -1px 0 #AA5500;
       font-weight: bold;
       box-shadow: 0 0 4px #FFAA00;
+      opacity: 1;
     }
   }
 }

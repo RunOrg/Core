@@ -67,6 +67,18 @@ let rotten nid =
       return ((),`put Data.({ notify with rotten = true }))
   end
 
+let get_mine cuid nid = 
+  let! notify = ohm_req_or (return None) $ MyTable.get nid in 
+  if notify.Data.uid = IUser.Deduce.is_anyone cuid then 
+    return $ Some (object
+      method id      = nid
+      method payload = notify.Data.payload
+      method time    = notify.Data.created
+      method seen    = notify.Data.seen <> None      
+    end)
+  else
+    return None
+
 (* Display notifications from an user ----------------------------------------------------------------------- *)
 
 module ByUser = CouchDB.DocView(struct
