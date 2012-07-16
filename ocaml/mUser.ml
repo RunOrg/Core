@@ -665,8 +665,6 @@ let _get id = MyTable.get (IUser.decay id)
 
 let get id = _get id |> Run.map (BatOption.map extract)
 
-let admin_get _ id = _get id |> Run.map (BatOption.map extract)
-
 let knows_password pass id = 
   let! user = ohm_req_or (return None) $ _get id in
   if user.Data.confirmed && user.Data.passhash = Some (ConfigKey.passhash pass)

@@ -10,7 +10,12 @@ module Redirect = CMe_notify_redirect
 
 let  count = 10
 
-let () = define UrlMe.Notify.def_home begin fun cuid  ->   
+let () = define UrlMe.Notify.def_home begin fun cuid ->   
+
+  let! gender = ohm begin
+    let! user = ohm_req_or (return None) $ MUser.get (IUser.Deduce.can_view cuid) in
+    return (user # gender) 
+  end in 
 
   let! list, _ = ohm $ O.decay (MNotify.Store.all_mine ~count cuid) in
   let! list = ohm $ O.decay (Run.list_filter begin fun t -> 
@@ -30,15 +35,26 @@ let () = define UrlMe.Notify.def_home begin fun cuid  ->
 
     let! pic, name = ohm begin 
       match who with 
-	| `RunOrg _ -> return (None, None)
+	| `RunOrg _ -> begin
+	  match what # payload with 
+	    | `NewUser uid -> 
+	      (* We must be a superadmin if we see this *)
+	      let uid = IUser.Assert.bot uid in 
+	      let! user = ohm_req_or (return (None,None)) $ MUser.get uid in 
+	      let! pic  = ohm $ CPicture.small_opt (user # picture) in
+	      return (pic, Some (user # fullname)) 
+	    | _ -> return (None, None) 
+	end
 	| `Person (aid,_) -> let! profile = ohm $ CAvatar.mini_profile aid in 
 			     return (profile # pico, Some profile # name) 
     end in
 
     let text, more = match what # payload with 
-      | `NewInstance _ -> `NewInstance1, []
-      | `NewUser     _ -> `NewUser1, []
-      | `NewJoin     _ -> `NewJoin1, []
+      | `NewInstance  _ -> `NewInstance1, []
+      | `NewUser      _ -> `NewUser1, []
+      | `NewJoin      _ -> `NewJoin1, []
+      | `BecomeAdmin  _ -> `BecomeAdmin1 gender, []
+      | `BecomeMember _ -> `BecomeMember1, []
       | _ -> `Whatever, []
     in
 
@@ -65,7 +81,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid  ->
 	| None -> return $ Some (object
 	  method name = "RunOrg"
 	  method url  = "http://runorg.com/"
-	  method pic  = Some "/public/img/logo-square.png"
+	  method pic  = Some "/public/img/logo-50x50.png"
 	end)
 	| Some iid -> 
 	  let! instance = ohm_req_or no_instance $ MInstance.get iid in
