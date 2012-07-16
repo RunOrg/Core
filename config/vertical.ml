@@ -112,8 +112,92 @@ let athle = vertical "Athle"
   Template.([
     groupSimple ;
     groupCollaborative ;
-    groupCheerleading ;
     forumPublic ;
+    albumSimple ;
+    pollSimple ;
+    pollYearly ;
+    courseSimple ;
+    course12sessions ;
+    eventSimple ;
+    eventMeeting ;
+    eventAg ;
+    eventPetition ;
+    subscriptionDatetodate ;
+    subscriptionForever ;
+  ])
+;;
+
+(* ========================================================================== *)
+
+let badminton = vertical "Badminton"
+  ~name:"Clubs de Badminton"
+  Template.([
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
+    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
+       "desc", "Groupe des responsables de l'association. Les administrateurs et les membres du bureau de l'association peuvent échanger en toute confidentialité dans ce groupe. Pour pouvoir accèder au contenu de ce groupe un administrateur doit inviter les personnes ou valider leur demande d'inscription." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.badminton-players.name" groupBadminton
+      ~name:(adlib "EntitySampleGroupCollaborativeBadmintonPlayersName" "Joueurs de Badminton") [
+       "desc", "Groupe des joueurs de badminton. Ce groupe inclu le formulaire d'inscription demandé aux joueurs." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.badminton-competition.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeBadmintonCompetitorsName" "Compétition") [
+       "desc", "Groupe des compétitrices et compétiteurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.badminton-fun.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeBadmintonFunName" "Loisir") [
+       "desc", "Groupe des pratiquants loisir" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.badminton-competition.name" eventBadmintonCompetition
+      ~name:(adlib "EntitySampleEventBadmintonCompetitionName" "Exemple de Tournoi de Badminton") [
+	  "desc", "Exemple d'organisation et d'inscriptions à un tournoi de badminton. Inscrivez-vous à ce tournois pour visualiser le formulaire d'inscription." ;
+	  "date", "20221231" ;
+	  "address", "9 Avenue Michelet 93583 SAINT-OUEN" ;     
+      ] ;
+    initial "entity.sample.event-ag.name" eventAg
+      ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
+       "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
+      ] ;
+    initial "entity.sample.poll-yearly.name" pollYearly
+      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
+       "desc", "Pour répondre à ce sondage rendez-vous dans l'onglet \"Mon inscription\". Vous pouvez ainsi utiliser immédiatement ce sondage que nous avons créé pour vous sous la forme d'un modèle réutilisable. Il vous est possible d'inviter vos membres à répondre à ce sondage en les ajoutant dans la liste des invités. " ;
+       "summary", "Exemple de sondage" ;
+       "moreinfo", "Ce sondage a été créé automatiquement lors de la mise en place de votre espace RunOrg. Cliquez sur créer un sondage pour voir les autres modèles disponibles." ;
+       "enddate", "20221231" ;
+      ] ;
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+  ])
+  Template.([
+    groupSimple ;
+    groupCollaborative ;
+	groupBadminton ;
+    forumPublic ;
+	eventBadmintonCompetition ;
     albumSimple ;
     pollSimple ;
     pollYearly ;
@@ -134,7 +218,54 @@ let campaigns = vertical "Campaigns"
   ~old:"v:campaigns"
   ~name:"Campagnes électorales"
   Template.([
-
+    initial "entity.sample.group-collaborative.campaign-comity.sample" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCampaignComitySample" ~old:"entity.sample.group-collaborative.campaign-comity.sample" "Comité de campagne") [
+       "desc", "Groupe du comité de campagne" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.campaign-members.sample" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCampaignMembersSample" ~old:"entity.sample.group-collaborative.campaign-members.sample" "Militants") [
+       "desc", "Groupe des militants" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.campaign-sympathisers.sample" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeCampaignSympathisersSample" ~old:"entity.sample.group-collaborative.campaign-sympathisers.sample" "Sympathisants") [
+       "desc", "Groupe des sympathisants" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+   initial "entity.sample.event-campaign-meeting.sample" eventCampaignMeeting
+      ~name:(adlib "EntitySampleEventCampaignMeetingName" ~old:"entity.sample.event-campaign-meeting.name" "Exemple de réunion électorale") [
+       "desc", "Ceci est un exemple de réunion électorale telle que vous pouvez les organisez dans RunOrg. Cliquez sur le bouton "inscription en haut à gauche de votre écran pour visualiser le formulaire d'inscription qui est proposé aux invités."" ;
+       "date", "20221231" ;
+       "location", "Maison de la mutualité" ;
+       "address", "24 Rue Saint-Victor, 75005 Paris" ;
+       "coord", "François & François" ;
+       "agenda", "Cliquez sur le bouton modifier pour visualiser le formulaire de création de cet évènement. " ;
+       "moreinfo", "Un pot de l'amité suivra cette réunion" ;
+      ] ;
+   initial "entity.sample.event-campaign-action.sample" eventCampaignAction
+      ~name:(adlib "EntitySampleEventCampaignActionName" ~old:"entity.sample.event-campaign-action.name" "Exemple d'opération militante") [
+       "action-typ", "Boitage" ;
+	   "desc", "Mettre dans les boites aux lettre du secteur Réunion les tracts programme" ;
+       "date", "20221231" ;
+       "location", "Secteur Réunion" ;
+       "address", "Rue Planchat 75020 Paris" ;
+       "coord", "Victor" ;
+       "action-details", "Par groupe de 2 faire les immeubles des rues Planchat, Haies, Avron, Buzenval" ;
+       "moreinfo", "RDV à 9h place de la réunion" ;
+      ] ;
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à la copro, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -267,7 +398,38 @@ let comiteEnt = vertical "ComiteEnt"
   ~old:"v:comite-ent"
   ~name:"Comités d'entreprise"
   Template.([
-
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à la copro, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.group-collaborative.comite-ent-employees.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeComiteEntEmployeesName" ~old:"entity.sample.group-collaborative.comite-ent-employees.name" "Salariés") [
+       "desc", "Groupe des salariés de l'entreprise" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.comite-ent-managers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeComiteEntManagersName" ~old:"entity.sample.group-collaborative.comite-ent-managers.name" "Elus du CE") [
+       "desc", "Groupe des élus du comité d'entreprise" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+   initial "entity.sample.event-meeting.comite-ent.name" eventComiteEnt
+      ~name:(adlib "EntitySampleEventMeetingComiteEntName" ~old:"entity.sample.event-meeting.comite-ent.name" "Exemple de Comité d'Entreprise") [
+       "desc", "Cliquez sur l'onglet "Mon inscription" pour voir les informations qui sont demandées aux personnes qui souhaitent s'inscrire à cet évènement. Cet évènement de type "Comité d'entreprise" vous permet de visualiser à quoi ressemble un CE dans RunOrg." ;
+       "date", "20221231" ;
+       "location", "Salle de réunion" ;
+       "address", "1 Place de la Défense 92800 Puteaux" ;
+       "coord", "Le secrétaire" ;
+       "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre CE." ;
+       "moreinfo", "Un pot de l'amité suivra ce CE" ;
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -443,7 +605,7 @@ let copro = vertical "Copro"
     initial "entity.sample.event-copro-meeting.name" eventCoproMeeting
       ~name:(adlib "EntitySampleEventCoproMeetingName" ~old:"entity.sample.event-copro-meeting.name" "Exemple de Conseil syndical") [
        "desc", "Nous avons créé automatiquement cet évènement de type \"Conseil syndical\" pour vous montrer à quoi cela ressemble dans RunOrg. Vous pouvez vous à tout moment en créer un en cliquant sur \"Créer un évènement\" et sélectionner \"Conseil syndical\". Cliquez sur \"Inscription\" pour visualiser le formulaire d'inscription qui est proposé aux participants." ;
-       "date", "20121231" ;
+       "date", "20221231" ;
        "location", "Chez le président du conseil" ;
        "address", "22 rue planchat 75020 Paris" ;
        "coord", "Julien (du A 23)" ;
@@ -581,7 +743,8 @@ let ess = vertical "Ess"
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
       ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
-       "enddate", "20221231" ;
+        "desc", "Ceci est un exemple d'évènement dans RunOrg. Vous pouvez ajouter une photo et éditer cet évènement";
+		"date", "20221231" ;
       ] ;
     initial "entity.sample.petition.name" eventPetition
       ~name:(adlib "EntitySamplePetitionName" ~old:"entity.sample.petition.name" "Exemple de pétition") [
@@ -645,7 +808,37 @@ let events = vertical "Events"
   ~old:"v:events"
   ~name:"Organisation d'évènements"
   Template.([
-
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à la copro, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.group-collaborative.staff.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeStaffName" ~old:"entity.sample.group-collaborative.staff.name" "Staff") [
+       "desc", "Groupe des membres du staff" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.contact.name" groupSimple
+      ~name:(adlib "EntitySampleContactName" ~old:"entity.sample.contact.name" "Contacts") [
+       "desc", "Groupe des contacts" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+	initial "entity.sample.event-clubbing.name" eventClubbing
+      ~name:(adlib "EntitySampleEventClubbingName" ~old:"entity.sample.event-clubbing.name" "Exemple de Soirée") [
+       "desc", "LA soirée unique de l'année, ambiance bon enfant et beautifull people. Cette soirée a été créée dans le but de vous montrer à quoi ressemble une soirée dans RunOrg. Vous pouvez utiliser le lien des soirées pour les diffuser auprès de vos contacts : ils pourront alors venir s'inscrire et renseigner les informations complémentaires que vous pouvez leur demander." ;
+       "date", "20221231" ;
+       "location", "Châlet" ;
+       "address", "Mont blanc, chamonix, France" ;
+       "coord", "Maxime" ;
+       "moreinfo", "Navette jusqu'au refuge. Horaires pour les retours : 2h, 3h, 5h" ;
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -793,7 +986,8 @@ let footus = vertical "Footus"
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
       ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
-       "enddate", "20221231" ;
+        "desc", "Ceci est un exemple d'évènement dans RunOrg. Vous pouvez ajouter une photo et éditer cet évènement";
+		"date", "20221231" ;
       ] ;
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
@@ -877,7 +1071,44 @@ let impro = vertical "Impro"
   ~old:"v:impro"
   ~name:"Théâtre d'Improvisation"
   Template.([
-
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
+    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
+       "desc", "Groupe des responsables de l'association. Les administrateurs et les membres du bureau de l'association peuvent échanger en toute confidentialité dans ce groupe. Pour pouvoir accèder au contenu de ce groupe un administrateur doit inviter les personnes ou valider leur demande d'inscription." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.event-ag.name" eventAg
+      ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
+       "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
+      ] ;
+    initial "entity.sample.poll-yearly.name" pollYearly
+      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
+       "desc", "Pour répondre à ce sondage rendez-vous dans l'onglet \"Mon inscription\". Vous pouvez ainsi utiliser immédiatement ce sondage que nous avons créé pour vous sous la forme d'un modèle réutilisable. Il vous est possible d'inviter vos membres à répondre à ce sondage en les ajoutant dans la liste des invités. " ;
+       "summary", "Exemple de sondage" ;
+       "moreinfo", "Ce sondage a été créé automatiquement lors de la mise en place de votre espace RunOrg. Cliquez sur créer un sondage pour voir les autres modèles disponibles." ;
+       "enddate", "20221231" ;
+      ] ;
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.event-impro-simple.name" eventImproSimple
+      ~name:(adlib "EntitySampleEventImproSimpleName" "Exemple de Match d'Impro") [
+	  "desc", "Grand classique de l'improvisation ! Cet événement créé dans RunOrg vous permet de réccupérer les désidératas de vos membres sur le rôle qu'ils veulent tenir dans l'organisation de ce match." ;
+	  "date", "20221231" ;
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -924,10 +1155,13 @@ let judo = vertical "Judo"
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
       ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
-       "enddate", "20221231" ;
+        "desc", "Ceci est un exemple d'évènement dans RunOrg. Vous pouvez ajouter une photo et éditer cet évènement";
+		"date", "20221231" ;
       ] ;
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
@@ -1228,10 +1462,13 @@ let multiSports = vertical "MultiSports"
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
       ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
-       "enddate", "20221231" ;
+        "desc", "Ceci est un exemple d'évènement dans RunOrg. Vous pouvez ajouter une photo et éditer cet évènement";
+		"date", "20221231" ;
       ] ;
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
@@ -1308,12 +1545,14 @@ let multiSports = vertical "MultiSports"
     groupFitnessMembers ;
     groupCheerleading ;
     groupFootus ;
+	groupBadminton ;
     forumPublic ;
     albumSimple ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
     course12sessions ;
+	eventBadmintonCompetition ;
     eventSimple ;
     eventAg ;
     eventMeeting ;
@@ -1380,6 +1619,45 @@ let salleSport = vertical "SalleSport"
   ~old:"v:salle-sport"
   ~name:"Salle de sport et Coaching sportif"
   Template.([
+      initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") [
+       "desc", "Groupe des entraîneurs et des formateurs" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à la copro, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.event-simple.name" eventSimple
+      ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
+        "desc", "Ceci est un exemple d'évènement dans RunOrg. Vous pouvez ajouter une photo et éditer cet évènement";
+		"date", "20221231" ;
+      ] ;
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
+    initial "entity.sample.group-fitness-members.name" groupFitnessMembers
+      ~name:(adlib "EntitySampleGroupFitnessMembersName" ~old:"entity.sample.group-fitness-members.name" "Sportifs Fitness") [
+       "desc", "Groupe des sportifs, c'est dans ce groupe que se trouve le formulaire que les sportifs doivent renseigner pour s'inscrire au club. Ne pas supprimer ce groupe. Vous pouvez modifier les informations du formulaire dans "option > champs spécifiques"." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la mise en place de votre espace RunOrg" ;
+      ] ;
+    initial "entity.sample.group-collaborative.staff.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeStaffName" ~old:"entity.sample.group-collaborative.staff.name" "Staff") [
+       "desc", "Groupe des membres du staff" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.course-12sessions.name" course12Sessions
+      ~name:(adlib "EntitySampleCourse12SessionsName" ~old:"entity.sample.course-12sessions.name" "Exemple de cours 12 séances") [
+        "desc", "Exemple de cours avec un formulaire permettant d'assurer le suivi sur 12 séances pour l'ensemble des personnes inscrites. Les inscrits et les responsables peuvent modifier les informations du formulaire. L'ensemble des informations est téléchargeable dans un tableur.";
+      ] ;
   ])
   Template.([
     groupSimple ;
@@ -1399,6 +1677,72 @@ let salleSport = vertical "SalleSport"
     subscriptionForever ;
   ])
 ;;
+(* ========================================================================== *)
+
+let primaryschool = vertical "PrimarySchool"
+ ~name:"Ecoles primaires"
+  Template.([
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-teachers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolTeachersName" "Enseignants et équipe éducative") [
+       "desc", "Groupe des professeurs et de l'équipe éducative" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-parents.name" groupSchoolParents
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolParentsName" "Parents d'élèves") [
+       "desc", "Groupe des parents des évèles scolarisés" ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-grade-cp.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCpName" "Classe de CP") [
+       "desc", "Groupe de la classe de CP " ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-grade-ce1.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe1Name" "Classe de CE1") [
+       "desc", "Groupe de la classe de CE1 " ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-grade-ce2.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe2Name" "Classe de CE2") [
+       "desc", "Groupe de la classe de CE2 " ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-grade-cm1.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm1Name" "Classe de CM1") [
+       "desc", "Groupe de la classe de CM1 " ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.group-collaborative.school-grade-cm2.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm2Name" "Classe de CM2") [
+       "desc", "Groupe de la classe de CM2 " ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+  ])
+  Template.([
+    groupSimple ;
+    groupCollaborative ;
+    forumPublic ;
+    albumSimple ;
+    pollSimple ;
+    pollYearly ;
+    courseSimple ;
+    course12sessions ;
+    eventSimple ;
+    eventMeeting ;
+  ])
+;;
 
 (* ========================================================================== *)
 
@@ -1416,6 +1760,8 @@ let simple = vertical "Simple"
       ] ;
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
@@ -1552,10 +1898,12 @@ let sports = vertical "Sports"
       ] ;
     initial "entity.sample.event-simple.name" eventSimple
       ~name:(adlib "EntitySampleEventSimpleName" ~old:"entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg") [
-       "enddate", "20221231" ;
+       "date", "20221231" ;
       ] ;
     initial "entity.sample.event-ag.name" eventAg
       ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
        "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
       ] ;
     initial "entity.sample.poll-yearly.name" pollYearly
@@ -1711,6 +2059,56 @@ let students = vertical "Students"
   ~old:"v:students"
   ~name:"Association étudiante"
   Template.([
+      initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérants 2012-2013") [
+       ] ;
+    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") [
+       "desc", "Groupe des responsables de l'association. Les administrateurs et les membres du bureau de l'association peuvent échanger en toute confidentialité dans ce groupe. Pour pouvoir accèder au contenu de ce groupe un administrateur doit inviter les personnes ou valider leur demande d'inscription." ;
+       "moreinfo", "Ce groupe a été créé automatiquement lors de la création de votre espace RunOrg." ;
+      ] ;
+    initial "entity.sample.event-ag.name" eventAg
+      ~name:(adlib "EntitySampleEventAgName" ~old:"entity.sample.event-ag.name" "Exemple d'AG dans RunOrg") [
+	  "desc", "Temps fort de la vie de l'association, l'AG est le moment du bilan et des projets. Avec RunOrg vous pouvez centraliser les demandes des adhérants et organiser des votes en ligne pour vos AG." ;
+	  "date", "20221231" ;
+       "agenda", "Grâce à ce champ, vous pouvez communiquer à tous vos membres l'ordre du jour de votre assemblée générale.    1. Ce champ est également disponible avec le modèle des réunions    2. Vous pouvez avant la réunion exporter au format excel la liste des participants ainsi que tous leurs retours    3. Mettez ce champ à jour à tout moment : seuls les administrateurs peuvent le modifier    4. Etc." ;
+      ] ;
+    initial "entity.sample.poll-yearly.name" pollYearly
+      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") [
+       "desc", "Pour répondre à ce sondage rendez-vous dans l'onglet \"Mon inscription\". Vous pouvez ainsi utiliser immédiatement ce sondage que nous avons créé pour vous sous la forme d'un modèle réutilisable. Il vous est possible d'inviter vos membres à répondre à ce sondage en les ajoutant dans la liste des invités. " ;
+       "summary", "Exemple de sondage" ;
+       "moreinfo", "Ce sondage a été créé automatiquement lors de la mise en place de votre espace RunOrg. Cliquez sur créer un sondage pour voir les autres modèles disponibles." ;
+       "enddate", "20221231" ;
+      ] ;
+    initial "entity.sample.forum-public.classified.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") [
+       "desc", "Profitez de ce forum pour poster vos diverses petites annonces. Pour répondre aux annonces : cliquez simplement sur répondre pour laisser votre message. Si vous avez des photos à poster en complément de vos annonces : un album est à votre disposition." ;
+       "summary", "Venez poster ici vos petites annonces" ;
+       "morinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+    initial "entity.sample.forum-public.user-support.name" forumPublic
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") [
+       "desc", "Ce forum a pour but de partager les bons conseils sur l'utilisation de RunOrg, et de répondre aux questions que vous pourriez vous poser. Ce forum d'entraide est interne à l'association, les équipes de RunOrg n'y ont pas accès. " ;
+       "summary", "Aide pour utiliser RunOrg" ;
+       "moreinfo", "Ce forum a été créé pour exemple lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
+	initial "entity.sample.event-clubbing.name" eventClubbing
+      ~name:(adlib "EntitySampleEventClubbingName" ~old:"entity.sample.event-clubbing.name" "Exemple de Soirée") [
+       "desc", "LA soirée unique de l'année, ambiance bon enfant et beautifull people. Cette soirée a été créée dans le but de vous montrer à quoi ressemble une soirée dans RunOrg. Vous pouvez utiliser le lien des soirées pour les diffuser auprès de vos contacts : ils pourront alors venir s'inscrire et renseigner les informations complémentaires que vous pouvez leur demander." ;
+       "date", "20221231" ;
+       "location", "Châlet" ;
+       "address", "Mont blanc, chamonix, France" ;
+       "coord", "Maxime" ;
+       "moreinfo", "Navette jusqu'au refuge. Horaires pour les retours : 2h, 3h, 5h" ;
+      ] ;
+    initial "entity.sample.petition.name" eventPetition
+      ~name:(adlib "EntitySamplePetitionName" ~old:"entity.sample.petition.name" "Exemple de pétition") [
+       "desc", "Cette pétition a été créé pour vous montrer le modèle d'évènement \"Pétition\" disponible avec votre préconfiguration. Grâce à ce modèle créez en un clique une pétition que vous pouvez ensuite diffuser sur Internet (site Internet, blog, réseaux sociaux, emails, etc...). Les personnes extèrieures y ont accès, lorsqu'elles signent elles sont automatiquement ajoutées à vos contacts. Il n'y a qu'un seul champ demandé lors de la signature (voir \"Mon inscription\") mais vous pouvez en ajouter autant que vous le souhaitez. Notez que vous pouvez exporter la liste des signataires avec leurs nom, prénom, email et code postal dans la grille des participants. " ;
+       "date", "20220630" ;
+       "enddate", "20221231" ;
+       "coord", "Le président de l'association" ;
+       "moreinfo", "Cette pétition a été créée automatiquement lors de la mise en place de votre espace RunOrg. " ;
+      ] ;
   ])
   Template.([
     groupCollaborative ;
@@ -1724,7 +2122,6 @@ let students = vertical "Students"
     eventSimple ;
     eventAg ;
     eventMeeting ;
-    eventClubbing ;
     eventClubbing ;
     eventPetition ;
     subscriptionDatetodate ;
@@ -1757,6 +2154,9 @@ let () = catalog [
               None ;
     inCatalog judo
               (adlib "VerticalJudoName" "Club de judo et jujitsu")
+              None ;
+    inCatalog badminton
+              (adlib "VerticalBadminton" "Club de badminton")
               None ;
     inCatalog footus
               (adlib "VerticalFootusName" "Football américain et cheerleading")
@@ -1815,6 +2215,11 @@ let () = catalog [
               None ;
     inCatalog spUsep
               (adlib "VerticalSpUsepName" "Fédération - USEP")
+              None ;
+  ] ;
+  subCatalog ~name:(adlib "Education" "Education") [
+    inCatalog primaryschool
+              (adlib "VerticalPrimarySchool" "Ecoles primaires")
               None ;
   ] ;
   subCatalog ~name:(adlib "Catalog_Autre" "Autres") [

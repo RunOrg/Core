@@ -1709,6 +1709,164 @@ let eventAg = template "EventAg"
 
 (* ========================================================================== *)
 
+let eventBadmintonCompetition = template "EventBadmintonCompetition"
+  ~kind:`Event
+  ~name:"Tournoi de Badminton"
+  ~desc:"Organisation et inscriptions à un tournoi de badminton"
+  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
+  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
+  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `Status) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFielBadmintonSeries" "Série choisie")
+      (`Self (`Field "badminton-series")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi")
+      (`Self (`Field "badminton-table")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldBadmintonDouble" "Partenaire de double (nom, prénom, classement)")
+      (`Self (`Field "badminton-double")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)")
+      (`Self (`Field "badminton-mixte")) ;
+  ]
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
+          `LongText "endtime" ;
+    field ~label:(adlib "EntityFieldTime" "Heure de début")
+          `LongText "time" ;
+    field ~label:(adlib "EntityFieldDate" "Date")
+          ~required:true
+          ~mean:`Date
+          `Date "date" ;
+    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
+          `LongText "location" ;
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
+          ~mean:`Location
+          `LongText "address" ;
+    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
+          `LongText "location-url" ;
+    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
+          `Textarea "agenda" ;
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
+  ~join:[
+  join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `longtext ;
+  join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `longtext ;
+  join ~name:"badminton-double" ~label:(adlib "JoinFieldBadmintonDouble" "Partenaire de double (nom, prénom, classement)") `Textarea ;
+  join ~name:"badminton-mixte" ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)") `Textarea ;
+  ]
+  ~page:[
+    infoSection
+      (adlib "Info_Section_Moreinfo" "Plus d'info")
+      [
+        infoItem
+          [
+            infoField "moreinfo" `Text ;
+          ];
+      ];
+    infoSection
+      (adlib "Info_Section_Org" "Organisation")
+      [
+        infoItem
+          [
+            infoField "coord" `Text ;
+            infoField "coord" `Text ;
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Coord" "Coordinateur")
+          [
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Coord" "Coordinateur")
+          [
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
+          [
+            infoField "agenda" `LongText ;
+          ];
+      ];
+    infoSection
+      (adlib "Info_Section_Where" "Où ?")
+      [
+        infoItem
+          [
+            infoField "location" `Text ;
+          ];
+        infoItem
+          [
+            infoField "address" `Address ;
+          ];
+        infoItem
+          [
+            infoField "location-url" `Url ;
+          ];
+      ];
+    infoSection
+      (adlib "Info_Section_When" "Quand ?")
+      [
+        infoItem
+          [
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Date" "Coordinateur")
+          [
+            infoField "date" `Date ;
+          ];
+        infoItem
+          [
+          ];
+        infoItem
+          [
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Time" "Heure de début")
+          [
+            infoField "time" `Text ;
+          ];
+        infoItem
+          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
+          [
+            infoField "endtime" `Text ;
+          ];
+      ];
+  ]
+  ()
+  
+(* ========================================================================== *)
+
 let eventCampaignAction = template "EventCampaignAction"
   ~old:"event-campaign-action"
   ~kind:`Event
@@ -3791,6 +3949,133 @@ let forumPublic = template "ForumPublic"
 
 (* ========================================================================== *)
 
+let groupBadminton = template "GroupBadminton"
+  ~kind:`Group
+  ~name:"Sportifs Badminton"
+  ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du badminton"
+  ~propagate:"members"
+  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
+  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
+  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `Status) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)")
+      (`Self (`Field "license-number")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormCompetitor" "Compétiteur")
+      (`Self (`Field "competitor")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRanking" "Classement")
+      (`Self (`Field "Classement")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`PickOne
+      ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
+      (`Self (`Field "sex")) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance")
+      (`Self (`Field "placeofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
+      (`Self (`Field "mobilephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse")
+      (`Self (`Field "address")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession")
+      (`Self (`Field "job")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père")
+      (`Self (`Field "info-father")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère")
+      (`Self (`Field "info-mother")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ]
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
+  ~join:[
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
+    join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
+      (`PickOne [
+         adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
+         adlib "JoinFormSexFemale" ~old:"join.form.sex.female" "Féminin" ] ) ;
+    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
+    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"job" ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession") `LongText ;
+    join ~name:"address" ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"license-number" ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)") `LongText ;
+    join ~name:"competitor" ~label:(adlib "JoinFormCompetitor" "Compétiteur") ~required:true 
+      (`PickOne [
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
+	join ~name:"ranking" ~label:(adlib "JoinFormRanking" "Classement") `LongText ;
+	join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
+    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père") `Textarea ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
+  ]
+  ~page:[
+    infoSection
+      (adlib "Info_Section_Moreinfo" "Plus d'info")
+      [
+        infoItem
+          [
+            infoField "moreinfo" `Text ;
+          ];
+      ];
+  ]
+  ()
+  
+(* ========================================================================== *)
+
 let groupCheerleading = template "GroupCheerleading"
   ~old:"group-cheerleading"
   ~kind:`Group
@@ -4921,6 +5206,97 @@ let groupRespo = template "GroupRespo"
   ]
   ()
 
+  (* ========================================================================== *)
+
+let groupSchoolParents = template "GroupSchoolParents"
+  ~kind:`Group
+  ~name:"Parents d'élèves"
+  ~desc:"Groupe collabroratif dédié aux parents d'élèves"
+  ~propagate:"members"
+  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
+  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
+  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:[
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
+      (`Profile `Firstname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
+      (`Self (`Field "lastname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
+      (`Self (`Field "children-names")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
+      (`Self (`Field "workphone")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormMobile" ~old:"join.form.mobile" "Tel portable")
+      (`Self (`Field "mobile")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
+      (`Self (`Field "workemail")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormChildrenGrades" "Classes des enfants scolarisés")
+      (`Self (`Field "children-grades")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
+      (`Self (`Field "firstname")) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
+      (`Profile `Lastname) ;
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
+      (`Profile `Email) ;
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `Status) ;
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) ;
+  ]
+  ~fields:[
+    field ~label:(adlib "EntityFieldSummary" "Résumé")
+          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
+          ~mean:`Summary
+          `LongText "summary" ;
+    field ~label:(adlib "EntityFieldDesc" "Description")
+          ~required:true
+          ~mean:`Description
+          `Textarea "desc" ;
+    field ~label:(adlib "EntityFieldPicture" "Image")
+          ~mean:`Picture
+          `Picture "pic" ;
+    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
+          `Textarea "moreinfo" ;
+  ]
+  ~join:[
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
+    join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
+    join ~name:"mobile" ~label:(adlib "JoinFormMobile" ~old:"join.form.mobile" "Tel portable") `LongText ;
+    join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
+	join ~name:"children-names" ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés") ~required:true `LongText ;
+	join ~name:"children-grades" ~label:(adlib "JoinFormChildrenGrades" "Classes des enfants scolarisés") 
+      (`PickMany [
+         adlib "JoinFormChildrenGradesCp" "CP" ;
+         adlib "JoinFormChildrenGradesCe1" "CE1" ;
+         adlib "JoinFormChildrenGradesCe2" "CE2" ;
+         adlib "JoinFormChildrenGradesCm1" "Cm1" ;
+         adlib "JoinFormChildrenGradesCm2" "Cm2" ;] ) ;
+	]
+  ~page:[
+    infoSection
+      (adlib "Info_Section_Moreinfo" "Plus d'info")
+      [
+        infoItem
+          [
+            infoField "moreinfo" `Text ;
+          ];
+      ];
+  ]
+  ()
+  
 (* ========================================================================== *)
 
 let groupSimple = template "GroupSimple"
