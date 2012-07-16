@@ -27,4 +27,21 @@ let () =
 (* Create a notification when an user joins an instance ----------------------------------------------------- *)
 
 let () = 
-  () (* Not implemented yet *)
+  let send (_,aid,iid) = to_admins (`NewJoin (iid,aid)) in
+  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_admin  send ;
+  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_member send
+
+(* Notify user when they are added as a member or admin ----------------------------------------------------- *)
+
+let () = 
+  let react how (aid, who, iid) = 
+    let! aid = req_or (return ()) aid in 
+    let! details = ohm $ MAvatar.details who in
+    let! uid = req_or (return ()) details # who in 
+    let  payload = how (IAvatar.decay aid) iid in
+    Store.create payload uid 
+  in
+  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_admin 
+    (react (fun aid iid -> `BecomeAdmin (iid,aid))) ;
+  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_member
+    (react (fun aid iid -> `BecomeMember (iid,aid)))
