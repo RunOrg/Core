@@ -6,6 +6,8 @@ open BatPervasives
 
 open CMe_common
 
+module Redirect = CMe_notify_redirect 
+
 let  count = 10
 
 let () = define UrlMe.Notify.def_home begin fun cuid  ->   
@@ -102,3 +104,18 @@ let () = UrlMe.Notify.def_count begin fun req res ->
   respond count
 
 end 
+
+let () = UrlMe.Notify.def_follow begin fun req res -> 
+
+  let  fail = return $ Action.redirect (Action.url UrlMe.Notify.home () ()) res in
+
+  let! cuid = req_or fail $ CSession.get req in 
+  let  nid  = req # args in 
+  let! notify = ohm_req_or fail $ MNotify.Store.get_mine cuid nid in 
+  let! () = ohm $ MNotify.Stats.from_site nid in 
+
+  let! url = ohm_req_or fail $ Redirect.url cuid notify in 
+  
+  return $ Action.redirect url res
+
+end
