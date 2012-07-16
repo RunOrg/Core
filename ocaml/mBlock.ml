@@ -13,12 +13,18 @@ end)
 
 type what = What.t
 
+module Kind = Fmt.Make(struct
+  type json t = [ `Send "s" | `Block "b" ] 
+end)
+
+type status = Kind.t
+
 module Data = struct
   module T = struct
-    module IAvatar = IAvatar
     type json t = {
-      what : What.t ;
-      who  : IAvatar.t 
+      what     : What.t ;
+      who      : IAvatar.t ;
+     ?kind "k" : Kind.t = `Block 
     }
   end
   include T
@@ -34,50 +40,65 @@ module Design = struct
 end
 
 module FindKey = Fmt.Make(struct
-  module IAvatar = IAvatar
-  type json t = What.t * IAvatar.t
+  type json t = ( What.t * IAvatar.t ) 
 end)
 
 module Find = CouchDB.MapView(struct
   module Key = FindKey
-  module Value = Fmt.Unit
+  module Value = Kind
   module Design = Design
   let name = "find"
-  let map  = "emit([doc.what,doc.who],null)"  
+  let map  = "emit([doc.what,doc.who],doc.k)"  
 end)
 
-let is_blocked avatar what =
+let status avatar what = 
   let! list = ohm $ Find.by_key (what,IAvatar.decay avatar) in
-  return (list <> [])
+  match list with 
+    | []     -> return None
+    | h :: _ -> return $ Some (h # value)
 
+let set avatar what kind = 
+  let! list = ohm $ Find.by_key (what, IAvatar.decay avatar) in
+  if list = [] then 
+    let! _ = ohm $ MyTable.transaction (Id.gen ())
+      (MyTable.insert Data.({ what ; who = IAvatar.decay avatar ; kind }))
+    in 
+    return ()
+  else 
+    Run.list_iter begin fun item -> 
+      let! _ = ohm $ MyTable.transaction (item # id) 
+	(MyTable.update (fun d -> Data.({ d with kind })))
+      in
+      return ()
+    end list
+      
 let block avatar what = 
-  let! is_blocked = ohm $ is_blocked avatar what in
-  if is_blocked then return () else
-    MyTable.transaction (Id.gen ())
-      (MyTable.insert Data.({ what = what ; who = IAvatar.decay avatar })) |> Run.map ignore
+  let! current = ohm $ status avatar what in 
+  if current = Some `Block then return () else set avatar what `Block
 
 let unblock avatar what =   
-
-  let! list = ohm $ Find.by_key (what,IAvatar.decay avatar) in
-
-  let! _    = ohm $
-    Run.list_map (fun item ->
-      MyTable.transaction (item # id) MyTable.remove
-    ) list
-  in
-
-  return ()
+  let! current = ohm $ status avatar what in 
+  if current = Some `Send then return () else set avatar what `Send
 
 module ByWhat = CouchDB.MapView(struct
   module Key = What
-  module Value = IAvatar
+  module Value = Fmt.Make(struct
+    type json t = ( IAvatar.t * Kind.t )
+  end)
   module Design = Design
   let name = "by_what"
-  let map  = "emit(doc.what,doc.who)"
+  let map  = "emit(doc.what,[doc.who,doc.k])"
 end)
 
-let all_blockers what = 
+let all_special what = 
   let! list = ohm $ ByWhat.by_key what in
-  let addset set item = BatPSet.add (item # value) set in
-  return $
-    List.fold_left addset BatPSet.empty list
+  let  list = List.map (#value) list in 
+  let  block, send = List.partition (fun (_,k) -> k = `Block) list in 
+  let  block = List.map fst block in
+  let  send  = List.map fst send in 
+  return (object
+    method block = block 
+    method send  = send
+  end)
+  
+

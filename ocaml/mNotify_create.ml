@@ -93,3 +93,5 @@ let () =
   let list = if it_author <> aid then (author_payload, it_author) :: list else list in
 
   to_avatars list
+
+open MBlock
