@@ -177,6 +177,10 @@ let interested itid =
   let  list = match MItem_data.author item with None -> list | Some aid -> aid :: list in 
   return $ BatList.sort_unique compare list 
 
+let iid itid = 
+  let! data = ohm_req_or (return None) $ MyTable.get (IItem.decay itid) in
+  return $ Some (data # iid) 
+
 let try_get context item = 
 
   let self = context # self in

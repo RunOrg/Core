@@ -7,6 +7,7 @@ open BatPervasives
 open CMe_common
 
 module Account = CMe_account
+module Notify  = CMe_notify
 
 let () = UrlMe.def_root begin fun req res -> 
 

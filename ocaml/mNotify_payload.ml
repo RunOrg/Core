@@ -17,39 +17,55 @@ include Fmt.Make(struct
     ]
 end)
 
-let author access = function 
+let access cuid iid = 
+  let! isin = ohm $ MAvatar.identify iid cuid in
+  let! isin = req_or (return None) $ IIsIn.Deduce.is_token isin in
+  let! self = ohm $ MAvatar.get isin in 
+  return $ Some (object
+    method self = self
+    method isin = isin
+   end)
 
-  | `NewWallItem (_,itid) -> 
-    let! item   = ohm_req_or (return None) $ MItem.try_get access itid in
-    let! author = req_or (return None) $ MItem.author (item # payload) in
-    return $ Some (`Person (author, item # iid))
+let author cuid = 
+  (* Act as a confirmed user for the purposes of extracting author information *)
+  let cuid = ICurrentUser.Assert.is_old cuid in 
+  function 
 
-  | `NewFavorite (_,aid,_) -> 
-    let! details = ohm $ MAvatar.details aid in
-    let! iid     = req_or (return None) (details # ins) in
-    return $ Some (`Person (aid, iid)) 
-
-  | `NewComment (_,cid) ->
-    let! itid = ohm_req_or (return None) $ MComment.item cid in 
-    let! item = ohm_req_or (return None) $ MItem.try_get access itid in 
-    let! _, comm = ohm_req_or (return None) $ MComment.try_get (item # id) cid in 
-    return $ Some (`Person (comm # who, item # iid))
-
-  | `BecomeMember (iid,aid) -> 
-    return $ Some (`Person (aid,iid))
-
-  | `BecomeAdmin (iid,aid) -> 
-    return $ Some (`Person (aid,iid))
-
-  | `NewInstance (iid,aid) -> 
-    return $ Some (`Person (aid,iid))
-
-  | `NewUser _ -> 
-    return $ Some (`RunOrg None)
-
-  | `NewJoin (iid,aid) -> 
-    return $ Some (`Person (aid,iid))
-
+    | `NewWallItem (_,itid) -> 
+      let! iid     = ohm_req_or (return None) $ MItem.iid itid in
+      let! access  = ohm_req_or (return None) $ access cuid iid in
+      let! item    = ohm_req_or (return None) $ MItem.try_get access itid in
+      let! author  = req_or (return None) $ MItem.author (item # payload) in
+      return $ Some (`Person (author, item # iid))
+	
+    | `NewFavorite (_,aid,_) -> 
+      let! details = ohm $ MAvatar.details aid in
+      let! iid     = req_or (return None) (details # ins) in
+      return $ Some (`Person (aid, iid)) 
+	
+    | `NewComment (_,cid) ->
+      let! itid    = ohm_req_or (return None) $ MComment.item cid in 
+      let! iid     = ohm_req_or (return None) $ MItem.iid itid in
+      let! access  = ohm_req_or (return None) $ access cuid iid in
+      let! item    = ohm_req_or (return None) $ MItem.try_get access itid in 
+      let! _, comm = ohm_req_or (return None) $ MComment.try_get (item # id) cid in 
+      return $ Some (`Person (comm # who, item # iid))
+	
+    | `BecomeMember (iid,aid) -> 
+      return $ Some (`Person (aid,iid))
+	
+    | `BecomeAdmin (iid,aid) -> 
+      return $ Some (`Person (aid,iid))
+	
+    | `NewInstance (iid,aid) -> 
+      return $ Some (`Person (aid,iid))
+	
+    | `NewUser _ -> 
+      return $ Some (`RunOrg None)
+	
+    | `NewJoin (iid,aid) -> 
+      return $ Some (`Person (aid,iid))
+	
 let channel : t -> MNotifyChannel.t = function 
   | `NewWallItem  (what,_)   -> `NewWallItem what
   | `NewFavorite  (what,_,_) -> `NewFavorite what

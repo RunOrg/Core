@@ -23,8 +23,9 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
        method url    = Action.url UrlMe.Account.home () ()
        method name   = user # fullname
        method pic    = pic
-       method notif  = Action.url UrlMe.Notif.home () ()
+       method notif  = Action.url UrlMe.Notify.home () ()
        method logout = Action.url UrlLogin.logout () ()
+       method unread = Action.url UrlMe.Notify.count () ()
      end)
    end user in
   

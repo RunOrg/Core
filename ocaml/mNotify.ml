@@ -7,6 +7,7 @@ open BatPervasives
 module Payload = MNotify_payload
 module Store   = MNotify_store
 module Stats   = MNotify_stats
+module Create  = MNotify_create
 
 let get_token nid = 
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 

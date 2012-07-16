@@ -1,0 +1,110 @@
+<div class="notify-list">
+  {#list}
+    <div class="-instance">
+      {=instance}
+        <a class="-instance-name" href="{url}">
+	  {?pic}<span class="-pic"><img src="{this}"/></span>{/?}
+  	  {name}
+        </a>
+      {/=}
+      <div class="-body">
+	<ul>
+	  {#items}
+	    <li {if seen}{else}class="-unseen"{/if}>
+	      <a href="{url}">
+		<span class="-date">{ `DateRelative date }</span>
+		{?pic}<img src="{this}"/>{/?}
+		{?name}<strong>{this}</strong>{/?}		
+		{ `Notify text } 
+		{#more} 
+		  <strong>{this | fst | esc}</strong>
+		  { `Notify this|snd } 
+		{/#}
+	      </a>
+	    </li>
+	  {/#}
+        </ul>
+      </div>
+    </div>
+  {else}
+    <div class="empty-list">
+      { `Notify_List_Empty } 
+    </div>
+  {/#}
+</div>
+
+<style>
+
+.notify-list {
+  margin: 20px auto;
+  width: 800px;
+  .-instance {
+    border-top: 1px solid #BBB;
+    padding-bottom: 30px;
+  }
+  .-body {
+    margin-left: 72px;
+    overflow: hidden;
+    > ul { 
+      margin: 0px; 
+      padding: 0px;
+      li { 
+        &.-unseen {
+          background-color: #FEC;
+          text-shadow: 0 1px 0 white;
+        } 
+        font-size: 13px;
+        border-top: 1px dashed #DDD;
+        padding: 0 8px 0 40px;
+        height: 36px;
+        line-height: 20px;
+        overflow: hidden; 
+        position: relative;       
+        strong {
+          color: #24B;
+          font-weight: normal;
+        }
+        a {
+          display: block; 
+          padding: 8px 0;
+          color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        .-date { 
+          color: #888;
+          float: right;
+          margin-left: 20px;
+        } 
+        img { 
+          height: 28px;
+          width: 28px; 
+          position: absolute; 
+          left: 4px;
+          top: 4px;
+        } 
+        &:first-child { border-top: none }         
+      } 
+    } 
+  }
+  .-instance-name {
+    background-color: #EEE;
+    border-bottom: 1px solid #DDD;
+    display: block;
+    font-size: 13px;
+    padding: 4px 8px;
+    color: black;
+    .-pic {
+      width: 50px;
+      height: 50px;
+      padding: 2px;
+      border: 1px solid #DDD;
+      float: left;
+      background-color: white;
+      margin-right: 8px;
+      img { width: 50px; height: 50px; } 
+    }
+  }
+}
+
+</style>

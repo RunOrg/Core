@@ -13,7 +13,7 @@ module Payload : sig
     | `NewJoin      of IInstance.t * IAvatar.t 
     ]
 
-  val author : 'any # MAccess.context -> t -> 
+  val author : 'any ICurrentUser.id -> t -> 
     [ `RunOrg of IInstance.t option 
     | `Person of (IAvatar.t * IInstance.t) ] option O.run 
 

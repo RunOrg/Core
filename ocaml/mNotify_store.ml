@@ -108,10 +108,10 @@ module CountByUser = CouchDB.ReduceView(struct
   module Value  = Fmt.Int
   module Doc    = Data
   module Design = Design
-  let name = "by_user"
+  let name = "count_by_user"
   let map = "if (!doc.r && !doc.sn) emit(doc.u,1);"
   let reduce = "return sum(values);"
-  let group = false
+  let group = true
   let level = None
 end)
 

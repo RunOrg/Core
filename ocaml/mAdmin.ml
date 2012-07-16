@@ -1,14 +1,14 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Util
 open BatPervasives
 
 module MAdmin = Fmt.Make(struct
-  type json t = <  users : Id.t list  > ;;
+  type json t = <  users : Id.t list > ;;
 end)
 
-module MyTable = CouchDB.Table(MModel.ConfigDB)(Id)(MAdmin)
+module MyTable = CouchDB.Table(O.ConfigDB)(Id)(MAdmin)
 
 let _admin : MAdmin.t = 
   let id = Id.of_string "admin" in
@@ -32,3 +32,5 @@ let user_may_be_admin uid =
 
 let map f = 
   List.map (fun id -> f (ICurrentUser.Assert.is_admin (ICurrentUser.of_id id))) (_admin # users) 
+
+let list () = List.map IUser.of_id _admin # users 

@@ -15,6 +15,19 @@
   	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
           <a href="{url}">{name}<img src="{pic}" style="margin-left: 10px"/></a>
 	  <a id="notifications" href="{notif}"><span></span></a>
+	  <script type="unread:string">
+
+load = () ->   
+  $.ajax
+    url: unread, 
+    success: (c) -> 
+      $('#notifications span').text(c).toggleClass("-on", c > 0)
+      setTimeout load, 10000
+    dataType: 'jsonp'
+
+setTimeout load, 1000
+
+	  </script>
         </div>
       {/?}
     </div>
@@ -74,6 +87,7 @@
       border: 1px solid #AA5500;
       text-shadow: 0 -1px 0 #AA5500;
       font-weight: bold;
+      box-shadow: 0 0 4px #FFAA00;
     }
   }
 }

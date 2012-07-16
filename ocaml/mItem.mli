@@ -141,6 +141,8 @@ val try_get :
 
 val interested : [`Bot] IItem.id -> IAvatar.t list O.run
 
+val iid : 'a IItem.id -> IInstance.t option O.run 
+
 module Backdoor : sig
 
   val count : unit -> int O.run

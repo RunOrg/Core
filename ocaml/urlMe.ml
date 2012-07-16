@@ -35,8 +35,9 @@ module Account = struct
   let picpost, def_picpost = O.declare O.core "edit/picture/post" A.none
 end
 
-module Notif = struct
-  let home, def_home = root "notifications"
+module Notify = struct
+  let home, def_home = root "notify"
+  let count, def_count = O.declare O.core "notify/count" A.none
 end
   
 module News = struct
