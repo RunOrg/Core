@@ -1,7 +1,6 @@
 (* © 2012 RunOrg *)
 
-type 'relation what = [ `item    of 'relation IItem.id
-		      | `comment of 'relation IComment.id ]
+type 'relation what = [ `item    of 'relation IItem.id ]
 
 module Signals : sig      
   val on_like   : (IAvatar.t * [`Liked] what, unit O.run) Ohm.Sig.channel

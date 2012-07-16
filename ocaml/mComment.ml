@@ -107,6 +107,10 @@ let all item =
   return visible_items
       
 let get id = MyTable.get (IComment.decay id)
+
+let item id = 
+  let! comment = ohm_req_or (return None) $ get id in
+  return $ Some (comment # on) 
     
 let try_get item id = 
 

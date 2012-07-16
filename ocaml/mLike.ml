@@ -24,8 +24,7 @@ module MyTable = CouchDB.Table(MyDB)(Id)(Data)
   
 include Data
 
-type 'relation what = [ `item    of 'relation IItem.id
-		      | `comment of 'relation IComment.id ]
+type 'relation what = [ `item    of 'relation IItem.id ]		  
 
 module Signals = struct
   let on_like_call,   on_like   = Sig.make (Run.list_iter identity)
@@ -33,8 +32,7 @@ module Signals = struct
 end
   
 module MLike = Fmt.Make(struct
-  module PAvatar = IAvatar
-  type json t = (Id.t * PAvatar.t)
+  type json t = (Id.t * IAvatar.t)
 end)
 
 module LikeView = CouchDB.DocView(struct
@@ -48,11 +46,9 @@ end)
   
 let id_of = function
   | `item i    -> IItem.to_id i
-  | `comment c -> IComment.to_id c    
     
 let liked = function
   | `item i    -> `item (IItem.Assert.liked i)
-  | `comment c -> `comment (IComment.Assert.liked c)
     
 let likes who what = 
   let what = id_of what in
@@ -176,9 +172,6 @@ let _ =
     let! like = ohm_req_or (return ()) $ MyTable.get lid in
     let aid = like # who in 
     let! _    = ohm $ Run.list_map begin fun what -> 
-      let! () = ohm $ Signals.on_unlike_call
-	(aid, liked (`comment (IComment.of_id what)))
-      in
       let! () = ohm $ Signals.on_unlike_call
 	(aid,liked (`item (IItem.of_id what)))
       in

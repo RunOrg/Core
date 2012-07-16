@@ -7,6 +7,7 @@ open BatPervasives
 module Actions = struct
   open MDo
   open MErrorAudit
+  open MNotify
   open CLogin
   open CMe
   open CWebsite

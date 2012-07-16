@@ -12,6 +12,7 @@ module Assert = struct
   let is_new  id = ICurrentUser.Assert.is_new (ICurrentUser.of_id id)
   let is_old  id = ICurrentUser.Assert.is_old (ICurrentUser.of_id id)
   let bot        = identity
+  let confirm    = identity 
 end
   
 module Deduce = struct

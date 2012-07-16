@@ -230,8 +230,9 @@ let confirm uid =
   let uid = IUser.decay uid in 
   let update user = 
     if user.Data.confirmed then (None, true), `keep else 	      
-      let o = Data.({ user with confirmed = true }) in
-      (Some o, true), `put o
+      if user.Data.passhash = None then (None, false), `keep else 
+	let o = Data.({ user with confirmed = true }) in
+	(Some o, true), `put o
   in
   
   let! result = ohm $ MyTable.transaction uid (MyTable.if_exists update) in

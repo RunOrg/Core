@@ -9,6 +9,7 @@ module Assert : sig
   val bot         : 'unknown id -> [`Bot] id
   val is_new      : 'unknown id -> [`New] ICurrentUser.id 
   val is_old      : 'unknown id -> [`Old] ICurrentUser.id
+  val confirm     : 'unknown id -> [`Confirm] id
 end
   
 module Deduce : sig

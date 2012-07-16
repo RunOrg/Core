@@ -32,6 +32,8 @@ val try_get :
   -> 'any IComment.id
   -> ([`Read] IComment.id * t) option O.run
 
+val item : 'a IComment.id -> IItem.t option O.run 
+
 val interested : [`Bot] IItem.id -> IAvatar.t list O.run
   
 module Backdoor : sig
