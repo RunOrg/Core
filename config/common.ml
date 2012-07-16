@@ -67,7 +67,7 @@ type template_data = {
   t_id : template ;
   t_old : string option ;
   t_name : adlib ;
-  t_desc : adlib ;
+  t_desc : adlib option ;
   t_join : join list ;
   t_kind : [ `Group | `Subscription | `Event | `Album | `Forum | `Course | `Poll ] ;  
   t_page : infoSection list ;
@@ -116,14 +116,14 @@ let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
 
-let template id ?old ~kind ~name ~desc ?propagate 
+let template id ?old ~kind ~name ?desc ?propagate 
     ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
   templates := {
     t_id     = id  ;
     t_old    = old ;
     t_kind   = kind ;
     t_name   = adlib ("Template_"^id^"_Name") name ;
-    t_desc   = adlib ("Template_"^id^"_Desc") desc ;
+    t_desc   = BatOption.map (adlib ("Template_"^id^"_Desc")) desc ;
     t_join   = join ;
     t_page   = page ;
     t_group  = group ;
@@ -292,7 +292,8 @@ module Build = struct
 
       (* The name (adlib) of the template =================================================================== *)
     ^ "\n\nlet desc = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_desc) (!templates))
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> %s" t.t_id 
+      (match t.t_desc with Some s -> "Some `"^s | None -> "None")) (!templates))
 
       (* The propagation ruless of the template ============================================================= *)
     ^ "\n\nlet propagate = function\n  | "
