@@ -148,8 +148,18 @@ let () = UrlLogin.def_post_signup begin fun req res ->
       | `created cuid -> 
 
 	let! ( ) = ohm $ send_signup_confirmation ~iid ~path ~cuid in
-	
-	return res
+
+	let! ins = ohm $ Run.opt_bind MInstance.get iid in 
+
+	let  url  = match ins, path with 
+	  | None, []   -> Action.url UrlMe.Account.home () ()
+	  | None, "me" :: path -> UrlMe.url path 
+	  | None, path -> Action.url UrlSplash.index () path
+	  | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
+	  | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
+	in
+		
+	return $ CSession.start (`New cuid) (Action.javascript (Js.redirect url ()) res)
     
       | `duplicate uid -> 
 
