@@ -21,6 +21,24 @@ module Payload : sig
 
 end
 
+module ToUser : sig
+
+  type freq = [ `Immediate | `Daily | `Weekly | `Never ]
+
+  type assoc = (MNotifyChannel.t * freq) list
+
+  type t = <
+    default : assoc ; 
+    by_iid  : (IInstance.t * assoc) list 
+  > 
+
+  val set : [<`Edit|`Bot] IUser.id -> t -> unit O.run 
+  val get : [<`IsSelf|`Bot] IUser.id -> t O.run 
+
+  val send : IUser.t -> Payload.t -> freq O.run
+
+end
+
 module Store : sig
 
   type t = <
