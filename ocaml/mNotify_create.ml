@@ -10,23 +10,25 @@ module Store   = MNotify_store
 let to_admins payload = 
   Run.list_iter (Store.create payload) (MAdmin.list ())
 
-let to_avatar payload aid = 
+let to_avatar payload aid nsid = 
   let! details = ohm $ MAvatar.details aid in 
   let! uid = req_or (return ()) (details # who) in
-  Store.create payload uid 
+  Store.create ~stats:nsid payload uid 
 
 module ToAvatars = Fmt.Make(struct
-  type json t = ( (Payload.t * IAvatar.t) list ) 
+  type json t = ( (Payload.t * IAvatar.t) list * INotifyStats.t) 
 end)
 
 let to_avatars = 
   let task = O.async # define "notify-to-avatars" ToAvatars.fmt
-    (Run.list_iter (fun (payload,aid) -> to_avatar payload aid))
+    (fun (list,nsid) -> 
+      Run.list_iter (fun (payload,aid) -> to_avatar payload aid nsid) list)
   in
-  function
-    | [] -> return ()
-    | [payload, aid] -> to_avatar payload aid
-    | list -> task list
+  fun nsid -> 
+    function
+      | [] -> return ()
+      | [payload, aid] -> to_avatar payload aid nsid
+      | list -> task (list,nsid)
  
 (* Create a notification when a new instance is created ----------------------------------------------------- *)
 
@@ -92,6 +94,56 @@ let () =
   let list = List.map (fun aid -> (others_payload, aid)) it_others in
   let list = if it_author <> aid then (author_payload, it_author) :: list else list in
 
-  to_avatars list
+  to_avatars (INotifyStats.of_id (IComment.to_id cid)) list
 
-open MBlock
+(* Notify interested parties when an item with an author is posted on a feed -------------------------------- *)
+
+let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.fmt) begin fun (itid,fid) -> 
+
+  (* Make sure item has an author *)
+  let! aid = ohm_req_or (return ()) $ MItem.author itid in 
+
+  (* Entity members receive posts written on entity walls *)
+  let! interested = ohm begin
+    let! feed = ohm_req_or (return []) $ MFeed.bot_get fid in 
+    match MFeed.Get.owner feed with 
+      | `of_instance _ | `of_message _ -> return []
+      | `of_entity eid -> 
+	let  eid    = IEntity.Assert.bot eid in 
+	let! entity = ohm_req_or (return []) $ MEntity.bot_get eid in 
+	let  gid    = IGroup.Assert.bot $ MEntity.Get.group entity in 
+	let! list   = ohm $ MMembership.InGroup.all gid `Any in
+	return $ List.map snd list	
+  end in 
+
+  (* Preferences further determine who does or does not receive posts. *)
+  let! preferences = ohm $ MBlock.all_special (`Feed (IFeed.decay fid)) in
+  
+  let block = 
+    List.fold_left (fun acc aid -> BatPSet.add aid acc) (BatPSet.add aid BatPSet.empty)
+      (preferences # block)
+  in
+  
+  let aids = 
+    BatList.sort_unique compare
+      (List.filter (fun aid -> not (BatPSet.mem aid block)) (interested @ preferences # send))
+  in
+
+  let payload = `NewWallItem (`WallReader, IItem.decay itid) in
+
+  let list = List.map (fun aid -> payload, aid) aids in
+
+  to_avatars (INotifyStats.of_id (IItem.to_id itid)) list
+
+end
+
+let () = 
+  let! item = Ohm.Sig.listen MItem.Signals.on_post in
+
+  (* Only push items that were posted to feeds. *)
+  let! fid = req_or (return ()) begin match item # where with
+    | `feed fid -> Some fid 
+    | `album _ | `folder _ -> None
+  end in 
+
+  push_item_task (item # id, IFeed.Assert.bot fid) 

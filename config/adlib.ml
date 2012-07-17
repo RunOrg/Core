@@ -3,6 +3,7 @@ open Common
 
 module EntityName = struct
 
+  let _       = adlib "EntityAdminOldName" ~old:"entity.admin-simple.name" "Administrateurs RunOrg"
   let admin   = adlib "EntityAdminName" ~old:"entity.admin.name" "Administrateurs RunOrg"
   let members = adlib "EntityMembersName" ~old: "entity.sample.group-simple.allmembers.name" "Tous les membres"
 
@@ -23,6 +24,7 @@ let access_manger_copro = adlib "AccessMangerCopro" ~old: "entity.sample.access-
 let ag_members = adlib "AgMembers" ~old: "entity.sample.ag.members" "Membres"
 let contact = adlib "Contact" ~old: "entity.sample.contact.name" "Contacts"
 let course_12sessions = adlib "Course12Sessions" ~old: "entity.sample.course-12sessions.name" "Exemple de cours avec 12 séances"
+let _ = adlib "EntitySampleCourseSimpleName" "Exemple de cours dans RunOrg"
 let course_simple = adlib "CourseSimple" ~old: "entity.sample.course-simple.name" "Exemple de cours dans RunOrg"
 let event_ag = adlib "EventAg" ~old: "entity.sample.event-ag.name" "Exemple d'AG dans RunOrg"
 let event_campaign_action = adlib "EventCampaignAction" ~old: "entity.sample.event-campaign-action.sample" "Sympathisants du secteur Exemple"
@@ -81,7 +83,10 @@ let group_poussinnets = adlib "GroupPoussinnets" ~old: "entity.sample.sport.grou
 let group_poussins = adlib "GroupPoussins" ~old: "entity.sample.sport.group-poussins.name" "Poussins"
 let group_seniors = adlib "GroupSeniors" ~old: "entity.sample.sport.group-seniors.name" "Séniors"
 let group_veterans = adlib "GroupVeterans" ~old: "entity.sample.sport.group-veterans.name" "Vétérans"
+let _ = adlib "EntitySampleSubscribtionForeverName" "Adhésion permanente"
 let subscribtion_forever = adlib "SubscribtionForever" ~old: "entity.sample.subscribtion-forever.name" "Adhésion permanente"
+let _ = adlib "EntitySampleSubscriptionDatetodateName" "Adhésion annuelle 2011-2012"
 let subscription_datetodate = adlib "SubscriptionDatetodate" ~old: "entity.sample.subscription-datetodate.name" "Adhésion annuelle 2011-2012"
+let _ = adlib "EntitySampleSubTestRunorgName" "Adhésion pour tester RunOrg"
 let sub_test_runorg = adlib "SubTestRunorg" ~old: "entity.sample.sub-test-runorg.name" "Adhésion pour tester RunOrg"
 end
