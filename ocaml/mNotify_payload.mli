@@ -10,6 +10,8 @@ include Ohm.Fmt.FMT with type t =
   | `NewUser      of IUser.t 
   | `NewJoin      of IInstance.t * IAvatar.t 
   ]
+
+val instance : t -> IInstance.t option O.run 
     
 val author : 'any ICurrentUser.id -> t ->
   [ `RunOrg of IInstance.t option 

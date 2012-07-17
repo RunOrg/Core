@@ -73,10 +73,22 @@ let set uid data =
     (`Default,compress_assoc (data # default))
     :: List.map (fun (iid,assoc) -> `Instance iid, compress_assoc assoc) (data # by_iid) 
   in
+  let list = List.filter (snd |- (<>) []) list in 
   let! _ = ohm $ MyTable.transaction (IUser.decay uid) (MyTable.insert list) in
   return ()
 
-let assoc channel assoc = 
+let frequency channel assoc = 
   try List.assoc channel assoc with Not_found -> default channel
 
-let send _ _ = return `Immediate
+let send uid payload =
+
+  let  channel = Payload.channel payload in 
+  let! iid     = ohm $ Payload.instance payload in 
+  let! options = ohm $ get uid in 
+
+  let  assoc   = match iid with 
+    | None -> options # default 
+    | Some iid -> try List.assoc iid (options # by_iid) with Not_found -> options # default
+  in
+
+  return $ frequency channel assoc

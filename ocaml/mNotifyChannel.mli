@@ -8,3 +8,4 @@ include Ohm.Fmt.FMT with type t =
   | `BecomeAdmin
   | `SuperAdmin
   ]
+

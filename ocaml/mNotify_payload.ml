@@ -26,6 +26,19 @@ let access cuid iid =
     method isin = isin
    end)
 
+let instance = function 
+    | `NewWallItem (_,itid)
+    | `NewFavorite (_,_,itid) -> MItem.iid itid
+    | `NewComment (_,cid) -> let! itid    = ohm_req_or (return None) $ MComment.item cid in 
+			     MItem.iid itid
+
+    | `BecomeMember (iid,_) 
+    | `BecomeAdmin (iid,_) 
+    | `NewInstance (iid,_)
+    | `NewJoin (iid,_) -> return $ Some iid 
+
+    | `NewUser _ -> return None
+	
 let author cuid = 
   (* Act as a confirmed user for the purposes of extracting author information *)
   let cuid = ICurrentUser.Assert.is_old cuid in 
