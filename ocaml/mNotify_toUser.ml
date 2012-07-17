@@ -45,6 +45,38 @@ let extract (list : (Key.t * assoc) list) = object
   method by_iid = by_iid
 end
 
-let get _ = return $ extract []
-let set _ _ = return ()
+include CouchDB.Convenience.Table(struct let db = O.db "notify-freq" end)(IUser)(Data)
+
+(* Implement functions -------------------------------------------------------------------------------------- *)
+
+let get uid = 
+  let! list = ohm_req_or (return $ extract []) $ MyTable.get (IUser.decay uid) in
+  return $ extract list
+
+let default = function
+
+  | `NewWallItem `WallReader 
+  | `NewWallItem `WallAdmin 
+  | `NewComment `ItemAuthor
+  | `NewComment `ItemFollower
+  | `BecomeMember
+  | `BecomeAdmin
+  | `SuperAdmin -> `Immediate
+
+  | `NewFavorite `ItemAuthor -> `Daily
+
+let compress_assoc assoc = 
+  List.filter (fun (k,v) -> default k <> v) assoc
+
+let set uid data = 
+  let list = 
+    (`Default,compress_assoc (data # default))
+    :: List.map (fun (iid,assoc) -> `Instance iid, compress_assoc assoc) (data # by_iid) 
+  in
+  let! _ = ohm $ MyTable.transaction (IUser.decay uid) (MyTable.insert list) in
+  return ()
+
+let assoc channel assoc = 
+  try List.assoc channel assoc with Not_found -> default channel
+
 let send _ _ = return `Immediate
