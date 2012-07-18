@@ -68,6 +68,20 @@
   !! "%s a répondu dans une conversation que vous suivez sur %s. Vous pouvez lui répondre en cliquant sur le lien ci-dessous :" who asso
 | `Mail_Notify_CommentItem_Thanks asso -> !! "À bientôt sur %s" asso
 
+| `Mail_Notify_InviteEvent_Title (who,what) -> !! "%s vous invite : %s" who what
+| `Mail_Notify_InviteEvent_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_InviteEvent_Explanation (who,what,asso) -> 
+  !! "Vous êtes invité par %s à l'évènement %s organisé par %s." who what asso
+| `Mail_Notify_InviteEvent_Explanation2 who -> 
+  !! "%s vous remercie de répondre à cette invitation en utilisant le lien ci-dessous :" who
+| `Mail_Notify_InviteEvent_Thanks asso -> !! "À bientôt sur %s" asso
 
+| `Mail_Notify_JoinPending_Title (who,what) -> !! "%s demande à rejoindre %s" who what
+| `Mail_Notify_JoinPending_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_JoinPending_Explanation (who,what,asso) -> 
+  !! "La demande de %s à rejoindre %s est en attente dans %s." who what asso
+| `Mail_Notify_JoinPending_Explanation2 -> 
+   "En tant qu'administrateur vous pouvez visualiser et traiter cette demande en suivant le lien ci-dessous :"
+| `Mail_Notify_JoinPending_Thanks asso -> !! "À bientôt sur %s" asso
 
 
