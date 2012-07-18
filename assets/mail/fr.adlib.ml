@@ -50,7 +50,7 @@
   !! "Ce message a été écrit par %s sur %s." autor asso
 | `Mail_Notify_PublishItem_Explanation2 -> 
   "Vous pouvez y répondre en cliquant sur le lien ci-dessous :"
-| `Mail_Notify_PublishItem_Thanks asso -> !! "À bientôt sur %s" asso 
+| `Mail_Notify_PublishItem_Thanks asso -> !! "À bientôt sur %s" asso
 
 
 
