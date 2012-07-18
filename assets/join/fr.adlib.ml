@@ -7,3 +7,19 @@
 | `Join_Edit_Event_Uninvite -> "Retirer l'invitation"
 
 | `Join_Edit_Save -> "Enregistrer"
+
+| `Join_Self_Event_Member -> "Vous participez à cette activité."
+| `Join_Self_Group_Member -> "Vous êtes membre de ce groupe."
+| `Join_Self_Forum_Member -> "Vous avez accès à ce forum."
+| `Join_Self_Event_NotMember -> "Vous ne participez pas à cette activité."
+| `Join_Self_Group_NotMember -> "Vous n'êtes pas membre de ce groupe."
+| `Join_Self_Event_Invited g -> !! "Vous êtes %s à cette activité." (macho "invité" "invitée" g) 
+| `Join_Self_Pending -> "Un responsable va valider votre inscription."
+
+| `Join_Self_Event_Cancel -> "Annuler"
+| `Join_Self_Event_Edit -> "Modifier..."
+| `Join_Self_Event_Join -> "Inscription"
+| `Join_Self_Event_JoinEdit -> "Inscription..."
+| `Join_Self_Event_Accept -> "Accepter"
+| `Join_Self_Event_AcceptEdit -> "Accepter..."
+| `Join_Self_Event_Decline -> "Refuser"

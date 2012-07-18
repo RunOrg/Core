@@ -4,7 +4,8 @@ type mini_profile = <
   url  : string ;
   pic  : string ;
   pico : string option ;
-  name : string 
+  name : string ;
+  nameo : string option 
 >
 
 val mini_profile : 'any IAvatar.id -> mini_profile O.run

@@ -16,7 +16,7 @@ module Unsent = CouchDB.DocView(struct
   module Doc    = Store.Data
   module Design = Store.Design
   let name = "unsent"
-  let map = "if (!doc.r && !doc.sn && !doc.st && !doc.d) emit(doc.t);"
+  let map = "if (doc.r === false && !doc.sn && !doc.st && !doc.d) emit(doc.t);"
 end)
 
 let send = 

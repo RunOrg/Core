@@ -8,7 +8,8 @@ type mini_profile = <
   url  : string ;
   pic  : string ;
   pico : string option ;
-  name : string 
+  name : string ;
+  nameo : string option 
 >
 
 let mini_profile aid = 
@@ -28,6 +29,7 @@ let mini_profile aid =
     method pic = pic
     method pico = pico
     method name = name
+    method nameo = details # name
   end)
 
 let directory aids = 
