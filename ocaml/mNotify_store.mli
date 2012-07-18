@@ -1,19 +1,19 @@
 (* © 2012 RunOrg *)
 
-module Data : sig
-  type t = {
-    payload     : MNotify_payload.t ;
-    created     : float ;
-    uid         : IUser.t ;
-    seen        : float option ;
-    sent        : (float * string) option ;
-    mail_clicks : int ;
-    site_clicks : int ;
-    rotten      : bool ;
-    delayed     : bool ;
-    stats       : INotifyStats.t option 
-  }
-end
+type data = {
+  payload     : MNotify_payload.t ;
+  created     : float ;
+  uid         : IUser.t ;
+  seen        : float option ;
+  sent        : float option ;
+  mail_clicks : int ;
+  site_clicks : int ;
+  rotten      : bool ;
+  delayed     : bool ;
+  stats       : INotifyStats.t option 
+}
+
+module Data : Ohm.Fmt.FMT with type t = data
 
 module MyTable : Ohm.CouchDB.TABLE with type id = INotify.t and type elt = Data.t
 module Design : Ohm.CouchDB.DESIGN

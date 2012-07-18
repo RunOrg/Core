@@ -9,6 +9,7 @@ module Store   = MNotify_store
 module Stats   = MNotify_stats
 module Create  = MNotify_create
 module ToUser  = MNotify_toUser
+module Send    = MNotify_send
 
 let get_token nid = 
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 
@@ -16,7 +17,7 @@ let get_token nid =
 let from_token nid token current = 
   let! () = true_or (return `Expired) (ConfigKey.is_proof token [ "notify" ; INotify.to_string nid ]) in
   let! notify = ohm_req_or (return `Missing) $ Store.MyTable.get nid in
-  let  uid  = notify.Store.Data.uid in 
+  let  uid  = notify.Store.uid in 
   match current with 
     | Some cuid when IUser.Deduce.is_anyone cuid = uid -> return (`Valid cuid) 
     | _ -> 

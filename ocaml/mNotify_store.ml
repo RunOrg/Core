@@ -22,7 +22,7 @@ module Data = struct
       created     "t"  : float ;
       uid         "u"  : IUser.t ;
       seen        "sn" : float option ;
-      sent        "st" : (float * string) option ;
+      sent        "st" : float option ;
       mail_clicks "mc" : int ;
       site_clicks "sc" : int ;
       rotten      "r"  : bool ;
@@ -33,6 +33,19 @@ module Data = struct
   include T
   include Fmt.Extend(T)
 end
+
+type data = Data.t = {
+  payload     : Payload.t ;
+  created     : float ;
+  uid         : IUser.t ;
+  seen        : float option ;
+  sent        : float option ;
+  mail_clicks : int ;
+  site_clicks : int ;
+  rotten      : bool ;
+  delayed     : bool ;
+  stats       : INotifyStats.t option 
+}
 
 include CouchDB.Convenience.Table(struct let db = O.db "notify" end)(INotify)(Data)
 
@@ -118,7 +131,6 @@ let all_mine ~count ?start cuid =
 module CountByUser = CouchDB.ReduceView(struct
   module Key    = IUser
   module Value  = Fmt.Int
-  module Doc    = Data
   module Design = Design
   let name = "count_by_user"
   let map = "if (!doc.r && !doc.sn) emit(doc.u,1);"

@@ -70,6 +70,12 @@ module Stats : sig
 
 end
 
+module Send : sig
+
+  val immediate : (IUser.t * Payload.t, unit O.run) Ohm.Sig.channel
+
+end
+
 val get_token  : INotify.t -> string 
 
 val from_token : 

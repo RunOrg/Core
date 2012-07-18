@@ -4,8 +4,6 @@
 
 <p>{ `Mail_SignupConfirm_Action email }</p>
 
-<p style="text-align:center">
-  <a style="color:#88F" href="{url}"><code>{url}</code></a>
-</p>
+{ url | Asset_Mail_Url.render | ohm } 
 
 <p>{ `Mail_SignupConfirm_Thanks }</p>

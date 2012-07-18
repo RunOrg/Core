@@ -8,19 +8,19 @@ module Payload = MNotify_payload
 module Store   = MNotify_store
 
 let see now d = 
-  if d.Store.Data.seen = None then Store.Data.({ d with seen = Some now }) else d
+  if d.Store.seen = None then Store.({ d with seen = Some now }) else d
 
 let from_mail nid = 
   let! now = ohmctx (#time) in
   let! _ = ohm $ Store.MyTable.transaction nid 
-    (Store.MyTable.update (fun d -> Store.Data.({ see now d with mail_clicks = d.mail_clicks + 1 })))
+    (Store.MyTable.update (fun d -> Store.({ see now d with mail_clicks = d.mail_clicks + 1 })))
   in
   return ()
 
 let from_site nid = 
   let! now = ohmctx (#time) in
   let! _ = ohm $ Store.MyTable.transaction nid 
-    (Store.MyTable.update (fun d -> Store.Data.({ see now d with site_clicks = d.site_clicks + 1 })))
+    (Store.MyTable.update (fun d -> Store.({ see now d with site_clicks = d.site_clicks + 1 })))
   in
   return ()
 

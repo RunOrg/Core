@@ -18,3 +18,9 @@
 | `Mail_Unsubscribe_Explanation of string
 | `Mail_Unsubscribe_Warning
 | `Mail_Unsubscribe_Thanks
+
+| `Mail_Notify_BecomeMember_Title of string
+| `Mail_Notify_BecomeMember_Intro of string
+| `Mail_Notify_BecomeMember_Explanation of string * string
+| `Mail_Notify_BecomeMember_Thanks of string
+
