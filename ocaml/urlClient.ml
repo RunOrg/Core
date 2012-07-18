@@ -14,6 +14,10 @@ let about,   def_about   = O.declare O.client "about" A.none
 let subscribe  , def_subscribe   = O.declare O.client "subscribe" A.none
 let unsubscribe, def_unsubscribe = O.declare O.client "unsubscribe" A.none
 
+(* Join =================================================================================================== *)
+
+let join, def_join = O.declare O.client "join" A.none
+
 (* Articles =============================================================================================== *)
 
 let articles, def_articles = O.declare O.client "h" (A.ri A.float) 

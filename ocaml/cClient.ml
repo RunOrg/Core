@@ -49,7 +49,7 @@ let () = UrlClient.def_root begin fun req res ->
   in
 
   let if_no_token () =
-    return res
+    return $ Action.redirect (Action.url UrlClient.join (instance # key) ()) res
   in
 
   match CSession.check req with 
