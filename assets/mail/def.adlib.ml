@@ -39,3 +39,16 @@
 | `Mail_Notify_PublishItem_Explanation2
 | `Mail_Notify_PublishItem_Thanks of string
 
+| `Mail_Notify_LikeYourItem_Title of string
+| `Mail_Notify_LikeYourItem_Intro of string
+| `Mail_Notify_LikeYourItem_Explanation of string * string
+| `Mail_Notify_LikeYourItem_Thanks of string
+
+| `Mail_Notify_CommentYourItem_Title of string
+| `Mail_Notify_CommentYourItem_Explanation of string * string
+| `Mail_Notify_CommentYourItem_Thanks of string
+
+| `Mail_Notify_CommentItem_Title of string
+| `Mail_Notify_CommentItem_Explanation of string * string
+| `Mail_Notify_CommentItem_Thanks of string
+

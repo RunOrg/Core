@@ -45,12 +45,28 @@
 | `Mail_Notify_BecomeAdmin_Responsability asso -> !! "Vous avez désormais une grande responsabilité dans l'annimation en ligne de %s ! Faites-en bon usage !" asso 
 | `Mail_Notify_BecomeAdmin_Thanks asso -> !! "À bientôt sur %s" asso 
 
-| `Mail_Notify_PublishItem_Title autor -> !! "Nouveau message de %s" autor
-| `Mail_Notify_PublishItem_Explanation (autor,asso) -> 
-  !! "Ce message a été écrit par %s sur %s." autor asso
+| `Mail_Notify_PublishItem_Title who -> !! "Nouveau message de %s" who
+| `Mail_Notify_PublishItem_Explanation (who,asso) -> 
+  !! "Ce message a été écrit par %s sur %s." who asso
 | `Mail_Notify_PublishItem_Explanation2 -> 
   "Vous pouvez y répondre en cliquant sur le lien ci-dessous :"
 | `Mail_Notify_PublishItem_Thanks asso -> !! "À bientôt sur %s" asso
+
+| `Mail_Notify_LikeYourItem_Title who -> !! "%s suit votre message" who
+| `Mail_Notify_LikeYourItem_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_LikeYourItem_Explanation (who,asso) -> 
+  !! "%s suit désormais l'un de vos message sur %s. Vous pouvez visualiser ce message à l'aide du lien ci dessous :" who asso
+| `Mail_Notify_LikeYourItem_Thanks asso -> !! "À bientôt sur %s" asso
+
+| `Mail_Notify_CommentYourItem_Title who -> !! "Réponse de %s" who
+| `Mail_Notify_CommentYourItem_Explanation (who,asso) -> 
+  !! "%s a répondu à votre message sur %s. Vous pouvez lui répondre en cliquant sur le lien ci-dessous :" who asso
+| `Mail_Notify_CommentYourItem_Thanks asso -> !! "À bientôt sur %s" asso
+
+| `Mail_Notify_CommentItem_Title who -> !! "Réponse de %s" who
+| `Mail_Notify_CommentItem_Explanation (who,asso) -> 
+  !! "%s a répondu dans une conversation que vous suivez sur %s. Vous pouvez lui répondre en cliquant sur le lien ci-dessous :" who asso
+| `Mail_Notify_CommentItem_Thanks asso -> !! "À bientôt sur %s" asso
 
 
 
