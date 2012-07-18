@@ -22,5 +22,20 @@
 | `Mail_Notify_BecomeMember_Title of string
 | `Mail_Notify_BecomeMember_Intro of string
 | `Mail_Notify_BecomeMember_Explanation of string * string
+| `Mail_Notify_BecomeMember_Explanation2 of string
+| `Mail_Notify_BecomeMember_Explanation3
 | `Mail_Notify_BecomeMember_Thanks of string
+
+| `Mail_Notify_BecomeAdmin_Title of string
+| `Mail_Notify_BecomeAdmin_Intro of string
+| `Mail_Notify_BecomeAdmin_Explanation of string * string
+| `Mail_Notify_BecomeAdmin_Explanation2 of string
+| `Mail_Notify_BecomeAdmin_Explanation3
+| `Mail_Notify_BecomeAdmin_Responsability of string
+| `Mail_Notify_BecomeAdmin_Thanks of string
+
+| `Mail_Notify_PublishItem_Title of string
+| `Mail_Notify_PublishItem_Explanation of string * string
+| `Mail_Notify_PublishItem_Explanation2
+| `Mail_Notify_PublishItem_Thanks of string
 

@@ -24,9 +24,34 @@
 | `Mail_Unsubscribe_Warning -> "Attention : cliquer sur ce lien provoque la suppression immédiate et irréversible de votre compte."
 | `Mail_Unsubscribe_Thanks -> "Si vous supprimez votre compte, alors ceci sera le dernier message que vous recevrez de RunOrg. Nous sommes tristes que votre expérience de nos services n'ait pas été aussi agréable que nous l'avons espéré, et nous nous excusons pour tout désagrément que vous avez pu subir."
 
-| `Mail_Notify_BecomeMember_Title asso -> !! "Rejoignez l'espace membres de %s" asso
+| `Mail_Notify_BecomeMember_Title asso -> !! "Invitation - %s" asso
 | `Mail_Notify_BecomeMember_Intro name -> !! "Bonjour %s" name
 | `Mail_Notify_BecomeMember_Explanation (who,asso) -> 
-  !! "%s vous invite à rejoindre l'espace membres de %s. Vous pourrez y trouver les dernières activités, photos ou annonces, et échanger avec les responsables et les autres membres. Pour vous connecter, cliquez sur le lien ci-dessous :" who asso
+  !! "%s vous invite à rejoindre l'espace privé et sécurisé utilisé pour la communication au sein de %s." who asso
+| `Mail_Notify_BecomeMember_Explanation2 asso -> 
+  !! "%s utilise l'outil en ligne RunOrg pour la gestion de ses membres, activités et évènements." asso
+| `Mail_Notify_BecomeMember_Explanation3 -> 
+  "Pour répondre aux messages, visualiser les photos, participer aux évènements et aux sondages : créez votre compte en cliquant sur le lien ci-dessous :"
 | `Mail_Notify_BecomeMember_Thanks asso -> !! "À bientôt sur %s" asso 
+
+| `Mail_Notify_BecomeAdmin_Title asso -> !! "Droits d'administration - %s" asso
+| `Mail_Notify_BecomeAdmin_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_BecomeAdmin_Explanation (who,asso) -> 
+  !! "%s vous a transmis les pleins pouvoir d'administrateur de %s." who asso
+| `Mail_Notify_BecomeAdmin_Explanation2 asso -> 
+  !! "%s utilise l'outil en ligne RunOrg pour la gestion de ses membres, activités et évènements." asso
+| `Mail_Notify_BecomeAdmin_Explanation3 -> 
+  "Pour découvrir les fonctionnalités et les pouvoirs réservés aux administrateurs (création de groupes et d'activités, visibilité totale et modération) : cliquez sur le lien ci-dessous :"
+| `Mail_Notify_BecomeAdmin_Responsability asso -> !! "Vous avez désormais une grande responsabilité dans l'annimation en ligne de %s ! Faites-en bon usage !" asso 
+| `Mail_Notify_BecomeAdmin_Thanks asso -> !! "À bientôt sur %s" asso 
+
+| `Mail_Notify_PublishItem_Title autor -> !! "Nouveau message de %s" autor
+| `Mail_Notify_PublishItem_Explanation (autor,asso) -> 
+  !! "Ce message a été écrit par %s sur %s." autor asso
+| `Mail_Notify_PublishItem_Explanation2 -> 
+  "Vous pouvez y répondre en cliquant sur le lien ci-dessous :"
+| `Mail_Notify_PublishItem_Thanks asso -> !! "À bientôt sur %s" asso 
+
+
+
 
