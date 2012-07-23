@@ -4,6 +4,13 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+let do_join self group =   
+  let! admin = ohm $ MGroup.Can.write group in   
+  match admin with
+    | None -> MMembership.user (MGroup.Get.id group) self true 
+    | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) self [ `Accept true ; `Default true ]
+ 
+
 let template fields = 
   List.fold_left (fun acc field -> 
     acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
@@ -150,14 +157,7 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   (* Save the data and process the join request *)
 
-  let! ()    = ohm begin 
-    (* If entity admin, validate as well *)
-    let! admin = ohm $ MGroup.Can.write group in   
-    match admin with
-      | None -> MMembership.user gid (access # self) true 
-      | Some group -> MMembership.admin ~from:(access # self) (MGroup.Get.id group) (access # self)
-	[ `Accept true ; `Default true ]
-  end in
+  let! ()    = ohm $ do_join (access # self) group in 
   
   let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
   let! mid  = ohm $ MMembership.as_user gid (access # self) in
@@ -206,7 +206,8 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     (* Leaving the entity, refreshing the display, or joining an entity with no form. *)
     
     let! () = ohm begin match join with 
-      | `Join join -> MMembership.user gid (access # self) join 
+      | `Join false -> MMembership.user gid (access # self) false
+      | `Join true  -> do_join (access # self) group
       | `Refresh -> return ()
     end in 
 
