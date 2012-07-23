@@ -14,3 +14,6 @@
     | `NewWallItem1 -> "a publié un nouveau message."
     | `Whatever -> "a fait quelque chose, mais nous ne savons pas quoi."
 end
+
+| `Notify_Expired_Title -> "Ce lien a expiré !" 
+| `Notify_Expired_Body -> "Pour des raisons de sécurité, le lien que vous avez suivi a dépassé sa date limite d'utilisation. Nous vous avons envoyé un nouveau lien par mail."

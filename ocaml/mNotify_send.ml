@@ -39,7 +39,7 @@ let send =
     let! now = ohmctx (#time) in
     let sent d = Store.({ d with sent = Some now }) in
 
-    let!  ( ) = ohm $ immediate_call (uid,payload) in
+    let!  ( ) = ohm $ immediate_call (uid,nid,payload) in
     let!   _  = ohm $ Store.MyTable.transaction nid (Store.MyTable.update sent) in
     return None
 

@@ -15,11 +15,12 @@ let get_token nid =
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 
 
 let from_token nid token current = 
-  let! () = true_or (return `Expired) (ConfigKey.is_proof token [ "notify" ; INotify.to_string nid ]) in
+  let!   ()   = true_or (return `Expired) (ConfigKey.is_proof token [ "notify" ; INotify.to_string nid ]) in
   let! notify = ohm_req_or (return `Missing) $ Store.MyTable.get nid in
-  let  uid  = notify.Store.uid in 
+  let  uid    = notify.Store.uid in 
+  let  notify = Store.extract nid notify in 
   match current with 
-    | Some cuid when IUser.Deduce.is_anyone cuid = uid -> return (`Valid cuid) 
+    | Some cuid when IUser.Deduce.is_anyone cuid = uid -> return (`Valid (notify,cuid)) 
     | _ -> 
 
       (* We can confirm the user, because this token was sent as an e-mail. *)
@@ -27,7 +28,7 @@ let from_token nid token current =
       let! confirmed = ohm $ MUser.confirm uid in 
       if confirmed then  
 	(* User is confirmed, log in *)
-	return $ `Valid (IUser.Assert.is_old uid)
+	return $ `Valid (notify,IUser.Assert.is_old uid)
       else
 	(* Not confirmed : return a new-user to allow setting password. *)
 	return $ `New (IUser.Assert.is_new uid) 

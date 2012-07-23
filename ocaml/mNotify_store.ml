@@ -73,6 +73,14 @@ let create ?stats payload user =
 
   return ()
 
+let extract nid notify = 
+  (object
+    method id      = nid
+    method payload = notify.payload
+    method time    = notify.created
+    method seen    = notify.seen <> None
+   end)
+
 let rotten nid = 
   MyTable.transaction nid begin fun nid -> 
     let! notify = ohm_req_or (return ((),`keep)) $ MyTable.get nid in 
@@ -83,12 +91,7 @@ let rotten nid =
 let get_mine cuid nid = 
   let! notify = ohm_req_or (return None) $ MyTable.get nid in 
   if notify.Data.uid = IUser.Deduce.is_anyone cuid then 
-    return $ Some (object
-      method id      = nid
-      method payload = notify.Data.payload
-      method time    = notify.Data.created
-      method seen    = notify.Data.seen <> None      
-    end)
+    return $ Some (extract nid notify)
   else
     return None
 

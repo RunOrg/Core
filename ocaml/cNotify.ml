@@ -4,8 +4,6 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-open CMe_common
-
 let none = return None
 
 let access cuid iid = 
@@ -16,8 +14,6 @@ let access cuid iid =
     method self = self
     method isin = isin
    end)
-
-
 
 let item_url cuid itid = 
   let! iid     = ohm_req_or none $ MItem.iid itid in
@@ -62,3 +58,32 @@ let url cuid notify =
 
     | `NewComment (_,cid) -> let! itid = ohm_req_or none $ MComment.item cid in 
 			     item_url cuid itid
+
+
+let () = UrlMe.Notify.def_mailed begin fun req res -> 
+
+  let nid, proof = req # args in
+  let cuid = match CSession.check req with 
+    | `None     -> None
+    | `New _    -> None
+    | `Old cuid -> Some cuid 
+  in
+
+  let! what = ohm $ MNotify.from_token nid proof cuid in 
+  
+  let home = Action.url UrlMe.Notify.home () () in
+
+  match what with 
+    | `Valid (notify,cuid) -> let! url = ohm (url cuid notify) in 
+			      let  url = BatOption.default home url in 
+			      return $ CSession.start (`Old cuid) (Action.redirect url res)
+    | `Missing -> return (Action.redirect home res)
+    | `Expired -> let title = AdLib.get `Notify_Expired_Title in
+		  let html = Asset_Notify_Expired.render (object
+		    method navbar = (None,None)
+		    method title  = title 
+		  end) in
+		  CPageLayout.core `Notify_Expired_Title html res	
+    | `New _   -> return res
+
+end

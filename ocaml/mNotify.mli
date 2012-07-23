@@ -72,7 +72,7 @@ end
 
 module Send : sig
 
-  val immediate : (IUser.t * Payload.t, unit O.run) Ohm.Sig.channel
+  val immediate : (IUser.t * INotify.t * Payload.t, unit O.run) Ohm.Sig.channel
 
 end
 
@@ -82,8 +82,8 @@ val from_token :
      INotify.t
   -> string 
   -> [`Old] ICurrentUser.id option
-  -> [ `Valid   of [`Old] ICurrentUser.id
+  -> [ `Valid   of Store.t * [`Old] ICurrentUser.id
      | `Expired
      | `Missing 
-     | `New     of [`New] ICurrentUser.id
+     | `New     of [`New] ICurrentUser.id 
      ] O.run 

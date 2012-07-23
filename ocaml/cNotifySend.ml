@@ -10,8 +10,9 @@ module CommentItem = CNotifySend_commentItem
 module PublishItem = CNotifySend_publishItem
 
 let () = 
-  let! uid, payload = Sig.listen MNotify.Send.immediate in 
-  let  url = "http://runorg.com/notify" in
+  let! uid, nid, payload = Sig.listen MNotify.Send.immediate in 
+  let  token = MNotify.get_token nid in 
+  let  url = Action.url UrlMe.Notify.mailed () (nid,token) in
   match payload with 
     | `BecomeMember (iid,aid) -> BecomeMember.send url uid iid aid 
     | `NewComment (`ItemAuthor,cid) -> CommentYourItem.send url uid cid

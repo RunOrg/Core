@@ -12,3 +12,6 @@
 	     | `NewWallItem1
 	     | `Whatever 
 	     ]
+
+| `Notify_Expired_Title
+| `Notify_Expired_Body 
