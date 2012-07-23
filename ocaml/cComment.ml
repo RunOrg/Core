@@ -27,7 +27,7 @@ let render comment =
 
   Asset_Comment_Single.render (object
     method author = author
-    method body   = OhmText.format ~nl2br:true ~skip2p:true ~mailto:true ~url:true (comment # what)
+    method body   = comment # what
     method time   = (comment # time, now) 
     method like   = None
     method remove = None

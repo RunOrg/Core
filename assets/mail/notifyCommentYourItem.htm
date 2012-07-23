@@ -1,4 +1,9 @@
-{ text }
+{ text | VText.format }
+
+{ Asset_Mail_BeginAppendix.render | ohm }
+ 
 <p>{ `Mail_Notify_CommentYourItem_Explanation sender }</p>
 { url | Asset_Mail_Url.render | ohm }
 <p>{ `Mail_Notify_CommentYourItem_Thanks asso }</p>
+
+{ Asset_Mail_EndAppendix.render | ohm }

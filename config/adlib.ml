@@ -35,6 +35,7 @@ let event_campaign_action = adlib "EventCampaignAction" ~old: "entity.sample.eve
 let event_campaign_action2 = adlib "EventCampaignAction2" ~old: "entity.sample.event-campaign-action2.sample" "Exemple d'opération militante"
 let event_campaign_meeting = adlib "EventCampaignMeeting" ~old: "entity.sample.event-campaign-meeting.sample" "Exemple de réunion électorales publique"
 let event_clubbing = adlib "EventClubbing" ~old: "entity.sample.event-clubbing.name" "Exemple de soirée"
+let _ = adlib "EntitySampleEventCoproMeetingName" "Exemple de Conseil syndical"
 let event_copro_meeting = adlib "EventCoproMeeting" ~old: "entity.sample.event-copro-meeting.name" "Exemple de Conseil syndical"
 let event_meeting_comite_ent = adlib "EventMeetingComiteEnt" ~old: "entity.sample.event-meeting.comite-ent.name" "Comité d'entreprise"
 let _ = adlib "EntitySampleEventSimpleName" "Exemple d'évènement dans RunOrg"

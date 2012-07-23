@@ -3,7 +3,7 @@
   <div class="-body"> 
     {=author}<a class="-author" href="{url}">{name}</a>{/=} { `Comment_Action } 
     <div class="-message">
-      { body | raw } 
+      { body | VText.format } 
     </div>
     <div class="-foot"> 
       {`DateRelative time}
