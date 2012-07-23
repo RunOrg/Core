@@ -28,7 +28,7 @@ let template fields =
 	end 
   ) (OhmForm.begin_object []) fields
 
-  |> VEliteForm.with_ok_button ~ok:(return "O HAI")
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Self_Save)
 
 let css_invited = "-invited"
 let css_none    = "-none"

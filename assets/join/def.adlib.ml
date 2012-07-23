@@ -23,3 +23,5 @@
 | `Join_Self_Accept 
 | `Join_Self_AcceptEdit
 | `Join_Self_Decline 
+
+| `Join_Self_Save
