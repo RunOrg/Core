@@ -4,6 +4,23 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module AccessFmt = Fmt.Make(struct
+  type json t = [ `Admin | `Member ]
+end)
+
+let template : (O.ctx,'a,'b) OhmForm.template = 
+
+  (VEliteForm.radio     
+     ~label:(AdLib.get `Events_Options_CanCreate)
+     ~detail:(AdLib.get `Events_Options_CanCreate_Detail)
+     ~format:AccessFmt.fmt
+     ~source:[ `Admin,  (AdLib.write `Events_Options_Admin) ;
+	       `Member, (AdLib.write `Events_Options_Member) ]
+     (fun () -> return None)
+     OhmForm.keep)
+      
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
+
 let css_invited = "-invited"
 let css_none    = "-none"
 let css_joined  = "-joined"
@@ -103,7 +120,8 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
   let! arg  = req_or panic (Action.Convenience.get_json req) in 
   let! join = req_or panic (match arg with 
-    | Json.Bool join -> Some join
+    | Json.Bool join -> Some (`Join join)
+    | Json.Null -> Some `Refresh 
     | _ -> None)
   in
 
@@ -130,11 +148,14 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
   (* Determine the action to be taken. *)
 
-  if join = false || fields = [] then
+  if join <> `Join true || fields = [] then
     
-    (* Leaving the entity, or joining an entity with no form. *)
+    (* Leaving the entity, refreshing the display, or joining an entity with no form. *)
     
-    let! () = ohm $ MMembership.user gid (access # self) join in 
+    let! () = ohm begin match join with 
+      | `Join join -> MMembership.user gid (access # self) join 
+      | `Refresh -> return ()
+    end in 
 
     (* Return the new status. *)
 
@@ -149,10 +170,15 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     
     (* Joining an entity with a join form *)
 
+    let form = OhmForm.create ~template ~source:(OhmForm.empty) in
+    let url  = JsCode.Endpoint.of_url "" in    
+
     let! status = ohm $ MMembership.status access gid in
     let! html = ohm $ Asset_Join_SelfEdit.render (object
       method status = css status
       method text   = AdLib.write (label ~gender ~kind ~status)
+      method form   = OhmForm.render form url
+      method refresh = Action.url req # self req # server req # args
     end) in 
 
     return $ Action.json ["replace" , Html.to_json html] res 

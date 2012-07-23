@@ -2,19 +2,31 @@
   {text | ohm} 
 </div>
 
-<div class="joinstatus-fullscreen">
+<div {$wrap} class="joinstatus-fullscreen">
   <div {$copy} class="-inner">
     <div class="joinstatus {status}">
       {text | ohm}
     </div>
-    <div class="join-form"> 
+    <div class="join-form">
+      {form | ohm}
     </div>
   </div>
 </div>
 
-<script>
+<script type="refresh:string">
 pos = here.$real.position()
-here.$copy.css {top:pos[0], left:pos[1]}  
+wid = here.$real.outerWidth()
+here.$copy.css {top:pos.top+'px', left:pos.left+'px', width: wid+'px'}  
+
+here.$wrap.click (ev) -> 
+  if $(ev.target).is(".joinstatus-fullscreen")
+    here.$wrap.remove()
+    post refresh, null, (d) -> 
+      if d.replace
+        here.$real.replaceWith(d.replace.html)
+        call d.replace.code
+      call d.code 
+
 </script>
 
 <style>
@@ -27,21 +39,29 @@ here.$copy.css {top:pos[0], left:pos[1]}
   width: 100%;
   z-index: 1000;
   height:1882px;
+
+  .-inner {
+    position: absolute;
+  }  
+
+  .-inner > * {
+    box-shadow: 0 0 3px #CCC;
+  }
+
+  .join-form {
+    background-color: white;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    margin-top: 20px;
+    padding: 14px;
+    background-color: #EEE;
+    background: -moz-linear-gradient(top , #DDD, #EEE 150px);
+    background: -webkit-linear-gradient(top , #DDD, #EEE 150px);
+  }
+
+  .elite-buttons {
+    margin-bottom: 0;
+  }
 }
 
-.joinstatus-fullscreen .-inner {
-  position: absolute;
-}
-
-.joinstatus-fullscreen .-inner > * {
-  box-shadow: 0 0 3px #CCC;
-}
-
-.joinstatus-fullscreen .join-form {
-  background-color: white;
-  border: 1px solid #CCC;
-  border-radius: 3px;
-  margin-top: 20px;
-  padding: 4px;
-}
 </style>
