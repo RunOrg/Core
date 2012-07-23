@@ -1,113 +1,84 @@
 (* © 2012 RunOrg *)
 open Common
 
+module Col = struct
+
+  let status = 
+    column ~sort:true ~show:true ~view:`Status
+      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
+      (`Self `Status)
+
+  let date = 
+    column ~sort:true ~show:true ~view:`DateTime
+      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
+      (`Self `Date) 
+
+end 
+
+module Field = struct
+
+  let desc = 
+    field ~label:(adlib "EntityFieldDesc" "Description")
+      ~required:true
+      ~mean:`Description
+      `Textarea "desc" 
+
+  let picture = 
+    field ~label:(adlib "EntityFieldPicture" "Image")
+      ~mean:`Picture
+      `Picture "pic" 
+
+  let date = 
+    field ~label:(adlib "EntityFieldDate" "Date")
+      ~mean:`Date
+      `Date "date" 
+
+  let location = 
+    field ~label:(adlib "EntityFieldAddress" "Adresse")
+      ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Maps")
+      ~mean:`Location
+      `LongText "address" 
+
+end
+
+module Page = struct
+
+  let place = 
+    infoSection (adlib "Info_Section_Where" "Où ?")   [ infoItem [ infoField "address" `Address ] ]
+    
+  let time = 
+    infoSection (adlib "Info_Section_When" "Quand ?") [ infoItem [ infoField "date" `Date ] ]
+
+end
+
 (* ========================================================================== *)
 
 let admin = template "Admin"
   ~old:"admin"
   ~kind:`Group
   ~name:"Groupe des Administrateurs RunOrg"
-  ~desc:"Groupe des administrateurs RunOrg. Les personnes inscrites dans ce groupe ont toute la visibilité et tous les droits dans l'espace Runorg de l'organisation. Ce groupe ne doit pas être supprimé."
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(Adlib.ColumnName.firstname)
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
+  ~fields:[]
+  ~join:[]
+  ~page:[]
   ()
 
 (* ========================================================================== *)
 
-let albumSimple = template "AlbumSimple"
+let _ = template "AlbumSimple"
   ~old:"album-simple"
   ~kind:`Forum
   ~name:"Album Photo Simple"
-  ~desc:"Contribution libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
+  ~fields:[]
+  ~join:[]
+  ~page:[]
   ()
 
 (* ========================================================================== *)
@@ -121,19 +92,8 @@ let course12sessions = template "Course12sessions"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ; date ;
     column ~view:`Date
       ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1")
       (`Self (`Field "date-session1")) ;
@@ -206,39 +166,16 @@ let course12sessions = template "Course12sessions"
     column ~view:`Text
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment-session12")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ;
     field ~label:(adlib "EntityFieldTeacher" "Formateur")
           `LongText "teacher" ;
     field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
           `Textarea "curriculum" ;
     field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
           `Textarea "prerequisite" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1") `Date ;
     join ~name:"comment-session1" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
@@ -265,60 +202,27 @@ let course12sessions = template "Course12sessions"
     join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
     join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:[
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
         infoItem
-          ~label:(adlib "Info_Item_Moreinfo" "Informations complémentaires")
-          [
-            infoField "moreinfo" `LongText ;
-          ];
-        infoItem
           ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [
-            infoField "prerequisite" `LongText ;
-          ];
+          [ infoField "prerequisite" `LongText ];
         infoItem
           ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [
-            infoField "curriculum" `LongText ;
-          ];
+          [ infoField "curriculum" `LongText ];
       ];
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           ~label:(adlib "Info_Item_Coord" "Formateur")
-          [
-            infoField "teacher" `Text ;
-          ];
+          [ infoField "teacher" `Text ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-      ];
-  ]
+    place ;
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -332,19 +236,8 @@ let course12sessionsFitness = template "Course12sessionsFitness"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ; date ;
     column ~view:`Date
       ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1")
       (`Self (`Field "date-session1")) ;
@@ -489,39 +382,16 @@ let course12sessionsFitness = template "Course12sessionsFitness"
     column ~view:`Text
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment-session12")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldTeacher" "Formateur")
           `LongText "teacher" ;
     field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
           `Textarea "curriculum" ;
     field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
           `Textarea "prerequisite" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"feedback-session1" ~label:(adlib "JoinFormFeedbackSession1" ~old:"join.form.feedback-session1" "Feedback séance 1") 
       (`PickOne [
@@ -620,15 +490,10 @@ let course12sessionsFitness = template "Course12sessionsFitness"
     join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
     join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:[
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
-        infoItem
-          ~label:(adlib "Info_Item_Moreinfo" "Informations complémentaires")
-          [
-            infoField "moreinfo" `LongText ;
-          ];
         infoItem
           ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
           [
@@ -649,31 +514,9 @@ let course12sessionsFitness = template "Course12sessionsFitness"
             infoField "teacher" `Text ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -681,70 +524,26 @@ let course12sessionsFitness = template "Course12sessionsFitness"
 let courseSimple = template "CourseSimple"
   ~old:"course-simple"
   ~kind:`Event
-  ~name:"Cours Simple"
-  ~desc:"Ouvert à inscription, organisé à une date fixe."
+  ~name:"Séance de cours"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldTeacher" "Formateur")
           `LongText "teacher" ;
     field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
           `Textarea "curriculum" ;
     field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
           `Textarea "prerequisite" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
-        infoItem
-          ~label:(adlib "Info_Item_Moreinfo" "Informations complémentaires")
-          [
-            infoField "moreinfo" `LongText ;
-          ];
         infoItem
           ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
           [
@@ -765,31 +564,9 @@ let courseSimple = template "CourseSimple"
             infoField "teacher" `Text ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
 
 (* ========================================================================== *)
@@ -798,51 +575,16 @@ let courseStage = template "CourseStage"
   ~old:"course-stage"
   ~kind:`Event
   ~name:"Stage"
-  ~desc:"organisez un stage sur plusieurs jours"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ;
     field ~label:(adlib "EntityFieldEnddate" "Date de fin")
           `Date "enddate" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+    location ;
     field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
           `Textarea "meal-accomodation" ;
     field ~label:(adlib "EntityFieldTeacher" "Formateur")
@@ -851,20 +593,12 @@ let courseStage = template "CourseStage"
           `Textarea "curriculum" ;
     field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
           `Textarea "prerequisite" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
-        infoItem
-          ~label:(adlib "Info_Item_Moreinfo" "Informations complémentaires")
-          [
-            infoField "moreinfo" `LongText ;
-          ];
         infoItem
           ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
           [
@@ -890,36 +624,9 @@ let courseStage = template "CourseStage"
             infoField "meal-accomodation" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -928,49 +635,13 @@ let courseTraining = template "CourseTraining"
   ~old:"course-training"
   ~kind:`Event
   ~name:"Formation"
-  ~desc:"Organisez une formation"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
           `Textarea "meal-accomodation" ;
     field ~label:(adlib "EntityFieldTeacher" "Formateur")
@@ -979,20 +650,12 @@ let courseTraining = template "CourseTraining"
           `Textarea "curriculum" ;
     field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
           `Textarea "prerequisite" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
-        infoItem
-          ~label:(adlib "Info_Item_Moreinfo" "Informations complémentaires")
-          [
-            infoField "moreinfo" `LongText ;
-          ];
         infoItem
           ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
           [
@@ -1011,7 +674,6 @@ let courseTraining = template "CourseTraining"
           ~label:(adlib "Info_Item_Coord" "Formateur")
           [
             infoField "teacher" `Text ;
-            infoField "meal-accomodation" `LongText ;
           ];
         infoItem
           ~label:(adlib "Info_Item_MealAccomodation" "Repas et hébergement")
@@ -1019,31 +681,9 @@ let courseTraining = template "CourseTraining"
             infoField "meal-accomodation" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
 
 (* ========================================================================== *)
@@ -1052,40 +692,13 @@ let eventAfterwork = template "EventAfterwork"
   ~old:"event-afterwork"
   ~kind:`Event
   ~name:"Afterwork"
-  ~desc:"Organisez un afterwork dont vous validez les inscriptions. Par défaut il est visible par vos contacts (peut être modifié dans les options)"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ;
     field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
           `Textarea "invitations-discounts" ;
     field ~label:(adlib "EntityFieldTicketing" "Billeterie")
@@ -1106,26 +719,8 @@ let eventAfterwork = template "EventAfterwork"
           `Textarea "ambiance" ;
     field ~label:(adlib "EntityFieldTheme" "Thème")
           `LongText "theme" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
     field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
           `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
     field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
           `LongText "cloakroom" ;
     field ~label:(adlib "EntityFieldReservationContact" "Réservations")
@@ -1134,10 +729,9 @@ let eventAfterwork = template "EventAfterwork"
           `LongText "contact-info" ;
     field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
           `Textarea "sponsors-partners" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Afterwork" "Afterwork")
       [
@@ -1223,15 +817,6 @@ let eventAfterwork = template "EventAfterwork"
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_ContactInfo" "Contact")
@@ -1254,93 +839,24 @@ let eventAfterwork = template "EventAfterwork"
             infoField "transportation-service" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
 
-let eventAfterworkAuto = template "EventAfterworkAuto"
+let _ = template "EventAfterworkAuto"
   ~old:"event-afterwork-auto"
   ~kind:`Event
-  ~name:"Aferwork  inscriptions automatiques"
-  ~desc:"Organisez un afterwork avec inscriptions automatiques. Par défaut il est visible par vos contacts (peut être modifié dans les options)"
+  ~name:"Aferwork inscriptions automatiques"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ~columns:Col.([ date ; status ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
           `Textarea "invitations-discounts" ;
     field ~label:(adlib "EntityFieldTicketing" "Billeterie")
@@ -1361,26 +877,8 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
           `Textarea "ambiance" ;
     field ~label:(adlib "EntityFieldTheme" "Thème")
           `LongText "theme" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
     field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
           `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
     field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
           `LongText "cloakroom" ;
     field ~label:(adlib "EntityFieldReservationContact" "Réservations")
@@ -1389,10 +887,9 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
           `LongText "contact-info" ;
     field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
           `Textarea "sponsors-partners" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Afterwork" "Afterwork")
       [
@@ -1405,10 +902,6 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
           ~label:(adlib "Info_Item_SpecialOffer" "Offre spéciale")
           [
             infoField "special-offer" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_SpecialOffer" "Offre spéciale")
-          [
           ];
       ];
     infoSection
@@ -1463,10 +956,6 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
         infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-        infoItem
           ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
           [
             infoField "sponsors-partners" `LongText ;
@@ -1477,7 +966,6 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
       [
         infoItem
           [
-            infoField "coord" `Text ;
             infoField "coord" `Text ;
           ];
         infoItem
@@ -1509,51 +997,9 @@ let eventAfterworkAuto = template "EventAfterworkAuto"
             infoField "transportation-service" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -1562,97 +1008,44 @@ let eventAg = template "EventAg"
   ~old:"event-ag"
   ~kind:`Event
   ~name:"Assemblée Générale"
-  ~desc:"Organisation de l'AG de l'association"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
+  ~columns:Col.([
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldAgOthervoiceShort" ~old:"join.field.ag.othervoice.short" "Pouvoir")
       (`Self (`Field "othervoice")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+    status ; 
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
-    join ~name:"othervoice" ~label:(adlib "JoinFieldAgOthervoice" ~old:"join.field.ag.othervoice" "Si vous ne venez pas, inscrivez ici le nom de la personne à laquelle vous transmettez votre pouvoir") `LongText ;
+    join ~name:"subject" 
+      ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
+		"Sujets que vous désirez aborder")
+      `Textarea ;
+    join ~name:"othervoice" 
+      ~label:(adlib "JoinFieldAgOthervoice" ~old:"join.field.ag.othervoice" 
+		"Si vous ne venez pas, inscrivez ici le nom de la personne à laquelle vous transmettez votre pouvoir") 
+      `LongText ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -1660,51 +1053,9 @@ let eventAg = template "EventAg"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -1712,27 +1063,13 @@ let eventAg = template "EventAg"
 let eventBadmintonCompetition = template "EventBadmintonCompetition"
   ~kind:`Event
   ~name:"Tournoi de Badminton"
-  ~desc:"Organisation et inscriptions à un tournoi de badminton"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ; 
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFielBadmintonSeries" "Série choisie")
       (`Self (`Field "badminton-series")) ;
@@ -1745,124 +1082,32 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)")
       (`Self (`Field "badminton-mixte")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-  join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `LongText ;
-  join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `LongText ;
-  join ~name:"badminton-double" ~label:(adlib "JoinFieldBadmintonDouble" "Partenaire de double (nom, prénom, classement)") `Textarea ;
-  join ~name:"badminton-mixte" ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)") `Textarea ;
+    join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `LongText ;
+    join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `LongText ;
+    join ~name:"badminton-double" ~label:(adlib "JoinFieldBadmintonDouble" 
+					    "Partenaire de double (nom, prénom, classement)") `Textarea ;
+    join ~name:"badminton-mixte" ~label:(adlib "JoinFieldBadmintonMixte" 
+					   "Partenaire de mixte (nom, prénom, classement)") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
   
 (* ========================================================================== *)
@@ -1871,104 +1116,41 @@ let eventCampaignAction = template "EventCampaignAction"
   ~old:"event-campaign-action"
   ~kind:`Event
   ~name:"Opération militante"
-  ~desc:"Organisez une opération militante et reccueillez les CR de cette action"
+  ~desc:"Organisez une opération militante et recueillez les CR de cette action"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([ 
+    status ; 
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" "Périmètre couvert lors de l'opération")
       (`Self (`Field "perimeter")) ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération")
       (`Self (`Field "action-cr")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ;  
     field ~label:(adlib "EntityFieldActionType" "Type d'opération")
           ~help:(adlib "EntityFieldActionCrExplain" "Tractage, boitage, porte à porte, affichage, phoning, etc.")
           ~required:true
           `LongText "action-type" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
     field ~label:(adlib "EntityFieldActionZone" "Zones, rues, quartiers")
           `LongText "action-zone" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
     field ~label:(adlib "EntityFieldActionDetails" "Détails techniques de l'opération")
           `Textarea "action-details" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"perimeter" ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" "Périmètre couvert lors de l'opération") `Textarea ;
-    join ~name:"action-cr" ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération") `Textarea ;
+    join ~name:"perimeter" ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" 
+				     "Périmètre couvert lors de l'opération") `Textarea ;
+    join ~name:"action-cr" ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" 
+				     "Compte rendu d'opération") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_What" "Quoi ?")
       [
@@ -1978,28 +1160,11 @@ let eventCampaignAction = template "EventCampaignAction"
           ];
       ];
     infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-    infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_ActionDetails" "Détails techniques de l'opération")
@@ -2007,19 +1172,9 @@ let eventCampaignAction = template "EventCampaignAction"
             infoField "action-details" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "action-zone" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -2033,92 +1188,36 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([ 
+    status ; 
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" "Thèmes que vous voulez voir aborder")
       (`Self (`Field "theme")) ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser")
       (`Self (`Field "question")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"theme" ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" "Thèmes que vous voulez voir aborder") `Textarea ;
-    join ~name:"question" ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser") `Textarea ;
+    join ~name:"theme" ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" 
+				 "Thèmes que vous voulez voir aborder") `Textarea ;
+    join ~name:"question" ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" 
+				    "Questions que vous souhaitez poser") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -2126,51 +1225,9 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
 
 (* ========================================================================== *)
@@ -2179,40 +1236,13 @@ let eventClubbing = template "EventClubbing"
   ~old:"event-clubbing"
   ~kind:`Event
   ~name:"Soirée"
-  ~desc:"Organisez une soirée dont vous validez les inscriptions. Par défaut elle est visible par vos contacts (peut être modifié dans les options)"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
           `Textarea "transportation-service" ;
     field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
@@ -2237,30 +1267,11 @@ let eventClubbing = template "EventClubbing"
           `Textarea "ambiance" ;
     field ~label:(adlib "EntityFieldTheme" "Thème")
           `LongText "theme" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
     field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
           `Textarea "sponsors-partners" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Price" "Prix")
       [
@@ -2313,10 +1324,6 @@ let eventClubbing = template "EventClubbing"
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
         infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-        infoItem
           ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
           [
             infoField "sponsors-partners" `LongText ;
@@ -2328,15 +1335,6 @@ let eventClubbing = template "EventClubbing"
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_ContactInfo" "Contact")
@@ -2359,93 +1357,24 @@ let eventClubbing = template "EventClubbing"
             infoField "transportation-service" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
 
-let eventClubbingAuto = template "EventClubbingAuto"
+let _ = template "EventClubbingAuto"
   ~old:"event-clubbing-auto"
   ~kind:`Event
   ~name:"Soirée inscriptions automatiques"
-  ~desc:"Organisez une soirée avec inscriptions automatiques. Par défaut elle est visible par vos contacts (peut être modifié dans les options)"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ;
     field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
           `Textarea "invitations-discounts" ;
     field ~label:(adlib "EntityFieldTicketing" "Billeterie")
@@ -2462,22 +1391,6 @@ let eventClubbingAuto = template "EventClubbingAuto"
           `Textarea "ambiance" ;
     field ~label:(adlib "EntityFieldTheme" "Thème")
           `LongText "theme" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
     field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
           `Textarea "transportation-service" ;
     field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
@@ -2490,10 +1403,9 @@ let eventClubbingAuto = template "EventClubbingAuto"
           `LongText "contact-info" ;
     field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
           `Textarea "sponsors-partners" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
+  ])
+  ~join:[]
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Price" "Prix")
       [
@@ -2546,10 +1458,6 @@ let eventClubbingAuto = template "EventClubbingAuto"
       (adlib "Info_Section_Moreinfo" "Plus d'info")
       [
         infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-        infoItem
           ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
           [
             infoField "sponsors-partners" `LongText ;
@@ -2561,15 +1469,6 @@ let eventClubbingAuto = template "EventClubbingAuto"
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_ContactInfo" "Contact")
@@ -2592,51 +1491,9 @@ let eventClubbingAuto = template "EventClubbingAuto"
             infoField "transportation-service" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -2645,93 +1502,35 @@ let eventComiteEnt = template "EventComiteEnt"
   ~old:"event-comite-ent"
   ~kind:`Event
   ~name:"Comité d'entreprise"
-  ~desc:"Organisez un comité d'entreprise"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ; 
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
+				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -2739,51 +1538,9 @@ let eventComiteEnt = template "EventComiteEnt"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -2792,93 +1549,37 @@ let eventCoproMeeting = template "EventCoproMeeting"
   ~old:"event-copro-meeting"
   ~kind:`Event
   ~name:"Conseil syndical"
-  ~desc:"Organisez un conseil syndical"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([ 
+    status ; 
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
     field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
           `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
+				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
-            infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
+            infoField "coord" `Text ;            
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -2886,51 +1587,9 @@ let eventCoproMeeting = template "EventCoproMeeting"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -2938,60 +1597,24 @@ let eventCoproMeeting = template "EventCoproMeeting"
 let eventImproSimple = template "EventImproSimple"
   ~old:"event-impro-simple"
   ~kind:`Event
-  ~name:"Match d'improvisation (organisation)"
+  ~name:"Match d'improvisation"
   ~desc:"Organisation interne d'un match contre une autre équipe"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
+  ~columns:Col.([ 
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
       (`Self (`Field "ok-for-help")) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
           `LongText "player-time" ;
     field ~label:(adlib "EntityFieldAgainstTeam" "Equipe rencontrée")
@@ -3004,13 +1627,12 @@ let eventImproSimple = template "EventImproSimple"
           `LongText "referee" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…") 
+    join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition"
+					   ~old:"join.form.ok-for-position" "Ok pour être…") 
       (`PickMany [
-         adlib "JoinFormOkForPositionPlayer" ~old:"join.form.ok-for-position.player" "Joueur(se)" ;
+        adlib "JoinFormOkForPositionPlayer" ~old:"join.form.ok-for-position.player" "Joueur(se)" ;
          adlib "JoinFormOkForPositionCoach" ~old:"join.form.ok-for-position.coach" "Coach" ;
          adlib "JoinFormOkForPositionReferee" ~old:"join.form.ok-for-position.referee" "Arbitre (et assistant)" ;
          adlib "JoinFormOkForPositionMc" ~old:"join.form.ok-for-position.mc" "MC" ] ) ;
@@ -3021,21 +1643,12 @@ let eventImproSimple = template "EventImproSimple"
          adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
          adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
-            infoField "coord" `Text ;
             infoField "coord" `Text ;
           ];
         infoItem
@@ -3062,44 +1675,8 @@ let eventImproSimple = template "EventImproSimple"
           [
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          [
-            infoField "" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-      ];
+    place ; 
+    time ; 
     infoSection
       (adlib "Info_Section_Against" "Contre Qui ?")
       [
@@ -3112,7 +1689,7 @@ let eventImproSimple = template "EventImproSimple"
             infoField "against-team-url" `Url ;
           ];
       ];
-  ]
+  ])
   ()
 
 (* ========================================================================== *)
@@ -3120,25 +1697,15 @@ let eventImproSimple = template "EventImproSimple"
 let eventImproSpectacle = template "EventImproSpectacle"
   ~old:"event-impro-spectacle"
   ~kind:`Event
-  ~name:"Spectacle d'improvisation (organisation)"
-  ~desc:"Organisation interne d'un spectacle d'improvisation"
+  ~name:"Spectacle d'improvisation"
+  ~desc:"Organisation interne du spectacle"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
+  ~columns:Col.([ 
+    status ; 
+    date ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
@@ -3148,51 +1715,20 @@ let eventImproSpectacle = template "EventImproSpectacle"
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
           `LongText "player-time" ;
-    field ~label:(adlib "EntityFieldAgainstTeam" "Equipe rencontrée")
-          `LongText "against-team" ;
-    field ~label:(adlib "EntityFieldAgainstTeamUrl" "Son site web")
-          `LongText "against-team-url" ;
     field ~label:(adlib "EntityFieldMc" "MC")
           `LongText "mc" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…") 
       (`PickMany [
          adlib "JoinFormOkForPositionPlayer" ~old:"join.form.ok-for-position.player" "Joueur(se)" ;
-         adlib "JoinFormOkForPositionCoach" ~old:"join.form.ok-for-position.coach" "Coach" ;
-         adlib "JoinFormOkForPositionReferee" ~old:"join.form.ok-for-position.referee" "Arbitre (et assistant)" ;
          adlib "JoinFormOkForPositionMc" ~old:"join.form.ok-for-position.mc" "MC" ] ) ;
     join ~name:"ok-for-help" ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...") 
       (`PickMany [
@@ -3201,21 +1737,12 @@ let eventImproSpectacle = template "EventImproSpectacle"
          adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
          adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
-            infoField "coord" `Text ;
             infoField "coord" `Text ;
           ];
         infoItem
@@ -3228,54 +1755,10 @@ let eventImproSpectacle = template "EventImproSpectacle"
           [
             infoField "mc" `Text ;
           ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          [
-            infoField "" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
 
 (* ========================================================================== *)
@@ -3284,93 +1767,35 @@ let eventMeeting = template "EventMeeting"
   ~old:"event-meeting"
   ~kind:`Event
   ~name:"Réunion"
-  ~desc:"Organisation d'une réunion"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
+				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -3378,51 +1803,9 @@ let eventMeeting = template "EventMeeting"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time 
+  ])
   ()
 
 (* ========================================================================== *)
@@ -3431,22 +1814,15 @@ let eventPetition = template "EventPetition"
   ~old:"event-petition"
   ~kind:`Event
   ~name:"Pétition"
-  ~desc:"Organisez une pétition et personnalisez les informations demandées aux signataires. Les pétitions sont accessibles à vos contacts"
+  ~desc:"Vous pouvez personnaliser les informations demandées aux signataires."
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Event ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
+  ~columns:Col.([
+    status ;
+    date ; 
     column ~sort:true ~show:true ~view:`DateTime
       ~label:(adlib "MemberFieldBirthdate" ~old:"member.field.birthdate" "Date de Naissance")
       (`Profile `Birthdate) ;
@@ -3456,104 +1832,22 @@ let eventPetition = template "EventPetition"
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment")) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; 
     field ~label:(adlib "EntityFieldClosingdate" "Date de clôture")
           `Date "enddate" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldSite" "Site web")
-          `LongText "url" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"comment" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Url" "Site web")
-          [
-            infoField "url" `Url ;
-          ];
-      ];
+  ~page:Page.([  
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
           ];
       ];
     infoSection
@@ -3565,107 +1859,49 @@ let eventPetition = template "EventPetition"
             infoField "date" `Date ;
           ];
         infoItem
-          ~label:(adlib "Info_Item_Enddate" "Validité")
+          ~label:(adlib "Info_Item_Enddate" "Date de fin")
           [
             infoField "enddate" `Date ;
           ];
       ];
-  ]
+  ])
   ()
 
 (* ========================================================================== *)
 
-let eventPublicComity = template "EventPublicComity"
+let eventPublicCommittee = template "EventPublicCommittee"
   ~old:"event-public-comity"
   ~kind:`Event
   ~name:"Conseil municipal"
-  ~desc:"Organisez un conseil municipal"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([ 
+    status ; 
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
     field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
           `Textarea "agenda" ;
     field ~label:(adlib "EntityFieldCoord" "Coordinateur")
           `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder") `Textarea ;
+    join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject"
+				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
+  ~page:Page.([
     infoSection
       (adlib "Info_Section_Org" "Organisation")
       [
         infoItem
           [
             infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
           ];
         infoItem
           ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
@@ -3673,51 +1909,9 @@ let eventPublicComity = template "EventPublicComity"
             infoField "agenda" `LongText ;
           ];
       ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+    place ; 
+    time
+  ])
   ()
 
 (* ========================================================================== *)
@@ -3726,222 +1920,44 @@ let eventSimple = template "EventSimple"
   ~old:"event-simple"
   ~kind:`Event
   ~name:"Evènement Simple"
-  ~desc:"Une date, un lieu, une liste d'invités. Validation manuelle des inscriptions pour les non-invités."
+  ~desc:"Une date, un lieu, une liste d'invités."
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-            infoField "date" `Date ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([ desc ; picture ; date ; location ])
+  ~join:[]
+  ~page:Page.([ place ; time ])
   ()
 
 (* ========================================================================== *)
 
-let eventSimpleAuto = template "EventSimpleAuto"
+let _ = template "EventSimpleAuto"
   ~old:"event-simple-auto"
   ~kind:`Event
-  ~name:"Evènement Simple inscriptions automatiques"
-  ~desc:"Une date, un lieu, une liste d'invités. Validation automatique des inscriptions pour les non-invités."
+  ~name:"Evènement Simple"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldEndtime" "Heure de fin")
-          `LongText "endtime" ;
-    field ~label:(adlib "EntityFieldTime" "Heure de début")
-          `LongText "time" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldLocation" "Salle, Bâtiment...")
-          `LongText "location" ;
-    field ~label:(adlib "EntityFieldAddress" "Adresse")
-          ~help:(adlib "EntityFieldAddressExplain" "Inscrivez l'adresse complète : un lien automatique est fait vers Google Map")
-          ~mean:`Location
-          `LongText "address" ;
-    field ~label:(adlib "EntityFieldLocationUrl" "Site web du lieu")
-          `LongText "location-url" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Where" "Où ?")
-      [
-        infoItem
-          [
-            infoField "location" `Text ;
-          ];
-        infoItem
-          [
-            infoField "address" `Address ;
-          ];
-        infoItem
-          [
-            infoField "location-url" `Url ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "Quand ?")
-      [
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Coordinateur")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Time" "Heure de début")
-          [
-            infoField "time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Endtime" "Heure de fin")
-          [
-            infoField "endtime" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([ desc ; picture ; date ; location ])
+  ~join:[]
+  ~page:Page.([ place ; time ])
   ()
 
 (* ========================================================================== *)
 
-let forumPublic = template "ForumPublic"
+let forum = template "ForumPublic"
   ~old:"forum-public"
   ~kind:`Forum
-  ~name:"Forum Public"
-  ~desc:"Participation libre et sans inscription"
+  ~name:"Forum"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Viewers ~post:`Viewers)
   ~folder:(folderConfig ~read:`Viewers ~post:`Viewers)
   ~album:(albumConfig ~read:`Viewers ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
+  ~columns:Col.([ status ; date ])
   ~fields:[]
   ~join:[]
   ~page:[]
@@ -3952,25 +1968,15 @@ let forumPublic = template "ForumPublic"
 let groupBadminton = template "GroupBadminton"
   ~kind:`Group
   ~name:"Sportifs Badminton"
-  ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du badminton"
+  ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du badminton"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
+  ~columns:Col.([
+    status ;
+    date ; 
     column ~view:`Text
       ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)")
       (`Self (`Field "license-number")) ;
@@ -3980,15 +1986,6 @@ let groupBadminton = template "GroupBadminton"
     column ~view:`Text
       ~label:(adlib "JoinFormRanking" "Classement")
       (`Self (`Field "Classement")) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
@@ -4022,22 +2019,7 @@ let groupBadminton = template "GroupBadminton"
     column ~view:`Text
       ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
       (`Self (`Field "other")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
     join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
@@ -4062,16 +2044,6 @@ let groupBadminton = template "GroupBadminton"
     join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
     join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
   
 (* ========================================================================== *)
@@ -4086,19 +2058,9 @@ let groupCheerleading = template "GroupCheerleading"
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
@@ -4141,22 +2103,7 @@ let groupCheerleading = template "GroupCheerleading"
     column ~view:`Text
       ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
       (`Self (`Field "other")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
     join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
@@ -4188,16 +2135,6 @@ let groupCheerleading = template "GroupCheerleading"
     join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
     join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -4205,57 +2142,13 @@ let groupCheerleading = template "GroupCheerleading"
 let groupCollaborative = template "GroupCollaborative"
   ~old:"group-collaborative"
   ~kind:`Group
-  ~name:"Groupe collaboratif"
-  ~desc:"Ce type de groupe peut être utilisé comme un espace collaboratif. Il comporte tous les objets collaboratifs (mur, albums, documents, etc.)"
+  ~name:"Groupe avec Forum"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
@@ -4263,115 +2156,27 @@ let groupCollaborative = template "GroupCollaborative"
 let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~old:"group-collaborative-auto"
   ~kind:`Group
-  ~name:"Groupe collaboratif inscriptions automatiques"
-  ~desc:"Groupe collaboratif avec validation automatique des inscriptions pour les non-invités"
+  ~name:"Groupe avec Forum"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let groupContact = template "GroupContact"
+let _ = template "GroupContact"
   ~old:"group-contact"
   ~kind:`Group
   ~name:"Contacts"
-  ~desc:"Groupe en accès public et validé automatiquement de personnes n'ayant pas accès à votre espace, mais qui peuvent être contactées via RunOrg"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
@@ -4380,19 +2185,15 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~old:"group-copro-employes"
   ~kind:`Group
   ~name:"Gardiens / employés"
-  ~desc:"Groupe collabroratif dédié aux gardiens et salariés"
+  ~desc:"Groupe avec forum, dédié aux gardiens et salariés"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
+  ~columns:Col.([ 
+    status ;
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
       (`Self (`Field "workphone")) ;
@@ -4408,55 +2209,13 @@ let groupCoproEmployes = template "GroupCoproEmployes"
     column ~view:`Text
       ~label:(adlib "JoinFormDayTimeWorking" ~old:"join.form.day-time-working" "Jours et heures d'interventions")
       (`Self (`Field "day-time-working")) ;
-    column ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
     join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
     join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel") `LongText ;
     join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
     join ~name:"resposabilities-tasks" ~label:(adlib "JoinFormResposabilitiesTasks" ~old:"join.form.resposabilities-tasks" "Responsabilités / tâches") `Textarea ;
     join ~name:"day-time-working" ~label:(adlib "JoinFormDayTimeWorking" ~old:"join.form.day-time-working" "Jours et heures d'interventions") `Textarea ;
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
   ]
   ()
 
@@ -4466,19 +2225,15 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~old:"group-copro-lodger"
   ~kind:`Group
   ~name:"Locataires"
-  ~desc:"Groupe collabroratif dédié aux locataires"
+  ~desc:"Groupe avec forum, dédié aux locataires"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
+  ~columns:Col.([
+    status ;
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
@@ -4488,53 +2243,11 @@ let groupCoproLodger = template "GroupCoproLodger"
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)")
       (`Self (`Field "appartment")) ;
-    column ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
     join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
     join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
     join ~name:"appartment" ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
   ]
   ()
 
@@ -4544,19 +2257,15 @@ let groupCoproManager = template "GroupCoproManager"
   ~old:"group-copro-manager"
   ~kind:`Group
   ~name:"Gestionnaires"
-  ~desc:"Groupe collabroratif dédié aux gestionnaires"
+  ~desc:"Groupe avec forum, dédié aux gestionnaires"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
       (`Self (`Field "workphone")) ;
@@ -4566,53 +2275,11 @@ let groupCoproManager = template "GroupCoproManager"
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
       (`Self (`Field "workemail")) ;
-    column ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
     join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
     join ~name:"workmobile" ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel") `LongText ;
     join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
   ]
   ()
 
@@ -4622,19 +2289,15 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~old:"group-corpro-owner"
   ~kind:`Group
   ~name:"Propriétaires"
-  ~desc:"Groupe collaboratif dédié aux propriétaires"
+  ~desc:"Groupe avec forum, dédié aux propriétaires"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
+  ~columns:Col.([
+    status ; 
+    date ; 
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
@@ -4650,40 +2313,8 @@ let groupCorproOwner = template "GroupCorproOwner"
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormLiveCopro" ~old:"join.form.live-copro" "Habitez-vous cet appartement ?")
       (`Self (`Field "live-copro")) ;
-    column ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
     join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
     join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
     join ~name:"appartment" ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)") ~required:true `LongText ;
@@ -4693,16 +2324,6 @@ let groupCorproOwner = template "GroupCorproOwner"
          adlib "Yes" ~old:"yes" "Oui" ;
          adlib "No" ~old:"no" "Non" ] ) ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -4711,28 +2332,15 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~old:"group-fitness-members"
   ~kind:`Group
   ~name:"Sportifs fitness"
-  ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre d'une salle de sport ou d'un coaching sportif"
+  ~desc:"Regroupe les informations demandées à vos sportifs."
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "ProfileShareConfigPhone" ~old:"profile.share.config.phone" "Numéro de téléphone")
       (`Self (`Field "phone")) ;
@@ -4781,22 +2389,7 @@ let groupFitnessMembers = template "GroupFitnessMembers"
     column ~view:`Text
       ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
       (`Self (`Field "other")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
     join ~name:"phone" ~label:(adlib "ProfileShareConfigPhone" ~old:"profile.share.config.phone" "Numéro de téléphone") ~required:true `LongText ;
     join ~name:"dateofbirth" ~label:(adlib "ProfileShareConfigBirth" ~old:"profile.share.config.birth" "Date de naissance") ~required:true `LongText ;
@@ -4855,16 +2448,6 @@ let groupFitnessMembers = template "GroupFitnessMembers"
     join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
     join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -4873,34 +2456,15 @@ let groupFootus = template "GroupFootus"
   ~old:"group-footus"
   ~kind:`Group
   ~name:"Sportifs football américain"
-  ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du football américain"
+  ~desc:"Regroupe les informations demandées aux joueurs de football américain"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
@@ -4946,25 +2510,8 @@ let groupFootus = template "GroupFootus"
     column ~view:`Text
       ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
       (`Self (`Field "other")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
     join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
       (`PickOne [
          adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
@@ -4993,16 +2540,6 @@ let groupFootus = template "GroupFootus"
     join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
     join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -5011,34 +2548,15 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~old:"group-judo-members"
   ~kind:`Group
   ~name:"Sportifs judo et jujitsu"
-  ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre de la pratique du judo et du jujitsu"
+  ~desc:"Regroupe les informations demandées aux pratiquants de judo et de jujitsu"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
@@ -5078,25 +2596,8 @@ let groupJudoMembers = template "GroupJudoMembers"
     column ~view:`Text
       ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
       (`Self (`Field "other")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
     join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
       (`PickOne [
          adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
@@ -5136,16 +2637,6 @@ let groupJudoMembers = template "GroupJudoMembers"
     join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
     join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -5154,56 +2645,12 @@ let groupRespo = template "GroupRespo"
   ~old:"group-respo"
   ~kind:`Group
   ~name:"Responsables"
-  ~desc:"Un groupe de responsables"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
   (* ========================================================================== *)
@@ -5211,19 +2658,13 @@ let groupRespo = template "GroupRespo"
 let groupSchoolParents = template "GroupSchoolParents"
   ~kind:`Group
   ~name:"Parents d'élèves"
-  ~desc:"Groupe collabroratif dédié aux parents d'élèves"
+  ~desc:"Groupe avec forum, dédié aux parents d'élèves"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom")
-      (`Self (`Field "lastname")) ;
+  ~columns:Col.([
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
       (`Self (`Field "children-names")) ;
@@ -5239,40 +2680,8 @@ let groupSchoolParents = template "GroupSchoolParents"
     column ~view:`PickOne
       ~label:(adlib "JoinFormChildrenGrades" "Classes des enfants scolarisés")
       (`Self (`Field "children-grades")) ;
-    column ~view:`Text
-      ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom")
-      (`Self (`Field "firstname")) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
   ~join:[
-    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
-    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") `LongText ;
     join ~name:"workphone" ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel") `LongText ;
     join ~name:"mobile" ~label:(adlib "JoinFormMobile" ~old:"join.form.mobile" "Tel portable") `LongText ;
     join ~name:"workemail" ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel") `LongText ;
@@ -5284,16 +2693,6 @@ let groupSchoolParents = template "GroupSchoolParents"
          adlib "JoinFormChildrenGradesCe2" "CE2" ;
          adlib "JoinFormChildrenGradesCm1" "Cm1" ;
          adlib "JoinFormChildrenGradesCm2" "Cm2" ;] ) ;
-	]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
   ]
   ()
   
@@ -5302,94 +2701,23 @@ let groupSchoolParents = template "GroupSchoolParents"
 let groupSimple = template "GroupSimple"
   ~old:"group-simple"
   ~kind:`Group
-  ~name:"Groupe simple"
-  ~desc:"Type de groupe dédié à la gestion des membres. Il comporte une simple liste de membre aucun objet collaboratif (mur, albums, documents, etc.)"
+  ~name:"Groupe sans Forum"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let groupTest = template "GroupTest"
+let _ = template "GroupTest"
   ~old:"group-test"
   ~kind:`Group
   ~name:"Groupe Test"
-  ~desc:"Un groupe pour tester les préconfigs"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Checkbox
-      ~label:(adlib "JoinFieldTestShort" ~old:"join.field.test.short" "Test marche ?")
-      (`Self (`Field "test")) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-    join ~name:"test" ~label:(adlib "JoinFieldTest" ~old:"join.field.test" "Est-ce que ce test marche ?") `Checkbox ;
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
@@ -5400,50 +2728,8 @@ let pollSimple = template "PollSimple"
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
+  ~fields:Field.([ desc ; picture ])
   ()
 
 (* ========================================================================== *)
@@ -5452,21 +2738,11 @@ let pollYearly = template "PollYearly"
   ~old:"poll-yearly"
   ~kind:`Poll
   ~name:"Bilan de l'année écoulée"
-  ~desc:"Proposition de questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
+  ~desc:"Questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
+  ~columns:Col.([
+    status ;
+    date ;
     column ~show:true ~view:`Text
       ~label:(adlib "JoinPollYearlyBestevent" ~old:"join.poll-yearly.bestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?")
       (`Self (`Field "bestevent")) ;
@@ -5485,25 +2761,10 @@ let pollYearly = template "PollYearly"
     column ~sort:true ~show:true ~view:`PickOne
       ~label:(adlib "JoinPollYearlyInvolvement" ~old:"join.poll-yearly.involvement" "Voulez-vous vous impliquer dans l'organisation ?")
       (`Self (`Field "involvement")) ;
-    column ~sort:true ~show:true ~view:`PickOne
-      ~label:(adlib "JoinPollYearlySatisfaction" ~old:"join.poll-yearly.satisfaction" "Etes-vous satisfait de l'année qui vient de se passer ?")
-      (`Profile `Firstname) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
+  ])
+  ~fields:Field.([
+    desc ; picture 
+  ])
   ~join:[
     join ~name:"bestevent" ~label:(adlib "JoinPollYearlyBestevent" ~old:"join.poll-yearly.bestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?") `LongText ;
     join ~name:"assiduity" ~label:(adlib "JoinPollYearlyAssiduity" ~old:"join.poll-yearly.assiduity" "Comment qualifieriez-vous votre participation dans notre association cette année ?") 
@@ -5531,70 +2792,16 @@ let pollYearly = template "PollYearly"
          adlib "Yes" ~old:"yes" "Oui" ;
          adlib "No" ~old:"no" "Non" ] ) ;
   ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
   ()
 
 (* ========================================================================== *)
 
-let subscriptionAuto = template "SubscriptionAuto"
+let _ = template "SubscriptionAuto"
   ~old:"subscription-auto"
   ~kind:`Group
-  ~name:"Adhésion Automatique"
-  ~desc:"Sans validation par un responsable"
+  ~name:"Adhésion"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
@@ -5602,296 +2809,23 @@ let subscriptionAuto = template "SubscriptionAuto"
 let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~old:"subscription-datetodate"
   ~kind:`Group
-  ~name:"Adhésion date à date (annuelle, semestrielle, autre)"
-  ~desc:"Adhésion pour laquelle vous définissez une date de début et de fin de validité"
+  ~name:"Adhésion"
+  ~desc:"Date à date : annuelle, semestrielle, etc"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldStartdate" "Date de début")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
-          ~required:true
-          ~mean:`Enddate
-          `Date "enddate" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `LongText ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "{! NON TRADUIT !}")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Validity" "Validité")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-            infoField "date" `Date ;
-            infoField "date" `Date ;
-            infoField "date" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionDatetodateAuto = template "SubscriptionDatetodateAuto"
+let _ = template "SubscriptionDatetodateAuto"
   ~old:"subscription-datetodate-auto"
   ~kind:`Group
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldStartdate" "Date de début")
-          ~required:true
-          ~mean:`Date
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
-          ~required:true
-          ~mean:`Enddate
-          `Date "enddate" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `Text ;
-            infoField "moreinfo" `LongText ;
-          ];
-        infoItem
-          [
-          ];
-        infoItem
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_When" "{! NON TRADUIT !}")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Validity" "Validité")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-            infoField "date" `Date ;
-            infoField "date" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-            infoField "enddate" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
@@ -5900,253 +2834,39 @@ let subscriptionForever = template "SubscriptionForever"
   ~old:"subscription-forever"
   ~kind:`Group
   ~name:"Adhésion Permanente"
-  ~desc:"Adhésion sans date de fin de validité"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionForeverAuto = template "SubscriptionForeverAuto"
+let _ = template "SubscriptionForeverAuto"
   ~old:"subscription-forever-auto"
   ~kind:`Group
   ~name:"Adhésion permanente automatique"
-  ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion sans date de fin de validité"
   ~propagate:"members"
   ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionSemester = template "SubscriptionSemester"
+let _ = template "SubscriptionSemester"
   ~old:"subscription-semester"
   ~kind:`Group
   ~name:"Adhésion Semestrielle"
-  ~desc:"Dure six mois, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
-          ~required:true
-          `Date "enddate" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_When" "{! NON TRADUIT !}")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionYear = template "SubscriptionYear"
+let _ = template "SubscriptionYear"
   ~old:"subscription-year"
   ~kind:`Group
   ~name:"Adhésion Annuelle"
-  ~desc:"Dure un an, de date à date"
   ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
-  ~columns:[
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom")
-      (`Profile `Firstname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicLastname" ~old:"column.user-basic.lastname" "Nom")
-      (`Profile `Lastname) ;
-    column ~sort:true ~show:true ~view:`Text
-      ~label:(adlib "ColumnUserBasicEmail" ~old:"column.user-basic.email" "E-mail")
-      (`Profile `Email) ;
-    column ~sort:true ~show:true ~view:`Status
-      ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
-      (`Self `Status) ;
-    column ~sort:true ~show:true ~view:`DateTime
-      ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
-      (`Self `Date) ;
-  ]
-  ~fields:[
-    field ~label:(adlib "EntityFieldSummary" "Résumé")
-          ~help:(adlib "EntityFieldSummaryExplain" "Texte apparaissant dans les listes")
-          ~mean:`Summary
-          `LongText "summary" ;
-    field ~label:(adlib "EntityFieldDesc" "Description")
-          ~required:true
-          ~mean:`Description
-          `Textarea "desc" ;
-    field ~label:(adlib "EntityFieldDate" "Date")
-          ~required:true
-          `Date "date" ;
-    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
-          ~required:true
-          `Date "enddate" ;
-    field ~label:(adlib "EntityFieldPicture" "Image")
-          ~mean:`Picture
-          `Picture "pic" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ]
-  ~join:[
-  ]
-  ~page:[
-    infoSection
-      (adlib "Info_Section_When" "{! NON TRADUIT !}")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-      ];
-  ]
+  ~columns:Col.([ status ; date ])
   ()
 

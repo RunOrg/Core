@@ -85,7 +85,7 @@ type init = {
   i_name : adlib ;
 }
 
-let initial i_key i_tmpl ~name i_data = {
+let initial i_key i_tmpl ~name = {
   i_tmpl ; i_name = name 
 }
 
@@ -117,7 +117,7 @@ let folderConfig = wallConfig
 let albumConfig = wallConfig
 
 let template id ?old ~kind ~name ?desc ?propagate 
-    ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ~page () = 
+    ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ?(page=[]) () = 
   templates := {
     t_id     = id  ;
     t_old    = old ;
