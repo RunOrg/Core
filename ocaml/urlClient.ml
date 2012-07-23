@@ -44,15 +44,16 @@ let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
-module Like = UrlClient_like
-module Comment = UrlClient_comment
-module Item = UrlClient_item
+module Like     = UrlClient_like
+module Comment  = UrlClient_comment
+module Item     = UrlClient_item
 module MiniPoll = UrlClient_miniPoll 
-module Members = UrlClient_members
-module Events = UrlClient_events
-module Forums = UrlClient_forums
-module Website = UrlClient_website
-module Invite = UrlClient_invite
+module Members  = UrlClient_members
+module Events   = UrlClient_events
+module Forums   = UrlClient_forums
+module Website  = UrlClient_website
+module Invite   = UrlClient_invite
+module Join     = UrlClient_join
 
 module Home = struct
   let home, def_home = root "home"
