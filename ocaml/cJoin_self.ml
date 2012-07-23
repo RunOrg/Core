@@ -43,6 +43,7 @@ let label ~gender ~kind ~status =
     | `Declined -> begin
       match kind with 
 	| `Event -> `Join_Self_Event_NotMember gender
+	| `Forum -> `Join_Self_Forum_NotMember gender
 	| _      -> `Join_Self_Group_NotMember gender      
     end
     | `Member -> begin

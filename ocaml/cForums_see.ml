@@ -15,25 +15,19 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
     
     let! admin  = ohm $ O.decay (MEntity.Can.admin entity ) in
-    
-    let  draft  = MEntity.Get.draft entity in 
-    
+        
     let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
     let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
-    let  feed   = if draft then None else feed in
     
     let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
     let! album  = ohm $ O.decay (MAlbum.Can.read album) in
-    let  album  = if draft then None else album in 
     
     let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
     let! folder = ohm $ O.decay (MFolder.Can.read folder) in
-    let  folder = if draft then None else folder in 
 
     let  gid = MEntity.Get.group entity in
     let! group = ohm $ O.decay (MGroup.try_get access gid) in
     let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
-    let  group = if draft then None else group in   
 
     let  public = CEntityUtil.public_forum entity in 
     
@@ -78,6 +72,17 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       
       let! name = ohm $ CEntityUtil.name entity in
 
+      (* My own status in this group --------------------------------------------------------------------- *)
+
+      let! join = ohm begin
+	if public || MEntity.Get.kind entity = `Group then return None else
+	  match group with None -> return None | Some group -> 
+	    let! status = ohm $ MMembership.status access gid in
+	    let  fields = MGroup.Fields.get group <> [] in
+	    return $ 
+	      Some (CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
+      end in 
+
       (* Administrator URLs -------------------------------------------------------------------------------- *)
       
       let admin = 
@@ -103,6 +108,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	method admin      = admin
 	method group      = group 
 	method title      = name
+	method join       = join 
 	method box        = O.Box.render contents 
       end)
     end

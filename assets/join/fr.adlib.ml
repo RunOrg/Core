@@ -13,6 +13,7 @@
 | `Join_Self_Forum_Member g -> "Vous avez accès à ce forum."
 | `Join_Self_Event_NotMember g -> "Vous ne participez pas à cette activité."
 | `Join_Self_Group_NotMember g -> "Vous n'êtes pas membre de ce groupe."
+| `Join_Self_Forum_NotMember g -> "Vous ne participez pas à ce forum."
 | `Join_Self_Event_Invited g -> !! "Vous êtes %s à cette activité." (macho "invité" "invitée" g) 
 | `Join_Self_Pending g -> "Un responsable va valider votre inscription."
 

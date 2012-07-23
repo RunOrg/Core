@@ -13,6 +13,7 @@
 | `Join_Self_Forum_Member of Ohm.AdLib.gender
 | `Join_Self_Event_NotMember of Ohm.AdLib.gender
 | `Join_Self_Group_NotMember of Ohm.AdLib.gender
+| `Join_Self_Forum_NotMember of Ohm.AdLib.gender
 | `Join_Self_Event_Invited of Ohm.AdLib.gender
 | `Join_Self_Pending of Ohm.AdLib.gender
 
