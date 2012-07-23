@@ -12,6 +12,9 @@ end
 module ColumnName = struct
 
   let firstname = adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom"
+  let lastname  = adlib "ColumnUserBasicLastname"  ~old:"column.user-basic.lastname" "Nom"
+  let email     = adlib "ColumnUserBasicEmail"     ~old:"column.user-basic.email" "Email"
+  let gender    = adlib "MemberFieldGender"        ~old:"member.field.gender" "Sexe"
 
 end
 
@@ -27,12 +30,14 @@ let course_12sessions = adlib "Course12Sessions" ~old: "entity.sample.course-12s
 let _ = adlib "EntitySampleCourseSimpleName" "Exemple de cours dans RunOrg"
 let course_simple = adlib "CourseSimple" ~old: "entity.sample.course-simple.name" "Exemple de cours dans RunOrg"
 let event_ag = adlib "EventAg" ~old: "entity.sample.event-ag.name" "Exemple d'AG dans RunOrg"
+let _ = adlib "EntitySampleEventAgName" "Exemple d'AG dans RunOrg"
 let event_campaign_action = adlib "EventCampaignAction" ~old: "entity.sample.event-campaign-action.sample" "Sympathisants du secteur Exemple"
 let event_campaign_action2 = adlib "EventCampaignAction2" ~old: "entity.sample.event-campaign-action2.sample" "Exemple d'opération militante"
 let event_campaign_meeting = adlib "EventCampaignMeeting" ~old: "entity.sample.event-campaign-meeting.sample" "Exemple de réunion électorales publique"
 let event_clubbing = adlib "EventClubbing" ~old: "entity.sample.event-clubbing.name" "Exemple de soirée"
 let event_copro_meeting = adlib "EventCoproMeeting" ~old: "entity.sample.event-copro-meeting.name" "Exemple de Conseil syndical"
 let event_meeting_comite_ent = adlib "EventMeetingComiteEnt" ~old: "entity.sample.event-meeting.comite-ent.name" "Comité d'entreprise"
+let _ = adlib "EntitySampleEventSimpleName" "Exemple d'évènement dans RunOrg"
 let event_simple = adlib "EventSimple" ~old: "entity.sample.event-simple.name" "Exemple d'évènement dans RunOrg"
 let forum_public_classified = adlib "ForumPublicClassified" ~old: "entity.sample.forum-public.classified.name" "Petites annonces"
 let forum_public_jobs_sport = adlib "ForumPublicJobsSport" ~old: "entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois"

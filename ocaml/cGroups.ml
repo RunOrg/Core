@@ -19,10 +19,14 @@ let contents access =
   let eid = if IEntity.to_string eid = "" then members_eid else eid in
   
   O.Box.fill $ O.decay begin
-      
-    let! avatars, actions = ohm begin
 
-      let none = return (None, None) in
+    (* Grab the avatars and possible actions for the group ------------------------------------------------- *)
+      
+    let! avatars, actions, join = ohm begin
+
+      (* Determine raw access ----------------------------------------------------------------------------- *)
+
+      let none = return (None, None, None) in
 
       let! entity = ohm_req_or none $ MEntity.try_get access eid in 
       let! entity = ohm_req_or none $ MEntity.Can.view entity in 
@@ -32,7 +36,20 @@ let contents access =
       let! group  = ohm_req_or none $ MGroup.Can.list group in
       let  gid    = MGroup.Get.id group in 
 
+      (* List group members ------------------------------------------------------------------------------ *)
+
       let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
+
+      (* My own status in this group --------------------------------------------------------------------- *)
+
+      let! join = ohm begin
+	let! status = ohm $ MMembership.status access gid in
+	let  fields = MGroup.Fields.get group <> [] in
+	return $ 
+	  CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
+      end in 
+
+      (* Url for sending messages ----------------------------------------------------------------------- *)
 
       let! send_url = ohm begin 
 
@@ -52,10 +69,12 @@ let contents access =
 
       end in 
 
-      let not_admin = return (Some avatars, if avatars = [] then None else Some (object
+      (* Determine if administrator or not ------------------------------------------------------------ *)
+      
+      let not_admin = return (Some avatars, (if avatars = [] then None else Some (object
 	method admin = None
 	method send  = send_url
-      end)) in
+      end)), Some join) in
 
       let! admin = ohm_req_or not_admin $ MEntity.Can.admin entity in 
       
@@ -67,14 +86,17 @@ let contents access =
 	  method admin  = Action.url UrlClient.Members.admin (access # instance # key)
 	    [ IEntity.to_string eid ] 
 	end)
-      end))
+      end), Some join)
 
     end in 
+
+    (* Render the group contents ------------------------------------------------------------------------- *)
 
     Asset_Group_Page.render (object
       method id        = eid
       method actions   = actions
       method directory = BatOption.map CAvatar.directory avatars
+      method join      = join 
     end)
   end
 

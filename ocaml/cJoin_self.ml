@@ -39,7 +39,8 @@ let css_joined  = "-joined"
 
 let label ~gender ~kind ~status = 
   match status with 
-    | `NotMember -> begin
+    | `NotMember 
+    | `Declined -> begin
       match kind with 
 	| `Event -> `Join_Self_Event_NotMember gender
 	| _      -> `Join_Self_Group_NotMember gender      
@@ -53,7 +54,6 @@ let label ~gender ~kind ~status =
     | `Invited -> `Join_Self_Event_Invited gender
     | `Pending -> `Join_Self_Pending gender
     | `Unpaid  -> `EMPTY
-    | `Declined -> `Join_Self_Event_NotMember gender
 
 let css = function
   | `NotMember -> css_none
