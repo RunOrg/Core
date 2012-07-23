@@ -1,0 +1,47 @@
+<div {$real} class="joinstatus {status}">
+  {text | ohm} 
+</div>
+
+<div class="joinstatus-fullscreen">
+  <div {$copy} class="-inner">
+    <div class="joinstatus {status}">
+      {text | ohm}
+    </div>
+    <div class="join-form"> 
+    </div>
+  </div>
+</div>
+
+<script>
+pos = here.$real.position()
+here.$copy.css {top:pos[0], left:pos[1]}  
+</script>
+
+<style>
+.joinstatus-fullscreen {
+  background-color: white;
+  background-color: rgba(255, 255, 255, 0.75);
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  height:1882px;
+}
+
+.joinstatus-fullscreen .-inner {
+  position: absolute;
+}
+
+.joinstatus-fullscreen .-inner > * {
+  box-shadow: 0 0 3px #CCC;
+}
+
+.joinstatus-fullscreen .join-form {
+  background-color: white;
+  border: 1px solid #CCC;
+  border-radius: 3px;
+  margin-top: 20px;
+  padding: 4px;
+}
+</style>

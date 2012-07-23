@@ -8,6 +8,32 @@ let css_invited = "-invited"
 let css_none    = "-none"
 let css_joined  = "-joined"
 
+let label ~gender ~kind ~status = 
+  match status with 
+    | `NotMember -> begin
+      match kind with 
+	| `Event -> `Join_Self_Event_NotMember gender
+	| _      -> `Join_Self_Group_NotMember gender      
+    end
+    | `Member -> begin
+      match kind with 
+	| `Event -> `Join_Self_Event_Member gender
+	| `Forum -> `Join_Self_Forum_Member gender
+	| _      -> `Join_Self_Group_Member gender      
+    end
+    | `Invited -> `Join_Self_Event_Invited gender
+    | `Pending -> `Join_Self_Pending gender
+    | `Unpaid  -> `EMPTY
+    | `Declined -> `Join_Self_Event_NotMember gender
+
+let css = function
+  | `NotMember -> css_none
+  | `Member    -> css_joined
+  | `Invited   -> css_invited
+  | `Pending   -> css_joined
+  | `Unpaid    -> css_none
+  | `Declined  -> css_none
+
 let render eid key ~gender ~kind ~status ~fields = 
 
   let action what = object
@@ -15,44 +41,29 @@ let render eid key ~gender ~kind ~status ~fields =
     method data = Json.Bool what
   end in
 
-  let label, css, buttons = match status with 
-    | `NotMember -> begin
-      let label = match kind with 
-	| `Event -> `Join_Self_Event_NotMember gender
-	| _      -> `Join_Self_Group_NotMember gender
-      in
-      (label,css_none,[(object
-	method green = true
-	method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
-	method action = action true
-      end)])
-    end
-    | `Member -> begin
-      let label = match kind with 
-	| `Event -> `Join_Self_Event_Member gender
-	| `Forum -> `Join_Self_Forum_Member gender
-	| _      -> `Join_Self_Group_Member gender
-      in
+  let buttons = match status with 
+    | `NotMember -> [(object
+      method green = true
+      method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
+      method action = action true
+    end)]
+    | `Member ->
       let cancel = object 
 	method green = false
 	method label = AdLib.write `Join_Self_Cancel
 	method action = action false
       end in 
-      (label,css_joined,
-	if fields then 
-	  [ cancel ;
-	    (object
-	      method green = false
-	      method label = AdLib.write `Join_Self_Edit
-	      method action = action true
-	     end)
-	  ]
-	else 
-	  [ cancel ]
-      )
-    end
-    | `Invited -> begin
-      (`Join_Self_Event_Invited gender,css_invited,[
+      if fields then 
+	[ cancel ;
+	  (object
+	    method green = false
+	    method label = AdLib.write `Join_Self_Edit
+	    method action = action true
+	   end)
+	]
+      else 
+	[ cancel ]
+    | `Invited -> [
 	(object
 	  method green = false
 	  method label = AdLib.write `Join_Self_Decline
@@ -63,32 +74,25 @@ let render eid key ~gender ~kind ~status ~fields =
 	  method label = AdLib.write (if fields then `Join_Self_AcceptEdit else `Join_Self_Accept)
 	  method action = action true
 	 end) ;
-      ])
-    end
-    | `Pending -> begin
-      (`Join_Self_Pending gender,css_joined,[
+      ]
+    | `Pending -> [
 	(object
 	  method green = false
 	  method label = AdLib.write `Join_Self_Cancel
 	  method action = action false
 	 end)
-      ])
-    end
-    | `Unpaid -> begin
-      (`EMPTY,css_none,[])
-    end
-    | `Declined -> begin
-      (`Join_Self_Event_NotMember gender,css_none,[(object
-	method green = true
-	method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
-	method action = action true
-      end)])
-    end
+      ]
+    | `Unpaid -> []
+    | `Declined -> [(object
+      method green = true
+      method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
+      method action = action true
+    end)]    
   in
 
   Asset_Join_Self.render (object
-    method status = css
-    method text = AdLib.write label
+    method status = css status
+    method text = AdLib.write (label ~kind ~gender ~status)
     method buttons = buttons
   end)
 
@@ -114,17 +118,43 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
   let  gid   = MEntity.Get.group entity in
   let! group = ohm_req_or panic $ MGroup.try_get access gid in
 
+  let  fields = MGroup.Fields.get group in
+
   let  kind = match MEntity.Get.kind entity with
     | `Event -> `Event
     | `Group -> `Group
     | other  -> `Forum
   in 
 
-  let! status = ohm $ MMembership.status access gid in
-  let  fields = MGroup.Fields.get group <> [] in
+  let gender = None in 
 
-  let! html   = ohm $ render eid (access # instance # key) ~gender:None ~kind ~status ~fields in
-  return $ Action.json ["replace" , Html.to_json html] res 
+  (* Determine the action to be taken. *)
 
+  if join = false || fields = [] then
     
+    (* Leaving the entity, or joining an entity with no form. *)
+    
+    let! () = ohm $ MMembership.user gid (access # self) join in 
+
+    (* Return the new status. *)
+
+    let! status = ohm $ MMembership.status access gid in
+    
+    let! html   = ohm $ render eid (access # instance # key) 
+      ~gender ~kind ~status ~fields:(fields <> []) in
+
+    return $ Action.json ["replace" , Html.to_json html] res 
+
+  else
+    
+    (* Joining an entity with a join form *)
+
+    let! status = ohm $ MMembership.status access gid in
+    let! html = ohm $ Asset_Join_SelfEdit.render (object
+      method status = css status
+      method text   = AdLib.write (label ~gender ~kind ~status)
+    end) in 
+
+    return $ Action.json ["replace" , Html.to_json html] res 
+
 end
