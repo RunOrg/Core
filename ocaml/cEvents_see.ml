@@ -94,6 +94,15 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 	 end)
     in
 
+    (* Join box ------------------------------------------------------------------------------------------ *)
+
+    let! join = ohm begin match group with None -> return None | Some group ->      
+      let! status = ohm $ MMembership.status access gid in
+      let  fields = MGroup.Fields.get group <> [] in
+      return $ Some (CJoin.Self.render eid  (access # instance # key) 
+		       ~gender:None ~kind:`Event ~status ~fields)
+    end in 
+
     (* Administrator URLs -------------------------------------------------------------------------------- *)
 
     let pic_change = 
@@ -127,7 +136,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       method sidebar    = O.Box.render sidebar
       method admin      = admin
       method title      = name
-      method join       = Some (CJoin.Self.render ~gender:None ~kind:`Event ~status:`Member ~fields:true)
+      method join       = join
       method pic_change = pic_change 
       method date       = BatOption.map (fun t -> (t,now)) date
       method status     = MEntity.Get.status entity 

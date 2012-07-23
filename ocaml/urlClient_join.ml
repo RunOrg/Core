@@ -6,4 +6,4 @@ open BatPervasives
 
 module A = Action.Args
 
-let ajax = O.declare O.client "join/ajax" (A.r IEntity.arg)
+let ajax, def_ajax = O.declare O.client "join/ajax" (A.r IEntity.arg)

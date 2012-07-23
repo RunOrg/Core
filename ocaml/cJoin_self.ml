@@ -8,11 +8,11 @@ let css_invited = "-invited"
 let css_none    = "-none"
 let css_joined  = "-joined"
 
-let render ~gender ~kind ~status ~fields = 
+let render eid key ~gender ~kind ~status ~fields = 
 
-  let action = object
-    method url = ""
-    method data =  Json.Null 
+  let action what = object
+    method url  = Action.url UrlClient.Join.ajax key eid  
+    method data = Json.Bool what
   end in
 
   let label, css, buttons = match status with 
@@ -24,7 +24,7 @@ let render ~gender ~kind ~status ~fields =
       (label,css_none,[(object
 	method green = true
 	method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
-	method action = action
+	method action = action true
       end)])
     end
     | `Member -> begin
@@ -36,7 +36,7 @@ let render ~gender ~kind ~status ~fields =
       let cancel = object 
 	method green = false
 	method label = AdLib.write `Join_Self_Cancel
-	method action = action
+	method action = action false
       end in 
       (label,css_joined,
 	if fields then 
@@ -44,7 +44,7 @@ let render ~gender ~kind ~status ~fields =
 	    (object
 	      method green = false
 	      method label = AdLib.write `Join_Self_Edit
-	      method action = action
+	      method action = action true
 	     end)
 	  ]
 	else 
@@ -56,12 +56,12 @@ let render ~gender ~kind ~status ~fields =
 	(object
 	  method green = false
 	  method label = AdLib.write `Join_Self_Decline
-	  method action = action
+	  method action = action false
 	 end) ;
 	(object
 	  method green = false
 	  method label = AdLib.write (if fields then `Join_Self_AcceptEdit else `Join_Self_Accept)
-	  method action = action
+	  method action = action true
 	 end) ;
       ])
     end
@@ -70,7 +70,7 @@ let render ~gender ~kind ~status ~fields =
 	(object
 	  method green = false
 	  method label = AdLib.write `Join_Self_Cancel
-	  method action = action
+	  method action = action false
 	 end)
       ])
     end
@@ -81,7 +81,7 @@ let render ~gender ~kind ~status ~fields =
       (`Join_Self_Event_NotMember gender,css_none,[(object
 	method green = true
 	method label = AdLib.write (if fields then `Join_Self_JoinEdit else `Join_Self_Join)
-	method action = action
+	method action = action true
       end)])
     end
   in
