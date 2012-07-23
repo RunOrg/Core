@@ -8,18 +8,27 @@ module AccessFmt = Fmt.Make(struct
   type json t = [ `Admin | `Member ]
 end)
 
-let template : (O.ctx,'a,'b) OhmForm.template = 
+let template fields = 
+  List.fold_left (fun acc field -> 
+    acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
+	begin match field # edit with 
+	  | `Checkbox
+	  | `Date
+	  | `LongText
+	  | `PickMany _ 
+	  | `PickOne  _ 
+	  | `Textarea ->
+	    (VEliteForm.textarea 
+	       ~label:(TextOrAdlib.to_string (field # label))
+	       (fun data -> return begin 
+		 try Json.to_string (List.assoc (field # name) data)
+		 with _ -> ""
+	       end)
+	       (OhmForm.keep)) 
+	end 
+  ) (OhmForm.begin_object []) fields
 
-  (VEliteForm.radio     
-     ~label:(AdLib.get `Events_Options_CanCreate)
-     ~detail:(AdLib.get `Events_Options_CanCreate_Detail)
-     ~format:AccessFmt.fmt
-     ~source:[ `Admin,  (AdLib.write `Events_Options_Admin) ;
-	       `Member, (AdLib.write `Events_Options_Member) ]
-     (fun () -> return None)
-     OhmForm.keep)
-      
-  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
+  |> VEliteForm.with_ok_button ~ok:(return "O HAI")
 
 let css_invited = "-invited"
 let css_none    = "-none"
@@ -170,7 +179,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     
     (* Joining an entity with a join form *)
 
-    let form = OhmForm.create ~template ~source:(OhmForm.empty) in
+    let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.empty) in
     let url  = JsCode.Endpoint.of_url "" in    
 
     let! status = ohm $ MMembership.status access gid in
