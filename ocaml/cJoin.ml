@@ -13,6 +13,7 @@ module StatusEditFmt = Fmt.Make(struct
 end)
 
 module Top = CJoin_top 
+module Self = CJoin_self
 
 let template group = 
   List.fold_left (fun acc field -> 

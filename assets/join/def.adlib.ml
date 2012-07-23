@@ -8,18 +8,18 @@
 
 | `Join_Edit_Save
 
-| `Join_Self_Event_Member
-| `Join_Self_Group_Member
-| `Join_Self_Forum_Member
-| `Join_Self_Event_NotMember
-| `Join_Self_Group_NotMember
+| `Join_Self_Event_Member of Ohm.AdLib.gender
+| `Join_Self_Group_Member of Ohm.AdLib.gender
+| `Join_Self_Forum_Member of Ohm.AdLib.gender
+| `Join_Self_Event_NotMember of Ohm.AdLib.gender
+| `Join_Self_Group_NotMember of Ohm.AdLib.gender
 | `Join_Self_Event_Invited of Ohm.AdLib.gender
-| `Join_Self_Pending 
+| `Join_Self_Pending of Ohm.AdLib.gender
 
-| `Join_Self_Event_Cancel
-| `Join_Self_Event_Edit 
-| `Join_Self_Event_Join 
-| `Join_Self_Event_JoinEdit 
-| `Join_Self_Event_Accept 
-| `Join_Self_Event_AcceptEdit
-| `Join_Self_Event_Decline 
+| `Join_Self_Cancel
+| `Join_Self_Edit 
+| `Join_Self_Join 
+| `Join_Self_JoinEdit 
+| `Join_Self_Accept 
+| `Join_Self_AcceptEdit
+| `Join_Self_Decline 

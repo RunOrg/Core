@@ -1,7 +1,17 @@
-<div class="joinstatus {status}">
+<div {$root} class="joinstatus {status}">
   {text | ohm} 
   {#buttons}
-    <a href="javascript:void(0)" class="action-button{if green} -green{/if}">{label}</a>
+    <a {$a} href="javascript:void(0)" class="action-button{if green} -green{/if}">{label | ohm}</a>
+    {=action}
+      <script type="url:string,data:json">
+here.$a.click -> 
+  post url, data, (d) -> 
+    if d.replace
+      here.$root.replaceWith(d.replace.html)
+      call d.replace.code
+    call d.code
+      </script>
+    {/=}
   {/#}
 </div>
 
