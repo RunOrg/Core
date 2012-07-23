@@ -35,6 +35,9 @@ let template group =
 	end 
   ) (OhmForm.begin_object []) (MGroup.Fields.get group)
 
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Edit_Save)
+
+
 let status_edit aid mid access kind group profile = fun edit _ self res ->
 
   let diffs = 

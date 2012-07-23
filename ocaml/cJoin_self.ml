@@ -24,7 +24,7 @@ let template fields =
 		 try Json.to_string (List.assoc (field # name) data)
 		 with _ -> ""
 	       end)
-	       (OhmForm.keep)) 
+	       (fun field data -> return $ Ok (Json.String data))) 
 	end 
   ) (OhmForm.begin_object []) fields
 
@@ -122,6 +122,47 @@ let render eid key ~gender ~kind ~status ~fields =
     method buttons = buttons
   end)
 
+let () = UrlClient.Join.def_post $ CClient.action begin fun access req res -> 
+
+  (* Check that entity is available for joining *)
+
+  let panic = return $ Action.javascript (Js.reload ()) res in 
+
+  let  eid    = req # args in 
+  let! entity = ohm_req_or panic $ MEntity.try_get access eid in
+  let! entity = ohm_req_or panic $ MEntity.Can.view entity in
+
+  let! () = true_or panic (not (MEntity.Get.draft entity)) in 
+  
+  let  gid   = MEntity.Get.group entity in
+  let! group = ohm_req_or panic $ MGroup.try_get access gid in
+
+  (* Extract form data *)
+
+  let! json = req_or panic $ Action.Convenience.get_json req in
+
+  let  src  = OhmForm.from_post_json json in 
+  let  form = OhmForm.create ~template:(template (MGroup.Fields.get group)) ~source:src in
+
+  let fail errors = 
+    let  form = OhmForm.set_errors errors form in
+    let! json = ohm $ OhmForm.response form in
+    return $ Action.json json res
+  in
+  
+  let! result = ohm_ok_or fail $ OhmForm.result form in  
+
+  (* Save the data and process the join request *)
+
+  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
+
+  let! mid   = ohm $ MMembership.as_user gid (access # self) in
+  let! ()    = ohm $ MMembership.user gid (access # self) true in
+  let! ()    = ohm $ MMembership.Data.self_update gid (access # self) info result in
+
+  return $ Action.javascript (Js.reload ()) res
+
+end
 
 let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res -> 
 
@@ -184,7 +225,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     let! data   = ohm $ MMembership.Data.get mid in 
 
     let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.from_seed data) in
-    let url  = JsCode.Endpoint.of_url "" in    
+    let url  = JsCode.Endpoint.of_url (Action.url UrlClient.Join.post req # server req # args) in    
 
     let! html = ohm $ Asset_Join_SelfEdit.render (object
       method status = css status
