@@ -8,7 +8,7 @@ module Message = struct
 
   let render item message = 
     let body = Asset_Item_Message.render (object
-      method body = OhmText.format ~nl2br:true ~skip2p:true ~mailto:true ~url:true (message # text)
+      method body = message # text
     end) in
     (message # author, `Message, body)
 
@@ -47,7 +47,7 @@ module Poll = struct
       in
 
       let display answers count total questions = Asset_Item_Poll.render (object
-	method body = OhmText.format ~nl2br:true ~skip2p:true ~mailto:true ~url:true (poll # text)
+	method body = poll # text
 	method questions = questions
 	method count = count
 	method total = total
