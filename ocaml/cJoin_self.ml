@@ -179,10 +179,13 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     
     (* Joining an entity with a join form *)
 
-    let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.empty) in
+    let! mid    = ohm $ MMembership.as_user gid (access # self) in
+    let! status = ohm $ MMembership.status access gid in
+    let! data   = ohm $ MMembership.Data.get mid in 
+
+    let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.from_seed data) in
     let url  = JsCode.Endpoint.of_url "" in    
 
-    let! status = ohm $ MMembership.status access gid in
     let! html = ohm $ Asset_Join_SelfEdit.render (object
       method status = css status
       method text   = AdLib.write (label ~gender ~kind ~status)
