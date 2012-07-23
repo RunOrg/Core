@@ -1,5 +1,10 @@
 { text | VText.render }
+
+{ Asset_Mail_BeginAppendix.render | ohm }
+
 <p>{ `Mail_Notify_PublishItem_Explanation sender }</p>
 <p>{ `Mail_Notify_PublishItem_Explanation2 }</p>
 { url | Asset_Mail_Url.render | ohm }
 <p>{ `Mail_Notify_PublishItem_Thanks asso }</p>
+
+{ Asset_Mail_EndAppendix.render | ohm }
