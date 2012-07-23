@@ -91,3 +91,40 @@ let render eid key ~gender ~kind ~status ~fields =
     method text = AdLib.write label
     method buttons = buttons
   end)
+
+
+let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res -> 
+
+  let panic = return $ Action.javascript (Js.reload ()) res in 
+
+  let! arg  = req_or panic (Action.Convenience.get_json req) in 
+  let! join = req_or panic (match arg with 
+    | Json.Bool join -> Some join
+    | _ -> None)
+  in
+
+  (* Extract the group and entity *)
+
+  let  eid    = req # args in 
+  let! entity = ohm_req_or panic $ MEntity.try_get access eid in
+  let! entity = ohm_req_or panic $ MEntity.Can.view entity in
+
+  let! () = true_or panic (not (MEntity.Get.draft entity)) in 
+  
+  let  gid   = MEntity.Get.group entity in
+  let! group = ohm_req_or panic $ MGroup.try_get access gid in
+
+  let  kind = match MEntity.Get.kind entity with
+    | `Event -> `Event
+    | `Group -> `Group
+    | other  -> `Forum
+  in 
+
+  let! status = ohm $ MMembership.status access gid in
+  let  fields = MGroup.Fields.get group <> [] in
+
+  let! html   = ohm $ render eid (access # instance # key) ~gender:None ~kind ~status ~fields in
+  return $ Action.json ["replace" , Html.to_json html] res 
+
+    
+end
