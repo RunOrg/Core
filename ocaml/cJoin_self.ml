@@ -4,10 +4,6 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module AccessFmt = Fmt.Make(struct
-  type json t = [ `Admin | `Member ]
-end)
-
 let template fields = 
   List.fold_left (fun acc field -> 
     acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
@@ -154,11 +150,18 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   (* Save the data and process the join request *)
 
+  let! ()    = ohm begin 
+    (* If entity admin, validate as well *)
+    let! admin = ohm $ MGroup.Can.write group in   
+    match admin with
+      | None -> MMembership.user gid (access # self) true 
+      | Some group -> MMembership.admin ~from:(access # self) (MGroup.Get.id group) (access # self)
+	[ `Accept true ; `Default true ]
+  end in
+  
   let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
-
-  let! mid   = ohm $ MMembership.as_user gid (access # self) in
-  let! ()    = ohm $ MMembership.user gid (access # self) true in
-  let! ()    = ohm $ MMembership.Data.self_update gid (access # self) info result in
+  let! mid  = ohm $ MMembership.as_user gid (access # self) in
+  let! ()   = ohm $ MMembership.Data.self_update gid (access # self) info result in
 
   return $ Action.javascript (Js.reload ()) res
 
