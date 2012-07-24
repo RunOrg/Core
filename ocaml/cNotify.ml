@@ -112,7 +112,14 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
   let home = Action.url UrlMe.Notify.home () () in
 
   match what with 
-    | `Valid (notify,cuid) -> let! url = ohm (url cuid notify) in 
+    | `Valid (notify,cuid) -> let uid = IUser.Deduce.is_anyone cuid in 
+			      let! () = ohm $ MAdminLog.log 
+				~uid
+				(MAdminLog.Payload.LoginWithNotify 
+				   (MNotify.Payload.channel notify # payload))
+			      in
+			      let! () = ohm $ MNotify.Stats.from_site nid in 
+			      let! url = ohm (url cuid notify) in 
 			      let  url = BatOption.default home url in 
 			      return $ CSession.start (`Old cuid) (Action.redirect url res)
     | `Missing -> return (Action.redirect home res)

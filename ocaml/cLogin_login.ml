@@ -25,16 +25,25 @@ let template =
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Submit)
 
-let attempt fail email password req res =
+let attempt how fail email password req res =
 
   let! uid  = ohm_req_or fail $ MUser.by_email email in
   let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
 
   let res = CSession.start (`Old cuid) res in
 
-  (* Determine the URL we should redirect to. *)
+  (* Log the login success *)
 
   let  iid  = UrlLogin.instance_of (req # args) in
+
+  let! () = ohm $ MAdminLog.log 
+    ~uid:(IUser.Deduce.is_anyone cuid) 
+    ?iid
+    how
+  in
+
+  (* Determine the URL we should redirect to. *)
+
   let  path = UrlLogin.path_of (req # args) in
   let! ins  = ohm $ Run.opt_bind MInstance.get iid in
   
@@ -79,6 +88,6 @@ let () = UrlLogin.def_post_login begin fun req res ->
     return $ Action.json json res
   in
 
-  attempt fail email password req res
+  attempt MAdminLog.Payload.LoginManual fail email password req res
 
 end

@@ -143,6 +143,11 @@ let () = UrlMail.def_passReset begin fun req res ->
     (match IUser.Deduce.from_session_token proof uid with `Old cuid -> Some cuid | _ -> None) 
   in
 
+  let! () = ohm $ MAdminLog.log 
+    ~uid
+    MAdminLog.Payload.LoginWithReset
+  in
+
   let  url  = Action.url UrlMe.Account.pass () () in
   
   return $ CSession.start (`Old cuid) (Action.redirect url res)

@@ -26,8 +26,7 @@ module MiniJoin = Fmt.Make(struct
 end)
 
 module Login = Fmt.Make(struct
-  module Channel = MNotification.ChannelType
-  type json t = [ `Notification "n" of IInstance.t * Channel.t * IUser.t
+  type json t = [ `Notification "n" of IInstance.t * Json.t * IUser.t
 		| `Login        "l" of IUser.t ]
 end)
 
@@ -75,18 +74,6 @@ end)
 
 module MyTable = CouchDB.Table(MyDB)(INews)(Data)
 
-type t = 
-  [ `item of IItem.t
-  | `join of MiniJoin.t
-  ]
-
-let t_of_payload = function
-  | `item i -> Some (`item i)
-  | `join j -> Some (`join j)
-  | `createInstance _ -> None
-  | `networkConnect _ -> None
-  | `login          _ -> None
-
 (* Actor involved in some news *)
 
 let actor t = match t # payload with 
@@ -108,36 +95,3 @@ let actor t = match t # payload with
       | `Login             u  -> Some (`User u)
   end 
 
-(* Creating news items from existing data elsewhere. *)
-
-let create ~instance ~avatar ~entity ~(payload:t) ~time ~access = 
-
-  let id = INews.gen () in
-  let obj = object
-    method t = `News
-    method instance   = Some (IInstance.decay instance)
-    method avatar     = BatOption.map IAvatar.decay avatar
-    method entity     = BatOption.map IEntity.decay entity
-    method payload    = (payload :> Payload.t) 
-    method time       = time
-    method restrict   = access
-    method backoffice = false
-  end in
-
-  MyTable.transaction id (MyTable.insert obj) |> Run.map ignore
-
-let create_backoffice ~payload ~time = 
-  
-  let id = INews.gen () in 
-  let obj = object
-    method t = `News
-    method instance   = None
-    method avatar     = None
-    method entity     = None
-    method payload    = payload
-    method time       = time
-    method restrict   = [`nobody]
-    method backoffice = true
-  end in 
-
-  MyTable.transaction id (MyTable.insert obj) |> Run.map ignore

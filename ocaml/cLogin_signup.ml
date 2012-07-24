@@ -179,7 +179,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
 
   in
 
-  Login.attempt if_login_failed email pass req res
+  Login.attempt MAdminLog.Payload.LoginSignup if_login_failed email pass req res
 
 end
   
