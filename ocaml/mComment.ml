@@ -13,16 +13,12 @@ module Design = struct
 end
   
 module Data = Fmt.Make(struct
-  module PAvatar = IAvatar
-  module PItem   = IItem
-  module PFeed   = IFeed
-  module Float   = Fmt.Float
   type json t = <
     t          : MType.t ;
-    who        : PAvatar.t ;
+    who        : IAvatar.t ;
     what       : string ;
-    time       : Float.t ;
-    on         : PItem.t 
+    time       : float ;
+    on         : IItem.t 
   > 
 end)
   
@@ -34,6 +30,12 @@ module Signals = struct
   let on_create_call, on_create = Sig.make (Run.list_iter identity)
   let on_delete_call, on_delete = Sig.make (Run.list_iter identity)
 end
+
+let () = 
+  let! cid, comm = Sig.listen Signals.on_create in 
+  let! iid = ohm_req_or (return ()) $ MAvatar.get_instance (comm # who) in
+  let! uid = ohm_req_or (return ()) $ MAvatar.get_user (comm # who) in
+  MAdminLog.log ~uid ~iid (MAdminLog.Payload.CommentCreate (IComment.decay cid))
 
 let max_length = 1000
   
@@ -50,7 +52,7 @@ let create on who what =
   end in
   
   let! _ = ohm $ MyTable.transaction id (MyTable.insert comment) in
-  
+   
   let id = IComment.Assert.created id in	
   let! () = ohm $ Signals.on_create_call (id, comment) in 
   return (id, comment)
