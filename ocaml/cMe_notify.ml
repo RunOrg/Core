@@ -15,17 +15,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
     return (user # gender) 
   end in 
 
-  let! list, _ = ohm $ O.decay (MNotify.Store.all_mine ~count cuid) in
-  let! list = ohm $ O.decay (Run.list_filter begin fun t -> 
-    let! author = ohm $ MNotify.Payload.author cuid (t # payload) in
-    match author with 
-      | Some (`RunOrg iid) -> return (Some (iid, (`RunOrg iid, t)))
-      | Some (`Person (aid,iid)) -> return (Some (Some iid, (`Person (aid,iid), t)))
-      | None -> let! () = ohm $ MNotify.Store.rotten (t # id) in
-		return None
-  end list) in
-
-  let by_iid = Ohm.ListAssoc.group_seq list in 
+  (* Rendering a single item *)
 
   let! now = ohmctx (#time) in
 
@@ -80,42 +70,72 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
     end)
   in
 
-  let! list = ohm $ O.decay (Run.list_filter begin fun (iid,items) -> 
+  (* Rendering a list *)
 
-    let no_instance = 
-      let! () = ohm $ Run.list_iter (snd |- (#id) |- MNotify.Store.rotten) items in
-      return None
-    in
+  let render_list more start = 
 
-    let! instance = ohm_req_or (return None)  begin
-      match iid with 
-	| None -> return $ Some (object
-	  method name = "RunOrg"
-	  method url  = "http://runorg.com/"
-	  method pic  = Some "/public/img/logo-50x50.png"
-	end)
-	| Some iid -> 
-	  let! instance = ohm_req_or no_instance $ MInstance.get iid in
-	  let! pic = ohm $ CPicture.small_opt (instance # pic) in
-	  return $ Some (object
-	    method name = instance # name
-	    method url  = Action.url UrlClient.website (instance # key) ()
-	    method pic  = pic
-	  end)					      
-    end in 
+    let! list, next = ohm $ O.decay (MNotify.Store.all_mine ~count ?start cuid) in
+    let! list = ohm $ O.decay (Run.list_filter begin fun t -> 
+      let! author = ohm $ MNotify.Payload.author cuid (t # payload) in
+      match author with 
+	| Some (`RunOrg iid) -> return (Some (iid, (`RunOrg iid, t)))
+	| Some (`Person (aid,iid)) -> return (Some (Some iid, (`Person (aid,iid), t)))
+	| None -> let! () = ohm $ MNotify.Store.rotten (t # id) in
+		  return None
+    end list) in
+    
+    let by_iid = Ohm.ListAssoc.group_seq list in 
+    
+    let! list = ohm $ O.decay (Run.list_filter begin fun (iid,items) -> 
+      
+      let no_instance = 
+	let! () = ohm $ Run.list_iter (snd |- (#id) |- MNotify.Store.rotten) items in
+	return None
+      in
+      
+      let! instance = ohm_req_or (return None)  begin
+	match iid with 
+	  | None -> return $ Some (object
+	    method name = "RunOrg"
+	    method url  = "http://runorg.com/"
+	    method pic  = Some "/public/img/logo-50x50.png"
+	  end)
+	  | Some iid -> 
+	    let! instance = ohm_req_or no_instance $ MInstance.get iid in
+	    let! pic = ohm $ CPicture.small_opt (instance # pic) in
+	    return $ Some (object
+	      method name = instance # name
+	      method url  = Action.url UrlClient.website (instance # key) ()
+	      method pic  = pic
+	    end)					      
+      end in 
+      
+      let! items = ohm $ Run.list_map render_item items in
+      
+      return $ Some (object
+	method instance = instance
+	method items = items
+      end)
+    end by_iid) in
 
-    let! items = ohm $ Run.list_map render_item items in
-
-    return $ Some (object
-      method instance = instance
-      method items = items
-    end)
-  end by_iid) in
-
-  O.Box.fill begin
-    Asset_Notify_List.render (object
+    Asset_Notify_List_Inner.render (object
       method list = list
+      method more = match next with None -> None | Some time -> 
+	Some (object
+	  method data     = Json.Null
+	  method endpoint = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint more time)
+	end)
     end)
+
+  in
+
+  let! more = O.Box.react Fmt.Float.fmt begin fun time _ self res -> 
+    let! html = ohm $ render_list self (Some time) in
+    return $ Action.json [ "more", Html.to_json html ] res
+  end in
+    
+  O.Box.fill begin
+    Asset_Notify_List.render (render_list more None)
   end 
 end
 

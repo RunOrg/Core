@@ -1,36 +1,44 @@
 <div class="notify-list">
-  {#list}
-    <div class="-instance">
-      {=instance}
-        <a class="-instance-name" href="{url}">
-	  {?pic}<span class="-pic"><img src="{this}"/></span>{/?}
-  	  {name}
-        </a>
-      {/=}
-      <div class="-body">
-	<ul>
-	  {#items}
-	    <li {if seen}{else}class="-unseen"{/if}>
-	      <a href="{url}">
-		<span class="-date">{ `DateRelative date }</span>
-		{?pic}<img src="{this}"/>{/?}
-		{?name}<strong>{this}</strong>{/?}		
-		{ `Notify text } 
-		{#more} 
-		  <strong>{this | fst | esc}</strong>
-		  { `Notify this|snd } 
-		{/#}
-	      </a>
-	    </li>
-	  {/#}
-        </ul>
+  { this | ohm } 
+
+  {@!inner}
+    {#list}
+      <div class="-instance">
+        {=instance}
+          <a class="-instance-name" href="{url}">
+  	    {?pic}<span class="-pic"><img src="{this}"/></span>{/?}
+  	    {name}
+          </a>
+        {/=}
+        <div class="-body">
+	  <ul>
+	    {#items}
+	      <li {if seen}{else}class="-unseen"{/if}>
+	        <a href="{url}">
+		  <span class="-date">{ `DateRelative date }</span>
+		  {?pic}<img src="{this}"/>{/?}
+		  {?name}<strong>{this}</strong>{/?}		
+		  { `Notify text } 
+		  {#more} 
+		    <strong>{this | fst | esc}</strong>
+		    { `Notify this|snd } 
+		  {/#}
+	        </a>
+	      </li>
+	    {/#}
+          </ul>
+	</div>
       </div>
-    </div>
-  {else}
-    <div class="empty-list">
-      { `Notify_List_Empty } 
-    </div>
-  {/#}
+    {else}
+      <div class="empty-list">
+        { `Notify_List_Empty } 
+      </div>
+    {/#}
+    {?more}
+      { this | Asset_More_Auto.render | ohm }
+    {/?}
+  {/@}
+
 </div>
 
 <style>

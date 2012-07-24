@@ -1,0 +1,44 @@
+<div {$point}></div>
+
+<script type="endpoint:json,data:json">
+onScroll = () -> 
+
+  if here.$point.is(":visible")
+
+    $b = $ window
+    dt = $b.scrollTop()
+    db = dt + $b.height()
+    et = here.$point.offset().top 
+    eb = et + here.$point.height() 
+
+    if (et <= db && eb >= dt)
+      here.$point.hide() 
+      
+      if typeof endpoint is 'string'
+        send = (data,callback) -> 
+          $.ajax
+            url: endpoint
+            data: data 
+            type: 'POST'
+            contentType: 'application/json'
+            success: callback 
+      else
+        send = (data,callback) -> 
+          f = eval('('+endpoint[0]+')')
+          a = endpoint[1..]
+          a.push data, callback
+          f.apply @, a
+
+      send data, (d) -> 
+        if d.more
+          here.$point.before(d.more.html)
+          call d.more.code
+        call d.code
+        here.$point.remove()
+
+  else
+    $(window).unbind "scroll", onScroll
+
+$(window).bind "scroll", onScroll
+  
+</script> 
