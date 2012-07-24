@@ -58,7 +58,7 @@ let admin = template "Admin"
   ~kind:`Group
   ~name:"Groupe des Administrateurs RunOrg"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -74,7 +74,7 @@ let _ = template "AlbumSimple"
   ~old:"album-simple"
   ~kind:`Forum
   ~name:"Album Photo Simple"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~columns:Col.([ status ; date ])
   ~fields:[]
   ~join:[]
@@ -88,7 +88,7 @@ let course12sessions = template "Course12sessions"
   ~kind:`Event
   ~name:"Cours 12 séances"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances. Peut être renseigné par l'élève ou le prof"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -232,7 +232,7 @@ let course12sessionsFitness = template "Course12sessionsFitness"
   ~kind:`Event
   ~name:"Cours 12 séances fitness"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances et de réccupérer les retours des élèves. Peut être renseigné par l'élève et/ou le prof"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -525,7 +525,7 @@ let courseSimple = template "CourseSimple"
   ~old:"course-simple"
   ~kind:`Event
   ~name:"Séance de cours"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -575,7 +575,7 @@ let courseStage = template "CourseStage"
   ~old:"course-stage"
   ~kind:`Event
   ~name:"Stage"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -635,7 +635,7 @@ let courseTraining = template "CourseTraining"
   ~old:"course-training"
   ~kind:`Event
   ~name:"Formation"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -692,7 +692,7 @@ let eventAfterwork = template "EventAfterwork"
   ~old:"event-afterwork"
   ~kind:`Event
   ~name:"Afterwork"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -850,7 +850,7 @@ let _ = template "EventAfterworkAuto"
   ~old:"event-afterwork-auto"
   ~kind:`Event
   ~name:"Aferwork inscriptions automatiques"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1008,7 +1008,7 @@ let eventAg = template "EventAg"
   ~old:"event-ag"
   ~kind:`Event
   ~name:"Assemblée Générale"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1063,7 +1063,7 @@ let eventAg = template "EventAg"
 let eventBadmintonCompetition = template "EventBadmintonCompetition"
   ~kind:`Event
   ~name:"Tournoi de Badminton"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1117,7 +1117,7 @@ let eventCampaignAction = template "EventCampaignAction"
   ~kind:`Event
   ~name:"Opération militante"
   ~desc:"Organisez une opération militante et recueillez les CR de cette action"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1184,7 +1184,7 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
   ~kind:`Event
   ~name:"Réunion électorale publique"
   ~desc:"Organisez une réunion électorale et reccueillez les thèmes attendus par les participants"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1236,7 +1236,7 @@ let eventClubbing = template "EventClubbing"
   ~old:"event-clubbing"
   ~kind:`Event
   ~name:"Soirée"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1368,7 +1368,7 @@ let _ = template "EventClubbingAuto"
   ~old:"event-clubbing-auto"
   ~kind:`Event
   ~name:"Soirée inscriptions automatiques"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1502,7 +1502,7 @@ let eventComiteEnt = template "EventComiteEnt"
   ~old:"event-comite-ent"
   ~kind:`Event
   ~name:"Comité d'entreprise"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1549,7 +1549,7 @@ let eventCoproMeeting = template "EventCoproMeeting"
   ~old:"event-copro-meeting"
   ~kind:`Event
   ~name:"Conseil syndical"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1599,7 +1599,7 @@ let eventImproSimple = template "EventImproSimple"
   ~kind:`Event
   ~name:"Match d'improvisation"
   ~desc:"Organisation interne d'un match contre une autre équipe"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1699,7 +1699,7 @@ let eventImproSpectacle = template "EventImproSpectacle"
   ~kind:`Event
   ~name:"Spectacle d'improvisation"
   ~desc:"Organisation interne du spectacle"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1767,7 +1767,7 @@ let eventMeeting = template "EventMeeting"
   ~old:"event-meeting"
   ~kind:`Event
   ~name:"Réunion"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1816,7 +1816,7 @@ let eventPetition = template "EventPetition"
   ~name:"Pétition"
   ~desc:"Vous pouvez personnaliser les informations demandées aux signataires."
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Event ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1873,7 +1873,7 @@ let eventPublicCommittee = template "EventPublicCommittee"
   ~old:"event-public-comity"
   ~kind:`Event
   ~name:"Conseil municipal"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1921,7 +1921,7 @@ let eventSimple = template "EventSimple"
   ~kind:`Event
   ~name:"Evènement Simple"
   ~desc:"Une date, un lieu, une liste d'invités."
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1937,7 +1937,7 @@ let _ = template "EventSimpleAuto"
   ~old:"event-simple-auto"
   ~kind:`Event
   ~name:"Evènement Simple"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -1953,7 +1953,7 @@ let forum = template "ForumPublic"
   ~old:"forum-public"
   ~kind:`Forum
   ~name:"Forum"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~wall:(wallConfig ~read:`Viewers ~post:`Viewers)
   ~folder:(folderConfig ~read:`Viewers ~post:`Viewers)
   ~album:(albumConfig ~read:`Viewers ~post:`Viewers)
@@ -1970,7 +1970,7 @@ let groupBadminton = template "GroupBadminton"
   ~name:"Sportifs Badminton"
   ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du badminton"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2054,7 +2054,7 @@ let groupCheerleading = template "GroupCheerleading"
   ~name:"Sportifs cheerleaders"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du cheerleading"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2144,7 +2144,7 @@ let groupCollaborative = template "GroupCollaborative"
   ~kind:`Group
   ~name:"Groupe avec Forum"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2158,7 +2158,7 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~kind:`Group
   ~name:"Groupe avec Forum"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2172,7 +2172,7 @@ let _ = template "GroupContact"
   ~kind:`Group
   ~name:"Contacts"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2187,7 +2187,7 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~name:"Gardiens / employés"
   ~desc:"Groupe avec forum, dédié aux gardiens et salariés"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2227,7 +2227,7 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~name:"Locataires"
   ~desc:"Groupe avec forum, dédié aux locataires"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2259,7 +2259,7 @@ let groupCoproManager = template "GroupCoproManager"
   ~name:"Gestionnaires"
   ~desc:"Groupe avec forum, dédié aux gestionnaires"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2291,7 +2291,7 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~name:"Propriétaires"
   ~desc:"Groupe avec forum, dédié aux propriétaires"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2334,7 +2334,7 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~name:"Sportifs fitness"
   ~desc:"Regroupe les informations demandées à vos sportifs."
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2458,7 +2458,7 @@ let groupFootus = template "GroupFootus"
   ~name:"Sportifs football américain"
   ~desc:"Regroupe les informations demandées aux joueurs de football américain"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2550,7 +2550,7 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~name:"Sportifs judo et jujitsu"
   ~desc:"Regroupe les informations demandées aux pratiquants de judo et de jujitsu"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2646,7 +2646,7 @@ let groupRespo = template "GroupRespo"
   ~kind:`Group
   ~name:"Responsables"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2660,7 +2660,7 @@ let groupSchoolParents = template "GroupSchoolParents"
   ~name:"Parents d'élèves"
   ~desc:"Groupe avec forum, dédié aux parents d'élèves"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2703,7 +2703,7 @@ let groupSimple = template "GroupSimple"
   ~kind:`Group
   ~name:"Groupe sans Forum"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2714,7 +2714,7 @@ let _ = template "GroupTest"
   ~kind:`Group
   ~name:"Groupe Test"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Registered ~grant:`Yes)
+  ~group:(groupConfig ~validation:`None ~read:`Registered ~grant:`Yes)
   ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
@@ -2727,7 +2727,7 @@ let pollSimple = template "PollSimple"
   ~kind:`Poll
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~columns:Col.([ status ; date ])
   ~fields:Field.([ desc ; picture ])
   ()
@@ -2739,7 +2739,7 @@ let pollYearly = template "PollYearly"
   ~kind:`Poll
   ~name:"Bilan de l'année écoulée"
   ~desc:"Questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`No)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`No)
   ~columns:Col.([
     status ;
     date ;
@@ -2800,7 +2800,7 @@ let _ = template "SubscriptionAuto"
   ~old:"subscription-auto"
   ~kind:`Group
   ~name:"Adhésion"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2812,7 +2812,7 @@ let subscriptionDatetodate = template "SubscriptionDatetodate"
   ~name:"Adhésion"
   ~desc:"Date à date : annuelle, semestrielle, etc"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2824,7 +2824,7 @@ let _ = template "SubscriptionDatetodateAuto"
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2835,7 +2835,7 @@ let subscriptionForever = template "SubscriptionForever"
   ~kind:`Group
   ~name:"Adhésion Permanente"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2846,7 +2846,7 @@ let _ = template "SubscriptionForeverAuto"
   ~kind:`Group
   ~name:"Adhésion permanente automatique"
   ~propagate:"members"
-  ~group:(groupConfig ~semantics:`Group ~validation:`None ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`None ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2856,7 +2856,7 @@ let _ = template "SubscriptionSemester"
   ~old:"subscription-semester"
   ~kind:`Group
   ~name:"Adhésion Semestrielle"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2866,7 +2866,7 @@ let _ = template "SubscriptionYear"
   ~old:"subscription-year"
   ~kind:`Group
   ~name:"Adhésion Annuelle"
-  ~group:(groupConfig ~semantics:`Group ~validation:`Manual ~read:`Viewers ~grant:`Yes)
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers ~grant:`Yes)
   ~columns:Col.([ status ; date ])
   ()
 

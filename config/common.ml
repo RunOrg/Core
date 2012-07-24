@@ -10,7 +10,7 @@ let infoField src kind = src, kind
 let infoItem ?label fields = label, fields
 let infoSection label items = label, items
 
-type groupConfig = [`Group|`Event] * [`Manual|`None] * [`Viewers|`Registered|`Managers] * [`Yes|`No]
+type groupConfig = [`Manual|`None] * [`Viewers|`Registered|`Managers] * [`Yes|`No]
 type collabConfig = [`Viewers|`Registered|`Managers] * [`Viewers|`Registered|`Managers] 
 
 type join = { 
@@ -111,7 +111,7 @@ let adlib key ?(old:string option) (fr:string) =
   try ignore (List.assoc key !adlibs) ; key
   with Not_found ->  adlibs := (key, (old,fr)) :: !adlibs ; key
 
-let groupConfig ~semantics ~validation ~read ~grant = semantics, validation, read,  grant
+let groupConfig ~validation ~read ~grant = validation, read,  grant
 let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
@@ -226,9 +226,8 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
 	| None -> "None"
-	| Some (semantics,valid,read,grant) -> Printf.sprintf 
-	  "Some (object method semantics = %s method validation = %s method read = %s method grant = %s end)"
-	  (match semantics with `Event -> "`Event" | `Group -> "`Group")
+	| Some (valid,read,grant) -> Printf.sprintf 
+	  "Some (object method validation = %s method read = %s method grant = %s end)"
 	  (match valid with `Manual -> "`Manual" | `None -> "`None")
 	  (access read)
 	  (match grant with `Yes -> "`Yes" | `No -> "`No"))) (!templates))
