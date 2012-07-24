@@ -15,3 +15,4 @@ val from : MAvatar_common.Data.t -> details
 val details : 'any IAvatar.id -> details O.run
 
 val get_user : 'any IAvatar.id -> IUser.t option O.run
+val get_instance : 'any IAvatar.id -> IInstance.t option O.run 

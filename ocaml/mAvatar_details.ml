@@ -40,6 +40,10 @@ let get_user aid =
   let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay aid) in
   return $ Some (avatar # who) 
 
+let get_instance aid = 
+  let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay aid) in
+  return $ Some (avatar # ins) 
+
 let details id = 
   MyTable.get (IAvatar.decay id) |> Run.map begin function
     | None      -> no_details

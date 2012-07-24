@@ -39,6 +39,23 @@ let admin ~from gid aids what =
     let aids  = List.map IAvatar.decay aids in
     let diffs = List.map (Diff.make from) what in
     if diffs = [] then return () else 
+
+      (* Log that we're doing this. *)
+      let! () = ohm begin 
+	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
+	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
+	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
+	let! eid = req_or     (return ()) $ MGroup.Get.entity g in
+	let  p   = 
+	  if List.mem `Invite what then `Invite else 
+	    if List.mem (`Accept true) what then
+	      if List.mem (`Default true) what then `Add else `Validate
+	    else `Remove
+	in
+	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,eid,List.length aids))
+      end in 
+
+      (* Start the insertion task *)
       admin_task gid aids diffs
 	
 (* Creating avatars and adding them to a group -------------------------------------------------------------- *)
@@ -108,4 +125,16 @@ let create ~from iid gid list what =
     let gid   = IGroup.decay gid in 
     let diffs = List.map (Diff.make from) what in
     if diffs = [] then return () else 
+
+      (* Log that we're doing this. *)
+      let! () = ohm begin 
+	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
+	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
+	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
+	let! eid = req_or     (return ()) $ MGroup.Get.entity g in
+	let  p   = `Create in 
+	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,eid,List.length list))
+      end in 
+
+      (* Run the actual task *)
       create_task list iid gid diffs

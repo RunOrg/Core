@@ -3,13 +3,9 @@
 module Payload : sig
 
   type t = 
-    | MembershipInvite of IEntity.t * IAvatar.t * int
-    | MembershipAdd of IEntity.t * IAvatar.t * int
-    | MembershipInviteAccept of IEntity.t * IAvatar.t 
-    | MembershipInviteDecline of IEntity.t * IAvatar.t 
-    | MembershipRequest of IEntity.t * IAvatar.t
-    | MembershipLeave of IEntity.t * IAvatar.t 
-    | MembershipValidate of IEntity.t * IAvatar.t
+      MembershipMass of [ `Invite | `Add | `Remove | `Validate | `Create ] * IEntity.t * int
+    | MembershipAdmin of [ `Invite | `Add | `Remove | `Validate ] * IEntity.t * IAvatar.t
+    | MembershipUser of bool * IEntity.t
     | InstanceCreate 
     | LoginManual 
     | LoginSignup

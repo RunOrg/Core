@@ -9,26 +9,24 @@ open BatPervasives
 module Payload = struct
   module T = struct
     type json t = 
-	MembershipInvite        "mi"  of IEntity.t * IAvatar.t * int
-      | MembershipAdd           "ma"  of IEntity.t * IAvatar.t * int
-      | MembershipInviteAccept  "mia" of IEntity.t * IAvatar.t 
-      | MembershipInviteDecline "mid" of IEntity.t * IAvatar.t 
-      | MembershipRequest       "mr"  of IEntity.t * IAvatar.t
-      | MembershipLeave         "ml"  of IEntity.t * IAvatar.t 
-      | MembershipValidate      "mv"  of IEntity.t * IAvatar.t
+        MembershipMass          "mm"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" | `Create "c"
+					 ] * IEntity.t * int
+      | MembershipAdmin         "ma"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" 
+					 ] * IEntity.t * IAvatar.t
+      | MembershipUser          "mu"  of bool * IEntity.t 
       | InstanceCreate          "ic"
       | LoginManual             "lm"
       | LoginSignup             "ls"
       | LoginWithNotify         "ln"  of MNotifyChannel.t
       | LoginWithReset          "lr"
-      | NotifyClickMail         "ncm" of MNotifyChannel.t 
-      | NotifyClickSite         "ncs" of MNotifyChannel.t
+      | NotifyClickMail         "nm"  of MNotifyChannel.t 
+      | NotifyClickSite         "ns"  of MNotifyChannel.t
       | UserConfirm             "uc"
-      | ItemCreate              "itc" of IItem.t
+      | ItemCreate              "it"  of IItem.t
       | CommentCreate           "cc"  of IComment.t 
-      | EntityCreateGroup       "ecg" of IEntity.t 
-      | EntityCreateEvent       "ece" of IEntity.t 
-      | EntityCreateForum       "ecf" of IEntity.t 
+      | EntityCreateGroup       "eg"  of IEntity.t 
+      | EntityCreateEvent       "ee"  of IEntity.t 
+      | EntityCreateForum       "ef"  of IEntity.t 
       | BroadcastPublish        "bp"  of IBroadcast.t
   end
   include T

@@ -45,7 +45,8 @@ val exists      : 'any IAvatar.id -> bool O.run
 
 val details     : 'any IAvatar.id -> details O.run
 
-val get_user    : 'any IAvatar.id -> IUser.t option O.run
+val get_user     : 'any IAvatar.id -> IUser.t option O.run
+val get_instance : 'any IAvatar.id -> IInstance.t option O.run 
 
 val upgrade_to_admin     :
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
