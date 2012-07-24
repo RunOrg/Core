@@ -250,6 +250,10 @@ let confirmed uid =
   let! user = ohm_req_or (return false) $ MyTable.get (IUser.decay uid) in
   return user.Data.confirmed
 
+let blocks uid = 
+  let! user = ohm_req_or (return []) $ MyTable.get (IUser.decay uid) in
+  return user.Data.blocktype
+
 let confirmed_time uid = 
   let! user = ohm_req_or (return None) $ MyTable.get (IUser.decay uid) in 
   return (if user.Data.confirmed then Some user.Data.joindate else None) 
@@ -839,3 +843,4 @@ let merge_unconfirmed ~merged ~into =
 
   return () 
 
+let all_ids ~count start = MyTable.all_ids ~count start

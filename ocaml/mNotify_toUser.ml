@@ -34,6 +34,13 @@ module Data = Fmt.Make(struct
 			   | `Daily "d"
 			   | `Weekly "w"
 			   | `Never "n"]) list) ListAssoc.t
+  let t_of_json = function
+    | Json.Object list ->
+      let json = Json.Object (List.filter (function 
+	| (_,Json.Array _) -> true
+	|  _               -> false) list) in
+      t_of_json json
+    | json -> t_of_json json
 end)
 
 let extract (list : (Key.t * assoc) list) = object
@@ -61,8 +68,11 @@ let default = function
   | `NewComment `ItemFollower
   | `BecomeMember
   | `BecomeAdmin
+  | `EntityInvite
+  | `EntityRequest
   | `SuperAdmin -> `Immediate
 
+  | `Broadcast
   | `NewFavorite `ItemAuthor -> `Daily
 
 let compress_assoc assoc = 
@@ -92,3 +102,39 @@ let send uid payload =
   in
 
   return $ frequency channel assoc
+
+(* Retrieve old data from user notify preferences ----------------------------------------------------------- *)
+
+let restore uid = 
+  MyTable.transaction uid begin fun uid -> 
+    let! data = ohm $ MyTable.get uid in 
+    match data with Some _ -> return ((),`keep) | None -> 
+      (* No saved preferences yet, time to build some ! *)
+      let! blocks  = ohm $ MUser.blocks uid in 
+      let  blocked = List.concat $ List.map (function 
+	| `message 
+	| `item -> [ `NewWallItem `WallReader ; `NewWallItem `WallAdmin ]  
+	| `myMembership -> [ `BecomeMember ; `BecomeAdmin ] 
+	| `likeItem -> [ `NewFavorite `ItemAuthor ]
+	| `commentItem -> [ `NewComment `ItemAuthor ; `NewComment `ItemFollower ]
+	| `welcome -> []
+	| `subscription 
+	| `event
+	| `forum
+	| `album
+	| `group
+	| `poll
+	| `course -> [ `EntityInvite ]
+	| `pending -> [ `EntityRequest ]
+	| `digest -> [ `Broadcast ]
+	| `networkInvite
+	| `chatReq -> []) blocks
+      in
+      let blocked = BatList.sort_unique compare blocked in 
+      return ( (), `put [`Default,List.map (fun k -> k,`Never) blocked] )
+  end
+      
+let task = Async.Convenience.foreach O.async "notify.migrate.toUser" IUser.fmt
+  (MUser.all_ids ~count:20) restore 
+
+let () = O.put (task ())

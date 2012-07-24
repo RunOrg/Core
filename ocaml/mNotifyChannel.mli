@@ -6,6 +6,9 @@ include Ohm.Fmt.FMT with type t =
   | `NewComment  of [ `ItemAuthor | `ItemFollower ]
   | `BecomeMember
   | `BecomeAdmin
+  | `EntityInvite
+  | `EntityRequest
+  | `Broadcast
   | `SuperAdmin
   ]
 

@@ -139,6 +139,8 @@ val set_password : string -> 'any ICurrentUser.id -> unit O.run
 
 val set_notifications : [`Edit] IUser.id -> blocked:Notification.t list -> autologin:bool -> unit O.run
 
+val blocks : 'any IUser.id -> Notification.t list O.run
+
 module Share : sig
 
   val set : [`IsSelf] IUser.id -> MFieldShare.t list -> unit O.run
@@ -146,6 +148,8 @@ module Share : sig
 end
 
 val obliterate : [`Unsubscribe] IUser.id -> [`ok|`missing|`destroyed] O.run
+
+val all_ids : count:int -> IUser.t option -> (IUser.t list * IUser.t option) O.run
 
 module Backdoor : sig
 
