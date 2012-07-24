@@ -19,6 +19,7 @@ module Actions = struct
   open CHome
   open CForums
   open CNotifySend
+  open CContact
   open Splash
 end
 
