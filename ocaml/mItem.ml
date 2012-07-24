@@ -18,6 +18,13 @@ module Backdoor = MItem_backdoor
 include MItem_types
 include MItem_create
 
+let () = 
+  let! item = Sig.listen Signals.on_post in 
+  let  iid = item # iid in
+  let! aid = req_or (return ()) $ author_by_payload (item # payload) in
+  let! uid = ohm_req_or (return ()) $ MAvatar.get_user aid in
+  MAdminLog.log ~uid ~iid (MAdminLog.Payload.ItemCreate (IItem.decay (item # id)))
+
 type 'a source = 'a MItem_common.source
 
 module PrevNextView = CouchDB.MapView(struct
