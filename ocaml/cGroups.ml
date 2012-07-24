@@ -108,7 +108,7 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 
     let! list = ohm $ MEntity.All.get_by_kind access `Group in
 
-    let! list = ohm $ Run.list_map begin fun entity -> 
+    let! list = ohm $ Run.list_filter begin fun entity -> 
       let! name = ohm $ CEntityUtil.name entity in
       let! count, isMember = ohm begin 	
 
@@ -127,7 +127,8 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 
       end in            
       let status = MEntity.Get.status entity in
-      return (isMember, object
+      if status = Some `Draft then return None else 
+      return $ Some (isMember, object
 	method id     = IEntity.to_string (MEntity.Get.id entity) 
 	method count  = count
 	method status = status 
