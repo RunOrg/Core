@@ -37,7 +37,6 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
     
     let () = 
 
-      (*
       Netsendmail.compose 
 	~in_charset:`Enc_utf8
 	~out_charset:`Enc_utf8
@@ -48,7 +47,6 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	~container_type:("multipart/alternative",[])
 	html
       |> Netsendmail.sendmail ;
-      *)
 
       Util.log "Sent to: %s <%s>" to_name to_email 
     in
