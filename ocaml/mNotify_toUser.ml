@@ -137,4 +137,4 @@ let restore uid =
 let task = Async.Convenience.foreach O.async "notify.migrate.toUser" IUser.fmt
   (MUser.all_ids ~count:20) restore 
 
-let () = O.put (task ())
+(* let () = O.put (task ()) *)

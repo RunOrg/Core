@@ -19,4 +19,4 @@ let kind = E.Store.migrate O.async "entity.migrate.kind"
     else return $ Some E.Init.({ data with kind ; draft })
   end
 
-let () = O.put (kind ())
+(* let () = O.put (kind ()) *)
