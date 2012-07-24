@@ -49,14 +49,6 @@ let grants t =
       | `Yes -> true
       | `No  -> false
 
-let on_add t = 
-  let config = config t in
-  let e = get t in 
-  match MEntityConfig.group e.E.template config with None -> `ignore | Some config ->
-    match config # semantics with 
-      | `Group -> `add
-      | `Event -> `invite
-
 let group t = (get t).E.group
       	
 let instance      t = (get t).E.instance

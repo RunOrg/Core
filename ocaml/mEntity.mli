@@ -69,7 +69,6 @@ module Get : sig
   val grants        :            'any t -> bool
   val group         : [<`Admin|`View|`Bot] t -> IGroup.t
   val name          : [<`Admin|`View] t -> TextOrAdlib.t option
-  val on_add        :            'any t -> [ `ignore | `invite | `add ] 
   val picture       : [<`Admin|`View] t -> [`GetPic] IFile.id option
   val summary       : [<`Admin|`View] t -> TextOrAdlib.t
   val date          : [<`Admin|`View] t -> string option

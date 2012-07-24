@@ -16,7 +16,6 @@ val public        : 'any t -> bool
 val grants        : 'any t -> bool
 val group         : 'any t -> IGroup.t 
 val name          : 'any t -> TextOrAdlib.t option
-val on_add        : 'any t -> [ `ignore | `invite | `add ] 
 val picture       : 'any t -> [`GetPic] IFile.id option
 val summary       : 'any t -> TextOrAdlib.t
 val date          : 'any t -> string option

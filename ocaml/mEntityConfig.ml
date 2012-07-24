@@ -22,7 +22,6 @@ include Fmt.Make(struct
      ?validation   : [`Manual "manual"|`None "none"] = `None ;
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
      ?grant "grant_tokens" : [`Yes "yes"|`No "no"] = `No ;
-     ?semantics    : [`Group "group"|`Event "event"] = `Group ;
     > WithDefault.t = `None;
    ?wall : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
@@ -104,9 +103,7 @@ class editable_group ?(group=default_group) () = object
   val validation   = group # validation
   val grant        = group # grant
   val read         = group # read
-  val semantics    = group # semantics
 
-  method semantics  = ( semantics    : [`Group|`Event])
   method validation = ( validation   : [`Manual|`None])
   method grant      = ( grant        : [`Yes|`No] )
   method read       = ( read         : [`Viewers|`Registered|`Managers])
@@ -114,7 +111,6 @@ class editable_group ?(group=default_group) () = object
   method set_validation x = {< validation = x >}
   method set_grant      x = {< grant      = x >}
   method set_read       x = {< read       = x >}
-  method set_semantics  x = {< semantics  = x >}
 
 end
 
@@ -209,7 +205,7 @@ class editable_config template config = object (self)
     | `Group_Payment     x -> self
     | `Group_Validation  x -> self # edit_group (fun g -> g # set_validation x)
     | `Group_PublicList  x -> self 
-    | `Group_Semantics   x -> self # edit_group (fun g -> g # set_semantics  x)
+    | `Group_Semantics   x -> self
     | `Group_GrantTokens x -> self # edit_group (fun g -> g # set_grant      x) 
     | `Group_Read        x -> self # edit_group (fun g -> g # set_read       x)
 
