@@ -179,6 +179,10 @@ module Signals = struct
 
 end
 
+let () = 
+  let! uid, _ = Sig.listen Signals.on_confirm in
+  MAdminLog.log ~uid MAdminLog.Payload.UserConfirm
+
 (*
   Confirmed users : all confirmed e-mails.
   Non-confirmed users : primary e-mail only. 
@@ -241,8 +245,7 @@ let confirm uid =
 			  return x
     | Some (None  , x) -> return x
     | None             -> return false
-  
-      
+        
 let confirmed uid = 
   let! user = ohm_req_or (return false) $ MyTable.get (IUser.decay uid) in
   return user.Data.confirmed

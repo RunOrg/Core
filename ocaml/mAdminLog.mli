@@ -11,14 +11,10 @@ module Payload : sig
     | LoginSignup
     | LoginWithNotify of MNotifyChannel.t
     | LoginWithReset
-    | NotifyClickMail of MNotifyChannel.t 
-    | NotifyClickSite of MNotifyChannel.t
     | UserConfirm
     | ItemCreate of IItem.t
     | CommentCreate of IComment.t 
-    | EntityCreateGroup of IEntity.t 
-    | EntityCreateEvent of IEntity.t 
-    | EntityCreateForum of IEntity.t 
+    | EntityCreate of [ `Forum | `Event | `Group ] * IEntity.t 
     | BroadcastPublish of IBroadcast.t
 
 end

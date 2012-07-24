@@ -154,7 +154,20 @@ let _create ?pcname ?name ?pic ?access template iid creator =
  
 let create self ~name ?pic ~iid ?access template =
   let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
-  _create template ~name ?pic ?access (IInstance.decay iid) self 
+  let iid = IInstance.decay iid in 
+
+  (* Perform the actual creation *)
+  let! eid = ohm $ _create template ~name ?pic ?access iid self in
+
+  (* Log that we've created this *)
+  let! () = ohm begin 
+    let! uid = ohm_req_or (return ()) $ MAvatar.get_user self in 
+    let  kind = match PreConfig_Template.kind template with 
+      | `Event -> `Event | `Forum -> `Forum | _ -> `Group in 
+    MAdminLog.log ~uid ~iid (MAdminLog.Payload.EntityCreate (kind,IEntity.decay eid))
+  end in 
+
+  return eid 
 
 let set_grants ctx eids = 
 

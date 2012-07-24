@@ -19,14 +19,10 @@ module Payload = struct
       | LoginSignup             "ls"
       | LoginWithNotify         "ln"  of MNotifyChannel.t
       | LoginWithReset          "lr"
-      | NotifyClickMail         "nm"  of MNotifyChannel.t 
-      | NotifyClickSite         "ns"  of MNotifyChannel.t
       | UserConfirm             "uc"
       | ItemCreate              "it"  of IItem.t
       | CommentCreate           "cc"  of IComment.t 
-      | EntityCreateGroup       "eg"  of IEntity.t 
-      | EntityCreateEvent       "ee"  of IEntity.t 
-      | EntityCreateForum       "ef"  of IEntity.t 
+      | EntityCreate            "ec"  of [ `Event "e" | `Forum "f" | `Group "g" ] * IEntity.t 
       | BroadcastPublish        "bp"  of IBroadcast.t
   end
   include T
