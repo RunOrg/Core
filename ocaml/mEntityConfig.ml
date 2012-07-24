@@ -21,7 +21,6 @@ include Fmt.Make(struct
    ?group : <
      ?validation   : [`Manual "manual"|`None "none"] = `None ;
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
-     ?grant "grant_tokens" : [`Yes "yes"|`No "no"] = `No ;
     > WithDefault.t = `None;
    ?wall : <
      ?read         : [`Viewers|`Registered|`Managers] = `Viewers ;
@@ -101,15 +100,12 @@ let names _ = []
 class editable_group ?(group=default_group) () = object
 
   val validation   = group # validation
-  val grant        = group # grant
   val read         = group # read
 
   method validation = ( validation   : [`Manual|`None])
-  method grant      = ( grant        : [`Yes|`No] )
   method read       = ( read         : [`Viewers|`Registered|`Managers])
 
   method set_validation x = {< validation = x >}
-  method set_grant      x = {< grant      = x >}
   method set_read       x = {< read       = x >}
 
 end
@@ -206,7 +202,7 @@ class editable_config template config = object (self)
     | `Group_Validation  x -> self # edit_group (fun g -> g # set_validation x)
     | `Group_PublicList  x -> self 
     | `Group_Semantics   x -> self
-    | `Group_GrantTokens x -> self # edit_group (fun g -> g # set_grant      x) 
+    | `Group_GrantTokens x -> self
     | `Group_Read        x -> self # edit_group (fun g -> g # set_read       x)
 
     | `NoWall -> {< wall = `None >}

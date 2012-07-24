@@ -7,7 +7,6 @@ end
 include Ohm.Fmt.FMT with type t = <
   group : <
     validation : [`Manual|`None] ;
-    grant      : [`Yes|`No] ;
     read       : [`Viewers|`Registered|`Managers] ;
   > WithDefault.t ;
   wall : <
@@ -30,7 +29,6 @@ include Ohm.Fmt.FMT with type t = <
 
 val group : ITemplate.t -> t -> <
   validation : [`Manual|`None] ;
-  grant      : [`Yes|`No] ;
   read       : [`Viewers|`Registered|`Managers]
 > option
 

@@ -42,12 +42,8 @@ let real_access   t =
       `Normal
 
 let grants t = 
-  let config = config t in 
-  let e = get t in
-  match MEntityConfig.group e.E.template config with None -> false | Some config -> 
-    match config # grant with 
-      | `Yes -> true
-      | `No  -> false
+  let e = get t in 
+  e.E.kind = `Group 
 
 let group t = (get t).E.group
       	

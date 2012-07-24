@@ -227,10 +227,9 @@ module Build = struct
       Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
 	| None -> "None"
 	| Some (valid,read) -> Printf.sprintf 
-	  "Some (object method validation = %s method read = %s method grant = %s end)"
+	  "Some (object method validation = %s method read = %s end)"
 	  (match valid with `Manual -> "`Manual" | `None -> "`None")
-	  (access read)
-	  (match t.t_kind with `Group -> "`Yes" | _ -> "`No"))) (!templates))
+	  (access read))) (!templates))
     ^ "\n\nlet wall = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> %s" t.t_id (match t.t_wall with 
