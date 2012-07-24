@@ -100,14 +100,6 @@ val create :
   -> vertical:IVertical.t
   -> [`Created] IInstance.id O.run
 
-val create_stub : 
-     who:([`IsSelf] IUser.id)
-  -> name:string 
-  -> desc:MRich.OrText.t option
-  -> site:string option
-  -> profile:IInstance.t option
-  -> [`Created] IInstance.id O.run
-
 val update : 
      [`IsAdmin] IInstance.id
   -> name:string

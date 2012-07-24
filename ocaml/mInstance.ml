@@ -94,6 +94,9 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
       unbound  = false ;
   }) in
 
+  (* Log that we're creating this *)
+  let! () = ohm $ MAdminLog.log ~uid:(IUser.Deduce.is_anyone who) ~iid:id MAdminLog.Payload.InstanceCreate in
+
   (* Created right here. *)
   let  cid = IInstance.Assert.created id in
 
@@ -228,59 +231,6 @@ let free_name name =
   in
 
   aux 1 name
-
-(* Profile-only (stub) instance management -------------------------------------- *)
-
-let create_stub ~who ~name ~desc ~site ~profile = 
-
-  let iid = BatOption.default (IInstance.gen ()) profile in
-
-  let! existing = ohm $ Profile.get iid in
-  
-  let! key  = ohm $ free_name (BatOption.default name (BatOption.map (#key) existing)) in 
-  let  site = BatOption.default site (BatOption.map (#site) existing) in
-  let  desc = BatOption.default desc (BatOption.map (#desc) existing) in
-  let  name = BatOption.default name (BatOption.map (#name) existing) in  
-
-  let clip n s = if String.length s > n then String.sub s 0 n else s in 
-  let now = Unix.gettimeofday () in
-  let obj = Data.({
-    t       = `Instance ;
-    key     ;
-    name    = clip 80 name ;
-    theme   = None ;
-    disk    = 50.0 ;
-    seats   = 30 ;
-    create  = now ;
-    usr     = IUser.decay who ;
-    ver     = `Stub ;
-    pic     = None ;
-    install = false ;
-    light   = true ;
-    stub    = true ;
-    address = None ;
-    desc    = None ;
-    site    = None ;
-    contact = None ;
-    white   = None
-  }) in 
-
-  let info old = Profile.Info.({
-    old with 
-      name     = clip 80 name ;
-      key      ;
-      desc     ;
-      site     = BatOption.map (clip 256) site ;
-  }) in
-
-  (* Created right here. *)
-  let cid = IInstance.Assert.created iid in
-
-  let! () = ohm $ Profile.update iid info in 
-  let! _  = ohm $ MyTable.put iid obj in
-  let! () = ohm $ Signals.on_create_call cid in
-
-  return cid
 
 (* Recent visits ---------------------------------------------------------------- *)
 
