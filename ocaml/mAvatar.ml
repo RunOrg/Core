@@ -8,6 +8,7 @@ open Ohm.Universal
 (* Including submodules ------------------------------------------------------------------- *)
 
 module Common  = MAvatar_common
+module Unique  = MAvatar_unique
 module Status  = MAvatar_status
 module Signals = MAvatar_signals
 module Pending = MAvatar_pending
@@ -28,10 +29,6 @@ end)
 module UsrSta = Fmt.Make(struct
   type json t = (IUser.t * Status.t)
 end) 
-
-module InsUsr = Fmt.Make(struct
-  type json t = (IInstance.t * IUser.t)
-end)
 
 module Search = Fmt.Make(struct
   type json t = (IInstance.t * string)
@@ -145,20 +142,11 @@ let exists aid =
   let! avatar = ohm $ MyTable.get aid in 
   return (avatar <> None)
 
-module RelationView = CouchDB.DocView(struct
-  module Key    = InsUsr
-  module Value  = Status
-  module Doc    = Common.Data
-  module Design = Design
-  let name = "relation"
-  let map  = "if (doc.t == 'avtr') emit([doc.ins,doc.who],doc.sta)"
-end)
-
 let _get ins usr = 
-  RelationView.doc (ins,usr) |> Run.map Util.first 
+  let! aid    = ohm $ Unique.get ins usr in 
+  let! avatar = ohm $ MyTable.get aid in 
+  return (aid, avatar) 
 
-let _getid ins usr =
-  _get ins usr |> Run.map (BatOption.map (#id |- IAvatar.of_id))
 
 (* Status updates ------------------------------------------------------------------------- *)
 
@@ -167,8 +155,7 @@ let _update_status status ins usr =
   let ins = IInstance.decay ins in
   let usr = IUser.decay usr in
   
-  let! aid = ohm $ _getid ins usr in
-  let  aid = BatOption.default (IAvatar.gen ()) aid in
+  let! aid = ohm $ Unique.get ins usr in
   
   let isin newsta = 
     let role = (newsta :> [`Admin|`Token|`Contact|`Nobody]) in
@@ -304,29 +291,23 @@ let become_admin instance user =
 let status iid cuid = 
   let  uid = IUser.Deduce.is_anyone cuid in
   let  iid = IInstance.decay iid in 
-  let! result = ohm_req_or (return `Contact) $ _get iid uid in
-  return (result # value)
+  let! aid, avatar = ohm $ _get iid uid in
+  return $ BatOption.default `Contact (BatOption.map (#sta) avatar)
 
 let do_identify_user instance user cuid = 
   let  usr = IUser.decay     user     in
   let  ins = IInstance.decay instance in 
-  let! result = ohm $ _get ins usr in
-        
-  let! inst = ohm $ MInstance.get ins in 
-  
-  let id, role = match result with 
-    | None      -> None,    `Nobody
-    | Some item -> Some (item # id), (item # value :> [`Admin|`Contact|`Token|`Nobody])
+  let! aid, avatar = ohm $ _get ins usr in
+          
+  let role = BatOption.default `Nobody 
+    (BatOption.map (#sta) avatar :> [`Admin|`Contact|`Token|`Nobody] option)
   in
 
-  let id = id
-    |> BatOption.map IAvatar.of_id
-      (* The database said so... *)
-    |> BatOption.map IAvatar.Assert.is_self 
-  in
+  (* The database said so... *)
+  let aid = IAvatar.Assert.is_self aid in
   
   (* The database said so... *)
-  return $ IIsIn.Assert.make ~id ~role ~ins:instance ~usr:cuid
+  return $ IIsIn.Assert.make ~id:(Some aid) ~role ~ins:instance ~usr:cuid
  
 let identify_user instance user = 
   do_identify_user instance user (IUser.Deduce.self_is_current user)
@@ -651,7 +632,7 @@ let _ =
 let _ = 
 
   let! _, user, instance, data = Sig.listen MProfile.Signals.on_update in 
-  let! id = ohm_req_or (return ()) $ _getid instance user in
+  let! id = ohm_req_or (return ()) $ Unique.get_if_exists instance user in
   
   let update avatar = 
     let data = collect_profile data in
