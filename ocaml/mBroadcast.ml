@@ -20,6 +20,18 @@ module Signals = struct
   let on_create_call, on_create = Sig.make (Run.list_iter identity)
 end
 
+let () = 
+  let! bid = Sig.listen Signals.on_create in 
+  let! broadcast = ohm_req_or (return ()) $ MyTable.get bid in
+  let  iid  = broadcast.Item.from in
+  let! aid  = req_or (return ()) $ broadcast.Item.author in 
+  let! uid  = ohm_req_or (return ()) $ MAvatar.get_user aid in
+  let  kind = match broadcast.Item.kind with 
+    | `Content _ -> `Post 
+    | `Forward _ -> `Forward
+  in
+  MAdminLog.log ~uid ~iid (MAdminLog.Payload.BroadcastPublish (kind,bid))
+
 (* Extracting the public representation from the private representation --------------------- *)
 
 let extract_forward (bid,item) = object

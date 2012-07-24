@@ -23,7 +23,7 @@ module Payload = struct
       | ItemCreate              "it"  of IItem.t
       | CommentCreate           "cc"  of IComment.t 
       | EntityCreate            "ec"  of [ `Event "e" | `Forum "f" | `Group "g" ] * IEntity.t 
-      | BroadcastPublish        "bp"  of IBroadcast.t
+      | BroadcastPublish        "bp"  of [ `Post "p" | `Forward "f" ] * IBroadcast.t
       | SendMail                "m"   
   end
   include T
