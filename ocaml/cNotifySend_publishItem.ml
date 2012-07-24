@@ -34,7 +34,7 @@ let send url uid itid =
     
     let subject = AdLib.get (`Mail_Notify_PublishItem_Title name) in
     
-    let body = Asset_Mail_NotifyCommentItem.render (object
+    let body = Asset_Mail_NotifyPublishItem.render (object
       method sender = (name, instance # name)
       method url    = url 
       method asso   = instance # name
