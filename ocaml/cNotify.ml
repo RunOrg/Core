@@ -130,6 +130,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 		      end) in
 		      let! () = ohm $ resend_notification ~nid ~uid in 
 		      CPageLayout.core `Notify_Expired_Title html res	
-    | `New _   -> return res
+    (* Temporary solution.... *)
+    | `New cuid -> return $ CSession.start (`Old (ICurrentUser.Assert.is_old cuid)) (Action.redirect home res)
 
 end
