@@ -440,3 +440,48 @@ module Backdoor = struct
     return $ BatOption.default 0 int_opt
 
 end
+
+(* Importing from a source : unique binding table ----------------------------------------------------------- *)
+
+module MyImportDB = CouchDB.Convenience.Database(struct let db = O.db "broadcast-import" end) 
+module Import = OhmCouchUnique.Make(MyImportDB)
+
+let import data = 
+  let! iid = ohm_req_or (return ()) $ MInstance.by_key (data # blog) in
+  let! bid = ohm $ Import.get (Printf.sprintf "%s-%d" (IInstance.to_string iid) (data # id)) in
+  let  bid = IBroadcast.of_id bid in 
+  let  edit bid = 
+
+    let! broadcast = ohm $ MyTable.get bid in 
+    let  delete    = BatOption.bind (fun i -> i.Item.delete) broadcast in
+    let  forwards  = BatOption.default 0 $ BatOption.bind (fun i -> match i.Item.kind with
+      | `Content c -> Some (c # forwards)
+      | `Forward _ -> None) broadcast 
+    in
+
+    let  kind      = `Content (object
+      method forwards = forwards
+      method what     = `Post (object
+	method title = data # title
+	method body  = `Rich (MRich.parse (data # text))
+      end)
+    end) in
+
+    return (broadcast = None,`put Item.({
+      delete ;
+      from   = iid ;
+      author = None ;
+      time   = data # time ; 
+      kind   ;
+    }))
+  in
+  let! created = ohm $ MyTable.transaction bid edit in
+  if created then 
+    Signals.on_create_call bid
+  else
+    return ()
+
+let () = 
+  O.put begin 
+    Run.list_iter import MBroadcast_cda_source.import
+  end
