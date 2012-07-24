@@ -39,7 +39,7 @@ module Notify = struct
   let home, def_home = root "notify"
   let count, def_count = O.declare O.core "notify/count" A.none
   let follow, def_follow = O.declare O.core "notify/follow" (A.r INotify.arg) 
-  let mailed, def_mailed = O.declare O.core "n" (A.rr INotify.arg A.string)
+  let mailed, def_mailed = O.declare O.core "nt" (A.rr INotify.arg A.string)
 end
   
 module News = struct

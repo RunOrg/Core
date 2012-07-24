@@ -15,9 +15,10 @@ let get_token nid =
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 
 
 let from_token nid token current = 
-  let!   ()   = true_or (return `Expired) (ConfigKey.is_proof token [ "notify" ; INotify.to_string nid ]) in
   let! notify = ohm_req_or (return `Missing) $ Store.MyTable.get nid in
   let  uid    = notify.Store.uid in 
+  let!   ()   = true_or (return $ `Expired uid) 
+    (ConfigKey.is_proof token [ "notify" ; INotify.to_string nid ]) in
   let  notify = Store.extract nid notify in 
   match current with 
     | Some cuid when IUser.Deduce.is_anyone cuid = uid -> return (`Valid (notify,cuid)) 

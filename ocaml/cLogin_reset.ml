@@ -121,3 +121,30 @@ let () = UrlLogin.def_post_lost
     return $ Action.javascript js res
       
   end 
+
+let () = UrlMail.def_passReset begin fun req res -> 
+
+  let expired uid = 
+    
+    let! () = ohm $ send None uid in 
+    
+    let html = Asset_Login_ResetResend.render (object
+      method navbar = (None,None)
+      method title  = AdLib.get `Login_ResetResend_Title
+    end) in
+
+    CPageLayout.core `Login_ResetResend_Title html res
+
+  in
+
+  let uid, proof = req # args in 
+  
+  let! cuid = req_or (expired uid) 
+    (match IUser.Deduce.from_session_token proof uid with `Old cuid -> Some cuid | _ -> None) 
+  in
+
+  let  url  = Action.url UrlMe.Account.pass () () in
+  
+  return $ CSession.start (`Old cuid) (Action.redirect url res)
+
+end

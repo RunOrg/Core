@@ -84,4 +84,7 @@
    "En tant qu'administrateur vous pouvez visualiser et traiter cette demande en suivant le lien ci-dessous :"
 | `Mail_Notify_JoinPending_Thanks asso -> !! "À bientôt sur %s" asso
 
-
+| `Mail_NotifyResend_Title -> "Nouveau lien de connexion"
+| `Mail_NotifyResend_Intro name -> !! "Bonjour %s" name
+| `Mail_NotifyResend_Explain -> "Vous avez visité un lien expiré, voici un nouveau lien à jour :"
+| `Mail_NotifyResend_Thanks -> "À bientôt !"

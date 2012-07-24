@@ -64,3 +64,7 @@
 | `Mail_Notify_JoinPending_Explanation2
 | `Mail_Notify_JoinPending_Thanks of string
 
+| `Mail_NotifyResend_Title 
+| `Mail_NotifyResend_Intro of string
+| `Mail_NotifyResend_Explain
+| `Mail_NotifyResend_Thanks
