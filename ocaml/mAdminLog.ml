@@ -24,6 +24,7 @@ module Payload = struct
       | CommentCreate           "cc"  of IComment.t 
       | EntityCreate            "ec"  of [ `Event "e" | `Forum "f" | `Group "g" ] * IEntity.t 
       | BroadcastPublish        "bp"  of IBroadcast.t
+      | SendMail                "m"   
   end
   include T
   include Fmt.Extend(T)

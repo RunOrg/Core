@@ -16,6 +16,7 @@ module Payload : sig
     | CommentCreate of IComment.t 
     | EntityCreate of [ `Forum | `Event | `Group ] * IEntity.t 
     | BroadcastPublish of IBroadcast.t
+    | SendMail
 
 end
 

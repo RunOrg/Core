@@ -20,6 +20,8 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
   let! () = true_or (return false) (user # destroyed = None) in 
 
   let! () = ohm $ build uid user begin fun ~from ~subject ~html ->
+
+    let! () = ohm $ MAdminLog.log ~uid:(IUser.decay uid) MAdminLog.Payload.SendMail in 
     
     let! subject = ohm subject in
     let! html    = ohm html in
