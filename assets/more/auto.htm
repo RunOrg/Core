@@ -1,8 +1,17 @@
-<div {$point}></div>
+<div {$point} class="more"></div>
+
+<style>
+.more {
+  background:url(/public/icon/ajax-load.gif) center center no-repeat;
+  min-height:64px;
+  min-width:64px
+}
+</style>
 
 <script type="endpoint:json,data:json">
-onScroll = () -> 
 
+onScroll = () -> 
+ 
   if here.$point.is(":visible")
 
     $b = $ window
@@ -12,7 +21,7 @@ onScroll = () ->
     eb = et + here.$point.height() 
 
     if (et <= db && eb >= dt)
-      here.$point.hide() 
+      $(window).unbind "scroll", onScroll
       
       if typeof endpoint is 'string'
         send = (data,callback) -> 

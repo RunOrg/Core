@@ -43,6 +43,8 @@
 
   {/#}
 
+  {?more}{ this | Asset_More_Auto.render | ohm }{/?}
+
 </div>
 
 <script type="url:json">
@@ -253,6 +255,11 @@ here.$f.submit () ->
     }
 
     &.-collapsed .-area1 .-bottom { display: none } 
+  }
+
+  .more {
+    border-top: 1px solid #BBB;
+    box-shadow: 0 0 30px #CCC inset;
   }
 }
 </style>
