@@ -1,8 +1,29 @@
 @font-face {
-  font-family: 'Oxygen';
+  font-family: 'Asap';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Asap Bold Italic'), local('Asap-BoldItalic'), url('/public/fonts/asap-bolditalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Asap';
   font-style: normal;
   font-weight: 400;
-  src: local('Oxygen'), url('/public/fonts/oxygen.ttf') format('truetype');
+  src: local('Asap'), local('Asap-Regular'), url('/public/fonts/asap.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Asap';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Asap Bold'), local('Asap-Bold'), url('/public/fonts/asap-bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Asap';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Asap Italic'), local('Asap-Italic'), url('/public/fonts/asap-italic.woff') format('woff');
 }
 
 @font-face {
@@ -21,7 +42,7 @@
 
 body {
   .zero();
-  .oxygen();
+  .asap();
 }
 
 img {
