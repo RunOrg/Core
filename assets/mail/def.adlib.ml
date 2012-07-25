@@ -31,7 +31,6 @@
 | `Mail_Notify_BecomeAdmin_Explanation of string * string
 | `Mail_Notify_BecomeAdmin_Explanation2 of string
 | `Mail_Notify_BecomeAdmin_Explanation3
-| `Mail_Notify_BecomeAdmin_Responsability of string
 | `Mail_Notify_BecomeAdmin_Thanks of string
 
 | `Mail_Notify_PublishItem_Title of string

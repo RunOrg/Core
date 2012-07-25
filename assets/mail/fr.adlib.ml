@@ -42,7 +42,6 @@
   !! "%s utilise l'outil en ligne RunOrg pour la gestion de ses membres, activités et évènements." asso
 | `Mail_Notify_BecomeAdmin_Explanation3 -> 
   "Pour découvrir les fonctionnalités et les pouvoirs réservés aux administrateurs (création de groupes et d'activités, visibilité totale et modération) : cliquez sur le lien ci-dessous :"
-| `Mail_Notify_BecomeAdmin_Responsability asso -> !! "Vous avez désormais une grande responsabilité dans l'annimation en ligne de %s ! Faites-en bon usage !" asso 
 | `Mail_Notify_BecomeAdmin_Thanks asso -> !! "À bientôt sur %s" asso 
 
 | `Mail_Notify_PublishItem_Title who -> !! "Nouveau message de %s" who
