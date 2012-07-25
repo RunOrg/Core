@@ -11,9 +11,9 @@
       {#isMember} 
         <li id="{id}">
 	  <a href="{url}">
+	    {?status}{ this | Asset_Status_Tag.render | ohm }{/?} 
 	    {name}
 	    {?count}<span class="-count">{this | string_of_int | esc}</span>{/?}
-	    {?status}{ this | Asset_Status_Tag.render | ohm }{/?} 
 	  </a>
 	</li>
       {/#}
@@ -26,9 +26,9 @@
 	{#isNotMember}
           <li id="{id}">
 	    <a href="{url}">
+	      {?status}{ this | Asset_Status_Tag.render | ohm }{/?} 
 	      {name}
 	      {?count}<span class="-count">{this | string_of_int | esc}</span>{/?}
-	      {?status}{ this | Asset_Status_Tag.render | ohm }{/?} 
 	    </a>
 	  </li>
 	{/#}
