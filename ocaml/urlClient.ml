@@ -6,8 +6,9 @@ open BatPervasives
 
 include UrlClient_common
 
-let website, def_website = O.declare O.client "" A.none
-let about,   def_about   = O.declare O.client "about" A.none
+let website,  def_website  = O.declare O.client "" A.none
+let notfound, def_notfound = O.declare O.client "" A.i  
+let about,    def_about    = O.declare O.client "about" A.none
 
 (* Subscribe and unsubscribe ============================================================================== *)
 
@@ -28,7 +29,8 @@ let article_url_key b =
     | `Post p -> p # title
     | `RSS  r -> r # title
   in
-  OhmSlug.make title
+  let s = OhmSlug.make title in
+  if String.length s > 100 then String.sub s 0 100 else s 
 
 let article_url key b = 
   Action.url article key (b # id, Some (article_url_key b))

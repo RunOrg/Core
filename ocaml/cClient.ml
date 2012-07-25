@@ -64,6 +64,13 @@ let () = UrlClient.def_root begin fun req res ->
     | `None     -> if_old () (* The JS will redirect to the login page *)
   
 end
+
+let () = UrlClient.def_notfound begin fun req res -> 
+
+  let! cuid, key, iid, instance = extract req res in
+  C404.render ~iid cuid res
+
+end 
     
 let () = UrlClient.def_ajax begin fun req res -> 
 
