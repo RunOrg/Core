@@ -17,30 +17,9 @@
   
   <div class="-right">
 
-    <div class="helpbox">
-      <h2>{ `Events_Help_Title }</h2>
-      <table>
-	<col class="-term"/>
-	<col class="-what">
-	<tr>
-	  <td colspan="2">{ `Events_Help_Default }</td>
-	</tr>
-	<tr>
-	  <td><span style="float:right;margin:3px" class="status -website">{ `Status_Website }</span></td>
-	  <td>{ `Events_Help_Website }</td>
-	  </tr>
-	<tr>
-	  <td><span style="float:right;margin:3px" class="status -secret">{ `Status_Secret }</span></td>
-	  <td>{ `Events_Help_Secret }</td>
-	</tr>
-	<tr>
-	  <td><span style="float:right;margin:3px" class="status -draft">{ `Status_Draft }</span></td>
-	  <td>{ `Events_Help_Draft }</td>
-	</tr>
-	</table>
-      </div>
-    
-    </div>
+    <img src="/public/img/events-1.jpg" style="display:block;opacity:.5"/>
+
+  </div>
   
   <div class="-list">
     {#list}
@@ -125,6 +104,8 @@
   .-right {
     float: right;
     margin-left: 60px;
+    overflow: hidden; 
+    border-radius: 7px;
   }
 
 } 
