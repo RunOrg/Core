@@ -13,6 +13,16 @@
 | `Group_Edit_Title -> "Modifier"
 | `Group_Edit_Link -> "Options du groupe"
 | `Group_Edit_Sub -> "Changez le nom et la visibilité de ce groupe"
+| `Group_Edit_Submit -> "Enregistrer"
+| `Group_Edit_Name -> "Nom du groupe"
+| `Group_Edit_Required -> "Champ obligatoire"
+| `Group_Edit_Publish -> "Visibilité"
+| `Group_Edit_Publish_Detail -> "Détermine qui peut voir le groupe."
+| `Group_Edit_Publish_Label what -> begin match what with
+    | `Public -> "Visible depuis internet"
+    | `Normal -> "Visible par tous les membres de l'association"
+    | `Private -> "Sur invitation uniquement"
+end
 
 | `Group_People_Title -> "Membres"
 | `Group_People_Link -> "Gestion des membres"
@@ -34,8 +44,3 @@
 | `Groups_Create_Submit -> "Créer"
 | `Groups_Create_Cancel -> "Annuler"
 
-| `Group_Edit_Publish_Label what -> begin match what with
-    | `Public -> "Visible depuis internet"
-    | `Normal -> "Visible par tous les membres de l'association"
-    | `Private -> "Sur invitation uniquement"
-end

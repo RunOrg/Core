@@ -13,6 +13,12 @@
 | `Group_Edit_Title
 | `Group_Edit_Link 
 | `Group_Edit_Sub 
+| `Group_Edit_Name 
+| `Group_Edit_Submit 
+| `Group_Edit_Required
+| `Group_Edit_Publish
+| `Group_Edit_Publish_Detail 
+| `Group_Edit_Publish_Label of [`Public|`Normal|`Private]
 
 | `Group_People_Title 
 | `Group_People_Link 
@@ -34,4 +40,3 @@
 | `Groups_Create_Submit 
 | `Groups_Create_Cancel 
 
-| `Group_Edit_Publish_Label of [`Public|`Normal|`Private]

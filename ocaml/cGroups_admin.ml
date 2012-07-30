@@ -9,6 +9,7 @@ open CGroups_admin_common
 module People = CGroups_admin_people
 module Join   = CGroups_admin_join
 module Invite = CGroups_admin_invite
+module Edit   = CGroups_admin_edit
 
 let () = define UrlClient.Members.def_admin begin fun parents entity access -> 
 
