@@ -16,7 +16,9 @@ let renderlist ?tag list next =
     end)
   end list in
 
-  let next = None in 
+  let next = BatOption.map (fun next -> 
+    JsCode.Endpoint.of_url (Action.url UrlNetwork.more () (next,tag)), Json.Null
+  ) next in 
   
   return (object
     method list = list
@@ -33,7 +35,7 @@ let render ?tag title list next req res =
     method count = count
   end)) stats in 
 
-  let! list = ohm $ renderlist ?tag list next in
+  let! list = ohm $ renderlist ?tag:(BatOption.map fst tag) list next in
 
   let html = Asset_Network_List.render (object
     method navbar = (uid,None)
@@ -64,6 +66,22 @@ let () = UrlNetwork.def_tag begin fun req res ->
   let  title      = `Network_Title_WithTag tag in
 
   render ~tag:(tag,home) title list next req res
+
+end
+
+let () = UrlNetwork.def_more begin fun req res -> 
+
+  let iid, tag = req # args in 
+
+  let! list, next = ohm begin match tag with 
+    | None     -> MInstance.Profile.all    ~start:iid ~count:20 () 
+    | Some tag -> MInstance.Profile.by_tag ~start:iid ~count:20 tag
+  end in 
+
+  let! list = ohm $ renderlist ?tag list next in 
+  let! html = ohm $ Asset_Network_List_List.render list in 
+  
+  return $ Action.json [ "more", Html.to_json html ] res
 
 end
     
