@@ -90,8 +90,15 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
       Action.url UrlMe.News.home () ()
   in
 
+  let admin = if BatOption.bind MAdmin.user_is_admin cuid <> None then
+      Some (Action.url UrlAdmin.home () ())
+    else 
+      None
+  in
+
   Asset_PageLayout_Navbar.render (object
     method home      = home
+    method admin     = admin
     method public    = public
     method account   = account
     method instances = BatOption.default [] instances

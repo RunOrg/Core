@@ -6,6 +6,7 @@
 | `PageLayout_Navbar_Events
 | `PageLayout_Navbar_Forums
 | `PageLayout_Navbar_Website
+| `PageLayout_Navbar_Admin 
 | `PageLayout_Navbar_Intranet
 | `PageLayout_Foot_PoweredBy
 | `PageLayout_Navbar_Public_Website

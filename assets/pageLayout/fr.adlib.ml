@@ -6,6 +6,7 @@
 | `PageLayout_Navbar_Events -> "Activités"
 | `PageLayout_Navbar_Forums -> "Discussions"
 | `PageLayout_Navbar_Website -> "Site Web"
+| `PageLayout_Navbar_Admin -> "Admin"
 | `PageLayout_Navbar_Intranet -> "Espace Membres"
 | `PageLayout_Foot_PoweredBy -> "Propulsé par"
 | `PageLayout_Navbar_Public_Website -> "Accueil"
