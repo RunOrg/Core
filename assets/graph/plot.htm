@@ -1,0 +1,53 @@
+<div {$c} class="plot"></div>
+
+<style>
+.plot { 
+  margin: 1em;
+  width: 10em;
+  background-color: #FC9;
+  overflow: hidden;
+  border: 1px solid #CCC;
+  box-shadow: inset 0 0 3em rgba(255, 255, 255, 0.5);
+
+  .-fd, .-fa { 
+    float:left;
+    border-bottom: 0 solid transparent;
+  } 
+
+  .-fa { border-left: 1em solid white } 
+  .-fd { border-right: 1em solid white } 
+}
+</style>
+
+<script type="y:float list,h:int,w:int">
+html = [ 
+  '<div class="chart" style="', 
+  'font-size:', size, 'px;',
+  'background-color:', color, ';',
+  'width:', vals.length - 1, 'em">'
+]
+    
+max = 1
+for v in vals
+  max = Math.max(v,max)
+			
+max = max * 1.2
+ratio = (h/w) / max
+			
+p = vals[0]
+for v in vals[1..]
+  d = v - p
+  b = Math.max(p, v)
+  html.push(
+    '<div class="', 
+    (if d > 0 then '-fa' else '-fd'), 
+    '" style="height:',
+    (ratio * (max - b)).toFixed(2),
+    'em;border-bottom-width:', 
+    (ratio * (if d > 0 then d else -d)).toFixed(2),
+    'em"></div>'
+  )
+  p = v
+
+here.$c.html(html.join(""))					    
+</script>
