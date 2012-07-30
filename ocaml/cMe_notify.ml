@@ -120,11 +120,8 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
 
     Asset_Notify_List_Inner.render (object
       method list = list
-      method more = match next with None -> None | Some time -> 
-	Some (object
-	  method data     = Json.Null
-	  method endpoint = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint more time)
-	end)
+      method more = match next with None -> None | Some time ->  
+	Some (OhmBox.reaction_endpoint more time, Json.Null)
     end)
 
   in

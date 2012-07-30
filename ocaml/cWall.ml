@@ -9,10 +9,7 @@ let items more access feed start =
   let! htmls = ohm $ Run.list_filter (CItem.render access) items in 
   let  more  = match next with 
     | None -> None
-    | Some time -> Some (object
-      method data = Json.Null
-      method endpoint = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint more time)
-    end)
+    | Some time -> Some (OhmBox.reaction_endpoint more time,Json.Null)
   in
   return (htmls, more)
 

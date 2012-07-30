@@ -21,27 +21,31 @@
   </div>
 
   <div class="-list">
-    {if list | OhmAsset.notEmpty} 
-      <ul>
-	{#list}
-	  <li>
-	    {?pic}<img src="{this}"/>{/?}
-            <a href="{url}">
-	      <span class="-name">{name}</span>
-	    </a>
-	    {if tags | OhmAsset.notEmpty} 
-  	      <span class="-tags">
-	      {#tags}{ this | Asset_Network_Tag.render | ohm }{/#}
-	      </span>
-	    {/if}
-  	  </li>
-	{/#}
-      </ul>
-    {else}
-      <div class="empty-list">
-	{ `Network_List_Empty }
-      </div>
-    {/if}
+    <ul>
+      {@!list}
+        {if list | OhmAsset.notEmpty} 
+          {#list}
+            <li>
+  	      {?pic}<img src="{this}"/>{/?}
+              <a href="{url}">
+	        <span class="-name">{name}</span>
+	      </a>
+	      {if tags | OhmAsset.notEmpty} 
+  	        <span class="-tags">
+		  {#tags}{ this | Asset_Network_Tag.render | ohm }{/#}
+	        </span>
+	      {/if}
+  	    </li>
+	  {/#}
+	  {?more}{ this | VMore.li | ohm }{/?}      
+        {else}
+          <li class="empty-list">
+            { `Network_List_Empty }
+          </li>
+        {/if}
+      {/@}
+      { list | Asset_Network_List_List.render | ohm } 
+    </ul>
   </div>
 
 </div>
