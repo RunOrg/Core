@@ -17,7 +17,7 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method img      = VIcon.Large.award_star_gold_1
       method url      = Parents.active # url 
       method title    = return "Instances actives"
-      method subtitle = Some (return "Celles qui ont publié le plus d'items ces deux derniers mois")
+      method subtitle = Some (return "Celles qui ont publié le plus d'items chaque mois")
      end) ;
     
   ] in
