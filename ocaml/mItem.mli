@@ -151,4 +151,6 @@ module Backdoor : sig
 
   val get : 'a IItem.id -> bot_item option O.run
 
+  val active_instances : unit -> (IInstance.t * int) list O.run
+
 end
