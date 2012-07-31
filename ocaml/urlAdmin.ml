@@ -7,4 +7,4 @@ open BatPervasives
 module A = Action.Args
 
 let home,   def_home   = O.declare O.core "admin" A.none
-let active, dev_active = O.declare O.core "admin/active" A.none
+let active, def_active = O.declare O.core "admin/active" (A.o A.int)

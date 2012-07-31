@@ -46,12 +46,13 @@ let rec clip yyyy mm =
     if mm >= 12 then clip (yyyy + 1) (mm - 12) else
       Printf.sprintf "%04d%02d" yyyy (mm + 1) 
 
-let active_instances _ = 
+let active_instances _ ago = 
 
   let! time = ohmctx (#time) in
   let  date = Unix.gmtime time in
-  let  startkey = Unix.( clip (date.tm_year + 1900) (date.tm_mon - 1), IInstance.of_id Id.smallest ) in
-  let  endkey   = Unix.( clip (date.tm_year + 1900)  date.tm_mon     , IInstance.of_id Id.largest  ) in
+  let  date = Unix.(clip (date.tm_year + 1900) (date.tm_mon - ago)) in
+  let  startkey = ( date, IInstance.of_id Id.smallest ) in
+  let  endkey   = ( date, IInstance.of_id Id.largest  ) in
   let! list = ohm $ InstanceCountView.reduce_query ~startkey ~endkey ( ) in
 
   let  totals = List.fold_left (fun map ((_,iid),count) -> 
