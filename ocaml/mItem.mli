@@ -151,6 +151,6 @@ module Backdoor : sig
 
   val get : 'a IItem.id -> bot_item option O.run
 
-  val active_instances : unit -> (IInstance.t * int) list O.run
+  val active_instances : [`Admin] ICurrentUser.id -> (IInstance.t * int) list O.run
 
 end

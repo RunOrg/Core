@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let js deeplink = 
+let js ~deeplink = 
   BatList.filter_map identity [
     Some "/public/jquery.min.js" ;
     Some "/public/jquery.json.min.js" ;
@@ -35,3 +35,4 @@ let core ?(deeplink=false) title html res =
        ~css:[Asset.css] 
        ~favicon:"/public/favicon.ico"
        ~title html) res
+

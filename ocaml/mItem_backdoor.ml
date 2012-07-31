@@ -46,7 +46,7 @@ let rec clip yyyy mm =
     if mm >= 12 then clip (yyyy + 1) (mm - 12) else
       Printf.sprintf "%04d%02d" yyyy (mm + 1) 
 
-let active_instances () = 
+let active_instances _ = 
 
   let! time = ohmctx (#time) in
   let  date = Unix.gmtime time in
