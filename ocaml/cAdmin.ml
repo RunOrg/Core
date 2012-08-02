@@ -8,6 +8,7 @@ open CAdmin_common
 
 module Parents = CAdmin_parents
 module Active  = CAdmin_active
+module Public  = CAdmin_public
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 
@@ -18,6 +19,13 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method url      = Parents.active # url 
       method title    = return "Instances actives"
       method subtitle = Some (return "Celles qui ont publié le plus d'items chaque mois")
+     end) ;
+
+    (object
+      method img      = VIcon.Large.world_link
+      method url      = Parents.public # url 
+      method title    = return "Sites web actifs"
+      method subtitle = Some (return "Ceux qui ont publié le plus d'annonces chaque mois")
      end) ;
     
   ] in

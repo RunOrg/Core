@@ -13,3 +13,4 @@ open UrlAdmin
 
 let home    = make "Administration" home   () 
 let active  = make "Instances"      active None
+let public  = make "Sites Web"      public None
