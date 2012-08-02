@@ -78,4 +78,6 @@ module Backdoor : sig
   val posts : int O.run
   val forwards : int O.run
 
+  val active_instances : [`Admin] ICurrentUser.id -> int -> (IInstance.t * int) list O.run
+
 end
