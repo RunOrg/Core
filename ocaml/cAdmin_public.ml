@@ -13,7 +13,7 @@ let rec clip yyyy mm =
     if mm >= 12 then clip (yyyy + 1) (mm - 12) else
       Printf.sprintf "%02d / %04d" (mm + 1) yyyy
 
-let () = UrlAdmin.def_active $ admin_only begin fun cuid req res -> 
+let () = UrlAdmin.def_public $ admin_only begin fun cuid req res -> 
 
   let  ago = BatOption.default 0 (req # args) in
 
