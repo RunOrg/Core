@@ -21,7 +21,7 @@ let () = UrlAdmin.def_active $ admin_only begin fun cuid req res ->
 
   let! items = ohm $ Run.list_filter begin fun (iid,count) ->
     let! instance = ohm_req_or (return None) $ MInstance.get iid in
-    let  url = Action.url UrlClient.website (instance # key) () in
+    let  url = Action.url UrlAdmin.instance () iid in
     let! pic = ohm $ CPicture.small_opt (instance # pic) in    
     return $ Some (object
       method url   = url
