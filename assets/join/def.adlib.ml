@@ -26,3 +26,7 @@
 | `Join_Self_Decline 
 
 | `Join_Self_Save
+
+| `Join_PublicNone_Title 
+| `Join_PublicNone_Problem
+| `Join_PublicNone_Solution

@@ -26,3 +26,7 @@
 | `Join_Self_Decline -> "Refuser"
 
 | `Join_Self_Save -> "Enregistrer"
+
+| `Join_PublicNone_Title -> "Inscription en ligne"
+| `Join_PublicNone_Problem -> "Les responsables de cet espace membre ont décidé d'interdire les demandes d'inscription par internet."
+| `Join_PublicNone_Solution -> "Si vous pensez que vous devez avoir accès à cet espace, contactez un responsable."
