@@ -17,7 +17,7 @@ let unsubscribe, def_unsubscribe = O.declare O.client "unsubscribe" A.none
 
 (* Join =================================================================================================== *)
 
-let join, def_join = O.declare O.client "join" A.none
+let join, def_join = O.declare O.client "join" (A.o IEntity.arg)
 
 (* Articles =============================================================================================== *)
 
