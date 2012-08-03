@@ -44,27 +44,6 @@ module PublicView = CouchDB.DocView(struct
                 emit([doc.c.instance,doc.c.kind],null);"
 end)
 
-module PublicGrantView = CouchDB.DocView(struct
-  module Key = IInstance
-  module Value = Fmt.Unit
-  module Doc = E.Format
-  module Design = E.Design
-  let name = "public_grants"
-  let map  = "if (!doc.c.archive && doc.c.public && !doc.c.draft && !doc.c.deleted && 
-                   doc.c.config.group.grant_tokens === 'yes') 
-                emit(doc.c.instance,null);"
-end)
-
-module PotentialGrantView = CouchDB.DocView(struct
-  module Key = IInstance
-  module Value = Fmt.Unit
-  module Doc = E.Format
-  module Design = E.Design
-  let name = "grants"
-  let map  = "if (!doc.c.deleted && doc.c.config.group.grant_tokens === 'yes') 
-                emit(doc.c.instance,null);"
-end)
-
 module WithMemberView = CouchDB.DocView(struct
   module Key = IInstance
   module Value = Fmt.Unit
@@ -132,23 +111,6 @@ let get_with_members ctx =
   let   iid = IInstance.decay $ IIsIn.instance (ctx # isin) in
   let! list = ohm $ WithMemberView.doc iid in 
   Run.list_filter (as_visible ctx) list 
-
-let get_granting ctx = 
-
-  let  iid  = IInstance.decay $ IIsIn.instance (ctx # isin) in
-  let! list = ohm $ PotentialGrantView.doc iid in 
-  Run.list_filter (as_visible ctx) list
-
-let get_administrable_granting ctx = 
-
-  let  iid      = IInstance.decay $ IIsIn.instance (ctx # isin) in
-  let! list     = ohm $ PotentialGrantView.doc iid in 
-  Run.list_filter (as_administrable ctx) list 
-
-let get_public_granting iid = 
-
-  let! list = ohm $ PublicGrantView.doc iid in
-  return $ BatList.filter_map as_public list
 
 let get_future ctx = 
  let  now = MFmt.date_of_float $ Unix.gettimeofday () in

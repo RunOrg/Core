@@ -169,33 +169,6 @@ let create self ~name ?pic ~iid ?access template =
 
   return eid 
 
-let set_grants ctx eids = 
-
-  let  self = ctx # self in 
-  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay self)) in
-
-  let  iid     = IInstance.decay (IIsIn.instance (ctx # isin)) in 
-  let! current = ohm $ All.get_granting ctx in 
-
-  let eids    = List.map IEntity.decay eids in 
-  let current = List.map (Get.id |- IEntity.decay) current in 
-
-  let to_remove = List.filter (fun eid -> not (List.mem eid eids)) current in 
-  let to_add    = List.filter (fun eid -> not (List.mem eid current)) eids in 
-
-  let set_grant grant id = 
-    let  diffs    = [ `Config [`Group_GrantTokens (if grant then `Yes else `No)] ] in
-    let! previous = ohm_req_or (return ()) $ E.Table.get id in
-    if previous.E.instance <> iid then return () else  
-      let! _ = ohm $ E.Store.update ~id ~info ~diffs () in
-      return ()
-  in
-
-  let! _ = ohm $ Run.list_iter (set_grant false) to_remove in 
-  let! _ = ohm $ Run.list_iter (set_grant true)  to_add in 
-
-  return ()
-
 (* Attempt to grab a public entity if it is public. ---------------------------------------- *)
 
 let get_if_public eid = 

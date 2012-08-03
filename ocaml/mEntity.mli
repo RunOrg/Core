@@ -146,8 +146,6 @@ val create :
   ->  ITemplate.t 
   ->  [`Created] IEntity.id O.run
 
-val set_grants : [`IsAdmin] # MAccess.context -> 'any IEntity.id list -> unit O.run
-
 val get_last_real_event_date : [`IsAdmin] IInstance.id -> string option option O.run
 
 module All : sig
@@ -175,23 +173,11 @@ module All : sig
     -> MEntityKind.t
     -> [`View] t list O.run
 
-  val get_granting : 
-       'any # MAccess.context
-    -> [`View] t list O.run
-
-  val get_administrable_granting : 
-       'any # MAccess.context
-    -> [`Admin] t list O.run
-
   val get_future : 
        'any # MAccess.context
     -> [`View] t list O.run
 
   val get_public_future :
-       IInstance.t
-    -> [`View] t list O.run
-
-  val get_public_granting :
        IInstance.t
     -> [`View] t list O.run
 
