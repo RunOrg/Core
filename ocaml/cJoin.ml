@@ -14,6 +14,7 @@ end)
 
 module Top = CJoin_top 
 module Self = CJoin_self
+module Public = CJoin_public
 
 let template group = 
   List.fold_left (fun acc field -> 

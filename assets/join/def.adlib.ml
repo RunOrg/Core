@@ -27,6 +27,8 @@
 
 | `Join_Self_Save
 
+| `Join_Public_Title of string
+
 | `Join_PublicNone_Title 
 | `Join_PublicNone_Problem
 | `Join_PublicNone_Solution
