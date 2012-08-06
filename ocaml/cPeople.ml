@@ -7,7 +7,7 @@ open BatPervasives
 let box_content access group = 
   let  gid = MGroup.Get.id group in 
   O.Box.fill $ O.decay begin 
-    let! avatars, _ = ohm $ MMembership.InGroup.avatars gid ~start:None ~count:100 in
+    let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
     CAvatar.directory avatars
   end
     
