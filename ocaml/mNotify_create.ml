@@ -73,6 +73,7 @@ let () =
   let `item itid = what in 
   let  bot_itid = IItem.Assert.bot itid in 
   let! author = ohm_req_or (return ()) $ MItem.author bot_itid in 
+  let! () = true_or (return ()) (IAvatar.decay author <> IAvatar.decay aid) in
   let! details = ohm $ MAvatar.details author in 
   let! uid = req_or (return ()) details # who in 
   Store.create (`NewFavorite (`ItemAuthor, aid, IItem.decay itid)) uid

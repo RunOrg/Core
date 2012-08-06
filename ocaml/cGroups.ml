@@ -43,15 +43,6 @@ let contents access =
 	  CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
       end in 
 
-      let none = return (None, None, Some join) in
-
-      (* List group members ------------------------------------------------------------------------------ *)
-
-      let! group  = ohm_req_or none $ MGroup.Can.list group in
-      let  gid    = MGroup.Get.id group in 
-
-      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
-
       (* Url for sending messages ----------------------------------------------------------------------- *)
 
       let! send_url = ohm begin 
@@ -71,6 +62,18 @@ let contents access =
 	       [ IEntity.to_string eid ])
 
       end in 
+
+      let none = return (None, Some (object
+	method admin = None
+	method send  = send_url 
+      end), Some join) in
+
+      (* List group members ------------------------------------------------------------------------------ *)
+
+      let! group  = ohm_req_or none $ MGroup.Can.list group in
+      let  gid    = MGroup.Get.id group in 
+
+      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
 
       (* Determine if administrator or not ------------------------------------------------------------ *)
       
