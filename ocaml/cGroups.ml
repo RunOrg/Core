@@ -33,12 +33,6 @@ let contents access =
       let  gid    = MEntity.Get.group entity in 
 
       let! group  = ohm_req_or none $ MGroup.try_get access gid in
-      let! group  = ohm_req_or none $ MGroup.Can.list group in
-      let  gid    = MGroup.Get.id group in 
-
-      (* List group members ------------------------------------------------------------------------------ *)
-
-      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
 
       (* My own status in this group --------------------------------------------------------------------- *)
 
@@ -48,6 +42,15 @@ let contents access =
 	return $ 
 	  CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
       end in 
+
+      let none = return (None, None, Some join) in
+
+      (* List group members ------------------------------------------------------------------------------ *)
+
+      let! group  = ohm_req_or none $ MGroup.Can.list group in
+      let  gid    = MGroup.Get.id group in 
+
+      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
 
       (* Url for sending messages ----------------------------------------------------------------------- *)
 
