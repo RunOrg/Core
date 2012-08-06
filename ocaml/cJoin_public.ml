@@ -10,7 +10,7 @@ let () = UrlClient.def_join begin fun req res ->
 
   let display main = 
     let left = CWebsite. Left.render cuid key iid in 
-    let html = VNavbar.public `About ~cuid ~left ~main instance in
+    let html = VNavbar.public `Join ~cuid ~left ~main instance in
     CPageLayout.core (`Join_Public_Title (instance # name)) html res
   in
 

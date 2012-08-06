@@ -12,4 +12,4 @@
 | `PageLayout_Navbar_Public_Website
 | `PageLayout_Navbar_Public_Calendar
 | `PageLayout_Navbar_Public_About
-
+| `PageLayout_Navbar_Public_Join 

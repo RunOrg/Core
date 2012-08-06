@@ -12,3 +12,4 @@
 | `PageLayout_Navbar_Public_Website -> "Accueil"
 | `PageLayout_Navbar_Public_Calendar -> "Agenda"
 | `PageLayout_Navbar_Public_About -> "À propos"
+| `PageLayout_Navbar_Public_Join -> "Inscription"

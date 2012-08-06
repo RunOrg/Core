@@ -130,9 +130,10 @@ let public_menu menu key =
     method sel = id = menu
     method label = AdLib.write label 
   end)) [
-    Action.url UrlClient.website  key (), `PageLayout_Navbar_Public_Website,  `Home ;
-    Action.url UrlClient.calendar key (), `PageLayout_Navbar_Public_Calendar, `Calendar ;
-    Action.url UrlClient.about    key (), `PageLayout_Navbar_Public_About,    `About
+    Action.url UrlClient.website  key (),   `PageLayout_Navbar_Public_Website,  `Home ;
+    Action.url UrlClient.calendar key (),   `PageLayout_Navbar_Public_Calendar, `Calendar ;
+    Action.url UrlClient.about    key (),   `PageLayout_Navbar_Public_About,    `About ;
+    Action.url UrlClient.join     key None, `PageLayout_Navbar_Public_Join,     `Join 
   ]
 
 let event (cuid,iid) = 
