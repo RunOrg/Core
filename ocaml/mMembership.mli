@@ -90,7 +90,7 @@ module InGroup : sig
   val all :
        [<`Admin|`Write|`List|`Bot] IGroup.id
     -> MAccess.State.t 
-    -> (bool * IAvatar.t) list O.run
+    -> (bool * IAvatar.t) list O.run  
     
   val list_members :
        ?start:Ohm.Id.t
