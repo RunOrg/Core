@@ -22,6 +22,18 @@ let () = UrlClient.def_join begin fun req res ->
     return $ Action.redirect (Action.url UrlLogin.login () (UrlLogin.save_url ~iid [])) res
   in
 
+  let pickPublic cuid list = 
+    let! list = ohm $ Run.list_map (fun entity ->
+      let! name = ohm $ CEntityUtil.name entity in 
+      let  url  = Action.url UrlClient.join key (Some (IEntity.decay (MEntity.Get.id entity))) in
+      return (object
+	method name = name
+	method url  = url
+      end)
+    ) list in
+    display $ Asset_Join_PublicPick.render list
+  in
+
   let  eid = req # args in 
   let! entity = ohm $ Run.opt_bind MEntity.get_if_public eid in 
   let  entity = BatOption.bind (fun entity -> if MEntity.Get.grants entity then Some entity else None) entity in
@@ -35,6 +47,6 @@ let () = UrlClient.def_join begin fun req res ->
 		| [entity] -> let eid = MEntity.Get.id entity in 
 			      return $ Action.redirect (Action.url UrlClient.join key (Some (IEntity.decay eid))) res
 		| list -> let! cuid = req_or (login ()) cuid in 		
-			  nonePublic ()
+			  pickPublic cuid list
 
 end

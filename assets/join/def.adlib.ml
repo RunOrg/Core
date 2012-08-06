@@ -32,3 +32,6 @@
 | `Join_PublicNone_Title 
 | `Join_PublicNone_Problem
 | `Join_PublicNone_Solution
+
+| `Join_PublicPick_Description 
+| `Join_PublicPick_Button

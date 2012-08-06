@@ -1,0 +1,21 @@
+<div style="color:#555;overflow:hidden">
+  <p>{`Join_PublicPick_Description}</p>
+  {#this}
+    <div class="public-join-item">
+      {name}
+      <a style="float:right" href="{url}" class="action-button -green">{ `Join_PublicPick_Button }</a>
+    </div>
+  {/#}
+</div>
+
+<style>
+.public-join-item {
+  overflow: hidden;
+  margin: -1px 30px 0;
+  padding: 10px;
+  border: 1px solid #CCC;
+  line-height: 27px;
+  font-size: 16px;
+  color: #333;
+}
+</style>

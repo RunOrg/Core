@@ -30,5 +30,8 @@
 | `Join_Public_Title inst -> "Accès membres - " ^ inst
 
 | `Join_PublicNone_Title -> "Inscription en ligne"
-| `Join_PublicNone_Problem -> "Les responsables de cet espace membre ont décidé d'interdire les demandes d'inscription par internet."
+| `Join_PublicNone_Problem -> "Les responsables de l'espace membre ont décidé d'interdire les demandes d'inscription par internet."
 | `Join_PublicNone_Solution -> "Si vous pensez que vous devez avoir accès à cet espace, contactez un responsable."
+
+| `Join_PublicPick_Description -> "Sélectionnez un type d'inscription ci-dessous :"
+| `Join_PublicPick_Button -> "Inscription"
