@@ -56,6 +56,7 @@ let () =
 let () = 
   let react how (aid, who, iid) = 
     let! aid = req_or (return ()) aid in 
+    let! () = true_or (return ()) (IAvatar.decay aid <> IAvatar.decay who) in
     let! details = ohm $ MAvatar.details who in
     let! uid = req_or (return ()) details # who in 
     let  payload = how (IAvatar.decay aid) iid in

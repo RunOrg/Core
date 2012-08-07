@@ -13,3 +13,4 @@
 | `PageLayout_Navbar_Public_Calendar -> "Agenda"
 | `PageLayout_Navbar_Public_About -> "À propos"
 | `PageLayout_Navbar_Public_Join -> "Inscription"
+| `PageLayout_Loading_Thanks -> "Veuillez patienter quelques instants..."

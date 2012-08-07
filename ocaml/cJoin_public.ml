@@ -24,25 +24,27 @@ let () = UrlClient.def_join begin fun req res ->
 
   let displayEntity cuid entity =
 
-    let! status = ohm begin
+    let! token, status = ohm begin
 
       (* Acting as confirmed user to determine current status, if any *)
       let  self = IUser.Assert.is_self (IUser.Deduce.is_anyone cuid) in 
       let! isin = ohm $ MAvatar.identify_user iid self in 
-      let! aid  = req_or (return `NotMember) (IIsIn.avatar isin) in
-      let! ()   = true_or (return `Member) (IIsIn.Deduce.is_token isin = None) in
+      let! aid  = req_or (return (false,`NotMember)) (IIsIn.avatar isin) in
+      let! ()   = true_or (return (true,`Member)) (IIsIn.Deduce.is_token isin = None) in
 
       let  gid  = MEntity.Get.group entity in
       let! mid  = ohm $ MMembership.as_user gid aid in
-      let! membership = ohm_req_or (return `NotMember) $ MMembership.get mid in
-      return membership.MMembership.status 
+      let! membership = ohm_req_or (return (false,`NotMember)) $ MMembership.get mid in
+      return (false,membership.MMembership.status)
     end in 
 
     match status with 
-      | `Member -> let url = Action.url UrlClient.intranet key [] in
-		   display $ Asset_Join_PublicConfirmed.render url
+      | `Member when token -> let url = Action.url UrlClient.intranet key [] in
+			      display $ Asset_Join_PublicConfirmed.render url
+      | `Member -> display $ Asset_PageLayout_Reload.render (object method time = 10.0 end)
       | `Pending -> display $ Asset_Join_PublicRequested.render ()
-      | _ -> display $ Asset_Join_PublicNoFields.render () 
+      | _ -> let url = Action.url UrlClient.doJoin key (IEntity.decay $ MEntity.Get.id entity) in
+	     display $ Asset_Join_PublicNoFields.render (object method url = url end)
 
   in
 
@@ -72,5 +74,35 @@ let () = UrlClient.def_join begin fun req res ->
 			      return $ Action.redirect (Action.url UrlClient.join key (Some (IEntity.decay eid))) res
 		| list -> let! cuid = req_or (login ()) cuid in 		
 			  pickPublic cuid list
+
+end
+
+let () = UrlClient.def_doJoin begin fun req res ->
+
+  let panic = return $ Action.javascript (Js.reload ()) res in
+
+  let! json = req_or panic $ Action.Convenience.get_json req in 
+
+  let! cuid, key, iid, instance = CClient.extract req res in  
+  let! cuid = req_or panic cuid in 
+
+  let! aid = ohm $ MAvatar.self_become_contact iid cuid in
+
+  let  eid = req # args in
+  let! entity = ohm_req_or panic $ MEntity.get_if_public eid in 
+  let! () = true_or panic (MEntity.Get.kind entity = `Group) in 
+  let  gid = MEntity.Get.group entity in
+  let! group = ohm_req_or panic $ MGroup.naked_get gid in 
+
+  let  fields = MGroup.Fields.get group in 
+
+  if fields = [] then
+
+    let! () = ohm $ MMembership.user gid aid true in
+    return $ Action.javascript (Js.reload ()) res 
+
+  else
+
+    return res
 
 end

@@ -282,6 +282,10 @@ let become_contact instance user =
   in
   return id
 
+let self_become_contact instance cuid = 
+  let! aid = ohm $ become_contact instance (IUser.Deduce.is_anyone cuid) in
+  return $ IAvatar.Assert.is_self aid 
+
 let become_admin instance user =
   let! id, _, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
   return id

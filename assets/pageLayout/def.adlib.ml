@@ -13,3 +13,4 @@
 | `PageLayout_Navbar_Public_Calendar
 | `PageLayout_Navbar_Public_About
 | `PageLayout_Navbar_Public_Join 
+| `PageLayout_Loading_Thanks
