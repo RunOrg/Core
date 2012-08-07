@@ -22,6 +22,30 @@ let () = UrlClient.def_join begin fun req res ->
     return $ Action.redirect (Action.url UrlLogin.login () (UrlLogin.save_url ~iid [])) res
   in
 
+  let displayEntity cuid entity =
+
+    let! status = ohm begin
+
+      (* Acting as confirmed user to determine current status, if any *)
+      let  self = IUser.Assert.is_self (IUser.Deduce.is_anyone cuid) in 
+      let! isin = ohm $ MAvatar.identify_user iid self in 
+      let! aid  = req_or (return `NotMember) (IIsIn.avatar isin) in
+      let! ()   = true_or (return `Member) (IIsIn.Deduce.is_token isin = None) in
+
+      let  gid  = MEntity.Get.group entity in
+      let! mid  = ohm $ MMembership.as_user gid aid in
+      let! membership = ohm_req_or (return `NotMember) $ MMembership.get mid in
+      return membership.MMembership.status 
+    end in 
+
+    match status with 
+      | `Member -> let url = Action.url UrlClient.intranet key [] in
+		   display $ Asset_Join_PublicConfirmed.render url
+      | `Pending -> display $ Asset_Join_PublicRequested.render ()
+      | _ -> display $ Asset_Join_PublicNoFields.render () 
+
+  in
+
   let pickPublic cuid list = 
     let! list = ohm $ Run.list_map (fun entity ->
       let! name = ohm $ CEntityUtil.name entity in 
@@ -40,7 +64,7 @@ let () = UrlClient.def_join begin fun req res ->
 
   match entity with 
     | Some entity -> let! cuid = req_or (login ()) cuid in 		     
-		     nonePublic ()
+		     displayEntity cuid entity
     | None -> let! entities = ohm $ MEntity.All.get_public iid `Group in
 	      match entities with 
 		| [] -> nonePublic () 

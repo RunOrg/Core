@@ -35,3 +35,12 @@
 
 | `Join_PublicPick_Description 
 | `Join_PublicPick_Button
+
+| `Join_PublicNoFields_Description    
+| `Join_PublicNoFields_Submit 
+
+| `Join_PublicRequested_Description    
+
+| `Join_PublicConfirmed_Description
+| `Join_PublicConfirmed_Confirmed 
+

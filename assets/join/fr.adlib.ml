@@ -35,3 +35,11 @@
 
 | `Join_PublicPick_Description -> "Sélectionnez un type d'inscription ci-dessous :"
 | `Join_PublicPick_Button -> "Inscription"
+
+| `Join_PublicNoFields_Description -> "Souhaitez-vous confirmer votre demande d'inscription à cet espace membres ?"
+| `Join_PublicNoFields_Submit -> "Confirmer mon inscription"
+
+| `Join_PublicRequested_Description -> "Votre demande d'inscription doit maintenant être validée par un responsable. Vous recevrez un e-mail dès que ce sera le cas."     
+
+| `Join_PublicConfirmed_Description -> "Votre demande d'inscription à cet espace a été acceptée."
+| `Join_PublicConfirmed_Confirmed -> "Accéder à l'espace membres"
