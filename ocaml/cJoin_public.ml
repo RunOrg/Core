@@ -96,13 +96,7 @@ let () = UrlClient.def_doJoin begin fun req res ->
 
   let  fields = MGroup.Fields.get group in 
 
-  if fields = [] then
-
-    let! () = ohm $ MMembership.user gid aid true in
-    return $ Action.javascript (Js.reload ()) res 
-
-  else
-
-    return res
+  let! () = ohm $ MMembership.user gid aid true in
+  return $ Action.javascript (Js.reload ()) res 
 
 end
