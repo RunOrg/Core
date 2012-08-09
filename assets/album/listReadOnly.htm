@@ -1,0 +1,19 @@
+<div class="album">
+
+  {#items}
+  
+    {this | Asset_Album_Item.render | ohm }
+
+  {else}
+
+    <div class="-empty" style="position:relative">
+      <div class="empty-list">
+	{`Album_RO_Empty}
+      </div>
+    </div>
+
+  {/#}
+
+  {?more}{ this | VMore.div | ohm }{/?}
+
+</div>

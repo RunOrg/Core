@@ -42,6 +42,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Events.tabs seg ] in
       return (object
 	method url   = url
+	method dark  = seg = `Album
 	method cls   = if seg = the_seg then "-selected" else "" 
 	method size  = "-d0"
 	method count = "" 
@@ -64,6 +65,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     let! the_seg = O.Box.parse UrlClient.Events.tabs in 
     match the_seg with
       | `Wall   -> CWall.box access feed     
+      | `Album  -> CAlbum.box access album
       | `People -> CPeople.event_box access group 
       | _       -> O.Box.fill (Asset_Soon_Block.render ())
 

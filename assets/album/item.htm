@@ -1,0 +1,64 @@
+<a class="album-item" href="{url}">
+  {?pic}
+    <span {$s} class="-pic" style="background-image: url('{this}')">{this}</span>
+    <img {$i}/>
+    <script>
+
+here.$s.hide()
+
+s = () ->
+  here.$s.fadeIn()
+  here.$i.remove() 
+
+r = () -> 
+  src = here.$s.text()
+  here.$s.text ""
+  here.$i.load s 
+  here.$i.attr "src", src
+  if here.$i.width() == 178
+    do s
+  setTimeout s, 1000
+
+setTimeout r, 0
+
+    </script>
+  {/?}
+  {?comments}
+    <span class="-comm">{`Album_Item_Comments this}</span>
+  {/?}
+</a>
+
+<style>
+.album-item 
+{
+  float: left;
+  margin: 3px;
+  height: 128px;
+  width: 178px;
+  position: relative;
+
+  .-pic {
+    box-shadow: inset 0 0 2px #111; 
+    display: block;
+    height: 128px;
+    width: 178px;
+  } 
+
+  img {
+    position: absolute;
+    left: -10000px;
+  }
+
+  .-comm {
+    position: absolute;
+    bottom: 0;
+    width: 170px;
+    padding: 4px;
+    background-color: #222;
+    background-color: rgba(16,16,16,0.75);
+    color: white;
+    font-size: 12px;
+    text-align: center;
+  }
+}
+</style>
