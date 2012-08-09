@@ -1,6 +1,19 @@
 <div class="profile">
 
   <div class="-side">
+    <img src="{pic}"/>
+    <ul class="-details">
+      <li><strong>{name}</strong></li>
+      {?profile}
+        {?email}
+          <li><a href="mailto:{this}">{this}</a></li>
+        {else}
+          <li class="-empty">{ `Profile_NoEmail }</li>
+        {/?}
+	{?cellphone}<li>{this}</li>{/?}
+	{?phone}<li>{this}</li>{/?}
+      {/?}
+    </ul>
   </div>
 
   <div class="-main">
@@ -8,3 +21,38 @@
 
 </div>
 
+<style>
+
+.profile {
+
+  overflow: hidden;
+
+  .-side {
+    float: left;
+    width: 230px;
+    border: 1px solid #888;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 0 3px #888;
+    margin: 3px;
+
+    > img { display : block }
+
+    .-details {
+      margin: 0;
+      border-top: 1px solid #88;
+      padding: 10px 5px;
+      background-color: #EEE;
+      box-shadow: inset 0 0 30px #BBB;
+      color: #111;
+      list-style-type: none;
+      text-align: center;
+      text-shadow: 0 1px 0 white;
+    }
+
+    .-empty { color: #555 }
+  }
+
+}
+
+</style>
