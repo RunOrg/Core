@@ -22,6 +22,7 @@ module Actions = struct
   open CNotifySend
   open CContact
   open CSplash
+  open CProfile
   open Splash
 end
 

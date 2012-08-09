@@ -24,8 +24,16 @@ let mini_profile aid =
   let! pic  = ohm $ CPicture.small (details # picture) in
   let! pico = ohm $ CPicture.small_opt (details # picture) in
 
+  let! url  = ohm begin
+    let! iid = req_or (return None) (details # ins) in
+    let! instance = ohm_req_or (return None) $ MInstance.get iid in 
+    return $ Some (Action.url UrlClient.Profile.home (instance # key) [IAvatar.to_string aid])
+  end in 
+
+  let url = BatOption.default "javascript:void(0)" url in 
+
   return (object
-    method url = "javascript:void(0)"
+    method url = url
     method pic = pic
     method pico = pico
     method name = name
