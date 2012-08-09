@@ -38,7 +38,7 @@
     {@!sidebar}
       <ul class="-navig">
         {#this}
-          <li class="{cls}">
+          <li class="{if dark}-dark {/if}{cls}">
   	    <a href="{url}">
 	      <span class="{size}">{count}</span> { `Forum_Section label } 
 	    </a>
@@ -145,6 +145,10 @@
         top: 50%;
       }
 
+      .-dark.-selected:after {
+        border-right-color: #000;
+      }
+
       .-selected:before {
         border-right-color: #BBB;
         border-width: 15px;
@@ -162,6 +166,7 @@
     overflow: hidden;
 
     .-contents {
+      overflow: hiddne;
       margin: 12px 3px 20px 0;
       border: 1px solid #CCC;
       border-radius: 4px;

@@ -39,6 +39,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Forums.tabs seg ] in
 	return (object
 	  method url   = url
+	  method dark  = seg = `Album
 	  method cls   = if seg = the_seg then "-selected" else "" 
 	  method size  = "-d0"
 	  method count = "" 
@@ -61,6 +62,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       let! the_seg = O.Box.parse UrlClient.Forums.tabs in 
       match the_seg with
 	| `Wall   -> CWall.box access feed     
+	| `Album  -> CAlbum.box access album
 	| `People -> CPeople.forum_box access group 
 	| _       -> O.Box.fill (Asset_Soon_Block.render ())
 	  
