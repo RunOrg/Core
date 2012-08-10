@@ -12,6 +12,34 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
   let! iid = ohm_req_or e404 $ O.decay (MAvatar.get_instance aid) in 
   let! ()  = true_or e404 (iid = IInstance.decay (access # iid)) in 
      
+  let! content = O.Box.add begin
+    
+    let! seg = O.Box.parse UrlClient.Profile.tabs in 
+
+    let menu = List.map begin fun seg' ->
+      (object
+	method selected = seg = seg'
+	method url      = Action.url UrlClient.Profile.home (access # instance # key)
+	  [IAvatar.to_string aid; fst UrlClient.Profile.tabs seg']
+	method label    = seg'
+       end)
+    end [
+      `Groups ;
+      `Forms ; 
+      `Messages ; 
+      `Images ; 
+      `Files 
+    ] in 
+
+    let main = object
+      method menu = menu
+      method body = return ignore 
+    end in 
+
+    O.Box.fill (Asset_Profile_Page_Main.render main)
+
+  end in 
+
   O.Box.fill $ O.decay begin
 
     let! details = ohm $ MAvatar.details aid in 
@@ -42,6 +70,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
       method pic     = pic
       method name    = name
       method profile = profile
+      method content = O.Box.render content 
     end)
 
   end

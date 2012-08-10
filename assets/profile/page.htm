@@ -17,6 +17,25 @@
   </div>
 
   <div class="-main">
+
+    { content | verbatim }
+
+    {@!main}
+
+      <ul class="-menu">
+	{#menu}
+	  <li{if selected} class="-selected"{/if}>
+	    <a href="{url}">{`Profile_Menu label}</a>
+	  </li>
+	{/#}
+      </ul>
+
+      <div class="-body">
+	{body|ohm|verbatim}
+      </div>
+
+    {/@}
+
   </div>
 
 </div>
@@ -52,6 +71,34 @@
     }
 
     .-empty { color: #555 }
+  }
+
+  .-main {
+    margin: 3px 0 0 256px;
+  }
+
+  ul.-menu {
+    list-style-type: none;
+    margin: 0 0 16px 0;
+    padding: 0;
+    overflow: hidden;
+
+    li { float: left }
+
+    a {
+      display: block;
+      padding: 5px 20px;
+      border: 1px solid #BBB;
+      margin-right: -1px;
+      color: #333;
+      font-size: 13px;
+    }
+
+    .-selected a {
+      background-color: #EEE;
+      color: black;
+      box-shadow: inset 0 0 15px #CCC;
+    }
   }
 
 }
