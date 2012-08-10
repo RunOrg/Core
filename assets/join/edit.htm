@@ -17,9 +17,11 @@ here.$a.click () ->
 	  </script>
         {/#}
       </ul>
-      {?picture}<img src="{this}"/>{/?}
-      <span class="-name">{name}</span> 
-      {?status}{ this | Asset_Status_Tag.render | ohm }{/?}
+      <a href="{profile}">
+	{?picture}<img src="{this}"/>{/?}
+	<span class="-name">{name}</span> 
+	{?status}{ this | Asset_Status_Tag.render | ohm }{/?}
+      </a>
     </div>
   {/@}
 
@@ -49,6 +51,10 @@ here.$a.click () ->
       height: 40px;
       float: left;
     } 
+
+    .-name {
+      color: #333;
+    }
 
     span {
       display: block;

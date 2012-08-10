@@ -1,0 +1,33 @@
+<div class="profile-groups">
+  {#this}
+    <a href="{url}">
+      { name }
+      { status | Asset_Status_Tag.render | ohm }
+    </a>
+  {else}  
+    <div class="empty-list">
+      { `Profile_NoGroups }
+    </div>
+  {/#}
+</div>
+
+<style>
+.profile-groups {
+
+  padding: 30px;
+
+  a {
+    display: block;
+    padding: 8px;
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: -1px;
+  }
+
+  .status {
+    float: right;
+    margin-top: 2px;
+  }
+
+}
+</style>

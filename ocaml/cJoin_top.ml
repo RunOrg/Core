@@ -51,4 +51,5 @@ let render kind profile status status_edit =
     method name    = profile # name
     method status  = status_tag
     method actions = actions
+    method profile = profile # url
   end)

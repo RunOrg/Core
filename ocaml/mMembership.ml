@@ -150,6 +150,10 @@ let as_user gid aid =
   let! mid = ohm $ Unique.find gid aid in
   return $ IMembership.Assert.self mid
 
+let as_viewer gid aid = 
+  let! mid = ohm $ Unique.find gid aid in
+  return $ IMembership.Assert.view mid  
+
 (* Perform changes ----------------------------------------------------------------------- *)
 
 let admin ~from gid aid what = 

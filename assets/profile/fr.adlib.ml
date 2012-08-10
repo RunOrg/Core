@@ -6,3 +6,4 @@
     | `Images -> "Photos"
     | `Messages -> "Messages"
 end
+| `Profile_NoGroups -> "Ce profil n'est inscrit dans aucun groupe"

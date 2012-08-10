@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Groups = CProfile_groups
+
 let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access -> 
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
@@ -11,6 +13,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
   let! aid = O.Box.parse IAvatar.seg in
   let! iid = ohm_req_or e404 $ O.decay (MAvatar.get_instance aid) in 
   let! ()  = true_or e404 (iid = IInstance.decay (access # iid)) in 
+
+  let  me  = aid = IAvatar.decay (access # self) in
      
   let! content = O.Box.add begin
     
@@ -33,10 +37,12 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
 
     let main = object
       method menu = menu
-      method body = return ignore 
+      method body = match seg with 
+	| `Groups -> Groups.body access aid me 
+	| _       -> Asset_Soon_Block.render ()
     end in 
 
-    O.Box.fill (Asset_Profile_Page_Main.render main)
+    O.Box.fill $ O.decay (Asset_Profile_Page_Main.render main)
 
   end in 
 

@@ -60,7 +60,7 @@ val status : 'any # MAccess.context -> 'b IGroup.id -> Status.t O.run
 
 val default : mustpay:bool -> group:IGroup.t -> avatar:IAvatar.t -> t
 
-val get : [<`Read|`IsSelf|`IsAdmin] IMembership.id -> t option O.run 
+val get : [<`View|`IsSelf|`IsAdmin] IMembership.id -> t option O.run 
 
 val as_admin :
      [<`Admin|`Write|`Bot] IGroup.id
@@ -71,7 +71,12 @@ val as_user :
      'a IGroup.id
   -> [`IsSelf] IAvatar.id
   -> [`IsSelf] IMembership.id O.run
-  
+
+val as_viewer :
+     [<`List|`Admin|`Write|`Bot] IGroup.id
+  -> 'a IAvatar.id 
+  -> [`View] IMembership.id O.run
+
 val admin :
      from:[`IsSelf] IAvatar.id
   -> [<`Admin|`Write|`Bot] IGroup.id
