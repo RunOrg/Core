@@ -8,8 +8,9 @@ module Info  = MProfileForm_info
 module Store = MProfileForm_store
 module Table = CouchDB.ReadTable(Store.DataDB)(IProfileForm)(Store.Raw)
 module All   = MProfileForm_all 
+module Data  = MProfileForm_data
 
-type data = (string * Json.t) list
+type data = Data.data 
 
 let create access aid ~kind ~hidden ~name ~data = 
 
@@ -27,15 +28,18 @@ let create access aid ~kind ~hidden ~name ~data =
     updated = None
   }) in
 
-  let who = `user (Id.gen (), IAvatar.decay (access # self)) in
+  let who  = `user (Id.gen (), IAvatar.decay (access # self)) in
+  let info = MUpdateInfo.info ~who in
 
-  let! _ = ohm $ Store.create ~id:pfid ~info:(MUpdateInfo.info ~who) ~init ~diffs:[] () in
+  let! _ = ohm $ Store.create ~id:pfid ~info ~init ~diffs:[] () in
+  let! _ = ohm $ Data.set pfid info data in
 
   return pfid
      
-let update pfid ?hidden ?name ?data access = 
+let update pfid ?hidden ?name ?(data=[]) access = 
   
   let who = `user (Id.gen (), IAvatar.decay (access # self)) in
+  let info = MUpdateInfo.info ~who in
 
   let diffs = BatList.filter_map identity 
     [ BatOption.map (fun hidden -> `Hiding hidden) hidden ;
@@ -44,9 +48,9 @@ let update pfid ?hidden ?name ?data access =
   in
     
   let! () = ohm begin 
-    if hidden <> None || name <> None || data <> None then 
-      let! _ = ohm $ Store.update ~id:(IProfileForm.decay pfid) ~diffs ~info:(MUpdateInfo.info ~who) () in
-      return () 
+    if hidden <> None || name <> None || data <> [] then
+      let! _ = ohm $ Store.update ~id:(IProfileForm.decay pfid) ~diffs ~info () in
+      if data <> [] then Data.set pfid info data else return () 
     else
       return () 
   end in
@@ -58,7 +62,7 @@ let get pfid =
   return $ Some (data # current) 
 
 let get_data pfid = 
-  return []
+  Data.get pfid 
 
 let as_admin pfid _ = 
   (* Administrator can edit profile forms *)
