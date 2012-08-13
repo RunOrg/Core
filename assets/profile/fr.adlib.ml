@@ -7,3 +7,6 @@
     | `Messages -> "Messages"
 end
 | `Profile_NoGroups -> "Ce profil n'est inscrit dans aucun groupe"
+
+| `Profile_Forms_Create -> "Nouvelle Fiche"
+| `Profile_Forms_Empty  -> "Aucune fiche disponible"

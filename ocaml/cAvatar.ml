@@ -10,7 +10,17 @@ type mini_profile = <
   pico : string option ;
   name : string ;
   nameo : string option 
->
+> ;;
+
+let name aid = 
+  
+  let! details = ohm $ MAvatar.details aid in 
+  let! name = ohm begin match details # name with 
+    | None -> AdLib.get `Anonymous
+    | Some name -> return name
+  end in 
+
+  return name 
 
 let mini_profile aid = 
   

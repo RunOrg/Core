@@ -1,0 +1,39 @@
+<div class="profile-forms">
+
+  {?create}
+    <a href="{this}" class="-create">{`Profile_Forms_Create}</a>
+  {/?}
+
+  {#list}
+  {else}
+    {?create}{else}
+      <div class="empty-list">
+        {`Profile_Forms_Empty}
+      </div>
+    {/?}
+  {/#}
+</div>
+
+<style>
+.profile-forms {
+  padding: 10px;
+  .-create {
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 0 40px #DDDDDD inset;
+    color: #AAAAAA;
+    display: block;
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    padding: 4px;
+    text-align: center;
+    text-shadow: 0 -1px 0 #FFFFFF;
+    &:hover {
+      border-color: #BBB;
+      background-color: #EEE;
+      box-shadow: 0 0 40px #CCC inset;
+      color: #888;
+    }
+  }  
+}
+</style>

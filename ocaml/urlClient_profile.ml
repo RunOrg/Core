@@ -9,6 +9,7 @@ module A = Action.Args
 open UrlClient_common
 
 let home,    def_home    = child UrlClient_members.def_home "profile"
+let newForm, def_newForm = child def_home "p/new-form"
 
 let tabs = 
   (function 
