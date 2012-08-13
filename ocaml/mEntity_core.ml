@@ -44,13 +44,11 @@ module Reflected = struct
 end
   
 module Diff = Fmt.Make(struct
-  module ConfigDiff = MEntityConfig.Diff
-  module MAvatar = IAvatar
   type json t = 
-    [ `Config  of ConfigDiff.t list
+    [ `Config  of MEntityConfig.Diff.t list
     | `Admin   of MAccess.t
     | `Access  of [ `Private | `Normal | `Public ]
-    | `Status  of [ `Draft | `Active | `Delete of MAvatar.t ]
+    | `Status  of [ `Draft | `Active | `Delete of IAvatar.t ]
     | `Version of string
     ]
 end)  

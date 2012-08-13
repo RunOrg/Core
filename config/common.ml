@@ -99,12 +99,18 @@ type vertical_data = {
   v_init : init list ;
 }
 
+type profileForm = string
+type profileForm_data = {
+  pf_id : profileForm ; 
+}
+
 type catalog = (adlib * (vertical * adlib * (adlib option)) list) list
 
-let the_catalog = ref []
-let verticals   = ref []
-let templates   = ref []
-let adlibs      = ref [] 
+let the_catalog  = ref []
+let profileForms = ref []
+let verticals    = ref []
+let templates    = ref []
+let adlibs       = ref [] 
 
 let adlib key ?(old:string option) (fr:string) = 
   let key = match key.[0] with '0' .. '9' -> "_" ^ key | _ -> key in
@@ -115,6 +121,12 @@ let groupConfig ~validation ~read = validation, read
 let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
+
+let profileForm id = 
+  profileForms := {
+    pf_id = id ;
+  } :: !profileForms ;
+  id
 
 let template id ?old ~kind ~name ?desc ?propagate 
     ?(columns=[]) ?(fields=[]) ?(join=[]) ?group ?wall ?folder ?album ?(page=[]) () = 
@@ -212,6 +224,24 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun v -> 
       let old = match v.v_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
       Printf.sprintf "%S%s -> Some `%s" v.v_id old v.v_id) (!verticals))
+    ^ "\n  | _ -> None\n" 
+
+  let profileFormId_ml () = 
+    "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
+    ^ String.concat "\n    | " (List.map (fun pf -> "`" ^ pf.pf_id) (!profileForms))
+    ^ " ]\n\n  let json_of_t = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun pf -> 
+      Printf.sprintf "`%s -> Ohm.Json.String %S" pf.pf_id pf.pf_id) (!profileForms))
+    ^ "\n\n  let t_of_json = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun pf -> 
+      Printf.sprintf " Ohm.Json.String %S -> `%s" pf.pf_id pf.pf_id) (!profileForms))
+    ^ "\n    | json -> Ohm.Json.parse_error \"vertical-id\" json"
+    ^ "\nend)\n\nlet to_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun pf -> 
+      Printf.sprintf "`%s -> %S" pf.pf_id pf.pf_id) (!profileForms))
+    ^ "\n\nlet of_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun pf -> 
+      Printf.sprintf "%S -> Some `%s" pf.pf_id pf.pf_id) (!profileForms))
     ^ "\n  | _ -> None\n" 
 
   let access = function
@@ -607,6 +637,7 @@ let build dir =
     "preConfig_VerticalId.ml", Build.verticalId_ml () ;
     "preConfig_Template.ml", Build.template_ml () ;
     "preConfig_Vertical.ml", Build.vertical_ml () ;
+    "preConfig_ProfileFormId.ml", Build.profileFormId_ml () ;
   ] in
   
   List.iter (fun (file,code) ->

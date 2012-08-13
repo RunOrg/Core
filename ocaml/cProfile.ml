@@ -5,6 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 module Groups = CProfile_groups
+module Forms  = CProfile_forms
 
 let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access -> 
 
@@ -39,6 +40,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
       method menu = menu
       method body = match seg with 
 	| `Groups -> Groups.body access aid me 
+	| `Forms  -> Forms.body access aid me 
 	| _       -> Asset_Soon_Block.render ()
     end in 
 
