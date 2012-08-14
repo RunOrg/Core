@@ -27,6 +27,8 @@ let join ~name ~label ?(required=false) typ = {
   j_type  = typ
 } 
 
+let form ~name ~label ?required typ = join ~name ~label ?required typ
+
 type field = {
   f_label : adlib ;
   f_help  : adlib option ;
@@ -89,6 +91,15 @@ let initial i_key i_tmpl ~name = {
   i_tmpl ; i_name = name 
 }
 
+type profileForm = string
+type profileForm_data = {
+  pf_id : profileForm ; 
+  pf_name : adlib ;
+  pf_subtitle : adlib option ;
+  pf_comment : bool ;
+  pf_fields : join list ;
+}
+
 type vertical = string
 type vertical_data = {
   v_id   : vertical ;
@@ -97,11 +108,7 @@ type vertical_data = {
   v_tmpl : template list ;
   v_arch : bool ;
   v_init : init list ;
-}
-
-type profileForm = string
-type profileForm_data = {
-  pf_id : profileForm ; 
+  v_pfs  : profileForm list 
 }
 
 type catalog = (adlib * (vertical * adlib * (adlib option)) list) list
@@ -122,9 +129,13 @@ let wallConfig ~read ~post = read, post
 let folderConfig = wallConfig
 let albumConfig = wallConfig
 
-let profileForm id = 
+let profileForm id ~name ?subtitle ?(comment=false) fields = 
   profileForms := {
-    pf_id = id ;
+    pf_id       = id ;
+    pf_name     = adlib ("ProfileForm_"^id^"_Name") name ;
+    pf_subtitle = BatOption.map (adlib ("ProfileForm_"^id^"_Subtitle")) subtitle ;
+    pf_comment  = comment ;
+    pf_fields   = fields ;
   } :: !profileForms ;
   id
 
@@ -144,18 +155,19 @@ let template id ?old ~kind ~name ?desc ?propagate
     t_album  = album ;
     t_fields = fields ;
     t_cols   = columns ;
-    t_propg  = propagate
+    t_propg  = propagate ;
   } :: !templates ;
   id 
 
-let vertical id ?old ?(archive=false) ~name init tmpl = 
+let vertical id ?old ?(archive=false) ~name ?(forms=[]) init tmpl = 
   verticals := {
-    v_id   = id ;
-    v_old  = old ;
-    v_name = adlib ("Vertical_"^id^"_Name") name ;
-    v_tmpl = tmpl ;
-    v_arch = archive ;
-    v_init = init ;
+    v_id    = id ;
+    v_old   = old ;
+    v_name  = adlib ("Vertical_"^id^"_Name") name ;
+    v_tmpl  = tmpl ;
+    v_arch  = archive ;
+    v_init  = init ;
+    v_pfs   = forms ;
   } :: !verticals ;
   id
 
@@ -248,6 +260,17 @@ module Build = struct
     | `Registered -> "`Registered"
     | `Viewers    -> "`Viewers"
     | `Managers   -> "`Managers"
+
+  let profileForm_ml () = 
+
+    (* The name (adlib) of the template =================================================================== *)
+    "\n\nlet name = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun pf -> Printf.sprintf "`%s -> `%s" pf.pf_id pf.pf_name) (!profileForms))
+
+    (* The subtitle (adlib) of the template =================================================================== *)
+    ^ "\n\nlet subtitle = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun pf -> Printf.sprintf "`%s -> %s" pf.pf_id 
+      (match pf.pf_subtitle with Some s -> "Some `"^s | None -> "None")) (!profileForms))       
 
   let template_ml () = 
 
@@ -564,6 +587,16 @@ module Build = struct
       end (!verticals)
     end
 
+    (* List of profile forms in a vertical, in order ----------------------------------------------- *)
+    ^ "\n\nlet profileForms = function\n  | "
+    ^ String.concat "\n  | " begin
+      List.map begin fun (vertical) -> 
+	Printf.sprintf "`%s -> [%s]" vertical.v_id
+	  (String.concat ";" 
+	     (List.map (Printf.sprintf "`%s") vertical.v_pfs))
+      end (!verticals)
+    end
+
     (* List of verticals in the catalog. ------------------------------------------------------------- *)
     ^ "\n\nmodule Catalog = struct\n\n"
     ^ "  let list = [\n    "
@@ -638,6 +671,7 @@ let build dir =
     "preConfig_Template.ml", Build.template_ml () ;
     "preConfig_Vertical.ml", Build.vertical_ml () ;
     "preConfig_ProfileFormId.ml", Build.profileFormId_ml () ;
+    "preConfig_ProfileForm.ml", Build.profileForm_ml () ;
   ] in
   
   List.iter (fun (file,code) ->

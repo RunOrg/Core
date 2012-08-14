@@ -14,4 +14,7 @@ module Kind : sig
 
   include Ohm.Fmt.FMT with type t = PreConfig_ProfileFormId.t
 
+  val to_string : t -> string
+  val of_string : string -> t option
+
 end

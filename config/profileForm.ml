@@ -2,5 +2,8 @@
 open Common
 
 (* ========================================================================== *)
-let simple = profileForm "Simple"
+let simple = profileForm "Simple" 
+  ~name:"Commentaire / Remarque"
+  ~comment:true []
+ 
 

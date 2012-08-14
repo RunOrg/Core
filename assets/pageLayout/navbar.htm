@@ -3,13 +3,13 @@
   <div id="navbar" {?account} class="-with-account" {/?}>
     <div class="-inner">
       <div class="-left">
-	<a href="{home}">RUN<strong>ORG</strong></a>
-	  <a href="{network}">{ `PageLayout_Navbar_Network }</a>
-	  <a href="{news}">{ `PageLayout_Navbar_News }</a>
-	  {?admin}<a href="{this}">{ `PageLayout_Navbar_Admin }</a>{/?}
-	  {#instances} 
-	    <a style="padding: 8px 4px" href="{url}"><img src="{pic}"/></a>
-	  {/#}
+	<a style="font-size:17px;line-height:17px" href="{home}">RUN<strong>ORG</strong></a>
+	<a href="{network}">{ `PageLayout_Navbar_Network }</a>
+	<a href="{news}">{ `PageLayout_Navbar_News }</a>
+	{?admin}<a href="{this}">{ `PageLayout_Navbar_Admin }</a>{/?}
+	{#instances} 
+  	  <a style="padding: 8px 4px" href="{url}"><img src="{pic}"/></a>
+	{/#}
       </div>
       {?account}
         <div class="-right">
@@ -77,7 +77,7 @@ setTimeout load, 2000
     border-radius: 4px 4px 4px 4px;
     display: inline-block;
     height: 24px;
-    line-height: 24px;
+    line-height: 23px;
     text-align: center;
     min-width: 18px;
     padding: 0 3px;
@@ -108,7 +108,7 @@ setTimeout load, 2000
   }
 
   a {
-    font-family: "Arial", sans-serif ;
+    font-size: 14px;
     color: white;
     text-decoration: none;
     display: block;
@@ -191,12 +191,11 @@ setTimeout load, 2000
         &.-root a {
           display: block;
           margin: 0 -1px 0 0;
-          padding: 4px 10px;
+          padding: 4px 15px;
           height: 14px;
           line-height: 14px;
-          color: black;
-          font-size: 12px;
-          font-family: "Verdana", "Arial", sans-serif;
+          color: #333;
+          font-size: 13px;
           text-decoration: none;
           border: 1px solid #555;
 

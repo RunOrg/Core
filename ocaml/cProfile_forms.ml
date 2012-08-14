@@ -18,6 +18,17 @@ let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
     let! name = ohm $ CAvatar.name aid in 
     
+    let list = List.map begin fun pfkid -> (object
+      method url      = Action.url UrlClient.Profile.newForm (access # instance # key)
+	[ IAvatar.to_string aid ; IProfileForm.Kind.to_string pfkid ]
+      method name     = PreConfig_ProfileForm.name pfkid
+      method subtitle = PreConfig_ProfileForm.subtitle pfkid 
+    end) end (PreConfig_Vertical.profileForms (access # instance # ver)) in 
+
+    let body = Asset_Profile_FormPickKind.render (object
+      method list = list
+    end) in
+
     Asset_Admin_Page.render (object
       method parents = [ (object
 	method title = CAvatar.name aid 
@@ -25,7 +36,7 @@ let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 	  [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
       end) ]
       method here  = AdLib.get `Profile_Forms_Create
-      method body  = return ignore
+      method body  = body
     end)
 
   end
