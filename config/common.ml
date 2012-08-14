@@ -263,14 +263,40 @@ module Build = struct
 
   let profileForm_ml () = 
 
-    (* The name (adlib) of the template =================================================================== *)
+    (* The name (adlib) of the form =================================================================== *)
     "\n\nlet name = function\n  | "
     ^ String.concat "\n  | " (List.map (fun pf -> Printf.sprintf "`%s -> `%s" pf.pf_id pf.pf_name) (!profileForms))
 
-    (* The subtitle (adlib) of the template =================================================================== *)
+    (* The subtitle (adlib) of the form =================================================================== *)
     ^ "\n\nlet subtitle = function\n  | "
     ^ String.concat "\n  | " (List.map (fun pf -> Printf.sprintf "`%s -> %s" pf.pf_id 
       (match pf.pf_subtitle with Some s -> "Some `"^s | None -> "None")) (!profileForms))       
+      
+    (* Is the form name a comment or just a title ? ======================================================== *)
+    ^ "\n\nlet comment = function\n  | "
+    ^ String.concat "\n  | " (List.map 
+				(fun pf -> Printf.sprintf "`%s -> %s" pf.pf_id (if pf.pf_comment then "true" else "false"))
+				(!profileForms))
+
+    (* The fields of the form ============================================================================== *)
+    ^ "\n\nlet fields = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun pf -> 
+      Printf.sprintf "`%s -> [\n    %s ]" pf.pf_id 
+	(String.concat ";\n    " 
+	   (List.map (fun j -> Printf.sprintf 
+	     "(object\n      method name = %S\n      method label = `%s\n      method required = %s\n      method edit = %s\n    end)"
+	     j.j_name j.j_label (if j.j_req then "true" else "false") 
+	     (match j.j_type with 
+	       | `Textarea -> "`Textarea"
+	       | `Checkbox -> "`Checkbox"
+	       | `LongText -> "`LongText"
+	       | `Date     -> "`Date"
+	       | `PickOne  l -> Printf.sprintf "`PickOne [%s]"
+		 (String.concat ";" (List.map (fun l -> "`" ^ l) l))
+	       | `PickMany l -> Printf.sprintf "`PickMany [%s]"
+		 (String.concat ";" (List.map (fun l -> "`" ^ l) l)))
+	    ) pf.pf_fields)
+	)) (!profileForms))
 
   let template_ml () = 
 

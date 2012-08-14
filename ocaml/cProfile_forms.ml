@@ -5,6 +5,55 @@ open Ohm.Universal
 open BatPervasives
 
 module F = MProfileForm
+
+let selectKind aid kinds access render =       
+
+  let list = List.map begin fun pfkid -> (object
+    method url      = Action.url UrlClient.Profile.newForm (access # instance # key)
+      [ IAvatar.to_string aid ; IProfileForm.Kind.to_string pfkid ]
+    method name     = PreConfig_ProfileForm.name pfkid
+    method subtitle = PreConfig_ProfileForm.subtitle pfkid 
+  end) end kinds in 
+  
+  let body = Asset_Profile_FormPickKind.render (object
+    method list = list
+  end) in
+
+  render body 
+
+let template fields = 
+  List.fold_left (fun acc field -> 
+    acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
+	begin match field # edit with 
+	  | `Checkbox
+	  | `Date
+	  | `LongText
+	  | `PickMany _ 
+	  | `PickOne  _ 
+	  | `Textarea ->
+	    (VEliteForm.textarea 
+	       ~label:(AdLib.get (field # label))
+	       (fun data -> return begin 
+		 try Json.to_string (List.assoc (field # name) data)
+		 with _ -> ""
+	       end)
+	       (fun field data -> return $ Ok (Json.String data))) 
+	end 
+  ) (OhmForm.begin_object []) fields
+
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Self_Save)
+
+let newForm aid kind access render =
+
+  let fields = PreConfig_ProfileForm.fields kind in
+  let iscomm = PreConfig_ProfileForm.comment kind in
+ 
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res -> return res end in 
+
+  let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.empty) in
+  let url  = OhmBox.reaction_endpoint post () in
+
+  render (OhmForm.render form url)
   
 let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
@@ -14,32 +63,36 @@ let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
   let! iid = ohm_req_or e404 $ O.decay (MAvatar.get_instance aid) in 
   let! ()  = true_or e404 (iid = IInstance.decay (access # iid)) in 
 
-  O.Box.fill $ O.decay begin 
+  let render body = 
+    O.Box.fill $ O.decay begin 
+      
+      let! name = ohm $ CAvatar.name aid in 
+      
+      Asset_Admin_Page.render (object
+	method parents = [ (object
+	  method title = CAvatar.name aid 
+	  method url   = Action.url UrlClient.Profile.home (access # instance # key) 
+	    [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
+	end) ]
+	method here  = AdLib.get `Profile_Forms_Create
+	method body  = body
+      end)
+	
+    end
+  in
 
-    let! name = ohm $ CAvatar.name aid in 
-    
-    let list = List.map begin fun pfkid -> (object
-      method url      = Action.url UrlClient.Profile.newForm (access # instance # key)
-	[ IAvatar.to_string aid ; IProfileForm.Kind.to_string pfkid ]
-      method name     = PreConfig_ProfileForm.name pfkid
-      method subtitle = PreConfig_ProfileForm.subtitle pfkid 
-    end) end (PreConfig_Vertical.profileForms (access # instance # ver)) in 
+  let kinds = PreConfig_Vertical.profileForms (access # instance # ver) in
 
-    let body = Asset_Profile_FormPickKind.render (object
-      method list = list
-    end) in
+  let! kind = O.Box.parse OhmBox.Seg.string in 
+  let  kind =
+    match IProfileForm.Kind.of_string kind with Some kind -> Some kind | None ->
+      match kinds with [kind] -> Some kind | _ -> None
+  in
 
-    Asset_Admin_Page.render (object
-      method parents = [ (object
-	method title = CAvatar.name aid 
-	method url   = Action.url UrlClient.Profile.home (access # instance # key) 
-	  [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
-      end) ]
-      method here  = AdLib.get `Profile_Forms_Create
-      method body  = body
-    end)
-
-  end
+  match kind with 
+    | Some kind -> newForm aid kind access render
+    | None when kinds = [] -> e404
+    | None -> selectKind aid kinds access render
 
 end
 

@@ -28,12 +28,12 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
 	  [IAvatar.to_string aid; fst UrlClient.Profile.tabs seg']
 	method label    = seg'
        end)
-    end [
-      `Groups ;
-      `Forms ; 
-      `Messages ; 
-      `Images ; 
-      `Files 
+    end $ BatList.filter_map identity [
+      Some `Groups ;
+      (if PreConfig_Vertical.profileForms (access # instance # ver) = [] then None else Some `Forms) ; 
+      Some `Messages ; 
+      Some `Images ; 
+      Some `Files 
     ] in 
 
     let main = object
