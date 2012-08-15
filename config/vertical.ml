@@ -375,6 +375,42 @@ let coproVolunteer = vertical "CoproVolunteer"
 
 (* ========================================================================== *)
 
+let elementarySchool = vertical "ElementarySchool"
+  ~name:"Ecoles primaires"
+  ~forms:ProfileForm.([ simple ])
+  Template.([
+    initial "entity.sample.forum-public.classified.name" forum
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
+    initial "entity.sample.forum-public.user-support.name" forum
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
+    initial "entity.sample.group-collaborative.school-teachers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolTeachersName" "Enseignants et équipe éducative") ;
+    initial "entity.sample.group-collaborative.school-parents.name" groupSchoolParents
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolParentsName" "Parents d'élèves") ;
+    initial "entity.sample.group-collaborative.school-grade-cp.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCpName" "Classe de CP") ;
+    initial "entity.sample.group-collaborative.school-grade-ce1.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe1Name" "Classe de CE1") ;
+    initial "entity.sample.group-collaborative.school-grade-ce2.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe2Name" "Classe de CE2") ;
+    initial "entity.sample.group-collaborative.school-grade-cm1.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm1Name" "Classe de CM1") ;
+    initial "entity.sample.group-collaborative.school-grade-cm2.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm2Name" "Classe de CM2") ;
+  ])
+  Template.([
+    groupSimple ;
+    groupCollaborative ;
+    pollSimple ;
+    pollYearly ;
+    courseSimple ;
+    eventSimple ;
+    eventMeeting ;
+  ])
+;;
+
+(* ========================================================================== *)
+
 let ess = vertical "Ess"
   ~old:"v:ess"
   ~name:"Association Economie Sociale et Solidaire"
@@ -840,30 +876,19 @@ let salleSport = vertical "SalleSport"
     eventMeeting ;
   ])
 ;;
+
 (* ========================================================================== *)
 
-let elementarySchool = vertical "ElementarySchool"
-  ~name:"Ecoles primaires"
-  ~forms:ProfileForm.([ simple ])
+(*let simple = vertical "SectionSportEtudes"
+  ~name:"Section Sport-études"
+  ~forms:ProfileForm.([ simple ; test ])
   Template.([
+    initial "entity.sample.groupe-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs" ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.school-teachers.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolTeachersName" "Enseignants et équipe éducative") ;
-    initial "entity.sample.group-collaborative.school-parents.name" groupSchoolParents
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolParentsName" "Parents d'élèves") ;
-    initial "entity.sample.group-collaborative.school-grade-cp.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCpName" "Classe de CP") ;
-    initial "entity.sample.group-collaborative.school-grade-ce1.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe1Name" "Classe de CE1") ;
-    initial "entity.sample.group-collaborative.school-grade-ce2.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe2Name" "Classe de CE2") ;
-    initial "entity.sample.group-collaborative.school-grade-cm1.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm1Name" "Classe de CM1") ;
-    initial "entity.sample.group-collaborative.school-grade-cm2.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm2Name" "Classe de CM2") ;
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg")
   ])
   Template.([
     groupSimple ;
@@ -873,9 +898,11 @@ let elementarySchool = vertical "ElementarySchool"
     courseSimple ;
     eventSimple ;
     eventMeeting ;
+    eventAg ;
+    eventPetition ;
   ])
 ;;
-
+*)
 (* ========================================================================== *)
 
 let simple = vertical "Simple"
