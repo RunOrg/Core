@@ -55,7 +55,7 @@ module All : sig
 
   val by_avatar :
        IAvatar.t 
-    -> [`Admin] # MAccess.context
+    -> [`IsAdmin] # MAccess.context
     -> ([`Edit] IProfileForm.id * Info.t) list O.run
 
   val mine : 

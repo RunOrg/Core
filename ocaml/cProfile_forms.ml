@@ -6,7 +6,7 @@ open BatPervasives
 
 module F = MProfileForm
 
-module HiddenFmt = Fmt.Bool
+(* Selecting the kind of profile form to be created ================================================ *)
 
 let selectKind aid kinds access render =       
 
@@ -23,12 +23,16 @@ let selectKind aid kinds access render =
 
   render body 
 
+(* The form template for creating/editing profile forms ============================================ *)
+
+module HiddenFmt = Fmt.Bool
+
 let template iscomm fields = 
 
   OhmForm.begin_object (fun ~name ~data ~hidden -> (object
-    method name  = name
-    method data  = data
-    method hidde = hidden 
+    method name   = name
+    method data   = data
+    method hidden = hidden 
   end))
 
   |> OhmForm.append (fun f name -> return $ f ~name) 
@@ -95,37 +99,73 @@ let template iscomm fields =
 
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Profile_Form_Edit_Save)
 
+(* Creating a new profile form of a selected kind ================================================== *)
+
 let newForm aid kind access render =
 
   let fields = PreConfig_ProfileForm.fields kind in
   let iscomm = PreConfig_ProfileForm.comment kind in
  
-  let! post = O.Box.react Fmt.Unit.fmt begin fun _ _ json res -> 
-    return res
+  let template = template iscomm fields in 
+
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
+
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template ~source:src in
+
+    (* Extract the result for the form *)
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+
+    (* Save the changes to the database *)
+    let! pfid = ohm $ O.decay (MProfileForm.create access aid 
+			      ~kind
+			      ~hidden:(result # hidden) 
+			      ~name:(result # name) 
+			      ~data:(result # data))
+    in
+    
+    (* Redirect to main page *)
+
+    let url = 
+      Action.url UrlClient.Profile.home (access # instance # key) 
+	[ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string pfid ] 
+    in  
+ 
+    return $ Action.javascript (Js.redirect url ()) res
 
   end in 
 
-  let form = OhmForm.create ~template:(template iscomm fields) ~source:(OhmForm.empty) in
+  let form = OhmForm.create ~template ~source:(OhmForm.empty) in
   let url  = OhmBox.reaction_endpoint post () in
 
   render (Asset_Profile_FormEdit.render (OhmForm.render form url))
   
+(* Entire creation process for profile forms ======================================================= *)
+
 let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 
+  let! access = req_or e404 (CAccess.admin access) in 
   let! aid = O.Box.parse IAvatar.seg in
   let! iid = ohm_req_or e404 $ O.decay (MAvatar.get_instance aid) in 
   let! ()  = true_or e404 (iid = IInstance.decay (access # iid)) in 
 
   let render body = 
-    O.Box.fill $ O.decay begin 
+    O.Box.fill begin 
       
-      let! name = ohm $ CAvatar.name aid in 
+      let! name = ohm $ O.decay (CAvatar.name aid) in 
       
       Asset_Admin_Page.render (object
 	method parents = [ (object
-	  method title = CAvatar.name aid 
+	  method title = return name
 	  method url   = Action.url UrlClient.Profile.home (access # instance # key) 
 	    [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
 	end) ]
@@ -151,6 +191,8 @@ let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
 end
 
+(* Listing available profile forms ================================================================= *)
+
 let body access aid me = 
 
   let create = 
@@ -159,8 +201,41 @@ let body access aid me =
 	      [ IAvatar.to_string aid ] ) 
   in
 
+  let! list = ohm begin
+    match CAccess.admin access with 
+      | Some access -> let! list = ohm $ MProfileForm.All.by_avatar aid access in
+		       return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
+      | None when me -> let! list = ohm $ MProfileForm.All.mine access in
+			return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
+      | None -> return []
+  end in 
+
+  let! list = ohm $ Run.list_filter begin fun (id,info) ->
+
+    let url = 
+      Action.url UrlClient.Profile.home (access # instance # key) 
+	[ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string id ]
+    in
+     
+    let  time, author = BatOption.default info.MProfileForm.Info.created info.MProfileForm.Info.updated in     
+    let! author = ohm $ CAvatar.mini_profile author in
+    let! now = ohmctx (#time) in
+
+    let  text = OhmText.cut ~ellipsis:"…" 100 $ MRich.OrText.to_text info.MProfileForm.Info.name in   
+
+    return $ Some (object
+      method url = url
+      method author = author
+      method time = (time,now)
+      method name = text
+      method kind = PreConfig_ProfileForm.name info.MProfileForm.Info.kind 
+      method hidden = info.MProfileForm.Info.hidden 
+    end)
+    
+  end list in
+
   Asset_Profile_Forms.render (object
     method create = create
-    method list = []
+    method list = list
   end)
 

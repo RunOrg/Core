@@ -11,6 +11,7 @@ end
 | `Profile_Forms_Create -> "Nouvelle Fiche"
 | `Profile_Forms_Empty  -> "Aucune fiche disponible"
 
+| `Profile_Form_Hidden -> "Secret"
 | `Profile_Form_Create_Question -> "Quel type de fiche souhaitez-vous créer ?"
 | `Profile_Form_Edit_Comment -> "Commentaire"
 | `Profile_Form_Edit_Title -> "Titre"

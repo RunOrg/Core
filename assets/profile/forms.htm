@@ -1,10 +1,24 @@
 <div class="profile-forms">
 
   {?create}
-    <a href="{this}" class="-create">{`Profile_Forms_Create}</a>
+  <div class="-create">
+    <a href="{this}" style="display:inline-block" class="action-button -green">{`Profile_Forms_Create}</a>
+  </div>
   {/?}
 
   {#list}
+    <a href="{url}" class="-form">
+      <span class="-name">{name}</span>     
+      <span class="-info">
+	<span class="-time">{`DateRelative time}</span> &middot;
+	{=author}
+  	  {?pico}<img src="{this}"/>{/?}
+	  <span class="-author">{name}</span>
+	{/=} 
+	<span class="-kind">{`PreConfig kind}</span>
+	{if hidden}<span class="-hidden">{`Profile_Form_Hidden}</span>{/if}      
+      </span>
+    </a>
   {else}
     {?create}{else}
       <div class="empty-list">
@@ -16,24 +30,48 @@
 
 <style>
 .profile-forms {
-  padding: 10px;
+  margin-top: -1px;
   .-create {
-    border: 1px solid #CCCCCC;
-    box-shadow: 0 0 40px #DDDDDD inset;
-    color: #AAAAAA;
-    display: block;
-    font-size: 18px;
-    height: 40px;
-    line-height: 40px;
-    padding: 4px;
     text-align: center;
-    text-shadow: 0 -1px 0 #FFFFFF;
+  }
+  .-create, .-form {
+    display: block;
+    padding: 16px 8px;
+    border-top: 1px solid #DDD;
+    text-shadow: 0 -1px 0 #FFF;
+  }  
+  .-form {
     &:hover {
-      border-color: #BBB;
       background-color: #EEE;
       box-shadow: 0 0 40px #CCC inset;
-      color: #888;
     }
-  }  
+    .-name {
+      display: block;
+      font-size: 15px;
+      padding: 2px 0 8px;
+      color: #333
+    }
+    .-info {
+      color: #888;
+      display: block;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: right;
+    }
+    .-kind {
+      color: #555;
+      float: left;      
+      margin-right: 8px;
+    }
+    img {
+      height: 20px;
+      vertical-align: top;
+    }
+    .-hidden {
+      float: left;
+      color: #C55;
+      font-weight: bold;
+    }
+  }
 }
 </style>

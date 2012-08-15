@@ -15,7 +15,7 @@ module ByAvatar = CouchDB.DocView(struct
   module Doc    = Store.Raw
   module Design = Store.Design
   let name = "by_avatar"
-  let map = "emit(doc.c.aid,doc.c.c[0])"
+  let map = "emit([doc.c.aid,doc.c.c[0]])"
 end)
 
 let by_avatar aid _ = 
@@ -38,7 +38,7 @@ module Mine = CouchDB.DocView(struct
   module Doc    = Store.Raw
   module Design = Store.Design
   let name = "mine"
-  let map = "if (!doc.c.h) emit(doc.c.aid,doc.c.c[0])"
+  let map = "if (!doc.c.h) emit([doc.c.aid,doc.c.c[0]])"
 end)
 
 let mine access = 

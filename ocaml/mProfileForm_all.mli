@@ -2,7 +2,7 @@
 
 val by_avatar :
      IAvatar.t 
-  -> [`Admin] # MAccess.context
+  -> [`IsAdmin] # MAccess.context
   -> ([`Edit] IProfileForm.id * MProfileForm_info.t) list O.run
   
 val mine : 
