@@ -3,6 +3,7 @@
 | `Profile_NoGroups
 
 | `Profile_Forms_Create
+| `Profile_Forms_Edit
 | `Profile_Forms_Empty
 
 | `Profile_Form_Hidden

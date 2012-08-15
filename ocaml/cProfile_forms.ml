@@ -210,6 +210,91 @@ let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
 end
 
+(* Editing process for profile forms =============================================================== *)
+
+let () = CClient.define UrlClient.Profile.def_editForm begin fun access ->
+
+  let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
+
+  let! access = req_or e404 (CAccess.admin access) in 
+  let! pfid = O.Box.parse IProfileForm.seg in
+  let  pfid = MProfileForm.as_admin pfid access in 
+
+  let! info = ohm_req_or e404 $ O.decay (MProfileForm.get pfid) in
+  let! ()  = true_or e404 (info.MProfileForm.Info.iid = IInstance.decay (access # iid)) in 
+
+  let  aid = info.MProfileForm.Info.aid in 
+  let kind = info.MProfileForm.Info.kind in 
+
+  let fields = PreConfig_ProfileForm.fields kind in
+  let iscomm = PreConfig_ProfileForm.comment kind in
+ 
+  let template = template iscomm fields in 
+
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
+
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template ~source:src in
+
+    (* Extract the result for the form *)
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+
+    (* Save the changes to the database *)
+    let! () = ohm $ O.decay (MProfileForm.update pfid
+			      ~hidden:(result # hidden) 
+			      ~name:(result # name) 
+			      ~data:(result # data)
+			      access)
+    in
+    
+    (* Redirect to main page *)
+
+    let url = 
+      Action.url UrlClient.Profile.home (access # instance # key) 
+	[ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string pfid ] 
+    in  
+ 
+    return $ Action.javascript (Js.redirect url ()) res
+
+  end in 
+
+  O.Box.fill begin 
+    
+    let! name = ohm $ O.decay (CAvatar.name aid) in 
+    let! data = ohm $ O.decay (MProfileForm.get_data pfid) in 
+
+    let seed = object
+      method name = info.MProfileForm.Info.name
+      method hidden = info.MProfileForm.Info.hidden
+      method data = data
+    end in 
+    
+    let form = OhmForm.create ~template ~source:(OhmForm.from_seed seed) in
+    let url  = OhmBox.reaction_endpoint post () in
+    
+    let body = Asset_Profile_FormEdit.render (OhmForm.render form url) in
+
+    Asset_Admin_Page.render (object
+      method parents = [ (object
+	method title = return name
+	method url   = Action.url UrlClient.Profile.home (access # instance # key) 
+	  [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string pfid ]
+      end) ]
+      method here  = AdLib.get `Profile_Forms_Edit
+      method body  = body
+    end)
+
+  end      
+
+end
+
 (* Listing available profile forms ================================================================= *)
 
 let body access aid me render = 
