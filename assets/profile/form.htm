@@ -11,12 +11,17 @@
 
   {#fields}
     <div class="-field">
-      <div class="-label">{label}</div>
+      <div class="-label">{label|ohm}</div>
       <div class="-value">{value|ohm}</div>
     </div>
   {/#}
 
 </div>
+
+{@!text}{this}{/@}
+{@!date}{`WeekDate this}{/@}
+{@!checkbox}<img src="{if this}/public/icon/tick.png{else}/public/icon/cross.png{/if}"/>{/@}
+{@!pick}{#this} <span class="-pick">{this|ohm}</span> {/#}{/@}
 
 <style>
 .profile-form {
@@ -29,6 +34,30 @@
   .-comment {
     padding: 0 10px;
     color: #333;
+  }
+  .-field { 
+    overflow: hidden; 
+    margin: 10px 0; 
+    font-size: 14px;
+  }
+  .-label {
+    text-align: right;
+    float: left;
+    width: 200px;
+    color: #888;
+  }
+  .-value {
+    margin-left: 220px;
+    color: #333;
+  }
+  .-pick {
+    background-color: #88BBEE;
+    border-radius: 4px 4px 4px 4px;
+    color: white;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1px 6px;
+    text-shadow: 0 1px 0 #5588BB;
   }
 }
 </style>

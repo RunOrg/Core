@@ -283,6 +283,37 @@ let body access aid me render =
 
   (* Draw the individual form *)
     
+  let fields = BatList.filter_map begin fun field ->
+    try let data  = List.assoc (field # name) data in
+	let label = AdLib.write (field # label) in
+	let value = match field # edit with 
+	  | `Textarea
+	  | `LongText -> 
+	    let text = Json.to_string data in 
+	    Asset_Profile_Form_Text.render text
+	  | `Date ->
+	    let date = Json.to_string data in 
+	    let t = match MFmt.float_of_date date with Some x -> x | None -> raise Not_found in
+	    Asset_Profile_Form_Date.render t 
+	  | `PickOne  list -> 	    
+	    let pick = Json.to_int data in
+	    let text = AdLib.write (List.nth list pick) in
+	    Asset_Profile_Form_Pick.render [text]
+	  | `PickMany list ->
+	    let picks = Json.to_list Json.to_int data in 
+	    let texts = List.map (fun i -> AdLib.write (List.nth list i)) picks in
+	    Asset_Profile_Form_Pick.render texts
+	  | `Checkbox ->
+	    let checked = data = Json.Bool true in
+	    Asset_Profile_Form_Checkbox.render checked
+	in
+	Some (object
+	  method label = label
+	  method value = value
+	end)
+    with _ -> None
+  end (PreConfig_ProfileForm.fields info.MProfileForm.Info.kind) in
+
   let data = object
     method back = Action.url UrlClient.Profile.home (access # instance # key) 
       [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
@@ -291,7 +322,7 @@ let body access aid me render =
 		[ IProfileForm.to_string pfid ])
       else None
     method body = MRich.OrText.to_html info.MProfileForm.Info.name 
-    method fields = []
+    method fields = fields
   end in
 
   O.Box.fill $ O.decay (render (Asset_Profile_Form.render data))
