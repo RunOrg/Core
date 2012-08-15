@@ -8,7 +8,7 @@ module Info = MProfileForm_info
 
 module InfoDiff = Fmt.Make(struct
   type json t = 
-    [ `Name   "n" of string
+    [ `Name   "n" of MRich.OrText.t
     | `Hiding "h" of bool
     | `Author "a" of IAvatar.t ]
 end)

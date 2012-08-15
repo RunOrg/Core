@@ -74,6 +74,24 @@ let to_html (doc:doc) html =
 
   List.iter recprint doc
 
+let to_text (doc:doc) = 
+
+  let b = Buffer.create 1024 in
+  let rec recprint = function 
+    | `TEXT t   -> Buffer.add_string b t 
+    | `BR       -> Buffer.add_char b '\n'
+    | `B l    
+    | `I l      -> List.iter recprint l 
+    | `P l 
+    | `INDENT l -> Buffer.add_char b '\n' ; List.iter recprint l ; Buffer.add_char b '\n'
+    | `UL l
+    | `OL l     -> List.iter (fun l -> Buffer.add_char b '\n' ; List.iter recprint l ; Buffer.add_char b '\n') l
+  in
+
+  List.iter recprint doc ;
+
+  Buffer.contents b
+
 let whitespace = 
   Str.regexp "^\\([ \t\r\n]\\|\194\160\\|&nbsp;\\|&emsp;\\|&ensp;\\)*$"
 
@@ -240,6 +258,10 @@ module OrText = struct
   let to_html = function
     | `Rich r -> to_html r 
     | `Text t -> Html.str (raw_html t)
+
+  let to_text = function 
+    | `Rich r -> to_text r
+    | `Text t -> t
 
   let length = function 
     | `Rich r -> length r

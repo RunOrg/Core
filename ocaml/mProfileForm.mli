@@ -5,7 +5,7 @@ module Info : sig
     aid : IAvatar.t ;
     iid : IInstance.t ;
     kind : IProfileForm.Kind.t ;
-    name : string ;
+    name : MRich.OrText.t ;
     hidden : bool ;
     created : float * IAvatar.t ;
     updated : (float * IAvatar.t) option 
@@ -19,14 +19,14 @@ val create :
   -> IAvatar.t 
   -> kind:IProfileForm.Kind.t
   -> hidden:bool 
-  -> name:string
+  -> name:MRich.OrText.t
   -> data:data
   -> IProfileForm.t O.run
 
 val update : 
      [`Edit] IProfileForm.id
   -> ?hidden:bool
-  -> ?name:string
+  -> ?name:MRich.OrText.t
   -> ?data:data
   -> 'any # MAccess.context
   -> unit O.run

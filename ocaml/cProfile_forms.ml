@@ -26,8 +26,8 @@ let selectKind aid kinds access render =
 let template iscomm fields = 
 
   OhmForm.begin_object (fun ~name ~data ~hidden -> (object
-    method name = name
-    method data = data
+    method name  = name
+    method data  = data
     method hidde = hidden 
   end))
 
@@ -35,13 +35,23 @@ let template iscomm fields =
       (if iscomm then 
 	  VEliteForm.rich 
 	    ~label:(AdLib.get `Profile_Form_Edit_Comment)
-	    (fun seed -> return $ seed # name)
-	    (OhmForm.required (AdLib.get `Profile_Form_Edit_Required))
+	    (fun seed -> return $ Html.to_html_string (MRich.OrText.to_html (seed # name)))
+	    (fun field text -> let text = BatString.strip text in 
+			       if text = "" then 
+				 let! error = ohm $ AdLib.get `Profile_Form_Edit_Required in
+				 return $ Bad (field,error)
+			       else 
+				 return $ Ok (`Rich (MRich.parse text)))
        else 
 	  VEliteForm.text
 	    ~label:(AdLib.get `Profile_Form_Edit_Title)
-	    (fun seed -> return $ seed # name)
-	    (OhmForm.required (AdLib.get `Profile_Form_Edit_Required)))
+	    (fun seed -> return $ MRich.OrText.to_text (seed # name))
+	    (fun field text -> let text = BatString.strip text in 
+			       if text = "" then
+				 let! error = ohm $ AdLib.get `Profile_Form_Edit_Required in 
+				 return $ Bad (field,error)
+			       else
+				 return $ Ok (`Text text)))
 	  	  
   |> OhmForm.append (fun f data -> return $ f ~data) begin
     List.fold_left (fun acc field -> 
@@ -90,7 +100,10 @@ let newForm aid kind access render =
   let fields = PreConfig_ProfileForm.fields kind in
   let iscomm = PreConfig_ProfileForm.comment kind in
  
-  let! post = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res -> return res end in 
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ _ json res -> 
+    return res
+
+  end in 
 
   let form = OhmForm.create ~template:(template iscomm fields) ~source:(OhmForm.empty) in
   let url  = OhmBox.reaction_endpoint post () in

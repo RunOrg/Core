@@ -10,7 +10,7 @@ module T = struct
     aid         : IAvatar.t ;
     iid         : IInstance.t ;
     kind    "k" : IProfileForm.Kind.t ;
-    name    "n" : string ;
+    name    "n" : MRich.OrText.t ;
     hidden  "h" : bool ;
     created "c" : float * IAvatar.t ;
     updated "u" : (float * IAvatar.t) option 
