@@ -881,7 +881,7 @@ let elementarySchool = vertical "ElementarySchool"
 let simple = vertical "Simple"
   ~old:"v:simple"
   ~name:"RunOrg Standard"
-  ~forms:ProfileForm.([ simple ])
+  ~forms:ProfileForm.([ simple ; test ])
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;

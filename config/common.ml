@@ -284,7 +284,7 @@ module Build = struct
       Printf.sprintf "`%s -> [\n    %s ]" pf.pf_id 
 	(String.concat ";\n    " 
 	   (List.map (fun j -> Printf.sprintf 
-	     "(object\n      method name = %S\n      method label = `%s\n      method required = %s\n      method edit = %s\n    end)"
+	     "(object\n      method name = %S\n      method label = `PreConfig `%s\n      method required = %s\n      method edit = %s\n    end)"
 	     j.j_name j.j_label (if j.j_req then "true" else "false") 
 	     (match j.j_type with 
 	       | `Textarea -> "`Textarea"
@@ -292,9 +292,9 @@ module Build = struct
 	       | `LongText -> "`LongText"
 	       | `Date     -> "`Date"
 	       | `PickOne  l -> Printf.sprintf "`PickOne [%s]"
-		 (String.concat ";" (List.map (fun l -> "`" ^ l) l))
+		 (String.concat ";" (List.map (fun l -> "`PreConfig `" ^ l) l))
 	       | `PickMany l -> Printf.sprintf "`PickMany [%s]"
-		 (String.concat ";" (List.map (fun l -> "`" ^ l) l)))
+		 (String.concat ";" (List.map (fun l -> "`PreConfig `" ^ l) l)))
 	    ) pf.pf_fields)
 	)) (!profileForms))
 
