@@ -1,10 +1,10 @@
 <div class="profile-forms">
 
-  {?create}
   <div class="-create">
-    <a href="{this}" style="display:inline-block" class="action-button -green">{`Profile_Forms_Create}</a>
+    {?create}
+      <a href="{this}" style="display:inline-block" class="action-button -green">{`Profile_Forms_Create}</a>
+    {/?}
   </div>
-  {/?}
 
   {#list}
     <a href="{url}" class="-form">
@@ -32,15 +32,16 @@
 .profile-forms {
   margin-top: -1px;
   .-create {
+    padding: 5px;
     text-align: center;
   }
   .-create, .-form {
     display: block;
-    padding: 16px 8px;
     border-top: 1px solid #DDD;
     text-shadow: 0 -1px 0 #FFF;
   }  
   .-form {
+    padding: 16px 8px;
     &:hover {
       background-color: #EEE;
       box-shadow: 0 0 40px #CCC inset;
