@@ -33,3 +33,7 @@ end)
 let to_string = function
   | `text  t -> return t
   | `label l -> AdLib.get (`PreConfig l)
+
+let to_html = function
+  | `text  t -> return (Html.esc t) 
+  | `label l -> AdLib.write (`PreConfig l)
