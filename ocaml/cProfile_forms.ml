@@ -6,6 +6,8 @@ open BatPervasives
 
 module F = MProfileForm
 
+module HiddenFmt = Fmt.Bool
+
 let selectKind aid kinds access render =       
 
   let list = List.map begin fun pfkid -> (object
@@ -21,27 +23,67 @@ let selectKind aid kinds access render =
 
   render body 
 
-let template fields = 
-  List.fold_left (fun acc field -> 
-    acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
-	begin match field # edit with 
-	  | `Checkbox
-	  | `Date
-	  | `LongText
-	  | `PickMany _ 
-	  | `PickOne  _ 
-	  | `Textarea ->
-	    (VEliteForm.textarea 
-	       ~label:(AdLib.get (field # label))
-	       (fun data -> return begin 
-		 try Json.to_string (List.assoc (field # name) data)
-		 with _ -> ""
-	       end)
-	       (fun field data -> return $ Ok (Json.String data))) 
-	end 
-  ) (OhmForm.begin_object []) fields
+let template iscomm fields = 
 
-  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Self_Save)
+  OhmForm.begin_object (fun ~name ~data ~hidden -> (object
+    method name = name
+    method data = data
+    method hidde = hidden 
+  end))
+
+  |> OhmForm.append (fun f name -> return $ f ~name) 
+      (if iscomm then 
+	  VEliteForm.rich 
+	    ~label:(AdLib.get `Profile_Form_Edit_Comment)
+	    (fun seed -> return $ seed # name)
+	    (OhmForm.required (AdLib.get `Profile_Form_Edit_Required))
+       else 
+	  VEliteForm.text
+	    ~label:(AdLib.get `Profile_Form_Edit_Title)
+	    (fun seed -> return $ seed # name)
+	    (OhmForm.required (AdLib.get `Profile_Form_Edit_Required)))
+	  	  
+  |> OhmForm.append (fun f data -> return $ f ~data) begin
+    List.fold_left (fun acc field -> 
+      acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
+	  begin match field # edit with 
+	    | `Checkbox
+	    | `Date
+	    | `LongText
+	    | `PickMany _ 
+	    | `PickOne  _ 
+	    | `Textarea ->
+	      (VEliteForm.textarea 
+		 ~label:(AdLib.get (field # label))
+		 (fun seed -> return begin 
+		   try Json.to_string (List.assoc (field # name) (seed # data))
+		   with _ -> ""
+		 end)
+		 (fun field data -> return $ Ok (Json.String data))) 
+	  end 
+    ) (OhmForm.begin_object []) fields
+  end
+
+  |> OhmForm.append (fun f hidden -> return $ f ~hidden) 
+      (VEliteForm.radio 
+	 ~label:(AdLib.get `Profile_Form_Edit_Hidden)
+	 ~format:HiddenFmt.fmt
+	 ~source:[
+	   true, Asset_Profile_StatusRadio.render (object
+	     method status = Some `Secret
+	     method label  = AdLib.get (`Profile_Form_Edit_Hidden_Label true)
+	   end) ;
+	   false, Asset_Profile_StatusRadio.render (object
+	     method status = None
+	     method label  = AdLib.get (`Profile_Form_Edit_Hidden_Label false)
+	   end) ]
+	 (fun seed -> return $ Some (seed # hidden))
+	 (fun field hidden_opt -> match hidden_opt with 
+	   | Some hidden -> return $ Ok hidden 
+	   | None -> let! error = ohm $ AdLib.get `Profile_Form_Edit_Required in 
+		     return $ Bad (field,error)))
+
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Profile_Form_Edit_Save)
 
 let newForm aid kind access render =
 
@@ -50,10 +92,10 @@ let newForm aid kind access render =
  
   let! post = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res -> return res end in 
 
-  let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.empty) in
+  let form = OhmForm.create ~template:(template iscomm fields) ~source:(OhmForm.empty) in
   let url  = OhmBox.reaction_endpoint post () in
 
-  render (OhmForm.render form url)
+  render (Asset_Profile_FormEdit.render (OhmForm.render form url))
   
 let () = CClient.define UrlClient.Profile.def_newForm begin fun access ->
 
@@ -103,7 +145,7 @@ let body access aid me =
       Some (Action.url UrlClient.Profile.newForm (access # instance # key)
 	      [ IAvatar.to_string aid ] ) 
   in
-  
+
   Asset_Profile_Forms.render (object
     method create = create
     method list = []

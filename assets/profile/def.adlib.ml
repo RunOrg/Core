@@ -6,3 +6,9 @@
 | `Profile_Forms_Empty
 
 | `Profile_Form_Create_Question 
+| `Profile_Form_Edit_Comment
+| `Profile_Form_Edit_Title
+| `Profile_Form_Edit_Required
+| `Profile_Form_Edit_Hidden
+| `Profile_Form_Edit_Hidden_Label of bool 
+| `Profile_Form_Edit_Save 
