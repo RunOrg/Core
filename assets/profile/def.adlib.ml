@@ -13,3 +13,5 @@
 | `Profile_Form_Edit_Hidden
 | `Profile_Form_Edit_Hidden_Label of bool 
 | `Profile_Form_Edit_Save 
+| `Profile_Form_Edit 
+| `Profile_Form_Back 

@@ -193,49 +193,86 @@ end
 
 (* Listing available profile forms ================================================================= *)
 
-let body access aid me = 
+let body access aid me render = 
 
-  let create = 
-    if CAccess.admin access = None then None else 
-      Some (Action.url UrlClient.Profile.newForm (access # instance # key)
-	      [ IAvatar.to_string aid ] ) 
-  in
+  let! pfid = O.Box.parse IProfileForm.seg in 
+  let! item = ohm $ O.decay (MProfileForm.access pfid access) in
 
-  let! list = ohm begin
-    match CAccess.admin access with 
-      | Some access -> let! list = ohm $ MProfileForm.All.by_avatar aid access in
-		       return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
-      | None when me -> let! list = ohm $ MProfileForm.All.mine access in
-			return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
-      | None -> return []
+  (* When the requested item is not available, draw the list of items *)
+
+  let no_item = O.Box.fill $ O.decay begin 
+    
+    let! list = ohm begin
+      match CAccess.admin access with 
+	| Some access -> let! list = ohm $ MProfileForm.All.by_avatar aid access in
+			 return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
+	| None when me -> let! list = ohm $ MProfileForm.All.mine access in
+			  return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
+	| None -> return []
+    end in     
+    
+    let create = 
+      if CAccess.admin access = None then None else 
+	Some (Action.url UrlClient.Profile.newForm (access # instance # key)
+		[ IAvatar.to_string aid ] ) 
+    in
+    
+    let! list = ohm $ Run.list_filter begin fun (id,info) ->
+      
+      let url = 
+	Action.url UrlClient.Profile.home (access # instance # key) 
+	  [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string id ]
+      in
+      
+      let  time, author = BatOption.default info.MProfileForm.Info.created info.MProfileForm.Info.updated in     
+      let! author = ohm $ CAvatar.mini_profile author in
+      let! now = ohmctx (#time) in
+      
+      let  text = OhmText.cut ~ellipsis:"…" 100 $ MRich.OrText.to_text info.MProfileForm.Info.name in   
+      
+      return $ Some (object
+	method url = url
+	method author = author
+	method time = (time,now)
+	method name = text
+	method kind = PreConfig_ProfileForm.name info.MProfileForm.Info.kind 
+	method hidden = info.MProfileForm.Info.hidden 
+      end)
+	
+    end list in
+    
+    render $ Asset_Profile_Forms.render (object
+      method create = create
+      method list = list
+    end)
+      
+  end in
+  
+  (* Check whether the item exists and belongs to the avatar *)
+
+  let! edit, pfid, info, data = ohm_req_or no_item $ O.decay begin match item with 
+    | `None -> return None
+    | `View pfid -> let! info = ohm_req_or (return None) $ MProfileForm.get pfid in
+		    let! data = ohm $ MProfileForm.get_data pfid in 
+		    return $ Some (false, IProfileForm.decay pfid, info, data) 
+    | `Edit pfid -> let! info = ohm_req_or (return None) $ MProfileForm.get pfid in
+		    let! data = ohm $ MProfileForm.get_data pfid in 
+		    return $ Some (true, IProfileForm.decay pfid, info, data) 
   end in 
 
-  let! list = ohm $ Run.list_filter begin fun (id,info) ->
+  let! () = true_or no_item (info.MProfileForm.Info.aid = aid) in
 
-    let url = 
-      Action.url UrlClient.Profile.home (access # instance # key) 
-	[ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ; IProfileForm.to_string id ]
-    in
-     
-    let  time, author = BatOption.default info.MProfileForm.Info.created info.MProfileForm.Info.updated in     
-    let! author = ohm $ CAvatar.mini_profile author in
-    let! now = ohmctx (#time) in
-
-    let  text = OhmText.cut ~ellipsis:"…" 100 $ MRich.OrText.to_text info.MProfileForm.Info.name in   
-
-    return $ Some (object
-      method url = url
-      method author = author
-      method time = (time,now)
-      method name = text
-      method kind = PreConfig_ProfileForm.name info.MProfileForm.Info.kind 
-      method hidden = info.MProfileForm.Info.hidden 
-    end)
+  (* Draw the individual form *)
     
-  end list in
+  let data = object
+    method back = Action.url UrlClient.Profile.home (access # instance # key) 
+      [ IAvatar.to_string aid ; fst UrlClient.Profile.tabs `Forms ]
+    method edit = if edit then 
+	Some (Action.url UrlClient.Profile.editForm (access # instance # key) 
+		[ IProfileForm.to_string pfid ])
+      else None
+    method body = MRich.OrText.to_html info.MProfileForm.Info.name 
+    method fields = []
+  end in
 
-  Asset_Profile_Forms.render (object
-    method create = create
-    method list = list
-  end)
-
+  O.Box.fill $ O.decay (render (Asset_Profile_Form.render data))

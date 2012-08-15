@@ -36,15 +36,15 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
       Some `Files 
     ] in 
 
-    let main = object
+    let render body = Asset_Profile_Page_Main.render (object
       method menu = menu
-      method body = match seg with 
-	| `Groups -> Groups.body access aid me 
-	| `Forms  -> Forms.body access aid me 
-	| _       -> Asset_Soon_Block.render ()
-    end in 
+      method body = body 
+    end) in 
 
-    O.Box.fill $ O.decay (Asset_Profile_Page_Main.render main)
+    match seg with 
+      | `Groups -> Groups.body access aid me render
+      | `Forms  -> Forms.body access aid me render
+      | _       -> O.Box.fill $ O.decay (render (Asset_Soon_Block.render ()))
 
   end in 
 

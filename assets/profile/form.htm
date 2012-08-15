@@ -1,0 +1,34 @@
+<div class="profile-form">
+
+  <ul class="actions">
+    <li><a href="{back}" class="action-button">{`Profile_Form_Back}</a></li>
+    {?edit}<li class="-r"><a href="{this}" class="action-button -admin">{`Profile_Form_Edit}</a></li>{/?}
+  </ul>
+
+  <div class="-comment">
+    {body|verbatim}
+  </div>
+
+  {#fields}
+    <div class="-field">
+      <div class="-label">{label}</div>
+      <div class="-value">{value|ohm}</div>
+    </div>
+  {/#}
+
+</div>
+
+<style>
+.profile-form {
+  padding: 5px;
+  .actions {
+    border-top: 1px solid #BBB;
+    background-color: #EEE;
+    box-shadow: inset 0 0 20px #CCC;
+  }
+  .-comment {
+    padding: 0 10px;
+    color: #333;
+  }
+}
+</style>

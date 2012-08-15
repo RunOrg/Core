@@ -21,3 +21,5 @@ end
   if hidden then "Seuls les responsables peuvent accéder à cette fiche"
   else "La personne concernée peut voir cette fiche"
 | `Profile_Form_Edit_Save -> "Enregistrer"
+| `Profile_Form_Edit -> "Modifier"
+| `Profile_Form_Back -> "Retour"
