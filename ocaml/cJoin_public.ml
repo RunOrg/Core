@@ -114,7 +114,37 @@ let () = UrlClient.def_doJoin begin fun req res ->
 
   let  fields = MGroup.Fields.get group in 
 
-  let! () = ohm $ MMembership.user gid aid true in
-  return $ Action.javascript (Js.reload ()) res 
+  if fields = [] then 
+
+    let! () = ohm $ MMembership.user gid aid true in
+    return $ Action.javascript (Js.reload ()) res 
+
+  else 
+    
+    (* Extract form data *)
+    
+    let! json = req_or panic $ Action.Convenience.get_json req in
+    
+    let  src  = OhmForm.from_post_json json in 
+    let  form = OhmForm.create ~template:(template fields) ~source:src in
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+    
+    (* Save the data and process the join request *)
+    
+    let! () = ohm $ MMembership.user gid aid true in
+    
+    let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay aid)) in
+    let! mid  = ohm $ MMembership.as_user gid aid in
+    let! ()   = ohm $ MMembership.Data.self_update gid aid info result in
+    
+    return $ Action.javascript (Js.reload ()) res
+
 
 end
