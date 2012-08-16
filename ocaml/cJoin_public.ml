@@ -4,6 +4,10 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Self = CJoin_self
+
+let template fields = Self.template `Join_Public_Save fields 
+
 let () = UrlClient.def_join begin fun req res ->
 
   let! cuid, key, iid, instance = CClient.extract req res in
@@ -23,6 +27,12 @@ let () = UrlClient.def_join begin fun req res ->
   in
 
   let displayEntity cuid entity =
+
+    let! fields = ohm begin
+      let  gid = MEntity.Get.group entity in 
+      let! group = ohm_req_or (return []) $ MGroup.naked_get gid in 
+      return $ MGroup.Fields.get group
+    end in 
 
     let! token, status = ohm begin
 
@@ -44,7 +54,15 @@ let () = UrlClient.def_join begin fun req res ->
       | `Member -> display $ Asset_PageLayout_Reload.render (object method time = 10.0 end)
       | `Pending -> display $ Asset_Join_PublicRequested.render ()
       | _ -> let url = Action.url UrlClient.doJoin key (IEntity.decay $ MEntity.Get.id entity) in
-	     display $ Asset_Join_PublicNoFields.render (object method url = url end)
+	     if fields = [] then 
+	       display $ Asset_Join_PublicNoFields.render (object method url = url end)
+	     else
+	       let template = template fields in 
+	       let form = OhmForm.create ~template ~source:(OhmForm.empty) in
+	       let url = JsCode.Endpoint.of_url url in 
+	       display $ Asset_Join_Public.render (object 
+		 method form = OhmForm.render form url 
+	       end)
 
   in
 

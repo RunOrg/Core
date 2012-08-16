@@ -28,6 +28,8 @@
 | `Join_Self_Save
 
 | `Join_Public_Title of string
+| `Join_Public_Save
+| `Join_Public_Description
 
 | `Join_PublicNone_Title 
 | `Join_PublicNone_Problem

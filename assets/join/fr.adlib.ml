@@ -28,6 +28,8 @@
 | `Join_Self_Save -> "Enregistrer"
 
 | `Join_Public_Title inst -> "Accès membres - " ^ inst
+| `Join_Public_Save -> "Inscription"
+| `Join_Public_Description -> "Merci de remplir le formulaire d'inscription ci-dessous :"
 
 | `Join_PublicNone_Title -> "Inscription en ligne"
 | `Join_PublicNone_Problem -> "Les responsables de l'espace membre ont décidé d'interdire les demandes d'inscription par internet."

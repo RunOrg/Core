@@ -11,7 +11,7 @@ let do_join self group =
     | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) self [ `Accept true ; `Default true ]
  
 
-let template fields = 
+let template button fields = 
   List.fold_left (fun acc field -> 
     acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
 	begin let json seed = List.assoc (field # name) seed in 
@@ -50,7 +50,7 @@ let template fields =
 	end 
   ) (OhmForm.begin_object []) fields
 
-  |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Self_Save)
+  |> VEliteForm.with_ok_button ~ok:(AdLib.get button)
 
 let css_invited = "-invited"
 let css_none    = "-none"
@@ -165,7 +165,7 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
   let! json = req_or panic $ Action.Convenience.get_json req in
 
   let  src  = OhmForm.from_post_json json in 
-  let  form = OhmForm.create ~template:(template (MGroup.Fields.get group)) ~source:src in
+  let  form = OhmForm.create ~template:(template `Join_Self_Save (MGroup.Fields.get group)) ~source:src in
 
   let fail errors = 
     let  form = OhmForm.set_errors errors form in
@@ -248,7 +248,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     let! status = ohm $ MMembership.status access gid in
     let! data   = ohm $ MMembership.Data.get mid in 
 
-    let form = OhmForm.create ~template:(template fields) ~source:(OhmForm.from_seed data) in
+    let form = OhmForm.create ~template:(template `Join_Self_Save fields) ~source:(OhmForm.from_seed data) in
     let url  = JsCode.Endpoint.of_url (Action.url UrlClient.Join.post req # server req # args) in    
 
     let! html = ohm $ Asset_Join_SelfEdit.render (object
