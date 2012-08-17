@@ -63,8 +63,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       match the_seg with
 	| `Wall   -> CWall.box access feed     
 	| `Album  -> CAlbum.box access album
-	| `People -> CPeople.forum_box access group 
-	| _       -> O.Box.fill (Asset_Soon_Block.render ())
+	| `Folder -> CFolder.box access folder
+	| `People -> CPeople.forum_box access group 	
 	  
     end in
     

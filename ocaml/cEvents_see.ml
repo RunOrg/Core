@@ -66,8 +66,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     match the_seg with
       | `Wall   -> CWall.box access feed     
       | `Album  -> CAlbum.box access album
+      | `Folder -> CFolder.box access folder
       | `People -> CPeople.event_box access group 
-      | _       -> O.Box.fill (Asset_Soon_Block.render ())
 
   end in
       

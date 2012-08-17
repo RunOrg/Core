@@ -1,14 +1,9 @@
 <div class="folder">
 
-  {#files}
-    <div class="-file">     
-      <a class="-name" href="{download}">{name}</a>       
-      <div class="-foot">
-	<img src="{ext}"/> &middot; {`Folder_File_Size size}
-	{?comments}&middot; {`Folder_File_Comments this}{/?}
-	&middot; <a class="-info" href="{info}">{`Folder_File_Info}</a>
-      </div>
-    </div>
-  {/#}
+  {if files | OhmAsset.notEmpty}
+    { this | Asset_Folder_More.render | ohm }
+  {else}
+    <div class="empty-list">{`Folder_List_Empty}</div>
+  {/if}
 
 </div>
