@@ -39,3 +39,6 @@ let public_forum entity =
       match MEntityConfig.wall tmpl config with 
 	| Some c when c # read = `Viewers -> true
 	| _ -> false
+
+let private_forum entity = 
+  not (public_forum entity) && MEntity.Get.kind entity = `Forum 
