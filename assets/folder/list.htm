@@ -1,6 +1,34 @@
 <div class="folder-upload">
 {?upload}
-  <iframe style="border:none;width:655px;height:28px" src="{this}"></iframe>
+  <iframe {$f} style="border:none;width:655px;height:28px" src="{this}"></iframe>
+  <div {$ok} class="-ok">{`Folder_Upload_Ok}</div>
+  <div {$fail} class="-fail">{`Folder_Upload_Fail}</div>
+  <script>
+url = here.$f.attr("src")
+
+reset = () ->
+  here.$f.attr("src",url)
+  here.$ok.hide()
+  here.$fail.hide()  
+
+show = ($x) ->
+  $x.fadeIn("fast")
+  setTimeout(
+    () -> $x.fadeOut("fast"),
+    3000
+  )
+
+here.$f.load () ->
+  try 
+    location = here.$f.contents().get(0).location
+    if /confirm/.test location      
+      do reset 
+      show here.$ok
+  catch exn
+    do reset
+    show here.$fail
+
+  </script>
 {else}
   <center>{`Folder_ReadOnly}</center>
 {/?}
@@ -22,5 +50,27 @@
   padding: 7px 20px;
   text-shadow: 0 1px 0 white;
   height: 28px;
+
+  div {
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    text-shadow: none;
+    display: none;
+    width: 625px;
+    position: absolute;
+  }
+
+  .-ok {
+    background-color: #080;
+    background-color: rgba(0, 128, 0, 0.5);
+  }
+
+  .-fail {
+    background-color: #800;
+    background-color: rgba(128, 0, 0, 0.5);
+  }
 }
 </style>

@@ -5,3 +5,6 @@
 
 | `Folder_List_Empty 
 | `Folder_ReadOnly
+
+| `Folder_Upload_Ok 
+| `Folder_Upload_Fail
