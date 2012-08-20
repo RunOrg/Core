@@ -36,17 +36,21 @@ let items more access folder start =
 let folder_rw more access folder wfolder = 
   O.Box.fill begin 
     let! files, more = ohm $ O.decay (items more access folder None) in 
+    let upload = Action.url UrlUpload.Client.Doc.root (access # instance # key) 
+      (IFolder.decay $ MFolder.Get.id folder) in
     Asset_Folder_List.render (object
-      method files = files
-      method more  = more
+      method upload = Some upload
+      method files  = files
+      method more   = more
     end)
   end
 
 let folder_ro more access folder = 
   let! files, more = ohm $ O.decay (items more access folder None) in 
   O.Box.fill (Asset_Folder_List.render (object
-    method files = files
-    method more  = more
+    method upload = None
+    method files  = files
+    method more   = more
   end))
 
 let folder_none () = 

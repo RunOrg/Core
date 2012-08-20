@@ -1,3 +1,11 @@
+<div class="folder-upload">
+{?upload}
+  <iframe style="border:none;width:655px;height:40px" src="{this}"></iframe>
+{else}
+  <center>{`Folder_ReadOnly}</center>
+{/?}
+</div>
+<div class="shadow" style="position:relative"><div class="-inner"></div></div>
 <div class="folder">
 
   {if files | OhmAsset.notEmpty}
@@ -7,3 +15,11 @@
   {/if}
 
 </div>
+
+<style>
+.folder-upload {
+  background-color: #E4E4E4;
+  padding: 7px 20px 10px;
+  text-shadow: 0 1px 0 white;
+}
+</style>

@@ -6,3 +6,4 @@
       !! "%.2f Go" (mb /. 1024.) 
 | `Folder_File_Comments n -> if n = 1 then "1 commentaire" else !! "%d commentaires" n 
 | `Folder_List_Empty -> "Aucun fichier disponible"
+| `Folder_ReadOnly -> "Vous ne pouvez pas ajouter de documents" 

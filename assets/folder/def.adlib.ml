@@ -4,3 +4,4 @@
 | `Folder_File_Comments of int 
 
 | `Folder_List_Empty 
+| `Folder_ReadOnly
