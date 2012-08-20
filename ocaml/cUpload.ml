@@ -14,26 +14,27 @@ let () = UrlUpload.Client.def_cancel white
 
 (* Confirming an upload ------------------------------------------------------------------------------------- *)
 
-let confirm req res = 
+let confirm prove confirm req res = 
 
   let white = white req res in 
   let fid, proof = req # args in
 
   let! cuid  = req_or white $ CSession.get req in
-  let! fid   = req_or white $ IFile.Deduce.from_getPic_token cuid fid proof in
+  let! fid   = req_or white $ prove cuid fid proof in
 
-  let! () = ohm $ MFile.Upload.confirm_pic fid in 
+  let! () = ohm $ confirm fid in 
 
   white
 
-let () = UrlUpload.Core.def_ok confirm
-let () = UrlUpload.Client.def_ok confirm
+let () = UrlUpload.Core.def_ok (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
+let () = UrlUpload.Client.def_ok (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
+let () = UrlUpload.Client.Doc.def_ok (confirm IFile.Deduce.from_getDoc_token MFile.Upload.confirm_doc)
 
 (* Preparing an upload ------------------------------------------------------------------------------------- *) 
 
-let form cuid fid cancel ok res = 
+let form cuid fid prove cancel ok res = 
 
-  let proof = IFile.Deduce.make_getPic_token cuid (IFile.Deduce.get_pic fid) in 
+  let proof = prove fid in 
   let redirect = ok (IFile.decay fid, proof) in
 
   let html = 
@@ -57,6 +58,7 @@ let () = UrlUpload.Core.def_root begin fun req res ->
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
   
   form cuid fid 
+    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Core.cancel () ())
     (Action.url UrlUpload.Core.ok ())
     res
@@ -71,12 +73,30 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
   
   form cuid fid 
+    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Client.cancel (req # server) ())
     (Action.url UrlUpload.Client.ok (req # server))
     res
 
 end
 
+let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res -> 
+
+  let cuid = IIsIn.user access # isin in
+  let fid  = req # args in 
+
+  let! folder = ohm_req_or (white req res) $ MFolder.try_get access fid in 
+  let! folder = ohm_req_or (white req res) $ MFolder.Can.write folder in 
+
+  let! _, fid = ohm_req_or (white req res) $ MItem.Create.doc access folder in
+  
+  form cuid fid 
+    (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
+    (Action.url UrlUpload.Client.cancel (req # server) ())
+    (Action.url UrlUpload.Client.Doc.ok (req # server))
+    res
+
+end
 
 (* Find a picture based on its identifier (and key) --------------------------------------------------------- *)
 

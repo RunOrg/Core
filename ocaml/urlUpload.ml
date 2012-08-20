@@ -22,4 +22,9 @@ module Client = struct
   let ok,     def_ok     = O.declare O.client "upload/confirm" (A.rr IFile.arg A.string) 
   let find,   def_find   = O.declare O.client "upload/find" A.none
 
+  module Doc = struct
+    let root, def_root = O.declare O.client "upload/file" (A.r IFolder.arg)
+    let ok,   def_ok   = O.declare O.client "upload/file/confirm" (A.rr IFile.arg A.string)
+  end
+
 end
