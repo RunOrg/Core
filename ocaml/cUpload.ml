@@ -32,23 +32,10 @@ let () = UrlUpload.Client.Doc.def_ok (confirm IFile.Deduce.from_getDoc_token MFi
 
 (* Preparing an upload ------------------------------------------------------------------------------------- *) 
 
-let form cuid fid prove cancel ok res = 
-
+let form cuid fid outer inner prove ok res = 
   let proof = prove fid in 
   let redirect = ok (IFile.decay fid, proof) in
-
-  let html = 
-    Asset_Upload_Form.render 
-      (ConfigS3.upload_form 
-	 (MFile.Upload.configure fid redirect)
-	 (fun inner -> 
-	   Asset_Upload_Form_Inner.render (object
-	     method cancel = cancel 
-	     method inner  = inner
-	   end))
-      )
-  in
-
+  let html = outer (ConfigS3.upload_form (MFile.Upload.configure fid redirect) inner) in
   CPageLayout.core `EMPTY html res
 
 let () = UrlUpload.Core.def_root begin fun req res -> 
@@ -58,8 +45,13 @@ let () = UrlUpload.Core.def_root begin fun req res ->
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
   
   form cuid fid 
+    (Asset_Upload_Form.render) 
+    (fun inner -> 
+      Asset_Upload_Form_Inner.render (object
+	method cancel = Action.url UrlUpload.Core.cancel () ()
+	method inner  = inner
+      end))
     (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
-    (Action.url UrlUpload.Core.cancel () ())
     (Action.url UrlUpload.Core.ok ())
     res
 
@@ -73,8 +65,13 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
   
   form cuid fid 
+    (Asset_Upload_Form.render) 
+    (fun inner -> 
+      Asset_Upload_Form_Inner.render (object
+	method cancel = Action.url UrlUpload.Client.cancel (req # server) ()
+	method inner  = inner
+      end))
     (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
-    (Action.url UrlUpload.Client.cancel (req # server) ())
     (Action.url UrlUpload.Client.ok (req # server))
     res
 
@@ -91,8 +88,9 @@ let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res
   let! _, fid = ohm_req_or (white req res) $ MItem.Create.doc access folder in
   
   form cuid fid 
+    (Asset_Upload_DocForm.render) 
+    (Asset_Upload_DocForm_Inner.render)
     (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
-    (Action.url UrlUpload.Client.cancel (req # server) ())
     (Action.url UrlUpload.Client.Doc.ok (req # server))
     res
 
