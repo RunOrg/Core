@@ -10,7 +10,7 @@ type t = <
 > 
 
 val set : [<`Edit|`Bot] IUser.id -> t -> unit O.run 
-val get : [<`IsSelf|`Bot] IUser.id -> t O.run 
+val get : [<`IsSelf|`Edit|`Bot] IUser.id -> t O.run 
   
 val default : MNotifyChannel.t -> freq 
 

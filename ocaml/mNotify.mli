@@ -32,8 +32,10 @@ module ToUser : sig
     by_iid  : (IInstance.t * assoc) list 
   > 
 
+  val default : MNotifyChannel.t -> freq
+
   val set : [<`Edit|`Bot] IUser.id -> t -> unit O.run 
-  val get : [<`IsSelf|`Bot] IUser.id -> t O.run 
+  val get : [<`IsSelf|`Edit|`Bot] IUser.id -> t O.run 
 
   val send : IUser.t -> Payload.t -> freq O.run
 

@@ -54,7 +54,7 @@ end
 
 include CouchDB.Convenience.Table(struct let db = O.db "notify-freq" end)(IUser)(Data)
 
-(* Implement functions -------------------------------------------------------------------------------------- *)
+(* Implement functions --------------------------------------------------------------------- *)
 
 let get uid = 
   let! list = ohm_req_or (return $ extract []) $ MyTable.get (IUser.decay uid) in
@@ -83,7 +83,6 @@ let set uid data =
     (`Default,compress_assoc (data # default))
     :: List.map (fun (iid,assoc) -> `Instance iid, compress_assoc assoc) (data # by_iid) 
   in
-  let list = List.filter (snd |- (<>) []) list in 
   let! _ = ohm $ MyTable.transaction (IUser.decay uid) (MyTable.insert list) in
   return ()
 
@@ -103,38 +102,3 @@ let send uid payload =
 
   return $ frequency channel assoc
 
-(* Retrieve old data from user notify preferences ----------------------------------------------------------- *)
-
-let restore uid = 
-  MyTable.transaction uid begin fun uid -> 
-    let! data = ohm $ MyTable.get uid in 
-    match data with Some _ -> return ((),`keep) | None -> 
-      (* No saved preferences yet, time to build some ! *)
-      let! blocks  = ohm $ MUser.blocks uid in 
-      let  blocked = List.concat $ List.map (function 
-	| `message 
-	| `item -> [ `NewWallItem `WallReader ; `NewWallItem `WallAdmin ]  
-	| `myMembership -> [ `BecomeMember ; `BecomeAdmin ] 
-	| `likeItem -> [ `NewFavorite `ItemAuthor ]
-	| `commentItem -> [ `NewComment `ItemAuthor ; `NewComment `ItemFollower ]
-	| `welcome -> []
-	| `subscription 
-	| `event
-	| `forum
-	| `album
-	| `group
-	| `poll
-	| `course -> [ `EntityInvite ]
-	| `pending -> [ `EntityRequest ]
-	| `digest -> [ `Broadcast ]
-	| `networkInvite
-	| `chatReq -> []) blocks
-      in
-      let blocked = BatList.sort_unique compare blocked in 
-      return ( (), `put [`Default,List.map (fun k -> k,`Never) blocked] )
-  end
-      
-let task = Async.Convenience.foreach O.async "notify.migrate.toUser" IUser.fmt
-  (MUser.all_ids ~count:20) restore 
-
-(* let () = O.put (task ()) *)
