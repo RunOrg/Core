@@ -34,43 +34,32 @@ let schedule_deletion =
 
   fun itid -> task ~delay:30.0 itid
 
+let delete d = object
+  method del      = true
+  method delayed  = d # delayed
+  method where    = d # where
+  method payload  = d # payload
+  method time     = d # time
+  method clike    = d # clike 
+  method nlike    = d # nlike
+  method ccomm    = d # ccomm
+  method ncomm    = d # ncomm
+  method iid      = d # iid
+end
+  
 let moderate itid from =
 
-  let delete d = object
-    method del      = d # del || (d # where = decay from)
-    method delayed  = d # delayed
-    method where    = d # where
-    method payload  = d # payload
-    method time     = d # time
-    method clike    = d # clike 
-    method nlike    = d # nlike
-    method ccomm    = d # ccomm
-    method ncomm    = d # ncomm
-    method iid      = d # iid
+  let! item_opt = ohm $ MyTable.transaction (IItem.decay itid) begin fun itid ->
+    let! item = ohm_req_or (return (None,`keep)) $ MyTable.get itid in 
+    let! _ = ohm_req_or (return (None,`keep)) $ from (item # where) in
+    let  item = delete item in 
+    return (Some item, `put item) 
   end in
-
-  let! item_opt = ohm $ MyTable.transaction
-    (IItem.decay itid) (MyTable.update delete) 
-  in
 
   match item_opt with None -> return () | Some item ->
     if item # del then schedule_deletion (IItem.decay itid) else return ()
   
-let delete itid =
-  
-  let delete d = object
-    method del      = true
-    method delayed  = d # delayed
-    method where    = d # where
-    method payload  = d # payload
-    method time     = d # time
-    method clike    = d # clike 
-    method nlike    = d # nlike
-    method ccomm    = d # ccomm
-    method ncomm    = d # ncomm
-    method iid      = d # iid
-  end in
-    
+let delete itid =    
   let! _  = ohm $ MyTable.transaction (IItem.decay itid) (MyTable.update delete) in
   let! () = ohm $ schedule_deletion (IItem.decay itid) in
   return ()

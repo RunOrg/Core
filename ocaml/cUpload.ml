@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-(* Cancelling an upload ------------------------------------------------------------------------------------- *)
+(* Cancelling an upload --------------------------------------------------------------------- *)
 
 let white req res = 
   CPageLayout.core `EMPTY (return ignore) res 
@@ -12,9 +12,9 @@ let white req res =
 let () = UrlUpload.Core.def_cancel white
 let () = UrlUpload.Client.def_cancel white
 
-(* Confirming an upload ------------------------------------------------------------------------------------- *)
+(* Confirming an upload --------------------------------------------------------------------- *)
 
-let confirm prove confirm req res = 
+let confirm ?(white=white) prove confirm req res = 
 
   let white = white req res in 
   let fid, proof = req # args in
@@ -26,11 +26,20 @@ let confirm prove confirm req res =
 
   white
 
-let () = UrlUpload.Core.def_ok (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
-let () = UrlUpload.Client.def_ok (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
-let () = UrlUpload.Client.Doc.def_ok (confirm IFile.Deduce.from_getDoc_token MFile.Upload.confirm_doc)
+let () = UrlUpload.Core.def_ok 
+  (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
 
-(* Preparing an upload ------------------------------------------------------------------------------------- *) 
+let () = UrlUpload.Client.def_ok 
+  (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
+
+let () = UrlUpload.Client.Doc.def_ok 
+  (confirm IFile.Deduce.from_getDoc_token MFile.Upload.confirm_doc)
+
+let () = UrlUpload.Client.Img.def_confirm
+  (confirm ~white:(fun _ res -> return res) 
+     IFile.Deduce.from_getImg_token MFile.Upload.confirm_img)
+
+(* Preparing an upload --------------------------------------------------------------------- *) 
 
 let form cuid fid outer inner prove ok res = 
   let proof = prove fid in 
@@ -96,10 +105,44 @@ let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res
 
 end
 
-(* Find a picture based on its identifier (and key) --------------------------------------------------------- *)
+let () = UrlUpload.Client.Img.def_prepare $ CClient.action begin fun access req res ->
+
+  let cuid = IIsIn.user access # isin in
+  let alid  = req # args in 
+
+  let! json = req_or (return res) $ Action.Convenience.get_json req in 
+  let! filename = req_or (return res) $ Fmt.String.of_json_safe json in 
+
+  let! album = ohm_req_or (return res) $ MAlbum.try_get access alid in 
+  let! album = ohm_req_or (return res) $ MAlbum.Can.write album in 
+
+  let! _, fid = ohm_req_or (return res) $ MItem.Create.image access album in
+  
+  let upload_config = MFile.Upload.configure fid ~filename ~redirect:"-" in
+    
+  let upload_url, upload_post = ConfigS3.upload_url upload_config in
+
+  let upload_post = Json.Object (List.map (fun (k,v) -> k, Json.String v) upload_post) in
+
+  let confirm = Action.url UrlUpload.Client.Img.confirm (access # instance # key) 
+    (IFile.decay fid, IFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
+
+  let check = Action.url UrlUpload.Client.Img.check (access # instance # key) 
+    (IFile.decay fid, IFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
+
+
+  return $ Action.json [ "confirm", Json.String confirm ;
+			 "check",   Json.String check ;
+			 "upload",  Json.String upload_url ;
+			 "post",    upload_post ] res
+
+end
+
+
+(* Find a picture based on its identifier (and key) ----------------------------------------- *)
 
 let find req res = 
-  let fail = return res in
+  let  fail = return res in
 
   let! cuid  = req_or fail $ CSession.get req in
 
@@ -117,3 +160,22 @@ let find req res =
 
 let () = UrlUpload.Core.def_find find
 let () = UrlUpload.Client.def_find find
+
+(* Check whether an image has been completely processed *)
+
+let () = UrlUpload.Client.Img.def_check begin fun req res ->
+
+  let  fail = return res in
+
+  let! cuid  = req_or fail $ CSession.get req in
+
+  let  id, proof = req # args in 
+
+  let! fid   = req_or fail $ IFile.Deduce.from_getImg_token cuid id proof in
+
+  let! large = ohm_req_or fail $ MFile.Url.get fid `Large in
+
+  return $ Action.json [ "ok", Json.Bool true ] res
+
+
+end

@@ -6,7 +6,12 @@ open BatPervasives
 
 let items more access feed start = 
   let! items, next = ohm $ MItem.list ~self:(access # self) (`feed (MFeed.Get.id feed)) ~count:8 start in
-  let! htmls = ohm $ Run.list_filter (CItem.render access) items in 
+  let! admin = ohm $ MFeed.Can.admin feed in
+  let  moderate = 
+    if admin = None then None else 
+      Some (Action.url UrlClient.Item.moderate (access # instance # key))  
+  in
+  let! htmls = ohm $ Run.list_filter (CItem.render ?moderate access) items in 
   let  more  = match next with 
     | None -> None
     | Some time -> Some (OhmBox.reaction_endpoint more time,Json.Null)

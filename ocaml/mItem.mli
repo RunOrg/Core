@@ -115,7 +115,7 @@ end
 
 module Remove : sig
   val delete   : [`Remove] IItem.id -> unit O.run
-  val moderate : IItem.t -> [`Admin] source -> unit O.run
+  val moderate : IItem.t -> ([`Unknown] source -> [`Admin] source option O.run) -> unit O.run
 end
 
 val last :

@@ -130,8 +130,8 @@ let render ?moderate access item =
 	  (IItem.decay (item # id), proof) ) 
     end)
     | None -> match moderate with 
-	| Some url -> Some (object method url = url end)
-	| None     -> None
+	| Some f -> Some (object method url = f (IItem.decay (item #id)) end)
+	| None   -> None
   in
 
   let! html = ohm $ Asset_Item_Wrap.render (object
@@ -191,6 +191,31 @@ let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -
   let  html = Html.concat htmls in
 
   return $ Action.json ["all", Html.to_json html] res
+
+end
+
+let () = UrlClient.Item.def_moderate $ CClient.action begin fun access req res -> 
+ 
+  let  fail = return res in
+  let! json = req_or fail (Action.Convenience.get_json req) in 
+
+  let  itid = req # args in
+  
+  let admin = function
+    | `feed fid -> let! feed = ohm_req_or (return None) $ MFeed.try_get access fid in 
+		   let! feed = ohm_req_or (return None) $ MFeed.Can.admin feed in 
+		   return (Some (`feed (MFeed.Get.id feed))) 
+    | `album aid -> let! album = ohm_req_or (return None) $ MAlbum.try_get access aid in 
+		    let! album = ohm_req_or (return None) $ MAlbum.Can.admin album in 
+		    return (Some (`album (MAlbum.Get.id album))) 
+    | `folder fid -> let! folder = ohm_req_or (return None) $ MFolder.try_get access fid in 
+		     let! folder = ohm_req_or (return None) $ MFolder.Can.admin folder in 
+		     return (Some (`folder (MFolder.Get.id folder))) 
+  in
+
+  let!  () = ohm $ MItem.Remove.moderate itid admin in
+
+  return res
 
 end
 

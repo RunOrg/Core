@@ -1,0 +1,148 @@
+<div class="album-uploader">
+  <div class="-notice">
+    {`Album_Size_Remaining} <strong>{`Album_Size free}</strong>
+  </div>
+  <span {$p} class="-progress">
+    <span></span>
+  </span>
+  <button {$up}></button>
+  <a {$l} href="javascript:void(0)" style="box-shadow:none;float:right;margin-top:0" class="action-button -green">{`Album_Upload}</a>
+</div>
+
+<script type="prepare:string">
+if (!('SWFUpload' of @))
+  $('<script type="text/javascript" src="/public/js/swfupload.js"><'+'/script>').appendTo('body');
+
+here.$p.hide() 
+
+here.$l.mouseenter () ->
+  $(".swfupload").css("visibility","visible")
+
+checks = []
+
+uploading = false
+current = null
+
+doCheck = ->
+  return if !checks.length
+  url = checks[0]
+  post url, {}, (data) ->
+    if data.ok 
+      if checks[0] == url
+        checks.shift()
+        do render      
+    setTimeout doCheck, 1000
+
+onComplete = ->
+  uploading = false
+  if current
+    if !checks.length
+      setTimeout doCheck, 1000
+    checks.push current.check 
+    post current.confirm, {}, (data) ->
+      call data.code 
+    current = null
+  do doUpload
+
+render = ->
+  i = 0
+  completed = 0
+  while (file = uploader.getFile(i++))
+    status[file.id] = file.filestatus
+    if file.filestatus == SWFUpload.FILE_STATUS.ERROR || file.filestatus == SWFUpload.FILE_STATUS.COMPLETE || file.filestatus == SWFUpload.FILE_STATUS.CANCELLED
+      ++completed
+  return if i == 1
+  i--
+  pc = (completed + completed - checks.length) / (i + i)
+  if !here.$p.is(":visible")
+    $(".swfupload").css("visibility","hidden")
+    here.$p.show().children().css("width",0)
+  here.$p.children().stop().animate({"width":(pc * 100).toFixed(0) + "%"},"slow").html(if pc == 0 then "" else (pc * 100).toFixed(0) + "%&nbsp;")
+  if pc == 1 
+    here.$p.fadeOut "slow"
+
+fail = () ->
+
+doUpload = ->
+  do render
+  return if uploading
+  file = do uploader.getFile
+  if file
+    uploading = true
+    post prepare, file.name, (data) ->
+      return fail() if !data.confirm || !data.post
+      current = data
+      uploader.setUploadURL(data.upload || '-')
+      data.post.Filename = '' # Suppress this SWFUpload auto-sent field
+      uploader.setPostParams data.post
+      do uploader.startUpload      
+
+uploader = new SWFUpload
+  file_post_name: 'file'
+  flash_url: '/public/flash/swfupload.swf'
+  button_placeholder_id: here.$up.attr("id")
+  button_width: here.$up.next().outerWidth()
+  button_height: here.$up.next().outerHeight()
+  button_image_url: '/public/img/button-green-empty.png'
+  file_dialog_complete_handler: doUpload
+  upload_complete_handler: onComplete
+  file_types: '*.jpg;*.gif;*.png'
+
+</script>
+
+<style>
+.swfupload {
+  position: absolute;
+  right: 13px;
+  top: 10px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.album-uploader {
+
+  position: relative;
+  background-color: #111;
+  border-bottom: 1px solid #333;
+  padding: 10px;
+  vertical-align: middle;
+  height: 21px;
+
+  .-notice {
+    color: #BBB;
+    display: inline-block;
+    height: 20px;
+    font-size: 14px;
+  }
+ 
+  .-progress {
+    background-color: #333;
+    box-shadow: 2px 2px 3px #111 inset;
+    padding: 1px;
+    border: 1px solid #555;
+    display: inline-block;
+    height: 18px;
+    margin-left: 100px;
+    vertical-align: middle;
+    width: 200px;
+    span {
+      box-shadow: 1px 1px 1px #5D5 inset, -1px -1px 1px #1A1 inset;
+      background-color: #3B3;
+      background: -moz-linear-gradient(top, #4C4, #2A2);
+      background: -webkit-linear-gradient(top, #4C4, #2A2);
+      height: 18px;
+      display: block;
+      font-size: 11px;
+      overflow: hidden;
+      line-height: 18px;
+      text-align: right;
+      color: white;
+      text-shadow: 0 -1px 0 #006600;
+    }
+  }
+
+  button {
+    float: right;
+  }
+}
+</style>

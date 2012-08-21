@@ -27,4 +27,10 @@ module Client = struct
     let ok,   def_ok   = O.declare O.client "upload/file/confirm" (A.rr IFile.arg A.string)
   end
 
+  module Img = struct
+    let prepare, def_prepare = O.declare O.client "upload/img/prepare" (A.r IAlbum.arg)
+    let confirm, def_confirm = O.declare O.client "upload/img/confirm" (A.rr IFile.arg A.string)
+    let check,   def_check   = O.declare O.client "upload/img/check" (A.rr IFile.arg A.string)
+  end
+
 end

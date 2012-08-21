@@ -28,7 +28,14 @@ let items more access album start =
 let album_rw more access album walbum = 
   O.Box.fill begin 
     let! items, more = ohm $ O.decay (items more access album None) in 
+    let  iid = IInstance.Deduce.can_see_usage (MAlbum.Get.write_instance walbum) in 
+    let! used, full = ohm $ O.decay (MFile.Usage.instance iid) in 
     Asset_Album_List.render (object
+      method upload = Some (object 
+	method prepare = Action.url UrlUpload.Client.Img.prepare (access # instance # key) 
+	  (IAlbum.decay (MAlbum.Get.id album))
+	method free    = full -. used 
+      end)
       method items = items
       method more  = more
     end)
@@ -37,8 +44,9 @@ let album_rw more access album walbum =
 let album_ro more access album = 
   let! items, more = ohm $ O.decay (items more access album None) in 
   O.Box.fill (Asset_Album_ListReadOnly.render (object
-    method items = items
-    method more  = more
+    method upload = None
+    method items  = items
+    method more   = more
   end))
 
 let album_none () = 
