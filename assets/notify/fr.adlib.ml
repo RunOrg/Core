@@ -30,4 +30,11 @@ end
     | `Relevant -> "Uniquement les notifications qui me concernent"
     | `Nothing -> "Ne rien recevoir"
 end
+| `Notify_Settings_Detail c -> begin
+  match c with 
+    | `Everything -> "Vous recevez en temps réel les notifications par mail"
+    | `Relevant -> "Des résumes quotidiens ou hebdomadaires vous informent du reste"
+    | `Nothing -> "Vous ne recevez strictement aucune notification"
+end
 | `Notify_Settings_Submit -> "Enregistrer"
+| `Notify_Settings_Default -> "Options par défaut"

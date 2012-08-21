@@ -15,25 +15,41 @@ module InstanceFmt = Fmt.Make(struct
 end)
 
 let template instances = 
+  
+  OhmForm.begin_object (fun ~default ~instances -> (object
+    method default = default
+    method instances = instances
+  end)) 
 
-  List.fold_left
-    (fun fields instance -> 
-      OhmForm.append (fun list choice -> return ((instance # iid,choice) :: list)) 
-	(VNotify.radio 
-	   ~name:(instance # name)
-	   ~pic:(instance # pic) 
-	   ~format:InstanceFmt.fmt
-	   ~source:(List.map 
-		      (fun stat -> stat, AdLib.write (`Notify_Settings_Choice stat))
-		      [ `Default ; `Everything ; `Relevant ; `Nothing ])
-	   (fun _ -> return $ Some `Default) 
-	   OhmForm.keep)
-	fields)
-    (OhmForm.begin_object []) instances
+  |> OhmForm.append (fun f default -> return $ f ~default) 
+      (VNotify.default
+	 ~format:DefaultFmt.fmt
+	 ~source:(List.map (fun stat -> stat, Asset_Notify_DefaultSetting.render (object
+	   method choice = AdLib.write (`Notify_Settings_Choice (stat :> InstanceFmt.t))
+	   method detail = AdLib.write (`Notify_Settings_Detail stat)
+	 end))
+		    [ `Everything ; `Relevant ; `Nothing ])
+	 (fun _ -> return $ Some `Everything)
+	 OhmForm.keep) 
+      
+  |> OhmForm.append (fun f instances -> return $ f ~instances) 
+      (List.fold_left
+	 (fun fields instance -> 
+	   OhmForm.append (fun list choice -> return ((instance # iid,choice) :: list)) 
+	     (VNotify.radio 
+		~name:(instance # name)
+		~pic:(instance # pic) 
+		~format:InstanceFmt.fmt
+		~source:(List.map 
+			   (fun stat -> stat, AdLib.write (`Notify_Settings_Choice stat))
+			   [ `Default ; `Everything ; `Relevant ; `Nothing ])
+		(fun _ -> return $ Some `Default) 
+		OhmForm.keep)
+	     fields)
+	 (OhmForm.begin_object []) instances
+      )
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Notify_Settings_Submit) 
-
-
 
 let () = define UrlMe.Notify.def_settings begin fun cuid -> 
 

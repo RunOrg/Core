@@ -23,6 +23,11 @@
 			     | `Relevant
 			     | `Nothing 
 			     ]
+| `Notify_Settings_Detail of [ `Everything
+			     | `Relevant
+			     | `Nothing 
+			     ]
 | `Notify_Settings_Submit 
+| `Notify_Settings_Default
 
 | `Notify_Link_Settings

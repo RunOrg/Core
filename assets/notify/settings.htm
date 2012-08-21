@@ -5,35 +5,48 @@
 <style>
 .notify-settings {
   width: 800px;
-  margin: auto;
-  .joy-buttons { clear: both }
+  margin: 20px auto;
+  .joy-buttons { clear: both; text-align: right }
   .-name {
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCC;
     display: block;
     font-size: 18px;
     font-weight: bold;
     padding-bottom: 3px;
   }
 
+  .-detail {
+    color: #888;
+    display: block;
+    font-size: 12px;
+    margin-left: 21px;
+    margin-bottom: 10px;
+  }
+
   .-pic {
     background-color: white;
-    border: 1px solid #BBBBBB;
+    border: 1px solid #BBB;
     float: left;
     height: 50px;
     margin-top: 7px;
     padding: 1px;
     width: 50px;
   }
+
+  .elite-field-list {
+    margin-top: 8px;
+  }
 }
 
 .notify-instance-settings {
   float: left;
-  margin-bottom: 30px;
-  margin-right: 30px;
+  margin: 30px 30px 30px 0;
   width: 370px;
   .elite-field-list {
+    input { vertical-align: top }
+    margin-top: 0px;
     font-size: 12px;
-    line-height: 20px;
+    line-height: 19px;
     margin-left: 58px;
   }
 }
