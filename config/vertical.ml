@@ -646,7 +646,7 @@ let judo = vertical "Judo"
     pollYearly ;
     courseSimple ;
     eventSimple ;
-	EventJudoCompetition ;
+    eventJudoCompetition ;
     eventAg ;
     eventMeeting ;
     eventPetition ;
@@ -880,15 +880,15 @@ let salleSport = vertical "SalleSport"
 
 (* ========================================================================== *)
 
-let simple = vertical "SectionSportEtudes"
+let sectionSportEtudes = vertical "SectionSportEtudes"
   ~name:"Section Sport-études"
   ~forms:ProfileForm.([ 
-		SectionSportEtudesBilan ; 
-		SectionSportEtudesCompetition_Judo ; 
-		SectionSportEtudesMedical ;
-		SectionSportEtudesTrainings ;
-		SectionSportEtudesAcademic ;
-		SectionSportEtudesOther	])
+		sectionSportEtudesBilan ; 
+		sectionSportEtudesCompetition_Judo ; 
+		sectionSportEtudesMedical ;
+		sectionSportEtudesTrainings ;
+		sectionSportEtudesAcademic ;
+		sectionSportEtudesOther	])
   Template.([
     initial "entity.sample.group-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs") ;
@@ -914,7 +914,7 @@ let simple = vertical "SectionSportEtudes"
     pollYearly ;
     courseSimple ;
     eventSimple ;
-	EventJudoCompetition ;
+    eventJudoCompetition ;
     eventMeeting ;
     eventAg ;
     eventPetition ;
@@ -1195,7 +1195,7 @@ let () = catalog [
     inCatalog spUsep
               (adlib "VerticalSpUsepName" "Fédération - USEP")
               None ;
-    inCatalog SectionSportEtudes
+    inCatalog sectionSportEtudes
               (adlib "SectionSportEtudes" "Sections Sport-études")
               (Some (adlib "VerticalCatalogSectionSportEtudesDesc" 
 		       "Gestion des classes sportives : encadrement, parents, élèves")) ;
@@ -1204,7 +1204,7 @@ let () = catalog [
     inCatalog elementarySchool
               (adlib "VerticalElementarySchool" "Ecoles primaires")
               None ;
-    inCatalog SectionSportEtudes
+    inCatalog sectionSportEtudes
               (adlib "SectionSportEtudes" "Sections Sport-études")
               (Some (adlib "VerticalCatalogSectionSportEtudesDesc" 
 		       "Gestion des classes sportives : encadrement, parents, élèves")) ;

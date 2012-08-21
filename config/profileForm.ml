@@ -2,7 +2,7 @@
 open Common
 
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesAcademic" 
+let sectionSportEtudesAcademic = profileForm "SectionSportEtudesAcademic" 
   ~name:"Scolaire"
   [ 
      join ~name:"noteteacher"
@@ -14,7 +14,7 @@ let simple = profileForm "SectionSportEtudesAcademic"
   ]		 
 
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesBilan" 
+let sectionSportEtudesBilan = profileForm "SectionSportEtudesBilan" 
   ~name:"Bilan"
   [
     join ~name:"period"
@@ -38,7 +38,7 @@ let simple = profileForm "SectionSportEtudesBilan"
   ]
 
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesCompetition_Judo" 
+let sectionSportEtudesCompetition_Judo = profileForm "SectionSportEtudesCompetition_Judo" 
   ~name:"Compétition"
   [
     join ~name:"name"
@@ -79,7 +79,7 @@ let simple = profileForm "SectionSportEtudesCompetition_Judo"
   ]		 
 
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesMedical" 
+let sectionSportEtudesMedical = profileForm "SectionSportEtudesMedical" 
   ~name:"Médical"
   [
         join ~name:"date"
@@ -97,7 +97,7 @@ let simple = profileForm "SectionSportEtudesMedical"
   ]
  
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesOther" 
+let sectionSportEtudesOther = profileForm "SectionSportEtudesOther" 
   ~name:"Autre"
   [
     join ~name:"note"
@@ -106,7 +106,7 @@ let simple = profileForm "SectionSportEtudesOther"
   ]
   
 (* ========================================================================== *)
-let simple = profileForm "SectionSportEtudesTrainings" 
+let sectionSportEtudesTrainings = profileForm "SectionSportEtudesTrainings" 
   ~name:"Entraînements"
   [ 
      join ~name:"notetrainer"
