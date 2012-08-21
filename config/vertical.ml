@@ -888,7 +888,7 @@ let sectionSportEtudes = vertical "SectionSportEtudes"
 		sectionSportEtudesMedical ;
 		sectionSportEtudesTrainings ;
 		sectionSportEtudesAcademic ;
-		sectionSportEtudesOther	])
+		simple	])
   Template.([
     initial "entity.sample.group-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs") ;

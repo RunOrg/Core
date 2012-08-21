@@ -7,10 +7,10 @@ let sectionSportEtudesAcademic = profileForm "SectionSportEtudesAcademic"
   [ 
      join ~name:"noteteacher"
          ~label:(adlib "ProfileForm_SectionSportEtude_Field_NoteTeacher" "Remarques responsable suivi scolaire")
-         `LongText ;
+         `Textarea ;
      join ~name:"notemanagement"
          ~label:(adlib "ProfileForm_SectionSportEtude_Field_NoteManagement" "Remarques encadrement")
-         `LongText ;
+         `Textarea ;
   ]		 
 
 (* ========================================================================== *)
@@ -19,22 +19,22 @@ let sectionSportEtudesBilan = profileForm "SectionSportEtudesBilan"
   [
     join ~name:"period"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_Period" "Période")
-         `Textarea ;
+         `LongText ;
     join ~name:"trainings"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_Trainings" "Entraînements")
-         `LongText ;
+         `Textarea ;
     join ~name:"tournaments"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_Tournaments" "Compétitions")
-         `LongText ;
+         `Textarea ;
     join ~name:"academic"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_Academic" "Scolaire")
-         `LongText ;
+         `Textarea ;
     join ~name:"medical"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_Medical" "Médical")
-         `LongText ;
+         `Textarea ;
     join ~name:"general"
          ~label:(adlib "ProfileForm_SectionSportEtudesBilan_Field_General" "Général")
-         `LongText ;
+         `Textarea ;
   ]
 
 (* ========================================================================== *)
@@ -75,7 +75,7 @@ let sectionSportEtudesCompetition_Judo = profileForm "SectionSportEtudesCompetit
 			adlib "ProfileFormValuesSectionSportEtudesCompetitionNC" "NC" ] ) ;
     join ~name:"notetrainer"
          ~label:(adlib "ProfileForm_SectionSportEtudes_Field_NoteTrainer" "Remarques entraîneur")
-         `LongText ;
+         `Textarea ;
   ]		 
 
 (* ========================================================================== *)
@@ -87,7 +87,7 @@ let sectionSportEtudesMedical = profileForm "SectionSportEtudesMedical"
          `Date ;
 	join ~name:"injury"
          ~label:(adlib "ProfileForm_SectionSportEtudesMedical_Field_Injury" "Type de blessure")
-         `Textarea ;
+         `LongText ;
 	join ~name:"dayoff"
          ~label:(adlib "ProfileForm_SectionSportEtudesMedical_Field_DayOff" "NB jours d'arrêt")
          `Textarea ;
@@ -95,23 +95,14 @@ let sectionSportEtudesMedical = profileForm "SectionSportEtudesMedical"
          ~label:(adlib "ProfileForm_SectionSportEtudes_Field_Note" "Remarques")
          `LongText ;
   ]
- 
-(* ========================================================================== *)
-let sectionSportEtudesOther = profileForm "SectionSportEtudesOther" 
-  ~name:"Autre"
-  [
-    join ~name:"note"
-         ~label:(adlib "ProfileForm_SectionSportEtudes_Field_Note" "Remarques")
-         `LongText ;
-  ]
-  
+   
 (* ========================================================================== *)
 let sectionSportEtudesTrainings = profileForm "SectionSportEtudesTrainings" 
   ~name:"Entraînements"
   [ 
      join ~name:"notetrainer"
          ~label:(adlib "ProfileForm_SectionSportEtudes_Field_NoteTrainer" "Remarques entraîneur")
-         `LongText ;
+         `Textarea ;
   ]		 
  
  (* ========================================================================== *)
