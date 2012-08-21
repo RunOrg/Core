@@ -1,5 +1,11 @@
+<ul class="actions" style="margin: auto; width: 806px;">
+  <li class="-r">
+    <a class="action-button -admin" href="{options}">{`Notify_Link_Settings}</a>
+  </li>
+</ul>
+
 <div class="notify-list">
-  { this | ohm } 
+  { inner | ohm } 
 
   {@!inner}
     {#list}
@@ -44,7 +50,7 @@
 <style>
 
 .notify-list {
-  margin: 20px auto;
+  margin: 10px auto;
   width: 800px;
   .-instance {
     border-top: 1px solid #BBB;

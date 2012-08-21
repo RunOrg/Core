@@ -15,3 +15,8 @@
 
 | `Notify_Expired_Title
 | `Notify_Expired_Body 
+
+| `Notify_Title
+| `Notify_Settings_Title
+
+| `Notify_Link_Settings

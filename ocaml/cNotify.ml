@@ -28,7 +28,8 @@ let item_url cuid itid =
 	| `of_entity eid -> begin 
 	  let! entity = ohm_req_or none $ MEntity.try_get access eid in 
 	  return $ Some (Action.url 
-	    (if MEntity.Get.kind entity = `Event then UrlClient.Events.see else UrlClient.Forums.see) 
+	    (if MEntity.Get.kind entity = `Event then UrlClient.Events.see
+	     else UrlClient.Forums.see) 
 	    (instance # key) [ IEntity.to_string eid ])
 	end 
 	| `of_message  _ -> return None

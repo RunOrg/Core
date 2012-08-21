@@ -6,6 +6,8 @@ open BatPervasives
 
 open CMe_common
 
+module Settings = CMe_notify_settings
+
 let  count = 10
 
 let () = define UrlMe.Notify.def_home begin fun cuid ->   
@@ -132,7 +134,10 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
   end in
     
   O.Box.fill begin
-    Asset_Notify_List.render (render_list more None)
+    Asset_Notify_List.render (object
+      method inner = render_list more None
+      method options = Action.url UrlMe.Notify.settings () () 
+    end) 
   end 
 end
 

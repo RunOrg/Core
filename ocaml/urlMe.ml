@@ -40,6 +40,7 @@ module Notify = struct
   let count, def_count = O.declare O.core "notify/count" A.none
   let follow, def_follow = O.declare O.core "notify/follow" (A.r INotify.arg) 
   let mailed, def_mailed = O.declare O.core "nt" (A.rr INotify.arg A.string)
+  let settings, def_settings = child def_home "nt/settings" 
 end
   
 module News = struct
