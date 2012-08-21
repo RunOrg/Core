@@ -18,5 +18,11 @@
 
 | `Notify_Title
 | `Notify_Settings_Title
+| `Notify_Settings_Choice of [ `Default
+			     | `Everything
+			     | `Relevant
+			     | `Nothing 
+			     ]
+| `Notify_Settings_Submit 
 
 | `Notify_Link_Settings

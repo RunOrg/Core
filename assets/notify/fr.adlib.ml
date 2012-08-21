@@ -21,4 +21,13 @@ end
 | `Notify_Link_Settings -> "Paramètres"
 
 | `Notify_Title -> "Notifications"
+
 | `Notify_Settings_Title -> "Paramètres"
+| `Notify_Settings_Choice c -> begin 
+  match c with 
+    | `Default -> "Options par défaut"
+    | `Everything -> "Recevoir toutes les notifications" 
+    | `Relevant -> "Uniquement les notifications qui me concernent"
+    | `Nothing -> "Ne rien recevoir"
+end
+| `Notify_Settings_Submit -> "Enregistrer"
