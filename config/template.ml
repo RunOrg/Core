@@ -1763,6 +1763,46 @@ let eventImproSpectacle = template "EventImproSpectacle"
 
 (* ========================================================================== *)
 
+let eventJudoCompetition = template "EventJudoCompetition"
+  ~kind:`Event
+  ~name:"Compétition de Judo"
+  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
+  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
+  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~columns:Col.([
+    status ; 
+    date ; 
+    column ~sort:true ~show:true ~view:`Text
+      ~label:(adlib "JoinFielJudoNoteAthlete" "Remarques sportif")
+      (`Self (`Field "judo-note-athlete")) ;
+
+  ])
+  ~fields:Field.([
+    desc ; picture ; date ; location ; 
+    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
+          `LongText "coord" ;
+  ])
+  ~join:[
+    join ~name:"judo-note-athlete" ~label:(adlib "JoinFielJudoNoteAthlete" "Remarques du sportif") `LongText ;
+      ]
+  ~page:Page.([
+    infoSection
+      (adlib "Info_Section_Org" "Organisation")
+      [
+        infoItem
+          [
+            infoField "coord" `Text ;
+          ];
+      ];
+    place ; 
+    time
+  ])
+  ()
+  
+
+(* ========================================================================== *)
+
 let eventMeeting = template "EventMeeting"
   ~old:"event-meeting"
   ~kind:`Event

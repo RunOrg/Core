@@ -646,6 +646,7 @@ let judo = vertical "Judo"
     pollYearly ;
     courseSimple ;
     eventSimple ;
+	EventJudoCompetition ;
     eventAg ;
     eventMeeting ;
     eventPetition ;
@@ -879,12 +880,28 @@ let salleSport = vertical "SalleSport"
 
 (* ========================================================================== *)
 
-(*let simple = vertical "SectionSportEtudes"
+let simple = vertical "SectionSportEtudes"
   ~name:"Section Sport-études"
-  ~forms:ProfileForm.([ simple ; test ])
+  ~forms:ProfileForm.([ 
+		SectionSportEtudesBilan ; 
+		SectionSportEtudesCompetition_Judo ; 
+		SectionSportEtudesMedical ;
+		SectionSportEtudesTrainings ;
+		SectionSportEtudesAcademic ;
+		SectionSportEtudesOther	])
   Template.([
-    initial "entity.sample.groupe-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
-      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs" ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs") ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.management-team.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesManagementTeamName" "Equipe encadrante") ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.trainers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesTrainersName" "Entraîneurs") ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.teachers.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesTeachersName" "Professeurs") ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.medical-team.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesMedicalTeamName" "Equipe médicale") ;
+    initial "entity.sample.group-collaborative.sectionsportetudes.parents.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesParentsName" "Parents des sportifs") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
@@ -897,12 +914,13 @@ let salleSport = vertical "SalleSport"
     pollYearly ;
     courseSimple ;
     eventSimple ;
+	EventJudoCompetition ;
     eventMeeting ;
     eventAg ;
     eventPetition ;
   ])
 ;;
-*)
+
 (* ========================================================================== *)
 
 let simple = vertical "Simple"
@@ -1177,11 +1195,19 @@ let () = catalog [
     inCatalog spUsep
               (adlib "VerticalSpUsepName" "Fédération - USEP")
               None ;
+    inCatalog SectionSportEtudes
+              (adlib "SectionSportEtudes" "Sections Sport-études")
+              (Some (adlib "VerticalCatalogSectionSportEtudesDesc" 
+		       "Gestion des classes sportives : encadrement, parents, élèves")) ;
   ] ;
   subCatalog ~name:(adlib "Education" "Education") [
     inCatalog elementarySchool
               (adlib "VerticalElementarySchool" "Ecoles primaires")
               None ;
+    inCatalog SectionSportEtudes
+              (adlib "SectionSportEtudes" "Sections Sport-études")
+              (Some (adlib "VerticalCatalogSectionSportEtudesDesc" 
+		       "Gestion des classes sportives : encadrement, parents, élèves")) ;
   ] ;
   subCatalog ~name:(adlib "Catalog_Autre" "Autres") [
     inCatalog campaigns
