@@ -1,0 +1,6 @@
+| `JoinForm_Required -> "Obligatoire"
+| `JoinForm_Kind_LongText -> "Texte"
+| `JoinForm_Kind_Textarea -> "Texte long"
+| `JoinForm_Kind_Date -> "Date"
+| `JoinForm_Edit -> "Modifier"
+| `JoinForm_Create -> "Ajouter un champ"
