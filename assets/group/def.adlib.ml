@@ -10,6 +10,10 @@
 
 | `Group_Admin_Title 
 
+| `Group_JoinForm_Title 
+| `Group_JoinForm_Link 
+| `Group_JoinForm_Sub 
+
 | `Group_Edit_Title
 | `Group_Edit_Link 
 | `Group_Edit_Sub 

@@ -10,6 +10,10 @@
 
 | `Group_Admin_Title -> "Administration"
 
+| `Group_JoinForm_Title -> "Formulaire"
+| `Group_JoinForm_Link -> "Formulaire d'inscription"
+| `Group_JoinForm_Sub -> "Demandez des informations aux membres qui s'inscrivent"
+
 | `Group_Edit_Title -> "Modifier"
 | `Group_Edit_Link -> "Options du groupe"
 | `Group_Edit_Sub -> "Changez le nom et la visibilité de ce groupe"
