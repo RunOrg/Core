@@ -11,9 +11,7 @@
       </div>
     </div>
   {/#}
-  <a href="javascript:void(0)" class="-create">
-    {`JoinForm_Create}
-  </a>
+  {form|Asset_JoinForm_Create.render|ohm}
 </div>
 
 {@!longtext}<input type="text" readonly value="{`JoinForm_Kind_LongText}"/>{/@}
@@ -87,18 +85,5 @@
     width: 175px;
   }
 
-  .-create {
-    border: 2px dashed #CCC;
-    border-radius: 5px 5px 5px 5px;
-    color: #888;
-    display: block;
-    padding: 8px;
-    text-align: center;
-    margin-top: 25px;
-    &:hover {
-      border-color: #AAA;
-      color: #666;
-    }
-  }
 }
 </style>

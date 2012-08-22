@@ -1,0 +1,170 @@
+<div {$f} style="display:none" class="-new">
+  <ul>
+    <li class="-selected">
+        <a class="_longtext" 
+	   href="javascript:void(0)">{`JoinForm_Kind_LongText}</a></li>
+    <li><a class="_textarea" 
+	   href="javascript:void(0)">{`JoinForm_Kind_Textarea}</a></li>
+    <li><a class="_date"
+	   href="javascript:void(0)">{`JoinForm_Kind_Date}</a></li>
+    <li><a class="_pickone"
+	   href="javascript:void(0)">{`JoinForm_Kind_PickOne}</a></li>
+    <li><a class="_pickmany"
+	   href="javascript:void(0)">{`JoinForm_Kind_PickMany}</a></li>
+  </ul>
+  <form action="">
+    <div class="-body">
+      <textarea></textarea>
+      <div {$c} style="display:none" class="-choices">
+	<div style="position:absolute">{`JoinForm_Choices}</div>
+	<input type="text"/>
+	<input type="text"/>
+      </div>
+      <label><input type="checkbox"/> {`JoinForm_Required}</label>
+    </div>
+    <button type="submit"><span>{`JoinForm_Create_Submit}</span></button>
+  </form>
+</div>
+
+
+<a {$b} href="javascript:void(0)" class="-create">
+  {`JoinForm_Create}
+</a>
+
+<script>
+init = false
+here.$b.click () ->
+  here.$f.show() 
+  here.$b.hide() 
+
+  ## Perform init of form now
+  return if init
+  init = true
+  here.$f.find("ul a").each () ->
+    $(@).click () ->
+      here.$f.find("ul .-selected").removeClass()
+      $(@).parent().addClass("-selected")
+      pick = $(@).hasClass("_pickone") || $(@).hasClass("_pickmany")
+      here.$c.toggle(pick)
+
+</script>
+
+<style>
+.edit-join-fields .-new {
+
+  margin-top: 25px;
+  border: 1px solid #888;
+  background-color: #E4E4E4;
+  box-shadow: 0 0 3px #555;
+  text-align: right;
+  padding: 8px;
+  border-radius: 5px;
+
+  .-body {
+    border: 1px solid #BBB;
+    background: white;
+    border-radius: 0;
+    margin-bottom: 4px;
+    padding: 0;
+  }
+
+  textarea {
+    .asap();
+    font-size: 13px;
+    padding: 3px;
+    width: 574px;
+    border: none;
+    margin: 0;
+    border-bottom: 1px solid #CCC;
+  }
+
+  label {
+    color: #555;
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 3px;
+    input { vertical-align: middle }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 4px;
+    height: 20px;
+  }
+
+  li {
+    height: 20px;
+    float: left;
+    a {
+      font-size: 13px;
+      display: block;
+      padding: 1px 12px;
+    }
+    &.-selected {
+      position: relative;
+      a { color: #333; }
+      &:after, &:before {
+        bottom: -5px;
+        border: solid transparent; 
+        content: " "; 
+        height: 0; 
+        width: 0; 
+        position: absolute; 
+        pointer-events: none; 
+      } 
+      &:after { 
+        border-bottom-color: #FFF;
+        border-width: 7px;
+        left: 50%; 
+        margin-left: -7px;
+      }
+      &:before { 
+        border-bottom-color: #BBB;
+        border-width: 8px;
+        left: 50%;
+        margin-left: -8px;      
+      }  
+    }
+  }
+
+  .-choices {
+    text-align: left;
+    color: #555;
+    line-height: 40px;
+    font-size: 14px;
+    overflow: hidden;
+    padding: 5px 90px 6px 5px;
+    border-bottom: 1px solid #CCC;
+    background-color: #EEE;
+    input {
+      border: 1px solid #CCC;
+      margin: 0 -1px -1px 0;
+      float: right;
+      width: 250px;
+      .asap();
+      clear: right;
+      font-size: 13px;
+      padding: 2px;
+    }
+  }
+
+}
+
+.edit-join-fields .-create {
+  border: 2px dashed #CCC;
+  border-radius: 5px 5px 5px 5px;
+  color: #888;
+  display: block;
+  padding: 8px;
+  text-align: center;
+  margin-top: 25px;
+  &:hover {
+    border-color: #AAA;
+    color: #666;
+  }
+}
+
+</style>

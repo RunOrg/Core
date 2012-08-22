@@ -40,6 +40,7 @@ let box access entity inner =
 
     Asset_JoinForm_List.render (object
       method list = list 
+      method form = () 
     end)
 
   in

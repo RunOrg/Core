@@ -2,5 +2,9 @@
 | `JoinForm_Kind_LongText
 | `JoinForm_Kind_Textarea
 | `JoinForm_Kind_Date
+| `JoinForm_Kind_PickOne
+| `JoinForm_Kind_PickMany 
 | `JoinForm_Edit
 | `JoinForm_Create
+| `JoinForm_Create_Submit
+| `JoinForm_Choices
