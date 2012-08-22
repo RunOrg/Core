@@ -8,6 +8,13 @@ let box access entity inner =
  
   let  gid   = MEntity.Get.group entity in 
 
+  let choices list = 
+    Run.list_filter (fun t ->
+      let! text = ohm $ TextOrAdlib.to_string t in
+      if text = "" then return None else return (Some text) 
+    ) list 
+  in
+
   let render = 
 
     let! fields = ohm begin
@@ -26,8 +33,8 @@ let box access entity inner =
 	  | `Textarea -> Asset_JoinForm_List_Textarea.render ()
 	  | `Date     -> Asset_JoinForm_List_Date.render ()
 	  | `Checkbox -> Asset_JoinForm_List_Checkbox.render ()
-	  | `PickOne list -> Asset_JoinForm_List_Pickone.render list
-	  | `PickMany list -> Asset_JoinForm_List_Pickmany.render list
+	  | `PickOne list -> Asset_JoinForm_List_Pickone.render (choices list)
+	  | `PickMany list -> Asset_JoinForm_List_Pickmany.render (choices list)
       end)      
     end fields in 
 
