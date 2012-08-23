@@ -9,3 +9,6 @@
 | `JoinForm_Create_Cancel
 | `JoinForm_Create_Submit
 | `JoinForm_Choices
+| `JoinForm_Edit_Submit
+| `JoinForm_Edit_Remove
+| `JoinForm_Edit_Cancel

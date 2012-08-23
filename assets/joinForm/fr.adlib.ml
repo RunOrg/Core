@@ -9,3 +9,6 @@
 | `JoinForm_Create_Cancel -> "Annuler"
 | `JoinForm_Create_Submit -> "Enregistrer"
 | `JoinForm_Choices -> "Réponses possibles :"
+| `JoinForm_Edit_Submit -> "Enregistrer"
+| `JoinForm_Edit_Remove -> "Supprimer"
+| `JoinForm_Edit_Cancel -> "Annuler"
