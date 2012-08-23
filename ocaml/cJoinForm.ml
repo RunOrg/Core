@@ -19,7 +19,13 @@ end)
 
 let box access entity inner =
  
-  let  gid   = MEntity.Get.group entity in 
+  let  gid   = MEntity.Get.group entity in
+  let  error = inner (return ignore) in
+
+  let! group = ohm_req_or error $ O.decay (MGroup.try_get access gid) in 
+  let! group = ohm_req_or error $ O.decay (MGroup.Can.admin group) in
+
+  let fields = MGroup.Fields.get group in 
 
   let choices list = 
     Run.list_filter (fun t ->
@@ -63,6 +69,10 @@ let box access entity inner =
 			  | `PickMany -> `PickMany pick
     end in
 
+    let fields = fields @ [field] in
+    
+    let! () = ohm (O.decay (MGroup.Fields.set group fields)) in
+
     let! data = ohm $ render_field field in 
     let! html = ohm $ Asset_JoinForm_List_Field.render data in
 
@@ -71,11 +81,6 @@ let box access entity inner =
   end in 
 
   let render = 
-
-    let! fields = ohm begin
-      let! group = ohm_req_or (return []) $ MGroup.naked_get gid in 
-      return (MGroup.Fields.get group) 
-    end in 
 
     let! list = ohm $ Run.list_map render_field fields in 
 
