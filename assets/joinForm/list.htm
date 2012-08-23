@@ -1,18 +1,24 @@
 <div class="edit-join-fields">
   {#list}
-    <div class="-field">
-      <span class="-label">
-	{label}
-        {if required}<span class="-required">{`JoinForm_Required}</span>{/if}
-      </span>
-      <a class="action-button" style="float:right;margin:0" href="javascript:void(0)">{`JoinForm_Edit}</a>      
-      <div class="-edit">
-	{edit|ohm}
-      </div>
-    </div>
+    {this|Asset_JoinForm_List_Field.render|ohm}
   {/#}
   {form|Asset_JoinForm_Create.render|ohm}
 </div>
+
+{@!field}
+  <div class="-field">
+    <span class="-label">
+      {label}
+      {if required}<span class="-required">{`JoinForm_Required}</span>{/if}
+    </span>
+    <a class="action-button" style="float:right;margin:0" href="javascript:void(0)">
+      {`JoinForm_Edit}
+    </a>      
+    <div class="-edit">
+      {edit|ohm}
+    </div>
+  </div>
+{/@}
 
 {@!longtext}<input type="text" readonly value="{`JoinForm_Kind_LongText}"/>{/@}
 {@!textarea}<textarea readonly="true">{`JoinForm_Kind_Textarea}</textarea>{/@}
