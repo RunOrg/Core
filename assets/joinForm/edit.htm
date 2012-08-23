@@ -1,5 +1,5 @@
 <div {$e} class="-edit">
-  <form action="">
+  <form {$f} action="">
 
     <div class="-body">
 
@@ -21,14 +21,27 @@
   </form>
 </div>
 
-<script type="endpoint:json">
+<script type="endpoint:json,req:bool,text:string">
+
+here.$e.find("textarea").val(text)
+here.$e.find("input").attr("checked",req)
+
+replace = (r) -> 
+  if r.field 
+    here.$e.replaceWith(r.field.html)
+    call r.field.code 
+  call r.code
 
 here.$cancel.click () ->
-  to_endpoint endpoint, false, (r) ->
-    if r.field 
-      here.$e.replaceWith(r.field.html)
-      call r.field.code 
-    call r.code
+  to_endpoint endpoint, false, replace
+
+here.$f.submit () ->
+  data = 
+    text: here.$e.find("textarea").val()
+    req:  here.$e.find(":checked").length > 0 
+  return false if text == ""
+  to_endpoint endpoint, data, replace
+  return false
 
 here.$remove.click () ->
   to_endpoint endpoint, "delete", () ->

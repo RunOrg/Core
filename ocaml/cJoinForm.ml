@@ -17,6 +17,14 @@ module CreateFmt = Fmt.Make(struct
   >
 end)
 
+module EditFmt = Fmt.Make(struct
+  type json t = <
+    text : string ;
+    req : bool ;
+  >
+end)
+
+
 let box access entity inner =
  
   let  gid   = MEntity.Get.group entity in
@@ -61,7 +69,10 @@ let box access entity inner =
     if json = Json.Null then 
 
       (* We need to pop up the edit form! *)
+      let! label = ohm (TextOrAdlib.to_string (field # label)) in
       let! html = ohm $ Asset_JoinForm_Edit.render (object
+	method req      = field # required
+	method text     = label
 	method endpoint = JsCode.Endpoint.to_json
 	  (OhmBox.reaction_endpoint edit name)
       end) in
@@ -84,7 +95,19 @@ let box access entity inner =
 
     else
 
-      return res
+      (* Edit the field using the sent data *)
+      let! data = req_or (return res) $ EditFmt.of_json_safe json in 
+      let field = object
+	method edit = field # edit
+	method name = field # name
+	method required = data # req
+	method label = `text (data # text) 
+      end in
+      let fields = List.map (fun f -> if (f # name) = name then field else f) fields in 
+      let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+      let! data = ohm $ render_field edit field in 
+      let! html = ohm $ Asset_JoinForm_List_Field.render data in 
+      return $ Action.json [ "field", Html.to_json html ] res 
 
   end in 
 
