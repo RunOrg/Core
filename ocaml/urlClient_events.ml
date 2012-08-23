@@ -19,6 +19,7 @@ let people,  def_people  = child def_admin  "ev/people"
 let join,    def_join    = child def_people "ev/join"
 let invite,  def_invite  = child def_people "ev/invite"
 let access,  def_access  = child def_admin  "ev/access"
+let jform,   def_jform   = child def_admin  "ev/jform"
 
 let tabs = 
   (function 

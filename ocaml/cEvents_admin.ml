@@ -12,6 +12,7 @@ module Access  = CEvents_admin_access
 module People  = CEvents_admin_people
 module Join    = CEvents_admin_join
 module Invite  = CEvents_admin_invite
+module JForm   = CEvents_admin_jForm
 
 let () = define UrlClient.Events.def_admin begin fun parents entity access -> 
   O.Box.fill begin 
@@ -43,6 +44,13 @@ let () = define UrlClient.Events.def_admin begin fun parents entity access ->
 	method url      = parents # access # url 
 	method title    = AdLib.get `Event_Access_Link
 	method subtitle = Some (AdLib.get `Event_Access_Sub)
+       end) ;
+
+      (object
+	method img      = VIcon.Large.textfield
+	method url      = parents # jform # url 
+	method title    = AdLib.get `Event_JoinForm_Link
+	method subtitle = Some (AdLib.get `Event_JoinForm_Sub)
        end) ;
 
     ] in

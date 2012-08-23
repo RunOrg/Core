@@ -85,3 +85,7 @@ end
 | `Event_Access_Title -> "Visibilité et droits"
 | `Event_Access_Link -> "Visibilité et droits"
 | `Event_Access_Sub -> "Déterminez qui peut voir, s'inscrire ou administrer cette activité"
+
+| `Event_JoinForm_Title -> "Formulaire"
+| `Event_JoinForm_Link -> "Formulaire d'inscription"
+| `Event_JoinForm_Sub -> "Demandez des informations aux participants"

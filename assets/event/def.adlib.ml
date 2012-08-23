@@ -77,3 +77,7 @@
 | `Event_Access_Title
 | `Event_Access_Link
 | `Event_Access_Sub
+
+| `Event_JoinForm_Title
+| `Event_JoinForm_Link
+| `Event_JoinForm_Sub 
