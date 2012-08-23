@@ -23,7 +23,7 @@ onScroll = () ->
 
     if (et <= db && eb >= dt)
       $(window).unbind "scroll", onScroll
-      to_endpoint data, (d) ->
+      to_endpoint endpoint, data, (d) ->
         if d.more
           here.$point.before(d.more.html)
           call d.more.code
