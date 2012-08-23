@@ -6,5 +6,6 @@
 | `JoinForm_Kind_PickMany 
 | `JoinForm_Edit
 | `JoinForm_Create
+| `JoinForm_Create_Cancel
 | `JoinForm_Create_Submit
 | `JoinForm_Choices

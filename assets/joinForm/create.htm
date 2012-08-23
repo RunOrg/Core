@@ -1,28 +1,38 @@
 <div {$f} style="display:none" class="-new">
   <ul>
     <li class="-selected">
-        <a class="_longtext" 
+        <a class="_LongText" 
 	   href="javascript:void(0)">{`JoinForm_Kind_LongText}</a></li>
-    <li><a class="_textarea" 
+    <li><a class="_Textarea" 
 	   href="javascript:void(0)">{`JoinForm_Kind_Textarea}</a></li>
-    <li><a class="_date"
+    <li><a class="_Date"
 	   href="javascript:void(0)">{`JoinForm_Kind_Date}</a></li>
-    <li><a class="_pickone"
+    <li><a class="_PickOne"
 	   href="javascript:void(0)">{`JoinForm_Kind_PickOne}</a></li>
-    <li><a class="_pickmany"
+    <li><a class="_PickMany"
 	   href="javascript:void(0)">{`JoinForm_Kind_PickMany}</a></li>
   </ul>
-  <form action="">
+  <form {$form} action="">
+
     <div class="-body">
+
       <textarea></textarea>
+
       <div {$c} style="display:none" class="-choices">
 	<div style="position:absolute">{`JoinForm_Choices}</div>
 	<input type="text"/>
 	<input type="text"/>
       </div>
+
       <label><input type="checkbox"/> {`JoinForm_Required}</label>
+
     </div>
+
     <button type="submit"><span>{`JoinForm_Create_Submit}</span></button>
+    <a {$cancel} style="display:inline-block" 
+       class="action-button"
+       href="javascript:void(0)">{`JoinForm_Create_Cancel}</span></a>
+
   </form>
 </div>
 
@@ -31,21 +41,60 @@
   {`JoinForm_Create}
 </a>
 
-<script>
+<script type="submit:json">
 init = false
 here.$b.click () ->
   here.$f.show() 
   here.$b.hide() 
 
   ## Perform init of form now
+
   return if init
   init = true
   here.$f.find("ul a").each () ->
     $(@).click () ->
       here.$f.find("ul .-selected").removeClass()
       $(@).parent().addClass("-selected")
-      pick = $(@).hasClass("_pickone") || $(@).hasClass("_pickmany")
+      pick = $(@).hasClass("_PickOne") || $(@).hasClass("_PickMany")
       here.$c.toggle(pick)
+
+  here.$c.find("input").focus () ->
+    if !$(@).nextAll().length
+      $(@).clone(true).insertAfter(@)
+
+  clean = () -> 
+    here.$f.hide()
+    here.$b.show() 
+    here.$f.find("textarea, input").val ""    
+    here.$f.find(":checked").attr "checked", false
+
+  here.$form.submit () ->
+
+    data = 
+      kind: here.$f.find(".-selected a").attr("class").substring(1)
+      text: here.$f.find("textarea").val()
+      req:  here.$f.find(":checked").length > 0
+      pick: []
+
+    here.$c.find("input").each () ->
+      str = $(@).val()
+      data.pick.push str if str != "" 
+
+
+    return if data.text == ""
+    return if here.$c.is(":visible") && data.pick.length == 0
+      
+    to_endpoint submit, data, (result) ->
+      if result.field
+        $(result.field.html).insertBefore(here.$f)
+        call result.field.code
+      call result.code
+
+    clean()
+
+    return false
+
+  here.$cancel.click clean
 
 </script>
 
@@ -75,6 +124,7 @@ here.$b.click () ->
     width: 574px;
     border: none;
     margin: 0;
+    display: block;
     border-bottom: 1px solid #CCC;
   }
 

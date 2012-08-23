@@ -6,5 +6,6 @@
 | `JoinForm_Kind_PickMany -> "Choix multiple"
 | `JoinForm_Edit -> "Modifier"
 | `JoinForm_Create -> "Ajouter un champ"
+| `JoinForm_Create_Cancel -> "Annuler"
 | `JoinForm_Create_Submit -> "Enregistrer"
 | `JoinForm_Choices -> "Réponses possibles :"

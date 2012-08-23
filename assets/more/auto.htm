@@ -23,23 +23,7 @@ onScroll = () ->
 
     if (et <= db && eb >= dt)
       $(window).unbind "scroll", onScroll
-      
-      if typeof endpoint is 'string'
-        send = (data,callback) -> 
-          $.ajax
-            url: endpoint
-            data: data 
-            type: 'POST'
-            contentType: 'application/json'
-            success: callback 
-      else
-        send = (data,callback) -> 
-          f = eval('('+endpoint[0]+')')
-          a = endpoint[1..]
-          a.push data, callback
-          f.apply @, a
-
-      send data, (d) -> 
+      to_endpoint data, (d) ->
         if d.more
           here.$point.before(d.more.html)
           call d.more.code
