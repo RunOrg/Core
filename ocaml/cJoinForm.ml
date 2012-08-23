@@ -34,10 +34,9 @@ let box access entity inner =
     ) list 
   in
 
-  let render_field field = 
+  let render_field edit field = 
     let! label = ohm (TextOrAdlib.to_string (field # label)) in
     return (object
-      method name     = field # name
       method label    = label
       method required = field # required
       method edit     = match field # edit with 
@@ -47,8 +46,47 @@ let box access entity inner =
 	| `Checkbox -> Asset_JoinForm_List_Checkbox.render ()
 	| `PickOne list -> Asset_JoinForm_List_Pickone.render (choices list)
 	| `PickMany list -> Asset_JoinForm_List_Pickmany.render (choices list)
+      method endpoint = JsCode.Endpoint.to_json 
+	(OhmBox.reaction_endpoint edit (field # name))
     end)      
   in
+
+  let! edit = O.Box.react Fmt.String.fmt begin fun name json edit res -> 
+    
+    let! field = req_or (return res) begin
+      try Some (List.find (fun f -> (f # name) = name) fields)
+      with Not_found -> None 
+    end in
+
+    if json = Json.Null then 
+
+      (* We need to pop up the edit form! *)
+      let! html = ohm $ Asset_JoinForm_Edit.render (object
+	method endpoint = JsCode.Endpoint.to_json
+	  (OhmBox.reaction_endpoint edit name)
+      end) in
+
+      return $ Action.json [ "edit", Html.to_json html ] res    
+
+    else if json = Json.Bool false then
+
+      (* We need to restore the field. *)
+      let! data = ohm $ render_field edit field in 
+      let! html = ohm $ Asset_JoinForm_List_Field.render data in 
+      return $ Action.json [ "field", Html.to_json html ] res 
+	
+    else if json = Json.String "delete" then 
+
+      (* Remove the field from the list of fields *)
+      let fields = List.filter (fun f -> (f # name) <> name) fields in
+      let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+      return res
+
+    else
+
+      return res
+
+  end in 
 
   let! create = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
     
@@ -73,7 +111,7 @@ let box access entity inner =
     
     let! () = ohm (O.decay (MGroup.Fields.set group fields)) in
 
-    let! data = ohm $ render_field field in 
+    let! data = ohm $ render_field edit field in 
     let! html = ohm $ Asset_JoinForm_List_Field.render data in
 
     return $ Action.json [ "field", Html.to_json html ] res
@@ -82,7 +120,7 @@ let box access entity inner =
 
   let render = 
 
-    let! list = ohm $ Run.list_map render_field fields in 
+    let! list = ohm $ Run.list_map (render_field edit) fields in 
 
     Asset_JoinForm_List.render (object
       method list = list 

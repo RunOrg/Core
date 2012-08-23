@@ -6,18 +6,26 @@
 </div>
 
 {@!field}
-  <div class="-field">
+  <div {$f} class="-field">
     <span class="-label">
       {label}
       {if required}<span class="-required">{`JoinForm_Required}</span>{/if}
     </span>
-    <a class="action-button" style="float:right;margin:0" href="javascript:void(0)">
+    <a {$e} class="action-button" style="float:right;margin:0" href="javascript:void(0)">
       {`JoinForm_Edit}
     </a>      
-    <div class="-edit">
+    <div class="-aspect">
       {edit|ohm}
     </div>
   </div>
+  <script type="endpoint:json">
+here.$e.click () ->
+  to_endpoint endpoint, null, (r) ->
+    if r.edit 
+      here.$f.replaceWith(r.edit.html)
+      call r.edit.code
+    call r.code
+  </script>
 {/@}
 
 {@!longtext}<input type="text" readonly value="{`JoinForm_Kind_LongText}"/>{/@}
@@ -56,7 +64,7 @@
     padding-right: 4px;
   }
 
-  .-edit {
+  .-aspect {
     overflow: hidden;
     padding: 0 8px;
     opacity: 0.5;

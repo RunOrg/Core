@@ -1,4 +1,4 @@
-<div class="-edit">
+<div {$e} class="-edit">
   <form action="">
 
     <div class="-body">
@@ -9,7 +9,7 @@
 
     </div>
 
-    <a {$remove} style="display:inline-block" 
+    <a {$remove} style="float:left"
        class="action-button"
        href="javascript:void(0)">{`JoinForm_Edit_Remove}</span></a>
 
@@ -20,3 +20,18 @@
 
   </form>
 </div>
+
+<script type="endpoint:json">
+
+here.$cancel.click () ->
+  to_endpoint endpoint, false, (r) ->
+    if r.field 
+      here.$e.replaceWith(r.field.html)
+      call r.field.code 
+    call r.code
+
+here.$remove.click () ->
+  to_endpoint endpoint, "delete", () ->
+  here.$e.remove()
+
+</script>
