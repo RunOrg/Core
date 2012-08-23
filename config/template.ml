@@ -2011,9 +2011,9 @@ let groupBadminton = template "GroupBadminton"
   ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du badminton"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ; 
@@ -2095,9 +2095,9 @@ let groupCheerleading = template "GroupCheerleading"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du cheerleading"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -2185,9 +2185,9 @@ let groupCollaborative = template "GroupCollaborative"
   ~name:"Groupe avec Forum"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2199,9 +2199,9 @@ let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~name:"Groupe avec Forum"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2213,9 +2213,9 @@ let _ = template "GroupContact"
   ~name:"Contacts"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2228,9 +2228,9 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~desc:"Groupe avec forum, dédié aux gardiens et salariés"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ 
     status ;
     date ; 
@@ -2268,9 +2268,9 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~desc:"Groupe avec forum, dédié aux locataires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ; 
@@ -2300,9 +2300,9 @@ let groupCoproManager = template "GroupCoproManager"
   ~desc:"Groupe avec forum, dédié aux gestionnaires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -2332,9 +2332,9 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~desc:"Groupe avec forum, dédié aux propriétaires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ; 
     date ; 
@@ -2375,9 +2375,9 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~desc:"Regroupe les informations demandées à vos sportifs."
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -2499,9 +2499,9 @@ let groupFootus = template "GroupFootus"
   ~desc:"Regroupe les informations demandées aux joueurs de football américain"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -2591,9 +2591,9 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~desc:"Regroupe les informations demandées aux pratiquants de judo et de jujitsu"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -2687,9 +2687,9 @@ let groupRespo = template "GroupRespo"
   ~name:"Responsables"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -2701,9 +2701,9 @@ let groupSchoolParents = template "GroupSchoolParents"
   ~desc:"Groupe avec forum, dédié aux parents d'élèves"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     column ~sort:true ~show:true ~view:`Text
       ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
@@ -2755,9 +2755,9 @@ let _ = template "GroupTest"
   ~name:"Groupe Test"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ()
 
 (* ========================================================================== *)
