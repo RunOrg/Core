@@ -19,20 +19,39 @@ module Public = CJoin_public
 let template group = 
   List.fold_left (fun acc field -> 
     acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
-	begin match field # edit with 
-	  | `Checkbox
-	  | `Date
-	  | `LongText
-	  | `PickMany _ 
-	  | `PickOne  _ 
-	  | `Textarea ->
-	    (VEliteForm.textarea 
-	       ~label:(TextOrAdlib.to_string (field # label))
-	       (fun data -> return begin 
-		 try Json.to_string (List.assoc (field # name) data)
-		 with _ -> ""
-	       end)
-	       (OhmForm.keep)) 
+	begin let json seed = List.assoc (field # name) seed in 
+	      let label = TextOrAdlib.to_string (field # label) in 
+	      match field # edit with 
+		| `Checkbox ->
+		  (VEliteForm.checkboxes ~label
+		     ~format:Fmt.Unit.fmt
+		     ~source:[ (), return ignore ]
+		     (fun seed -> return (try if Json.to_bool (json seed) then [()] else [] with _ -> []))
+		     (fun field data -> return $ Ok (Json.Bool (data <> []))))
+		| `Date ->
+		  (VEliteForm.date ~label
+		     (fun seed -> return (try Json.to_string (json seed) with _ -> ""))
+		     (fun field data -> return $ Ok (Json.String data)))
+		| `LongText -> 
+		  (VEliteForm.text ~label
+		     (fun seed -> return (try Json.to_string (json seed) with _ -> ""))
+		     (fun field data -> return $ Ok (Json.String data))) 
+		| `PickOne list -> 
+		  (VEliteForm.radio ~label
+		     ~format:Fmt.Int.fmt
+		     ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
+		     (fun seed -> return (try Some (Json.to_int (json seed)) with _ -> None))
+		     (fun field data -> return $ Ok (Json.of_opt Json.of_int data)))
+		| `PickMany list ->
+		  (VEliteForm.checkboxes ~label
+		     ~format:Fmt.Int.fmt
+		     ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
+		     (fun seed -> return (try Json.to_list Json.to_int (json seed) with _ -> []))
+		     (fun field data -> return $ Ok (Json.of_list Json.of_int data)))
+		| `Textarea ->
+		  (VEliteForm.textarea ~label
+		     (fun data -> return (try Json.to_string (json data) with _ -> ""))
+		     (fun field data -> return $ Ok (Json.String data))) 
 	end 
   ) (OhmForm.begin_object []) (MGroup.Fields.get group)
 
