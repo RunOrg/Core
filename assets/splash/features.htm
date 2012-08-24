@@ -1,0 +1,41 @@
+<ul class="block-features">
+  {#this}
+    <li>
+      <h4>{title}</h4>
+      {body|raw}
+    </li>
+  {/#}
+</ul>
+
+<style>
+.theme-splash .block-features {
+
+  padding: 0; 
+  margin: 0 20px; 
+  list-style-type: none;
+
+  li {
+    overflow: hidden;
+    color: #888;
+    font-size: 14px;
+    border-bottom: 1px solid #DDD;
+    border-top: 1px solid #DDD;
+    margin-bottom: -1px;
+    padding: 16px 8px;
+    height: 62px;
+  }
+
+  h4 {
+    white-space: nowrap;
+    margin: 0 0 4px;
+    font-size: 18px;
+    color: black;
+    font-weight: bold;
+  }
+
+  p {
+    margin: 0 0 0 16px;
+  }
+  
+}
+</style>

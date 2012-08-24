@@ -35,6 +35,9 @@ let obj l =
 	 (fun (name,expr) -> "method " ^ name ^ " = " ^ expr) l
      @ ["end)"]) 
 
+let opt f = function
+  | None -> "None"
+  | Some x -> "Some ("^f x^")"
 
 let hr () = "(return $ Html.str " ^ string "<hr/>" ^ ")"
 
@@ -100,8 +103,22 @@ let image ?copyright url =
 		"Some " ^ obj [ "url", string link ; "name", string name ])
 	  ]] 
 
+let images urls = 
+  call "Asset_Splash_List.render"
+    [ list (List.map image urls) ]
+
 let ribbon inner = 
   call "Asset_Splash_Ribbon.render" [ inner ]  
+
+let ribbon_title ?name title = 
+  call "Asset_Splash_RibbonTitle.render"
+    [ obj [ "name", opt string name ; "title", string title ] ]
+
+let features l = 
+  call "Asset_Splash_Features.render" 
+    [ list (List.map (fun (title, body) ->
+      obj [ "title", string title ; "body", html body ] 
+    ) l ) ] 
 
 let facebook () = 
   call "Asset_Splash_Facebook.render" [ "()" ] 

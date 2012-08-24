@@ -96,6 +96,28 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	
     ] ;
 
+  page "/features/full" "RunOrg Associations - Fonctionnalités"
+    ~section:"associations" 
+    ~head:"associations"
+    ~subsection:"fonctionnalites"
+    [ ribbon_title ~name:"members" "Gestion des membres" ;
+      composite `LR 
+	(* Images : 464x254 pixels *)
+	(images [ "/public/img/2012-04-13-1-cut.png" ;
+		  "/public/img/2012-04-13-1-cut.png" ;
+		  "/public/img/2012-04-13-1-cut.png" ])
+	(features [ 
+	  "Adhésions et groupes", 
+	  "Disposez d'une liste à jour de vos membres, triée en autant de sous-listes que nécesaire." ;
+
+	  "Groupes secrets",
+	  "Un groupe secret n'est visible que par les membres qui y sont inscrits." ;
+
+	  "Inscription en ligne", 
+	  "Permettez à vos membres de rejoindre des groupes en ligne."
+	]) ;
+    ] ;
+
   page "/features" "RunOrg Associations - Fonctionnalités"
     ~section:"associations" 
     ~head:"associations"
