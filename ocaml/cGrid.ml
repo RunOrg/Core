@@ -22,7 +22,7 @@ module RowsFmt = Fmt.Make(struct
   type json t = (string list)
 end)
 
-let box access entity fail join_url wrapper = 
+let box access entity fail invite_url join_url wrapper = 
 
   (* Extract the AvatarGrid identifier *)
 
@@ -140,8 +140,9 @@ let box access entity fail join_url wrapper =
       (* ==================================== *)
 
     end in     
-
+	     
     let body = Asset_Grid_Block.render (object
+      method invite  = invite_url 
       method columns = List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns
       method cols = List.length columns 
       method urlRows = OhmBox.reaction_json rows ()

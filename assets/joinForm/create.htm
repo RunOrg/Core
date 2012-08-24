@@ -86,7 +86,7 @@ here.$b.click () ->
       text: here.$f.find("textarea").val() || "" 
       req:  here.$req.is(":checked")
       pick: []
-      prof: here.$f.find("[name='profile']:checked").attr "value" || "" 
+      prof: here.$f.find("[name='profile']:checked").attr("value") || "" 
 
     here.$c.find("input").each () ->
       str = $(@).val()

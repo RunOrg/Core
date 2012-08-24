@@ -29,6 +29,11 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
 	IAvatar.to_string aid ] 
   in
   
+  let invite_url = 
+    Action.url UrlClient.Members.invite (access # instance # key) 
+      [ IEntity.to_string (MEntity.Get.id entity) ]
+  in
+
   (* Return the box containing the grid. *)
 
   let wrapper body = 
@@ -39,6 +44,6 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access entity fail join_url wrapper
+  CGrid.box access entity fail invite_url join_url wrapper
 
 end
