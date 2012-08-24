@@ -4,8 +4,9 @@
 </div>
 
 {@!field}
-  <div {$f} class="-field">
+  <div {$f} class="-field{if extern} -extern{/if}">
     <span class="-label">
+      {if extern}<span style="color:#888">{`JoinForm_Source_Profile}</span>{/if}
       {label}
       {if required}<span class="-required">{`JoinForm_Required}</span>{/if}
     </span>
@@ -60,6 +61,10 @@ here.$e.click () ->
     color: #BBB;
     font-size: 12px;
     padding-right: 4px;
+  }
+
+  .-field.-extern {
+    background-color: #EFF;
   }
 
   .-aspect {

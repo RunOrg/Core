@@ -11,6 +11,8 @@
 	   href="javascript:void(0)">{`JoinForm_Kind_PickOne}</a></li>
     <li><a class="_PickMany"
 	   href="javascript:void(0)">{`JoinForm_Kind_PickMany}</a></li>
+    <li><a class="_Profile"
+	   href="javascript:void(0)">{`JoinForm_Kind_Profile}</a></li>
   </ul>
   <form {$form} action="">
 
@@ -24,7 +26,13 @@
 	<input type="text"/>
       </div>
 
-      <label><input type="checkbox"/> {`JoinForm_Required}</label>
+      <div {$profile} style="display:none" class="-profile">
+	{#profile}
+	  <label><input type="radio" name="profile" value="{value}">{`PreConfig label}</label>
+	{/#}
+      </div>
+
+      <label><input {$req} type="checkbox"/> {`JoinForm_Required}</label>
 
     </div>
 
@@ -57,6 +65,9 @@ here.$b.click () ->
       $(@).parent().addClass("-selected")
       pick = $(@).hasClass("_PickOne") || $(@).hasClass("_PickMany")
       here.$c.toggle(pick)
+      text = !$(@).hasClass("_Profile")
+      here.$f.find("textarea").toggle(text)
+      here.$profile.toggle($(@).hasClass("_Profile"))
 
   here.$c.find("input").focus () ->
     if !$(@).nextAll().length
@@ -72,17 +83,18 @@ here.$b.click () ->
 
     data = 
       kind: here.$f.find(".-selected a").attr("class").substring(1)
-      text: here.$f.find("textarea").val()
-      req:  here.$f.find(":checked").length > 0
+      text: here.$f.find("textarea").val() || "" 
+      req:  here.$req.is(":checked")
       pick: []
+      prof: here.$f.find("[name='profile']:checked").attr "value" || "" 
 
     here.$c.find("input").each () ->
       str = $(@).val()
       data.pick.push str if str != "" 
 
-
-    return if data.text == ""
+    return if here.$f.find("textarea").is(":visible") && !data.text
     return if here.$c.is(":visible") && data.pick.length == 0
+    return if here.$profile.is(":visible") && !data.prof
       
     to_endpoint submit, data, (result) ->
       if result.field
@@ -198,6 +210,23 @@ here.$b.click () ->
       clear: right;
       font-size: 13px;
       padding: 2px;
+    }
+  }
+
+  .-profile {
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    background-color: #EEE;
+    margin-top: 5px;
+    padding: 5px 16px;
+    overflow: hidden;
+    label {
+      padding: 3px 23px;
+      float: left;
+      width: 228px;
+    }
+    input {
+      margin: 0 6px 3px 0;
     }
   }
 

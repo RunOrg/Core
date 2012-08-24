@@ -4,6 +4,7 @@
 | `JoinForm_Kind_Date -> "Date"
 | `JoinForm_Kind_PickOne -> "Choix simple"
 | `JoinForm_Kind_PickMany -> "Choix multiple"
+| `JoinForm_Kind_Profile -> "Profil"
 | `JoinForm_Edit -> "Modifier"
 | `JoinForm_Create -> "Ajouter un champ"
 | `JoinForm_Create_Cancel -> "Annuler"
@@ -12,3 +13,4 @@
 | `JoinForm_Edit_Submit -> "Enregistrer"
 | `JoinForm_Edit_Remove -> "Supprimer"
 | `JoinForm_Edit_Cancel -> "Annuler"
+| `JoinForm_Source_Profile -> "Profil : "

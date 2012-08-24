@@ -4,6 +4,7 @@
 | `JoinForm_Kind_Date
 | `JoinForm_Kind_PickOne
 | `JoinForm_Kind_PickMany 
+| `JoinForm_Kind_Profile
 | `JoinForm_Edit
 | `JoinForm_Create
 | `JoinForm_Create_Cancel
@@ -12,3 +13,4 @@
 | `JoinForm_Edit_Submit
 | `JoinForm_Edit_Remove
 | `JoinForm_Edit_Cancel
+| `JoinForm_Source_Profile

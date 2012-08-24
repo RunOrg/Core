@@ -3,8 +3,9 @@
 
     <div class="-body">
 
-      <textarea></textarea>
-
+      {if extern}{else}
+        <textarea></textarea>
+      {/if}
       <label><input type="checkbox"/> {`JoinForm_Required}</label>
 
     </div>
@@ -21,7 +22,7 @@
   </form>
 </div>
 
-<script type="endpoint:json,req:bool,text:string">
+<script type="endpoint:json,req:bool,text:string,extern:bool">
 
 here.$e.find("textarea").val(text)
 here.$e.find("input").attr("checked",req)
@@ -37,9 +38,9 @@ here.$cancel.click () ->
 
 here.$f.submit () ->
   data = 
-    text: here.$e.find("textarea").val()
+    text: here.$e.find("textarea").val() || ""
     req:  here.$e.find(":checked").length > 0 
-  return false if text == ""
+  return false if text == "" && !extern
   to_endpoint endpoint, data, replace
   return false
 

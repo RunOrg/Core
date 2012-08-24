@@ -10,10 +10,12 @@ module CreateFmt = Fmt.Make(struct
 	   | `Textarea
 	   | `PickOne
 	   | `PickMany
-	   | `Date ] ;
+	   | `Date 
+	   | `Profile ] ;
     text : string ;
     req : bool ;
     pick : string list ;
+    prof : string
   >
 end)
 
@@ -24,6 +26,12 @@ module EditFmt = Fmt.Make(struct
   >
 end)
 
+let profile_fields = 
+  [ "Phone"    , `Phone     ; "Address"  , `Address   ;
+    "Cellphone", `Cellphone ; "Zipcode"  , `Zipcode   ;
+    "Birthdate", `Birthdate ; "City"     , `City      ;
+    "Gender"   , `Gender    ; "Country"  , `Country   ;
+  ]
 
 let box access entity inner =
  
@@ -159,19 +167,27 @@ let box access entity inner =
     let! data = req_or (return res) $ CreateFmt.of_json_safe json in 
     
     let name = Id.gen () |> Id.str in
-
-    let field = `Local (object
-      method name     = name
-      method label    = `text data # text
-      method required = data # req
-      method edit     = let pick = List.map (fun t -> `text t) (data # pick) in
-			match data # kind with 
-			  | `LongText -> `LongText
-			  | `Textarea -> `Textarea
-			  | `Date -> `Date
-			  | `PickOne -> `PickOne pick
-			  | `PickMany -> `PickMany pick
-    end) in
+    
+    let pick = List.map (fun t -> `text t) (data # pick) in
+    let what = match data # kind with 
+      | `LongText -> `Local `LongText
+      | `Textarea -> `Local `Textarea
+      | `Date     -> `Local `Date
+      | `PickOne  -> `Local (`PickOne pick)
+      | `PickMany -> `Local (`PickMany pick)
+      | `Profile  -> `Profile
+    in
+	
+    let field = match what with 
+      | `Local edit -> `Local (object
+	method name     = name
+	method label    = `text data # text
+	method required = data # req
+	method edit     = edit 	  
+      end)
+      | `Profile -> let f = try List.assoc (data # prof) profile_fields with _ -> `Cellphone in
+		    `Profile (data # req, f)
+    in
 
     let fields = (List.map (snd |- fst) fields) @ [field] in
     
@@ -198,6 +214,10 @@ let box access entity inner =
       method list = Html.concat list 
       method form = if List.length fields < MGroup.Fields.max then 
 	  Some (object
+	    method profile = List.map (fun (v,l) -> (object
+	      method value = v
+	      method label = l
+	    end)) profile_fields
 	    method submit = JsCode.Endpoint.to_json 
 	      (OhmBox.reaction_endpoint create ())
 	  end)
