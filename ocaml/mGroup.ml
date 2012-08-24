@@ -100,7 +100,7 @@ let create gid iid eid tmpl =
     method manual = true
     method entity = Some eid
     method list   = list
-    method fields = PreConfig_Template.join tmpl
+    method fields = List.map (fun f -> `Local f) (PreConfig_Template.join tmpl)
     method propg  = propg
   end in
   
@@ -318,12 +318,14 @@ end
 
 module Fields = struct
 
+  (* Worst case, keep only 20 fields. *)
+  let max = 20
+
   let get t = 
     t.data # fields
     
   let set t fields = 
-    (* Worst case, keep only 20 fields. *)
-    let fields = BatList.take 20 fields in
+    let fields = BatList.take max fields in
     let update d = object
       method t      = `Group
       method ins    = d # ins
@@ -343,16 +345,32 @@ module Fields = struct
     let! group = ohm_req_or (return []) $ _get id in
     return (group # fields)
 
-  let complete id = 
-    let rec aux id accum = 
-      if List.exists (fun (x,_) -> x = id) accum then return accum else
-	let! group = ohm_req_or (return accum) $ _get id in
-	let  accum = (id, List.map (fun f -> f # name, f) group # fields) :: accum in
-	List.fold_left (fun accum_m id -> accum_m |> Run.bind (aux id))
-	  (return accum) (group # propg) 
-    in
-    aux (IGroup.decay id) []
-      
+  let local gid = 
+    let! fields = ohm $ of_group gid in
+    return $ BatList.filter_map begin function 
+      | `Local simple -> Some simple
+      | `Profile _
+      | `Import  _ -> None 
+    end fields
+
+  let flat gid = function 
+    | `Local   simple  -> return (Some (MJoinFields.Flat.group false (IGroup.decay gid) simple))
+    | `Profile (r,p)   -> return (Some (MJoinFields.Flat.profile r p))
+    | `Import  (r,g,s) -> let! fields = ohm $ of_group g in   
+			  try return $ Some (BatList.find_map (function 
+			    | `Local f when f # name = s -> 
+			      Some (MJoinFields.Flat.group r g f) 
+			    | _ -> None) fields) 
+			  with Not_found -> return None
+   
+
+  let flatten gid = 
+
+    let gid = IGroup.decay gid in 
+    let! fields = ohm $ of_group gid in 
+    
+    Run.list_filter (flat gid) fields
+
 end
 
 (* Reacting to entity refreshes ------------------------------------------------------------- *)

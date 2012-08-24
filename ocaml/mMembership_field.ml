@@ -1,6 +1,6 @@
 (* © 2012 RunOrg *)
 
-include MJoinFields.Field
+include MJoinFields.Simple
   
 let has_stats field = 
   match field # edit with

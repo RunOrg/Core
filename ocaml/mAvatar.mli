@@ -83,6 +83,8 @@ val status : 'a IInstance.id -> 'b ICurrentUser.id -> ( #Ohm.CouchDB.ctx, Status
 
 val profile : 'a IAvatar.id -> IProfile.t O.run
 
+val my_profile : [`IsSelf] IAvatar.id -> [`IsSelf] IProfile.id O.run
+
 val get : 'any IIsIn.id -> [`IsSelf] IAvatar.id O.run
 
 val usage : [<`ViewContacts|`SeeUsage] IInstance.id -> int O.run

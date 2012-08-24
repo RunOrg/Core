@@ -16,6 +16,17 @@ module ColumnName = struct
   let email     = adlib "ColumnUserBasicEmail"     ~old:"column.user-basic.email" "Email"
   let gender    = adlib "MemberFieldGender"        ~old:"member.field.gender" "Sexe"
 
+  let _ = adlib "Birthdate" "Date de naissance"
+  let _ = adlib "Phone" "Téléphone"
+  let _ = adlib "Cellphone" "Téléphone portable"
+  let _ = adlib "Address" "Adresse"
+  let _ = adlib "Zipcode" "Code postal"
+  let _ = adlib "City" "Ville"
+  let _ = adlib "Country" "Pays"
+  let _ = adlib "Gender" "Sexe"
+  let _ = adlib "Gender_Male" "Homme"
+  let _ = adlib "Gender_Female" "Femme"
+
 end
 
 module OldEntity = struct

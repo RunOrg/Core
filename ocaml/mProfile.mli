@@ -17,20 +17,10 @@ module Data : sig
     gender    : [`m|`f] option 
   }
     
-  type extract = [ `firstname 
-		 | `lastname 
-		 | `email 
-		 | `birthdate
-		 | `phone
-		 | `cellphone 
-		 | `address
-		 | `zipcode
-		 | `city
-		 | `country
-		 | `gender ]
-      
-  val extract : t -> extract -> Ohm.Json.t
-    
+  val field : t -> MJoinFields.profile -> Ohm.Json.t
+
+  val apply : (MJoinFields.profile * Ohm.Json.t) list -> (t -> t) option 
+
 end
 
 
@@ -57,7 +47,9 @@ val refresh   : [`Bot] IUser.id -> 'b IInstance.id -> unit O.run
 val create : 'any IInstance.id -> Data.t -> 
   [ `ok of (IUser.t * [`Created] IProfile.id) | `exists of IUser.t ] O.run
     
-val data : [`View] IProfile.id -> (MFieldShare.t list * Data.t) option O.run
+val data : [<`IsSelf|`View] IProfile.id -> (MFieldShare.t list * Data.t) option O.run
+
+val update : [`IsSelf] IProfile.id -> (Data.t -> Data.t) -> unit O.run
 
 module Sharing : sig
 

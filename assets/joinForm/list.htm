@@ -1,8 +1,6 @@
 <div class="edit-join-fields">
-  {#list}
-    {this|Asset_JoinForm_List_Field.render|ohm}
-  {/#}
-  {form|Asset_JoinForm_Create.render|ohm}
+  {list|verbatim}
+  {?form}{this|Asset_JoinForm_Create.render|ohm}{/?}
 </div>
 
 {@!field}

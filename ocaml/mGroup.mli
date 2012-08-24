@@ -24,9 +24,7 @@ val bot_get   : [`Bot] IGroup.id -> [`Bot] t option O.run
 val naked_get :  'any  IGroup.id ->  'any  t option O.run
 
 module Token : sig 
-
   val get    :    'any  t -> [`contact | `token | `admin] 
-
 end
 
 module Get : sig 
@@ -45,10 +43,16 @@ end
 
 module Fields : sig 
 
+  val max      : int
+
   val get      : 'any     t -> MJoinFields.Field.t list 
   val set      : [`Admin] t -> MJoinFields.Field.t list -> unit O.run
+
   val of_group : 'any IGroup.id -> MJoinFields.Field.t list O.run
-  val complete : 'any IGroup.id -> (IGroup.t * ((string * MJoinFields.Field.t) list)) list O.run
+  val local    : 'any IGroup.id -> string MJoinFields.field list O.run
+  val flatten  : 'any IGroup.id -> MJoinFields.Flat.t list O.run 
+
+  val flat     : 'any IGroup.id -> MJoinFields.Field.t -> MJoinFields.Flat.t option O.run 
 
 end
 

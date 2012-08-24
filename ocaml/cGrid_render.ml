@@ -4,12 +4,15 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let get_field = function
+let rec get_field = function
   | `Group (gid,`Field name) ->
-    let! group = ohm_req_or (return None) $ MGroup.naked_get gid in  
-    let fields = MGroup.Fields.get group in 
-    let has_name f = f # name = name in
-    return (try Some (List.find has_name fields) with _ -> None)
+    let! fields = ohm $ MGroup.Fields.of_group gid in 
+    return (
+      try Some (BatList.find_map (function 
+	| `Local field when field # name = name -> Some field
+	| _ -> None) fields)
+      with _ -> None
+    )
   | _ -> return None 
     
 let format_picker json field =       

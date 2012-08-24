@@ -16,7 +16,7 @@ module Top = CJoin_top
 module Self = CJoin_self
 module Public = CJoin_public
 
-let template group = 
+let template fields = 
   List.fold_left (fun acc field -> 
     acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
 	begin let json seed = List.assoc (field # name) seed in 
@@ -53,7 +53,7 @@ let template group =
 		     (fun data -> return (try Json.to_string (json data) with _ -> ""))
 		     (fun field data -> return $ Ok (Json.String data))) 
 	end 
-  ) (OhmForm.begin_object []) (MGroup.Fields.get group)
+  ) (OhmForm.begin_object []) fields
 
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Join_Edit_Save)
 
@@ -66,7 +66,7 @@ let status_edit aid mid access kind group profile = fun edit _ self res ->
     @ ( match edit # user   with Some b -> [ `Default b ] | None -> [] ) 
   in
   
-  let gid = MGroup.Get.id group in 
+  let  gid = MGroup.Get.id group in 
 
   let! () = ohm $ O.decay (MMembership.admin ~from:(access # self) gid aid diffs) in
   
@@ -95,7 +95,9 @@ let box entity access fail wrapper =
 
   let! mid = ohm $ O.decay (MMembership.as_admin (MGroup.Get.id group) aid) in 
 
-  let! status_edit = O.Box.react StatusEditFmt.fmt (status_edit aid mid access kind group profile) in
+  let! status_edit = O.Box.react StatusEditFmt.fmt 
+    (status_edit aid mid access kind group profile)
+  in
 
   let! data_edit = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     return res
@@ -103,14 +105,18 @@ let box entity access fail wrapper =
 
   O.Box.fill begin 
 
+    let! fields = ohm $ O.decay (MGroup.Fields.local gid) in 
+
     let! mbr = ohm $ O.decay (MMembership.get mid) in 
-    let  mbr = BatOption.default (MMembership.default ~mustpay:false ~group:gid ~avatar:aid) mbr in
+    let  mbr = BatOption.default 
+      (MMembership.default ~mustpay:false ~group:gid ~avatar:aid) mbr
+    in
     
-    let fields = if MGroup.Fields.get group = [] then None else Some begin
+    let fields = if fields = [] then None else Some begin
 
       let! data = ohm $ O.decay (MMembership.Data.get mid) in
 
-      let template = template group in 
+      let template = template fields in 
       let form = OhmForm.create ~template ~source:(OhmForm.from_seed data) in
       let url  = OhmBox.reaction_endpoint data_edit () in
 

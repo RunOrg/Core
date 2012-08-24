@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Util
@@ -340,6 +340,11 @@ let profile aid =
   let! a        = ohm_req_or (return selfsame) $ MyTable.get (IAvatar.decay aid) in
   let! pid      = ohm_req_or (return selfsame) $ MProfile.find (a#ins) (a#who) in
   return pid 
+
+let my_profile aid = 
+  let! pid = ohm $ profile aid in 
+  (* Acting as self *)
+  return (IProfile.Assert.is_self pid)
 
 (* Count members with a token ------------------------------------------------------------- *)
 

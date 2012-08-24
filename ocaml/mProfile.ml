@@ -12,18 +12,6 @@ module Design = struct
 end
 
 module Data = struct
-
-  type extract = [ `firstname 
-		 | `lastname 
-		 | `email 
-		 | `birthdate
-		 | `phone
-		 | `cellphone 
-		 | `address
-		 | `zipcode
-		 | `city
-		 | `country
-		 | `gender ]
       
   type t = {
     firstname : string ;
@@ -93,22 +81,39 @@ module Data = struct
     }
  
   let fmt = to_json, Fmt.protect of_json
-
  
-  let extract v (e:extract) = match e with 
-    | `firstname -> Json.of_string (v.firstname)
-    | `lastname  -> Json.of_string (v.lastname)
-    | `email     -> Json.of_opt Json.of_string (v.email)
-    | `birthdate -> Json.of_opt Json.of_string (v.birthdate) 
-    | `phone     -> Json.of_opt Json.of_string (v.phone) 
-    | `cellphone -> Json.of_opt Json.of_string (v.cellphone) 
-    | `address   -> Json.of_opt Json.of_string (v.address) 
-    | `zipcode   -> Json.of_opt Json.of_string (v.zipcode) 
-    | `city      -> Json.of_opt Json.of_string (v.city) 
-    | `country   -> Json.of_opt Json.of_string (v.country) 
-    | `gender    -> Json.of_opt 
-      (function `m -> Json.of_string "m" | `f -> Json.of_string "f") (v.gender) 
-      
+  let field v = function
+    | `Birthdate -> Json.of_opt Json.of_string (v.birthdate) 
+    | `Phone     -> Json.of_opt Json.of_string (v.phone) 
+    | `Cellphone -> Json.of_opt Json.of_string (v.cellphone) 
+    | `Address   -> Json.of_opt Json.of_string (v.address) 
+    | `Zipcode   -> Json.of_opt Json.of_string (v.zipcode) 
+    | `City      -> Json.of_opt Json.of_string (v.city) 
+    | `Country   -> Json.of_opt Json.of_string (v.country) 
+    | `Gender    -> Json.of_opt 
+      (function `m -> Json.Int 0 | `f -> Json.Int 1) (v.gender) 
+
+  let apply list =
+    if list = [] then None else
+      Some (fun v ->
+	List.fold_left (fun v (key,json) ->
+	  try 
+	    match key with 
+	      | `Birthdate -> { v with birthdate = Json.to_opt Json.to_string json }
+	      | `Phone     -> { v with phone     = Json.to_opt Json.to_string json }
+	      | `Cellphone -> { v with cellphone = Json.to_opt Json.to_string json }
+	      | `Address   -> { v with address   = Json.to_opt Json.to_string json }
+	      | `Zipcode   -> { v with zipcode   = Json.to_opt Json.to_string json }
+	      | `City      -> { v with city      = Json.to_opt Json.to_string json }
+	      | `Country   -> { v with country   = Json.to_opt Json.to_string json }
+	      | `Gender    -> { v with gender = match json with 
+		  | Json.Int 0 -> Some `m
+		  | Json.Int 1 -> Some `f
+		  | _          -> None }
+	  with _ -> v
+	) v list
+      )
+
 end
 
 module Profile = struct
@@ -310,7 +315,16 @@ let create iid data =
     end 
 
     | _ :: _ -> return (`exists uid)
-      
+
+let update pid f = 
+
+  let! what = ohm_req_or (return ())
+    (MyTable.transaction (IProfile.decay pid)
+       (MyTable.update (fun t -> { t with data = f t.data }))) 
+  in
+
+  let updated = IProfile.Assert.updated pid in
+  Signals.on_update_call (updated, what.user, what.ins, what.data)
       
 let data id = 
   let id = IProfile.decay id in

@@ -31,7 +31,7 @@ let () = UrlClient.def_join begin fun req res ->
     let! fields = ohm begin
       let  gid = MEntity.Get.group entity in 
       let! group = ohm_req_or (return []) $ MGroup.naked_get gid in 
-      return $ MGroup.Fields.get group
+      MGroup.Fields.flatten gid
     end in 
 
     let! token, status = ohm begin
@@ -112,7 +112,7 @@ let () = UrlClient.def_doJoin begin fun req res ->
   let  gid = MEntity.Get.group entity in
   let! group = ohm_req_or panic $ MGroup.naked_get gid in 
 
-  let  fields = MGroup.Fields.get group in 
+  let! fields = ohm $ MGroup.Fields.flatten gid in
 
   if fields = [] then 
 
@@ -134,16 +134,13 @@ let () = UrlClient.def_doJoin begin fun req res ->
       return $ Action.json json res
     in
     
-    let! result = ohm_ok_or fail $ OhmForm.result form in  
-    
+    let! result = ohm_ok_or fail $ OhmForm.result form in     
+
     (* Save the data and process the join request *)
     
     let! () = ohm $ MMembership.user gid aid true in
-    
-    let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay aid)) in
-    let! mid  = ohm $ MMembership.as_user gid aid in
-    let! ()   = ohm $ MMembership.Data.self_update gid aid info result in
-    
+    let! () = ohm $ Self.save_data aid result in 
+
     return $ Action.javascript (Js.reload ()) res
 
 

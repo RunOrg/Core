@@ -9,44 +9,87 @@ let do_join self group =
   match admin with
     | None -> MMembership.user (MGroup.Get.id group) self true 
     | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) self [ `Accept true ; `Default true ]
+
+
+let save_data self result = 
+
+  let  result = MJoinFields.Flat.dispatch result in 
+  
+  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay self)) in
+
+  let! ()   = ohm (Run.list_iter begin fun (gid, data) ->
+    MMembership.Data.self_update gid self info data
+  end result # groups) in
+
+  match MProfile.Data.apply (result # profile) with 
+    | None -> return ()
+    | Some f -> let! pid = ohm $ MAvatar.my_profile self in 
+		MProfile.update pid f
  
 
 let template button fields = 
   List.fold_left (fun acc field -> 
-    acc |> OhmForm.append (fun json result -> return $ (field # name,result) :: json)
-	begin let json seed = List.assoc (field # name) seed in 
-	      let label = TextOrAdlib.to_string (field # label) in 
-	      match field # edit with 
-		| `Checkbox ->
-		  (VEliteForm.checkboxes ~label
-		     ~format:Fmt.Unit.fmt
-		     ~source:[ (), return ignore ]
-		     (fun seed -> return (try if Json.to_bool (json seed) then [()] else [] with _ -> []))
-		     (fun field data -> return $ Ok (Json.Bool (data <> []))))
-		| `Date ->
-		  (VEliteForm.date ~label
-		     (fun seed -> return (try Json.to_string (json seed) with _ -> ""))
-		     (fun field data -> return $ Ok (Json.String data)))
-		| `LongText -> 
-		  (VEliteForm.text ~label
-		     (fun seed -> return (try Json.to_string (json seed) with _ -> ""))
-		     (fun field data -> return $ Ok (Json.String data))) 
-		| `PickOne list -> 
-		  (VEliteForm.radio ~label
-		     ~format:Fmt.Int.fmt
-		     ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
-		     (fun seed -> return (try Some (Json.to_int (json seed)) with _ -> None))
-		     (fun field data -> return $ Ok (Json.of_opt Json.of_int data)))
-		| `PickMany list ->
-		  (VEliteForm.checkboxes ~label
-		     ~format:Fmt.Int.fmt
-		     ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
-		     (fun seed -> return (try Json.to_list Json.to_int (json seed) with _ -> []))
-		     (fun field data -> return $ Ok (Json.of_list Json.of_int data)))
-		| `Textarea ->
-		  (VEliteForm.textarea ~label
-		     (fun data -> return (try Json.to_string (json data) with _ -> ""))
-		     (fun field data -> return $ Ok (Json.String data))) 
+
+    let name, edit = match field with 
+      | `Group   f -> `Group   (f # name), f # edit
+      | `Profile f -> `Profile (f # name), f # edit 
+    in
+
+    let label = 
+      TextOrAdlib.to_string (match field with 
+	| `Group   f -> f # label
+	| `Profile f -> f # label)
+    in 
+
+    let json self = match field with 
+      | `Group f -> let  gid, name = f # name in 
+		    let! mid  = ohm $ MMembership.as_user gid self in 
+		    let! data = ohm $ MMembership.Data.get mid in 
+		    return (try List.assoc name data with Not_found -> Json.Null)
+      | `Profile f -> let  what = f # name in 
+		      let! pid  = ohm $ MAvatar.my_profile self in 
+		      let! _, data = ohm_req_or (return Json.Null) $ MProfile.data pid in
+		      return (MProfile.Data.field data what) 
+    in
+
+    acc |> OhmForm.append (fun json result -> return $ (name,result) :: json)
+	begin match edit with
+	  | `Checkbox ->
+	    (VEliteForm.checkboxes ~label
+	       ~format:Fmt.Unit.fmt
+	       ~source:[ (), return ignore ]
+	       (fun self -> let! json = ohm (json self) in 
+			    return (try if Json.to_bool json then [()] else [] with _ -> []))
+	       (fun field data -> return $ Ok (Json.Bool (data <> []))))
+	  | `Date ->
+	    (VEliteForm.date ~label
+	       (fun self -> let! json = ohm (json self) in
+			    return (try Json.to_string json with _ -> ""))
+	       (fun field data -> return $ Ok (Json.String data)))
+	  | `LongText -> 
+	    (VEliteForm.text ~label
+	       (fun self -> let! json = ohm (json self) in
+			    return (try Json.to_string json with _ -> ""))
+	       (fun field data -> return $ Ok (Json.String data))) 
+	  | `PickOne list -> 
+	    (VEliteForm.radio ~label
+	       ~format:Fmt.Int.fmt
+	       ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
+	       (fun self -> let! json = ohm (json self) in
+			    return (try Some (Json.to_int json) with _ -> None))
+	       (fun field data -> return $ Ok (Json.of_opt Json.of_int data)))
+	  | `PickMany list ->
+	    (VEliteForm.checkboxes ~label
+	       ~format:Fmt.Int.fmt
+	       ~source:(BatList.mapi (fun i label -> i, TextOrAdlib.to_html label) list)
+	       (fun self -> let! json = ohm (json self) in
+			    return (try Json.to_list Json.to_int json with _ -> []))
+	       (fun field data -> return $ Ok (Json.of_list Json.of_int data)))
+	  | `Textarea ->
+	    (VEliteForm.textarea ~label
+	       (fun self -> let! json = ohm (json self) in
+			    return (try Json.to_string json with _ -> ""))
+	       (fun field data -> return $ Ok (Json.String data))) 
 	end 
   ) (OhmForm.begin_object []) fields
 
@@ -157,15 +200,18 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   let! () = true_or panic (not (MEntity.Get.draft entity)) in 
   
-  let  gid   = MEntity.Get.group entity in
-  let! group = ohm_req_or panic $ MGroup.try_get access gid in
+  let  gid    = MEntity.Get.group entity in
+  let! group  = ohm_req_or panic $ MGroup.try_get access gid in
+  let! fields = ohm $ MGroup.Fields.flatten gid in 
 
   (* Extract form data *)
 
   let! json = req_or panic $ Action.Convenience.get_json req in
 
+  let  template = template `Join_Self_Save fields in
+
   let  src  = OhmForm.from_post_json json in 
-  let  form = OhmForm.create ~template:(template `Join_Self_Save (MGroup.Fields.get group)) ~source:src in
+  let  form = OhmForm.create ~template ~source:src in
 
   let fail errors = 
     let  form = OhmForm.set_errors errors form in
@@ -177,11 +223,8 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   (* Save the data and process the join request *)
 
-  let! ()    = ohm $ do_join (access # self) group in 
-  
-  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
-  let! mid  = ohm $ MMembership.as_user gid (access # self) in
-  let! ()   = ohm $ MMembership.Data.self_update gid (access # self) info result in
+  let! () = ohm $ do_join (access # self) group in 
+  let! () = ohm $ save_data (access # self) result in
 
   return $ Action.javascript (Js.reload ()) res
 
@@ -206,10 +249,9 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
   let! () = true_or panic (not (MEntity.Get.draft entity)) in 
   
-  let  gid   = MEntity.Get.group entity in
-  let! group = ohm_req_or panic $ MGroup.try_get access gid in
-
-  let  fields = MGroup.Fields.get group in
+  let  gid    = MEntity.Get.group entity in
+  let! group  = ohm_req_or panic $ MGroup.try_get access gid in 
+  let! fields = ohm $ MGroup.Fields.flatten gid in
 
   let  kind = match MEntity.Get.kind entity with
     | `Event -> `Event
@@ -244,11 +286,10 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     
     (* Joining an entity with a join form *)
 
-    let! mid    = ohm $ MMembership.as_user gid (access # self) in
     let! status = ohm $ MMembership.status access gid in
-    let! data   = ohm $ MMembership.Data.get mid in 
 
-    let form = OhmForm.create ~template:(template `Join_Self_Save fields) ~source:(OhmForm.from_seed data) in
+    let template = template `Join_Self_Save fields in 
+    let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # self)) in
     let url  = JsCode.Endpoint.of_url (Action.url UrlClient.Join.post req # server req # args) in    
 
     let! html = ohm $ Asset_Join_SelfEdit.render (object
