@@ -58,23 +58,31 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     end in
     
     let! contents = O.Box.add begin 
+
+      let url =
+	if admin <> None then 
+	  Some (fun aid -> Action.url UrlClient.Forums.join (access # instance # key) 
+	    [ IEntity.to_string eid ; IAvatar.to_string aid ])
+	else
+	  None
+      in
       
       let! the_seg = O.Box.parse UrlClient.Forums.tabs in 
       match the_seg with
 	| `Wall   -> CWall.box access feed     
 	| `Album  -> CAlbum.box access album
 	| `Folder -> CFolder.box access folder
-	| `People -> CPeople.forum_box access group 	
+	| `People -> CPeople.forum_box ?url access group 	
 	  
     end in
     
     O.Box.fill $ O.decay begin
       
-      (* Top and side details ------------------------------------------------------------------------------ *)
+      (* Top and side details -------------------------------------------------------------- *)
       
       let! name = ohm $ CEntityUtil.name entity in
 
-      (* My own status in this group --------------------------------------------------------------------- *)
+      (* My own status in this group ------------------------------------------------------- *)
 
       let! join = ohm begin
 	if public || MEntity.Get.kind entity = `Group then return None else
@@ -85,7 +93,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	      Some (CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
       end in 
 
-      (* Administrator URLs -------------------------------------------------------------------------------- *)
+      (* Administrator URLs ---------------------------------------------------------------- *)
       
       let admin = 
 	if admin <> None then 

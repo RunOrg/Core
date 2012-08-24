@@ -12,4 +12,7 @@ val name : 'any IAvatar.id -> string O.run
 
 val mini_profile : 'any IAvatar.id -> mini_profile O.run
 
-val directory : 'any IAvatar.id list -> Ohm.Html.writer O.run
+val directory : 
+     ?url:('any IAvatar.id -> string)
+  -> 'any IAvatar.id list
+  -> Ohm.Html.writer O.run

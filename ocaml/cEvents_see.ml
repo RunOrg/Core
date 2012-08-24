@@ -62,18 +62,26 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
   let! contents = O.Box.add begin 
 
+    let url =
+      if admin <> None then 
+	Some (fun aid -> Action.url UrlClient.Events.join (access # instance # key) 
+	  [ IEntity.to_string eid ; IAvatar.to_string aid ])
+      else
+	None
+    in
+
     let! the_seg = O.Box.parse UrlClient.Events.tabs in 
     match the_seg with
       | `Wall   -> CWall.box access feed     
       | `Album  -> CAlbum.box access album
       | `Folder -> CFolder.box access folder
-      | `People -> CPeople.event_box access group 
+      | `People -> CPeople.event_box ?url access group 
 
   end in
       
   O.Box.fill $ O.decay begin
 
-    (* Top and side details ------------------------------------------------------------------------------ *)
+    (* Top and side details ---------------------------------------------------------------- *)
 
     let! now  = ohmctx (#time) in
 

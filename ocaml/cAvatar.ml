@@ -50,18 +50,16 @@ let mini_profile aid =
     method nameo = details # name
   end)
 
-let directory aids = 
+let directory ?url aids = 
   
-  let! list = ohm $ Run.list_map begin fun aid -> 
+  let! list = ohm $ Run.list_filter begin fun aid -> 
 
     let! details = ohm $ MAvatar.details aid in 
-
-    let! name = ohm begin match details # name with 
-      | None -> AdLib.get `Anonymous
-      | Some name -> return name
-    end in 
-
+    let! name = req_or (return None) (details # name) in
     let! pic = ohm $ CPicture.small_opt (details # picture) in
+    let! iid = req_or (return None) (details # ins) in
+
+    let! instance = ohm_req_or (return None) $ MInstance.get iid in 
 
     let sort = match details # sort with 
       | None | Some "" -> '?', "" 
@@ -72,8 +70,13 @@ let directory aids =
 
     let gender = None in
 
-    return (sort, (object
-      method url    = "javascript:void(0)"
+    let url = match url with 
+      | None -> Action.url UrlClient.Profile.home (instance # key) [IAvatar.to_string aid]
+      | Some url -> url aid
+    in 
+
+    return $ Some (sort, (object
+      method url    = url 
       method pic    = pic
       method name   = name
       method status = match details # status with 
