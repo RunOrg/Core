@@ -19,7 +19,8 @@
   </div>
   <script type="endpoint:json">
 here.$e.click () ->
-  to_endpoint endpoint, null, (r) ->
+  pos = here.$f.prevAll().length - 1
+  to_endpoint endpoint, ["Form",pos], (r) ->
     if r.edit 
       here.$f.replaceWith(r.edit.html)
       call r.edit.code

@@ -26,6 +26,15 @@ module EditFmt = Fmt.Make(struct
   >
 end)
 
+module ArgFmt = Fmt.Make(struct
+  type json t = 
+    [ `View of int
+    | `Edit of int * EditFmt.t
+    | `Form of int
+    | `Delete of int
+    ]
+end)
+
 let profile_fields = 
   [ "Phone"    , `Phone     ; "Address"  , `Address   ;
     "Cellphone", `Cellphone ; "Zipcode"  , `Zipcode   ;
@@ -87,77 +96,84 @@ let box access entity inner =
 	| `PickOne  list -> Asset_JoinForm_List_Pickone.render (choices list)
 	| `PickMany list -> Asset_JoinForm_List_Pickmany.render (choices list)
       method endpoint = JsCode.Endpoint.to_json 
-	(OhmBox.reaction_endpoint edit idx)
+	(OhmBox.reaction_endpoint edit ())
     end)      
   in
 
   (* A reaction responsible for editing individual fields *)
 
-  let! edit = O.Box.react Fmt.Int.fmt begin fun idx json edit res -> 
-    
-    let! field, flat = req_or (return res) begin
+  let! edit = O.Box.react Fmt.Unit.fmt begin fun () json edit res -> 
+        
+    let! arg = req_or (return res) (ArgFmt.of_json_safe json) in
+
+    let get idx = req_or (return res) begin
       try Some (List.assoc idx fields)
       with Not_found -> None 
-    end in
+    end in 
 
-    if json = Json.Null then 
+    match arg with 
+      | `Form idx -> 
 
-      let collapsed = MJoinFields.Flat.collapse flat in 
+	let! field, flat = get idx in 
 
-      (* We need to pop up the edit form! *)
-      let! label = ohm (TextOrAdlib.to_string (collapsed # label)) in
-      let! html = ohm $ Asset_JoinForm_Edit.render (object
-	method extern   = extern field
-	method req      = collapsed # required
-	method text     = label
-	method endpoint = JsCode.Endpoint.to_json
-	  (OhmBox.reaction_endpoint edit idx)
-      end) in
-
-      return $ Action.json [ "edit", Html.to_json html ] res    
-
-    else if json = Json.Bool false then
-
-      (* We need to restore the field HTML: render it and send it back. *)
-
-      let! html = ohm $ render_field edit (idx,(field,flat)) in 
-      return $ Action.json [ "field", Html.to_json html ] res 
+	let collapsed = MJoinFields.Flat.collapse flat in 
 	
-    else if json = Json.String "delete" then 
+	(* We need to pop up the edit form! *)
+	let! label = ohm (TextOrAdlib.to_string (collapsed # label)) in
+	let! html = ohm $ Asset_JoinForm_Edit.render (object
+	  method extern   = extern field
+	  method req      = collapsed # required
+	  method text     = label
+	  method endpoint = JsCode.Endpoint.to_json
+	    (OhmBox.reaction_endpoint edit ())
+	end) in
+	
+	return $ Action.json [ "edit", Html.to_json html ] res    
 
-      (* Remove the field from the list of fields. The client will
-	 also remove it from the client-side list. *)
+      | `View idx ->
 
-      let fields = BatList.filter_map (fun (i,(f,_)) -> 
-	if i = idx then None else Some f
-      ) fields in 
+	let! field, flat = get idx in 
 
-      let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
-      return res
+	(* We need to restore the field HTML: render it and send it back. *)
+	let! html = ohm $ render_field edit (idx,(field,flat)) in 
+	return $ Action.json [ "field", Html.to_json html ] res 
 
-    else
+      | `Delete idx -> 
+	
+	(* Remove the field from the list of fields. The client will
+	   also remove it from the client-side list. *)
+	
+	let fields = BatList.filter_map (fun (i,(f,_)) -> 
+	  if i = idx then None else Some f
+	) fields in 
+	
+	let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+	return res
 
-      (* Edit the field using the sent data *)
-      let! data = req_or (return res) $ EditFmt.of_json_safe json in 
-      let field = match field with 
-	| `Local f -> `Local (object
-	  method edit = f # edit
-	  method name = f # name
-	  method required = data # req
-	  method label = `text (data # text) 
-	end)
-	| `Profile (req,what) -> `Profile (data # req, what)
-	| `Import (req,gid,name) -> `Import (data # req, gid, name) 
-      in
-      let fields = List.map (fun (i,(f,_)) -> if i = idx then field else f) fields in 
+      | `Edit (idx,data) -> 
+	
+	let! field, flat = get idx in 
 
-      let! flat' = ohm $ O.decay (MGroup.Fields.flat (MGroup.Get.id group) field) in
-      let  flat  = BatOption.default flat flat' in
-
-      let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
-      let! html = ohm $ render_field edit (idx,(field,flat)) in 
-      return $ Action.json [ "field", Html.to_json html ] res 
-
+	(* Edit the field using the sent data *)     
+	let field = match field with 
+	  | `Local f -> `Local (object
+	    method edit = f # edit
+	    method name = f # name
+	    method required = data # req
+	    method label = `text (data # text) 
+	  end)
+	  | `Profile (req,what) -> `Profile (data # req, what)
+	  | `Import (req,gid,name) -> `Import (data # req, gid, name) 
+	in
+	let fields = List.map (fun (i,(f,_)) -> if i = idx then field else f) fields in 
+	
+	let! flat' = ohm $ O.decay (MGroup.Fields.flat (MGroup.Get.id group) field) in
+	let  flat  = BatOption.default flat flat' in
+	
+	let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+	let! html = ohm $ render_field edit (idx,(field,flat)) in 
+	return $ Action.json [ "field", Html.to_json html ] res 
+	  
   end in 
 
   (* Reaction that creates a new field. *)
