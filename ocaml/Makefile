@@ -12,6 +12,5 @@ distclean:
 	make -C ohm/src distclean
 
 clean:
-	make -C ohm/src clean
 	$(OCAMLBUILD) -clean
 
