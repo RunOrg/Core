@@ -48,3 +48,4 @@ end
 | `Groups_Create_Submit -> "Créer"
 | `Groups_Create_Cancel -> "Annuler"
 
+| `Group_Columns_Title -> "Colonnes"

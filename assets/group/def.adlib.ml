@@ -44,3 +44,4 @@
 | `Groups_Create_Submit 
 | `Groups_Create_Cancel 
 
+| `Group_Columns_Title 

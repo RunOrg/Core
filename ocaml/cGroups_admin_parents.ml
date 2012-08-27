@@ -22,5 +22,6 @@ let parents title key eid = object
   method people  = make `Group_People_Title   people  key eid 
   method invite  = make `Group_Invite_Title   invite  key eid 
   method jform   = make `Group_JoinForm_Title jform   key eid
+  method cols    = make `Group_Columns_Title  cols    key eid 
 end
 

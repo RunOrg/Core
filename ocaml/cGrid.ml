@@ -4,8 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Grid   = MAvatarGrid
-module Render = CGrid_render
+module Grid    = MAvatarGrid
+module Render  = CGrid_render
+module Columns = CGrid_columns
 
 module SortFmt = Fmt.Make(struct
   type json t = < asc : bool ; col : int > 
