@@ -153,7 +153,6 @@ let box access entity inner =
       | `Edit (idx,data) -> 
 	
 	let! field, flat = get idx in 
-
 	(* Edit the field using the sent data *)     
 	let field = match field with 
 	  | `Local f -> `Local (object

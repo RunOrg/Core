@@ -137,8 +137,8 @@ setTimeout load, 2000
 
 #topbar {
   background-color: #EEE;
-  background: -webkit-linear-gradient(bottom, #CCC 0px, #EEE 75px);
-  background: -moz-linear-gradient(bottom, #CCC 0px, #EEE 75px);
+  background: -webkit-linear-gradient(bottom, #CCC, #EEE 75px);
+  background: -moz-linear-gradient(bottom, #CCC, #EEE 75px);
   border-bottom: 1px solid #555;
   box-shadow: 0 1px 3px #CCC;
   margin-bottom: 10px;
@@ -203,16 +203,16 @@ setTimeout load, 2000
 
           &:hover {
             background-color: #CCC;
-            background: -moz-linear-gradient(top,#CCC 0%,#BBB 100%);
-            background: -webkit-linear-gradient(top,#CCC 0%,#BBB 100%);
+            background: -moz-linear-gradient(top,#CCC,#BBB);
+            background: -webkit-linear-gradient(top,#CCC,#BBB);
             box-shadow: inset 1px 1px 1px #AAA;
           }
         }
 
         &.-selected a, &.-selected a:hover {
           background-color: #BBB;
-          background: -moz-linear-gradient(top,#BBB 0%,#AAA 100%);
-          background: -webkit-linear-gradient(top,#BBB 0%,#AAA 100%);
+          background: -moz-linear-gradient(top,#BBB,#AAA);
+          background: -webkit-linear-gradient(top,#BBB,#AAA);
           box-shadow: inset 1px 1px 2px #888;
         }
 
