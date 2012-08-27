@@ -116,6 +116,57 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	  "Inscription en ligne", 
 	  "Permettez à vos membres de rejoindre des groupes en ligne."
 	]) ;
+	
+	[ ribbon_title ~name:"website" "Site Internet" ;
+      composite `LR 
+	(* Images : 464x254 pixels *)
+	(images [ "/public/img/" ;
+		  "/public/img/" ;
+		  "/public/img/"])
+	(features [ 
+	  "Site Internet gratuit", 
+	  "Disposez d'un site Internet gratuit pour communiquer avec le public." ;
+
+	  "Publication d'articles",
+	  "Publiez vos annonces à la manière d'un blog et tout aussi facilement." ;
+
+	  "Envoie des articles aux abonnés", 
+	  "Vos articles sont automatiquement envoyés à l'ensemble de vos membres et vos abonnés" ;
+	  
+	  "Agenda en ligne",
+	  "Mettez en ligne les évènements que vous voulez rendre public, en un seul clique depuis votre espace privé." ;
+	  
+	  "Inscriptions et adhésions en ligne",
+	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne." ;
+	  
+	  "Page de présentation",
+	  "Une page de présentation vous permet de présenter votre association, de mettre en ligne son logo et de renseigner ses coordonnées."	
+    ] ;
+	
+	[ ribbon_title ~name:"confidentiality" "Espace privé et confidentialité" ;
+      composite `LR 
+	(* Images : 464x254 pixels *)
+	(images [ "/public/img/" ;
+		  "/public/img/" ;
+		  "/public/img/"])
+	(features [ 
+	  "Vous avez le contrôle total", 
+	  "C'est vous qui contrôlez qui accède à votre espace, et qui peut voir ou participer à vos activités." ;
+
+	  "Sous groupes à volonté",
+	  "Au sein de votre espace, vous créez autant de groupes indépendants les un des autres que vous le souhaitez." ;
+
+	  "Vie privée respectée", 
+	  "Les informations des espaces membres sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers" ;
+	  
+	  "Accès nominatifs et contrôlé",
+	  "Chaque personne dispose d'un compte pour lequel nous avons vérifié la validité de l'adresse email." ;
+	  
+	  "Gestion des information personnelles",
+	  "Chaque membre contrôle et modifie les informations personnelles qu'il partage avec ses associations" ;
+	  
+	  "Connexion sécurisée",
+	  "Un protocole sécurisé avec un certificat est utilisé lors de la connexion à votre espace privé."	
     ] ;
 
   page "/features" "RunOrg Associations - Fonctionnalités"
