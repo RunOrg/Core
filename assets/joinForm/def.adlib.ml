@@ -14,3 +14,4 @@
 | `JoinForm_Edit_Remove
 | `JoinForm_Edit_Cancel
 | `JoinForm_Source_Profile
+| `JoinForm_Create_Warning

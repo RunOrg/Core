@@ -318,8 +318,8 @@ end
 
 module Fields = struct
 
-  (* Worst case, keep only 20 fields. *)
-  let max = 20
+  (* Worst case, keep only 50 fields. *)
+  let max = 50
 
   let get t = 
     t.data # fields

@@ -14,3 +14,4 @@
 | `JoinForm_Edit_Remove -> "Supprimer"
 | `JoinForm_Edit_Cancel -> "Annuler"
 | `JoinForm_Source_Profile -> "Profil : "
+| `JoinForm_Create_Warning -> "Attention : pour le confort des utilisateurs, il est recommandé de garder les formulaires d'inscription aussi courts que possible."

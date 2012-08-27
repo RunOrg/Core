@@ -1,4 +1,6 @@
+
 <div {$f} style="display:none" class="-edit">
+
   <ul>
     <li class="-selected">
         <a class="_LongText" 
@@ -17,6 +19,11 @@
   <form {$form} action="">
 
     <div class="-body">
+
+      <div class="-warn">
+	{`JoinForm_Create_Warning}
+      </div>
+      
 
       <textarea></textarea>
 
@@ -76,6 +83,7 @@ here.$b.click () ->
   clean = () -> 
     here.$f.hide()
     here.$b.show() 
+    here.$f.find(".-warn").toggle(here.$f.parent().children().length > 5)
     here.$f.find("textarea, .-choices input").val ""    
     here.$f.find(":checked").attr "checked", false
 
@@ -111,6 +119,18 @@ here.$b.click () ->
 </script>
 
 <style>
+
+.edit-join-fields .-warn {
+    background-color: #FCC;
+    border-bottom: 1px solid #DAA;
+    border-top: 1px solid #DAA;
+    color: #A33;
+    font-size: 13px;
+    margin-top: 3px;
+    padding: 5px 20px;
+    text-align: left;
+}
+
 .edit-join-fields .-edit {
 
   margin: 10px 0;
