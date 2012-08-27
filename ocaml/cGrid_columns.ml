@@ -24,7 +24,7 @@ let box access entity render =
   let  lid   = Grid.list_id grid in
   
   let! columns = ohm $ O.decay (
-    let! columns, _, _ = ohm_req_or (return []) $ Grid.MyGrid.get_list lid in
+    let! columns, _, _ = ohm_req_or (return []) $ Grid.MyGrid.get_list lid in    
     return columns
   ) in
 

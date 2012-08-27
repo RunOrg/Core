@@ -12,7 +12,7 @@ let () = define UrlClient.Members.def_cols begin fun parents entity access ->
 
   O.Box.fill begin 
     Asset_Admin_Page.render (object
-      method parents = [ parents # home ; parents # admin ] 
+      method parents = [ parents # home ; parents # admin ; parents # people ] 
       method here = parents # cols # title
       method body = O.decay body
     end)

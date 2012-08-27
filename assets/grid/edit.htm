@@ -5,10 +5,35 @@
 	{#columns}
 	  <td><a href="javascript:void(0)">{this | ohm | esc}</a></td>
 	{/#}
+	<td class="-new"><a href="javascript:void(0)"><span>{`Grid_Columns_Add}</span></a></td>
       </tr>
     </thead>
     <tbody>      
     </tbody>
   </table>
 </div> 
+
+<style>
+.grid.-edit {
+
+  margin-top: 46px;
+
+  .-new {
+    width: 130px;
+    span {
+      background-color: #DFD;
+      border-radius: 50px;
+      box-shadow: 0 1px 1px #060 inset;
+      color: #060;
+      display: block;
+      font-size: 11px;
+      height: 17px;
+      line-height: 18px;
+      margin-top: 2px;
+      padding: 0 10px;
+      text-shadow: none;
+    }
+  }
+}
+</style>
 
