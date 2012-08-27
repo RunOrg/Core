@@ -61,6 +61,7 @@ init = false
 here.$b.click () ->
   here.$f.show() 
   here.$b.hide() 
+  here.$f.find(".-warn").toggle(here.$f.parent().children().length > 5)
 
   ## Perform init of form now
 
@@ -80,10 +81,9 @@ here.$b.click () ->
     if !$(@).nextAll().length
       $(@).clone(true).insertAfter(@)
 
-  clean = () -> 
+  clean = () ->     
     here.$f.hide()
     here.$b.show() 
-    here.$f.find(".-warn").toggle(here.$f.parent().children().length > 5)
     here.$f.find("textarea, .-choices input").val ""    
     here.$f.find(":checked").attr "checked", false
 
