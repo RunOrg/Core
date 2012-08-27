@@ -76,7 +76,7 @@ here.$b.click () ->
   clean = () -> 
     here.$f.hide()
     here.$b.show() 
-    here.$f.find("textarea, input").val ""    
+    here.$f.find("textarea, .-choices input").val ""    
     here.$f.find(":checked").attr "checked", false
 
   here.$form.submit () ->
