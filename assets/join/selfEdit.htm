@@ -18,9 +18,12 @@ pos = here.$real.position()
 wid = here.$real.outerWidth()
 here.$copy.css {top:pos.top+'px', left:pos.left+'px', width: wid+'px'}  
 
+here.$real.closest(".popup-resize").css("min-height",here.$copy.outerHeight() + pos.top + "px")
+
 close = (ev) -> 
   if $(ev.target).is(".joinstatus-fullscreen") || $(ev.target).is("a.-close")
     here.$wrap.remove()
+    here.$real.closest(".popup-resize").css("min-height","auto")
     post refresh, null, (d) -> 
       if d.replace
         here.$real.replaceWith(d.replace.html)
