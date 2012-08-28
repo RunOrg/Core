@@ -2,6 +2,8 @@
 | `Upload_Cancel -> "Annuler"
 | `Upload_Doc_Submit -> "Publier"
 
+| `Upload_Picture_Edit -> "Modifier"
+
 | `Album_Size_Remaining -> "Espace disponible" 
 | `Album_Size mb ->
   if mb < 0.5 then !! "%.2f Ko" (mb *. 1024.) else

@@ -33,11 +33,10 @@ let () = define UrlClient.Events.def_picture begin fun parents entity access ->
       | Some fid -> IFile.to_string (IFile.decay fid) ^ "/" ^ IFile.Deduce.make_getPic_token cuid fid
     in
 
-    let html = Asset_Event_Picture.render (object
-      method url = OhmBox.reaction_json post ()
+    let html = Asset_Upload_Picture.render (object
+      method url = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint post ())
       method upload = Action.url UrlUpload.Client.root (access # instance # key) ()
       method pics = Action.url UrlUpload.Client.find (access # instance # key) ()
-      method back = parents # home # url
       method id = id
     end) in
 

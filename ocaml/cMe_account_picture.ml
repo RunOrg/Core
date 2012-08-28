@@ -19,8 +19,9 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
       | Some fid -> IFile.to_string (IFile.decay fid) ^ "/" ^ IFile.Deduce.make_getPic_token cuid fid
     in
 
-    let html = Asset_MeAccount_Picture.render (object
-      method url = Action.url UrlMe.Account.picpost () ()
+    let html = Asset_Upload_Picture.render (object
+      method url = JsCode.Endpoint.to_json 
+	(JsCode.Endpoint.of_url (Action.url UrlMe.Account.picpost () ()))
       method upload = Action.url UrlUpload.Core.root () ()
       method pics = Action.url UrlUpload.Core.find () ()
       method back = Parents.home # url 

@@ -47,3 +47,5 @@
 | `Website_Admin_About_Website -> "Site web officiel"
 | `Website_Admin_About_Address -> "Adresse postale"
 | `Website_Admin_About_Submit -> "Enregistrer"
+
+| `Website_Admin_Picture_Edit -> "Logo" 

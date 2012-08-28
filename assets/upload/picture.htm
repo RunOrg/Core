@@ -1,35 +1,28 @@
-<form {$form} style="width:408px;margin:auto" action="" method="POST">
+<div style="width:408px;margin:auto" action="" method="POST">
   
   <input {$pic} type="hidden" name="pic" value="{id}"/>
   <div class="upload-picture">
     <img class="-l" src="/public/img/404_large.png"/>
     <img class="-s" src="/public/img/404_small.png"/>
     <a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
-      { `MeAccount_Picture_Edit } 
+      { `Upload_Picture_Edit } 
     </a>
   </div>
-  
-  <div style="text-align:right; margin-top: 20px">
-    <button {$submit} type="submit"><span>{ `MeAccount_Picture_Submit }</span></button>
-    <a style="display:inline-block" href="{back}" class="action-button">{ `MeAccount_Picture_Cancel }</a>
-  </div>
-  
+    
 </form>
 
-<script type="url:string,upload:string,pics:string">
+<script type="url:json,upload:string,pics:string">
 
 $f = here.$form
 $p = here.$pic
 
-here.$submit.attr("disabled",false)
+init = $p.val() || null
 
-$f.submit -> 
+submit = -> 
   data = $p.val() || null
-  here.$submit.attr("disabled","disabled")
-  post url, data, (result) -> 
-    here.$submit.attr("disabled",false)
+  return if data == init
+  to_endpoint url, data, (result) -> 
     call result.code
-  false
 
 refresh = -> 
   [id,proof] = $p.val().split("/")
@@ -41,7 +34,8 @@ refresh = ->
     $i.find(".-l").attr("src",data.large)
     $i.find(".-s").attr("src",data.small)
     $i.removeClass("-loading")
-        
+    submit()         
+
 here.$upload.click -> 
   $iframe = $ "<iframe/>", {src : upload}  
   close = -> 

@@ -49,6 +49,4 @@
 | `MeAccount_Pass_Mismatch 
 
 | `MeAccount_Picture_Title
-| `MeAccount_Picture_Edit 
-| `MeAccount_Picture_Submit
-| `MeAccount_Picture_Cancel
+

@@ -113,6 +113,11 @@ val update :
   -> tags:string list
   -> unit O.run
 
+val set_pic : 
+     [`IsAdmin] IInstance.id
+  -> [`InsPic] IFile.id option
+  -> unit O.run 
+
 val by_key        : string -> IInstance.t option O.run
 val by_servername : string -> IInstance.t option O.run
 val by_url        : string -> IInstance.t option O.run

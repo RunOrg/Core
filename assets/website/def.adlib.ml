@@ -46,3 +46,5 @@
 | `Website_Admin_About_Website
 | `Website_Admin_About_Address
 | `Website_Admin_About_Submit 
+
+| `Website_Admin_Picture_Edit

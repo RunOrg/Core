@@ -139,6 +139,17 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
   let! () = ohm $ Profile.update id info in 
   MyTable.transaction (IInstance.decay id) (MyTable.update update) |> Run.map ignore
 
+let set_pic id pic = 
+ 
+  let id  = IInstance.decay id in 
+  let pic = BatOption.map IFile.decay pic in 
+
+  let update ins = Data.({ ins with pic }) in
+  let info   old = Profile.Info.({ old with pic }) in
+
+  let! () = ohm $ Profile.update id info in 
+  MyTable.transaction (IInstance.decay id) (MyTable.update update) |> Run.map ignore
+
 let refresh_profile iid = 
 
   let! data = ohm_req_or (return ()) $ MyTable.get iid in 

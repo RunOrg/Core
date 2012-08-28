@@ -69,9 +69,6 @@ end
 | `Event_Picture_Title -> "Photo"
 | `Event_Picture_Link -> "Changer de photo"
 | `Event_Picture_Sub -> "Sélectionnez un nouveau logo ou photo pour cette activité"
-| `Event_Picture_Edit -> "Modifier"
-| `Event_Picture_Submit -> "Enregistrer"
-| `Event_Picture_Cancel -> "Annuler"
 
 | `Event_People_Title -> "Participants"
 | `Event_People_Link -> "Gestion des participants"
