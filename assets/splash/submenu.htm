@@ -6,17 +6,30 @@
     <li class="-try-now"><a href="{url}">{name}</a></li>
   {/?}
 </ul>
+{?lower}
+  <ul class="block-submenu -lower">
+    {#this}
+      <li{if selected} class="-selected"{/if}><a href="{url}">{name}</a></li>
+    {/#}
+  </ul>
+{/?}
 
 <style>
 .theme-splash .block-submenu {
 
-  padding: 3px 0;
+  padding: 3px 8px;
   margin: 10px auto;
   border-bottom: 1px solid #BBB;
   border-top: 1px solid #BBB;
   list-style-type: none;
   overflow: hidden;
-  width: 950px; 
+  width: 934px; 
+
+  &.-lower {     
+    margin-top: -11px;
+    background-color: #EEE;
+    text-shadow: 0 -1px 0 white;
+  }
 
   li {
     float: left;

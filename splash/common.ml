@@ -206,15 +206,67 @@ let header id ~title ~text ?trynow menu =
     ) :: begin if (trynow, menu) = (None, []) then [] else 
 	
 	[ call "Asset_Splash_Submenu.render"
-	    [ obj [ "trynow", (match trynow with 
-	      | None -> "None"
-	      | Some (name,url) -> 
-		"Some " ^ obj [ "name", string name ; 
-				"url",  string url ]) ;
+	    [ obj [ "trynow", 
+		    (match trynow with 
+		      | None -> "None"
+		      | Some (name,url) -> 
+			"Some " ^ obj [ "name", string name ; 
+					"url",  string url ]) ;
+		    
 		    "items", list (List.map (fun (name,sec,url) -> 
 		      obj [ "selected", bool (Some sec = subsection) ;
 			    "name",     string name ;
-			    "url",      string url ]) menu)
+			    "url",      string url ]) menu) ;
+		    
+		    "lower", "None"
+		  ]
+	    ]
+	]
+	  
+    end
+
+let multiheader id ~title ~text ?trynow menu = 
+  id, fun subsection -> 
+    ( call "Asset_Splash_Pagehead.render" 
+	[ obj [ "title", string title ;
+		"text",  html text 
+	      ] ] 	
+    ) :: begin if (trynow, menu) = (None, []) then [] else 
+	
+	[ call "Asset_Splash_Submenu.render"
+	    [ obj [ "trynow", 
+		    (match trynow with 
+		      | None -> "None"
+		      | Some (name,url) -> 
+			"Some " ^ obj [ "name", string name ; 
+					"url",  string url ]) ;
+		    
+		    "items", list (List.map (fun (name,url,sub) -> 
+		      obj [ "selected", bool (Some url = subsection || 
+			  List.exists (fun (name,url) -> Some url = subsection) sub) ;
+			    "name",     string name ;
+			    "url",      string url ]) menu) ;
+		    
+		    "lower", begin 
+		      try 
+
+			let _, _, sub = List.find (fun (_,url,sub) ->
+			  Some url = subsection 
+			  || List.exists (fun (_,url) -> Some url = subsection) sub 
+			) menu in
+
+			if sub = [] then "None" else "Some (" ^ begin
+			
+			  list (List.map (fun (name,url) ->
+			    obj [ "selected", bool (Some url = subsection) ;
+				  "name", string name ;
+				  "url",  string url ]
+			  ) sub)
+  
+			end ^ ")"
+			
+		      with _ -> "None"
+		    end
 		  ]
 	    ]
 	]

@@ -64,6 +64,15 @@ let headers = [
       "Pour les associations", "associations", "/network/asso" 
     ] ;
 
+  multiheader "catalog"
+    ~title:"Catalogue"
+    ~text:"Toutes les configurations disponibles pour votre espace RunOrg pour mieux répondre à vos besoins."
+    [ "Associations", "/catalog", 
+      [ "Standard",              "/catalog" ;
+	"Association étudiante", "/catalog/asso/Students"
+      ] ;
+      "Comités d'entreprise", "/catalog/ComiteEnt", [] ;
+    ] ;
 
 (*  header "collectivites" 
     ~title:"Des intranets pour votre collectivité"

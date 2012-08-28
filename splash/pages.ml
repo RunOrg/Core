@@ -1,7 +1,7 @@
 open Common
 open WithSections 
 
-let pages = [
+let pages = Catalog.pages @ [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
   page "/" "RunOrg Associations"
