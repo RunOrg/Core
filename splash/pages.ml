@@ -103,9 +103,9 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
     [ ribbon_title ~name:"members" "Gestion des membres" ;
       composite `LR 
 	(* Images : 464x254 pixels *)
-	(images [ "/public/img/2012-04-13-1-cut.png" ;
-		  "/public/img/2012-04-13-1-cut.png" ;
-		  "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-04-13-1-cut.png" ;
+		       "/public/img/2012-04-13-1-cut.png" ;
+		       "/public/img/2012-04-13-1-cut.png" ])
 	(features [ 
 	  "Adhésions et groupes", 
 	  "Disposez d'une liste à jour de vos membres, triée en autant de sous-listes que nécesaire." ;

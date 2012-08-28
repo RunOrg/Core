@@ -94,6 +94,14 @@ let price title subtitle text =
 	    "subtitle", string subtitle ;
 	    "text",     html   text ]]
 
+let screenshot url = 
+  call "Asset_Splash_Screenshot.render" 
+    [ obj [ "url", string url ]]
+
+let screenshots urls = 
+  call "Asset_Splash_List.render"
+    [ list (List.map screenshot urls) ]
+
 let image ?copyright url = 
   call "Asset_Splash_Image.render" 
     [ obj [ "url", string url ;

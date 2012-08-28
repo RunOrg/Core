@@ -1,0 +1,33 @@
+<div class="block-screenshot">
+  <div class="-inner"
+       style="background:-webkit-linear-gradient(top right,rgba(255,255,255,0.5) 120px,rgba(255,255,255,0) 120px), url({url}) center center no-repeat black;background:-moz-linear-gradient(top right,rgba(255,255,255,0.5) 120px,rgba(255,255,255,0) 120px), url({url}) center center no-repeat black;url({url}) center center no-repeat black">
+  </div>
+</div>
+
+<style>
+.theme-splash .block-screenshot {
+  + .block-screenshot {
+    margin-top: 31px;
+  }
+
+  .-inner {
+    height: 254px;  
+    width: 464px;
+  }
+  
+  -webkit-transition-property: -webkit-transform;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transform: perspective(800) scale(0.8) rotatey(30deg); 
+  -webkit-transition-timing-function: ease-in-out;
+
+  -moz-transition-property: -moz-transform;
+  -moz-transition-duration: 0.5s;
+  -moz-transform: perspective(800px) scale(0.8) rotatey(30deg); 
+  -moz-transition-timing-function: ease-in-out;
+
+  &:hover {
+    -moz-transform: perspective(800px) rotatey(0) scale(1);     
+    -webkit-transform: perspective(800px) rotatey(0) scale(1);     
+  }
+}
+</style>
