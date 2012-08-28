@@ -13,7 +13,10 @@ let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
   page "" "RunOrg Associations - Configuration Standard"
-    [ pride ~title:"Configuration standard" "Description" ] ;
+    [ composite `LR
+	(pride ~title:"Configuration standard" "Description")
+	(create "Simple")
+    ] ;
 
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
     [ pride ~title:"BDE & Etudiants" "Description" ] ;

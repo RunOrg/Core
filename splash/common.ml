@@ -103,6 +103,17 @@ let image ?copyright url =
 		"Some " ^ obj [ "url", string link ; "name", string name ])
 	  ]] 
 
+let action url text sub =
+  call "Asset_Splash_Action.render"
+    [ obj [ "url", string url ;
+	    "text", string text ;
+	    "sub", string sub ] ]
+
+let create kind = 
+  action ("/start/"^kind) 
+    "Créez votre espace"
+    "C'est rapide et gratuit !"
+
 let images urls = 
   call "Asset_Splash_List.render"
     [ list (List.map image urls) ]
