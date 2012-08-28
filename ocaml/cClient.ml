@@ -60,7 +60,8 @@ let () = UrlClient.def_root begin fun req res ->
 		    if_old ()
 	| None   -> if_no_token ()
     end
-    | `New cuid -> if_new ()
+    | `New cuid -> let! status = ohm $ MAvatar.status iid cuid in 
+		   if status = `Contact then if_no_token () else if_new ()
     | `None     -> if_old () (* The JS will redirect to the login page *)
   
 end
