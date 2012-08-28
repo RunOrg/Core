@@ -20,7 +20,7 @@
 
     <div class="-body">
 
-      <div class="-warn">
+      <div class="warning">
 	{`JoinForm_Create_Warning}
       </div>
       
@@ -61,7 +61,7 @@ init = false
 here.$b.click () ->
   here.$f.show() 
   here.$b.hide() 
-  here.$f.find(".-warn").toggle(here.$f.parent().children().length > 5)
+  here.$f.find(".warning").toggle(here.$f.parent().children().length > 5)
 
   ## Perform init of form now
 
@@ -120,15 +120,8 @@ here.$b.click () ->
 
 <style>
 
-.edit-join-fields .-warn {
-    background-color: #FCC;
-    border-bottom: 1px solid #DAA;
-    border-top: 1px solid #DAA;
-    color: #A33;
-    font-size: 13px;
-    margin-top: 3px;
-    padding: 5px 20px;
-    text-align: left;
+.edit-join-fields .warning {
+  margin-top: 3px;
 }
 
 .edit-join-fields .-edit {

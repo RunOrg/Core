@@ -1,0 +1,9 @@
+.warning {
+  background-color: #FCC;
+  border-bottom: 1px solid #DAA;
+  border-top: 1px solid #DAA;
+  color: #A33;
+  font-size: 13px;
+  padding: 5px 20px;
+  text-align: left;
+}

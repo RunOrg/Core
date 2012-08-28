@@ -64,22 +64,6 @@ a.action-button.-green:hover, button[type=submit]:hover span {
   box-shadow: 0 0 3px #222;
 }
 
-a.action-button.-blue {
-  color: white;
-  background-color: #39B;
-  background: -webkit-linear-gradient(top, #4AC,#27A);
-  background: -moz-linear-gradient(top, #4AC,#27A);
-  text-shadow: 0 -1px 0 #057;
-  border-color: #057;
-  
-  &:hover {
-    background-color: #4AC;
-    background: -webkit-linear-gradient(top,#5BD,#38B);
-    background: -moz-linear-gradient(top,#5BD,#38B);
-    box-shadow: 0 0 3px #222;
-  }
-}
-
 a.action-button.-orange {
   background-color: #FA0;
   background: -webkit-linear-gradient(top, #FA0,#D70);
