@@ -6,13 +6,7 @@
       <img src="{pic}"/>
 
       {?pic_change}
-        <ul class="actions">
-	  <li class="-stack">
-	    <a class="action-button -admin" href="{this}">
-	      {`Event_Pic_Change}
-	    </a>
-	  </li>
-	</ul>
+      <a class="action-button -admin" href="{this}">{`Event_Pic_Change}</a>
       {/?}
     </div>
 
@@ -129,15 +123,14 @@
       }
     }
 
-    .actions {
-      margin: 0;
+    .action-button {
       position: absolute;
-      width: 230px;
-      bottom: 4px;
+      right: 3px;
+      top: 3px;
       visibility: hidden;
     }
 
-    .-picture:hover .actions {
+    .-picture:hover .action-button {
       visibility: visible;
     }
 

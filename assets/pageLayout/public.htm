@@ -6,6 +6,8 @@
     <div class="-pic-wrap">
       <div class="-pic">
 	<a href="{home}"><img src="{pic}"/></a>
+	{?edit}<a class="action-button -admin"
+		  href="{this}">{`PageLayout_Picture_Edit}</a>{/?}
       </div>
     </div>
 
@@ -24,7 +26,7 @@
 <style>
 #public {
   width: 950px;
-  margin: 10px auto;
+  margin: 10px auto;  
 
   .-left { 
     float: left;
@@ -35,7 +37,17 @@
     .-pic-wrap {
       min-height: 76px;
       margin-bottom: 8px;
+      .action-button {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        visibility: hidden;
+      }
+      .-pic:hover .action-button {
+        visibility: visible;
+      }
       .-pic { 
+        position: relative;
         width: 230px;
         padding: 2px;
         box-shadow: 0 0 3px #888;

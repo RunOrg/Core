@@ -143,7 +143,20 @@ let public menu ~left ~main ~cuid instance =
 
   let! pic = ohm $ CPicture.large (instance # pic) in
 
-  let navbar = render ~public:true ~hidepic:true ~menu:(public_menu menu) (cuid,Some (instance # id)) in
+  let! status = ohm begin
+    let! cuid = req_or (return `Contact) cuid in 
+    MAvatar.status (instance # id) cuid
+  end in
+  
+  let  edit = if status = `Admin then 
+      Some (Action.url UrlClient.Website.picture (instance # key) [])
+    else
+      None
+  in
+
+  let navbar = 
+    render ~public:true ~hidepic:true ~menu:(public_menu menu) (cuid,Some (instance # id))
+  in
       
   let data = object
     method navbar = navbar
@@ -151,6 +164,7 @@ let public menu ~left ~main ~cuid instance =
     method main   = main 
     method home   = Action.url UrlClient.website (instance # key) ()
     method pic    = pic
+    method edit   = edit
   end in
 
   Asset_PageLayout_Public.render data

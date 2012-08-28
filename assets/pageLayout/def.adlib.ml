@@ -14,3 +14,4 @@
 | `PageLayout_Navbar_Public_About
 | `PageLayout_Navbar_Public_Join 
 | `PageLayout_Loading_Thanks
+| `PageLayout_Picture_Edit
