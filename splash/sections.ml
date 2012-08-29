@@ -3,7 +3,7 @@ let sections = [
   
   "associations", "Associations", "/" ;
   (* "catalogue", "Catalogue", "/catalog" ; *)
-  "network", "Réseau", "/network" ;
+  (* "network", "Réseau", "/network" ; *)
   "login", "Connexion", "/me" ;
 
   (* END SECTIONS ----------------------------------------------------------- *)
