@@ -20,6 +20,12 @@ let pages = [
 
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
     [ pride ~title:"BDE & Etudiants" "Description" ] ;
+	
+  page "" "RunOrg Associations - Economie Sociale et Solidaire"
+    [ composite `LR
+	(pride ~title:"Economie Sociale et Solidaire" "Description")
+	(create "ess")
+    ] ;
 
   page "/ComiteEnt" "RunOrg Comités d'Entreprise"
     [ pride ~title:"Comités d'Entreprise" "Description" ]
