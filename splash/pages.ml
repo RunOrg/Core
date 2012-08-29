@@ -210,7 +210,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
        
       ribbon 
 	(important 
-	   "DETAIL DES FONCTIONNALITES"
+	   "Détail des fonctionnalités"
 	   ""
 	) ;
       
