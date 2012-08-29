@@ -241,7 +241,9 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
       
       ribbon_title ~name:"activityorganization" "Organisation des activités" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-5-cut.png" ;
+		       "/public/img/2012-08-29-4-cut.png" ;
+		       "/public/img/2012-08-29-3-cut.png" ])
 	(features [ 
 	  "Création d'activités",
 	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
@@ -285,7 +287,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
   
       ribbon_title ~name:"messagescommunication" "Messages et communication" ; 
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-28-5-cut.png" ])
 	(features [ 
 	  "Murs de discussions",
 	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
@@ -302,7 +304,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 
       ribbon_title ~name:"membersconsultation" "Consultation des membres" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-28-7-cut.png" ])
 	(features [ 
 	  "Création de mini-sondages",
 	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
@@ -311,16 +313,13 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
 	  
 	  "Formulaires d'inscription",
-	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";
-	  
-	  "Forums",
-	  "Pour demander à vos membres leur avis ou les encourager à travailler sur un sujet spécifique."	
+	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
 	]) ;
     
       
       ribbon_title ~name:"forumsdiscussions" "Forums et discussions" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-10-cut.png" ])
 	(features [ 
 	  "Forums de discussion",
 	  "Un forum permet la discussion (mur), la consultation (sondage) et le partage (photos, documents) autour d'un thème";
@@ -337,7 +336,8 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 
       ribbon_title ~name:"quicksetup" "Prise en main rapide" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-7-cut.png" ;
+		       "/public/img/2012-08-28-8-cut.png" ])
 	(features [ 
 	  "Espace pré-adapté à vos besoins",
 	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
@@ -360,7 +360,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 
       ribbon_title ~name:"customizationintranet" "Personnalisation de votre intranet" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-6-cut.png" ])
 	(features [ 
 	  "Créez le miroir virtuel de votre organisation réelle",
 	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
@@ -377,7 +377,8 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
      
       ribbon_title ~name:"privacyconfidentiality" "Espace privé et confidentialité" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-8-cut.png" ;
+		       "/public/img/2012-08-29-12-cut.png" ])
 	(features [ 
 	  "Connexion sécurisée",
 	  "Tous les accès à RunOrg se font de façon cryptée et sécurisée";
@@ -391,7 +392,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Vous avez le contrôle total",
 	  "Les administrateurs de votre association définissent les accès à votre espace, et qui peut voir ou participer à vos activités";
 	  
-	  "Vie privée respecté",
+	  "Vie privée respectée",
 	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
 	  
 	  "Gestion des information personnelles",
@@ -400,7 +401,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 
       ribbon_title ~name:"membersprofil" "Profil membres" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-28-1-cut.png" ])
 	(features [ 
 	  "Informations personnelles",
 	  "Retrouvez les coordonnées et les informations personnelles de chaque membre sur sa page de profil";
@@ -420,7 +421,8 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
     
       ribbon_title ~name:"website" "Site Internet" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
+		       "/public/img/2012-08-28-3-cut.png"])
 	(features [ 
 	  "Publication d'articles",
 	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
@@ -443,7 +445,8 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
   
       ribbon_title ~name:"administration" "Administration" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-9-cut.png" ;
+		       "/public/img/2012-08-29-11-cut.png"])
 	(features [ 
 	  "Administrateurs globaux",
 	  "En tant qu'administrateur de votre espace privé vous pouvez tout voir et tout faire";
