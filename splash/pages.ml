@@ -217,7 +217,8 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
       ribbon_title ~name:"membersorganization" "Organisation des membres" ;
       
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
+		       "/public/img/2012-08-28-9-cut.png" ])
 	(features [ 
 	  "Groupes de membres",
 	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
@@ -269,7 +270,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
   
       ribbon_title ~name:"sharingspace" "Espace de partage" ;
       composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
+	(screenshots [ "/public/img/2012-08-29-2-cut.png" ])
 	(features [ 
 	  "Partagez vos documents",
 	  "Vos membres et vous même pouvez mettre en ligne et télécharger des documents quel que soit leur format";
