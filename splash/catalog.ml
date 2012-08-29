@@ -56,18 +56,30 @@ let pages = [
 
     [ composite `LRR
 	(pride 
-	   ~title:"Dossier de presse"
-	   ~subtitle:"Les informations essentielles "
-	   ~link:("/public/media/pdf/dossier-presse-runorg-20120423.pdf",
-		  "Télécharger le dossier complet [PDF]") 
-	   "Notre dossier de presse inclut un historique, des descriptions, des interviews et des données concrètes au sujet de notre société, de notre équipe et de notre produit."
+	   ~title:""
+	   "La préconfiguration RunOrg dédiée aux associations étudiantes (BDE, BDA, BDS, etc.) vous permet d’offrir à vos étudiants et vos bénévoles un outil de communication et d’organisation dédié à votre association. 
+De votre coté vous profitez de leur facilité à communiquer via les réseaux sociaux pour alléger considérablement vos tâches administratives et logistiques."
 	) 
 	(pride 
-	   ~title:"Présentation rapide"
-	   "RunOrg offre un intranet collaboratif aux organisations : une plateforme privée d’échange et de communication avec leurs membres, qui inclut des outils puissants de gestion et d’organisation pour les responsables. Le tout est hébergé et mis à jour gratuitement pour les associations ou pour un prix abordable dépendant du nombre d’accès. Des solutions pré-adaptées sont disponibles pour les différents types d’organisations : associations, clubs de sport, collectivités territoriales, politiques, syndics, etc. Contacts : contact@runorg.com"
+	   ~title:""
+	   "Vous organisez en quelques minutes vos évènements et soirées, offrez des espaces de discussions et d’échanges privés (fini les photos sur Internet !), équipez vos clubs et projets, et mobilisez rapidement votre réseau autour de causes avec l’organisation de pétitions. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants.
+A la fois pratique et facile : offrez à vos étudiant le réseau social privé qu’ils attendent de leur asso et de leur école."
 	) ;
-
 *)
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); 
     ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
