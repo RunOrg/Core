@@ -936,17 +936,17 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
         ~head:"pricing"
       [ pricing 
 	~foot:"Prix exprimés hors taxes. Consultez nos <a href=\"/autres/accompagnement\">offres d'accompagnement</a> et <a href=\"/contact\">contactez-nous</a> pour toutes informations supplémentaires."
-	[ [ "/catalog#asso", "Associations" ; 
-	    "/catalog#sport", "Clubs de sport" ;
-	    "/catalog/logiciel-intranet-extranet-maison-des-associations", "Maisons des associations" ;
-	    "/catalog/logiciel-intranet-mairies-portail-forum-association-associatif", "Portail communal associatif" ] ;
-	  [ "/catalog#syndic", "Syndics de copropriété" ;
-	    "/catalog#ce", "Comités d'entreprise" ] ;
-	  [ "/catalog/logiciel-intranet-collectivites-mairies", "Intranet municipal" ;
-	    "/catalog/logiciel-intranet-entreprise-pme-professionnel-formation", "Centres de formation" ] ;
-	  [ "/catalog/logiciel-intranet-organisation-evenements-soirees", "Organisation d'évènements" ;
-	    "/catalog/logiciel-intranet-campagne-electorale-election", "Campagnes électorales"] ;
-	  [ "/catalog#pro", "Entreprises" ]]
+	[ [ "/catalog/", "Associations" ; 
+	    "/catalog/clubs-sport", "Clubs de sport" ;
+	    "/catalog/collectivites/MaisonAsso", "Maisons des associations" ;
+	    "/catalog/collectivites/LocalNpPortal", "Portail communal associatif" ] ;
+	  [ "/catalog/syndic-copropriete/Copro", "Syndics de copropriété" ;
+	    "/catalog/ComiteEnt", "Comités d'entreprise" ] ;
+	  [ "/catalog/collectivites/Collectivites", "Collectivités territoriales" ;
+	    "/catalog/entreprises/CompanyTraining", "Centres de formation" ] ;
+	  [ "/catalog/others/Events", "Organisation d'évènements" ;
+	    "/catalog/collectivites/Campaigns", "Campagnes électorales"] ;
+	  [ "/catalog/entreprises/Company", "Entreprises" ]]
 	[ "Prix", [ `Text "Gratuit" ; 
 		    `Text "100€/an" ;
 		    `Text "500€/an" ;

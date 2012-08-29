@@ -36,8 +36,24 @@ let pages = [
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
    [ composite `LR
 	(pride ~title:"Associations étudiantes" "Pour les BDE, les BDA, les BDS et toutes les associations étudiantes")
-	(create "Students")
-    ] ;
+	(create "Students");
+
+    (* composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/giena/3361653109/",
+		       "Eugenijus Barzdzius")
+	   "/public/img/imagerugby.jpg")
+	(features [ 
+	  "Groupes de membres",
+	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
+	    
+	  "Annuaire à jour",
+	  "Visualisez facilement la liste des inscrits d'un groupe et leurs informations." ;
+	  
+	  "Indépendance des groupes",
+	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
+	]) ; *)
+    ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
     [ composite `LR
