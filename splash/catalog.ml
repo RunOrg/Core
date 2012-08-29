@@ -71,13 +71,13 @@ let pages = [
 
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
     [ composite `LR
-	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée notamment par un club évoluant en ELITE ")
+	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée notamment par un club évoluant en ELITE")
 	(create "Footus")
     ] ;	
 
   page "/clubs-sports/Athle" "RunOrg Clubs - Athlétisme "
     [ composite `LR
-	(pride ~title:"Club d'Athlétisme" "")
+	(pride ~title:"Clubs d'Athlétisme" "")
 	(create "Athle")
     ] ;	
 

@@ -69,7 +69,7 @@ let headers = [
     ~text:"Toutes les configurations disponibles pour votre espace RunOrg pour mieux répondre à vos besoins."
     [ "Associations", "/catalog", 
       [ "Standard",              "/catalog" ;
-	"Association étudiante", "/catalog/asso/Students" ;
+	"Associations étudiantes", "/catalog/asso/Students" ;
 	"Economie Sociale et Solidaire", "/catalog/asso/Ess" ;
 	"Théâtre d'improvisation", "/catalog/asso/Impro"
       ] ;

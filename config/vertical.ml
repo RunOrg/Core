@@ -1082,7 +1082,7 @@ let stub = vertical "Stub"
 
 let students = vertical "Students"
   ~old:"v:students"
-  ~name:"Association étudiante"
+  ~name:"Associations étudiantes"
   ~forms:ProfileForm.([ simple ])
   Template.([
       initial "entity.sample.sub-runorg.name" subscriptionForever
@@ -1117,7 +1117,7 @@ let () = catalog [
               (Some (adlib "VerticalCatalogStandardDesc" 
 		       "Une préconfiguration généraliste adaptée à toutes les associations")) ;
     inCatalog students
-              (adlib "VerticalStudentsName" "Association étudiante")
+              (adlib "VerticalStudentsName" "Associations étudiantes")
               (Some (adlib "VerticalStudentsDesc" 
 		       "Pour les BDE, les BDA, les BDS et les assos étudiantes"));
     inCatalog ess
