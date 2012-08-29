@@ -3,35 +3,122 @@
     <thead>
       <tr>
 	{#columns}
-	  <td><a href="javascript:void(0)">{this | ohm | esc}</a></td>
+	  { this | Asset_Grid_Edit_Column.render | ohm }
 	{/#}
-	<td class="-new"><a href="javascript:void(0)"><span>{`Grid_Columns_Add}</span></a></td>
+	<td class="-new"><a {$n} href="javascript:void(0)"><span>{`Grid_Columns_Add}</span></a></td>
       </tr>
     </thead>
     <tbody>      
     </tbody>
   </table>
+  <div class="-new-form">
+    <form>
+      <div class="-col">
+	<h3>{`Grid_Source_Local}</h3>
+	{#local}
+	  <label>
+	    <input type="radio" name="pick" value="{json}"/>
+	    {`Grid_Source_Local_Field label}
+	  </label>
+	{/#}
+      </div>
+      <div class="-col">
+	<h3>{`Grid_Source_Profile}</h3>
+	{#profile}
+	  <label>
+	    <input type="radio" name="pick" value="{json}"/>
+	    {`Grid_Source_Profile_Field label}
+	  </label>
+	{/#}
+      </div>
+    </form>
+  </div>
 </div> 
+
+{@!column}
+  <td><a {$a} href="javascript:void(0)">{this | ohm | esc}</a></td>
+  <script>
+here.$a.click ->
+
+  return if here.$a.parent().hasClass "-selected"
+
+  here.$a.closest("table").find(".-selected").removeClass "-selected"
+  here.$a.parent().addClass "-selected"
+  here.$a.closest(".grid").find(".-edit-form").remove()
+  $me = $ '<div class="-edit-form -loading"></div>' 
+  here.$a.closest(".grid").find(".-new-form").hide().after($me)
+
+
+
+  </script>
+{/@}
+
+<script>
+here.$n.click ->
+
+  here.$n.closest("table").find(".-selected").removeClass "-selected"
+  here.$n.parent().addClass "-selected"
+  here.$n.closest(".grid").find(".-edit-form").remove()
+  here.$n.closest(".grid").find(".-new-form").show()
+
+here.$n.click()
+</script>
+
 
 <style>
 .grid.-edit {
 
   margin-top: 46px;
+  min-height: 100px;
+
+  .-edit-form.-loading {
+    height: 78px;
+    background: url(/public/icon/ajax-load.gif) center center no-repeat;
+  }
+
+  .-new-form {
+    overflow: hidden;
+    h3 {
+      font-weight: none;
+      font-size: 20px;
+      margin: 0 0 10px 0;
+    }
+    .-col {
+      float: left;
+      background-color: #EEE;
+      margin: 10px;
+      padding: 5px 20px;
+      width: 393px;
+    }
+    label {
+      overflow: hidden;
+      white-space: nowrap;
+      display: block;
+      font-size: 13px;
+      line-height: 18px;
+      margin-bottom: 3px;
+      input { vertical-align: top; }
+    }
+  }
+
+  td.-selected {
+    border-bottom: 1px solid white;
+    a {
+      color: #333;
+      font-weight: bold;
+      background: white;
+      text-shadow: none;
+    }
+    &.-new a {
+      color: #2A2;
+    }
+  }
 
   .-new {
-    width: 130px;
-    span {
-      background-color: #DFD;
-      border-radius: 50px;
-      box-shadow: 0 1px 1px #060 inset;
-      color: #060;
-      display: block;
-      font-size: 11px;
-      height: 17px;
-      line-height: 18px;
-      margin-top: 2px;
-      padding: 0 10px;
-      text-shadow: none;
+    width: 140px;
+    a {
+      color: #8F8;
+      text-shadow: 0 -1px 0 #2A2;
     }
   }
 }

@@ -6,6 +6,35 @@ open BatPervasives
 
 module Grid    = MAvatarGrid
 
+module EvalFmt = Fmt.Make(struct
+  type json t = 
+    [ `Profile of [ `Birthdate
+		  | `City     
+		  | `Address  
+		  | `Zipcode  
+		  | `Country  
+		  | `Phone    
+		  | `Cellphone
+		  | `Gender   
+		  ]
+    | `Local of [ `Status		    
+		| `Date
+		| `Field of string
+		]
+    ]
+end)
+
+let profile_fields = 
+  [ `Birthdate ;`Gender ; `Phone   ; `Cellphone ;
+    `Address   ; `City  ; `Zipcode ; `Country   ]
+
+let local_fields local = 
+  let! list = ohm (Run.list_map (fun f -> 
+    let! label = ohm (TextOrAdlib.to_string (f # label)) in
+    return (`Field (f # name), `Field label)
+  ) local) in
+  return ((`Status,`Status) :: (`Date,`Date) :: list)
+
 let box access entity render = 
   
   let fail = render (return ignore) in 
@@ -28,8 +57,23 @@ let box access entity render =
     return columns
   ) in
 
-  let body = Asset_Grid_Edit.render (object
-    method columns = List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns
-  end) in
+  let body = 
+    let! local = ohm (MGroup.Fields.local gid)in
+    let! local = ohm (local_fields local) in
+    Asset_Grid_Edit.render (object
+      method columns = 
+	List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns
+      method profile = 
+	List.map (fun k -> (object
+	  method json  = Json.serialize (EvalFmt.to_json (`Profile k))
+	  method label = k
+	end)) profile_fields
+      method local   = 
+	List.map (fun (k,l) -> (object
+	  method json  = Json.serialize (EvalFmt.to_json (`Local k))
+	  method label = l
+	end)) local
+    end)
+  in
 
   render body
