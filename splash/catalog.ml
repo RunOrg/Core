@@ -26,8 +26,8 @@ let pages = [
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
 	   ~ordered:false
-	   [ "Communication interne avec l'espace membre" ;
-	     "Communication externe avec le site Internet" ;
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
 	); 
@@ -41,13 +41,13 @@ let pages = [
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
     [ composite `LR
-	(pride ~title:"Economie Sociale et Solidaire" "Pour toutes les associations de l'économie sociale et solidaire")
+	(pride ~title:"Associations de l'Economie Sociale et Solidaire" "Pour toutes les associations de l'économie sociale et solidaire")
 	(create "Ess")
     ] ;
 
   page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
     [ composite `LR
-	(pride ~title:"Théâtre d'Improvisation" "Spécialement créé pour les troupes et les clubs pratiquant le théâtre d'improvisation")
+	(pride ~title:"Troupes et clubs d'Improvisation" "Spécialement créé pour les troupes et les clubs pratiquant le théâtre d'improvisation")
 	(create "Impro")
     ] ;	
 
@@ -57,27 +57,27 @@ let pages = [
 	(create "MultiSports")
     ] ;	
 
-  page "/clubs-sports/Judo" "RunOrg Clubs - Judo et jujitsu"
+  page "/clubs-sports/Judo" "RunOrg Clubs - Judo et Jujitsu"
     [ composite `LR
-	(pride ~title:"Judo et jujitsu" "Solution conçue avec des entraîneurs et des clubs de haut niveau")
+	(pride ~title:"Clubs de Judo et Jujitsu" "Solution conçue avec des entraîneurs et des clubs de haut niveau")
 	(create "Judo")
     ] ;	
 
 	page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
     [ composite `LR
-	(pride ~title:"Badminton" "Solution élaborée avec le concours de la Fédération Française de Badminton")
+	(pride ~title:"Clubs de Badminton" "Solution élaborée avec le concours de la Fédération Française de Badminton")
 	(create "Badminton")
     ] ;	
 
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
     [ composite `LR
-	(pride ~title:"Football US & cheerleading" "Solution utilisée notamment par un club évoluant en ELITE ")
+	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée notamment par un club évoluant en ELITE ")
 	(create "Footus")
     ] ;	
 
   page "/clubs-sports/Athle" "RunOrg Clubs - Athlétisme "
     [ composite `LR
-	(pride ~title:"Athlétisme" "")
+	(pride ~title:"Club d'Athlétisme" "")
 	(create "Athle")
     ] ;	
 
@@ -89,7 +89,7 @@ let pages = [
 
   page "/clubs-sports/Sports" "RunOrg Clubs - Autres sports"
     [ composite `LR
-	(pride ~title:"Autres sports" "Solution standard pour les clubs de sports n'ayant pas encore de configuration dédiée")
+	(pride ~title:"Autres clubs de sports" "Solution standard pour les clubs de sports n'ayant pas encore de configuration dédiée")
 	(create "Sports")
     ] ;	
 
@@ -105,9 +105,9 @@ let pages = [
 	(create "LocalNpPortal")
     ] ;	
 
-  page "/collectivites/MaisonAsso" "RunOrg Collectivités - Maison des associations"
+  page "/collectivites/MaisonAsso" "RunOrg Collectivités - Maisons des associations"
     [ composite `LR
-	(pride ~title:"Maison des associations" "Equipez gratuitement votre MDA d'un outil pour accompagner et annimer facilement ses associations")
+	(pride ~title:"Maisons des associations" "Equipez gratuitement votre MDA d'un outil pour accompagner et annimer facilement ses associations")
 	(create "MaisonAsso")
     ] ;	
 

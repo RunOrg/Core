@@ -105,6 +105,8 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	(pride
 	   ~title:"Gestion des membres"
 	   ~subtitle:"Simplement et rapidement"
+	   ~link:("/features#organisationdesmembres",
+	       "En savoir plus...")
 	   "Toutes les associations ont une liste de leurs adhérents, mais elle est souvent incomplète ou accessible par un seul responsable.
 
 Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en ligne par tous les responsables, et laissez vos membres tenir eux-mêmes à jour leurs informations de contact."
@@ -114,9 +116,11 @@ Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en li
 	(pride
 	   ~title:"Evènements et activités"
 	   ~subtitle:"Organisez-vous en ligne"
+	   ~link:("/features#organisationdesactivites",
+	       "En savoir plus...")
 	   "Créez facilement des évènements publics ou privés, informez en un clic tout ou partie de vos membres.  
 
-Chaque évènement comporte un mur de discussion, un album photo, un partage de fichiers. Et pour vos assemblées générales, une chatroom et des votes anonymes."
+Chaque évènement comporte un mur de discussion, un album photo, un partage de fichiers."
 	) 
 	(image "/public/img/2012-08-29-5-cut.png") ;
 
@@ -125,11 +129,12 @@ Chaque évènement comporte un mur de discussion, un album photo, un partage de 
 	(pride
 	   ~title:"Déléguez en toute confiance"
 	   ~subtitle:"Ne soyez plus le seul à tout faire"
+	   ~link:("/features#administration",
+	       "En savoir plus...")
 	   "Il y a dans votre association beaucoup de membres motivés, 
 comment faire pour leur donner la main sur une seule activité ?
 
-Vous pouvez donner des responsabilités à vos membre sur des parties bien définies de votre espace privé RunOrg : un groupe, 
-un évènement, un forum de discussions, un album photo...
+Vous pouvez donner des responsabilités sur des parties bien définies de votre espace privé RunOrg (activités, forums).
 
 Et en cas de problème, nous gardons une trace des actions de chaque responsable."
 	) ;
@@ -147,6 +152,8 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	(pride
 	   ~title:"Formulaires configurables"
 	   ~subtitle:"Posez les bonnes questions"
+	   ~link:("/features#personnalisationintranet",
+	       "En savoir plus...")
 	   "Pouvoir récupérer facilement des informations sur les membres arrive en tête des demandes de nos utilisateurs. 
 
 Disponibles sur les adhésions et les évènements, des formulaires configurables vous permettent de poser les questions importantes, et les membres y répondent en s'inscrivant. Le résultat est disponible en ligne et facilement téléchargeable."
@@ -161,6 +168,8 @@ Disponibles sur les adhésions et les évènements, des formulaires configurable
 	(pride
 	   ~title:"Murs de discussion"
 	   ~subtitle:"Donnez la parole à vos membres"
+	   ~link:("/features#messagescommunication",
+	       "En savoir plus...")
 	   "Envie de communiquer une annonce à tous vos membres ? 
 De lancer une conversation autour d'un sujet ?
 
@@ -192,8 +201,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	   ""
 	) ;
       
-      ribbon_title ~name:"membersorganization" "Organisation des membres" ;
-      
+      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
 		       "/public/img/2012-08-28-9-cut.png" ])
@@ -217,7 +225,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
 	]) ;
       
-      ribbon_title ~name:"activityorganization" "Organisation des activités" ;
+      ribbon_title ~name:"organisationdesactivites" "Organisation des activités" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-5-cut.png" ;
 		       "/public/img/2012-08-29-4-cut.png" ;
@@ -248,7 +256,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Prenez votre temps pour créer une activité avant de la publier"	
 	]) ;  
   
-      ribbon_title ~name:"sharingspace" "Espace de partage" ;
+      ribbon_title ~name:"espacedepartage" "Espace de partage" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-2-cut.png" ])
 	(features [ 
@@ -280,7 +288,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Chaque message constitue un flux de discussion indépendant, dont seuls les participants reçoivent des notifications"	
 	]) ;   
 
-      ribbon_title ~name:"membersconsultation" "Consultation des membres" ;
+      ribbon_title ~name:"consultationdesmembres" "Consultation des membres" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-28-7-cut.png" ])
 	(features [ 
@@ -312,7 +320,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Les groupes peuvent disposer de forums privés réservés à leurs membres"	
 	]) ;   
 
-      ribbon_title ~name:"quicksetup" "Prise en main rapide" ;
+      ribbon_title ~name:"priseenmainrapide" "Prise en main rapide" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-7-cut.png" ;
 		       "/public/img/2012-08-28-8-cut.png" ])
@@ -336,7 +344,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Les membres que vous avez inscrits et qui n'ont pas encore rejoint RunOrg reçoivent tous vos messages par mail."	
 	]) ;   
 
-      ribbon_title ~name:"customizationintranet" "Personnalisation de votre intranet" ;
+      ribbon_title ~name:"personnalisationintranet" "Personnalisation de votre intranet" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-6-cut.png" ])
 	(features [ 
@@ -353,7 +361,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Insérez votre logo et définissez des images pour vos différents évènements"	
 	]) ;
      
-      ribbon_title ~name:"privacyconfidentiality" "Espace privé et confidentialité" ;
+      ribbon_title ~name:"espacepriveconfidentialite" "Espace privé et confidentialité" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-8-cut.png" ;
 		       "/public/img/2012-08-29-12-cut.png" ])
@@ -377,7 +385,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
 	]) ;
 
-      ribbon_title ~name:"membersprofil" "Profil membres" ;
+      ribbon_title ~name:"profilsmembres" "Profils membres" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-28-1-cut.png" ])
 	(features [ 
@@ -690,38 +698,6 @@ Vous restez maîtres de vos données personnelles."
 
     ] ;
 
-  page "/autres/accompagnement" "RunOrg - Accompagnement"
-    ~section:"autres" 
-    ~head:"accompagnement"
-    [ offer 
-	~title: "Bien démarrer avec RunOrg"
-	~price: "500 €"
-	"Cette offre comprend la prise en main de votre espace, la configuration par nos soins selon vos besoins et sous vos yeux. Accompagnement dans la communication vers vos membres concernant ce lancement. Vous disposez ensuite de 2 heures de support téléphonique durant lesquels nous pouvons également intervenir dans votre espace RunOrg."
-	[ "2 heures de formation à distance avec adaptation de votre espace RunOrg selon vos besoins" ;
-	  "2 heures d’assistance téléphonique sur les 2 premiers mois d’abonnement" ] ;
-
-      offer 
-	~title: "Pack complet de lancement"
-	~price: "750 € (plus frais de déplacement)"
-	"Faites du lancement de votre nouvel espace un évènement pour les membres de votre organisation. Nous le configurons (sur place ou à distance) et le faisons découvrir à vos membres et administrateurs."
-	[ "2 heures de formation à distance avec adaptation de votre espace RunOrg selon vos besoins (à distance ou sur place)" ;
-	  "2 heures de formation et de présentation administrateurs et membres (sur place)" ;
-	  "2 heures d’assistance téléphonique sur les 2 premiers mois d’abonnement" ] ;
-
-      offer 
-	~title: "Formation des administrateurs"
-	~price: "150 €"
-	"Toutes les choses importantes à savoir sur RunOrg pour en tirer le meilleur et plus ! Le niveau du cours s’adaptera en fonction des demandes des participants et de leur niveau sur RunOrg (débutant ou niveau avancé)."
-	[ "1h de formation à distance (par téléphone ou skype)" ] ;
-
-      offer 
-	~title: "Support téléphonique"
-	~price: "150 €"
-	"Ne cherchez pas : demandez !"
-	[ "1 heure de support téléphonique à consommer sur 1 mois après la souscription" ;
-	  "A votre demande nous pouvons intervenir dans votre espace RunOrg" ] ;
-    ] ;    
-
   page "/privacy" "RunOrg - Vie Privée"
     ~head:"cgu"
     ~subsection:"privacy"
@@ -766,6 +742,13 @@ Sur demande des autorités légales compétentes, RunOrg peut suspendre les acc�
     ~section:"autres" 
     ~head:"accompagnement"
     [ offer 
+	~title: "Support Premium"
+	~price: "95 €"
+	"Nous répondons en moins de 24h à vos emails ! (Souvent même la nuit et les weekends). De plus, nous vous offrons un entretient téléphonique avec un expert de la communication interne et externe des associations."
+	[ "Support moins de 24h (engagement sur les jours ouvrés" ;
+	  "Offert : 30 minutes d'entretien et de conseils sur la communication de votre association avec un expert" ] ;
+
+   offer 
 	~title: "Bien démarrer avec RunOrg"
 	~price: "500 €"
 	"Cette offre comprend la prise en main de votre espace, la configuration par nos soins selon vos besoins et sous vos yeux. Accompagnement dans la communication vers vos membres concernant ce lancement. Vous disposez ensuite de 2 heures de support téléphonique durant lesquels nous pouvons également intervenir dans votre espace RunOrg."
