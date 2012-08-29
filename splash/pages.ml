@@ -33,10 +33,10 @@ let pages = Catalog.pages @ [
 
 Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunOrg devient la façon la plus simple de communiquer et de s'organiser."
 	)
-	(image "/public/img/2012-04-12-1-cut.png") ;
+	(image "/public/img/2012-08-28-5-cut.png") ;
 
       composite `LR
-	(image "/public/img/2012-04-12-2-cut.png")
+	(image "/public/img/2012-08-28-9-cut.png")
 	(pride
 	   ~title:"Dédié aux associations"
 	   ~subtitle:"Nous avons pensé à vous"
@@ -373,7 +373,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Vie privée respectée",
 	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
 	  
-	  "Gestion des information personnelles",
+	  "Gestion des informations personnelles",
 	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
 	]) ;
 
