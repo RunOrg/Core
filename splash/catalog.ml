@@ -52,7 +52,22 @@ let pages = [
 	  
 	  "Indépendance des groupes",
 	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
-	]) ; *)
+	]) ; 
+
+    [ composite `LRR
+	(pride 
+	   ~title:"Dossier de presse"
+	   ~subtitle:"Les informations essentielles "
+	   ~link:("/public/media/pdf/dossier-presse-runorg-20120423.pdf",
+		  "Télécharger le dossier complet [PDF]") 
+	   "Notre dossier de presse inclut un historique, des descriptions, des interviews et des données concrètes au sujet de notre société, de notre équipe et de notre produit."
+	) 
+	(pride 
+	   ~title:"Présentation rapide"
+	   "RunOrg offre un intranet collaboratif aux organisations : une plateforme privée d’échange et de communication avec leurs membres, qui inclut des outils puissants de gestion et d’organisation pour les responsables. Le tout est hébergé et mis à jour gratuitement pour les associations ou pour un prix abordable dépendant du nombre d’accès. Des solutions pré-adaptées sont disponibles pour les différents types d’organisations : associations, clubs de sport, collectivités territoriales, politiques, syndics, etc. Contacts : contact@runorg.com"
+	) ;
+
+*)
     ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
