@@ -23,8 +23,8 @@ let pages = [
 	   "pour les associations"
 	   "de moins de 2000 adhérents") 
 	(bullets
-	   ~title:"La plateforme la plus complète pour les associations"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace pour vous faire gagner du temps"
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
 	   ~ordered:false
 	   [ "Communication interne avec l'espace membre" ;
 	     "Communication externe avec le site Internet" ;
@@ -36,19 +36,19 @@ let pages = [
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
    [ composite `LR
 	(pride ~title:"Associations étudiantes" "Pour les BDE, les BDA, les BDS et toutes les associations étudiantes")
-	(create "students")
+	(create "Students")
     ] ;
 	
-  page "/asso/ESS" "RunOrg Associations - Economie Sociale et Solidaire"
+  page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
     [ composite `LR
 	(pride ~title:"Economie Sociale et Solidaire" "Pour toutes les associations de l'économie sociale et solidaire")
-	(create "ess")
+	(create "Ess")
     ] ;
 
-  page "/asso/Improvisation" "RunOrg Associations - Théâtre d'Improvisation"
+  page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
     [ composite `LR
 	(pride ~title:"Théâtre d'Improvisation" "Spécialement créé pour les troupes et les clubs pratiquant le théâtre d'improvisation")
-	(create "impro")
+	(create "Impro")
     ] ;	
 	
   page "/ComiteEnt" "RunOrg Comités d'Entreprise"
