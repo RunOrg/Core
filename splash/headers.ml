@@ -73,7 +73,43 @@ let headers = [
 	"Economie Sociale et Solidaire", "/catalog/asso/Ess" ;
 	"Théâtre d'improvisation", "/catalog/asso/Impro"
       ] ;
+	  "Clubs de sport", "/catalog/clubs-sports/MultiSports", 
+		["Clubs multi-sports", "/catalog/clubs-sports/MultiSports" ;
+		"Judo et jujitsu", "/catalog/clubs-sports/Judo" ;
+		"Badminton", "/catalog/clubs-sports/Badminton" ;
+		"Football US & cheerleading", "/catalog/clubs-sports/Footus" ;
+		"Athlétisme", "/catalog/clubs-sports/Athle" ;
+		"Salle de sport et coaching", "/catalog/clubs-sports/SalleSport" ;
+		"Autre", "/catalog/clubs-sports/Sports" 
+		] ;
+	  "Collectivités territoriales", "/catalog/collectivites/Collectivites" 
+	  [ "Mairies & collectivités", "/catalog/collectivites/Collectivites";
+	  "Portail associatif communal", "/catalog/collectivites/LocalNpPortal";
+	  "Maison des associations", "/catalog/collectivites/MaisonAsso" ;
+	  "Campagnes électorales", "/catalog/collectivites/Campaigns"
+	  ];
+	  "Fédérations", "/catalog/federations/Federations", 
+	  [ "Fédérations", "/catalog/federations/Federations" ;
+	  "FF Badminton", "/catalog/federations/Badminton" ;
+	  "USEP", "/catalog/federations/SpUsep" ;
+	  "Sections sport-études", "/catalog/federations/SectionSportEtudes"
+	  ] ;
+	  "Education", "/catalog/education/ElementarySchool", 
+	  [ "Ecoles primaires" , "/catalog/education/ElementarySchool" ;
+	  "Sections sport-études", "/catalog/education/SectionSportEtudes"
+	  ] ;
+	  "Syndics copropriété", "/catalog/syndic-copropriete/Copro", 
+	  [ "Copropriété avec syndic professionnel", "/catalog/syndic-copropriete/Copro" ;
+	  "Copropriété avec syndic bénévole", "/catalog/syndic-copropriete/CoproVolunteer"
+	  ] ;
+	  "Entreprises", "/catalog/entreprises/Company", 
+	  [ "Entreprises", "/catalog/entreprises/Company" ;
+	  "Centres de formation", "/catalog/entreprises/CompanyTraining"
+	  ] ;
       "Comités d'entreprise", "/catalog/ComiteEnt", [] ;
+	  "Autres", "/catalog/others/Events", 
+	  [ "Organisation d'évènements", "/catalog/others/Events" 
+	  ] ;
     ] ;
 
 (*  header "collectivites" 

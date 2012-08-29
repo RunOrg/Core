@@ -1160,32 +1160,11 @@ let () = catalog [
     inCatalog campaigns
               (adlib "VerticalCampaignsName" "Campagnes électorales")
               None ;
-    inCatalog localDemocracy
+    (* inCatalog localDemocracy
               (adlib "VerticalLocalDemocracyName" "Conseils de quartiers")
-              None ;
+              None ; *)
     inCatalog maisonAsso
               (adlib "VerticalMaisonAssoName" "Maison des associations")
-              None ;
-  ] ;
-  subCatalog ~name:(adlib "Catalog_Syndic" "Syndics de copropriétés") [
-    inCatalog copro
-              (adlib "VerticalCoproName" "Copropriété avec syndic professionnel")
-              None ;
-    inCatalog coproVolunteer
-              (adlib "VerticalCoproVolonteerName" "Copropriété avec syndic bénévole")
-              None ;
-  ] ;
-  subCatalog ~name:(adlib "Catalog_Pro" "Entreprises") [
-    inCatalog company
-              (adlib "VerticalCompanyName" "Entreprises")
-              None ;
-    inCatalog companyTraining
-              (adlib "VerticalCompanyTrainingName" "Centres de formation")
-              None ;
-  ] ;
-  subCatalog ~name:(adlib "Catalog_Ce" "Comités d'entreprise") [
-    inCatalog comiteEnt
-              (adlib "VerticalComiteEntName" "Comités d'entreprise")
               None ;
   ] ;
   subCatalog ~name:(adlib "Catalog_Fed" "Fédérations") [
@@ -1209,16 +1188,34 @@ let () = catalog [
               (Some (adlib "VerticalCatalogSectionSportEtudesDesc" 
 		       "Gestion des classes sportives : encadrement, parents, élèves")) ;
   ] ;
-  subCatalog ~name:(adlib "Catalog_Autre" "Autres") [
-    inCatalog campaigns
-              (adlib "VerticalCampaignsName" "Campagnes électorales")
+  subCatalog ~name:(adlib "Catalog_Syndic" "Syndics de copropriétés") [
+    inCatalog copro
+              (adlib "VerticalCoproName" "Copropriété avec syndic professionnel")
               None ;
+    inCatalog coproVolunteer
+              (adlib "VerticalCoproVolonteerName" "Copropriété avec syndic bénévole")
+              None ;
+  ] ;
+  subCatalog ~name:(adlib "Catalog_Pro" "Entreprises") [
+    inCatalog company
+              (adlib "VerticalCompanyName" "Entreprises")
+              None ;
+    inCatalog companyTraining
+              (adlib "VerticalCompanyTrainingName" "Centres de formation")
+              None ;
+  ] ;
+  subCatalog ~name:(adlib "Catalog_Ce" "Comités d'entreprise") [
+    inCatalog comiteEnt
+              (adlib "VerticalComiteEntName" "Comités d'entreprise")
+              None ;
+  ] ;
+  subCatalog ~name:(adlib "Catalog_Autre" "Autres") [
     inCatalog events
               (adlib "VerticalEventsName" "Organisation d'évènements")
               None ;
-    inCatalog citizenPortal
+    (* inCatalog citizenPortal
               (adlib "VerticalCitizenPortalName" "Portail citoyens")
-              None ;
+              None ; *)
     inCatalog simple
               (adlib "VerticalCatalogOtherName" "Autres")
               None ;
