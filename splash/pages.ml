@@ -96,34 +96,12 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	
     ] ;
 
-  page "/features/full" "RunOrg Associations - Fonctionnalités"
-    ~section:"associations" 
-    ~head:"associations"
-    ~subsection:"fonctionnalites"
-    [ ribbon_title ~name:"members" "Gestion des membres" ;
-      composite `LR 
-	(* Images : 464x254 pixels *)
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ;
-		       "/public/img/2012-04-13-1-cut.png" ;
-		       "/public/img/2012-04-13-1-cut.png" ])
-	(features [ 
-	  "Adhésions et groupes", 
-	  "Disposez d'une liste à jour de vos membres, triée en autant de sous-listes que nécesaire." ;
-
-	  "Groupes secrets",
-	  "Un groupe secret n'est visible que par les membres qui y sont inscrits." ;
-
-	  "Inscription en ligne", 
-	  "Permettez à vos membres de rejoindre des groupes en ligne."
-	]) ;
-    ] ;
-
   page "/features" "RunOrg Associations - Fonctionnalités"
     ~section:"associations" 
     ~head:"associations"
     ~subsection:"fonctionnalites"
     [ composite `LR
-	(image "/public/img/2012-04-13-1-cut.png")
+	(image "/public/img/2012-08-28-9-cut.png")
 	(pride
 	   ~title:"Gestion des membres"
 	   ~subtitle:"Simplement et rapidement"
@@ -132,7 +110,7 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en ligne par tous les responsables, et laissez vos membres tenir eux-mêmes à jour leurs informations de contact."
 	) ;
       
-      composite `LRR
+      composite `LR
 	(pride
 	   ~title:"Evènements et activités"
 	   ~subtitle:"Organisez-vous en ligne"
@@ -140,10 +118,10 @@ Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en li
 
 Chaque évènement comporte un mur de discussion, un album photo, un partage de fichiers. Et pour vos assemblées générales, une chatroom et des votes anonymes."
 	) 
-	(image "/public/img/2012-04-16-3-cut.png") ;
+	(image "/public/img/2012-08-29-5-cut.png") ;
 
       composite `LR
-	(image "/public/img/2012-04-16-2-cut.png")
+	(image "/public/img/2012-08-29-9-cut.png")
 	(pride
 	   ~title:"Déléguez en toute confiance"
 	   ~subtitle:"Ne soyez plus le seul à tout faire"
@@ -173,13 +151,13 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 
 Disponibles sur les adhésions et les évènements, des formulaires configurables vous permettent de poser les questions importantes, et les membres y répondent en s'inscrivant. Le résultat est disponible en ligne et facilement téléchargeable."
 	) 
-	(image "/public/img/2012-04-16-1-cut.png") ;
+	(image "/public/img/2012-08-29-6-cut.png") ;
       
 
       hr () ;
 
       composite `LR
-	(image "/public/img/2012-04-16-4-cut.png")
+	(image "/public/img/2012-08-28-5-cut.png")
 	(pride
 	   ~title:"Murs de discussion"
 	   ~subtitle:"Donnez la parole à vos membres"
