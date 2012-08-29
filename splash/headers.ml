@@ -82,7 +82,7 @@ let headers = [
 		"Salle de sport et coaching", "/catalog/clubs-sports/SalleSport" ;
 		"Autre", "/catalog/clubs-sports/Sports" 
 		] ;
-	  "Collectivités territoriales", "/catalog/collectivites/Collectivites" 
+	  "Collectivités", "/catalog/collectivites/Collectivites" ,
 	  [ "Mairies & collectivités", "/catalog/collectivites/Collectivites";
 	  "Portail associatif communal", "/catalog/collectivites/LocalNpPortal";
 	  "Maison des associations", "/catalog/collectivites/MaisonAsso" ;
@@ -98,7 +98,7 @@ let headers = [
 	  [ "Ecoles primaires" , "/catalog/education/ElementarySchool" ;
 	  "Sections sport-études", "/catalog/education/SectionSportEtudes"
 	  ] ;
-	  "Syndics copropriété", "/catalog/syndic-copropriete/Copro", 
+	  "Copropriétés", "/catalog/syndic-copropriete/Copro", 
 	  [ "Copropriété avec syndic professionnel", "/catalog/syndic-copropriete/Copro" ;
 	  "Copropriété avec syndic bénévole", "/catalog/syndic-copropriete/CoproVolunteer"
 	  ] ;
@@ -107,7 +107,7 @@ let headers = [
 	  "Centres de formation", "/catalog/entreprises/CompanyTraining"
 	  ] ;
       "Comités d'entreprise", "/catalog/ComiteEnt", [] ;
-	  "Autres", "/catalog/others/Events", 
+      "Autres", "/catalog/others/Events", 
 	  [ "Organisation d'évènements", "/catalog/others/Events" 
 	  ] ;
     ] ;
