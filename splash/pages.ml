@@ -213,41 +213,27 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	      ribbon 
 	(important 
 	   "DETAIL DES FONCTIONNALITES"
+	   ""
 	) ;
 
-    [ ribbon_title ~name:"members" "Gestion des membres" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
-	(features [ 
-	  "Adhésions et groupes", 
-	  "Disposez d'une liste à jour de vos membres, triée en autant de sous-listes que nécesaire." ;
-
-	  "Groupes secrets",
-	  "Un groupe secret n'est visible que par les membres qui y sont inscrits." ;
-
-	  "Inscription en ligne", 
-	  "Permettez à vos membres de rejoindre des groupes en ligne."
-	]) ;
-    ] ;
-	
-   [ ribbon_title ~name:"membersorganization" "Organisation des membres" ;
+    [ ribbon_title ~name:"membersorganization" "Organisation des membres" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-04-13-1-cut.png" ])
 	(features [ 
 		"Groupes de membres",
-		"Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)";
+		"Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
 		
 		"Demandes d'inscription",
-		"Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets.";
+		"Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 		
 		"Gestion des inscrits",
-		"Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement";
+		"Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
 		
 		"Inscriptions multiples",
-		"Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément";
+		"Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
 		
 		"Annuaire à jour",
-		"Visualisez facilement la liste des inscrits d'un groupe et leurs informations.";
+		"Visualisez facilement la liste des inscrits d'un groupe et leurs informations." ;
 		
 		"Indépendance des groupes",
 		"Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
