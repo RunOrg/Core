@@ -6,6 +6,20 @@ open BatPervasives
 
 module Grid    = MAvatarGrid
 
+type profile_label = 
+  [ `Address
+  | `Birthdate
+  | `Cellphone
+  | `City
+  | `Country
+  | `Email
+  | `Firstname
+  | `Fullname
+  | `Gender
+  | `Lastname
+  | `Phone
+  | `Zipcode ]
+
 module EvalFmt = Fmt.Make(struct
   type json t = 
     [ `Profile of [ `Birthdate
@@ -56,6 +70,91 @@ let box access entity render =
     let! columns, _, _ = ohm_req_or (return []) $ Grid.MyGrid.get_list lid in        
     return columns
   ) in
+
+  (* Edit a column *)
+
+  let! edit = O.Box.react Fmt.Unit.fmt begin fun () json _ res ->
+
+    let fail = 
+      let! html = ohm (Asset_Grid_Edit_Locked.render ()) in
+      return $ Action.json [ "form", Html.to_json html ] res 
+    in
+
+    let! idx = req_or fail (try Some (Json.to_int json) with _ -> None) in
+    let! () = true_or fail (idx > 0) in
+    
+    let! col = req_or fail (try Some (List.nth columns idx) with _ -> None) in 
+    let! name = ohm (TextOrAdlib.to_string (col.MAvatarGridColumn.label)) in
+
+    let! from, srcname = ohm begin 
+
+      let p x = 
+	let! from    = ohm (AdLib.get `Grid_Source_Profile_Short) in
+	let! srcname = ohm (AdLib.get (`Grid_Source_Profile_Field x)) in
+	return (from, srcname)
+      in
+
+      let group gid = 
+	let  none   = AdLib.get `Grid_Source_Group_Unknown in
+	let! group  = ohm_req_or none $ O.decay (MGroup.try_get access gid) in 
+	let! eid    = req_or none (MGroup.Get.entity group) in
+	let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
+	let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
+	CEntityUtil.name entity 
+      in
+
+      let g gid x = 
+	let! name = ohm $ group gid in
+	let! srcname = ohm $ AdLib.get (`Grid_Source_Local_Field x) in
+	return (name, srcname) 
+      in
+
+      match col.MAvatarGridColumn.eval with
+	| `Avatar  (_,`Name)      -> p `Fullname
+	| `Profile (_,`Firstname) -> p `Firstname
+	| `Profile (_,`Lastname)  -> p `Lastname
+	| `Profile (_,`Email)     -> p `Email
+	| `Profile (_,`Birthdate) -> p `Birthdate
+	| `Profile (_,`City)      -> p `City
+	| `Profile (_,`Address)   -> p `Address
+	| `Profile (_,`Zipcode)   -> p `Zipcode
+	| `Profile (_,`Country)   -> p `Country
+	| `Profile (_,`Phone)     -> p `Phone
+	| `Profile (_,`Cellphone) -> p `Cellphone
+	| `Profile (_,`Gender)    -> p `Gender
+	| `Profile (_,`Full)      -> p `Fullname
+	| `Group (gid,`Status) -> g gid `Status
+	| `Group (gid,`Date)   -> g gid `Date
+	| `Group (gid,`InList) -> g gid `Status
+	| `Group (gid,`Field f) -> 
+	  let! fields = ohm $ O.decay (MGroup.Fields.local gid) in
+	  let  name =
+	    try BatList.find_map (fun field -> 
+	      if field # name = f then Some (field # label) else None) fields
+	    with Not_found -> `text ""
+	  in
+	  let! name = ohm $ TextOrAdlib.to_string name in
+	  g gid (`Field name) 
+    end in 
+
+    let data = object
+      method from = from
+      method srcname = srcname
+      method name = name
+    end in
+
+    let! html = ohm (Asset_Grid_Edit_Form.render data) in    
+
+    return $ Action.json [ "form", Html.to_json html ] res 
+
+  end in 
+
+  (* Rendering a single column *)
+  
+  let render_column c = object
+    method text = TextOrAdlib.to_string (c.MAvatarGridColumn.label)
+    method edit = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint edit ()) 
+  end in 
 
   (* Creation response *)
 
@@ -130,7 +229,7 @@ let box access entity render =
     let  columns = columns @ [col] in
     let! () = ohm $ O.decay (Grid.MyGrid.set_columns lid columns) in
 
-    let! html = ohm $ Asset_Grid_Edit_Column.render (TextOrAdlib.to_string label) in
+    let! html = ohm $ Asset_Grid_Edit_Column.render (render_column col) in
     let  html = Html.to_json html in 
 
     return $ Action.json [ "col", html ] res
@@ -142,11 +241,11 @@ let box access entity render =
     let! local = ohm (local_fields local) in
     Asset_Grid_Edit.render (object
       method columns = 
-	List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns
+	List.map render_column columns
       method profile = 
 	List.map (fun k -> (object
 	  method json  = Json.serialize (EvalFmt.to_json (`Profile k))
-	  method label = k
+	  method label = (k :> profile_label)
 	end)) profile_fields
       method local   = 
 	List.map (fun (k,l) -> (object

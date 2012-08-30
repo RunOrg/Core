@@ -39,8 +39,8 @@
 </div> 
 
 {@!column}
-  <td><a {$a} href="javascript:void(0)">{this | ohm | esc}</a></td>
-  <script>
+  <td><a {$a} href="javascript:void(0)">{text | ohm | esc}</a></td>
+  <script type="edit:json">
 here.$a.click ->
 
   return if here.$a.parent().hasClass "-selected"
@@ -51,9 +51,36 @@ here.$a.click ->
   $me = $ '<div class="-edit-form -loading"></div>' 
   here.$a.closest(".grid").find(".-new-form").hide().after($me)
 
-
+  to_endpoint edit, here.$a.parent().prevAll().length, (r) ->
+    return if !$me.is(":visible")
+    if r.form 
+      $me.html(r.form.html).removeClass("-loading")
+      call r.form.code
+    call r.code
 
   </script>
+{/@}
+
+{@!form}
+<form class="-l">
+  <div>
+    <label>{`Grid_Edit_Source}</label> 
+    <span style="color:#888">{from} : </span><span>{srcname}</span>
+  </div>
+  <div>
+    <label>{`Grid_Edit_Name}</label> <input type="text" value="{name}"/> 
+    <button type="submit"><span>{`Grid_Edit_Save}</span></button>
+  </div>
+</form>
+<div class="-r">
+  <a href="javascript:void" class="action-button">{`Grid_Edit_Delete}</a>
+</div>
+{/@}
+
+{@!locked}
+<div style="line-height:68px;color:#888;font-weight:bold;text-align:center">
+  { `Grid_Edit_Locked }
+</div>
 {/@}
 
 <script type="create:json">
@@ -88,8 +115,49 @@ here.$f.submit ->
   min-height: 100px;
 
   .-edit-form.-loading {
-    height: 78px;
     background: url(/public/icon/ajax-load.gif) center center no-repeat;
+  }
+
+  .-edit-form {
+    height: 88px;
+    overflow: hidden;
+    > * { 
+      background-color: #EEE;
+      margin: 10px;
+    }
+    .-r { 
+      float: right;
+      width: 205px;
+      padding: 20px 40px;
+      height: 28px;
+    }
+    .-l {
+      height: 48px;
+      width: 560px;
+      float: left;
+      padding: 10px;
+      > div { 
+        overflow: hidden; 
+        min-height: 24px; 
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      label {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 0 4px;
+        text-align: right;
+        width: 50px;
+      }
+      input {
+        .asap();
+        border: 1px solid #BBB;
+        background: white;
+        padding: 2px 4px;
+        width: 240px;
+      }
+    }
   }
 
   .-new-form {
