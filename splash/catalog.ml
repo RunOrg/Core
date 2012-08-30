@@ -38,39 +38,40 @@ let pages = [
 	(pride ~title:"Associations étudiantes" "Pour les BDE, les BDA, les BDS et toutes les associations étudiantes")
 	(create "Students");
 
-    (* composite `LR 
+    composite `LR 
 	(image 
-	   ~copyright:("http://www.flickr.com/photos/giena/3361653109/",
-		       "Eugenijus Barzdzius")
-	   "/public/img/imagerugby.jpg")
+	   ~copyright:("http://www.flickr.com/photos/gaetan_z/6853069363/",
+		       "GaetanZFSHN")
+	   "/public/img/preconf_students.jpg")
 	(features [ 
-	  "Groupes de membres",
-	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
+	  "Points forts",
+	  "Créer et annimez facilement le réseau social privé de votre association étudiante" ;
 	    
-	  "Annuaire à jour",
-	  "Visualisez facilement la liste des inscrits d'un groupe et leurs informations." ;
+	  "Idéal pour...",
+	  "Organiser vos soirées et partager ensuite les photos entre vous. Gérer l'inscription en ligne de vos membres" ;
 	  
-	  "Indépendance des groupes",
-	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres. Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
+	  "Egalement pensé pour...",
+	  "Equiper vos projets et vos commissions d'un outil qui leur permettra d'agir plus efficacement."	
 	]) ; 
+	
+	ribbon ( important
+		"Ils vont parler de vous !"
+		"Offrez à vos étudiants le réseau social privé qu’ils attendent de leur asso et de leur école") ;
 
-    [ composite `LRR
 	(pride 
-	   ~title:""
-	   "La préconfiguration RunOrg dédiée aux associations étudiantes (BDE, BDA, BDS, etc.) vous permet d’offrir à vos étudiants et vos bénévoles un outil de communication et d’organisation dédié à votre association. 
-De votre coté vous profitez de leur facilité à communiquer via les réseaux sociaux pour alléger considérablement vos tâches administratives et logistiques."
-	) 
-	(pride 
-	   ~title:""
-	   "Vous organisez en quelques minutes vos évènements et soirées, offrez des espaces de discussions et d’échanges privés (fini les photos sur Internet !), équipez vos clubs et projets, et mobilisez rapidement votre réseau autour de causes avec l’organisation de pétitions. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants.
-A la fois pratique et facile : offrez à vos étudiant le réseau social privé qu’ils attendent de leur asso et de leur école."
-	) ;
-*)
+	   ~title:"Le réseau privé de votre asso"
+	   "Notre solution dédiée aux associations étudiantes (BDE, BDA, BDS, etc.) vous permet d'équiper votre asso d'un outil de communication et d’organisation complet et puissant. Vous organisez en quelques minutes vos évènements et soirées, offrez des espaces de discussions et d’échanges privés (fini les photos sur Internet !), équipez vos clubs et projets. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants.
+
+De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et vos bénévoles à communiquer via les réseaux sociaux pour alléger considérablement vos tâches administratives et logistiques"
+	) ; 
+
+      hr () ;
+
       composite `LR
 	(price
 	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	   "pour les assos étudiantes"
+	   "de moins de 8000 adhérents") 
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
