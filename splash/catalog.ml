@@ -44,7 +44,7 @@ let pages = [
 		       "GaetanZFSHN")
 	   "/public/img/preconf_students.jpg")
 	(features [ 
-	  "Points forts",
+	  "Point fort",
 	  "Créer et annimez facilement le réseau social privé de votre association étudiante" ;
 	    
 	  "Idéal pour...",
@@ -87,6 +87,53 @@ De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et
     [ composite `LR
 	(pride ~title:"Associations de l'Economie Sociale et Solidaire" "Pour toutes les associations de l'économie sociale et solidaire")
 	(create "Ess")
+    ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/leo-gruebler/6347903993/",
+		       "Leo Gruebler")
+	   "/public/img/preconf_ess.jpg")
+	(features [ 
+	  "Point fort",
+	  "Communiquez, organiser et mobilisez depuis un seul et même espace" ;
+	    
+	  "Idéal pour...",
+	  "Mobiliser très rapidement tous les membres pour une action commune et pour communiquer de manière transversale" ;
+	  
+	  "Egalement pensé pour...",
+	  "Travailler de manière collaborative sur des idées ou des actions ; garder confidentiel les échanges entre les membres"	
+	  	  
+	]) ; 
+	
+      hr () ;
+
+	(pride 
+	   ~title:"L'ESS a enfin son outil !"
+	   "La solution dédiée aux Associations de l'Economie Sociale et Solidaire (ESS) est conçue pour les aider à s'organiser au mieux dans un environnement démocratique et collaboratif.
+
+Les membres s'organisent autour de projets, de thèmes ou encore d'actions. Chacun des groupes ainsi constitué peut avancer sur ses sujets sans interférer avec la communication globale au sein de l'association.  Les membres on néanmoins accès à tous les sujets qui les intéressent et peuvent apporter leur contribution.
+
+RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en main, ludique et efficace pour organiser vos activité et vos action. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres.
+"
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); 
     ] ;
 
   page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
