@@ -13,6 +13,7 @@ module People  = CEvents_admin_people
 module Join    = CEvents_admin_join
 module Invite  = CEvents_admin_invite
 module JForm   = CEvents_admin_jForm
+module Columns = CEvents_admin_cols
 
 let () = define UrlClient.Events.def_admin begin fun parents entity access -> 
   O.Box.fill begin 

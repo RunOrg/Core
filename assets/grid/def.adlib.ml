@@ -2,6 +2,7 @@
 | `Grid_Block_Wait_Thanks
 | `Grid_Block_Empty
 | `Grid_Link_Invite
+| `Grid_Link_Columns
 
 | `Grid_Column_Add
 

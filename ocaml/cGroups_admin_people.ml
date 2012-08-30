@@ -28,6 +28,11 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
       [ IEntity.to_string (MEntity.Get.id entity) ;
 	IAvatar.to_string aid ] 
   in
+
+  let cols_url = 
+    Action.url UrlClient.Members.cols (access # instance # key) 
+      [ IEntity.to_string (MEntity.Get.id entity) ]
+  in
   
   let invite_url = 
     Action.url UrlClient.Members.invite (access # instance # key) 
@@ -44,6 +49,6 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access entity fail invite_url join_url wrapper
+  CGrid.box access entity fail cols_url invite_url join_url wrapper
 
 end

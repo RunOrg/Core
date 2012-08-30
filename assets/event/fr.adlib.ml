@@ -86,3 +86,5 @@ end
 | `Event_JoinForm_Title -> "Formulaire"
 | `Event_JoinForm_Link -> "Formulaire d'inscription"
 | `Event_JoinForm_Sub -> "Demandez des informations aux participants"
+
+| `Event_Columns_Title -> "Colonnes"

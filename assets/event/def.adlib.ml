@@ -78,3 +78,5 @@
 | `Event_JoinForm_Title
 | `Event_JoinForm_Link
 | `Event_JoinForm_Sub 
+
+| `Event_Columns_Title 

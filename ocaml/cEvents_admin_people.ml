@@ -22,6 +22,10 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
   end in 
 
+  let cols_url = 
+    Action.url UrlClient.Events.cols (access # instance # key) 
+      [ IEntity.to_string (MEntity.Get.id entity) ] 
+  in  
 
   let join_url aid = 
     Action.url UrlClient.Events.join (access # instance # key) 
@@ -44,6 +48,6 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access entity fail invite_url join_url wrapper
+  CGrid.box access entity fail cols_url invite_url join_url wrapper
 
 end
