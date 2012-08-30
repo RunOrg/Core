@@ -2,7 +2,9 @@
 | `Grid_Block_Wait_Thanks -> "Merci de votre patience"
 | `Grid_Block_Empty -> "Aucun élément à afficher"
 | `Grid_Link_Invite -> "Ajouter des membres"
+
 | `Grid_Columns_Add -> "Nouvelle Colonne"
+| `Grid_Column_Add -> "Ajouter"
 
 | `Grid_Source_Profile -> "Depuis le profil membres"
 | `Grid_Source_Local -> "Depuis cette liste"

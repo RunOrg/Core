@@ -12,7 +12,7 @@
     </tbody>
   </table>
   <div class="-new-form">
-    <form>
+    <form {$f}>
       <div class="-col">
 	<h3>{`Grid_Source_Local}</h3>
 	{#local}
@@ -30,6 +30,9 @@
 	    {`Grid_Source_Profile_Field label}
 	  </label>
 	{/#}
+      </div>
+      <div style="clear:both;padding:0 8px 8px;text-align:right">
+	<button type="submit"><span>{`Grid_Column_Add}</span></button>      
       </div>
     </form>
   </div>
@@ -53,7 +56,7 @@ here.$a.click ->
   </script>
 {/@}
 
-<script>
+<script type="create:json">
 here.$n.click ->
 
   here.$n.closest("table").find(".-selected").removeClass "-selected"
@@ -62,6 +65,18 @@ here.$n.click ->
   here.$n.closest(".grid").find(".-new-form").show()
 
 here.$n.click()
+
+here.$f.submit ->
+  val = here.$f.find(':checked').attr("value")
+  return if !val
+  val = eval('('+val+')')
+  to_endpoint create, val, (result) ->
+    if result.col
+      here.$n.insertBefore(result.col.html)
+      call result.col.code
+    call result.col.code
+  return false
+
 </script>
 
 

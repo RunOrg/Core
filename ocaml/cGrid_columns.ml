@@ -57,6 +57,10 @@ let box access entity render =
     return columns
   ) in
 
+  let! create = O.Box.react Fmt.Unit.fmt begin fun () json _ res ->
+    return res
+  end in 
+
   let body = 
     let! local = ohm (MGroup.Fields.local gid)in
     let! local = ohm (local_fields local) in
@@ -73,6 +77,8 @@ let box access entity render =
 	  method json  = Json.serialize (EvalFmt.to_json (`Local k))
 	  method label = l
 	end)) local
+      method create = JsCode.Endpoint.to_json 
+	(OhmBox.reaction_endpoint create ())
     end)
   in
 

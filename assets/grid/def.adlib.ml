@@ -2,7 +2,9 @@
 | `Grid_Block_Wait_Thanks
 | `Grid_Block_Empty
 | `Grid_Link_Invite
+
 | `Grid_Columns_Add
+| `Grid_Column_Add
 
 | `Grid_Source_Profile 
 | `Grid_Source_Local
