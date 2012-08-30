@@ -36,7 +36,7 @@ let pages = [
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	);
     ] ;
 	
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
@@ -87,7 +87,7 @@ De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
@@ -138,7 +138,7 @@ RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ;
 
   page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
@@ -189,7 +189,7 @@ Jamais organiser un spectacle, inviter votre public et partager ensuite les phot
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ;
 
   page "/clubs-sports/MultiSports" "RunOrg Clubs - Clubs multi-sports "
@@ -239,7 +239,7 @@ RunOrg Club multi-sports vous offre une solution clef en main, ludique et effica
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ;
 
   page "/clubs-sports/Judo" "RunOrg Clubs - Judo et Jujitsu"
@@ -289,7 +289,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ;
 
 	page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
@@ -308,7 +308,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	  "Gestion du loisir et du haut niveau en lien avec la FFBAD" ;
 
 	  "Modèles et groupes inclus",
-	  "Compétition de badminton, formualaire d'inscription badminton, groupes pour le loisir, la compétition et les entraîneurs "	
+	  "Compétition de badminton, formualaire d'inscription badminton, groupes pour le loisir, la compétition et les entraîneurs ";	
 	  
 	  "Déjà utilisé par...",
 	  "Les clubs affiliés à la Fédération Française de Badminton"	
@@ -345,7 +345,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	) ;
     ] ;	
 
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
@@ -738,6 +738,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
 	); *)
+    ] ;	
 
   page "/collectivites/Campaigns" "RunOrg Collectivités - Campagnes électorales"
     [ composite `LR
@@ -796,6 +797,7 @@ http://www.flickr.com/photos/wwworks/4005631298/
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
 	); *)
+    ] ;	
 
   page "/federations/Federations" "RunOrg Fédérations - Structure fédérale"
     [ composite `LR
@@ -813,11 +815,11 @@ http://www.flickr.com/photos/wwworks/4005631298/
 	(pride
 	   ~title:"Portail clubs de la FFBAD"
 	   ~subtitle:"Bientôt disponible"
-	   ~link:("/http://www.ffbad.org",
+	   ~link:("http://www.ffbad.org",
 	       "Site de la FFBAD")
 	   "La FFBAD met à la disposition exclusive de ses clubs affiliés des espaces privés spécialements adaptés au badminton. 
 	   Ces espaces sont hébergés sous le nom de domaine de la fédération, disposent des couleurs de la FFBAD, et fourniront des services exclusifs aux clubs affiliés."
-	)
+	);
     ] ;	
 
   page "/federations/SpUsep" "RunOrg Fédérations - USEP "
