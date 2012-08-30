@@ -40,7 +40,7 @@
 
 {@!column}
   <td><a {$a} href="javascript:void(0)">{text | ohm | esc}</a></td>
-  <script type="edit:json">
+  <script type="edit:json, del:json, name:json">
 here.$a.click ->
 
   return if here.$a.parent().hasClass "-selected"
@@ -51,11 +51,25 @@ here.$a.click ->
   $me = $ '<div class="-edit-form -loading"></div>' 
   here.$a.closest(".grid").find(".-new-form").hide().after($me)
 
-  to_endpoint edit, here.$a.parent().prevAll().length, (r) ->
+  idx = here.$a.parent().prevAll().length
+
+  render = (h) -> 
+    $me.html(h.html).removeClass("-loading")
+    call h.code
+
+    $me.find(".-delete").click ->
+      to_endpoint del, idx, () ->
+      $me.html ""
+      here.$a.parent().remove() 
+
+    $me.find("form").submit ->
+      v = $(@).find("input[type='text']").val() || ""
+      to_endpoint name, [idx,v], () ->
+      here.$a.text(v)
+
+  to_endpoint edit, idx, (r) ->
     return if !$me.is(":visible")
-    if r.form 
-      $me.html(r.form.html).removeClass("-loading")
-      call r.form.code
+    render r.form if r.form 
     call r.code
 
   </script>
@@ -73,7 +87,7 @@ here.$a.click ->
   </div>
 </form>
 <div class="-r">
-  <a href="javascript:void" class="action-button">{`Grid_Edit_Delete}</a>
+  <a href="javascript:void" class="action-button -delete">{`Grid_Edit_Delete}</a>
 </div>
 {/@}
 

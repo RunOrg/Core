@@ -38,6 +38,10 @@ module EvalFmt = Fmt.Make(struct
     ]
 end)
 
+module RenameFmt = Fmt.Make(struct
+  type json t = ( int * string )
+end)
+
 let profile_fields = 
   [ `Birthdate ;`Gender ; `Phone   ; `Cellphone ;
     `Address   ; `City  ; `Zipcode ; `Country   ]
@@ -70,6 +74,36 @@ let box access entity render =
     let! columns, _, _ = ohm_req_or (return []) $ Grid.MyGrid.get_list lid in        
     return columns
   ) in
+
+  (* Rename a column *)
+
+  let! rename = O.Box.react Fmt.Unit.fmt begin fun () json _ res ->
+    let  fail = return res in 
+    let! idx, name = req_or (return res) (RenameFmt.of_json_safe json) in
+    let! ()  = true_or fail (idx > 0) in
+    let columns = BatList.mapi (fun i c -> 
+      if i = idx then MAvatarGridColumn.({ c with label = `text name }) 
+      else c
+    ) columns in 
+    let! () = ohm $ O.decay (Grid.MyGrid.set_columns lid columns) in
+    return res    
+  end in 
+
+  (* Delete a column *)
+
+  let! del = O.Box.react Fmt.Unit.fmt begin fun () json _ res ->
+    let fail = return res in 
+    let! idx = req_or fail (try Some (Json.to_int json) with _ -> None) in 
+    let! ()  = true_or fail (idx > 0) in
+    let columns = 
+      columns
+      |> BatList.mapi (fun i x -> (i,x)) 
+      |> List.filter (fst |- ((<>) idx))
+      |> List.map snd
+    in
+    let! () = ohm $ O.decay (Grid.MyGrid.set_columns lid columns) in
+    return res
+  end in 
 
   (* Edit a column *)
 
@@ -154,6 +188,8 @@ let box access entity render =
   let render_column c = object
     method text = TextOrAdlib.to_string (c.MAvatarGridColumn.label)
     method edit = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint edit ()) 
+    method del  = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint del ()) 
+    method name = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint rename ()) 
   end in 
 
   (* Creation response *)
