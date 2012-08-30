@@ -5,7 +5,7 @@
 	{#columns}
 	  { this | Asset_Grid_Edit_Column.render | ohm }
 	{/#}
-	<td class="-new"><a {$n} href="javascript:void(0)"><span>{`Grid_Columns_Add}</span></a></td>
+	<td class="-new"><a {$n} href="javascript:void(0)"><span>+</span></a></td>
       </tr>
     </thead>
     <tbody>      
@@ -72,8 +72,9 @@ here.$f.submit ->
   val = eval('('+val+')')
   to_endpoint create, val, (result) ->
     if result.col
-      here.$n.insertBefore(result.col.html)
+      $me = $(result.col.html).insertBefore(here.$n.parent())
       call result.col.code
+      $me.find("a").click() 
     call result.col.code
   return false
 
@@ -83,7 +84,7 @@ here.$f.submit ->
 <style>
 .grid.-edit {
 
-  margin-top: 46px;
+  margin: 46px 0;
   min-height: 100px;
 
   .-edit-form.-loading {
@@ -130,10 +131,13 @@ here.$f.submit ->
   }
 
   .-new {
-    width: 140px;
+    width: 25px;
     a {
       color: #8F8;
       text-shadow: 0 -1px 0 #2A2;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 17px;
     }
   }
 }
