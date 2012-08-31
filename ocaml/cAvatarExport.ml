@@ -12,7 +12,7 @@ end)
 
 let task,define = O.async # declare "avatar-export" TaskFmt.fmt 
 let () = define begin fun (aid_opt,exid,gid,evals) ->
-  return () 
+  MCsvExport.finish exid 
 end
 
 let start gid =   
@@ -55,4 +55,7 @@ let start gid =
   let! heading = ohm $ Run.list_map TextOrAdlib.to_string names in 
 
   let! exid = ohm $ Export.create ~size ~heading () in
+
+  let! () = ohm $ task (None,IExport.decay exid,IGroup.decay gid, evals) in
+
   return exid
