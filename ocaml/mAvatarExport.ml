@@ -6,5 +6,7 @@ open BatPervasives
 
 module Export = MCsvExport
 
-let start _ = 
-  Export.create () 
+let start gid =   
+  let! size = ohm (Run.map (#any) (MMembership.InGroup.count gid)) in
+  let! exid = ohm $ Export.create ~size () in
+  return exid

@@ -166,7 +166,8 @@ let avatars gid ~start ~count =
 module Count = Fmt.Make(struct
   type json t = <
     count "c"   : int ;
-    pending "p" : int
+    pending "p" : int ;
+    any "a"     : int
   >
 end) 
 
@@ -177,14 +178,16 @@ module CountView = CouchDB.ReduceView(struct
   module Design  = Versioned.Design
   let name   = "count"
   let map    = "var c = (doc.r.status === 'Member') ? 1 : 0;
-                var p = (doc.r.status === 'Pending') ?  1 : 0;
-                if (c > 0 || p > 0) emit(doc.c.where,{c:c,p:p})" 
+                var p = (doc.r.status === 'Pending') ? 1 : 0;
+                var a = (doc.r.status !== 'NotMember') ? 1 : 0;
+                if (c > 0 || p > 0) emit(doc.c.where,{c:c,p:p,a:a})" 
   let group  = true 
   let level  = None 
-  let reduce = "var r = { c:0, p:0 } ; 
+  let reduce = "var r = { c:0, p:0, a:0 } ; 
                 for (var k in values) {
                   r.c += values[k].c ;
                   r.p += values[k].p ;
+                  r.a += values[k].a ;
                 }
                 return r;" 
 end)
@@ -192,6 +195,7 @@ end)
 let zero_count = object 
   method count   = 0
   method pending = 0
+  method any     = 0
 end
 
 let count group = 

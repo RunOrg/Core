@@ -109,7 +109,7 @@ module InGroup : sig
     -> count:int
     -> (IAvatar.t list * IAvatar.t option) O.run
     
-  val count : 'any IGroup.id -> < count : int ; pending : int > O.run
+  val count : 'any IGroup.id -> < count : int ; pending : int ; any : int > O.run
 
 end
 
