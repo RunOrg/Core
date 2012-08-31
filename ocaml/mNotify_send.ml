@@ -40,14 +40,14 @@ let send =
     let sent d = Store.({ d with sent = Some now }) in
 
     let!  ( ) = ohm $ immediate_call (uid,nid,payload) in
-    let!   _  = ohm $ Store.MyTable.transaction nid (Store.MyTable.update sent) in
+    let!   _  = ohm $ Store.Tbl.update nid sent in
     return None
 
   else
     
     (* Delayed sending : mark as delayed. *)
     let delay d = Store.({ d with delayed = true }) in
-    let! _ = ohm $ Store.MyTable.transaction nid (Store.MyTable.update delay) in
+    let! _ = ohm $ Store.Tbl.update nid delay in
     return None
 
 let () = 

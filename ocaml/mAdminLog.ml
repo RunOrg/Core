@@ -41,7 +41,7 @@ end)
 
 type t = Data.t 
 
-(* Database definition ------------------------------------------------------------------------------------- *)
+(* Database definition --------------------------------------------------------------------- *)
 
 include CouchDB.Convenience.Table(struct let db = O.db "alog" end)(Id)(Data)
 
@@ -57,10 +57,6 @@ let log ?id ~uid ?iid ?time payload =
   end in 
 
   match id with 
-    | None -> let id = Id.gen () in
-	      let! _ = ohm $ MyTable.put id data in
-	      return () 
-
-    | Some id -> let! _ = ohm $ MyTable.put id data in
-		 return () 
+    | None -> Run.map ignore (Tbl.create data)
+    | Some id -> Tbl.set id data 
 

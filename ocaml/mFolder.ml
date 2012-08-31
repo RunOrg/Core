@@ -22,7 +22,7 @@ module Data = Fmt.Make(struct
   >
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IFolder)(Data)
+module Tbl = CouchDB.Table(MyDB)(IFolder)(Data)
 
 type 'relation t = 
     {
@@ -53,7 +53,7 @@ let _make context id data =
 (* Direct access ---------------------------------------------------------------------------- *)
 
 let try_get ctx id = 
-  let! album_opt = ohm $ MyTable.get (IFolder.decay id) in
+  let! album_opt = ohm $ Tbl.get (IFolder.decay id) in
   return $ BatOption.map (_make ctx id) album_opt
 
 module Get = struct
@@ -135,13 +135,12 @@ let get_for_entity ctx eid =
       | Some item -> return (IFolder.of_id (item # id), item # doc)
       | None -> (* MFolder missing, create one *)
 
-	let id = IFolder.gen () in
 	let doc = object
 	  method owner = `entity eid
 	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
-	let! _ = ohm $ MyTable.transaction id (MyTable.insert doc) in
+	let! id = ohm $ Tbl.create doc in 
 	return (id, doc) 
   in
 

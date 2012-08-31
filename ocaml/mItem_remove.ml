@@ -12,7 +12,7 @@ let schedule_deletion =
   let task = O.async # define "scheduled-item-deletion" IItem.fmt begin fun itid ->
     
     let  finish = return () in
-    let! item   = ohm_req_or finish (MyTable.get itid) in
+    let! item   = ohm_req_or finish (Tbl.get itid) in
     let! ()     = true_or finish (item # del) in
 
     let! ()     = ohm begin 
@@ -26,9 +26,7 @@ let schedule_deletion =
 	| `Chat     c -> MChat.delete_now (IChat.Room.Assert.bot (c # room))
     end in
 
-    let! _ = ohm $ MyTable.transaction itid MyTable.remove in
-    
-    finish
+    Tbl.delete itid
 
   end in
 
@@ -49,8 +47,8 @@ end
   
 let moderate itid from =
 
-  let! item_opt = ohm $ MyTable.transaction (IItem.decay itid) begin fun itid ->
-    let! item = ohm_req_or (return (None,`keep)) $ MyTable.get itid in 
+  let! item_opt = ohm $ Tbl.Raw.transaction (IItem.decay itid) begin fun itid ->
+    let! item = ohm_req_or (return (None,`keep)) $ Tbl.get itid in 
     let! _ = ohm_req_or (return (None,`keep)) $ from (item # where) in
     let  item = delete item in 
     return (Some item, `put item) 
@@ -60,6 +58,6 @@ let moderate itid from =
     if item # del then schedule_deletion (IItem.decay itid) else return ()
   
 let delete itid =    
-  let! _  = ohm $ MyTable.transaction (IItem.decay itid) (MyTable.update delete) in
+  let! _  = ohm $ Tbl.update (IItem.decay itid) delete in
   let! () = ohm $ schedule_deletion (IItem.decay itid) in
   return ()

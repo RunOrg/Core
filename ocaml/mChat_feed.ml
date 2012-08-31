@@ -20,17 +20,15 @@ module Data = struct
 end
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "chat-line" end)
-module MyTable = CouchDB.Table(MyDB)(IChat.Line)(Data)
+module Tbl = CouchDB.Table(MyDB)(IChat.Line)(Data)
 module Design = struct
   module Database = MyDB
   let name = "line"
 end
 
 let post payload room = 
-  let room = IChat.Room.decay room in
-  let line = Data.({ payload ; room }) in
-  let clid = IChat.Line.gen () in
-  let! _ = ohm $ MyTable.transaction clid (MyTable.insert line) in
+  let  room = IChat.Room.decay room in
+  let! clid = ohm $ Tbl.create Data.({ payload ; room }) in
   return $ Line.make (IChat.Line.to_id clid) payload 
 
 module CountView = CouchDB.ReduceView(struct

@@ -48,7 +48,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-module MyTable = CouchDB.Table(MyDB)(IRelatedInstance)(Data)
+module Tbl = CouchDB.Table(MyDB)(IRelatedInstance)(Data)
 
 (* Signals --------------------------------------------------------------------------------- *)
 
@@ -80,8 +80,7 @@ module Signals = struct
       if lock = lock_id then
 	after_connect_call c
       else
-	let! _ = ohm $ MyTable.transaction (c # relation) MyTable.remove in
-	return () 
+	Tbl.delete (c # relation)
 
     end in
     fun c -> task c
@@ -224,14 +223,14 @@ let get_listeners iid =
 
 (* Accessing single items ----------------------------------------------------------------- *)
 
-let get_data rid = MyTable.get (IRelatedInstance.decay rid) 
+let get_data rid = Tbl.get (IRelatedInstance.decay rid) 
 
 let get_follower rid = 
   let! data = ohm_req_or (return None) $ get_data rid in 
   return $ Some data.Data.related_to
 
 let get ctx rid = 
-  let! data = ohm_req_or (return `None) $ MyTable.get (IRelatedInstance.decay rid) in
+  let! data = ohm_req_or (return `None) $ Tbl.get (IRelatedInstance.decay rid) in
 
   if data.Data.related_to <> IInstance.decay (IIsIn.instance (ctx # isin)) then
     return `None
@@ -256,7 +255,7 @@ let get ctx rid =
 
 let get_own cuid rid = 
   let  uid = IUser.Deduce.is_anyone cuid in 
-  let! data = ohm_req_or (return None) $ MyTable.get (IRelatedInstance.decay rid) in 
+  let! data = ohm_req_or (return None) $ Tbl.get (IRelatedInstance.decay rid) in 
   match data.Data.bind with 
     | `Bound   _ -> return None
     | `Unbound u -> if List.mem uid u.Unbound.owners then 
@@ -280,19 +279,19 @@ let bind_to rid iid =
   let rid = IRelatedInstance.decay rid in
   let iid = IInstance.decay iid in 
   let update rid = 
-    let! data = ohm_req_or (return (None,`keep)) $ MyTable.get rid in 
+    let! data = ohm_req_or (return (None,`keep)) $ Tbl.get rid in 
     match data.Data.bind with 
       | `Bound   _ -> return (None,`keep)
       | `Unbound _ -> return (Some data.Data.related_to,`put Data.({ data with bind = `Bound iid }))
   in
-  let! iid' = ohm_req_or (return ()) $ MyTable.transaction rid update in
+  let! iid' = ohm_req_or (return ()) $ Tbl.Raw.transaction rid update in
   connect rid iid' iid 
 
 let decline rid uid = 
   let uid = IUser.Deduce.is_anyone uid in 
   let rid = IRelatedInstance.decay rid in
   let update rid = 
-    let! data = ohm_req_or (return ((),`keep)) $ MyTable.get rid in 
+    let! data = ohm_req_or (return ((),`keep)) $ Tbl.get rid in 
     match data.Data.bind with 
       | `Bound   _ -> return ((),`keep)
       | `Unbound u -> return ((),`put Data.({ 
@@ -301,7 +300,7 @@ let decline rid uid =
 	})
       }))
   in
-  MyTable.transaction rid update
+  Tbl.Raw.transaction rid update
 
 let follow iid aid followed_iid = 
 
@@ -331,8 +330,7 @@ let follow iid aid followed_iid =
     bind       = bound
   }) in
 
-  let  rid = IRelatedInstance.gen () in 
-  let! _ = ohm $ MyTable.transaction rid (MyTable.insert data) in
+  let! rid = ohm $ Tbl.create data in
   connect rid iid followed_iid
 
 let create iid aid ~name ~request ~owners ~site ~access = 
@@ -351,8 +349,7 @@ let create iid aid ~name ~request ~owners ~site ~access =
     })
   }) in
 
-  let  rid = IRelatedInstance.gen () in 
-  let!  _  = ohm $ MyTable.transaction rid (MyTable.insert data) in 
+  let! rid = ohm $ Tbl.create data in
 
   let  rid = IRelatedInstance.Assert.own rid in 
   let!  _  = ohm $ Run.list_map
@@ -372,25 +369,16 @@ let update_unbound rid ~name ~site ~access =
 	  access ;
       })
   in
-  let! _ = ohm $ MyTable.transaction 
-    (IRelatedInstance.decay rid) (MyTable.update update) 
-  in
-
-  return ()
+  
+  Tbl.update (IRelatedInstance.decay rid) update
 
 let update_bound rid  ~access = 
-  let update data =
-    Data.({
-      data with 
-	access ;
-    })
-  in
-  let! _ = ohm $ MyTable.transaction (IRelatedInstance.decay rid) (MyTable.update update) in
-  return ()
-    
+  let update data = Data.({ data with access }) in
+  Tbl.update (IRelatedInstance.decay rid) update
+
 let send_requests rid aid request users = 
   let update rid =
-    let! data = ohm_req_or (return ([],`keep)) $ MyTable.get rid in
+    let! data = ohm_req_or (return ([],`keep)) $ Tbl.get rid in
     match data.Data.bind with 
       | `Bound   _ -> return ([],`keep)
       | `Unbound u -> let new_owners = 
@@ -404,7 +392,7 @@ let send_requests rid aid request users =
 		      return (new_owners,`put obj)
   in
 
-  let! owners = ohm $ MyTable.transaction (IRelatedInstance.decay rid) update in
+  let! owners = ohm $ Tbl.Raw.transaction (IRelatedInstance.decay rid) update in
 
   let  rid = IRelatedInstance.Assert.own rid in 
   let!  _  = ohm $ Run.list_map 
@@ -488,14 +476,15 @@ module Backdoor = struct
     return $ List.map (fun i -> IRelatedInstance.of_id (i#id), i#doc) list
 
   let set_profile riid iid = 
+
     let update data = Data.({ 
       data with 
 	profile = if data.profile = None then Some iid else data.profile
     }) in
-    let! data = ohm_req_or (return ()) $ 
-      MyTable.transaction riid (MyTable.update update) 
-    in 
-    let! _ = ohm $ connect riid (data.Data.related_to) iid in
-    return ()
+
+    let! () = ohm $ Tbl.update riid update in
+
+    let! data = ohm_req_or (return ()) $ Tbl.get riid in 
+    connect riid (data.Data.related_to) iid
 
 end

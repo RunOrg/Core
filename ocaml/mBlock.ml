@@ -32,7 +32,7 @@ module Data = struct
 end
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "block" end)
-module MyTable = CouchDB.Table(MyDB)(Id)(Data)
+module Tbl = CouchDB.Table(MyDB)(Id)(Data)
 
 module Design = struct
   module Database = MyDB
@@ -60,16 +60,11 @@ let status avatar what =
 let set avatar what kind = 
   let! list = ohm $ Find.by_key (what, IAvatar.decay avatar) in
   if list = [] then 
-    let! _ = ohm $ MyTable.transaction (Id.gen ())
-      (MyTable.insert Data.({ what ; who = IAvatar.decay avatar ; kind }))
-    in 
+    let! _ = ohm $ Tbl.create Data.({ what ; who = IAvatar.decay avatar ; kind }) in
     return ()
   else 
     Run.list_iter begin fun item -> 
-      let! _ = ohm $ MyTable.transaction (item # id) 
-	(MyTable.update (fun d -> Data.({ d with kind })))
-      in
-      return ()
+      Tbl.update (item # id) (fun d -> Data.({ d with kind }))
     end list
       
 let block avatar what = 

@@ -87,7 +87,7 @@ module Data = struct
 
 end
 
-module MyTable = CouchDB.Table(MyDB)(IUser)(Data)
+module Tbl = CouchDB.Table(MyDB)(IUser)(Data)
 
 type t = <
   firstname : string option ;
@@ -239,7 +239,13 @@ let confirm uid =
 	(Some o, true), `put o
   in
   
-  let! result = ohm $ MyTable.transaction uid (MyTable.if_exists update) in
+  let! result = ohm $ Tbl.transact uid 
+    (function
+      | None      -> return (None,`keep)
+      | Some data -> let res, act = update data in 
+		     return (Some res, act))
+  in
+
   match result with 
     | Some (Some o, x) -> let! () = ohm $ Signals.on_confirm_call (uid, extract o) in
 			  return x
@@ -247,15 +253,15 @@ let confirm uid =
     | None             -> return false
         
 let confirmed uid = 
-  let! user = ohm_req_or (return false) $ MyTable.get (IUser.decay uid) in
+  let! user = ohm_req_or (return false) $ Tbl.get (IUser.decay uid) in
   return user.Data.confirmed
 
 let blocks uid = 
-  let! user = ohm_req_or (return []) $ MyTable.get (IUser.decay uid) in
+  let! user = ohm_req_or (return []) $ Tbl.get (IUser.decay uid) in
   return user.Data.blocktype
 
 let confirmed_time uid = 
-  let! user = ohm_req_or (return None) $ MyTable.get (IUser.decay uid) in 
+  let! user = ohm_req_or (return None) $ Tbl.get (IUser.decay uid) in 
   return (if user.Data.confirmed then Some user.Data.joindate else None) 
 
 let quick_create (user : user_short) = 
@@ -288,7 +294,7 @@ let quick_create (user : user_short) =
       `created (IUser.decay id, obj), `put obj
   in
   
-  let! result = ohm $ MyTable.transaction id (fun id -> MyTable.get id |> Run.map update) in
+  let! result = ohm $ Tbl.transact id (update |- return) in
   match result with
     | `duplicate id      -> return $ `duplicate id
     | `created (id, obj) -> let! () = ohm $ (* Created above. *)
@@ -331,7 +337,7 @@ let listener_create email =
       (id, false), `put obj
   in
   
-  let! id, exists = ohm $ MyTable.transaction id (fun id -> MyTable.get id |> Run.map update) in
+  let! id, exists = ohm $ Tbl.transact id (update |- return) in 
   
   if exists then return None else
     (* We have created or retrieved a new, unconfirmed listener *)
@@ -393,7 +399,7 @@ let _facebook_update uid facebook details =
   let! () = ohm $ MFile.set_facebook_pic pic_id self details in
 	
   let! created, confirmed, obj = ohm $
-    MyTable.transaction uid (fun uid -> MyTable.get uid |> Run.map update)
+    Tbl.transact uid (update |- return)
   in 
   
   let! () = ohm begin 
@@ -459,7 +465,7 @@ let add_email ~uid ~email =
   let email = EmailUtil.canonical email in 
 
   let update uid = 
-    let! user = ohm_req_or (return (`missing,`keep)) $ MyTable.get uid in    
+    let! user = ohm_req_or (return (`missing,`keep)) $ Tbl.get uid in    
     if owns_email user email then return (`ok,`keep) else
       let o = Data.({ 
 	user with emails =
@@ -469,7 +475,7 @@ let add_email ~uid ~email =
       return (`prove proof, `put o)
   in
 
-  MyTable.transaction uid update
+  Tbl.Raw.transaction uid update
 
 let confirm_email ~uid ~proof = 
 
@@ -477,7 +483,7 @@ let confirm_email ~uid ~proof =
 
   let update uid = 
 
-    let! user  = ohm_req_or (return (`missing,`keep)) $ MyTable.get uid in
+    let! user  = ohm_req_or (return (`missing,`keep)) $ Tbl.get uid in
     let! email = req_or (return (`missing,`keep)) begin
       try Some (BatList.find_map 
 		  (fun (e,c) -> if not c && is_email_proof uid e proof then Some e else None)
@@ -496,7 +502,7 @@ let confirm_email ~uid ~proof =
 
   in
 
-  MyTable.transaction uid update
+  Tbl.Raw.transaction uid update
 
 class type user_full = object
   method firstname : string
@@ -557,9 +563,7 @@ let user_bind (user : user_full) =
 	     (true, obj), `put obj
   in
   
-  let! (created,obj) = ohm $
-    MyTable.transaction id (fun id -> MyTable.get id |> Run.map update)
-  in
+  let! (created,obj) = ohm $ Tbl.transact id (update |- return) in
 
   let! () = ohm begin 
     if created then 
@@ -586,9 +590,13 @@ module Share = struct
       else None, `keep 
     in
 
-    let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+    let! result = ohm $ Tbl.transact id 
+      (function
+	| None -> return (None, `keep) 
+	| Some user -> return (update user))
+    in 
     match result with 
-      | Some (Some o) ->  
+      | Some o ->  
 	(* Updated above. *) 
 	let updated = IUser.Assert.updated uid in
 	Signals.on_update_call (updated , extract o) 
@@ -632,9 +640,13 @@ let update uid (t:user_edit) =
     if o <> e then Some o, `put o else None, `keep 
   in
 
-  let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  let! result = ohm $ Tbl.transact id 
+    (function 
+      | None      -> return (None,`keep)
+      | Some data -> return (update data))
+  in
   match result with 
-    | Some (Some o) ->
+    | Some o ->
       (* Updated above. *)
       let updated = IUser.Assert.updated uid in
       Signals.on_update_call (updated , extract o) 
@@ -649,9 +661,13 @@ let set_pic uid pic =
     if o <> e then Some o, `put o else None, `keep 
   in
 
-  let! result = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  let! result = ohm $ Tbl.transact id 
+    (function 
+      | None -> return (None, `keep) 
+      | Some user -> return (update user))
+  in
   match result with 
-    | Some (Some o) ->
+    | Some o ->
       (* Updated above. *)
       let updated = IUser.Assert.updated uid in
       Signals.on_update_call (updated , extract o) 
@@ -665,10 +681,12 @@ let set_password pass cuid =
     (), `put o
   in
   
-  let ! _ = ohm $ MyTable.transaction id (MyTable.if_exists update) in
-  return () 
+  Tbl.transact id 
+    (function 
+      | None      -> return ((), `keep)
+      | Some user -> return (update user))
 
-let _get id = MyTable.get (IUser.decay id)
+let _get id = Tbl.get (IUser.decay id)
 
 let get id = _get id |> Run.map (BatOption.map extract)
 
@@ -677,31 +695,6 @@ let knows_password pass id =
   if user.Data.confirmed && user.Data.passhash = Some (ConfigKey.passhash pass)
   then return $ Some (IUser.Assert.is_old id) 
   else return None
-
-let set_notifications uid ~blocked ~autologin = 
-
-  let uid = IUser.decay uid in
-  let update user =
-    if 
-      List.sort compare blocked = List.sort compare (user.Data.blocktype) 
-      && user.Data.autologin = autologin
-    then (), `keep else
-      (), `put (Data.({ user with autologin ; blocktype = blocked }))
-  in
-  
-  MyTable.transaction uid (MyTable.if_exists update) |> Run.map ignore
-      
-let block uid ~blocked = 
-  let uid = IUser.decay uid in
-  let update user =
-    let blocked = BatList.sort_unique compare (blocked @ user.Data.blocktype) in
-    if List.sort compare blocked = List.sort compare (user.Data.blocktype) 
-    then (), `keep else
-      (), `put (Data.({ user with blocktype = blocked }))
-  in
-  
-  MyTable.transaction uid (MyTable.if_exists update) |> Run.map ignore
-  
 
 module Backdoor = struct
 
@@ -766,7 +759,7 @@ end
 let obliterate uid =
   
   let  uid  = IUser.decay uid in
-  let! user = ohm_req_or (return `missing) $ MyTable.get uid in 
+  let! user = ohm_req_or (return `missing) $ Tbl.get uid in 
   
   let! () = true_or (return `destroyed) (user.Data.destroyed = None) in
 
@@ -778,7 +771,7 @@ let obliterate uid =
   end in
   
   let update user =
-    (), `put (Data.({
+    Data.({
       user with 
 	firstname = "" ;
 	lastname  = "" ;
@@ -788,26 +781,26 @@ let obliterate uid =
 	facebook  = None ;
 	confirmed = true ;
 	destroyed = Some (Unix.gettimeofday ()) ;
-	  autologin = false ;
-	  picture   = None ;
-	  birthdate = None ;
-	  phone     = None ;
-	  cellphone = None ;
-	  address   = None ; 
-	  zipcode   = None ;
-	  city      = None ;
-	  country   = None ;
-	  gender    = None ;
-	  share     = [] ;
-	  blocktype = [] ;
-	  joindate  = 0.0 ;
-      })) 
-    in
-    
-    let! () = ohm $ Signals.on_obliterate_call uid in 
-    let! _  = ohm $ MyTable.transaction uid (MyTable.if_exists update) in
-    
-    return `ok
+	autologin = false ;
+	picture   = None ;
+	birthdate = None ;
+	phone     = None ;
+	cellphone = None ;
+	address   = None ; 
+	zipcode   = None ;
+	city      = None ;
+	country   = None ;
+	gender    = None ;
+	share     = [] ;
+	blocktype = [] ;
+	joindate  = 0.0 ;
+    }) 
+  in
+  
+  let! () = ohm $ Signals.on_obliterate_call uid in 
+  let! () = ohm $ Tbl.update uid update in
+  
+  return `ok
 
 let merge_unconfirmed ~merged ~into = 
 
@@ -815,32 +808,32 @@ let merge_unconfirmed ~merged ~into =
   let into_uid   = IUser.decay into   in 
 
   (* Make sure the merged-into account exists *)
-  let! _ = ohm_req_or (return ()) $ MyTable.get into_uid in
+  let! _ = ohm_req_or (return ()) $ Tbl.get into_uid in
 
   (* Disable the merged account, retrieve the e-mail. *)
   let disable uid =     
-    let! user = ohm_req_or (return (None, `keep)) $ MyTable.get uid in     
+    let! user = ohm_req_or (return (None, `keep)) $ Tbl.get uid in     
     if user.Data.confirmed then return (None, `keep) else
       return Data.(Some user.email, `put { user with email = "merged:<" ^ user.email ^ ">" ; emails = [] })
   in
 
-  let! email = ohm_req_or (return ()) $ MyTable.transaction merged_uid disable in 
+  let! email = ohm_req_or (return ()) $ Tbl.Raw.transaction merged_uid disable in 
   let  email = EmailUtil.canonical email in 
 
   (* That account was confirmed, so add it to the list of valid e-mails of the merged-into account *)
   let add uid = 
-    let! user = ohm_req_or (return ((), `keep)) $ MyTable.get uid in 
+    let! user = ohm_req_or (return ((), `keep)) $ Tbl.get uid in 
     return ((), `put Data.({
       user with emails = 
 	(email, true) :: List.filter (fun (e,_) -> EmailUtil.canonical e <> email) user.emails 
     }))
   in
 
-  let! () = ohm $ MyTable.transaction into_uid add in
+  let! () = ohm $ Tbl.Raw.transaction into_uid add in
 
   (* Propagate a merge signal and exit. *)
   let! () = ohm $ Signals.on_merge_call (merged_uid, into_uid) in
 
   return () 
 
-let all_ids ~count start = MyTable.all_ids ~count start
+let all_ids ~count start = Tbl.all_ids ~count start

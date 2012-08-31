@@ -131,7 +131,7 @@ module Profile = struct
   include Fmt.Extend(T)
 end
 
-module MyTable = CouchDB.Table(MyDB)(IProfile)(Profile)
+module Tbl = CouchDB.Table(MyDB)(IProfile)(Profile)
 
 include Profile
 
@@ -218,15 +218,11 @@ let create_from_user iid uid =
     data   ;
   } in
   
-  let created = 
-    (* We just created the object. *)
-    IProfile.Assert.created pid
-  in
+  (* We just created the object. *)
+  let created = IProfile.Assert.created pid in
   
-  let! _  = ohm $ MyTable.transaction pid (MyTable.insert insert) in
-  let! () = ohm $
-    Signals.on_create_call (created , IUser.decay uid, iid, data)
-  in
+  let! () = ohm $ Tbl.set pid insert in 
+  let! () = ohm $ Signals.on_create_call (created , IUser.decay uid, iid, data) in
 
   return pid
 
@@ -307,7 +303,7 @@ let create iid data =
       (* We just created the object. *)      
       let created = IProfile.Assert.created pid in
       
-      let! _  = ohm $ MyTable.transaction pid (MyTable.insert insert) in
+      let! _  = ohm $ Tbl.set pid insert in 
       let! () = ohm $ Signals.on_create_call (created, uid, iid, data) in
       
       return (`ok (uid, created))
@@ -318,17 +314,16 @@ let create iid data =
 
 let update pid f = 
 
-  let! what = ohm_req_or (return ())
-    (MyTable.transaction (IProfile.decay pid)
-       (MyTable.update (fun t -> { t with data = f t.data }))) 
-  in
-
-  let updated = IProfile.Assert.updated pid in
+  let  pid = IProfile.decay pid in 
+  let! ( ) = ohm $ Tbl.update pid (fun t -> { t with data = f t.data }) in
+  
+  let  updated = IProfile.Assert.updated pid in
+  let! what = ohm_req_or (return ()) (Tbl.get pid) in
   Signals.on_update_call (updated, what.user, what.ins, what.data)
       
 let data id = 
   let id = IProfile.decay id in
-  MyTable.get id |> Run.map (BatOption.map (fun p -> p.source, p.data))
+  Tbl.get id |> Run.map (BatOption.map (fun p -> p.source, p.data))
 
 let find_or_create iid uid =
   let! self = ohm (FindView.doc (iid,uid) |> Run.map Util.first) in
@@ -375,9 +370,7 @@ let refresh uid iid =
 		      )
   in
   
-  let! data_opt = ohm $ 
-    MyTable.transaction id (fun id -> MyTable.get id |> Run.bind update)
-  in
+  let! data_opt = ohm $ Tbl.transact id update in
   
   let! () = ohm begin
     match data_opt with 
@@ -397,7 +390,7 @@ type details = <
 
 let details id = 
   let id = IProfile.decay id in
-  let! profile = ohm_req_or (return None) $ MyTable.get id in
+  let! profile = ohm_req_or (return None) $ Tbl.get id in
   let data = profile.data in 
   let picture = 
     (* If profile is visible, so is the picture. *)
@@ -416,7 +409,7 @@ module Sharing = struct
 
   let get pid = 
     let id = IProfile.decay pid in
-    MyTable.get id |> Run.map begin function 
+    Tbl.get id |> Run.map begin function 
       | None         -> None
       | Some profile -> profile.share
     end
@@ -436,9 +429,7 @@ module Sharing = struct
 	)
     in
 
-    let! data, iid, uid = ohm_req_or (return ()) $ MyTable.transaction id 
-      (fun i -> MyTable.get i |> Run.bind update)
-    in
+    let! data, iid, uid = ohm_req_or (return ()) $ Tbl.transact id update in 
 
     let updated = IProfile.Assert.updated pid in
     Signals.on_update_call (updated, uid, iid, data)
@@ -458,9 +449,9 @@ end)
 
 let _ = 
   let obliterate pid = 
-    let! profile = ohm_req_or (return ()) $ MyTable.get pid in 
+    let! profile = ohm_req_or (return ()) $ Tbl.get pid in 
     let! () = ohm $ Signals.on_obliterate_call (pid, profile.user, profile.ins) in
-    let! _  = ohm $ MyTable.transaction pid MyTable.remove in 
+    let! ()  = ohm $ Tbl.delete pid in 
     return ()
   in
   let on_user_obliterated uid = 

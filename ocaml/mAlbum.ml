@@ -113,7 +113,7 @@ module Can = struct
 
 end
 
-(* MAccess by entity ------------------------------------------------------------------------- *)
+(* Access by entity ------------------------------------------------------------------------- *)
 
 module ByEntityView = CouchDB.DocView(struct
   module Key = IEntity
@@ -134,14 +134,13 @@ let get_for_entity ctx eid =
       | Some item -> return (IAlbum.of_id (item # id), item # doc)
       | None -> (* MAlbum missing, create one *)
 
-	let id = IAlbum.gen () in
 	let doc = object
 	  method t     = `Album
 	  method owner = `entity eid
 	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
-	let! _ = ohm (MyTable.transaction id (MyTable.insert doc)) in
+	let! id = ohm $ MyTable.create doc in
 	return (id, doc) 
   in
   

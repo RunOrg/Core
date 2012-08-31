@@ -27,7 +27,7 @@ let count () =
       
 let get itid =
   let itid = IItem.decay itid in
-  let! data_opt = ohm $ MyTable.get itid in
+  let! data_opt = ohm $ Tbl.get itid in
   return (BatOption.map (Types.bot_item_of_data itid) data_opt)
 
 module InstanceCountView = CouchDB.ReduceView(struct

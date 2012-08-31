@@ -21,7 +21,7 @@ module Data = Fmt.Make(struct
   > 
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IPoll)(Data)
+module Tbl = CouchDB.Table(MyDB)(IPoll)(Data)
 
 type details = <
   questions : TextOrAdlib.t list ;
@@ -37,7 +37,6 @@ type 'relation t = Data.t
 
 let create details = 
 
-  let id = Id.gen () |> IPoll.of_id in 
   let clip n s = if String.length s > n then String.sub s 0 n else s in      
 
   let obj = object
@@ -49,12 +48,13 @@ let create details =
     method total     = 0
   end in
 
-  let! _ = ohm $ MyTable.transaction id (MyTable.insert obj) in
-  (* MPoll was created right above. *)
+  let! id = ohm $ Tbl.create obj in 
+
+  (* Poll was created right above. *)
   return (IPoll.Assert.created id)
 		     
 let get id = 
-  MyTable.get (IPoll.decay id)
+  Tbl.get (IPoll.decay id)
 
 module Get = struct
 
@@ -123,18 +123,13 @@ let refresh id =
     end)
   in
 
-  let refresh data = 
-    RecapView.reduce id 
-    |> Run.map (BatOption.default empty)
-    |> Run.map (updated data)
+  let refresh = function 
+    | Some data ->
+      RecapView.reduce id |> Run.map (BatOption.default empty) |> Run.map (updated data)
+    | None -> return ((), `keep)
   in
 
-  let transform id = 
-    let! data = ohm_req_or (return ((), `keep)) $ get id in
-    refresh data
-  in
-
-  MyTable.transaction id transform
+  Tbl.transact id refresh
 
 module Answer = struct
 
@@ -173,7 +168,7 @@ module Answer = struct
     let obliterate ansid = 
       let! ans = ohm_req_or (return ()) $ AnswerTable.get ansid in 
       let! ()  = ohm $ MyUnique.remove_atomic (key (ans # who) (ans # poll)) ansid in
-      let! _   = ohm $ AnswerTable.transaction ansid AnswerTable.remove in
+      let! ()  = ohm $ AnswerTable.delete ansid in
       let! ()  = ohm $ refresh (ans # poll) in
       return ()
     in
@@ -212,7 +207,7 @@ module Answer = struct
     end in
 
     let! id = ohm $ MyUnique.get (key avatar poll) in
-    let! _  = ohm $ AnswerTable.transaction id (AnswerTable.insert obj) in
+    let! () = ohm $ AnswerTable.set id obj in
     let! () = ohm $ refresh poll in
     return ()
 
@@ -230,7 +225,7 @@ module Answer = struct
     let poll = IPoll.decay poll in
 
     let remove_answer answer = 
-      let! _  = ohm $ AnswerTable.transaction (answer # id) AnswerTable.remove in
+      let! () = ohm $ AnswerTable.delete (answer # id) in
       let! () = ohm $ MyUnique.remove (key (answer # doc # who) poll) in
       return ()
     in
@@ -243,5 +238,4 @@ end
 
 let delete_now poll = 
   let! () = ohm $ Answer.delete_all_now poll in
-  let! _  = ohm $ MyTable.transaction (IPoll.decay poll) MyTable.remove in
-  return ()
+  Tbl.delete (IPoll.decay poll)

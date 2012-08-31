@@ -13,7 +13,7 @@ type t = <
   seen    : bool 
 >
 
-(* Define data types --------------------------------------------------------------------------------------- *)
+(* Define data types ------------------------------------------------------------------------ *)
 
 module Data = struct
   module T = struct
@@ -49,7 +49,7 @@ type data = Data.t = {
 
 include CouchDB.Convenience.Table(struct let db = O.db "notify" end)(INotify)(Data)
 
-(* Implement functions ------------------------------------------------------------------------------------- *)
+(* Implement functions ---------------------------------------------------------------------- *)
 
 let create ?stats payload user = 
 
@@ -67,11 +67,9 @@ let create ?stats payload user =
     delayed = false ;
     stats   ;
   }) in
+ 
 
-  let  nid = INotify.gen () in 
-  let!  _  = ohm $ MyTable.transaction nid (MyTable.insert data) in
-
-  return ()
+  Run.map ignore (Tbl.create data) 
 
 let extract nid notify = 
   (object
@@ -82,20 +80,20 @@ let extract nid notify =
    end)
 
 let rotten nid = 
-  MyTable.transaction nid begin fun nid -> 
-    let! notify = ohm_req_or (return ((),`keep)) $ MyTable.get nid in 
+  Tbl.Raw.transaction nid begin fun nid -> 
+    let! notify = ohm_req_or (return ((),`keep)) $ Tbl.get nid in 
     if notify.Data.rotten then return ((),`keep) else
       return ((),`put Data.({ notify with rotten = true }))
   end
 
 let get_mine cuid nid = 
-  let! notify = ohm_req_or (return None) $ MyTable.get nid in 
+  let! notify = ohm_req_or (return None) $ Tbl.get nid in 
   if notify.Data.uid = IUser.Deduce.is_anyone cuid then 
     return $ Some (extract nid notify)
   else
     return None
 
-(* Display notifications from an user ----------------------------------------------------------------------- *)
+(* Display notifications from an user ------------------------------------------------------- *)
 
 module ByUser = CouchDB.DocView(struct
   module Key    = Fmt.Make(struct
@@ -129,7 +127,7 @@ let all_mine ~count ?start cuid =
 
   return (List.map extract list, BatOption.map (#key |- snd) next) 
 
-(* Count unseen notifications for an user ------------------------------------------------------------------- *)
+(* Count unseen notifications for an user --------------------------------------------------- *)
 
 module CountByUser = CouchDB.ReduceView(struct
   module Key    = IUser

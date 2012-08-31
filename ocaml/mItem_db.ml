@@ -9,7 +9,7 @@ module Design = struct
   let name = "item"
 end
 
-module MyTable = CouchDB.Table(MyDB)(IItem)(MItem_data)
+module Tbl = CouchDB.Table(MyDB)(IItem)(MItem_data)
 
 module ByAvatarView = CouchDB.DocView(struct
   module Key    = IAvatar

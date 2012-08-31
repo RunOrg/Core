@@ -17,7 +17,7 @@ module Details = MAvatar_details
 (* Data types & formats ------------------------------------------------------------------- *)
 
 module MyDB      = Common.MyDB
-module MyTable   = Common.MyTable
+module Tbl   = Common.Tbl
 module Design    = Common.Design
 
 include Common.Data
@@ -126,9 +126,7 @@ let refresh isin =
   match avatar with 
     | None -> return ()
     | Some avatar -> let avatar = IAvatar.decay avatar in 
-		     let! () = ohm $ MyTable.transaction avatar 
-		       (fun i -> MyTable.get i |> Run.bind update)
-		     in
+		     let! () = ohm $ Tbl.transact avatar update in
 		     Signals.on_update_call (avatar, IInstance.decay $ IIsIn.instance isin)
 	
 (* Details : extracted from the database when looking for details about an avatar --------- *)
@@ -139,12 +137,12 @@ include Details
 
 let exists aid = 
   let  aid    = IAvatar.decay aid in 
-  let! avatar = ohm $ MyTable.get aid in 
+  let! avatar = ohm $ Tbl.get aid in 
   return (avatar <> None)
 
 let _get ins usr = 
   let! aid    = ohm $ Unique.get ins usr in 
-  let! avatar = ohm $ MyTable.get aid in 
+  let! avatar = ohm $ Tbl.get aid in 
   return (aid, avatar) 
 
 
@@ -211,10 +209,7 @@ let _update_status status ins usr =
       )
   in
   
-  let! isin, changed = ohm $ 
-    MyTable.transaction aid (fun i -> MyTable.get i |> Run.bind update)
-  in
-
+  let! isin, changed = ohm $ Tbl.transact aid update in
   let! () = ohm $ Signals.on_update_call (aid, IInstance.decay $ IIsIn.instance isin) in
   
   return (aid, isin, changed)
@@ -241,14 +236,17 @@ let _update_avatar_status status ?ins avatar =
     end)
   in
   
-  let! result = ohm $ MyTable.transaction avatar (MyTable.if_exists update) in
+  let! result = ohm $ Tbl.transact avatar
+    (function 
+      | None      -> return (None,`keep)
+      | Some data -> return (update data)) 
+  in
   let! () = ohm begin 
     match result with 
-      | None       
-      | Some  None      -> return () 
-      | Some (Some iid) -> Signals.on_update_call (avatar, iid)
+      | None     -> return ()
+      | Some iid -> Signals.on_update_call (avatar, iid)
   end in
-  return $ BatOption.default None result
+  return result
 
 let eventful_upgrade how signal ?from avatar =
   let! iid = ohm_req_or (return ()) $ _update_avatar_status how avatar in
@@ -267,7 +265,7 @@ let downgrade_to_member = eventful_upgrade
   (function `Contact -> `Contact | _ -> `Token) Signals.on_downgrade_to_member_call
 
 let change_to_member ?from avatar = 
-  let! current = ohm_req_or (return ()) $ MyTable.get (IAvatar.decay avatar) in
+  let! current = ohm_req_or (return ()) $ Tbl.get (IAvatar.decay avatar) in
   match current # sta with 
     | `Admin   -> downgrade_to_member ?from avatar
     | `Contact
@@ -323,7 +321,7 @@ let identify instance cuid =
   do_identify_user instance (IUser.decay (IUser.Deduce.current_is_self cuid)) cuid
 
 let identify_avatar id = 
-  let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay id) in
+  let! avatar = ohm_req_or (return None) $ Tbl.get (IAvatar.decay id) in
 
   (* There's an avatar, so we are a contact *)
   let ins  = IInstance.Assert.is_contact avatar # ins in 
@@ -337,7 +335,7 @@ let identify_avatar id =
 
 let profile aid = 
   let  selfsame = IProfile.of_string (IAvatar.to_string aid) in
-  let! a        = ohm_req_or (return selfsame) $ MyTable.get (IAvatar.decay aid) in
+  let! a        = ohm_req_or (return selfsame) $ Tbl.get (IAvatar.decay aid) in
   let! pid      = ohm_req_or (return selfsame) $ MProfile.find (a#ins) (a#who) in
   return pid 
 
@@ -668,7 +666,11 @@ let _ =
       (), `keep
   in
   
-  let! _ = ohm $ MyTable.transaction id (MyTable.if_exists update) in
+  let! _ = ohm $ Tbl.transact id 
+    (function 
+      | None -> return ((),`keep)
+      | Some data -> return (update data))
+  in
   Signals.on_update_call (id,instance)
 
 (* Obliterate all avatars for an user ----------------------------------------------------- *)
@@ -679,10 +681,9 @@ let avatars_of_user uid =
 
 let obliterate aid = 
   let! () = ohm $ Pending.obliterate aid in 
-  let! avatar = ohm_req_or (return ()) $ MyTable.get aid in 
+  let! avatar = ohm_req_or (return ()) $ Tbl.get aid in 
   let! () = ohm $ Signals.on_obliterate_call (aid, avatar # ins) in 
-  let! _  = ohm $ MyTable.transaction aid MyTable.remove in 
-  return () 
+  Tbl.delete aid 
 
 let obliterate_for_user uid = 
   let! list = ohm $ avatars_of_user uid in 
@@ -690,8 +691,7 @@ let obliterate_for_user uid =
   return ()
 
 let obliterate_for_user_later = 
-  let task = O.async # define "obliterate-user-avatars" IUser.fmt obliterate_for_user in
-  fun uid -> task uid
+  O.async # define "obliterate-user-avatars" IUser.fmt obliterate_for_user 
 
 let _ =
   Sig.listen MUser.Signals.on_obliterate obliterate_for_user

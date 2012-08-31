@@ -22,7 +22,7 @@ module Data = Fmt.Make(struct
   > 
 end)
   
-module MyTable = CouchDB.Table(MyDB)(IComment)(Data)
+module Tbl = CouchDB.Table(MyDB)(IComment)(Data)
   
 include Data
 
@@ -41,8 +41,6 @@ let max_length = 1000
   
 let create on who what =
   
-  let id = IComment.gen () in    
-  
   let comment : t = object
     method t     = `Comment
     method who   = IAvatar.decay who
@@ -51,18 +49,17 @@ let create on who what =
     method time  = Unix.gettimeofday ()
   end in
   
-  let! _ = ohm $ MyTable.transaction id (MyTable.insert comment) in
+  let! id = ohm $ Tbl.create comment in 
    
-  let id = IComment.Assert.created id in	
+  let  id = IComment.Assert.created id in	
   let! () = ohm $ Signals.on_create_call (id, comment) in 
   return (id, comment)
     
 let remove cid = 
   let  cid     = IComment.decay cid in 
-  let! comment = ohm_req_or (return ()) $ MyTable.get cid in
+  let! comment = ohm_req_or (return ()) $ Tbl.get cid in
   let! ()      = ohm $ Signals.on_delete_call (cid, comment # on) in
-  let! _       = ohm $ MyTable.transaction cid MyTable.remove in
-  return ()
+  Tbl.delete cid 
 
 module ByAvatar = CouchDB.DocView(struct
   module Key    = IAvatar
@@ -108,7 +105,7 @@ let all item =
   
   return visible_items
       
-let get id = MyTable.get (IComment.decay id)
+let get id = Tbl.get (IComment.decay id)
 
 let item id = 
   let! comment = ohm_req_or (return None) $ get id in

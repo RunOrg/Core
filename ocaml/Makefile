@@ -9,7 +9,6 @@ all:
 distclean: 
 	$(OCAMLBUILD) -clean
 	rm -rf _build || echo ''
-	make -C ohm/src distclean
 
 clean:
 	$(OCAMLBUILD) -clean

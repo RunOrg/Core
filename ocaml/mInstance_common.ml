@@ -16,7 +16,7 @@ end
 
 (* Define the internal data type ----------------------------------------------------------- *)
 
-module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
+module Tbl = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let get_raw iid = 
-  MyTable.get (IInstance.decay iid) 
+  Tbl.get (IInstance.decay iid) 

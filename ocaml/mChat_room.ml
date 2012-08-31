@@ -8,8 +8,6 @@ module Arr  = MChat_arr
 module Line = MChat_line
 module Feed = MChat_feed
 
-module Float = Fmt.Float
-
 module Data = struct
   module T = struct
     type json t = {
@@ -17,7 +15,7 @@ module Data = struct
       wall     "fid" : IFeed.t ;
       key            : string ;
       active         : bool ;
-      created  "t"   : Float.t
+      created  "t"   : float
     }
   end
   include T
@@ -25,7 +23,7 @@ module Data = struct
 end
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "chat-room" end)
-module MyTable = CouchDB.Table(MyDB)(IChat.Room)(Data)
+module Tbl = CouchDB.Table(MyDB)(IChat.Room)(Data)
 
 module Design = struct
   module Database = MyDB
@@ -57,9 +55,7 @@ let () = define_check_activity begin fun crid ->
   
   let! () = ohm $ begin
     if Unix.gettimeofday () -. activity_delay > last_message_time then
-      let deactivate room = Data.({ room with active = false }) in
-      let! _ = ohm $ MyTable.transaction crid (MyTable.update deactivate) in
-      return ()
+      Tbl.update crid (fun room -> Data.({ room with active = false }))      
     else
       check_activity 60. crid
   end in 
@@ -76,7 +72,7 @@ let check_appear crid =
 
 let () = define_check_appear begin fun crid -> 
 
-  let! data = ohm_req_or (return ()) $ MyTable.get crid in 
+  let! data = ohm_req_or (return ()) $ Tbl.get crid in 
   let! ()   = true_or (return ()) data.Data.active in 
   
   let! _, next = ohm $ Feed.list ~count:0 crid in
@@ -100,9 +96,8 @@ let create feed =
     key      = Digest.to_hex (Digest.string (Util.uniq () ^ string_of_int (Random.int 65535)))
   }) in
 
-  let crid = IChat.Room.gen () in
   
-  let! _  = ohm $ MyTable.transaction crid (MyTable.insert data) in
+  let! crid = ohm $ Tbl.create data in 
   let  () = Arr.create (IChat.Room.to_id crid) data.Data.key in
   let! () = ohm $ check_activity 600. crid in
   let! () = ohm $ check_appear   crid in
@@ -123,7 +118,7 @@ let all_active iid =
   return $ List.map (#value) list
 
 module RecentView = CouchDB.DocView(struct
-  module Key    = Fmt.Make(struct type json t = (IFeed.t * Float.t) end)
+  module Key    = Fmt.Make(struct type json t = (IFeed.t * float) end)
   module Value  = Fmt.Unit
   module Doc    = Data
   module Design = Design
@@ -155,7 +150,7 @@ let recent feed =
 
 let ensure crid = 
   let  crid = IChat.Room.decay crid in 
-  let! room = ohm_req_or (return ()) $ MyTable.get crid in 
+  let! room = ohm_req_or (return ()) $ Tbl.get crid in 
   let () = Arr.create (IChat.Room.to_id crid) room.Data.key in
   return ()
 
@@ -163,16 +158,15 @@ let close crid =
   
   let crid = IChat.Room.decay crid in 
 
-  let update data = Data.({ data with active = false }) in
-  let! _ = ohm $ MyTable.transaction crid (MyTable.update update) in
-  
-  let () = Arr.delete (IChat.Room.to_id crid) in
+  let! () = ohm $ Tbl.update crid (fun data -> Data.({ data with active = false })) in  
+  let  () = Arr.delete (IChat.Room.to_id crid) in
+
   return ()
 
 let url crid aid = 
   
   let  crid = IChat.Room.decay crid in 
-  let! room = ohm_req_or (return None) $ MyTable.get crid in 
+  let! room = ohm_req_or (return None) $ Tbl.get crid in 
 
   if room.Data.active then 
     return $ Some (Arr.user_url 
@@ -190,7 +184,7 @@ let send crid line =
 
 let active crid = 
   let  crid   = IChat.Room.decay crid in 
-  let! room   = ohm_req_or (return None) $ MyTable.get crid in 
+  let! room   = ohm_req_or (return None) $ Tbl.get crid in 
   if room.Data.active then
     return $ Some (IChat.Room.Assert.post crid) 
   else
@@ -198,7 +192,7 @@ let active crid =
 
 let readable crid fid = 
   let  crid   = IChat.Room.decay crid in 
-  let! room = ohm_req_or (return None) $ MyTable.get crid in 
+  let! room = ohm_req_or (return None) $ Tbl.get crid in 
   if room.Data.wall = IFeed.decay fid then
     return $ Some (IChat.Room.Assert.view crid) 
   else

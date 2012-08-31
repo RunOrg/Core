@@ -44,7 +44,7 @@ module Signals = struct
 
 end
 
-module MyTable = CouchDB.Table(MyDB)(IDigestSbs)(Sbs)
+module Tbl = CouchDB.Table(MyDB)(IDigestSbs)(Sbs)
 
 let default did iid = 
   Sbs.({ did ; iid ; block = false ; direct = false ; through = [] })
@@ -55,7 +55,7 @@ let sbs_contains sbs = Sbs.( not sbs.block && (sbs.direct || sbs.through <> []) 
 
 let follows did iid = 
   let! dsid = ohm_req_or (return false) $ Unique.get_if_exists did iid in
-  let! sbs  = ohm_req_or (return false) $ MyTable.get dsid in
+  let! sbs  = ohm_req_or (return false) $ Tbl.get dsid in
   return $ sbs_contains sbs
 
 (* Change the object outside the database *)
@@ -76,8 +76,7 @@ let sbs_remove_through iid sbs =
 
 (* Change the object in the database : generic functions *)
 
-let update func did iid dsid = 
-  let! sbs_opt = ohm $ MyTable.get dsid in
+let update func did iid sbs_opt = 
   let  sbs     = BatOption.default (default did iid) sbs_opt in
   let  sbs'    = func sbs in  
   let  sbs_c   = sbs_contains sbs  in 
@@ -90,7 +89,7 @@ let update func did iid dsid =
 let transaction func did iid = 
   let  did  = IDigest.decay did and iid = IInstance.decay iid in
   let! dsid = ohm $ Unique.get did iid in
-  let! change_opt = ohm $ MyTable.transaction dsid (update func did iid) in
+  let! change_opt = ohm $ Tbl.transact dsid (update func did iid) in
   
   match change_opt with 
     | None -> return () 

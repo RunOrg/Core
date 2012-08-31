@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module MyTable = MAvatar_common.MyTable
+module Tbl = MAvatar_common.Tbl
 
 type details = <
   name    : string option ;
@@ -36,16 +36,13 @@ let from data = object
   method status  = Some (data # sta)
 end 
 
-let get_user aid = 
-  let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay aid) in
-  return $ Some (avatar # who) 
+let using aid f = Tbl.using (IAvatar.decay aid) f
 
-let get_instance aid = 
-  let! avatar = ohm_req_or (return None) $ MyTable.get (IAvatar.decay aid) in
-  return $ Some (avatar # ins) 
+let get_user aid = using aid (#who) 
+let get_instance aid = using aid (#ins)
 
-let details id = 
-  MyTable.get (IAvatar.decay id) |> Run.map begin function
+let details aid = 
+  Tbl.get (IAvatar.decay aid) |> Run.map begin function
     | None      -> no_details
     | Some data -> from data
   end 

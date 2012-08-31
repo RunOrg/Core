@@ -28,8 +28,8 @@ let create ~payload ~delayed ~where ~iid (itid:[`Created] IItem.id) =
     method iid      = IInstance.decay iid
   end in
 
-  let! created = ohm $ MyTable.transaction id (MyTable.insert obj) in
-  let! ()      = ohm $ Signals.on_post_call (Types.bot_item_of_data id created) in
+  let! () = ohm $ Tbl.set id obj in
+  let! () = ohm $ Signals.on_post_call (Types.bot_item_of_data id obj) in
 
   return () 
   

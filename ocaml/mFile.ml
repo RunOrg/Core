@@ -5,7 +5,7 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module MyTable = MFile_common.MyTable
+module Tbl = MFile_common.Tbl
 
 module Upload    = MFile_upload
 module Url       = MFile_url
@@ -16,7 +16,7 @@ type version = MFile_common.version
 
 let own_pic cuid id = 
   let usr = IUser.Deduce.is_anyone cuid in 
-  MyTable.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->
+  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->
     if file # usr = IUser.decay usr && file # ins = None && file # k = `Picture then 
       Some (IFile.Assert.own_pic id)
     else None
@@ -24,7 +24,7 @@ let own_pic cuid id =
 
 let instance_pic ins id = 
   let ins = IInstance.decay ins in 
-  MyTable.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
+  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
     if file # ins = Some ins && file # k = `Picture then 
       Some (IFile.Assert.ins_pic id)
     else None
@@ -53,14 +53,14 @@ let set_facebook_pic pic user details =
     ]
   end in
   
-  MyTable.transaction id (MyTable.insert obj) |> Run.map ignore
+  Tbl.set id obj
 
 let give_pic pic ins = 
 
   let id = IFile.decay pic in   
   let give file = 
-    if file # ins <> None then (), `keep else
-      (), `put (object
+    if file # ins <> None then file else 
+      (object
 	method t        = `File
 	method k        = file # k
 	method usr      = file # usr
@@ -72,7 +72,7 @@ let give_pic pic ins =
       end)
   in
 
-  MyTable.transaction id (MyTable.if_exists give) |> Run.map ignore
+  Tbl.update id give 
      		   
 (* When instance is created, give the pic. *) 
 
@@ -106,5 +106,4 @@ let delete_now fid =
 
 let item fid = 
   let   fid = IFile.decay fid in 
-  let! file = ohm_req_or (return None) $ MyTable.get fid in
-  return (file # item) 
+  Run.map (BatOption.bind (#item)) (Tbl.get fid) 

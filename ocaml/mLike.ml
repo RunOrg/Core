@@ -20,7 +20,7 @@ module Data = Fmt.Make(struct
   > 
 end)
 
-module MyTable = CouchDB.Table(MyDB)(Id)(Data)
+module Tbl = CouchDB.Table(MyDB)(Id)(Data)
   
 include Data
 
@@ -111,10 +111,7 @@ let like who what =
       | None -> Id.gen () 
     end) in
 	
-    let! write = ohm $
-      MyTable.transaction id 
-	(fun id -> MyTable.get id |> Run.map transform)
-    in
+    let! write = ohm $ Tbl.transact id (transform |- return) in
     
     Signals.on_like_call (who, liked what)
 
@@ -133,9 +130,7 @@ let unlike who what =
     method what = BatList.remove_all (obj # what) (id_of what) 
   end in
   
-  let remove_from id = 
-    MyTable.transaction id (MyTable.update remove) 
-  in
+  let remove_from id = Tbl.update id remove in 
   
   let! () = ohm begin 
     _find who (id_of what) 
@@ -169,7 +164,7 @@ end)
 
 let _ =
   let obliterate lid = 
-    let! like = ohm_req_or (return ()) $ MyTable.get lid in
+    let! like = ohm_req_or (return ()) $ Tbl.get lid in
     let aid = like # who in 
     let! _    = ohm $ Run.list_map begin fun what -> 
       let! () = ohm $ Signals.on_unlike_call
@@ -177,8 +172,7 @@ let _ =
       in
       return ()
     end (like # what) in
-    let! _    = ohm $ MyTable.transaction lid MyTable.remove in
-    return ()
+    Tbl.delete lid 
   in
   let on_obliterate_avatar (aid,_) = 
     let! list = ohm $ ByAvatarView.doc aid in 

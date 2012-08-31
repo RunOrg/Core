@@ -20,7 +20,7 @@ module Data = Fmt.Make(struct
   > 
 end)
   
-module MyTable = CouchDB.Table(MyDB)(IFeed)(Data)
+module Tbl = CouchDB.Table(MyDB)(IFeed)(Data)
   
 type 'relation t = 
     {
@@ -66,7 +66,7 @@ let _make context id data =
 (* Direct access ---------------------------------------------------------------------------- *)
 
 let try_get ctx id = 
-  let! feed_opt = ohm (MyTable.get (IFeed.decay id)) in
+  let! feed_opt = ohm (Tbl.get (IFeed.decay id)) in
   return (BatOption.map (_make ctx id) feed_opt)
 
 module Get = struct
@@ -83,7 +83,7 @@ module Get = struct
 
   let owner_by_id fid = 
     let id = IFeed.decay fid in 
-    MyTable.get id |> Run.map (BatOption.map owner_of_data) 
+    Tbl.get id |> Run.map (BatOption.map owner_of_data) 
 	
   let instance t = t.data # ins
 
@@ -170,14 +170,13 @@ let get_for_owner ctx own =
       | Some item -> return (IFeed.of_id (item # id), item # doc)
       | None -> (* Feed missing, create one *)
 
-	let id = IFeed.gen () in
 	let doc = object
 	  method t     = `Feed
 	  method own   = own
 	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
-	let! _ = ohm (MyTable.transaction id (MyTable.insert doc)) in
+	let! id = ohm $ Tbl.create doc in
 	return (id, doc) 
   end in
 
@@ -193,7 +192,7 @@ let get_for_instance ctx =
   get_for_owner ctx None
 
 let bot_get fid = 
-  let! feed = ohm_req_or (return None) $ MyTable.get (IFeed.decay fid) in
+  let! feed = ohm_req_or (return None) $ Tbl.get (IFeed.decay fid) in
   let owner = Run.memo (_access (feed # ins) (feed # own)) in
   return $ Some {
     id     = fid ;
@@ -218,15 +217,13 @@ let bot_find iid own =
       | Some item -> return $ IFeed.of_id (item # id)
       | None -> (* Feed missing, create one *)
 	
-	let id = IFeed.gen () in
 	let doc = object
 	  method t     = `Feed
 	  method own   = own
 	  method ins   = IInstance.decay iid
 	end in 
 	
-	let! _ = ohm (MyTable.transaction id (MyTable.insert doc)) in
-	return id
+	Tbl.create doc 	
   end in 
 
   return $ IFeed.Assert.bot id (* This is a bot-only access. *)

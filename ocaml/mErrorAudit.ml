@@ -22,7 +22,7 @@ module Data = Fmt.Make(struct
   >
 end)
 
-module MyTable = CouchDB.Table(MyDB)(Id)(Data)
+module Tbl = CouchDB.Table(MyDB)(Id)(Data)
 
 type t = Data.t
 
@@ -55,6 +55,6 @@ let notify error =
 
 let on_frontend ~server ~url ~user ~exn = 
   let error = make ~server ~url ~user ~exn in
-  let id = Id.gen () in
-  MyTable.transaction id (MyTable.insert error) |> Run.bind notify
+  let! _ = ohm $ Tbl.create error in
+  notify error
 

@@ -74,7 +74,7 @@ let extract iid i = Info.(object
   method pub_rss  = i.pub_rss
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IInstance)(Info)
+module Tbl = CouchDB.Table(MyDB)(IInstance)(Info)
 
 let empty_info = Info.({
   name = "" ;
@@ -97,20 +97,11 @@ let empty iid = extract iid empty_info
   
 let get iid = 
   let iid = IInstance.decay iid in   
-  let! data = ohm_req_or (return None) $ MyTable.get iid in
-  return (Some (extract iid data))
+  Tbl.using iid (extract iid)
     
 let update iid getinfo =
-
-  let update iid = 
-    let! info_opt = ohm $ MyTable.get iid in 
-    let  info     = BatOption.default empty_info info_opt in
-    let  newinfo  = getinfo info in
-    return ((), `put newinfo)
-  in
-
-  let! _ = ohm $ MyTable.transaction (IInstance.decay iid) update in
-  return ()     
+  let update info = getinfo (BatOption.default empty_info info) in
+  Tbl.replace (IInstance.decay iid) update
 
 module TagView = CouchDB.DocView(struct
   module Key    = Fmt.String

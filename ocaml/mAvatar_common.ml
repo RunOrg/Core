@@ -30,4 +30,4 @@ module Data = Fmt.Make(struct
   > 
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IAvatar)(Data)
+module Tbl = CouchDB.Table(MyDB)(IAvatar)(Data)

@@ -101,7 +101,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
   let  cid = IInstance.Assert.created id in
 
   let!  () = ohm $ Profile.update id info in 
-  let!  _  = ohm $ MyTable.put id obj in
+  let!  _  = ohm $ Tbl.set id obj in
   let!  () = ohm $ Signals.on_create_call cid in
 
   return cid
@@ -119,7 +119,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
       contact = None ;
   }) in
 
-  let! current = ohm_req_or (return ()) $ MyTable.get id in 
+  let! current = ohm_req_or (return ()) $ Tbl.get id in 
 
   let info old = Profile.Info.({    
     old with 
@@ -137,7 +137,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
   }) in
 
   let! () = ohm $ Profile.update id info in 
-  MyTable.transaction (IInstance.decay id) (MyTable.update update) |> Run.map ignore
+  Tbl.update (IInstance.decay id) update
 
 let set_pic id pic = 
  
@@ -148,28 +148,7 @@ let set_pic id pic =
   let info   old = Profile.Info.({ old with pic }) in
 
   let! () = ohm $ Profile.update id info in 
-  MyTable.transaction (IInstance.decay id) (MyTable.update update) |> Run.map ignore
-
-let refresh_profile iid = 
-
-  let! data = ohm_req_or (return ()) $ MyTable.get iid in 
-
-  let () = 
-    Util.log "Refresh instance profile %s (%s.runorg.com)"
-      (IInstance.to_string iid) (data.Data.key) 
-  in
-
-  let  info old = Profile.Info.({
-    old with
-      name     = data.Data.name ;
-      key      = data.Data.key ;
-      pic      = data.Data.pic ;
-      unbound  = false 
-  }) in
-
-  let! () = ohm $ Profile.update iid info in
-
-  return ()
+  Tbl.update (IInstance.decay id) update
     
 module ViewByKey = CouchDB.DocView(struct
   module Key    = Fmt.String
@@ -214,8 +193,8 @@ let servername_of_url url =
 let by_url url =
   Run.opt_bind by_servername (servername_of_url url)
 
-let get id = 
-  MyTable.get (IInstance.decay id) |> Run.map (BatOption.map (extract id))
+let get iid = 
+  Tbl.using (IInstance.decay iid) (extract iid)
   
 let get_free_space id = 
   get id |> Run.map begin function 
@@ -286,8 +265,7 @@ let visit user inst =
 		  (), `put obj
   in
 
-  RecentTable.transaction id
-    (fun id -> RecentTable.get id |> Run.map (add_recent inst)) 
+  RecentTable.transact id (add_recent inst |- return)
 
 (* The backdoor --------------------------------------------------------------------- *)
 

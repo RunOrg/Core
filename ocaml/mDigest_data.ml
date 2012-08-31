@@ -3,8 +3,6 @@
 open Ohm
 open Ohm.Universal
 open BatPervasives
-
-module Float = Fmt.Float
  
 (* Dealing with items and item lists ------------------------------------------------------ *)
 
@@ -14,8 +12,8 @@ module Item = struct
     type json t = {
       what "w" : IBroadcast.t ;
       from "f" : IInstance.t ;
-      time "t" : Float.t ;
-      last "l" : Float.t ;
+      time "t" : float ;
+      last "l" : float ;
       size "s" : int ;      
       via  "v" : IBroadcast.t option 
     }
@@ -70,10 +68,10 @@ let slice max seen items =
 
 module T = struct
   type json t = {
-    unviewed_since "uv" : Float.t ;
-    unsent_since   "us" : Float.t ;
+    unviewed_since "uv" : float ;
+    unsent_since   "us" : float ; 
     unsent         "u"  : int ;
-    send_delay     "n"  : Float.t ;
+    send_delay     "n"  : float ; 
     contents       "c"  : Item.t list 
   }
 end
@@ -128,7 +126,7 @@ let mark_sent time t =
 (* Actual operations on the database ---------------------------------------------------- *)
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "digest" end) 
-module MyTable = CouchDB.Table(MyDB)(IDigest)(Data)
+module Tbl = CouchDB.Table(MyDB)(IDigest)(Data)
 
 module Design = struct
   module Database = MyDB
@@ -136,14 +134,14 @@ module Design = struct
 end
 
 let get_if_exists did = 
-  MyTable.get (IDigest.decay did) 
+  Tbl.get (IDigest.decay did) 
 
 let get did = 
   let! item = ohm_req_or (return $ default ()) $ get_if_exists did in
   return item 
 
 let update_opt did func = 
-  let! _ = ohm $ MyTable.transaction (IDigest.decay did) 
+  let! _ = ohm $ Tbl.Raw.transaction (IDigest.decay did) 
     (fun did -> let! digest = ohm $ get did in
 		match func digest with 
 		  | None -> return ((),`keep)
@@ -164,7 +162,7 @@ let mark_seen did =
   update_opt did (mark_seen (Unix.gettimeofday ()))
 
 let update_opt did func = 
-  MyTable.transaction (IDigest.decay did) 
+  Tbl.Raw.transaction (IDigest.decay did) 
     (fun did -> let! digest = ohm $ get did in
 		match func digest with 
 		  | None -> return (digest.unsent_since,`keep)

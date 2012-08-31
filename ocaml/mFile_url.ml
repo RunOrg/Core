@@ -5,7 +5,7 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module MyTable = MFile_common.MyTable
+module Tbl = MFile_common.Tbl
 
 let build_key version id name = 
   String.concat "/" [
@@ -18,7 +18,7 @@ let get file version =
   
   let id = IFile.decay file in 
   
-  let! file = ohm_req_or (return None) $ MyTable.get id in
+  let! file = ohm_req_or (return None) $ Tbl.get id in
 
   let versionData_opt = 
     try Some (List.assoc (MFile_common.string_of_version version) (file # versions))

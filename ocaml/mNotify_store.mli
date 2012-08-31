@@ -15,7 +15,7 @@ type data = {
 
 module Data : Ohm.Fmt.FMT with type t = data
 
-module MyTable : Ohm.CouchDB.TABLE with type id = INotify.t and type elt = Data.t
+module Tbl : Ohm.CouchDB.TABLE with type id = INotify.t and type elt = Data.t
 module Design : Ohm.CouchDB.DESIGN
 
 type t = <

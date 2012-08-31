@@ -29,7 +29,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-module MyTable = CouchDB.Table(MyDB)(IAvatar)(Data) 
+module Tbl = CouchDB.Table(MyDB)(IAvatar)(Data) 
 
 (* Unitary creation procedures ------------------------------------------------------------- *)
 
@@ -42,7 +42,7 @@ let invite ?time ?uid ?iid id =
     let return x = return ( (), x ) in
     let nothing = return `keep  in
 
-    let! t_opt = ohm $ MyTable.get id in
+    let! t_opt = ohm $ Tbl.get id in
     match t_opt with 
       | None   -> begin
 	match uid, iid with 
@@ -59,7 +59,7 @@ let invite ?time ?uid ?iid id =
       | Some t -> nothing
   in
 
-  MyTable.transaction id update
+  Tbl.Raw.transaction id update
 
 let join ?time ?uid ?iid id = 
   
@@ -70,7 +70,7 @@ let join ?time ?uid ?iid id =
     let return x = return ( (), x ) in
     let nothing = return `keep  in
 
-    let! t_opt = ohm $ MyTable.get id in
+    let! t_opt = ohm $ Tbl.get id in
     match t_opt with 
       | None   -> begin
 	match uid, iid with 
@@ -89,7 +89,7 @@ let join ?time ?uid ?iid id =
 	else nothing
   in
 
-  MyTable.transaction id update
+  Tbl.Raw.transaction id update
 
 (* MUser confirmation process --------------------------------------------------------------- *)
 
@@ -151,7 +151,5 @@ let get_latest_confirmed ~count ?start iid =
   let next = BatOption.map (fun i -> snd (i#key), IAvatar.of_id (i#id)) next in
   return (list, next)
 
-let obliterate aid = 
-  let! _ = ohm $ MyTable.transaction aid MyTable.remove in
-  return () 
+let obliterate aid = Tbl.delete aid
   

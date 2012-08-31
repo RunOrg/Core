@@ -18,7 +18,7 @@ module Data = struct
 end
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance-access" end)
-module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
+module Tbl = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let default = Data.({
   directory = `Token ;
@@ -27,16 +27,14 @@ let default = Data.({
 })
 
 let get id = 
-  let! data = ohm_req_or (return default) $ MyTable.get (IInstance.decay id) in
+  let! data = ohm_req_or (return default) $ Tbl.get (IInstance.decay id) in
   return data
 
-let set id data = 
-  let! _ = ohm $ MyTable.transaction (IInstance.decay id) (MyTable.insert data) in
-  return ()
+let set id data = Tbl.set (IInstance.decay id) data
 
 let update id f = 
-  MyTable.transaction (IInstance.decay id) begin fun id -> 
-    let! data_opt = ohm $ MyTable.get id in 
+  Tbl.Raw.transaction (IInstance.decay id) begin fun id -> 
+    let! data_opt = ohm $ Tbl.get id in 
     let  data = BatOption.default default data_opt in 
     let  real = f data in 
     if data = real then return ((),`keep) else return ((),`put real)

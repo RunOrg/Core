@@ -27,7 +27,7 @@ module Data = Fmt.Make(struct
   > 
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IGroup)(Data)
+module Tbl = CouchDB.Table(MyDB)(IGroup)(Data)
 
 type data = Data.t
 
@@ -104,19 +104,19 @@ let create gid iid eid tmpl =
     method propg  = propg
   end in
   
-  let! data = ohm $ MyTable.transaction gid (MyTable.insert o) in
+  let! () = ohm $ Tbl.set gid o in
 		   
   return {
     id    = IGroup.Assert.admin gid ;
-    data  = data ;
+    data  = o ;
     view  = return true ;
     edit  = return true ;
     admin = return true ;
-    managers = managers_of_data data ;
+    managers = managers_of_data o ;
   } 
 
 let _get id = 
-  MyTable.get (IGroup.decay id)
+  Tbl.get (IGroup.decay id)
 
 let try_get context id =
   let! group = ohm_req_or (return None) $ _get id in
@@ -144,29 +144,22 @@ module Token = struct
 end
 
 let refresh gid ~grants ~manual = 
-  let update d =
-    if d # grants = grants && d # manual = manual then `nothing, `keep else 
-      let o = object
-	method t      = `Group
-	method ins    = d # ins
-	method admins = d # admins
-	method manual = manual
-	method grants = grants
-	method entity = d # entity
-	method list   = d # list
-	method fields = d # fields
-	method propg  = d # propg
-      end in
-      `ok, `put o 
-  in
+
+  let update d = object
+    method t      = `Group
+    method ins    = d # ins
+    method admins = d # admins
+    method manual = manual
+    method grants = grants
+    method entity = d # entity
+    method list   = d # list
+    method fields = d # fields
+    method propg  = d # propg
+  end in
   
-  let! result = ohm $ MyTable.transaction
-    (IGroup.decay gid) (MyTable.if_exists update)
-  in
+  let! () = ohm $ Tbl.update (IGroup.decay gid) update in 
   
-  match BatOption.default `nothing result with
-    | `nothing -> return ()
-    | `ok      -> Signals.on_update_call gid
+  Signals.on_update_call gid
 
 module Get = struct
     
@@ -238,6 +231,7 @@ end
 module Propagate = struct
 
   let _set id propg = 
+
     let update d = object
       method t      = `Group
       method ins    = d # ins
@@ -250,7 +244,7 @@ module Propagate = struct
       method propg  = propg
     end in
 
-    MyTable.transaction (IGroup.decay id) (MyTable.update update) |> Run.map ignore
+    Tbl.update (IGroup.decay id) update 
 
   (* Members in 'to_what' are added to 'what' automatically *)
   let add to_what what ctx = 
@@ -338,8 +332,7 @@ module Fields = struct
       method propg  = d # propg
     end in
     
-    MyTable.transaction (IGroup.decay t.id) (MyTable.update update)
-    |> Run.map ignore
+    Tbl.update (IGroup.decay t.id) update
 
   let of_group id = 
     let! group = ohm_req_or (return []) $ _get id in

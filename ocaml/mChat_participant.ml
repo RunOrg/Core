@@ -4,15 +4,12 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Float = Fmt.Float
-
 module Data = struct
   module T = struct
-    open IChat
     type json t = {
-      room    "r" : Room.t ;
+      room    "r" : IChat.Room.t ;
       avatar  "a" : IAvatar.t ;
-      time    "t" : Float.t
+      time    "t" : Fmt.Float.t
     }
   end
   include T
@@ -23,7 +20,7 @@ let make_id crid self =
   Id.of_string (IChat.Room.to_string crid ^ "-" ^ IAvatar.to_string self) 
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "chat-participant" end)
-module MyTable = CouchDB.Table(MyDB)(Id)(Data)
+module Tbl = CouchDB.Table(MyDB)(Id)(Data)
 module Design = struct
   module Database = MyDB
   let name = "participant"
@@ -31,12 +28,11 @@ end
 
 let participate aid crid = 
   let id     = make_id crid aid in 
-  let update id = 
-    let! data_opt = ohm $ MyTable.get id in 
-    let  data = BatOption.default Data.({ room = crid ; avatar = aid ; time = 0. }) data_opt in
+  let update data_opt =
+    let data = BatOption.default Data.({ room = crid ; avatar = aid ; time = 0. }) data_opt in
     return ((), `put Data.({ data with time = Unix.gettimeofday () }))
   in
-  MyTable.transaction id update
+  Tbl.transact id update
 
 module CountView = CouchDB.ReduceView(struct
   module Key    = IChat.Room

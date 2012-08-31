@@ -15,7 +15,7 @@ type t = <
   by_iid  : (IInstance.t * assoc) list 
 > 
 
-(* Define data types ---------------------------------------------------------------------------------------- *)
+(* Define data types ----------------------------------------------------------------------- *)
 
 module Key = struct
   type t = [ `Default | `Instance of IInstance.t ]
@@ -57,7 +57,7 @@ include CouchDB.Convenience.Table(struct let db = O.db "notify-freq" end)(IUser)
 (* Implement functions --------------------------------------------------------------------- *)
 
 let get uid = 
-  let! list = ohm_req_or (return $ extract []) $ MyTable.get (IUser.decay uid) in
+  let! list = ohm_req_or (return $ extract []) $ Tbl.get (IUser.decay uid) in
   return $ extract list
 
 let default = function
@@ -83,8 +83,7 @@ let set uid data =
     (`Default,compress_assoc (data # default))
     :: List.map (fun (iid,assoc) -> `Instance iid, compress_assoc assoc) (data # by_iid) 
   in
-  let! _ = ohm $ MyTable.transaction (IUser.decay uid) (MyTable.insert list) in
-  return ()
+  Tbl.set (IUser.decay uid) list 
 
 let frequency channel assoc = 
   try List.assoc channel assoc with Not_found -> default channel

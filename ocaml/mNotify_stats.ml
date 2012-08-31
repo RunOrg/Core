@@ -12,17 +12,13 @@ let see now d =
 
 let from_mail nid = 
   let! now = ohmctx (#time) in
-  let! _ = ohm $ Store.MyTable.transaction nid 
-    (Store.MyTable.update (fun d -> Store.({ see now d with mail_clicks = d.mail_clicks + 1 })))
-  in
-  return ()
+  Store.Tbl.update nid 
+     (fun d -> Store.({ see now d with mail_clicks = d.mail_clicks + 1 }))
 
 let from_site nid = 
   let! now = ohmctx (#time) in
-  let! _ = ohm $ Store.MyTable.transaction nid 
-    (Store.MyTable.update (fun d -> Store.({ see now d with site_clicks = d.site_clicks + 1 })))
-  in
-  return ()
+  Store.Tbl.update nid 
+    (fun d -> Store.({ see now d with site_clicks = d.site_clicks + 1 }))
 
 module NotifyStats = CouchDB.ReduceView(struct
   module Key = INotifyStats

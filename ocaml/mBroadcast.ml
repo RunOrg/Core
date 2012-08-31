@@ -9,7 +9,7 @@ module Types = MBroadcast_types
 include Types
 
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "broadcast" end) 
-module MyTable = CouchDB.Table(MyDB)(IBroadcast)(Item)
+module Tbl = CouchDB.Table(MyDB)(IBroadcast)(Item)
 
 module Design = struct
   module Database = MyDB
@@ -22,7 +22,7 @@ end
 
 let () = 
   let! bid = Sig.listen Signals.on_create in 
-  let! broadcast = ohm_req_or (return ()) $ MyTable.get bid in
+  let! broadcast = ohm_req_or (return ()) $ Tbl.get bid in
   let  iid  = broadcast.Item.from in
   let! aid  = req_or (return ()) $ broadcast.Item.author in 
   let! uid  = ohm_req_or (return ()) $ MAvatar.get_user aid in
@@ -45,7 +45,7 @@ let rec extract bid ?forward item =
   if item.Item.delete <> None then return None
   else match item.Item.kind with 
       
-    | `Forward f -> let! item' = ohm_req_or (return None) $ MyTable.get (f # real) in
+    | `Forward f -> let! item' = ohm_req_or (return None) $ Tbl.get (f # real) in
 		    if forward = None then 
 		      let forward = (bid,item) in
 		      extract (f # real) ~forward item'
@@ -65,7 +65,7 @@ let rec extract bid ?forward item =
 		    return (Some obj)
 
 let rec get_real ?(recurse=false) bid = 
-  let! item = ohm_req_or (return None) $ MyTable.get bid in 
+  let! item = ohm_req_or (return None) $ Tbl.get bid in 
   if item.Item.delete <> None then return None else 
     match item.Item.kind with 
       | `Forward f -> if recurse then return None else get_real (f # real) 
@@ -85,11 +85,9 @@ let generic_post iid aid time content =
     end) ;
     delete = None
   }) in
-
-  let bid = IBroadcast.gen () in
   
-  let! _  = ohm $ MyTable.transaction bid (MyTable.insert item) in
-  let! () = ohm $ Signals.on_create_call bid in 
+  let! bid = ohm $ Tbl.create item in 
+  let! ( ) = ohm $ Signals.on_create_call bid in 
 
   return bid 
 
@@ -154,7 +152,7 @@ let refresh_forwards bid =
 
   let update bid = 
     let  whoops = return ((),`keep) in
-    let! item  = ohm_req_or whoops $ MyTable.get bid in 
+    let! item  = ohm_req_or whoops $ Tbl.get bid in 
     if item.Item.delete <> None then whoops else 
       match item.Item.kind with 
 	| `Forward _ -> whoops
@@ -166,9 +164,7 @@ let refresh_forwards bid =
 			return ((),`put item')
   in 
 
-  let! _ = ohm $ MyTable.transaction bid update in
-
-  return () 
+  Tbl.Raw.transaction bid update
 
 let refresh_forwards_later = 
   let task = O.async # define "broadcast-refresh-forwards" IBroadcast.fmt refresh_forwards in
@@ -189,18 +185,16 @@ let forward iid aid from_bid =
     end) ;
     delete = None
   }) in
-
-  let bid = IBroadcast.gen () in
   
-  let! _  = ohm $ MyTable.transaction bid (MyTable.insert item) in
-  let! _  = ohm $ refresh_forwards_later bid in
-  let! () = ohm $ Signals.on_create_call bid in 
+  let! bid = ohm $ Tbl.create item in
+  let!  _  = ohm $ refresh_forwards_later bid in
+  let! ( ) = ohm $ Signals.on_create_call bid in 
   return ()
 
 (* Extract an item for display -------------------------------------------------------------- *)
 
 let get bid = 
-  let! item = ohm_req_or (return None) $ MyTable.get bid in 
+  let! item = ohm_req_or (return None) $ Tbl.get bid in 
   extract bid item 
 
 (* Display available forwards for a given item ---------------------------------------------- *)
@@ -374,14 +368,14 @@ let remove iid aid bid =
 
   let remove bid = 
     let whoops = return (None,`keep) in
-    let! item = ohm_req_or whoops $ MyTable.get bid in
+    let! item = ohm_req_or whoops $ Tbl.get bid in
     if item.Item.delete <> None || item.Item.from <> iid then whoops else
       match item.Item.kind with 
 	| `Content _ -> return (None, `put Item.({ item with delete }))
 	| `Forward f -> return (Some f, `put Item.({ item with delete }))
   in
   
-  let! f = ohm_req_or (return ()) $ MyTable.transaction bid remove in
+  let! f = ohm_req_or (return ()) $ Tbl.Raw.transaction bid remove in
   let! _ = ohm $ refresh_forwards_later (f # real) in  
 
   return ()
@@ -394,7 +388,7 @@ let edit iid aid bid content =
 
   let edit bid = 
     let whoops = return ((),`keep) in
-    let! item = ohm_req_or whoops $ MyTable.get bid in
+    let! item = ohm_req_or whoops $ Tbl.get bid in
     if item.Item.delete <> None || item.Item.from <> iid then whoops else
       match item.Item.kind with 
 	| `Content c -> let kind = `Content (object
@@ -405,7 +399,7 @@ let edit iid aid bid content =
 	| `Forward _ -> whoops 
   in
   
-  MyTable.transaction bid edit
+  Tbl.Raw.transaction bid edit
 
 module Backdoor = struct
 
@@ -487,7 +481,7 @@ let import data =
   let  bid = IBroadcast.of_id bid in 
   let  edit bid = 
 
-    let! broadcast = ohm $ MyTable.get bid in 
+    let! broadcast = ohm $ Tbl.get bid in 
     let  delete    = BatOption.bind (fun i -> i.Item.delete) broadcast in
     let  forwards  = BatOption.default 0 $ BatOption.bind (fun i -> match i.Item.kind with
       | `Content c -> Some (c # forwards)
@@ -510,7 +504,7 @@ let import data =
       kind   ;
     }))
   in
-  let! created = ohm $ MyTable.transaction bid edit in
+  let! created = ohm $ Tbl.Raw.transaction bid edit in
   if created then 
     Signals.on_create_call bid
   else

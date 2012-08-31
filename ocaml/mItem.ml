@@ -179,17 +179,17 @@ let exists source =
 let interested itid = 
   let! likers     = ohm $ MLike.interested itid in 
   let! commenters = ohm $ MComment.interested itid in
-  let! item       = ohm_req_or (return []) $ MyTable.get (IItem.decay itid) in
+  let! item       = ohm_req_or (return []) $ Tbl.get (IItem.decay itid) in
   let  list = likers @ commenters in
   let  list = match MItem_data.author item with None -> list | Some aid -> aid :: list in 
   return $ BatList.sort_unique compare list 
 
 let iid itid = 
-  let! data = ohm_req_or (return None) $ MyTable.get (IItem.decay itid) in
+  let! data = ohm_req_or (return None) $ Tbl.get (IItem.decay itid) in
   return $ Some (data # iid) 
 
 let author itid = 
-  let! data = ohm_req_or (return None) $ MyTable.get (IItem.decay itid) in
+  let! data = ohm_req_or (return None) $ Tbl.get (IItem.decay itid) in
   return $ MItem_data.author data
 
 let try_get context item = 
@@ -198,7 +198,7 @@ let try_get context item =
   let who  = Some (IAvatar.decay self) in 
   let item = IItem.decay item in
 
-  let! data = ohm_req_or (return None) $ MyTable.get item in
+  let! data = ohm_req_or (return None) $ Tbl.get item in
   
   let is_visible_in = function 
     | `feed feed     -> 

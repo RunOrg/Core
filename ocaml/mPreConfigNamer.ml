@@ -20,7 +20,7 @@ module Design = struct
   let name = "preconfig_namer"
 end
 
-module MyTable = CouchDB.Table(MyDB)(IInstance)(Data)
+module Tbl = CouchDB.Table(MyDB)(IInstance)(Data)
 
 type t = IInstance.t
 
@@ -33,7 +33,7 @@ let default = object
 end
 
 let get iid = 
-  let! data = ohm $ MyTable.get iid in
+  let! data = ohm $ Tbl.get iid in
   return $ BatOption.default default data
 
 (* Reverse compatibility with silly old name for the all-members group name.
@@ -58,7 +58,7 @@ let group name iid =
 		return (id, `put data)
   in
 
-  MyTable.transaction iid update
+  Tbl.Raw.transaction iid update
 
 let entity name iid = 
 
@@ -75,7 +75,7 @@ let entity name iid =
 		   return (id, `put data)
   in
 
-  MyTable.transaction iid update
+  Tbl.Raw.transaction iid update
 
 let set_admin iid eid gid = 
 
@@ -91,6 +91,6 @@ let set_admin iid eid gid =
     return ((), `put data)
   in
 
-  MyTable.transaction iid update
+  Tbl.Raw.transaction iid update
     
 

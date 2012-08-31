@@ -5,7 +5,7 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module MyTable = MFile_common.MyTable
+module Tbl = MFile_common.Tbl
 
 module Signals = struct
 
@@ -16,12 +16,8 @@ end
 
 let erase_if_still_temp =   
   let task = O.async # define "file.erase-temp" IFile.fmt 
-    begin fun id -> 
-      let! _ = ohm $
-	MyTable.transaction id (MyTable.remove_if (fun f -> f # k = `Temp))
-      in
-      return ()
-    end in
+    (fun id -> Tbl.delete_if id (#k |- (=) `Temp))
+  in
   task ~delay:600.
 
 let _do_prepare ~usr ~lift ?iid ?item () =   
@@ -40,8 +36,8 @@ let _do_prepare ~usr ~lift ?iid ?item () =
   (* La verification a eu lieu *)
   let real_id = lift id in
   
-  let! _ = ohm $ MyTable.transaction id (MyTable.insert file) in
-  let! _ = ohm $ erase_if_still_temp id in
+  let! () = ohm $ Tbl.set id file in 
+  let! () = ohm $ erase_if_still_temp id in
   return real_id
 
 let prepare_pic ~cuid = 
@@ -170,7 +166,11 @@ let remove ~version id =
       true, `keep
   in
 
-  MyTable.transaction id (MyTable.if_exists remove) 
+  Tbl.transact id (function 
+    | None -> return (None, `keep)
+    | Some file -> let success, what = remove file in 
+		   return (Some success, what))
+
       
 let remove_original = 
   let task = O.async # define "file.rm-original" IFile.fmt 
@@ -224,9 +224,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	  in
 	  
 	  if ok then
-	    let! _ = ohm_req_or (return false) $
-	      MyTable.transaction id (MyTable.update update) 
-            in 
+	    let! () = ohm $ Tbl.update id update in 
 	    return true
 	  else 
 	    ( log "File.resize_pic: %s upload failed" (IFile.to_string id) ;
@@ -275,7 +273,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	return (log "File.resize: %s has no original version!" (IFile.to_string id)) 
     in
 
-    let! file_opt = ohm $ MyTable.get id in
+    let! file_opt = ohm $ Tbl.get id in
 
     match file_opt with 
       | Some file -> 
@@ -349,12 +347,10 @@ let process_doc =
 	 end)
       in
 	
-      let! _ = ohm_req_or (return ()) $
-	MyTable.transaction id (MyTable.update update)
-      in
-
+      let! () = ohm $ Tbl.update id update in
       let! () = ohm $ remove_original id in
       return ()
+
     in
 
     let get_original file = 
@@ -365,7 +361,7 @@ let process_doc =
 	return (log "File.process-doc: %s has no original version!" (IFile.to_string id))
     in
     
-    let! file = ohm_req_or (return ()) $ MyTable.get id in
+    let! file = ohm_req_or (return ()) $ Tbl.get id in
 
     if file # k = `Doc then get_original file else
       return (log "File.process-doc: %s is not correct type" (IFile.to_string id))
@@ -416,15 +412,13 @@ let define_async_confirmer ~kind ~name ~process =
 		end) 
     in
     
-    let! update_succeeded = ohm $
-      MyTable.transaction id (fun id -> MyTable.get id |> Run.map transform)
-    in
+    let! update_succeeded = ohm $ Tbl.transact id (transform |- return) in
 
     let! () = true_or fail update_succeeded in
    
     let! () = ohm $ process id in
 
-    let! file = ohm_req_or fail $ MyTable.get id in
+    let! file = ohm_req_or fail $ Tbl.get id in
     let! item = req_or success (file # item) in
 
     let! () = ohm begin

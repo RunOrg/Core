@@ -27,10 +27,7 @@ let () =
     
     match what with 
       | `item what -> let! count = ohm $ MLike.count (`item what) in 
-		      let! _     = ohm $ MyTable.transaction 
-			(IItem.decay what) (MyTable.update (update count))
-		      in
-		      return ()
+		      Tbl.update (IItem.decay what) (update count) 
       | _          -> return ()
   in
   
@@ -54,10 +51,7 @@ let () =
     
     match what with 
       | `item what -> let! count = ohm $ MLike.count (`item what) in
-		      let! _     = ohm $ MyTable.transaction 
-			(IItem.decay what) (MyTable.update (update count))
-		      in 
-		      return ()
+		      Tbl.update (IItem.decay what) (update count)
       | _          -> return ()
   in
   
@@ -77,8 +71,7 @@ let () =
       method delayed  = item # delayed
       method where    = item # where
     end in
-    let on = comment # on in      
-    MyTable.transaction on (MyTable.update update) |> Run.map ignore
+    Tbl.update (comment # on) update
   in
   
   Sig.listen MComment.Signals.on_create comment
@@ -97,7 +90,7 @@ let () =
       method where    = item # where
       method iid      = item # iid
     end in
-    MyTable.transaction iid (MyTable.update update) |> Run.map ignore
+    Tbl.update iid update
   in
   
   Sig.listen MComment.Signals.on_delete uncomment
@@ -117,7 +110,7 @@ let () =
       method where   = item # where
       method iid     = item # iid
     end in 
-    MyTable.transaction id (MyTable.update update) |> Run.map ignore
+    Tbl.update id update
   in
 
   Sig.listen MFile.Upload.Signals.on_item_img_upload upload
@@ -148,7 +141,7 @@ let () =
 	| other  -> other (* This should not happen *)
     end in 
 
-    MyTable.transaction id (MyTable.update update) |> Run.map ignore
+    Tbl.update id update
   in
 
   Sig.listen MFile.Upload.Signals.on_item_doc_upload upload
@@ -160,7 +153,7 @@ let () =
 
     let! items = ohm $ ByChatRoom.doc (IChat.Room.decay crid) in 
 
-    let! _ = ohm $ Run.list_map begin fun doc -> 
+    let! _ = ohm $ Run.list_iter begin fun doc -> 
 
       let id = IItem.of_id (doc # id) in
 
@@ -177,7 +170,7 @@ let () =
 	method payload = item # payload
       end in 
       
-      MyTable.transaction id (MyTable.update update) |> Run.map ignore
+      Tbl.update id update
 
     end items in 
     
