@@ -26,7 +26,8 @@ let template fields =
 		  (VEliteForm.checkboxes ~label
 		     ~format:Fmt.Unit.fmt
 		     ~source:[ (), return ignore ]
-		     (fun seed -> return (try if Json.to_bool (json seed) then [()] else [] with _ -> []))
+		     (fun seed -> return (try if Json.to_bool (json seed) then [()] else [] 
+		                          with _ -> []))
 		     (fun field data -> return $ Ok (Json.Bool (data <> []))))
 		| `Date ->
 		  (VEliteForm.date ~label
