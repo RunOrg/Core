@@ -100,7 +100,31 @@ let box entity access fail wrapper =
   in
 
   let! data_edit = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
+
+    let! fields = ohm $ O.decay (MGroup.Fields.local gid) in 
+    let  template = template fields in
+    let  src = OhmForm.from_post_json json in 
+    
+    let  form = OhmForm.create ~template ~source:src in
+    
+    let fail errors = 
+      let  form = OhmForm.set_errors errors form in
+      let! json = ohm $ OhmForm.response form in
+      return $ Action.json json res
+    in
+    
+    let! result = ohm_ok_or fail $ OhmForm.result form in  
+    
+    (* Save the data and process the join request *)
+    
+    let info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
+
+    let! () = ohm $ O.decay (MMembership.Data.admin_update 
+			       (access # self) (MGroup.Get.id group) aid info result)
+    in
+
     return res
+
   end in
 
   O.Box.fill begin 

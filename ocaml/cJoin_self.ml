@@ -10,7 +10,6 @@ let do_join self group =
     | None -> MMembership.user (MGroup.Get.id group) self true 
     | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) self [ `Accept true ; `Default true ]
 
-
 let save_data self result = 
 
   let  result = MJoinFields.Flat.dispatch result in 
