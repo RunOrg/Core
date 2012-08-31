@@ -2,7 +2,7 @@
   <div class="-notice">
     {`Album_Size_Remaining} <strong>{`Album_Size free}</strong>
   </div>
-  <span {$p} class="progress">
+  <span {$p} class="progress -dark">
     <span></span>
   </span>
   <button {$up}></button>
@@ -105,6 +105,10 @@ uploader = new SWFUpload
   padding: 10px;
   vertical-align: middle;
   height: 21px;
+
+  .progress {
+    margin-left: 100px;
+  }
 
   .-notice {
     color: #BBB;

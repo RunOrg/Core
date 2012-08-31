@@ -66,6 +66,14 @@ let box access entity fail cols_url invite_url join_url wrapper =
 
   end in
 
+  (* Starting an export *)
+  let! export = O.Box.react Fmt.Unit.fmt begin fun () _ _ res ->
+    let! exid = ohm $ O.decay (CAvatarExport.start (MGroup.Get.id group)) in 
+    let  url  = CExport.status_url access exid in 
+    return $ Action.json 
+      [ "url", JsCode.Endpoint.to_json (JsCode.Endpoint.of_url url) ] res
+  end in 
+
   (* Returning the data for the given rows *)
   
   let! rows = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
@@ -147,6 +155,8 @@ let box access entity fail cols_url invite_url join_url wrapper =
       method coledit = cols_url 
       method columns = List.map MAvatarGridColumn.(fun c -> TextOrAdlib.to_string c.label) columns
       method cols = List.length columns 
+      method urlExport = JsCode.Endpoint.to_json 
+	(OhmBox.reaction_endpoint export ())
       method urlRows = OhmBox.reaction_json rows ()
       method urlSort = OhmBox.reaction_json sort ()
     end) in

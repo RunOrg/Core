@@ -1,6 +1,6 @@
 <ul class="actions" style="margin: 4px 7px">
   <li>
-    <a href="javascript:void(0)" class="action-button">{`Grid_Link_Export}</a>
+    <a {$ex} href="javascript:void(0)" class="action-button">{`Grid_Link_Export}</a>
   </li>
   <li class="-r">
     <a href="{coledit}" class="action-button">{`Grid_Link_Columns}</a>
@@ -30,7 +30,9 @@
   </table>
 </div> 
 
-<script type="cols:int,urlRows:json,urlSort:json"> 
+<script type="cols:int,urlRows:json,urlSort:json,urlExport:json"> 
+do_export here.$ex, urlExport
+
 @gridCache = @gridCache || { 
   odat : {}
   ndat : {} 
