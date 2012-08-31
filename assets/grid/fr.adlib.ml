@@ -3,6 +3,7 @@
 | `Grid_Block_Empty -> "Aucun élément à afficher"
 | `Grid_Link_Invite -> "Ajouter des membres"
 | `Grid_Link_Columns -> "Modifier les colonnes"
+| `Grid_Link_Export -> "Télécharger"
 
 | `Grid_Column_Add -> "Ajouter"
 
