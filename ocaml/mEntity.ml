@@ -179,8 +179,13 @@ let get_if_public eid =
       (* Can be seen, because it's public *)
       let eid = IEntity.Assert.view eid in
       return $ Some (MEntity_can.make_visible eid entity)
+
+(* Collect the instance of an entity -------------------------------------------------------- *)
+
+let instance eid = 
+  MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
       
-(* Create the initial entities. ---------------------------------------------------------------------- *)
+(* Create the initial entities. ------------------------------------------------------------- *)
 
 let create_initial = 
   let task = O.async # define "create-initial-entities" Fmt.(IInstance.fmt * IAvatar.fmt) 

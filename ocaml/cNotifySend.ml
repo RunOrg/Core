@@ -9,6 +9,8 @@ module BecomeAdmin = CNotifySend_becomeAdmin
 module CommentYourItem = CNotifySend_commentYourItem
 module CommentItem = CNotifySend_commentItem
 module PublishItem = CNotifySend_publishItem
+module EntityInvite = CNotifySend_entityInvite
+module EntityRequest = CNotifySend_entityRequest
 
 let () = 
   let! uid, nid, payload = Sig.listen MNotify.Send.immediate in 
@@ -20,4 +22,9 @@ let () =
     | `NewComment (`ItemAuthor,cid) -> CommentYourItem.send url uid cid
     | `NewComment (`ItemFollower,cid) -> CommentItem.send url uid cid
     | `NewWallItem (_,itid) -> PublishItem.send url uid itid
-    | _ -> return ()
+    | `EntityInvite (eid,aid) -> EntityInvite.send url uid eid aid 
+    | `EntityRequest (eid,aid) -> EntityRequest.send url uid eid aid 
+    | `NewUser _ 
+    | `NewFavorite _ 
+    | `NewInstance _
+    | `NewJoin _ -> return () 

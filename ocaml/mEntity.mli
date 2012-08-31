@@ -111,7 +111,8 @@ module Data : sig
 
 end
 
-(* procedures *)
+
+val instance : 'any IEntity.id -> IInstance.t option O.run
 
 val try_update : 
      [`IsSelf] IAvatar.id

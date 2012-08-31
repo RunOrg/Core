@@ -51,17 +51,17 @@
 | `Mail_Notify_CommentItem_Explanation of string * string
 | `Mail_Notify_CommentItem_Thanks of string
 
-| `Mail_Notify_InviteEvent_Title of string * string
-| `Mail_Notify_InviteEvent_Intro of string
-| `Mail_Notify_InviteEvent_Explanation of string * string * string
-| `Mail_Notify_InviteEvent_Explanation2 of string
-| `Mail_Notify_InviteEvent_Thanks of string
+| `Mail_Notify_EntityInvite_Title of string * string
+| `Mail_Notify_EntityInvite_Intro of string
+| `Mail_Notify_EntityInvite_Explanation of string * string * string
+| `Mail_Notify_EntityInvite_Explanation2 of string
+| `Mail_Notify_EntityInvite_Thanks of string
 
-| `Mail_Notify_JoinPending_Title of string * string
-| `Mail_Notify_JoinPending_Intro of string
-| `Mail_Notify_JoinPending_Explanation of string * string * string
-| `Mail_Notify_JoinPending_Explanation2
-| `Mail_Notify_JoinPending_Thanks of string
+| `Mail_Notify_EntityRequest_Title of string * string
+| `Mail_Notify_EntityRequest_Intro of string
+| `Mail_Notify_EntityRequest_Explanation of string * string * string
+| `Mail_Notify_EntityRequest_Explanation2
+| `Mail_Notify_EntityRequest_Thanks of string
 
 | `Mail_NotifyResend_Title 
 | `Mail_NotifyResend_Intro of string

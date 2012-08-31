@@ -6,14 +6,16 @@ open BatPervasives
 
 include Fmt.Make(struct
   type json t = 
-    [ `NewWallItem  "i"  of [`WallReader "r"|`WallAdmin "a"] * IItem.t
-    | `NewFavorite  "f"  of [`ItemAuthor "a"] * IAvatar.t * IItem.t
-    | `NewComment   "c"  of [`ItemAuthor "a"|`ItemFollower "f"] * IComment.t
-    | `BecomeMember "bm" of IInstance.t * IAvatar.t 
-    | `BecomeAdmin  "ba" of IInstance.t * IAvatar.t  
-    | `NewInstance  "ni" of IInstance.t * IAvatar.t 
-    | `NewUser      "nu" of IUser.t 
-    | `NewJoin      "nj" of IInstance.t * IAvatar.t  
+    [ `NewWallItem   "i"  of [`WallReader "r"|`WallAdmin "a"] * IItem.t
+    | `NewFavorite   "f"  of [`ItemAuthor "a"] * IAvatar.t * IItem.t
+    | `NewComment    "c"  of [`ItemAuthor "a"|`ItemFollower "f"] * IComment.t
+    | `BecomeMember  "bm" of IInstance.t * IAvatar.t 
+    | `BecomeAdmin   "ba" of IInstance.t * IAvatar.t  
+    | `NewInstance   "ni" of IInstance.t * IAvatar.t 
+    | `EntityInvite  "ei" of IEntity.t * IAvatar.t
+    | `EntityRequest "er" of IEntity.t * IAvatar.t 
+    | `NewUser       "nu" of IUser.t 
+    | `NewJoin       "nj" of IInstance.t * IAvatar.t  
     ]
 end)
 
@@ -31,6 +33,9 @@ let instance = function
     | `NewFavorite (_,_,itid) -> MItem.iid itid
     | `NewComment (_,cid) -> let! itid    = ohm_req_or (return None) $ MComment.item cid in 
 			     MItem.iid itid
+
+    | `EntityInvite (eid,_) 
+    | `EntityRequest (eid,_) -> MEntity.instance eid 
 
     | `BecomeMember (iid,_) 
     | `BecomeAdmin (iid,_) 
@@ -69,7 +74,15 @@ let author cuid =
 	
     | `BecomeAdmin (iid,aid) -> 
       return $ Some (`Person (aid,iid))
-	
+
+    | `EntityInvite  (eid,aid) 
+    | `EntityRequest (eid,aid) ->
+      let! iid    = ohm_req_or (return None) $ MEntity.instance eid in 
+      let! access = ohm_req_or (return None) $ access cuid iid in 
+      let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+      let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
+      return $ Some (`Entity (aid,iid,entity))
+
     | `NewInstance (iid,aid) -> 
       return $ Some (`Person (aid,iid))
 	
@@ -80,11 +93,13 @@ let author cuid =
       return $ Some (`Person (aid,iid))
 	
 let channel : t -> MNotifyChannel.t = function 
-  | `NewWallItem  (what,_)   -> `NewWallItem what
-  | `NewFavorite  (what,_,_) -> `NewFavorite what
-  | `NewComment   (what,_)   -> `NewComment what
-  | `BecomeMember (_,_)      -> `BecomeMember
-  | `BecomeAdmin  (_,_)      -> `BecomeAdmin
-  | `NewInstance  (_,_) 
-  | `NewUser       _
-  | `NewJoin      (_,_)      -> `SuperAdmin
+  | `NewWallItem   (what,_)   -> `NewWallItem what
+  | `NewFavorite   (what,_,_) -> `NewFavorite what
+  | `NewComment    (what,_)   -> `NewComment what
+  | `BecomeMember  (_,_)      -> `BecomeMember
+  | `BecomeAdmin   (_,_)      -> `BecomeAdmin
+  | `EntityInvite  (_,_)      -> `EntityInvite
+  | `EntityRequest (_,_)      -> `EntityRequest
+  | `NewInstance   (_,_) 
+  | `NewUser        _
+  | `NewJoin       (_,_)      -> `SuperAdmin

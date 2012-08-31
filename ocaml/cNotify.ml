@@ -54,6 +54,22 @@ let url cuid notify =
     | `BecomeAdmin (iid,_) -> let! instance = ohm_req_or none $ MInstance.get iid in 
 			      return $ Some (Action.url UrlClient.Home.home (instance # key) [])
 
+    | `EntityInvite (eid,_) -> let! iid = ohm_req_or none $ MEntity.instance eid in 
+			       let! instance = ohm_req_or none $ MInstance.get iid in 
+			       return $ Some (Action.url UrlClient.Events.see (instance # key) 
+						[ IEntity.to_string eid ])
+    | `EntityRequest (eid,aid) -> let! iid = ohm_req_or none $ MEntity.instance eid in 
+				  let! instance = ohm_req_or none $ MInstance.get iid in 
+				  let! entity = ohm_req_or none $ MEntity.naked_get eid in 
+				  let  res url = return $ Some 
+				    (Action.url url (instance # key) [ IEntity.to_string eid ;
+								       IAvatar.to_string aid ])
+				  in
+				  res (match MEntity.Get.kind entity with 
+				    | `Forum -> UrlClient.Forums.join
+				    | `Event -> UrlClient.Events.join
+				    | _      -> UrlClient.Members.join)
+
     | `NewWallItem (_,itid) 
     | `NewFavorite (_,_,itid) -> item_url cuid itid
 

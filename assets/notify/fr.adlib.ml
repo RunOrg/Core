@@ -12,6 +12,10 @@
     | `NewCommentOther1 -> "a laissé un commentaire sur un message de "
     | `NewCommentOther2 -> "."
     | `NewWallItem1 -> "a publié un nouveau message."
+    | `EntityInvite1 -> "vous invite à participer à «"
+    | `EntityInvite2 -> "»"
+    | `EntityRequest1 -> "a demandé son inscription à «"
+    | `EntityRequest2 -> "»"
     | `Whatever -> "a fait quelque chose, mais nous ne savons pas quoi."
 end
 

@@ -35,16 +35,26 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
 	      return (pic, Some (user # fullname)) 
 	    | _ -> return (None, None) 
 	end
-	| `Person (aid,_) -> let! profile = ohm $ CAvatar.mini_profile aid in 
-			     return (profile # pico, Some profile # name) 
+	| `Person (aid,_) 
+	| `Entity (aid,_,_) -> let! profile = ohm $ CAvatar.mini_profile aid in 
+			       return (profile # pico, Some profile # name) 
     end in
 
+    let! entity_name = ohm begin
+      match who with 
+	| `RunOrg _ 
+	| `Person _ -> return "-"
+	| `Entity (_,_,e) -> CEntityUtil.name e
+    end in 
+
     let! text, more = ohm begin match what # payload with 
-      | `NewInstance  _ -> return (`NewInstance1, [])
-      | `NewUser      _ -> return (`NewUser1, [])
-      | `NewJoin      _ -> return (`NewJoin1, [])
-      | `BecomeAdmin  _ -> return (`BecomeAdmin1 gender, [])
-      | `BecomeMember _ -> return (`BecomeMember1, [])
+      | `NewInstance   _ -> return (`NewInstance1, [])
+      | `NewUser       _ -> return (`NewUser1, [])
+      | `NewJoin       _ -> return (`NewJoin1, [])
+      | `BecomeAdmin   _ -> return (`BecomeAdmin1 gender, [])
+      | `BecomeMember  _ -> return (`BecomeMember1, [])
+      | `EntityInvite  _ -> return (`EntityInvite1, [ entity_name, `EntityInvite2 ])
+      | `EntityRequest _ -> return (`EntityRequest1, [ entity_name, `EntityRequest2 ])
       | `NewFavorite  _ -> return (`NewFavorite1, [])
       | `NewComment (`ItemAuthor,_) -> return (`NewCommentSelf1, [])
       | `NewComment (`ItemFollower,cid) -> begin
@@ -82,6 +92,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
       match author with 
 	| Some (`RunOrg iid) -> return (Some (iid, (`RunOrg iid, t)))
 	| Some (`Person (aid,iid)) -> return (Some (Some iid, (`Person (aid,iid), t)))
+	| Some (`Entity (aid,iid,e)) -> return (Some (Some iid, (`Entity (aid,iid,e), t)))
 	| None -> let! () = ohm $ MNotify.Store.rotten (t # id) in
 		  return None
     end list) in
