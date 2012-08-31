@@ -8,6 +8,7 @@ module Actions = struct
   open MErrorAudit
   open MNews
   open CAvatarExport
+  open CExport
   open CAdmin
   open CLogin
   open CMe

@@ -10,17 +10,24 @@ let website,  def_website  = O.declare O.client "" A.none
 let notfound, def_notfound = O.declare O.client "" A.i  
 let about,    def_about    = O.declare O.client "about" A.none
 
-(* Subscribe and unsubscribe ============================================================================== *)
+(* Subscribe and unsubscribe ================================================================ *)
 
 let subscribe  , def_subscribe   = O.declare O.client "subscribe" A.none
 let unsubscribe, def_unsubscribe = O.declare O.client "unsubscribe" A.none
 
-(* Join =================================================================================================== *)
+(* Join ===================================================================================== *)
 
 let join,   def_join   = O.declare O.client "join" (A.o IEntity.arg)
 let doJoin, def_doJoin = O.declare O.client "join/public" (A.r IEntity.arg) 
 
-(* Articles =============================================================================================== *)
+(* Exports ================================================================================== *)
+
+module Export = struct
+  let status,   def_status   = O.declare O.client "export/status" (A.rr IExport.arg A.string)
+  let download, def_download = O.declare O.client "export" (A.rr IExport.arg A.string)
+end
+
+(* Articles ================================================================================= *)
 
 let articles, def_articles = O.declare O.client "h" (A.ri A.float) 
 let article,  def_article  = O.declare O.client "b" (A.roi IBroadcast.arg A.string)
@@ -36,12 +43,12 @@ let article_url_key b =
 let article_url key b = 
   Action.url article key (b # id, Some (article_url_key b))
 
-(* Public calendar ======================================================================================== *)
+(* Public calendar ========================================================================== *)
 
 let calendar, def_calendar = O.declare O.client "calendar" A.none
 let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 
-(* Intranet =============================================================================================== *)
+(* Intranet ================================================================================= *)
 
 let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 
