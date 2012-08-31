@@ -6,11 +6,11 @@ open BatPervasives
 
 let reverse iid access = 
 
-  let of_entity = MEntity.access () in 
+  let of_entity e a = MAccess.of_entity e a in
 
   let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
-
-  let by_group gid state= 
+  
+  let by_group gid state = 
     let! group = ohm_req_or (return []) $ MGroup.naked_get gid in
 
     (* We need to make sure that we're accessing the right instance *)
@@ -21,11 +21,7 @@ let reverse iid access =
       return $ List.map snd list
   in
 
-  let by_message mid = 
-    let! avatars, groups = ohm $ MMessage.get_participants_forced iid mid in
-    let! in_groups       = ohm $ Run.list_map (fun (g,s) -> by_group g s) groups in
-    return $ List.concat (avatars :: in_groups)
-  in
+  let by_message mid = return [] in
 
   let rec aux = function 
     | `Nobody -> return []

@@ -26,6 +26,9 @@ val of_json : Ohm.Json.t -> t
 val to_json : t -> Ohm.Json.t
 val fmt : t Ohm.Fmt.t
 
+val of_entity : IEntity.t -> Action.t -> t O.run
+val in_group : IAvatar.t -> IGroup.t -> State.t -> bool O.run
+
 module Signals : sig
 
   val of_entity : (IEntity.t * Action.t, t O.run) Ohm.Sig.channel

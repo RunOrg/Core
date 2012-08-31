@@ -74,8 +74,6 @@ val get_participants_forced :
 
 val mark_as_read : [`IsSelf] IUser.id -> 'b IMessage.id -> unit O.run
 
-val in_message : MAccess.in_message 
-
 val count : [`IsSelf] IUser.id -> (IInstance.t * int) list O.run
 
 val total_count : [`IsSelf] IUser.id -> int O.run

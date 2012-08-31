@@ -66,18 +66,16 @@ class type ['any] context = object
   method isin             : 'any IIsIn.id 
 end
 
+let of_entity entity action = 
+  Signals.of_entity_call (entity,action)     
+    
+let in_group aid gid status = 
+  Signals.in_group_call (aid,gid,status)
+
 let test (context : 'any #context) accesses = 
 
   let access     = optimize (`Union accesses) in
   
-  let in_group aid gid status = 
-    Signals.in_group_call (aid,gid,status)
-  in
-
-  let of_entity entity action = 
-    Signals.of_entity_call (entity,action)     
-  in
-
   let isin = context # isin in
   let aid  = IAvatar.decay (context # self) in
 
