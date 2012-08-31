@@ -2,3 +2,4 @@
 | `WeekDate of float
 | `ShortWeekDate of (float * float)
 | `DateRelative of (float * float) 
+| `FullDate of float

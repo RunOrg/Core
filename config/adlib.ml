@@ -9,6 +9,15 @@ module EntityName = struct
 
 end
 
+module Generic = struct
+
+  let _ = adlib "Gender_Male" "Homme"
+  let _ = adlib "Gender_Female" "Femme"
+  let yes = adlib "Yes" "Oui"
+  let no  = adlib "No"  "Non"
+
+end
+
 module ColumnName = struct
 
   let firstname = adlib "ColumnUserBasicFirstname" ~old:"column.user-basic.firstname" "Prénom"
@@ -24,8 +33,6 @@ module ColumnName = struct
   let _ = adlib "City" "Ville"
   let _ = adlib "Country" "Pays"
   let _ = adlib "Gender" "Sexe"
-  let _ = adlib "Gender_Male" "Homme"
-  let _ = adlib "Gender_Female" "Femme"
 
 end
 

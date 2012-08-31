@@ -55,4 +55,7 @@
       default () 
     else default ()
 
-
+| `FullDate time ->   
+  let t = Unix.localtime time in
+  Printf.sprintf "%02d/%02d/%04d" 
+    t.Unix.tm_mday (t.Unix.tm_mon + 1) (t.Unix.tm_year + 1900)
