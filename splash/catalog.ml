@@ -802,8 +802,57 @@ http://www.flickr.com/photos/wwworks/4005631298/
   page "/federations/Federations" "RunOrg Fédérations - Structure fédérale"
     [ composite `LR
 	(pride ~title:"Fédérations" "Solution standard pour organiser en ligne la structure fédérale des fédérations.")
-	(create "Federations")
-    ] ;	
+	(create "Federations") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/-cavin-/2366764272/",
+		       "Cаvin")
+	   "/public/img/preconf_federations.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/federations/Badminton" "RunOrg Fédérations - FF Badminton"
     [ composite `LR
@@ -831,14 +880,112 @@ http://www.flickr.com/photos/wwworks/4005631298/
   page "/federations/SectionSportEtudes" "RunOrg Fédérations - Sections sport-études"
     [ composite `LR
 	(pride ~title:"Sections sport-études" "Conçu avec et pour le pôle espoir de la ligue de judo Rhône Alpes, cette solution d'adapte à toutes les sections sport-études.")
-	(create "SectionSportEtudes")
-    ] ;	
+	(create "SectionSportEtudes") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/jayhem/3600002571/",
+		       "Jayhem")
+	   "/public/img/preconf_sectionsportetudes.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/education/ElementarySchool" "RunOrg Education - Ecoles primaires "
     [ composite `LR
 	(pride ~title:"Ecoles primaires" "Elaboré avec le concours de spécialistes du numérique dans l'éducation, d'écoles, d'instituteurs et d'associations")
-	(create "ElementarySchool")
-    ] ;	
+	(create "ElementarySchool") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/wwworks/4005631298/",
+		       "Woodleywonderworks")
+	   "/public/img/preconf_elementaryschool.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/education/SectionSportEtudes" "RunOrg Education - Sections sport-études"
     [ composite `LR
@@ -849,37 +996,331 @@ http://www.flickr.com/photos/wwworks/4005631298/
   page "/syndic-copropriete/Copro" "RunOrg Copropriétés - Copropriété avec syndic professionnel"
     [ composite `LR
 	(pride ~title:"Copropriété avec syndic professionnel" "Gestion d'une copropriété avec un gestionnaire ou un syndic professionnel")
-	(create "Copro")
-    ] ;	
+	(create "Copro") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/joiseyshowaa/1279750389/",
+		       "Joiseyshowaa")
+	   "/public/img/preconf_copro.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/syndic-copropriete/CoproVolunteer" "RunOrg Copropriétés - Copropriété avec syndic bénévole"
     [ composite `LR
 	(pride ~title:"Copropriété avec syndic bénévole" "Gestion d'une copropriété en syndic bénévol ou regroupement de copropriétaires sans accès pour le syndic professionnel")
-	(create "CoproVolunteer")
-    ] ;	
+	(create "CoproVolunteer") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/gdominici/93513921/",
+		       "Gianni Dominici")
+	   "/public/img/preconf_coprovolunteer.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/entreprises/Company" "RunOrg Entreprises"
     [ composite `LR
 	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
-	(create "Company")
-    ] ;	
+	(create "Company") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
+		       "Alex E. Proimos")
+	   "/public/img/preconf_company.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/entreprises/CompanyTraining" "RunOrg Entreprises - Centres de formation"
     [ composite `LR
 	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
-	(create "CompanyTraining")
-    ] ;	
+	(create "CompanyTraining") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/76029035@N02/6829406809/",
+		       "Victor1558")
+	   "/public/img/preconf_companytraining.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 	
   page "/ComiteEnt" "RunOrg Comités d'Entreprise"
     [ composite `LR
 	(pride ~title:"Comités d'Entreprise" "Solution conçue pour organiser et annimer des comités de petites et moyennes entreprises" )
-	(create "ComiteEnt")
-	] ;
+	(create "ComiteEnt") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/highwaysagency/5998133376/",
+		       "Highways Agency")
+	   "/public/img/preconf_comiteent.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
+    ] ;
 
   page "/others/Events" "RunOrg - Organisation d'évènements"
     [ composite `LR
 	(pride ~title:"Organisation d'évènements" "Cette solution vous permet d'organiser un évènement, d'animer les participants, et de les relancer pour les évènements suivants")
-	(create "Events")
+	(create "Events") (* ;
+
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/pagedooley/3194564161/",
+		       "Kevin Dooley")
+	   "/public/img/preconf_events.jpg")
+	(features [ 
+	  "Point fort",
+	  "" ;
+	    
+	  "Idéal pour...",
+	  "" ;
+	  
+	  "Egalement pensé pour...",
+	  ""	
+	  
+	  "Modèles et groupes inclus",
+	  ""	
+	  
+	  "Déjà utilisé par...",
+	  ""	
+	  
+	]) ; 
+	
+	ribbon ( important
+		""
+		"") ;
+
+	(pride 
+	   ~title:""
+	   ""
+	) ; 
+
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	); *)
     ] 
 	       
   (* END PAGES -------------------------------------------------------------- *)
