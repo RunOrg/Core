@@ -6,13 +6,39 @@ open BatPervasives
 
 module Export = MCsvExport
 
+module Render = CAvatarExport_render
+
 module TaskFmt = Fmt.Make(struct
   type json t = (IAvatar.t option * IExport.t * IGroup.t * (MAvatarGridEval.t list))
 end)
 
+let cells_by_step = 50
+
 let task,define = O.async # declare "avatar-export" TaskFmt.fmt 
-let () = define begin fun (aid_opt,exid,gid,evals) ->
-  MCsvExport.finish exid 
+let () = define begin fun (start,exid,gid,evals) ->
+
+  let  count = max 1 (cells_by_step / List.length evals) in 
+
+  (* Acting as bot to list group contents. *)
+  let  bgid  = IGroup.Assert.bot gid in  
+  let! aids, next = ohm $ MMembership.InGroup.avatars bgid ~start ~count in
+  
+  (* A function that processes one cell. *)
+  let cell aid eval = 
+    let! json, _ = ohm $ MAvatarGrid.Config.apply aid eval in 
+    Render.cell json eval 
+  in
+
+  (* Process all cells. *)
+  let! lines = ohm $ Run.list_map (fun aid -> Run.list_map (cell aid) evals) aids in
+
+  (* Save them to the export *)
+  let! () = ohm $ Export.add exid lines in
+
+  if next = None then 
+    MCsvExport.finish exid
+  else
+    task (next,exid,gid,evals) 
 end
 
 let start gid =   

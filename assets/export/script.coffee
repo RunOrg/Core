@@ -9,14 +9,22 @@
         return call r.code
       check = () ->
         to_endpoint r.url, null, (r) ->
+
           return call r.code if !("progress" of r)
-          progress($p,r.progress)
+
+          p = r.progress
+          if !r.url && p == 1
+            p = 0.99            
+          progress($p,p)
+
           if !r.url 
-            setTimeout(check, 500) 
+            setTimeout(check, 500)           
             return call r.code
+
           $i = $ "<iframe style='display:none'/>"
           $b.before($i)
           $i.attr("src",r.url)
+
       do check 
       call r.code
            
