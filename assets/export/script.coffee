@@ -9,8 +9,9 @@
         return call r.code
       check = () ->
         to_endpoint r.url, null, (r) ->
+          return call r.code if !("progress" of r)
+          progress($p,r.progress)
           if !r.url 
-            progress($p,r.progress) if r.progress
             setTimeout(check, 500) 
             return call r.code
           $i = $ "<iframe style='display:none'/>"
