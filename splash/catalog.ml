@@ -351,7 +351,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
     [ composite `LR
 	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée notamment par un club évoluant en ELITE")
-	(create "Footus") (*
+	(create "Footus") 
     ;
 
     composite `LR 
@@ -361,29 +361,23 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	   "/public/img/preconf_footus.jpg")
 	(features [ 
 	  "Point fort",
-	  "" ;
+	  "De l'inscription des membres à l'organistion des matchs dans un seul outil." ;
 	    
 	  "Idéal pour...",
-	  "" ;
-	  
-	  "Egalement pensé pour...",
-	  ""	
+	  "Motiver les joueurs et communiquer sur les résultats !" ;
 	  
 	  "Modèles et groupes inclus",
-	  ""	
-	  
-	  "Déjà utilisé par...",
-	  ""	
-	  
+	  "Groupes des niveaux officiels, formulaires d'inscription Football US et cheerleading"	
+
 	]) ; 
-	
-	ribbon ( important
-		""
-		"") ;
 
 	(pride 
-	   ~title:""
-	   ""
+	   ~title:"Conçu avec les meilleurs"
+	   "La solution RunOrg pour les clubs de football américain et cheerleading a été conçue en se basant sur les besoins et les conseils de clubs évoluant au plus haut niveau. Son objectif est de faciliter l'organisation des entraînements et des compétitions et de mettre en avant les valeurs du club.
+
+Grâce à ses formulaires spéciaux football américain et cheerleading (comportant notamment les positions)  vous disposez d'une solution déjà personnalisée aux besoins des clubs football américain et cheerleading.
+
+Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilisé pour faciliter sa communication et son organisation, mais aussi renforcer ses valeurs et la cohésion de ses membres."
 	) ; 
 
       hr () ;
@@ -401,13 +395,13 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); *)
+	); 
     ] ;
 
   page "/clubs-sports/Athle" "RunOrg Clubs - Athlétisme "
     [ composite `LR
 	(pride ~title:"Clubs d'Athlétisme" "")
-	(create "Athle")(*
+	(create "Athle")
     ;
 
     composite `LR 
@@ -417,32 +411,15 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	   "/public/img/preconf_athle.jpg")
 	(features [ 
 	  "Point fort",
-	  "" ;
+	  "Gérer er organiser les différentes disciplines et leurs sportifs n'a jamais été aussi simple" ;
 	    
 	  "Idéal pour...",
-	  "" ;
+	  "Différencier la communication et l'organisation des activités par disciplines" ;
 	  
 	  "Egalement pensé pour...",
-	  ""	
-	  
-	  "Modèles et groupes inclus",
-	  ""	
-	  
-	  "Déjà utilisé par...",
-	  ""	
-	  
+	  "Offrir aux sportifs et leurs parents un lieu d'échanges et de conseils."	
+	  	  
 	]) ; 
-	
-	ribbon ( important
-		""
-		"") ;
-
-	(pride 
-	   ~title:""
-	   ""
-	) ; 
-
-      hr () ;
 
       composite `LR
 	(price
@@ -457,14 +434,13 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); *)
+	); 
     ] ;
 
   page "/clubs-sports/SalleSport" "RunOrg Clubs - Salle de sport et coaching "
     [ composite `LR
 	(pride ~title:"Salle de sport et coaching sportif" "Solution développée en collaboration avec un coach sportif et un gestionnaire de salle de sport")
-	(create "SalleSport")(*
-    ;
+	(create "SalleSport")    ;
 
     composite `LR 
 	(image 
@@ -472,30 +448,25 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 		       "Abdullah AL-Naser")
 	   "/public/img/preconf_sallesport.jpg")
 	(features [ 
-	  "Point fort",
-	  "" ;
+	  "Points forts",
+	  "Personnalisation du suivi des sportifs" ;
 	    
 	  "Idéal pour...",
-	  "" ;
-	  
-	  "Egalement pensé pour...",
-	  ""	
-	  
+	  "Organiser les activités et les suivis avec plusieurs sportifs et entraineurs " ;
+	 	  
 	  "Modèles et groupes inclus",
-	  ""	
-	  
-	  "Déjà utilisé par...",
-	  ""	
+	  "Cours incluant les objectifs, modèles de bilan sportifs, formulaire d'inscription détaillés"	
 	  
 	]) ; 
 	
-	ribbon ( important
-		""
-		"") ;
 
 	(pride 
-	   ~title:""
-	   ""
+	   ~title:"Personnalisez le suivi des sportifs"
+	   "La solution de RunOrg dédiée aux salles de sport et aux coachs sportifs est conçue pour les aider à s'organiser au mieux pour répondre aux besoins et attentes des sportifs qu'ils entraînent. 
+
+Même dans un environnement avec plusieurs profs, Les sportifs bénéficient d'un suivi personnalisé et centralisé de leurs activités, de leurs cours et de leur progression. Ils disposent en plus d'un espace d'échange privilégié avec leurs entraineurs et leurs conseillers. Vous proposez à vos sportifs de rejoindre des groupes (intérêts, cours, etc.) dans lesquels ils vont pouvoir communiquer. Des modèles vous permettent de réaliser des bilans réguliers de leurs performances.
+
+RunOrg Salles de sport et coaching sportif vous offre une solution clef en main, ludique et efficace pour organiser vos activités et vos actions. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres."
 	) ; 
 
       hr () ;
@@ -513,14 +484,13 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); *)
+	); 
     ] ;
 
   page "/clubs-sports/Sports" "RunOrg Clubs - Autres sports"
     [ composite `LR
 	(pride ~title:"Autres clubs de sports" "Solution standard pour les clubs de sports n'ayant pas encore de configuration dédiée")
-	(create "Sports")(*
-    ;
+	(create "Sports")   ;
 
     composite `LR 
 	(image 
@@ -529,29 +499,30 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	   "/public/img/preconf_sports.jpg")
 	(features [ 
 	  "Point fort",
-	  "" ;
+	  "Adapté à la plupart des besoins des clubs de sports" ;
 	    
 	  "Idéal pour...",
-	  "" ;
-	  
-	  "Egalement pensé pour...",
-	  ""	
-	  
+	  "Communiquer et organiser l'activité de son club" ;
+
 	  "Modèles et groupes inclus",
-	  ""	
-	  
-	  "Déjà utilisé par...",
-	  ""	
-	  
+	  "Groupes de niveaux"	
+
 	]) ; 
 	
 	ribbon ( important
-		""
-		"") ;
+		"Contactez-nous !"
+		"La solution pour votre sport n'existe pas encore ?
+		Contactez-nous pour que nous la construisions ensemble !") ;
 
 	(pride 
-	   ~title:""
-	   ""
+	   ~title:"Adapté à la plupart des sports !"
+	   "La solution Club de sport de RunOrg vous permet de bénéficier d'un intranet créé pour s'adapter à un très grand nombre de cas et de besoins de clubs de sport.
+
+Cette solution peut très facilement s’adapter pour répondre aux besoins de tous les sports dans le cadre de club mono-sport. Elle incorpore en standard les catégories sportives les plus utilisées. Sa prise en main rapide vous permet de l'adopter très rapidement.
+
+C'est cette configuration que nous vous conseillons s’il n’existe pas encore de préconfiguration dédiée à votre sport. De plus, nous pourrons vous « migrer » gratuitement vers celle conçue pour votre sport dès qu’elle sera disponible. 
+
+N’hésitez pas à nous contacter pour que nous aider à concevoir la solution pour votre sport !"
 	) ; 
 
       hr () ;
@@ -569,14 +540,13 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); *)
+	);
     ] ;
 
   page "/collectivites/Collectivites" "RunOrg Collectivités - Mairies et collectivités territoriales"
     [ composite `LR
 	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
-	(create "Collectivites")(*
-    ;
+	(create "Collectivites")   ;
 
     composite `LR 
 	(image 
@@ -585,38 +555,40 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	   "/public/img/preconf_collectivites.jpg")
 	(features [ 
 	  "Point fort",
-	  "" ;
+	  "Modernisation de la communication sans modification de l'organisation" ;
 	    
 	  "Idéal pour...",
-	  "" ;
+	  "Faciliter la communication inter-service, notamment autour de projets ou d'évènements" ;
 	  
 	  "Egalement pensé pour...",
-	  ""	
-	  
-	  "Modèles et groupes inclus",
-	  ""	
-	  
-	  "Déjà utilisé par...",
-	  ""	
-	  
+	  "Déléguer aux responsables la gestion de l'espace dédié à leur service"	
+
 	]) ; 
-	
-	ribbon ( important
-		""
-		"") ;
 
 	(pride 
-	   ~title:""
-	   ""
+	   ~title:"L'outil s'adapte à votre organisation"
+	   "Pour les collectivités territoriales nous proposons un intranet collaboratif qui s’adapte à leur organisation existante et à prix très compétitif.
+ 
+Tous les agents ont accès à un espace privé et sécurisé qui centralise la communication interne. Les différents services disposent d’espace privés, dont l’administration peut être déléguée aux responsables.
+
+Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènements et des réunions, de la possibilité d'échanger de manière sécurisé des documents, et de les partager aux seins de groupes restreins.
+"
 	) ; 
 
       hr () ;
 
-      composite `LR
+      composite `LRR
 	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	   ~title:"La technologie accessible"
+	   ~subtitle:"L'offre la plus économique du marché"
+	   ~link:("/pricing",
+		  "Tarifs des offres") 
+	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
+	   
+	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
+	   
+	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
+	) 
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -625,7 +597,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	     "Communication externe via le site Internet" ;
 	     "Outils de gestion et d'organisation collaboratifs" ;
 	     "Hébergement, mises à jour et maintenance informatique" ]
-	); *)
+	); 
     ] ;
 
   page "/collectivites/LocalNpPortal" "RunOrg Collectivités - Portail associatif communal"
