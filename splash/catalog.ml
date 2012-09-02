@@ -577,8 +577,18 @@ Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènem
 
       hr () ;
 
-      composite `LRR
-	(price
+      composite `LR
+       (bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	) 	
+
+        (pride
 	   ~title:"La technologie accessible"
 	   ~subtitle:"L'offre la plus économique du marché"
 	   ~link:("/pricing",
@@ -589,15 +599,7 @@ Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènem
 	   
 	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
 	) 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	
     ] ;
 
   page "/collectivites/LocalNpPortal" "RunOrg Collectivités - Portail associatif communal"
