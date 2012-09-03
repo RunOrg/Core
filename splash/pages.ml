@@ -15,15 +15,18 @@ let pages = Catalog.pages @ [
 	   [ "/public/videos/2012-04-13.mp4", "video/mp4" ;
 	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
 	(bullets 
-	   ~title:"Un nouvel outil"
+	   ~title:"La plateforme des associations"
 	   ~subtitle:"Découvez la meilleure façon de..."
 	   [ "Gérer vos membres, votre annuaire et vos adhésions." ;
 	     "Organiser des évènements, des réunions, des assemblées générales." ;
-	     "Déléguer des responsabilités tout en gardant le contrôle." ;
-	     "Communiquer plus facilement avec les membres de votre association."
+	     "Communiquer plus facilement avec les membres de votre association." ;
+		 "Déléguer des responsabilités tout en gardant le contrôle."
 		  ]) ;
       
-      hr () ;
+	ribbon ( important
+		"« Plus simple et plus puissant !»"
+		"« RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés, les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
+Suzel Chassefeire, présidente de la Chambre Des Associations") ;
 
       composite `LR
 	(pride
@@ -942,7 +945,8 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	    "/catalog/collectivites/LocalNpPortal", "Portail communal associatif" ] ;
 	  [ "/catalog/syndic-copropriete/Copro", "Syndics de copropriété" ;
 	    "/catalog/ComiteEnt", "Comités d'entreprise" ] ;
-	  [ "/catalog/collectivites/Collectivites", "Collectivités territoriales" ;
+	  [ "/catalog/federations/SectionSportEtudes", "Sections sport-études" ;
+	  "/catalog/collectivites/Collectivites", "Collectivités territoriales" ;
 	    "/catalog/entreprises/CompanyTraining", "Centres de formation" ] ;
 	  [ "/catalog/others/Events", "Organisation d'évènements" ;
 	    "/catalog/collectivites/Campaigns", "Campagnes électorales"] ;
