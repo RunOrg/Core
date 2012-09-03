@@ -15,7 +15,7 @@ let pages = Catalog.pages @ [
 	   [ "/public/videos/2012-04-13.mp4", "video/mp4" ;
 	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
 	(bullets 
-	   ~title:"La plateforme des associations"
+	   ~title:"L'outil des associations"
 	   ~subtitle:"Découvez la meilleure façon de..."
 	   [ "Gérer vos membres, votre annuaire et vos adhésions." ;
 	     "Organiser des évènements, des réunions, des assemblées générales." ;
@@ -25,7 +25,9 @@ let pages = Catalog.pages @ [
       
 	ribbon ( important
 		"« Plus simple et plus puissant !»"
-		"« RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés, les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
+		"« RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,
+les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… 
+Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
 Suzel Chassefeire, présidente de la Chambre Des Associations") ;
 
       composite `LR
@@ -953,12 +955,12 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	  [ "/catalog/entreprises/Company", "Entreprises" ]]
 	[ "Prix", [ `Text "Gratuit" ; 
 		    `Text "100€/an" ;
-		    `Text "500€/an" ;
+		    `Text "1000€/an" ;
 		    `Text "1000€/an" ;
 		    `Text "100€/an" ] ;
 	  "Accès inclus", [ `Text "2000" ;
 			    `Text "50" ;
-			    `Text "100" ;
+			    `Text "200" ;
 			    `Text "10000" ;
 			    `Text "10" ] ;
 	  "Espace disque", [ `Text "4 Go" ;
@@ -971,11 +973,11 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 					   `Tick ; 
 					   `Tick ; 
 					   `Tick ] ;
-	  "Assistance email", [ `Text "Normale" ;
-				`Text "Prioritaire" ;
-				`Text "Prioritaire" ;
-				`Text "Prioritaire" ;
-				`Text "Prioritaire" ] ;
+	  "Assistance premium", [ `Text "95€/an" ;
+				`Text "95€/an" ;
+				`Tick ;
+				`Tick ;
+				`Text "95€/an" ] ;
 	  "Formation initiale", [ `NoTick ;
 				       `NoTick ; 
 				       `Text "2 heures" ;
@@ -983,7 +985,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 				       `NoTick ] ;
 	  "Assistance téléphonique", [ `NoTick ;
 					    `NoTick ;
-					    `NoTick ;
+					    `Text "2 heures" ;
 					    `Text "2 heures" ;
 					    `NoTick ] ;
 	  "100 accès suppl.", [ `Link ("/contact", "Nous Contacter") ;
@@ -999,45 +1001,6 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	] ;
     ] ;
 
-(*  page "/collectivites/pricing" "RunOrg - Tarifs Collectivités"
-        ~section:"collectivites" 
-        ~head:"/collectivites/pricing"
-        ~subsection:"pricing-collectivites"
-      [ pricing 
-	~foot:"Prix exprimés hors taxes. Consultez nos <a href=\"/autres/accompagnement\">offres d'accompagnement</a> et <a href=\"/contact\">contactez-nous</a> pour toutes informations supplémentaires."
-	[ [ "/catalog/logiciel-intranet-extranet-maison-des-associations", "Maisons des associations" ;
-	    "/catalog/logiciel-intranet-mairies-portail-forum-association-associatif", "Portail communal associatif" ] ;
-	  [ "/catalog/logiciel-intranet-collectivites-mairies", "Intranet municipal" ] ;
-	  [ "/catalog/logiciel-intranet-campagne-electorale-election", "Campagnes électorales"] ]
-	[ "Prix", [ `Text "Gratuit" ; 
-		    `Text "500€/an" ;
-		    `Text "1000€/an"] ;
-	  "Accès inclus", [ `Text "2000" ;
-			    `Text "100" ;
-			    `Text "10000" ] ;
-	  "Espace disque", [ `Text "4 Go" ;
-			     `Text "5 Go" ;
-			     `Text "10 Go" ] ;
-	  "Hébergement et mises à jour", [ `Tick ; 
-					   `Tick ; 
-					   `Tick ] ;
-	  "Assistance email", [ `Text "Normale" ;
-				`Text "Prioritaire" ;
-				`Text "Prioritaire" ] ;
-	  "Formation initiale", [ `NoTick ;
-				       `Text "2 heures" ;
-				       `Text "2 heures" ] ;
-	  "Assistance téléphonique", [ `NoTick ;
-					   `NoTick ;
-					    `Text "2 heures" ] ;
-	  "100 accès suppl.", [ `Link ("/contact", "Nous Contacter") ;
-					 `Text "400€/an" ;
-					 `Text "25€/an" ] ;
-	  "Espace disque suppl.", [ `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" 	] 
-	];
-    ] *)
   
   (* END PAGES -------------------------------------------------------------- *)
 ] 

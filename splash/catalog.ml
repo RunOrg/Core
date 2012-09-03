@@ -512,10 +512,12 @@ RunOrg Salles de sport et coaching sportif vous offre une solution clef en main,
 	ribbon ( important
 		"Contactez-nous !"
 		"La solution pour votre sport n'existe pas encore ?
-		<a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires. pour que nous la construisions ensemble !") ;
+		Contactez-nous pour toutes informations supplémentaires. pour que nous la construisions ensemble !") ;
 
 	(pride 
 	   ~title:"Adapté à la plupart des sports !"
+	   ~link:("/contact",
+	       "Contactez-nous !")
 	   "La solution Club de sport de RunOrg vous permet de bénéficier d'un intranet créé pour s'adapter à un très grand nombre de cas et de besoins de clubs de sport.
 
 Cette solution peut très facilement s’adapter pour répondre aux besoins de tous les sports dans le cadre de club mono-sport. Elle incorpore en standard les catégories sportives les plus utilisées. Sa prise en main rapide vous permet de l'adopter très rapidement.
@@ -673,6 +675,10 @@ Vous disposez d’un annuaire des responsables associatif de votre commune, d’
 	  
 	]) ; 
 
+	ribbon ( important
+		"Solution approuvée par le RNMA"
+		"(Réseau National des Maisons des Associations)") ;
+
 	(pride 
 	   ~title:"Votre outil au service des associations"
 	   "Communiquez avec les responsables associatifs de votre commune et offrez à leurs associations un espace numérique pour améliorer et sécuriser leurs échanges. RunOrg permet également à votre Maison des associations de s'équiper d'un intranet pour ses agents.
@@ -791,7 +797,7 @@ Cette offre inclue l’ accompagnement et le support."
 	
 
 	(pride 
-	   ~title:""
+	   ~title:"Un outil pour toute votre fédération"
 	   "Disposez d’un outil qui permet à la fois de gérer la communication et l’organisation de la structure fédérale tout en étant ouvert vers les clubs et associations rattachées.
 
 De plus, nous pouvons paramétrer une solution spécialement pour l’ensemble de vos clubs et associations (un partenariat est alors mis en place : contactez-nous pour en savoir plus).
@@ -813,9 +819,9 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	) 	
 
        (bullets
-	   ~title:"Plusieurs options RunOrg existent pour les fédérations"
-	   ~subtitle:"<a href=\"/contact\">contactez-nous</a> pour toutes informations supplémentaires"
-	   ~ordered:true
+	   ~title:"De nombreuses possibilités"
+	   ~subtitle:"Il existe plusieurs options RunOrg pour les fédérations :"
+	   ~ordered:false
 	   [ "Utiliser l’outil uniquement pour votre structure fédérale" ;
 	     "Utiliser l’outil pour votre structure fédérale et l’ouvrir à vos clubs et association affiliés" ;
 	     "Recommander la solution préconfigurée RunOrg à vos clubs et associations" ;
@@ -864,10 +870,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	  "Communiquer avec les sportifs, les parents et entre encadrants" ;
 	  
 	  "Modèles et groupes inclus",
-	  "Formulaire d'inscription en ligne, modèle de fiches bilan (entraînement, compétition, scolaire, médical, etc.)"	
-	  
-	  "Déjà utilisé par...",
-	  "Le pôle espoir de la ligue Rhône Alpes de judo"	
+	  "Formulaire d'inscription en ligne, modèle de fiches bilan (entraînement, compétition, scolaire, médical, etc.)";
 	  
 	]) ; 
 
@@ -929,7 +932,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	]) ; 
 
 	(pride 
-	   ~title:"Premier intranet collaboratif pour les écoles primaires"
+	   ~title:"Premier intranet collaboratif pour les écoles"
 	   "La solution RunOrg pour les écoles primaires permet de regrouper dans un seul espace en ligne tous les outils de communication et d'organisation utiles aux enseignants.
 	   
 	   Ils peuvent utiliser cet espace privé pour initier leurs élèves à la communication numérique en toute sérénité, ils peuvent également communiquer et partager des documents et des photos avec les parents.
@@ -975,11 +978,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	  "Communiquer avec les sportifs, les parents et entre encadrants" ;
 	  
 	  "Modèles et groupes inclus",
-	  "Formulaire d'inscription en ligne, modèle de fiches bilan (entraînement, compétition, scolaire, médical, etc.)"	
-	  
-	  "Déjà utilisé par...",
-	  "Le pôle espoir de la ligue Rhône Alpes de judo"	
-	  
+	  "Formulaire d'inscription en ligne, modèle de fiches bilan (entraînement, compétition, scolaire, médical, etc.)" ;
 	]) ; 
 
 	(pride 
