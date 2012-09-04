@@ -73,7 +73,7 @@ let status ctx gid =
 
 module Signals = struct
 
-  let allow_propagation = Util.role <> `Put
+  let allow_propagation = O.role <> `Put
 
   let after_update_call, after_update = Sig.make (Run.list_iter identity)
     

@@ -8,13 +8,15 @@ open BatPervasives
 
 let environment = `Retheme 
 
+let role = Util.role () 
+
 let env = match environment with 
   | `Prod    -> "prod"
   | `Dev     -> "dev"
   | `Retheme -> "dev"
 
 let () = 
-  Configure.set `Log begin match Ohm.Util.role with 
+  Configure.set `Log begin match role with 
     | `Put
     | `Reset -> "-"
     | `Bot
@@ -43,7 +45,7 @@ let ctx = function
   | `FR -> new ctx Asset_AdLib.fr
 
 let put action = 
-  if Ohm.Util.role = `Put then 
+  if role = `Put then 
     ignore (Ohm.Run.eval (ctx `FR) action) 
 
 type 'a run = (ctx,'a) Run.t

@@ -28,6 +28,6 @@ module Actions = struct
 end
 
 module Main = Ohm.Main.Make(O.Reset)
-let _ = Main.run (Some O.run_async)
+let _ = Main.run ~async:O.run_async O.role
 
 
