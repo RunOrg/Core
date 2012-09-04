@@ -7,9 +7,8 @@ all:
 	cp _build/main.byte ../www/server
 
 distclean: 
-	$(OCAMLBUILD) -clean
-	rm -rf _build || echo ''
+	rm -r _build || echo ''
 
-clean:
-	$(OCAMLBUILD) -clean
+clean: distclean
+
 

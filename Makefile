@@ -17,5 +17,6 @@ reset: $(EXE)
 	$(EXE) --reset
 
 clean: 
+	rm -rf _build/*
 	make -C ocaml distclean
 	rm -f $(EXE) || echo '' 
