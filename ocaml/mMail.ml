@@ -36,19 +36,26 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
     in
     
     let () = 
+      try 
+	
+	Netsendmail.compose 
+	  ~in_charset:`Enc_utf8
+	  ~out_charset:`Enc_utf8
+	  ~from_addr:(from_name, from_email)
+	  ~to_addrs:[to_name, to_email]
+	  ~subject:subject
+	  ~content_type:("text/html", ["charset", Mimestring.mk_param "UTF-8"])
+	  ~container_type:("multipart/alternative",[])
+	  html
+	|> Netsendmail.sendmail ;
+	
+	Util.log "Sent to: %s <%s>" to_name to_email 
 
-      Netsendmail.compose 
-	~in_charset:`Enc_utf8
-	~out_charset:`Enc_utf8
-	~from_addr:(from_name, from_email)
-	~to_addrs:[to_name, to_email]
-	~subject:subject
-	~content_type:("text/html", ["charset", Mimestring.mk_param "UTF-8"])
-	~container_type:("multipart/alternative",[])
-	html
-      |> Netsendmail.sendmail ;
+      with exn -> 
 
-      Util.log "Sent to: %s <%s>" to_name to_email 
+	Util.log "Error sending to: %s <%s> : %s" to_name to_email
+	  (Printexc.to_string exn) 
+
     in
     
     return ()
