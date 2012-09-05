@@ -88,6 +88,12 @@ let pride ~title ?subtitle ?link text =
 		"Some " ^ obj [ "text", string text ; "url", string link ]) 
 	  ]]
 
+let quote ~who quote = 
+  let quote = "« "^quote^" »" in
+  call "Asset_Splash_Quote.render"
+    [ obj [ "quote", html   quote ;
+	    "who",   string who   ]]
+
 let price title subtitle text = 
   call "Asset_Splash_Price.render"
     [ obj [ "title",    string title ;

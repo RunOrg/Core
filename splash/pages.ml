@@ -30,6 +30,9 @@ les albums photos, les formulaires d’inscription, les newsletters, les sondage
 Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
 Suzel Chassefeire, présidente de la Chambre Des Associations") ;
 
+	ribbon 
+	  (quote ~who:"Auteur" "Citation") ;
+	     
       composite `LR
 	(pride
 	   ~title:"Prise en main immédiate"
