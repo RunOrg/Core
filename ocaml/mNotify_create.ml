@@ -192,9 +192,10 @@ let () =
 	  ((change # after).MMembership.Details.where) 
 
   else if List.exists (function `User w -> w # what | _ -> false) (change # diffs) then
+
     (* This might be a join request. Let's check whether it is *)
     if MMembership.Details.(
-      (change # before).admin = None 
+      (change # after).admin = None 
       && (match (change # before).user with Some (b,_,_) -> not b | _ -> true))
     then 
       (* This certainly looks like a join request, but does the group enforce
