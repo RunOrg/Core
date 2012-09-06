@@ -30,8 +30,8 @@ les albums photos, les formulaires d’inscription, les newsletters, les sondage
 Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
 Suzel Chassefeire, présidente de la Chambre Des Associations") ;
 
-	ribbon 
-	  (quote ~who:"Auteur" "Citation") ;
+(*	ribbon 
+	  (quote ~who:"Suzel Chassefeire, présidente de la Chambre Des Associations" "RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… Une seule plateforme pour tout faire : c’est plus simple et plus puissant !") ; *)
 	     
       composite `LR
 	(pride
