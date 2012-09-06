@@ -87,3 +87,27 @@
 | `Mail_NotifyResend_Intro name -> !! "Bonjour %s" name
 | `Mail_NotifyResend_Explain -> "Vous avez visité un lien expiré, voici un nouveau lien à jour :"
 | `Mail_NotifyResend_Thanks -> "À bientôt !"
+
+| `Mail_Notify_Welcome_Title -> "Bienvenue sur RunOrg !"
+| `Mail_Notify_Welcome_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_Welcome_Explanation_WithPassword -> "Vous venez de créer un compte sur notre plateforme et nous vous en remercions !
+
+RunOrg vous permet de personnaliser votre profil et les informations que vous partagez avec vos organisations. Pour en savoir plus, cliquez sur le lien ci-dessous :"
+| `Mail_Notify_Welcome_Explanation_WithoutPassword -> 
+   "Vous venez de vous connecter pour la première fois sur notre plateforme et nous vous en remercions !
+
+Pour vous y connecter à l'avenir et pour protéger votre vie privée : un mot de passe vous sera demandé. Pour le saisir, cliquez sur lien ci-dessous :"
+
+| `Mail_Notify_Welcome_Thanks asso -> !! "Bien cordialement,
+
+L'équipe RunOrg"
+
+
+
+
+
+
+
+
+
+
