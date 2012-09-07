@@ -233,24 +233,23 @@ let confirm uid =
  
   let uid = IUser.decay uid in 
   let update user = 
-    if user.Data.confirmed then (None, true), `keep else 	      
-      if user.Data.passhash = None then (None, false), `keep else 
-	let o = Data.({ user with confirmed = true }) in
-	(Some o, true), `put o
+    if user.Data.confirmed then None, `keep else 	      
+      let o = Data.({ user with confirmed = true }) in
+      (Some o), `put o
   in
   
   let! result = ohm $ Tbl.transact uid 
     (function
       | None      -> return (None,`keep)
-      | Some data -> let res, act = update data in 
-		     return (Some res, act))
+      | Some data -> let result, act = update data in
+		     return (Some result, act))
   in
 
   match result with 
-    | Some (Some o, x) -> let! () = ohm $ Signals.on_confirm_call (uid, extract o) in
-			  return x
-    | Some (None  , x) -> return x
-    | None             -> return false
+    | Some (Some o) -> let! () = ohm $ Signals.on_confirm_call (uid, extract o) in
+		       return true
+    | Some None -> return true
+    | None   -> return false
         
 let confirmed uid = 
   let! user = ohm_req_or (return false) $ Tbl.get (IUser.decay uid) in

@@ -90,5 +90,4 @@ val from_token :
   -> [ `Valid   of Store.t * [`Old] ICurrentUser.id
      | `Expired of IUser.t
      | `Missing 
-     | `New     of [`New] ICurrentUser.id 
      ] O.run 

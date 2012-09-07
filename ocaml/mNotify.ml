@@ -31,5 +31,5 @@ let from_token nid token current =
 	(* User is confirmed, log in *)
 	return $ `Valid (notify,IUser.Assert.is_old uid)
       else
-	(* Not confirmed : return a new-user to allow setting password. *)
-	return $ `New (IUser.Assert.is_new uid) 
+	(* Not confirmed : this means the user is missing. *)
+	return $ `Missing
