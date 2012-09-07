@@ -38,6 +38,7 @@
       font-size: 8px;
       font-family: verdana;
       text-align: center;    
+      z-index: 100;
     }
   }
 
@@ -62,6 +63,7 @@
 <script type="urls:string list">
 
 init = ($w, scale, lines) ->
+  lines.reverse()
   $c = $ "<div class=-chart/>"
   $w.append $c
   $w.data 'chart', {$c:$c,l:lines,s:Math.exp(2) * scale}
@@ -76,9 +78,9 @@ init here.$i, 30, [
 ] 
 
 init here.$l, 5, [
+  { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Notifications" },
   { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Logins manuels" },
   { css : { backgroundColor : "#EE6", borderColor : "#BB4" }, name : "Inscriptions" },
-  { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Notifications" },
   { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Pass Reset" }
 ]
 
@@ -97,12 +99,13 @@ init here.$m, 1, [
 ]
 
 init here.$e, 10, [
-  { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Groupes" },
   { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Activités" },
+  { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Groupes" },
   { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Forums" }
 ]
 
 draw = ($w,y) ->
+  y.reverse() 
   c = $w.data 'chart'
   $col = $("<div class=-col/>")
   toth = 0
@@ -115,7 +118,7 @@ draw = ($w,y) ->
       bh = Math.min(2,h) 
       h = Math.max(0,h-2)     
       $box = $("<div/>").css(line.css).css({height:h,borderTopWidth:bh}).text(y[i])
-      $col.append $box
+      $col.prepend $box
   toth = c.s * Math.log (1 + toth)
   if toth > c.$c.height()
     c.$c.css({height:toth}) 
@@ -125,11 +128,11 @@ draw = ($w,y) ->
 
 receive = (s) -> 
   draw here.$i, [ s.instanceCreate ]
-  draw here.$l, [ s.login.manual, s.login.signup, s.login.notify, s.login.reset ]
+  draw here.$l, [ s.login.notify, s.login.manual, s.login.signup, s.login.reset ]
   draw here.$c, [ s.confirm ]
   draw here.$p, [ s.post.item, s.post.comment, s.post.broadcast ]
   draw here.$m, [ s.mail ]
-  draw here.$e, [ s.entity.group, s.entity.event, s.entity.forum ]
+  draw here.$e, [ s.entity.event, s.entity.group, s.entity.forum ]
 
 read = ->
   return if !urls.length
