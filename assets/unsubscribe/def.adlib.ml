@@ -1,6 +1,7 @@
 | `Unsubscribe_Send_Title
 | `Unsubscribe_Send_Prelude
 | `Unsubscribe_Send_Body
+| `Unsubscribe_Send_ModifyParameters
 | `Unsubscribe_Send_Warning
 | `Unsubscribe_Send_Sorry
 
