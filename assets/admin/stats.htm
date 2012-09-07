@@ -35,7 +35,8 @@
     }
     &:hover {
       box-shadow: 0 0 3px #555;
-      font-size: 12px;
+      font-size: 8px;
+      font-family: verdana;
       text-align: center;    
     }
   }
@@ -63,7 +64,7 @@
 init = ($w, scale, lines) ->
   $c = $ "<div class=-chart/>"
   $w.append $c
-  $w.data 'chart', {$c:$c,l:lines,s:scale}
+  $w.data 'chart', {$c:$c,l:lines,s:Math.exp(1)*scale}
   for line in lines 
     $l = $("<span class=-sq/>").css(line.css)
     $w.append($l)
@@ -106,13 +107,17 @@ draw = ($w,y) ->
   $col = $("<div class=-col/>")
   toth = 0
   for line,i in c.l 
-    h = Math.floor(y[i] * c.s) 
+    h = y[i] 
+    o = Math.log toth 
     toth += h
+    n = Math.log toth 
+    h = (n - o) * c.s 
     if h > 0 
       bh = Math.min(2,h) 
       h = Math.max(0,h-2)     
       $box = $("<div/>").css(line.css).css({height:h,borderTopWidth:bh}).text(y[i])
       $col.append $box
+  toth = c.s * Math.log toth
   if toth > c.$c.height()
     c.$c.css({height:toth}) 
   w = c.$c.children().length * 20 
