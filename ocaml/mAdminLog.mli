@@ -20,6 +20,16 @@ module Payload : sig
 
 end
 
+module Stats : Ohm.Fmt.FMT with    
+  type t = <
+    instanceCreate : int ;
+    login : < manual : int ; signup : int ; notify : int ; reset : int > ;
+    confirm : int ;
+    post : < item : int ; comment : int ; broadcast : int ; forward : int > ;
+    mail : int ;
+    entity : < forum : int ; event : int ; group : int > ;
+  >
+
 type t = <
   uid  : IUser.t ;
   iid  : IInstance.t option ;
@@ -34,3 +44,5 @@ val log :
   -> ?time:float
   -> Payload.t
   -> (#Ohm.CouchDB.ctx,unit) Ohm.Run.t
+
+val stats : int -> (#Ohm.CouchDB.ctx,Stats.t) Ohm.Run.t

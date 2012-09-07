@@ -60,3 +60,74 @@ let log ?id ~uid ?iid ?time payload =
     | None -> Run.map ignore (Tbl.create data)
     | Some id -> Tbl.set id data 
 
+(* Stats extraction ----------------------------------------------------------------------- *)
+
+module Stats = struct
+
+  include Fmt.Make(struct
+
+    type json t = <
+      instanceCreate : int ;
+      login : < manual : int ; signup : int ; notify : int ; reset : int > ;
+      confirm : int ;
+      post : < item : int ; comment : int ; broadcast : int ; forward : int > ;
+      mail : int ;
+      entity : < forum : int ; event : int ; group : int > ;
+    >
+  end)
+
+  module Count = CouchDB.ReduceView(struct
+    module Key = Fmt.Float
+    module Value = Fmt.Make(struct type json t = (!string,int) ListAssoc.t end)
+    module Design = Design
+    let name = "stats"
+    let map = "var k = (typeof doc.what === 'string') ? doc.what : doc.what[0];
+               if (k == 'ec') k += doc.what[1];
+               if (k == 'bp') k += doc.what[1];
+               var o = {};
+               o[k] = 1;
+               emit(doc.time,o);"
+    let reduce = "var r = {}; 
+                  for (var i = 0; i < values.length; ++i)  
+                    for (var k in values[i]) 
+                      r[k] = (r[k] || 0) + values[i][k];
+                  return r;"
+    let group = false
+    let level = None
+  end)
+
+end
+
+let stats days_ago = 
+  let! time = ohmctx (#time) in
+  let  day  = 3600. *. 24. in
+  let  endkey = time -. (float_of_int days_ago *. day) in
+  let  startkey = endkey -. day in
+  let! data = ohm $ Stats.Count.reduce_query ~startkey ~endkey ~endinclusive:false () in
+
+  let  stats = match data with (_, stats) :: _ -> stats | _ -> [] in
+  let  map   = BatPMap.of_enum (BatList.enum stats) in
+  let  count key = try BatPMap.find key map with _ -> 0 in 
+
+  return (object
+    method instanceCreate = count "ic"
+    method login = (object
+      method manual = count "lm"
+      method signup = count "ls"
+      method notify = count "ln"
+      method reset  = count "lr"
+    end)
+    method confirm = count "uc"
+    method post = (object
+      method item = count "ic"
+      method comment = count "cc"
+      method broadcast = count "bpp"
+      method forward = count "bpf"
+    end)
+    method mail = count "m"
+    method entity = (object
+      method forum = count "ecf"
+      method event = count "ece"
+      method group = count "ecg"
+    end)
+  end)
