@@ -77,7 +77,7 @@ module Stats = struct
   end)
 
   module Count = CouchDB.ReduceView(struct
-    module Key = Fmt.Float
+    module Key = Fmt.Make(struct type json t = (float option) end) 
     module Value = Fmt.Make(struct type json t = (!string,int) ListAssoc.t end)
     module Design = Design
     let name = "stats"
@@ -101,9 +101,14 @@ end
 let stats days_ago = 
   let! time = ohmctx (#time) in
   let  day  = 3600. *. 24. in
-  let  endkey = time -. (float_of_int days_ago *. day) in
+  let  endkey   = time -. (float_of_int days_ago *. day) in
   let  startkey = endkey -. day in
-  let! data = ohm $ Stats.Count.reduce_query ~startkey ~endkey ~endinclusive:false () in
+
+  let! data = ohm $ Stats.Count.reduce_query
+    ~startkey:(Some startkey)
+    ~endkey:(Some endkey) 
+    ~endinclusive:false () 
+  in
 
   let  stats = match data with (_, stats) :: _ -> stats | _ -> [] in
   let  map   = BatPMap.of_enum (BatList.enum stats) in

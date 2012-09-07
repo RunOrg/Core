@@ -28,7 +28,14 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method title    = return "Sites web actifs"
       method subtitle = Some (return "Ceux qui ont publié le plus d'annonces chaque mois")
      end) ;
-    
+
+    (object
+      method img      = VIcon.Large.chart_bar
+      method url      = Parents.stats # url 
+      method title    = return "Statistiques"
+      method subtitle = Some (return "Données quotidiennes sur l'utilisation de RunOrg") 
+     end)
+
   ] in
   
   page cuid "Administration" (object

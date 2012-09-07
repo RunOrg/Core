@@ -1,0 +1,139 @@
+<div class="admin-stats">
+
+  <div {$i}></div>
+  <div {$l}></div>
+  <div {$c}></div>
+  <div {$p}></div>
+  <div {$m}></div>
+  <div {$e}></div>
+
+</div>
+
+<style>
+.admin-stats {
+
+  > div { margin-bottom: 30px; }
+  
+  .-chart {
+    position: relative; 
+    height: 100px;
+    border: 1px solid #BBB;
+    background-color: white;
+    margin-bottom: 9px;
+  }
+
+  .-col {
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 20px;
+    font-size: 0px;
+    div {
+      overflow: hidden;
+      cursor: default;
+      border-top: 1px solid white;
+    }
+    &:hover {
+      box-shadow: 0 0 3px #555;
+      font-size: 12px;
+      text-align: center;    
+    }
+  }
+
+  .-sq {
+    border-top-style: solid;
+    border-top-width: 2px;
+    display: inline-block;
+    height: 18px;
+    margin-right: 5px;
+    margin-left: 12px;
+    vertical-align: top;
+    width: 20px;
+  }
+
+  .-l {
+    font-size: 14px;
+    color: #333;  
+  } 
+}
+</style>
+
+<script type="urls:string list">
+
+init = ($w, scale, lines) ->
+  $c = $ "<div class=-chart/>"
+  $w.append $c
+  $w.data 'chart', {$c:$c,l:lines,s:scale}
+  for line in lines 
+    $l = $("<span class=-sq/>").css(line.css)
+    $w.append($l)
+    $l = $("<span class=-l/>").text(line.name)
+    $w.append($l)
+
+init here.$i, 30, [
+  { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Instances Créées" }
+] 
+
+init here.$l, 5, [
+  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Logins manuels" },
+  { css : { backgroundColor : "#EE6", borderColor : "#BB4" }, name : "Inscriptions" },
+  { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Notifications" },
+  { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Pass Reset" }
+]
+
+init here.$c, 10, [
+  { css : { backgroundColor : "#E6E", borderColor : "#B4B" }, name : "Confirmations" }
+]
+
+init here.$p, 8, [
+  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Messages, Photos, Fichiers" },
+  { css : { backgroundColor : "#EE6", borderColor : "#BB4" }, name : "Commentaires" },
+  { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Annonces" },
+]
+
+init here.$m, 1, [
+  { css : { backgroundColor : "#DDD", borderColor : "#AAA" }, name : "Mails Envoyés" },
+]
+
+init here.$e, 10, [
+  { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Groupes" },
+  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Activités" },
+  { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Forums" }
+]
+
+draw = ($w,y) ->
+  c = $w.data 'chart'
+  $col = $("<div class=-col/>")
+  toth = 0
+  for line,i in c.l 
+    h = Math.floor(y[i] * c.s) 
+    toth += h
+    if h > 0 
+      bh = Math.min(2,h) 
+      h = Math.max(0,h-2)     
+      $box = $("<div/>").css(line.css).css({height:h,borderTopWidth:bh}).text(y[i])
+      $col.append $box
+  if toth > c.$c.height()
+    c.$c.css({height:toth}) 
+  w = c.$c.children().length * 20 
+  $col.css({right:w})
+  c.$c.prepend $col
+
+receive = (s) -> 
+  draw here.$i, [ s.instanceCreate ]
+  draw here.$l, [ s.login.manual, s.login.signup, s.login.notify, s.login.reset ]
+  draw here.$c, [ s.confirm ]
+  draw here.$p, [ s.post.item, s.post.comment, s.post.broadcast ]
+  draw here.$m, [ s.mail ]
+  draw here.$e, [ s.entity.group, s.entity.event, s.entity.forum ]
+
+read = ->
+  return if !urls.length
+  url = urls.shift()
+  $.getJSON url, {}, (data) ->
+    receive data.stats
+    read()
+
+read()
+
+</script>
