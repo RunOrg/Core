@@ -6,6 +6,7 @@ open BatPervasives
 
 open CAdmin_common
 
+module Stats   = CAdmin_stats
 module Parents = CAdmin_parents
 module Active  = CAdmin_active
 module Public  = CAdmin_public
