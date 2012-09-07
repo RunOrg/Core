@@ -14,19 +14,30 @@
 
   > div { margin-bottom: 30px; }
   
+  .-bar {
+    border-top: 1px dashed #CCC;
+    bottom: 0;
+    color: #BBB;
+    font-family: verdana;
+    font-size: 8px;
+    position: absolute;
+    width: 100%;
+  }
+
   .-chart {
     position: relative; 
     height: 100px;
+    margin: 0 0px 9px 1px;
     border: 1px solid #BBB;
     background-color: white;
-    margin-bottom: 9px;
+    overflow: hidden;
   }
 
   .-col {
     bottom: 0;
     overflow: hidden;
     position: absolute;
-    width: 20px;
+    width: 32px;
     font-size: 0px;
     div {
       overflow: hidden;
@@ -34,7 +45,7 @@
       border-top: 1px solid white;
     }
     &:hover {
-      box-shadow: 0 0 3px #555;
+      box-shadow: 0 0 9px #333;
       font-size: 8px;
       font-family: verdana;
       text-align: center;    
@@ -65,15 +76,21 @@
 init = ($w, scale, lines) ->
   lines.reverse()
   $c = $ "<div class=-chart/>"
+  scale *= Math.exp(2)  
   $w.append $c
-  $w.data 'chart', {$c:$c,l:lines,s:Math.exp(2) * scale}
+  $w.data 'chart', {$c:$c,l:lines,s:scale}
+
+  for h in [ 10000, 10000, 1000, 100, 10 ] 
+    rh = Math.log(h) * scale - 1
+    $c.append $("<div class=-bar/>").text(h).css({height:rh})    
+
   for line in lines 
     $l = $("<span class=-sq/>").css(line.css)
     $w.append($l)
     $l = $("<span class=-l/>").text(line.name)
     $w.append($l)
 
-init here.$i, 30, [
+init here.$i, 10, [
   { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Instances Créées" }
 ] 
 
@@ -84,13 +101,13 @@ init here.$l, 5, [
   { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Pass Reset" }
 ]
 
-init here.$c, 10, [
+init here.$c, 8, [
   { css : { backgroundColor : "#E6E", borderColor : "#B4B" }, name : "Confirmations" }
 ]
 
-init here.$p, 8, [
-  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Messages, Photos, Fichiers" },
+init here.$p, 5, [
   { css : { backgroundColor : "#EE6", borderColor : "#BB4" }, name : "Commentaires" },
+  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Messages, Photos, Fichiers" },
   { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Annonces" },
 ]
 
@@ -98,7 +115,7 @@ init here.$m, 1, [
   { css : { backgroundColor : "#DDD", borderColor : "#AAA" }, name : "Mails Envoyés" },
 ]
 
-init here.$e, 10, [
+init here.$e, 5, [
   { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Activités" },
   { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Groupes" },
   { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Forums" }
@@ -121,16 +138,16 @@ draw = ($w,y) ->
       $col.prepend $box
   toth = c.s * Math.log (1 + toth)
   if toth > c.$c.height()
-    c.$c.css({height:toth}) 
-  w = c.$c.children().length * 20 
+    c.$c.css({height:toth+5}) 
+  w = c.$c.children(".-col").length * 33 + 1 
   $col.css({right:w})
-  c.$c.prepend $col
+  c.$c.children(".-bar:last").after $col
 
 receive = (s) -> 
   draw here.$i, [ s.instanceCreate ]
   draw here.$l, [ s.login.notify, s.login.manual, s.login.signup, s.login.reset ]
   draw here.$c, [ s.confirm ]
-  draw here.$p, [ s.post.item, s.post.comment, s.post.broadcast ]
+  draw here.$p, [ s.post.comment, s.post.item, s.post.broadcast ]
   draw here.$m, [ s.mail ]
   draw here.$e, [ s.entity.event, s.entity.group, s.entity.forum ]
 
