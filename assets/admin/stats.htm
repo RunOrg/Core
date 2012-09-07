@@ -80,7 +80,7 @@ init = ($w, scale, lines) ->
   $w.append $c
   $w.data 'chart', {$c:$c,l:lines,s:scale}
 
-  for h in [ 10000, 10000, 1000, 100, 10 ] 
+  for h in [ 100000, 10000, 1000, 100, 10 ] 
     rh = Math.log(h) * scale - 1
     $c.append $("<div class=-bar/>").text(h).css({height:rh})    
 
@@ -90,7 +90,7 @@ init = ($w, scale, lines) ->
     $l = $("<span class=-l/>").text(line.name)
     $w.append($l)
 
-init here.$i, 10, [
+init here.$i, 5, [
   { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Instances Créées" }
 ] 
 
@@ -101,7 +101,7 @@ init here.$l, 5, [
   { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Pass Reset" }
 ]
 
-init here.$c, 8, [
+init here.$c, 5, [
   { css : { backgroundColor : "#E6E", borderColor : "#B4B" }, name : "Confirmations" }
 ]
 
@@ -111,7 +111,7 @@ init here.$p, 5, [
   { css : { backgroundColor : "#6EE", borderColor : "#4BB" }, name : "Annonces" },
 ]
 
-init here.$m, 1, [
+init here.$m, 2, [
   { css : { backgroundColor : "#DDD", borderColor : "#AAA" }, name : "Mails Envoyés" },
 ]
 
