@@ -4,7 +4,9 @@
 | `Unsubscribe_Send_Body -> 
   "Nous croyons fermement que chaque individu doit rester maître de ses données. Si vous nous le demandez, nous irons effacer vos données personnelles dans les bases de données de nos associations clientes, et nous les empêcherons également de vous envoyer d'autres messages."
 | `Unsubscribe_Send_ModifyParameters -> 
-  "Si vous souhaitez simplement modifier les paramètres d'envoie des notifications, connectez-vous à votre interface via le lien suivant:"
+  "Si vous souhaitez simplement modifier les paramètres d'envoi des notifications, connectez-vous à votre interface via le lien suivant:"
+| `Unsubscribe_Send_ModifyLink -> 
+"Modifier mes paramètres d'envoi des notifications"
 | `Unsubscribe_Send_Warning -> 
   "Vous allez recevoir un email contenant un lien pour supprimer votre compte. Votre compte et toutes les données associées seront alors définitivement et irréversiblement supprimés." 
 | `Unsubscribe_Send_Sorry -> 
