@@ -123,6 +123,11 @@ val try_update :
   -> view:[`Private|`Normal|`Public]
   -> unit O.run
 
+val delete : 
+     [`IsSelf] IAvatar.id
+  -> [`Admin] t
+  -> unit O.run
+
 val set_picture : 
      [`IsSelf] IAvatar.id 
   -> [`Admin] t

@@ -42,7 +42,27 @@ let try_get context id =
 let () = 
   let! v = Sig.listen E.Store.Signals.version_create in
   Signals.on_update_call (IEntity.Assert.bot (E.Store.version_object v))
-	      
+
+(* Updating entities ----------------------------------------------------------------------- *)
+    
+let delete self t = 
+
+  let  mod_id = Id.gen () in
+
+  let  aid = IAvatar.decay self in
+  let  who = `user (mod_id, aid) in
+
+  let  diffs = [ `Status (`Delete aid) ] in
+
+  let! _ = ohm $ E.Store.update
+    ~id:(IEntity.decay (Get.id t)) 
+    ~diffs
+    ~info:(MUpdateInfo.info ~who)
+    ()
+  in
+
+  return () 
+	     
 (* Updating entities ----------------------------------------------------------------------- *)
     
 let try_update self t ~draft ~name ~data ~view = 
