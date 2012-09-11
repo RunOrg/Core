@@ -84,3 +84,7 @@
 | `Event_Delete_Title
 | `Event_Delete_Link
 | `Event_Delete_Sub 
+
+| `Event_Delete_Warning 
+| `Event_Delete_Submit 
+| `Event_Delete_Cancel 

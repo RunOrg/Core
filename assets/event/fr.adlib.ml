@@ -92,3 +92,7 @@ end
 | `Event_Delete_Title -> "Supprimer"
 | `Event_Delete_Link -> "Supprimer"
 | `Event_Delete_Sub -> "Effacer cette activité et toutes les données associées"
+
+| `Event_Delete_Warning -> "La suppression d'une activité est permanente !"
+| `Event_Delete_Submit -> "Supprimer"
+| `Event_Delete_Cancel -> "Ne pas supprimer"
