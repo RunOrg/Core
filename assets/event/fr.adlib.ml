@@ -88,3 +88,7 @@ end
 | `Event_JoinForm_Sub -> "Demandez des informations aux participants"
 
 | `Event_Columns_Title -> "Colonnes"
+
+| `Event_Delete_Title -> "Supprimer"
+| `Event_Delete_Link -> "Supprimer"
+| `Event_Delete_Sub -> "Effacer cette activité et toutes les données associées"

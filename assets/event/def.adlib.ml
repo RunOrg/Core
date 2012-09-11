@@ -80,3 +80,7 @@
 | `Event_JoinForm_Sub 
 
 | `Event_Columns_Title 
+
+| `Event_Delete_Title
+| `Event_Delete_Link
+| `Event_Delete_Sub 

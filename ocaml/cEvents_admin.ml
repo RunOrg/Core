@@ -54,6 +54,13 @@ let () = define UrlClient.Events.def_admin begin fun parents entity access ->
 	method subtitle = Some (AdLib.get `Event_JoinForm_Sub)
        end) ;
 
+      (object
+	method img      = VIcon.Large.cross
+	method url      = ""
+	method title    = AdLib.get `Event_Delete_Link
+	method subtitle = Some (AdLib.get `Event_Delete_Sub)
+       end) ;
+
     ] in
     
     Asset_Admin_Page.render (object
