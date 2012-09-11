@@ -14,6 +14,7 @@ module Join    = CEvents_admin_join
 module Invite  = CEvents_admin_invite
 module JForm   = CEvents_admin_jForm
 module Columns = CEvents_admin_cols
+module Delete  = CEvents_admin_delete
 
 let () = define UrlClient.Events.def_admin begin fun parents entity access -> 
   O.Box.fill begin 
@@ -56,7 +57,7 @@ let () = define UrlClient.Events.def_admin begin fun parents entity access ->
 
       (object
 	method img      = VIcon.Large.cross
-	method url      = ""
+	method url      = parents # delete # url 
 	method title    = AdLib.get `Event_Delete_Link
 	method subtitle = Some (AdLib.get `Event_Delete_Sub)
        end) ;

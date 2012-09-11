@@ -1,0 +1,16 @@
+<div style="text-align:center; padding: 40px">
+  <p>{`Event_Delete_Warning}</p>
+  <div>
+    <a href="javascript:void(0)" style="display:inline-block" class="action-button -red" {$del}>{`Event_Delete_Submit}</a>
+    <a href="{cancel}" style="display:inline-block" class="action-button">{`Event_Delete_Cancel}</a>
+  </div>
+</div>
+
+<script type="del:json">
+s = false
+here.$del.click -> 
+  return if s
+  s = true
+  to_endpoint del, {}, (data) ->
+    call data.code 
+</script>
