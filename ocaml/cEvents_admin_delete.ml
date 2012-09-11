@@ -26,7 +26,7 @@ let () = define UrlClient.Events.def_delete begin fun parents entity access ->
 
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ] 
-      method here = parents # edit # title
+      method here = parents # delete # title
       method body = Asset_Event_Delete.render (object
 	method cancel = parents # admin # url
 	method del = JsCode.Endpoint.to_json 
