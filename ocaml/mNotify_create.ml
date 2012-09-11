@@ -44,13 +44,6 @@ let () =
   let! uid, _ = Ohm.Sig.listen MUser.Signals.on_confirm in
   to_admins (`NewUser (IUser.decay uid)) 
 
-(* Create a notification when an user joins an instance ------------------------------------- *)
-
-let () = 
-  let send (_,aid,iid) = to_admins (`NewJoin (iid,aid)) in
-  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_admin  send ;
-  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_member send
-
 (* Notify user when they are added as a member or admin ------------------------------------- *)
 
 let () = 

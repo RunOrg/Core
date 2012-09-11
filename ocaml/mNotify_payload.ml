@@ -90,7 +90,7 @@ let author cuid =
       return $ Some (`RunOrg None)
 	
     | `NewJoin (iid,aid) -> 
-      return $ Some (`Person (aid,iid))
+      return None
 	
 let channel : t -> MNotifyChannel.t = function 
   | `NewWallItem   (what,_)   -> `NewWallItem what
