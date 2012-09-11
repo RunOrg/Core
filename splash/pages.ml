@@ -1004,6 +1004,26 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	] ;
     ] ;
 
+(*  page "/we-help-you" "Associations : WE HELP YOU"
+    ~section:"associations" 
+    [       
+
+
+	composite `LR
+	  (price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	  (bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]
+	) ; *)
+
   
   (* END PAGES -------------------------------------------------------------- *)
 ] 

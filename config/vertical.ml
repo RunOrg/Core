@@ -757,6 +757,35 @@ let maisonAsso = vertical "MaisonAsso"
 
 (* ========================================================================== *)
 
+let health = vertical "Health"
+  ~name:"Santé & médical "
+  ~forms:ProfileForm.([ simple ; test ])
+  Template.([
+    initial "entity.sample.sub-runorg.name" subscriptionForever
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
+    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+      ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
+    initial "entity.sample.forum-public.classified.name" forum
+      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
+    initial "entity.sample.forum-public.user-support.name" forum
+      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg")
+  ])
+  Template.([
+    groupSimple ;
+    groupCollaborative ;
+    pollSimple ;
+    pollYearly ;
+    courseSimple ;
+    eventSimple ;
+    eventMeeting ;
+    eventAg ;
+    eventPetition ;
+  ])
+;;
+
+(* ========================================================================== *)
+
+
 let multiSports = vertical "MultiSports"
   ~old:"v:multi-sports"
   ~name:"Club multi-sports"
@@ -1218,6 +1247,9 @@ let () = catalog [
               None ; *)
     inCatalog simple
               (adlib "VerticalCatalogOtherName" "Autres")
+              None ;
+    inCatalog health
+              (adlib "VerticalCatalogHealthName" "Santé & médical")
               None ;
   ] ;
 ] ;;
