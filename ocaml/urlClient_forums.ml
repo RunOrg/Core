@@ -16,6 +16,7 @@ let edit,   def_edit   = child def_admin  "frm/edit"
 let people, def_people = child def_admin  "frm/people"
 let join,   def_join   = child def_people "frm/join"
 let invite, def_invite = child def_admin  "frm/invite"
+let delete, def_delete = child def_admin  "frm/delete"
 
 let tabs = 
   (function 

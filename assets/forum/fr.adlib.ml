@@ -29,3 +29,11 @@
 | `Forum_Edit_Title -> "Modifier"
 | `Forum_Edit_Link -> "Modifier ce forum"
 | `Forum_Edit_Sub -> "Changez le nom, la visibilité et les autres options"
+
+| `Forum_Delete_Title -> "Supprimer"
+| `Forum_Delete_Link -> "Supprimer"
+| `Forum_Delete_Sub -> "Effacer ce forum et toutes les données associées"
+
+| `Forum_Delete_Warning -> "La suppression d'un forum est permanente !"
+| `Forum_Delete_Submit -> "Supprimer"
+| `Forum_Delete_Cancel -> "Ne pas supprimer"

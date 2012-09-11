@@ -20,5 +20,6 @@ let parents title key eid = object
   method admin   = make `Forum_Admin_Title   admin    key eid 
   method edit    = make `Forum_Edit_Title    edit     key eid 
   method people  = make `Forum_People_Title  people   key eid 
+  method delete  = make `Forum_Delete_Title  delete   key eid
 end
 

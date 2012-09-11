@@ -25,3 +25,11 @@
 | `Forum_Edit_Title 
 | `Forum_Edit_Link 
 | `Forum_Edit_Sub 
+
+| `Forum_Delete_Title
+| `Forum_Delete_Link
+| `Forum_Delete_Sub
+
+| `Forum_Delete_Warning
+| `Forum_Delete_Submit
+| `Forum_Delete_Cancel

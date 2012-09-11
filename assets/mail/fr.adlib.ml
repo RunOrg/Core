@@ -98,7 +98,7 @@ RunOrg vous permet de personnaliser votre profil et les informations que vous pa
 
 Pour vous y connecter à l'avenir et pour protéger votre vie privée : un mot de passe vous sera demandé. Pour le saisir, cliquez sur lien ci-dessous :"
 
-| `Mail_Notify_Welcome_Thanks asso -> !! "Bien cordialement,
+| `Mail_Notify_Welcome_Thanks -> "Bien cordialement,
 
 L'équipe RunOrg"
 
