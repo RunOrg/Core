@@ -1,6 +1,6 @@
 (* © 2012 RunOrg *)
 
-(* types *)
+(* Types *)
 
 type 'relation t
 
