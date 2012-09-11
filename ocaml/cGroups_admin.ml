@@ -12,6 +12,7 @@ module Invite = CGroups_admin_invite
 module Edit   = CGroups_admin_edit
 module JForm  = CGroups_admin_jForm
 module Cols   = CGroups_admin_cols
+module Delete = CGroups_admin_delete
 
 let () = define UrlClient.Members.def_admin begin fun parents entity access -> 
 
@@ -37,6 +38,13 @@ let () = define UrlClient.Members.def_admin begin fun parents entity access ->
 	method url      = parents # jform # url 
 	method title    = AdLib.get `Group_JoinForm_Link
 	method subtitle = Some (AdLib.get `Group_JoinForm_Sub)
+       end) ;
+
+      (object
+	method img      = VIcon.Large.cross
+	method url      = parents # delete # url 
+	method title    = AdLib.get `Group_Delete_Link
+	method subtitle = Some (AdLib.get `Group_Delete_Sub)
        end) ;
       
     ] in

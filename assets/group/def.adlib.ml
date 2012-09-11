@@ -45,3 +45,11 @@
 | `Groups_Create_Cancel 
 
 | `Group_Columns_Title 
+
+| `Group_Delete_Title
+| `Group_Delete_Link
+| `Group_Delete_Sub 
+
+| `Group_Delete_Warning 
+| `Group_Delete_Submit
+| `Group_Delete_Cancel

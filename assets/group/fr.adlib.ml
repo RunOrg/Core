@@ -49,3 +49,11 @@ end
 | `Groups_Create_Cancel -> "Annuler"
 
 | `Group_Columns_Title -> "Colonnes"
+
+| `Group_Delete_Title -> "Supprimer"
+| `Group_Delete_Link -> "Supprimer"
+| `Group_Delete_Sub -> "Effacer ce groupe et toutes les données associées"
+
+| `Group_Delete_Warning -> "La suppression d'un groupe est permanente !"
+| `Group_Delete_Submit -> "Supprimer"
+| `Group_Delete_Cancel -> "Ne pas supprimer"
