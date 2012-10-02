@@ -5,12 +5,14 @@
     <ul class="-what">
       <li class="-selected"><a href="javascript:void(0)">{`Feed_Post_Message}</a></li>
       <li><a href="javascript:void(0)">{`Feed_Post_MiniPoll}</a></li>
+      <li><a href="javascript:void(0)">{`Feed_Post_Mail}</a></li>
     </ul>
     
     <div class="-area -area1">
       <label class="-under">
 	<span class="-in-area1">{`Feed_Post_Message_Label}</span>
 	<span class="-in-area2">{`Feed_Post_MiniPoll_Label}</span>
+	<span class="-in-area3">{`Feed_Post_Mail_Label}</span>
       </label>
       <textarea {$t} ></textarea>      
       <div {$p} class="-poll">
@@ -22,6 +24,7 @@
 	</label>
       </div>
       <div class="-bottom">
+	<span class="-sent -in-area3">{`Feed_Mail_SentTo sending}</span>
 	<button type="submit"><span>{`Feed_Post_Submit}</span></button>
       </div>
     </div>
@@ -247,15 +250,20 @@ here.$f.submit () ->
 
     label.-under {
       display: none;
-      span { display: none } 
     } 
 
-    .-area1 .-in-area1, .-area2 .-in-area2 { display: block !important; } 
+    .-in-area1, .-in-area2, .-in-area3 { display: none }
+    .-area1 .-in-area1, .-area2 .-in-area2, .-area3 .-in-area3 { display: inline-block !important; } 
 
     .-bottom {
-      background-color: #EEEEEE;
-      border-top: 1px solid #DDDDDD;
+      background-color: #EEE;
+      border-top: 1px solid #DDD;
       text-align: right;
+      .-sent {
+        font-size: 12px;
+        color: #555;
+        margin-right: 10px;
+      }
     }
 
     &.-collapsed .-area1 .-bottom { display: none } 

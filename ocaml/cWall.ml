@@ -27,9 +27,10 @@ let feed_rw more access feed wfeed =
   O.Box.fill begin 
     let! items, more = ohm $ O.decay (items more access feed None) in 
     Asset_Wall_Feed.render (object
-      method url   = OhmBox.reaction_json post ()
-      method items = items
-      method more  = more
+      method url     = OhmBox.reaction_json post ()
+      method sending = `Everyone
+      method items   = items
+      method more    = more
     end)
   end
 
