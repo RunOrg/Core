@@ -23,7 +23,7 @@
 | `Feed_None -> "Aucune discussion disponible"
 
 | `Feed_Mail_SentTo who -> begin match who with 
-    | `Everyone -> "Tous les membres de cette association" 
+    | `Everyone -> "Tous les membres" 
     | `Group -> "Tous les membres de ce groupe"
     | `Forum -> "Tous les participants à ce forum"
     | `Event -> "Tous les inscrits et invités à cette activité"
