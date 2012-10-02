@@ -145,6 +145,16 @@ let () =
     | `album _ | `folder _ -> None
   end in 
 
+  (* Only push items that have an e-mail payload attached. *)
+  let! () = true_or (return ()) begin match item # payload with 
+    | `Message _ 
+    | `MiniPoll _ 
+    | `Image _ 
+    | `Doc _ 
+    | `Chat _ 
+    | `ChatReq _ -> false
+  end in 
+
   push_item_task (item # id, IFeed.Assert.bot fid) 
 
 (* Notify interested parties when membership changes --------------------------------------- *)
