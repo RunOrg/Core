@@ -31,6 +31,11 @@ let feed_rw where more access feed wfeed =
     | Some `Forum -> `Forum
   in
 
+  let! mail = ohm begin 
+    let! manage = ohm $ O.decay (MFeed.Can.admin feed) in
+    return (manage <> None) 
+  end in
+
   O.Box.fill begin 
     let! items, more = ohm $ O.decay (items more access feed None) in 
     Asset_Wall_Feed.render (object
@@ -38,7 +43,7 @@ let feed_rw where more access feed wfeed =
       method sending = sending
       method items   = items
       method more    = more
-      method mail    = true
+      method mail    = mail
     end)
   end
 
