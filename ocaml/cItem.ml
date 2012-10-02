@@ -14,6 +14,17 @@ module Message = struct
 
 end
 
+module Mail = struct
+
+  let render item message = 
+    let body = Asset_Item_Mail.render (object
+      method body    = message # body
+      method subject = message # subject
+    end) in
+    (message # author, `Message, body)
+
+end
+
 module Poll = struct
 
   module AnswerFmt = Fmt.Make(struct type json t = int list end)
@@ -89,6 +100,7 @@ let render ?moderate access item =
   let! author, action, body = req_or (return None) $ match item # payload with 
     | `Message  m -> Some (Message.render item m) 
     | `MiniPoll m -> Some (Poll.render access item m)
+    | `Mail     m -> Some (Mail.render item m) 
     | `Image    i -> None
     | `Doc      d -> None
     | `Chat     c -> None

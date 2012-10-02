@@ -29,3 +29,4 @@ let author t = match t # payload with
   | `Doc      d -> Some (d # author) 
   | `Chat     c -> None
   | `ChatReq  r -> Some (r # author)
+  | `Mail     m -> Some (m # author) 

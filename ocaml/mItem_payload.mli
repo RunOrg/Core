@@ -33,5 +33,7 @@ include Ohm.Fmt.FMT with type t =
   | `Image    of Image.t
   | `Doc      of Doc.t 
   | `Chat     of Chat.t 
-  | `ChatReq  of ChatRequest.t ]
+  | `ChatReq  of ChatRequest.t 
+  | `Mail     of Mail.t
+  ]
     

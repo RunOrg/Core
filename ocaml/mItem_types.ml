@@ -47,7 +47,9 @@ type payload = [ `Message  of message
 	       | `Image    of image
 	       | `Doc      of doc
 	       | `Chat     of chat 
-	       | `ChatReq  of chat_request ] 
+	       | `ChatReq  of chat_request 
+	       | `Mail     of mail 
+	       ] 
 
 let author_by_payload = function 
   | `Message  m -> Some (m # author) 
@@ -56,6 +58,7 @@ let author_by_payload = function
   | `Doc      d -> Some (d # author) 
   | `Chat     c -> None
   | `ChatReq  c -> Some (c # author)
+  | `Mail     m -> Some (m # author) 
 
 type item = < 
   where   : [`Unknown] source ; 
@@ -92,6 +95,7 @@ let comments t =
    container item. *)
 let payload  t = match t # payload with 
   | `Message  m -> `Message m
+  | `Mail     m -> `Mail m 
   | `MiniPoll p -> let id = IPoll.Assert.read (p # poll) in
 		   `MiniPoll ( object
 		     method author = p # author

@@ -20,6 +20,7 @@ let schedule_deletion =
       match item # payload with
 	| `Message  _ -> return ()
 	| `ChatReq  _ -> return ()
+	| `Mail     _ -> return () 
 	| `MiniPoll p -> MPoll.delete_now (IPoll.Assert.bot (p # poll)) 
 	| `Image    i -> MFile.delete_now (IFile.Assert.bot (i # file))
 	| `Doc      d -> MFile.delete_now (IFile.Assert.bot (d # file))

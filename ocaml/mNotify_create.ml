@@ -147,6 +147,7 @@ let () =
 
   (* Only push items that have an e-mail payload attached. *)
   let! () = true_or (return ()) begin match item # payload with 
+    | `Mail _ -> true
     | `Message _ 
     | `MiniPoll _ 
     | `Image _ 

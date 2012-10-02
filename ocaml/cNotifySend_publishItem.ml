@@ -19,10 +19,11 @@ let send url uid itid =
 
     let! aid = req_or (return ()) $ MItem.author_by_payload (item # payload) in
     
-    let! text = req_or (return ()) begin 
+    let! body, title = req_or (return ()) begin 
       match item # payload with 
-	| `Message  m -> Some (m # text)
-	| `MiniPoll p -> Some (p # text) 
+	| `Mail     m -> Some (m # body, m # subject)
+	| `Message  _
+	| `MiniPoll _
 	| `Image _
 	| `Doc _ 
 	| `Chat _ 
@@ -32,13 +33,13 @@ let send url uid itid =
     let! author = ohm $ CAvatar.mini_profile aid in 
     let! name = req_or (return ()) (author # nameo) in
     
-    let subject = AdLib.get (`Mail_Notify_PublishItem_Title name) in
+    let subject = return title in 
     
     let body = Asset_Mail_NotifyPublishItem.render (object
       method sender = (name, instance # name)
       method url    = url 
       method asso   = instance # name
-      method text   = text
+      method text   = body
     end) in
     
     let! _, html = ohm $ CMail.Wrap.render ~iid self body in 

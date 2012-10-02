@@ -49,7 +49,9 @@ type payload = [ `Message  of message
 	       | `Image    of image
 	       | `Doc      of doc 
 	       | `Chat     of chat
-	       | `ChatReq  of chat_request ] 
+	       | `ChatReq  of chat_request 
+	       | `Mail     of mail
+	       ] 
 
 val author_by_payload : payload -> IAvatar.t option
 

@@ -52,5 +52,7 @@ include Fmt.Make(struct
     | `Image    "i" of Image.t
     | `Doc      "d" of Doc.t 
     | `Chat     "c" of Chat.t 
-    | `ChatReq  "r" of ChatRequest.t ]
+    | `ChatReq  "r" of ChatRequest.t 
+    | `Mail     "a" of Mail.t 
+    ]
 end)
