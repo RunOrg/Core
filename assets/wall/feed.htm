@@ -95,6 +95,11 @@ here.$f.submit () ->
     return false if data.poll.length == 0
     data.multi = here.$p.find("input[name='multi']").is(":checked")
 
+  $s = here.$f.find("[name='subject']")
+  if $s.length && $s.is(":visible")
+    data.subject = $s.val()
+    return false if data.subject.length == 0
+
   here.$p.find(".-clone").remove()
   here.$p.children("input").val("")
   here.$t.val("").blur()
