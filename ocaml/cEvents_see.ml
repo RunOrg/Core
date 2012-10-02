@@ -72,7 +72,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
     let! the_seg = O.Box.parse UrlClient.Events.tabs in 
     match the_seg with
-      | `Wall   -> CWall.box access feed     
+      | `Wall   -> CWall.box (Some `Event) access feed     
       | `Album  -> CAlbum.box access album
       | `Folder -> CFolder.box access folder
       | `People -> CPeople.event_box ?url access group 

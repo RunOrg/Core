@@ -69,7 +69,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       
       let! the_seg = O.Box.parse UrlClient.Forums.tabs in 
       match the_seg with
-	| `Wall   -> CWall.box access feed     
+	| `Wall   -> let where = Some (if MEntity.Get.kind entity = `Group then `Group else `Forum) in 
+		     CWall.box where access feed     
 	| `Album  -> CAlbum.box access album
 	| `Folder -> CFolder.box access folder
 	| `People -> CPeople.forum_box ?url access group 	

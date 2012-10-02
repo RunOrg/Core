@@ -18,17 +18,24 @@ let items more access feed start =
   in
   return (htmls, more)
 
-let feed_rw more access feed wfeed = 
+let feed_rw where more access feed wfeed = 
 
   let! post = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
     O.decay $ CItem.post access wfeed json res
   end in
 
+  let sending = match where with 
+    | None -> `Everyone
+    | Some `Event -> `Event
+    | Some `Group -> `Group
+    | Some `Forum -> `Forum
+  in
+
   O.Box.fill begin 
     let! items, more = ohm $ O.decay (items more access feed None) in 
     Asset_Wall_Feed.render (object
       method url     = OhmBox.reaction_json post ()
-      method sending = `Everyone
+      method sending = sending
       method items   = items
       method more    = more
     end)
@@ -53,11 +60,11 @@ let getmore access feed = begin fun time _ self res ->
   return $ Action.json ["more", Html.to_json html] res
 end
 
-let box access feed =
+let box where access feed =
   match feed with 
     | None -> feed_none () 
     | Some feed -> let! writable = ohm (O.decay (MFeed.Can.write feed)) in
 		   let! more = O.Box.react Fmt.Float.fmt (getmore access feed) in 
 		   match writable with 
-		     | None       -> feed_ro more access feed
-		     | Some wfeed -> feed_rw more access feed wfeed
+		     | None       -> feed_ro       more access feed
+		     | Some wfeed -> feed_rw where more access feed wfeed
