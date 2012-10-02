@@ -22,13 +22,15 @@
 	      <li {if seen}{else}class="-unseen"{/if}>
 	        <a href="{url}">
 		  <span class="-date">{ `DateRelative date }</span>
-		  {?pic}<img src="{this}"/>{/?}
-		  {?name}<strong>{this}</strong>{/?}		
-		  { `Notify text } 
-		  {#more} 
-		    <strong>{this | fst | esc}</strong>
-		    { `Notify this|snd } 
-		  {/#}
+		  <span class="-text">
+  		    {?pic}<img src="{this}"/>{/?}
+		    {?name}<strong>{this}</strong>{/?}		
+		    { `Notify text } 
+		    {#more} 
+		      <strong>{this | fst | esc}</strong>
+		      { `Notify this|snd } 
+		    {/#}
+                  </span>
 	        </a>
 	      </li>
 	    {/#}
@@ -82,6 +84,9 @@
           display: block; 
           padding: 8px 0;
           color: #333;
+        }
+        .-text {
+          display: block;
           white-space: nowrap;
           overflow: hidden;
         }
