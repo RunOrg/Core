@@ -4,7 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let session = "S"
+let session = match O.environment with 
+  | `Prod -> "S"
+  | `Dev -> "SDEV"
 
 let start cuid res = 
 
