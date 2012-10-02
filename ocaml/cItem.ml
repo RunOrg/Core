@@ -21,7 +21,7 @@ module Mail = struct
       method body    = message # body
       method subject = message # subject
     end) in
-    (message # author, `Message, body)
+    (message # author, `Mail, body)
 
 end
 

@@ -1,7 +1,7 @@
 <div class="comment">
   {=author}<a href="{url}"><img src="{pic}"/></a>{/=}
   <div class="-body"> 
-    {=author}<a class="-author" href="{url}">{name}</a>{/=} { `Comment_Action } 
+    <span class="-action">{=author}<a class="-author" href="{url}">{name}</a>{/=} { `Comment_Action }</span> 
     <div class="-message">
       { body | VText.format } 
     </div>
@@ -31,6 +31,10 @@
     margin-right: 8px;
   }
 
+  .-action { 
+    font-size: 12px;
+  }
+
   .-body {
     overflow: hidden;
   }
@@ -38,7 +42,6 @@
   .-message {
     color: black;
     border: none;
-    padding: 0;
   }
 
   .-foot {

@@ -29,6 +29,18 @@
   }
 
   .-message {
+    color: #333;
+    font-size: 14px;
+    width: 500px;
+    padding: 0 16px;
+  }
+
+  .-title {
+    padding: 0 16px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 0;
+    color: #333;
   }
 
   .-foot {

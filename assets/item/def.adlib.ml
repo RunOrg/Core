@@ -1,4 +1,4 @@
-| `Item_Author_Action of [ `Message | `MiniPoll ]
+| `Item_Author_Action of [ `Message | `MiniPoll | `Mail ]
 
 | `Item_Remove
 
