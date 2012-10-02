@@ -8,6 +8,7 @@ server:
 	splash/gen.sh
 	config/gen.sh
 	make -C ocaml
+	ohm publish
 	cp $(EXE) $(REAL)
 
 put: $(EXE)
