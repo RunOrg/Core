@@ -9,6 +9,9 @@ module MiniPoll : Ohm.Fmt.FMT with type t =
 module Image : Ohm.Fmt.FMT with type t = 
   < author : IAvatar.t ; file : IFile.t >
 
+module Mail : Ohm.Fmt.FMT with type t = 
+  < author : IAvatar.t ; subject : string ; body : string >
+
 module Doc : Ohm.Fmt.FMT with type t = 
   <
     author : IAvatar.t ;

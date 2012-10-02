@@ -18,6 +18,10 @@ module Image = Fmt.Make(struct
   type json t = < author "a" : IAvatar.t ; file "f" : IFile.t >
 end)
 
+module Mail = Fmt.Make(struct
+  type json t = < author "a" : IAvatar.t ; subject "s" : string ; body "b" : string >
+end)
+
 module Doc = Fmt.Make(struct
   module Float     = Fmt.Float
   module Extension = MFile.Extension

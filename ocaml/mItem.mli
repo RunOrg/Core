@@ -16,6 +16,12 @@ type miniPoll = <
   poll   : [`Read] IPoll.id
 >
 
+type mail = <
+  author  : IAvatar.t ;
+  subject : string ;
+  body    : string 
+>
+
 type image    = <
   author : IAvatar.t ;
   file   : [`GetImg] IFile.id
