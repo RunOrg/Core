@@ -6,14 +6,13 @@ open BatPervasives
 
 (* Environment and basic configuration ---------------------------------------------------------------------- *)
 
-let environment = `Retheme 
+let environment = `Dev 
 
 let role = Util.role () 
 
 let env = match environment with 
   | `Prod    -> "prod"
   | `Dev     -> "dev"
-  | `Retheme -> "dev"
 
 let () = 
   Configure.set `Log begin match role with 
@@ -62,8 +61,10 @@ let run_async () =
 
 let domain = match environment with 
   | `Prod    -> "runorg.com"
-  | `Dev     -> "dev.runorg.com"
-  | `Retheme -> "runorg.local"
+  | `Dev     -> 
+    match Run.eval (ctx `FR) (ConfigDB.get (Id.of_string "local")) with 
+      | None -> "dev.runorg.com"
+      | Some _ -> "runorg.local"
 
 let cookies = "." ^ domain
 
