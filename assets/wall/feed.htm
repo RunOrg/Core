@@ -9,10 +9,21 @@
     </ul>
     
     <div class="-area -area1">
+      {if mail}
+        <div class="-in-area3 -subject">
+  	  <div>
+	    <label>{`Feed_Post_Mail_To}</label>
+	    <input style="color:#888" type="text" readonly="readonly" value="{`Feed_Mail_SentTo sending}"/>
+  	  </div>
+	  <div>
+	    <label>{`Feed_Post_Mail_Subject}</label>
+	    <input type="text" name="subject"/>
+	  </div>
+        </div>
+      {/if}
       <label class="-under">
 	<span class="-in-area1">{`Feed_Post_Message_Label}</span>
 	<span class="-in-area2">{`Feed_Post_MiniPoll_Label}</span>
-	<span class="-in-area3">{`Feed_Post_Mail_Label}</span>
       </label>
       <textarea {$t} ></textarea>      
       <div {$p} class="-poll">
@@ -24,7 +35,7 @@
 	</label>
       </div>
       <div class="-bottom">
-	<span class="-sent -in-area3">{`Feed_Mail_SentTo sending}</span>
+	{if mail}<span class="-in-area3">{`Feed_Post_Mail_OnlyAdmin}</span>{/if}
 	<button type="submit"><span>{`Feed_Post_Submit}</span></button>
       </div>
     </div>
@@ -253,13 +264,13 @@ here.$f.submit () ->
     } 
 
     .-in-area1, .-in-area2, .-in-area3 { display: none }
-    .-area1 .-in-area1, .-area2 .-in-area2, .-area3 .-in-area3 { display: inline-block !important; } 
+    .-area1 span.-in-area1, .-area2 span.-in-area2, .-area3 span.-in-area3 { display: inline-block !important; }    .-area1 div.-in-area1, .-area2 div.-in-area2, .-area3 div.-in-area3 { display: block !important; } 
 
     .-bottom {
       background-color: #EEE;
       border-top: 1px solid #DDD;
       text-align: right;
-      .-sent {
+      > span {
         font-size: 12px;
         color: #555;
         margin-right: 10px;
@@ -267,6 +278,36 @@ here.$f.submit () ->
     }
 
     &.-collapsed .-area1 .-bottom { display: none } 
+
+    .-area3 label.-under { display: none }
+    .-area3 textarea {
+      position: relative; 
+      height: 200px;
+      background-color: white;
+    }
+
+    .-subject {
+      background-color: #EEEEEE;
+      border-bottom: 1px solid #DDDDDD;
+      border-top: 1px solid #DDDDDD;
+      font-size: 13px;
+      height: 50px;
+      line-height: 25px;
+      margin: 4px 0 0;
+      padding: 4px 16px;
+      label {
+        float: left;
+        margin-right: 8px;
+        text-align: right;
+        width: 80px;
+      }
+      input {
+        .asap();
+        padding: 2px 3px;
+        width: 400px;
+        border: 1px solid #DDD;
+      }
+    }
   }
 
   .more {

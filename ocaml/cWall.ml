@@ -38,6 +38,7 @@ let feed_rw where more access feed wfeed =
       method sending = sending
       method items   = items
       method more    = more
+      method mail    = true
     end)
   end
 
