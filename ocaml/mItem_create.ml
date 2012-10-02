@@ -109,6 +109,22 @@ let message self text iid where =
 
   return itid
 
+let mail self ~subject text iid where = 
+  
+  let payload = `Mail (object
+    method author  = IAvatar.decay self 
+    method subject = if String.length subject > 100 then String.sub subject 0 100 else subject
+    method body    = if String.length text > 30000 then String.sub text 0 30000 else text
+  end) in
+
+  let where = `feed where in 
+
+  let itid = IItem.Assert.created (IItem.gen ()) in
+
+  let! () = ohm $ create ~where ~payload ~delayed:false ~iid itid in
+
+  return itid
+
 let chat_request self topic iid where = 
   
   let payload = `ChatReq (object

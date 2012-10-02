@@ -161,9 +161,10 @@ let render ?moderate access item =
 
 module PostForm = Fmt.Make(struct
   type json t = <
-    text  : string ;
-   ?poll  : string list = [] ;
-   ?multi : bool = false
+    text    : string ;
+   ?subject : string option ; 
+   ?poll    : string list = [] ;
+   ?multi   : bool = false
   > 
 end)
 
@@ -172,10 +173,19 @@ let post access feed json res =
   let! post = req_or (return res) $ PostForm.of_json_safe json in 
   let  self = access # self and iid = IInstance.decay access # iid and fid = MFeed.Get.id feed in 
 
+  let! afid  = ohm begin 
+    let! admin = ohm_req_or (return None) $ MFeed.Can.admin feed in 
+    return $ Some (MFeed.Get.id admin) 
+  end in
+
   let! itid = ohm begin 
     if post # poll = [] then 
-      MItem.Create.message self (post # text) iid fid 
-    else
+      match afid, post # subject with 
+	| Some afid, Some subject ->
+	  MItem.Create.mail self ~subject (post # text) iid afid
+	| _ -> 
+	  MItem.Create.message self (post # text) iid fid 
+    else 
       let! poll = ohm $ MPoll.create (object
 	method multiple = post # multi
 	method questions = List.map (fun t -> `text t)

@@ -102,6 +102,14 @@ module Create : sig
     -> [`Write] IFeed.id
     -> [`Created] IItem.id O.run
 
+  val mail : 
+       [`IsSelf] IAvatar.id 
+    -> subject:string
+    -> string
+    -> IInstance.t
+    -> [`Admin] IFeed.id
+    -> [`Created] IItem.id O.run
+
   val chat_request : 
        [`IsSelf] IAvatar.id 
     -> string
