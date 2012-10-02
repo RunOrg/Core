@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 type t = <
   tests : (string * bool) list ;

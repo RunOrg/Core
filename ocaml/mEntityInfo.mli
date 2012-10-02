@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 module Format : Ohm.Fmt.FMT with type t = 
   [ `text

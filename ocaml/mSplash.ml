@@ -1,4 +1,4 @@
-(* © 2012 MRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open Ohm.Util 
