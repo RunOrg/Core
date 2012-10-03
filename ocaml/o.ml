@@ -6,7 +6,7 @@ open BatPervasives
 
 (* Environment and basic configuration ---------------------------------------------------------------------- *)
 
-let environment = `Dev 
+let environment = `Prod
 
 let role = Util.role () 
 
