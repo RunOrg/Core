@@ -10,4 +10,4 @@ let domain id = match IWhite.to_string id with
   | "test" -> "test.local" 
   | other -> let error = "Unknown white id #" ^ other in
 	     Ohm.Util.log "%s" error ;
-	     assert false
+	     raise Not_found
