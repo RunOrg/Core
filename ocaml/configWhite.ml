@@ -8,4 +8,6 @@ let all = [
 
 let domain id = match IWhite.to_string id with 
   | "test" -> "test.local" 
-  | other -> failwith ("Unknown white id #" ^ other) 
+  | other -> let error = "Unknown white id #" ^ other in
+	     Ohm.Util.log "%s" error ;
+	     assert false
