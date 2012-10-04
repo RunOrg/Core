@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Server = O_server
+
 (* Environment and basic configuration ---------------------------------------------------------------------- *)
 
 let environment = `Dev 
