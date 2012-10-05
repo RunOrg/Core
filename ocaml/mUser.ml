@@ -227,8 +227,9 @@ class type user_short = object
   method lastname  : string
   method password  : string 
   method email     : string
-end
- 
+  method white     : IWhite.t option
+end 
+
 let confirm uid = 
  
   let uid = IUser.decay uid in 
@@ -288,6 +289,7 @@ let quick_create (user : user_short) =
 	  lastname  = clip (user # lastname) ;
 	  passhash  = Some (ConfigKey.passhash (user # password)) ;
 	  email     ;
+	  white     = user # white ; 
       }) in
       
       `created (IUser.decay id, obj), `put obj

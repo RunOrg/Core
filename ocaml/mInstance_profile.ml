@@ -28,10 +28,11 @@ module Info = struct
       facebook : string option ;
       phone    : string option ;
       tags     : string list ;
-     ?pic      : IFile.t option = None ;
+     ?pic      : IFile.t option ;
      ?search   : bool = false ;
      ?unbound  : bool = false ;
-     ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] 
+     ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
+     ?white    : IWhite.t option ;
     }
   end
   include T
@@ -41,7 +42,7 @@ end
 type t = <
   id       : IInstance.t ;
   name     : string ;
-  key      : string ;
+  key      : IWhite.key ;
   address  : string option ;
   contact  : string option ;
   site     : string option ;
@@ -58,7 +59,7 @@ type t = <
 
 let extract iid i = Info.(object
   method id       = IInstance.decay iid
-  method key      = i.key
+  method key      = i.key, i.white
   method name     = i.name
   method address  = i.address
   method contact  = i.contact
@@ -77,8 +78,9 @@ end)
 module Tbl = CouchDB.Table(MyDB)(IInstance)(Info)
 
 let empty_info = Info.({
-  name = "" ;
-  key  = "" ;
+  name  = "" ;
+  key   = "" ;
+  white = None ;
   address  = None ;
   contact  = None ;
   site     = None ;

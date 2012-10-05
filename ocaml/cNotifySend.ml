@@ -15,7 +15,7 @@ module EntityRequest = CNotifySend_entityRequest
 let () = 
   let! uid, nid, payload = Sig.listen MNotify.Send.immediate in 
   let  token = MNotify.get_token nid in 
-  let  url = Action.url UrlMe.Notify.mailed () (nid,token) in
+  let  url owid = Action.url UrlMe.Notify.mailed owid (nid,token) in
   match payload with 
     | `BecomeMember (iid,aid) -> BecomeMember.send url uid iid aid 
     | `BecomeAdmin (iid,aid) -> BecomeAdmin.send url uid iid aid

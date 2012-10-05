@@ -4,15 +4,17 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let make title endpoint = object
+let make title endpoint owid = object
   method title = (AdLib.get (title : O.i18n) : string O.boxrun) 
-  method url   = Action.url endpoint () ()
+  method url   = Action.url endpoint owid ()
 end
 
 open UrlMe.Account
 
-let home    = make `MeAccount_Page_Title    home
-let admin   = make `MeAccount_Admin_Title   admin
-let edit    = make `MeAccount_Edit_Title    edit
-let pass    = make `MeAccount_Pass_Title    pass
-let picture = make `MeAccount_Picture_Title picture
+let make owid = object
+  method home    = make `MeAccount_Page_Title    home    owid
+  method admin   = make `MeAccount_Admin_Title   admin   owid
+  method edit    = make `MeAccount_Edit_Title    edit    owid
+  method pass    = make `MeAccount_Pass_Title    pass    owid
+  method picture = make `MeAccount_Picture_Title picture owid
+end

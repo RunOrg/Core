@@ -57,7 +57,7 @@ let () = UrlClient.def_article begin fun req res ->
   let! cuid, key, iid, instance = CClient.extract req res in
 
   let  bid, str  = req # args in
-  let! broadcast = ohm_req_or (C404.render cuid res) $ MBroadcast.get bid in
+  let! broadcast = ohm_req_or (C404.render (snd key) cuid res) $ MBroadcast.get bid in
 
   let! status = ohm $ Run.opt_map (MAvatar.status iid) cuid in 
 

@@ -10,7 +10,7 @@ module Settings = CMe_notify_settings
 
 let  count = 10
 
-let () = define UrlMe.Notify.def_home begin fun cuid ->   
+let () = define UrlMe.Notify.def_home begin fun owid cuid ->   
 
   let! gender = ohm begin
     let! user = ohm_req_or (return None) $ MUser.get (IUser.Deduce.can_view cuid) in
@@ -78,7 +78,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
       method text = text
       method more = more  
       method seen = what # seen
-      method url  = Action.url UrlMe.Notify.follow () (what # id)  
+      method url  = Action.url UrlMe.Notify.follow owid (what # id)  
     end)
   in
 
@@ -147,7 +147,7 @@ let () = define UrlMe.Notify.def_home begin fun cuid ->
   O.Box.fill begin
     Asset_Notify_List.render (object
       method inner = render_list more None
-      method options = Action.url UrlMe.Notify.settings () () 
+      method options = Action.url UrlMe.Notify.settings owid () 
     end) 
   end 
 end
@@ -167,7 +167,7 @@ end
 
 let () = UrlMe.Notify.def_follow begin fun req res -> 
 
-  let  fail = return $ Action.redirect (Action.url UrlMe.Notify.home () ()) res in
+  let  fail = return $ Action.redirect (Action.url UrlMe.Notify.home (req # server) ()) res in
 
   let! cuid = req_or fail $ CSession.get req in 
   let  nid  = req # args in 

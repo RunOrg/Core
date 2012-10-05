@@ -13,13 +13,13 @@ let () = UrlLogin.def_login begin fun req res ->
 
   let login = 
     let form = OhmForm.create ~template:Login.template ~source:OhmForm.empty in
-    let url  = Action.url UrlLogin.post_login () (req # args) in
+    let url  = Action.url UrlLogin.post_login (req # server) (req # args) in
     Asset_Form_Clean.render (OhmForm.Convenience.render form url)
   in 
   
   let signup = 
     let form = OhmForm.create ~template:Signup.template ~source:OhmForm.empty in
-    let url  = Action.url UrlLogin.post_signup () (req # args) in
+    let url  = Action.url UrlLogin.post_signup (req # server) (req # args) in
     Asset_Form_Clean.render (OhmForm.Convenience.render form url)
   in
 
@@ -31,11 +31,11 @@ let () = UrlLogin.def_login begin fun req res ->
   in
 
   let html = Asset_Login_Page.render (object
-    method navbar = (None,iid)
+    method navbar = (req # server,None,iid)
     method title  = title 
     method login  = login
     method signup = signup
-    method lost   = Js.remote ~url:(Action.url UrlLogin.lost () (req # args)) ()
+    method lost   = Js.remote ~url:(Action.url UrlLogin.lost (req # server) (req # args)) ()
   end) in
 
   CPageLayout.core `Login_Title html res

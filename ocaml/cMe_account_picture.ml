@@ -8,7 +8,9 @@ open CMe_common
 
 module Parents = CMe_account_parents
 
-let () = define UrlMe.Account.def_picture begin fun cuid -> 
+let () = define UrlMe.Account.def_picture begin fun owid cuid -> 
+
+  let parents = Parents.make owid in 
 
   O.Box.fill begin
 
@@ -21,16 +23,16 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
 
     let html = Asset_Upload_Picture.render (object
       method url = JsCode.Endpoint.to_json 
-	(JsCode.Endpoint.of_url (Action.url UrlMe.Account.picpost () ()))
-      method upload = Action.url UrlUpload.Core.root () ()
-      method pics = Action.url UrlUpload.Core.find () ()
-      method back = Parents.home # url 
+	(JsCode.Endpoint.of_url (Action.url UrlMe.Account.picpost owid ()))
+      method upload = Action.url UrlUpload.Core.root owid ()
+      method pics = Action.url UrlUpload.Core.find owid ()
+      method back = parents # home # url 
       method id = id
     end) in
 
     Asset_Admin_Page.render (object
-      method parents = [ Parents.home ; Parents.admin ] 
-      method here  = Parents.picture # title
+      method parents = [ parents # home ; parents # admin ] 
+      method here  = parents # picture # title
       method body  = html
     end)
 
@@ -38,6 +40,8 @@ let () = define UrlMe.Account.def_picture begin fun cuid ->
 end
 
 let () = UrlMe.Account.def_picpost begin fun req res -> 
+
+  let parents = Parents.make (req # server) in
 
   let! cuid = req_or (return res) $ CSession.get req in 
   
@@ -50,7 +54,7 @@ let () = UrlMe.Account.def_picpost begin fun req res ->
 
   let! () = ohm $ MUser.set_pic (IUser.Deduce.can_edit cuid) pic in 
 
-  let url = Parents.home # url in
+  let url = parents # home # url in
 
   return $ Action.javascript (Js.redirect url ()) res
   

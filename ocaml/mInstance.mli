@@ -2,7 +2,7 @@
 
 type t = <
   id      : IInstance.t ;
-  key     : string ;
+  key     : IWhite.key ;
   name    : string ;
   theme   : string option ;
   disk    : float ;
@@ -12,8 +12,7 @@ type t = <
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
   install : bool ;
-  stub    : bool ;
-  white   : IWhite.t option
+  stub    : bool 
 > ;;
 
 module Profile : sig
@@ -21,7 +20,7 @@ module Profile : sig
   type t = <
     id       : IInstance.t ;
     name     : string ;
-    key      : string ;
+    key      : IWhite.key ;
     address  : string option ;
     contact  : string option ;
     site     : string option ;
@@ -98,6 +97,7 @@ val create :
   -> site:string option
   -> contact:string option 
   -> vertical:IVertical.t
+  -> white:IWhite.t option
   -> [`Created] IInstance.id O.run
 
 val update : 

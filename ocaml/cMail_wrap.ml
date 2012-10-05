@@ -4,9 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let render ?iid uid (body:Html.writer O.run) = 
+let render ?iid owid uid (body:Html.writer O.run) = 
   let! ins = ohm $ Run.opt_bind MInstance.get iid in
-  let unsubscribe = Action.url UrlMail.unsubscribe () 
+  let unsubscribe = Action.url UrlMail.unsubscribe owid 
     (IUser.decay uid, iid) in
   let instance = BatOption.map (fun ins -> (object
     method url  = Action.url UrlClient.website (ins # key) ()  

@@ -75,7 +75,7 @@ let short_user_instances user cuid more =
   else
     long_user_instances user cuid 
 
-let () = define UrlMe.Account.def_home begin fun cuid  ->   
+let () = define UrlMe.Account.def_home begin fun owid cuid  ->   
 
   let  uid  = IUser.Deduce.can_view cuid in
   let! user = ohm_req_or (O.Box.fill (Asset_Me_PageNotFound.render ())) $ MUser.get uid in
@@ -120,12 +120,12 @@ let () = define UrlMe.Account.def_home begin fun cuid  ->
     in    
     
     let data = object
-      method picedit   = Action.url UrlMe.Account.picture () ()
+      method picedit   = Action.url UrlMe.Account.picture owid ()
       method url       = pic 
       method fullname  = user # fullname
       method details   = details
       method email     = user # email
-      method edit      = Action.url UrlMe.Account.admin () ()
+      method edit      = Action.url UrlMe.Account.admin owid ()
       method instances = instances
     end in
     
@@ -134,28 +134,30 @@ let () = define UrlMe.Account.def_home begin fun cuid  ->
   end 
 end
 
-let () = define UrlMe.Account.def_admin begin fun cuid -> 
+let () = define UrlMe.Account.def_admin begin fun owid cuid -> 
   O.Box.fill begin 
+
+    let parents = Parents.make owid in 
     
     let choices = Asset_Admin_Choice.render [
       
       (object
 	method img      = VIcon.Large.vcard
-	method url      = Action.url UrlMe.Account.edit () ()
+	method url      = Action.url UrlMe.Account.edit owid ()
 	method title    = AdLib.get `MeAccount_Admin_Edit_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Edit_Sub)
        end) ;
       
       (object
 	method img      = VIcon.Large.key
-	method url      = Action.url UrlMe.Account.pass () ()
+	method url      = Action.url UrlMe.Account.pass owid ()
 	method title    = AdLib.get `MeAccount_Admin_Pass_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Pass_Sub)
        end) ;
       
       (object
 	method img      = VIcon.Large.user_silhouette
-	method url      = Action.url UrlMe.Account.picture () () 
+	method url      = Action.url UrlMe.Account.picture owid () 
 	method title    = AdLib.get `MeAccount_Admin_Picture_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Picture_Sub)
        end) ;
@@ -163,8 +165,8 @@ let () = define UrlMe.Account.def_admin begin fun cuid ->
     ] in
     
     Asset_Admin_Page.render (object
-      method parents = [ Parents.home ] 
-      method here  = Parents.admin # title
+      method parents = [ parents # home ] 
+      method here  = parents # admin # title
       method body  = choices
     end)
 

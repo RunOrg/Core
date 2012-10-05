@@ -27,11 +27,11 @@ let send url uid eid aid =
       method name      = user # fullname
       method inviter   = (name, entity, instance # name)
       method who       = name
-      method url       = url 
+      method url       = url (snd (instance # key))
       method asso      = instance # name
     end) in
     
-    let! _, html = ohm $ CMail.Wrap.render ~iid self body in 
+    let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
     send ~from ~subject ~html 

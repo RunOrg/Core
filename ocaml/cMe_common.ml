@@ -19,12 +19,12 @@ let action f req res =
   (* Redirect or run action *)
   match user with 
     | None -> let url = UrlLogin.save_url ("me" :: path) in
-	      let js  = Js.redirect (Action.url UrlLogin.login () url) () in
+	      let js  = Js.redirect (Action.url UrlLogin.login (req # server) url) () in
 	      return $ Action.javascript js res
     | Some cuid -> f cuid req res
 
 let define (base,prefix,parents,define) body =
   define (action (fun cuid req res -> 
-    O.Box.response ~prefix ~parents base O.BoxCtx.make (body cuid) req res
+    O.Box.response ~prefix ~parents (base (req # server)) O.BoxCtx.make (body (req # server) cuid) req res
   ))
 

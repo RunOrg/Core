@@ -23,7 +23,7 @@ let () = UrlClient.def_join begin fun req res ->
   in
 
   let login () = 
-    return $ Action.redirect (Action.url UrlLogin.login () (UrlLogin.save_url ~iid [])) res
+    return $ Action.redirect (Action.url UrlLogin.login (snd key) (UrlLogin.save_url ~iid [])) res
   in
 
   let displayEntity cuid entity =

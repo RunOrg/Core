@@ -79,7 +79,7 @@ let () = UrlClient.def_subscribe begin fun req res ->
 	match cuid with 
 
 	  | None -> 
-	    let url = Action.url UrlLogin.login () (UrlLogin.save_url ~iid []) in
+	    let url = Action.url UrlLogin.login (snd (req # server)) (UrlLogin.save_url ~iid []) in
 	    return (Action.javascript (Js.redirect ~url ()) res)
 
 	  | Some cuid -> 

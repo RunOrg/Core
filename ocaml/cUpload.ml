@@ -57,11 +57,11 @@ let () = UrlUpload.Core.def_root begin fun req res ->
     (Asset_Upload_Form.render) 
     (fun inner -> 
       Asset_Upload_Form_Inner.render (object
-	method cancel = Action.url UrlUpload.Core.cancel () ()
+	method cancel = Action.url UrlUpload.Core.cancel (req # server) ()
 	method inner  = inner
       end))
     (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
-    (Action.url UrlUpload.Core.ok ())
+    (Action.url UrlUpload.Core.ok (req # server))
     res
 
 end

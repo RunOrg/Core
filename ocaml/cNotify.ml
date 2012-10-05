@@ -92,14 +92,14 @@ let resend_notification =
 	begin fun self user send -> 
 
 	  let  token = MNotify.get_token (arg # nid) in 
-	  let  url = Action.url UrlMe.Notify.mailed () (arg # nid,token) in
+	  let  url = Action.url UrlMe.Notify.mailed (user # white) (arg # nid,token) in
 	  
 	  let  body = Asset_Mail_NotifyResend.render (object
 	    method url   = url 
 	    method name  = user # fullname
 	  end) in
 	  
-	  let! from, html = ohm $ CMail.Wrap.render self body in
+	  let! from, html = ohm $ CMail.Wrap.render (user # white) self body in
 	  let  subject = AdLib.get `Mail_NotifyResend_Title in
  
 	  send ~from ~subject ~html
@@ -126,7 +126,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 
   let! what = ohm $ MNotify.from_token nid proof cuid in 
   
-  let home = Action.url UrlMe.Notify.home () () in
+  let home = Action.url UrlMe.Notify.home (req # server) () in
 
   match what with 
     | `Valid (notify,cuid) -> let uid = IUser.Deduce.is_anyone cuid in 
@@ -142,7 +142,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
     | `Missing -> return (Action.redirect home res)
     | `Expired uid -> let title = AdLib.get `Notify_Expired_Title in
 		      let html = Asset_Notify_Expired.render (object
-			method navbar = (None,None)
+			method navbar = (req # server,None,None)
 			method title  = title 
 		      end) in
 		      let! () = ohm $ resend_notification ~nid ~uid in 

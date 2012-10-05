@@ -48,9 +48,9 @@ let attempt how fail email password req res =
   let! ins  = ohm $ Run.opt_bind MInstance.get iid in
   
   let  url  = match ins, path with 
-    | None, []   -> Action.url UrlMe.News.home () ()
-    | None, "me" :: path -> UrlMe.url path 
-    | None, path -> Action.url UrlSplash.index () path
+    | None, []   -> Action.url UrlMe.News.home (req # server) ()
+    | None, "me" :: path -> UrlMe.url (req # server) path 
+    | None, path -> Action.url UrlSplash.index (req # server) path
     | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
     | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
   in
