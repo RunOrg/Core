@@ -50,19 +50,19 @@ let athle = vertical "Athle"
  initial "entity.sample.group-collaborative.office.name" groupCollaborative
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPoussinsName" ~old:"entity.sample.sport.group-poussins.name" "Poussins") ;
+      ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupBenjaminsName" ~old:"entity.sample.sport.group-benjamins.name" "Benjamins") ;
+      ~name:Adlib.OldEntity.group_benjamins ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupMinimesName" ~old:"entity.sample.sport.group-minimes.name" "Minimes")  ;
+      ~name:Adlib.OldEntity.group_minimes  ;
     initial "entity.sample.sport.group-cadets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupCadetsName" ~old:"entity.sample.sport.group-cadets.name" "Cadets") ;
+      ~name:Adlib.OldEntity.group_cadets ;
     initial "entity.sample.sport.group-juniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupJuniorsName" ~old:"entity.sample.sport.group-juniors.name" "Juniors") ;
+      ~name:Adlib.OldEntity.group_juniors ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupSeniorsName" ~old:"entity.sample.sport.group-seniors.name" "Séniors") ;
+      ~name:Adlib.OldEntity.group_seniors ;
     initial "entity.sample.sport.group-veterans.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupVeteransName" ~old:"entity.sample.sport.group-veterans.name" "Vétérans") ;
+      ~name:Adlib.OldEntity.group_veterans ;
   ])
   Template.([
     groupSimple ;
@@ -311,13 +311,13 @@ let copro = vertical "Copro"
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-copro-owner.name" groupCorproOwner
-      ~name:(adlib "EntitySampleGroupCoproOwnerName" ~old:"entity.sample.group-copro-owner.name" "Propriétaires") ;
+      ~name:Adlib.OldEntity.group_copro_owner ;
     initial "entity.sample.group-copro-manager.name" groupCoproManager
       ~name:(adlib "EntitySampleGroupCoproManagerName" ~old:"entity.sample.group-copro-manager.name" "Gestionnaires") ;
     initial "entity.sample.group-copro-lodger.name" groupCoproLodger
-      ~name:(adlib "EntitySampleGroupCoproLodgerName" ~old:"entity.sample.group-copro-lodger.name" "Locataires") ;
+      ~name:Adlib.OldEntity.group_copro_lodger ;
     initial "entity.sample.group-copro-employes.name" groupCoproEmployes
-      ~name:(adlib "EntitySampleGroupCoproEmployesName" ~old:"entity.sample.group-copro-employes.name" "Gardiens / employés") ;
+      ~name:Adlib.OldEntity.group_copro_employes ;
   ])
   Template.([
     groupCorproOwner ;
@@ -350,11 +350,11 @@ let coproVolunteer = vertical "CoproVolunteer"
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-copro-owner.name" groupCorproOwner
-      ~name:(adlib "EntitySampleGroupCoproOwnerName" ~old:"entity.sample.group-copro-owner.name" "Propriétaires") ;
+      ~name:Adlib.OldEntity.group_copro_owner ;
     initial "entity.sample.group-copro-lodger.name" groupCoproLodger
-      ~name:(adlib "EntitySampleGroupCoproLodgerName" ~old:"entity.sample.group-copro-lodger.name" "Locataires")  ;
+      ~name:Adlib.OldEntity.group_copro_lodger  ;
     initial "entity.sample.group-copro-employes.name" groupCoproEmployes
-      ~name:(adlib "EntitySampleGroupCoproEmployesName" ~old:"entity.sample.group-copro-employes.name" "Gardiens / employés") ;
+      ~name:Adlib.OldEntity.group_copro_employes ;
   ])
  Template.([
     groupCorproOwner ;
@@ -543,13 +543,13 @@ let footus = vertical "Footus"
     initial "entity.sample.forum-public.jobs-sport.name" forum
       ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupSeniorsName" ~old:"entity.sample.sport.group-seniors.name" "Séniors")  ;
+      ~name:Adlib.OldEntity.group_seniors  ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupMinimesName" ~old:"entity.sample.sport.group-minimes.name" "Minimes")  ;
+      ~name:Adlib.OldEntity.group_minimes  ;
     initial "entity.sample.sport.group-cadets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupCadetsName" ~old:"entity.sample.sport.group-cadets.name" "Cadets") ;
+      ~name:Adlib.OldEntity.group_cadets ;
     initial "entity.sample.sport.group-juniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupJuniorsName" ~old:"entity.sample.sport.group-juniors.name" "Juniors")  ;
+      ~name:Adlib.OldEntity.group_juniors  ;
   ])
   Template.([
     groupSimple ;
@@ -620,23 +620,23 @@ let judo = vertical "Judo"
     initial "entity.sample.sport.group-petitssamourais.name" groupSimple
       ~name:(adlib "EntitySampleSportGroupPetitssamouraisName" ~old:"entity.sample.sport.group-petitssamourais.name" "Petits samouraïs") ;
     initial "entity.sample.sport.group-poussinnets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPoussinnetsName" ~old:"entity.sample.sport.group-poussinnets.name" "Poussinets") ;
+      ~name:Adlib.OldEntity.group_poussinets ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupSimpleAllmembersName" ~old:"entity.sample.group-simple.allmembers.name" "Tous les membres") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPoussinsName" ~old:"entity.sample.sport.group-poussins.name" "Poussins") ;
+      ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupBenjaminsName" ~old:"entity.sample.sport.group-benjamins.name" "Benjamins") ;
+      ~name:Adlib.OldEntity.group_benjamins ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupMinimesName" ~old:"entity.sample.sport.group-minimes.name" "Minimes")  ;
+      ~name:Adlib.OldEntity.group_minimes  ;
     initial "entity.sample.sport.group-cadets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupCadetsName" ~old:"entity.sample.sport.group-cadets.name" "Cadets")  ;
+      ~name:Adlib.OldEntity.group_cadets  ;
     initial "entity.sample.sport.group-juniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupJuniorsName" ~old:"entity.sample.sport.group-juniors.name" "Juniors")  ;
+      ~name:Adlib.OldEntity.group_juniors  ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupSeniorsName" ~old:"entity.sample.sport.group-seniors.name" "Séniors")  ;
+      ~name:Adlib.OldEntity.group_seniors  ;
     initial "entity.sample.sport.group-veterans.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupVeteransName" ~old:"entity.sample.sport.group-veterans.name" "Vétérans") ;
+      ~name:Adlib.OldEntity.group_veterans ;
   ])
   Template.([
     groupJudoMembers ;
@@ -803,19 +803,19 @@ let multiSports = vertical "MultiSports"
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPoussinsName" ~old:"entity.sample.sport.group-poussins.name" "Poussins") ;
+      ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupBenjaminsName" ~old:"entity.sample.sport.group-benjamins.name" "Benjamins") ;
+      ~name:Adlib.OldEntity.group_benjamins ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupMinimesName" ~old:"entity.sample.sport.group-minimes.name" "Minimes") ;
+      ~name:Adlib.OldEntity.group_minimes ;
     initial "entity.sample.sport.group-cadets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupCadetsName" ~old:"entity.sample.sport.group-cadets.name" "Cadets") ;
+      ~name:Adlib.OldEntity.group_cadets ;
     initial "entity.sample.sport.group-juniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupJuniorsName" ~old:"entity.sample.sport.group-juniors.name" "Juniors")  ;
+      ~name:Adlib.OldEntity.group_juniors  ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupSeniorsName" ~old:"entity.sample.sport.group-seniors.name" "Séniors")  ;
+      ~name:Adlib.OldEntity.group_seniors  ;
     initial "entity.sample.sport.group-veterans.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupVeteransName" ~old:"entity.sample.sport.group-veterans.name" "Vétérans") ;
+      ~name:Adlib.OldEntity.group_veterans ;
   ])
   Template.([
     groupCollaborative ;
@@ -1034,19 +1034,19 @@ let sports = vertical "Sports"
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPoussinsName" ~old:"entity.sample.sport.group-poussins.name" "Poussins") ;
+      ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupBenjaminsName" ~old:"entity.sample.sport.group-benjamins.name" "Benjamins") ;
+      ~name:Adlib.OldEntity.group_benjamins ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupMinimesName" ~old:"entity.sample.sport.group-minimes.name" "Minimes")  ;
+      ~name:Adlib.OldEntity.group_minimes  ;
     initial "entity.sample.sport.group-cadets.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupCadetsName" ~old:"entity.sample.sport.group-cadets.name" "Cadets") ;
+      ~name:Adlib.OldEntity.group_cadets ;
     initial "entity.sample.sport.group-juniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupJuniorsName" ~old:"entity.sample.sport.group-juniors.name" "Juniors") ;
+      ~name:Adlib.OldEntity.group_juniors ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupSeniorsName" ~old:"entity.sample.sport.group-seniors.name" "Séniors") ;
+      ~name:Adlib.OldEntity.group_seniors ;
     initial "entity.sample.sport.group-veterans.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupVeteransName" ~old:"entity.sample.sport.group-veterans.name" "Vétérans") ;
+      ~name:Adlib.OldEntity.group_veterans ;
   ])
   Template.([
     groupSimple ;
