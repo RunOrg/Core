@@ -473,8 +473,6 @@ let federations = vertical "Federations"
   ~name:"Fédérations"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.poll-yearly.name" pollYearly
-      ~name:(adlib "EntitySamplePollYearlyName" ~old:"entity.sample.poll-yearly.name" "Bilan de l'année 2012-2013") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
@@ -618,7 +616,7 @@ let judo = vertical "Judo"
     initial "entity.sample.forum-public.jobs-sport.name" forum
       ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
     initial "entity.sample.sport.group-petitssamourais.name" groupSimple
-      ~name:(adlib "EntitySampleSportGroupPetitssamouraisName" ~old:"entity.sample.sport.group-petitssamourais.name" "Petits samouraïs") ;
+      ~name:Adlib.OldEntity.group_petitssamourais ;
     initial "entity.sample.sport.group-poussinnets.name" groupSimple
       ~name:Adlib.OldEntity.group_poussinets ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
