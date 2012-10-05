@@ -34,7 +34,7 @@ let () = UrlClient.def_calendar begin fun req res ->
   let left = Left.render ~calendar:false cuid key iid in 
   let html = VNavbar.public `Calendar ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Calendar_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Calendar_Title (instance # name)) html res
 
 end
 
@@ -149,6 +149,6 @@ let () = UrlClient.def_event begin fun req res ->
  end in
  
   let html = Asset_Entity_Public.render data in
-  CPageLayout.core (`Website_Event_Title (instance # name, name)) html res
+  CPageLayout.core (snd key) (`Website_Event_Title (instance # name, name)) html res
 
 end

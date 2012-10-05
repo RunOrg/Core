@@ -45,7 +45,7 @@ let () = UrlMail.def_signupConfirm begin fun req res ->
       method title  = AdLib.get `Confirm_Resend_Title
     end) in
 
-    CPageLayout.core `Confirm_Resend_Title html res
+    CPageLayout.core (req # server) `Confirm_Resend_Title html res
 
   in
 

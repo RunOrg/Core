@@ -36,7 +36,7 @@ let () = UrlClient.def_website begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Title (instance # name)) html res
 
 end
 
@@ -48,7 +48,7 @@ let () = UrlClient.def_articles begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Title (instance # name)) html res
 
 end
    
@@ -84,6 +84,6 @@ let () = UrlClient.def_article begin fun req res ->
     | `RSS  r -> r # title
   in 
 
-  CPageLayout.core (`Website_Article_Title (instance # name, title)) html res
+  CPageLayout.core (snd key) (`Website_Article_Title (instance # name, title)) html res
 
 end

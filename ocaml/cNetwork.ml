@@ -47,7 +47,7 @@ let render ?tag title list next req res =
     method list   = list 
   end) in
 
-  CPageLayout.core title html res
+  CPageLayout.core (req # server) title html res
 
 let () = UrlNetwork.def_root begin fun req res -> 
 
@@ -107,6 +107,6 @@ let () = UrlNetwork.def_news begin fun req res ->
     method navbar = (req # server, uid, None)
   end) in 
 
-  CPageLayout.core `Network_News_Title html res
+  CPageLayout.core (req # server) `Network_News_Title html res
 
 end

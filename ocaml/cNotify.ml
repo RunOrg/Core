@@ -146,5 +146,5 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 			method title  = title 
 		      end) in
 		      let! () = ohm $ resend_notification ~nid ~uid in 
-		      CPageLayout.core `Notify_Expired_Title html res	
+		      CPageLayout.core (req # server) `Notify_Expired_Title html res	
 end

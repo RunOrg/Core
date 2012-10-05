@@ -57,7 +57,7 @@ let () = UrlMail.def_unsubscribe begin fun req res ->
 
   let! () = ohm $ send_unsubscribe_confirmation ~iid ~uid in
 
-  CPageLayout.core `Unsubscribe_Send_Title html res
+  CPageLayout.core (req # server) `Unsubscribe_Send_Title html res
 
 end
 
@@ -83,6 +83,6 @@ let () = UrlMail.def_post_unsubscribe begin fun req res ->
     method title  = AdLib.get title 
   end) in
 
-  CPageLayout.core title html res
+  CPageLayout.core (req # server) title html res
 	  
 end

@@ -53,7 +53,7 @@ let () = UrlClient.def_about begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `About ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_About_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_About_Title (instance # name)) html res
 
 end
 

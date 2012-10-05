@@ -8,4 +8,4 @@ open Ohm.Universal
 
 let render ?iid owid cuid res = 
   let html = Asset_NotFound_Page.render (owid,cuid,iid) in
-  CPageLayout.core `Page404_Title html res
+  CPageLayout.core owid `Page404_Title html res

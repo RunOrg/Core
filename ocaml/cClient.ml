@@ -32,7 +32,7 @@ let () = UrlClient.def_root begin fun req res ->
     let html = Asset_Client_ConfirmFirst.render (object
       method navbar = (snd key, cuid, Some iid)
     end) in 
-    CPageLayout.core (`Client_Title (instance # name)) html res
+    CPageLayout.core (snd key) (`Client_Title (instance # name)) html res
   in
 
   let if_old () =
@@ -45,7 +45,7 @@ let () = UrlClient.def_root begin fun req res ->
       method box    = OhmBox.render ~url ~default
     end) in
     
-    CPageLayout.core ~deeplink:true (`Client_Title (instance # name)) html res
+    CPageLayout.core ~deeplink:true (snd key) (`Client_Title (instance # name)) html res
   in
 
   let if_no_token () =

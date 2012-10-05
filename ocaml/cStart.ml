@@ -26,7 +26,7 @@ let () = UrlStart.def_home begin fun req res ->
     method pics       = Action.url UrlUpload.Core.find (req # server) () 
   end) in
 
-  CPageLayout.core `Start_Title html res 
+  CPageLayout.core (req # server) `Start_Title html res 
 
 end
 

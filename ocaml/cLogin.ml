@@ -38,7 +38,7 @@ let () = UrlLogin.def_login begin fun req res ->
     method lost   = Js.remote ~url:(Action.url UrlLogin.lost (req # server) (req # args)) ()
   end) in
 
-  CPageLayout.core `Login_Title html res
+  CPageLayout.core (req # server) `Login_Title html res
 
 end
     

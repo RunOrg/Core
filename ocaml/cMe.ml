@@ -8,6 +8,7 @@ open CMe_common
 
 module Account = CMe_account
 module Notify  = CMe_notify
+module News    = CMe_news
 
 let () = UrlMe.def_root begin fun req res -> 
 
@@ -20,7 +21,7 @@ let () = UrlMe.def_root begin fun req res ->
     method box    = OhmBox.render ~url ~default
   end) in
 
-  CPageLayout.core ~deeplink:true `Me_Title html res
+  CPageLayout.core ~deeplink:true (req # server) `Me_Title html res
 
 end
     

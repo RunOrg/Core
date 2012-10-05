@@ -133,7 +133,7 @@ let () = UrlMail.def_passReset begin fun req res ->
       method title  = AdLib.get `Login_ResetResend_Title
     end) in
 
-    CPageLayout.core `Login_ResetResend_Title html res
+    CPageLayout.core (req # server) `Login_ResetResend_Title html res
 
   in
 
