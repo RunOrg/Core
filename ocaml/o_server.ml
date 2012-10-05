@@ -4,20 +4,36 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let core = List.fold_left begin fun map wid ->
-  let domain = ConfigWhite.domain wid in
-  let www    = "www." ^ domain in
-  let server : unit Action.server = object
-    method protocol  = `HTTPS
-    method domain _  = domain 
-    method port   _  = 443
-    method cookie_domain = None
-    method matches _ domain' _ = if domain = domain' || domain = www then Some () else None
-  end in 
-  BatPMap.add wid server map 
-end BatPMap.empty ConfigWhite.all
+let domain default = function
+  | None -> default 
+  | Some wid -> try ConfigWhite.domain wid with Not_found -> default
 
-let core wid = 
-  try BatPMap.find wid core with Not_found -> 
-    Util.log "Missing core white server %S" (IWhite.to_string wid) ;
-    assert false
+let core default = object
+  method protocol _ = `HTTP
+  method domain = domain default 
+  method port _ = 80
+  method cookie_domain owid = Some ("." ^ domain default owid)
+  method matches protocol domain port = 
+    if protocol <> `HTTP then None else Some (ConfigWhite.white domain)      
+end
+
+let secure default = object
+  method protocol _ = `HTTPS
+  method domain = domain default
+  method port _ = 443
+  method cookie_domain owid = Some ("." ^ domain default owid)
+  method matches protocol domain port = 
+    if protocol <> `HTTPS then None else Some (ConfigWhite.white domain)
+end 
+
+let client default = object 
+  method protocol _ = `HTTP
+  method domain (prefix,owid) = prefix ^ "." ^ domain default owid
+  method port _ = 80
+  method cookie_domain (_,owid) = Some ("." ^ domain default owid) 
+  method matches protocol domain port = 
+    if protocol <> `HTTP then None else
+      match ConfigWhite.slice_domain domain with 
+	| None, _ -> None
+	| Some key, owid -> Some (key,owid)
+end
