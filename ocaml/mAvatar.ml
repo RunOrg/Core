@@ -578,6 +578,23 @@ let is_admin ?other_than uid =
   let  iids  = List.map (snd |- IInstance.decay) list in 
   return $ List.exists (fun iid -> other_than <> Some iid) iids
 
+let user_avatars uid = 
+
+  let  uid = IUser.decay uid in 
+  let  startkey = (uid,`Token) and endkey = (uid,`Admin) in
+  let! list = ohm $ ByUserView.query ~startkey ~endkey ~limit:200 () in
+  
+  return $
+    BatList.filter_map begin fun item ->
+      let iid = item # value and aid = IAvatar.of_id item # id in
+      let _, sta = item # key in 
+      match sta with `Contact -> None | `Admin | `Token -> 
+	(* Admin or member *)
+	let iid = IInstance.Assert.is_token iid in
+	let aid = IAvatar.Assert.is_self aid in
+	Some (aid, iid)
+    end list 
+      
 module CountByUserView = CouchDB.ReduceView(struct
   module Key    = IUser
   module Value  = Fmt.Int
