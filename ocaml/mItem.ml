@@ -239,6 +239,7 @@ end)
 
 let news ?self ?since access iid = 
 
+  let  iid = IInstance.decay iid in 
   let! now = ohmctx (#time) in
   let  startkey = (iid, now) in
   let  endkey   = (iid, BatOption.default (now -. 3600. *. 24.) since) in

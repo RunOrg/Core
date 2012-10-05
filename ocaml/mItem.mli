@@ -150,7 +150,7 @@ val news :
      ?self:[`IsSelf] IAvatar.id
   -> ?since:float
   -> (IFeed.t -> [`Read] IFeed.id option O.run)  
-  -> IInstance.t 
+  -> 'any IInstance.id 
   -> item list O.run
 
 val count : [`Read] source -> int O.run 
