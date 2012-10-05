@@ -221,3 +221,38 @@ let try_get context item =
       return $ Some (item_of_data item ~self data) 
     else 
       return None
+
+module NewsView = CouchDB.DocView(struct
+
+  module Key = Fmt.Make(struct
+    type json t = (IInstance.t * float)
+  end)
+
+  module Value  = Fmt.Unit
+  module Doc    = Data
+  module Design = Design
+
+  let name = "news"
+  let map  = "if (!doc.d && !doc.del && doc.w[0] == 'w') emit([doc.iid,doc.t]);" 
+
+end)
+
+let news ?self ?since access iid = 
+
+  let! now = ohmctx (#time) in
+  let  startkey = (iid, now) in
+  let  endkey   = (iid, BatOption.default (now -. 3600. *. 24.) since) in
+  let  access   = Util.memoize (fun fid -> Run.memo (access fid)) in
+
+  let! list = ohm $ NewsView.doc_query ~startkey ~endkey ~descending:true ~limit:200 () in
+
+  let! list = ohm (Run.list_filter begin fun item ->
+    let doc = item # doc in 
+    match doc # where with `album _ | `folder _ -> return None | `feed fid ->
+      let! fid  = ohm_req_or (return None) (access fid) in
+      let  itid = IItem.of_id (item # id) in
+      let  item = item_of_data ?self itid doc in 
+      return (Some item) 
+  end list) in
+
+  return list
