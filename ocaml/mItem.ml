@@ -237,12 +237,14 @@ module NewsView = CouchDB.DocView(struct
 
 end)
 
+let month = 3600. *. 24. *. 30.
+
 let news ?self ?since access iid = 
 
   let  iid = IInstance.decay iid in 
   let! now = ohmctx (#time) in
   let  startkey = (iid, now) in
-  let  endkey   = (iid, BatOption.default (now -. 3600. *. 24.) since) in
+  let  endkey   = (iid, BatOption.default (now -. month) since) in
   let  access   = Util.memoize (fun fid -> Run.memo (access fid)) in
 
   let! list = ohm $ NewsView.doc_query ~startkey ~endkey ~descending:true ~limit:200 () in
