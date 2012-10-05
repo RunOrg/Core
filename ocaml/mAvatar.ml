@@ -584,16 +584,16 @@ let user_avatars uid =
   let  startkey = (uid,`Token) and endkey = (uid,`Admin) in
   let! list = ohm $ ByUserView.query ~startkey ~endkey ~limit:200 () in
   
-  return $
-    BatList.filter_map begin fun item ->
-      let iid = item # value and aid = IAvatar.of_id item # id in
-      let _, sta = item # key in 
-      match sta with `Contact -> None | `Admin | `Token -> 
-	(* Admin or member *)
-	let iid = IInstance.Assert.is_token iid in
-	let aid = IAvatar.Assert.is_self aid in
-	Some (aid, iid)
-    end list 
+  Run.list_filter begin fun item ->
+    let  iid = item # value and aid = IAvatar.of_id item # id in
+    let  _, sta = item # key in 
+    let  role = (sta :> [`Admin|`Token|`Contact|`Nobody]) in
+    let  aid = IAvatar.Assert.is_self aid in
+    let  uid = IUser.Assert.is_old uid in
+    let  isin = IIsIn.Assert.make ~id:(Some aid) ~role ~ins:iid ~usr:uid in
+    let! isin = req_or (return None) (IIsIn.Deduce.is_token isin) in
+    return (Some (aid, isin))
+  end list 
       
 module CountByUserView = CouchDB.ReduceView(struct
   module Key    = IUser
