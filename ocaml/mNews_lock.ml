@@ -46,7 +46,7 @@ let grab id =
     let item = match item with None -> Item.make now | Some item -> item in 
     let recent = recent now item and locked = locked now item in    
     return (
-      (object method recent = recent method locked = locked end),
+      (object method last = item.Item.time method recent = recent method locked = locked end),
       if locked then `keep else `put (Item.lock now item)
     )
   end 

@@ -4,5 +4,5 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Lock = MNews_lock
+module Cache = MNews_cache
 
