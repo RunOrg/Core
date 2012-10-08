@@ -15,7 +15,7 @@ include Common
 
 type t = <
   id      : IInstance.t ;
-  key     : string ;
+  key     : IWhite.key ;
   name    : string ;
   theme   : string option ;
   disk    : float ;
@@ -25,13 +25,12 @@ type t = <
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
   install : bool ;
-  stub    : bool ;
-  white   : IWhite.t option
+  stub    : bool 
 > ;; 
 
 let extract id i = Data.(object
   method id = IInstance.decay id 
-  method key = i.key
+  method key = i.key, i.white
   method name = i.name
   method theme = i.theme
   method disk = if i.stub then 10.0 else i.disk
@@ -42,7 +41,6 @@ let extract id i = Data.(object
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
   method install = i.install
   method stub = i.stub
-  method white = i.white
 end)
 
 (* Signals --------------------------------------------------------------------------------- *)
@@ -55,7 +53,7 @@ end
 
 (* Various functions --------------------------------------------------------------------- *)
 
-let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical = 
+let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white = 
 
   let id = IInstance.gen () in
 
@@ -79,13 +77,14 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical =
     desc    = None ;
     site    = None ;
     contact = None ;
-    white   = None 
+    white   ;
   }) in 
 
   let info old = Profile.Info.({ 
     old with     
       name     = clip 80 name ;
       key      ;
+      white    ; 
       address  = BatOption.map (clip 300) address ;
       desc     ;
       site     = BatOption.map (clip 256) site ;
@@ -125,6 +124,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
     old with 
       name     = current.Data.name ;
       key      = current.Data.key ;
+      white    = current.Data.white ; 
       address  = BatOption.map (clip 300)  address ;
       desc     ;
       site     = BatOption.map (clip 256)  site ;

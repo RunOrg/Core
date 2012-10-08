@@ -31,7 +31,9 @@ let template =
 
 
 
-let () = define UrlMe.Account.def_pass begin fun cuid -> 
+let () = define UrlMe.Account.def_pass begin fun owid cuid -> 
+
+  let parents = Parents.make owid in 
 
   let! save = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
          
@@ -68,7 +70,7 @@ let () = define UrlMe.Account.def_pass begin fun cuid ->
       
     (* Redirect to home *)
       
-    let url = Parents.home # url in 
+    let url = parents # home # url in 
     return $ Action.javascript (Js.redirect url ()) res
 	
   end in 
@@ -79,8 +81,8 @@ let () = define UrlMe.Account.def_pass begin fun cuid ->
     let url  = OhmBox.reaction_endpoint save () in
 
     Asset_Admin_Page.render (object
-      method parents = [ Parents.home ; Parents.admin ] 
-      method here  = Parents.pass # title
+      method parents = [ parents # home ; parents # admin ] 
+      method here  = parents # pass # title
       method body  = Asset_Form_Clean.render (OhmForm.render form url)
     end)
 

@@ -10,7 +10,7 @@ module Parents = CAdmin_parents
 
 let () = UrlAdmin.def_stats $ admin_only begin fun cuid req res -> 
 
-  let urls = BatList.init 28 (Action.url UrlAdmin.getStats ()) in
+  let urls = BatList.init 28 (Action.url UrlAdmin.getStats None) in
 
   let choices = Asset_Admin_Stats.render (object
     method urls = urls 

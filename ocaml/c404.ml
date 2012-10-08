@@ -6,6 +6,6 @@ open BatPervasives
 open O
 open Ohm.Universal
 
-let render ?iid cuid res = 
-  let html = Asset_NotFound_Page.render (cuid,iid) in
-  CPageLayout.core `Page404_Title html res
+let render ?iid owid cuid res = 
+  let html = Asset_NotFound_Page.render (owid,cuid,iid) in
+  CPageLayout.core owid `Page404_Title html res

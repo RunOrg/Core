@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Server = O_server
+
 (* Environment and basic configuration ---------------------------------------------------------------------- *)
 
 let environment = `Prod
@@ -66,11 +68,9 @@ let domain = match environment with
       | None -> "dev.runorg.com"
       | Some _ -> "runorg.local"
 
-let cookies = "." ^ domain
-
-let core   = Action.Convenience.single_domain_server ~cookies domain
-let client = Action.Convenience.sub_domain_server ~cookies ("." ^ domain)
-let secure = Action.Convenience.single_domain_server ~secure:true ~cookies domain
+let core   = Server.core domain 
+let client = Server.client domain
+let secure = Server.secure domain
 
 let action f req res = 
   Run.with_context (ctx `FR) (f req res)

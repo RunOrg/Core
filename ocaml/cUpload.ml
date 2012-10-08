@@ -7,7 +7,7 @@ open BatPervasives
 (* Cancelling an upload --------------------------------------------------------------------- *)
 
 let white req res = 
-  CPageLayout.core `EMPTY (return ignore) res 
+  CPageLayout.core None `EMPTY (return ignore) res 
 
 let () = UrlUpload.Core.def_cancel white
 let () = UrlUpload.Client.def_cancel white
@@ -41,11 +41,11 @@ let () = UrlUpload.Client.Img.def_confirm
 
 (* Preparing an upload --------------------------------------------------------------------- *) 
 
-let form cuid fid outer inner prove ok res = 
+let form owid cuid fid outer inner prove ok res = 
   let proof = prove fid in 
   let redirect = ok (IFile.decay fid, proof) in
   let html = outer (ConfigS3.upload_form (MFile.Upload.configure fid redirect) inner) in
-  CPageLayout.core `EMPTY html res
+  CPageLayout.core owid `EMPTY html res
 
 let () = UrlUpload.Core.def_root begin fun req res -> 
 
@@ -53,15 +53,15 @@ let () = UrlUpload.Core.def_root begin fun req res ->
     
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
   
-  form cuid fid 
+  form (req # server) cuid fid 
     (Asset_Upload_Form.render) 
     (fun inner -> 
       Asset_Upload_Form_Inner.render (object
-	method cancel = Action.url UrlUpload.Core.cancel () ()
+	method cancel = Action.url UrlUpload.Core.cancel (req # server) ()
 	method inner  = inner
       end))
     (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
-    (Action.url UrlUpload.Core.ok ())
+    (Action.url UrlUpload.Core.ok (req # server))
     res
 
 end
@@ -73,7 +73,7 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
     
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
   
-  form cuid fid 
+  form (snd req # server) cuid fid 
     (Asset_Upload_Form.render) 
     (fun inner -> 
       Asset_Upload_Form_Inner.render (object
@@ -96,7 +96,7 @@ let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res
 
   let! _, fid = ohm_req_or (white req res) $ MItem.Create.doc access folder in
   
-  form cuid fid 
+  form (snd req # server) cuid fid 
     (Asset_Upload_DocForm.render) 
     (Asset_Upload_DocForm_Inner.render)
     (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 

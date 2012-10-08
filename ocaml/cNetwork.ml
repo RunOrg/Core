@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let renderlist ?tag list next = 
+let renderlist ?tag owid list next = 
 
   let! list = ohm $ Run.list_map begin fun profile -> 
     let! pic = ohm $ CPicture.small_opt (profile # pic) in
@@ -12,12 +12,12 @@ let renderlist ?tag list next =
       method url  = Action.url UrlClient.website (profile # key) ()
       method pic  = pic 
       method name = profile # name
-      method tags = List.map CTag.prepare (profile # tags)
+      method tags = List.map (CTag.prepare owid) (profile # tags)
     end)
   end list in
 
   let next = BatOption.map (fun next -> 
-    JsCode.Endpoint.of_url (Action.url UrlNetwork.more () (next,tag)), Json.Null
+    JsCode.Endpoint.of_url (Action.url UrlNetwork.more owid (next,tag)), Json.Null
   ) next in 
   
   return (object
@@ -31,14 +31,14 @@ let render ?tag title list next req res =
 
   let! stats = ohm $ MInstance.Profile.tag_stats () in
   let tags = List.map (fun (tag,count) -> (object
-    method tag   = CTag.prepare tag
+    method tag   = CTag.prepare (req # server) tag
     method count = count
   end)) stats in 
 
-  let! list = ohm $ renderlist ?tag:(BatOption.map fst tag) list next in
+  let! list = ohm $ renderlist ?tag:(BatOption.map fst tag) (req # server) list next in
 
   let html = Asset_Network_List.render (object
-    method navbar = (uid,None)
+    method navbar = (req # server,uid,None)
     method tags   = tags
     method tag    = BatOption.map (fun (tag,home) -> (object
       method tag  = tag
@@ -47,7 +47,7 @@ let render ?tag title list next req res =
     method list   = list 
   end) in
 
-  CPageLayout.core title html res
+  CPageLayout.core (req # server) title html res
 
 let () = UrlNetwork.def_root begin fun req res -> 
 
@@ -61,7 +61,7 @@ end
 let () = UrlNetwork.def_tag begin fun req res -> 
 
   let  tag        = req # args in
-  let  home       = Action.url UrlNetwork.root () () in
+  let  home       = Action.url UrlNetwork.root (req # server) () in
   let! list, next = ohm $ MInstance.Profile.by_tag ~count:20 tag in
   let  title      = `Network_Title_WithTag tag in
 
@@ -78,7 +78,7 @@ let () = UrlNetwork.def_more begin fun req res ->
     | Some tag -> MInstance.Profile.by_tag ~start:iid ~count:20 tag
   end in 
 
-  let! list = ohm $ renderlist ?tag list next in 
+  let! list = ohm $ renderlist ?tag (req # server) list next in 
   let! html = ohm $ Asset_Network_List_List.render list in 
   
   return $ Action.json [ "more", Html.to_json html ] res
@@ -96,7 +96,7 @@ let () = UrlNetwork.def_news begin fun req res ->
 
   let! more = ohm begin match next with 
     | None -> return $ Html.str "" 
-    | Some time -> let url = Action.url (req # self) () (Some time) in
+    | Some time -> let url = Action.url (req # self) (req # server) (Some time) in
 		   Asset_Broadcast_More.render url
   end in 
   
@@ -104,9 +104,9 @@ let () = UrlNetwork.def_news begin fun req res ->
 
   let html = Asset_Network_News.render (object
     method news = news
-    method navbar = (uid, None)
+    method navbar = (req # server, uid, None)
   end) in 
 
-  CPageLayout.core `Network_News_Title html res
+  CPageLayout.core (req # server) `Network_News_Title html res
 
 end

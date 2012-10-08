@@ -9,3 +9,5 @@ end
   
 module Deduce = struct
 end
+
+type key = string * t option

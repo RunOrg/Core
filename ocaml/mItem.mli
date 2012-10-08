@@ -146,6 +146,13 @@ val list :
   -> float option
   -> (item list * float option) O.run
 
+val news : 
+     ?self:[`IsSelf] IAvatar.id
+  -> ?since:float
+  -> (IFeed.t -> [`Read] IFeed.id option O.run)  
+  -> 'any IInstance.id 
+  -> item list O.run
+
 val count : [`Read] source -> int O.run 
 
 val prev_next : item -> (IItem.t option * IItem.t option) O.run

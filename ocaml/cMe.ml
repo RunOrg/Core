@@ -8,19 +8,20 @@ open CMe_common
 
 module Account = CMe_account
 module Notify  = CMe_notify
+module News    = CMe_news
 
 let () = UrlMe.def_root begin fun req res -> 
 
-  let url = Action.url UrlMe.ajax () [] in
+  let url = Action.url UrlMe.ajax (req # server) [] in
   let default = "/account" in
   let uid = CSession.get req in
 
   let html = Asset_Me_Page.render (object
-    method navbar = (uid,None)
+    method navbar = (req # server,uid,None)
     method box    = OhmBox.render ~url ~default
   end) in
 
-  CPageLayout.core ~deeplink:true `Me_Title html res
+  CPageLayout.core ~deeplink:true (req # server) `Me_Title html res
 
 end
     

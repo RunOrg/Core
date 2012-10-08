@@ -10,12 +10,12 @@ let do_extract fail req res =
   let  p404 = return $ Bad (fail cuid res) in
 
   let  key      = req # server in
-  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
+  let! iid      = ohm_req_or p404 $ MInstance.by_key (fst key) in
   let! instance = ohm_req_or p404 $ MInstance.get iid in
 
   return $ Ok (cuid, key, iid, instance) 
 
-let extract req res = ohm_ok_or identity (do_extract C404.render req res)
+let extract req res = ohm_ok_or identity (do_extract (C404.render (snd (req # server))) req res)
 
 let extract_ajax req res = 
   let redirect _ res = 
@@ -30,9 +30,9 @@ let () = UrlClient.def_root begin fun req res ->
 
   let if_new () = 
     let html = Asset_Client_ConfirmFirst.render (object
-      method navbar = (cuid, Some iid)
+      method navbar = (snd key, cuid, Some iid)
     end) in 
-    CPageLayout.core (`Client_Title (instance # name)) html res
+    CPageLayout.core (snd key) (`Client_Title (instance # name)) html res
   in
 
   let if_old () =
@@ -41,11 +41,11 @@ let () = UrlClient.def_root begin fun req res ->
     let default = "/home" in
     
     let html = Asset_Client_Page.render (object
-      method navbar = (cuid,Some iid)
+      method navbar = (snd key,cuid,Some iid)
       method box    = OhmBox.render ~url ~default
     end) in
     
-    CPageLayout.core ~deeplink:true (`Client_Title (instance # name)) html res
+    CPageLayout.core ~deeplink:true (snd key) (`Client_Title (instance # name)) html res
   in
 
   let if_no_token () =
@@ -69,7 +69,7 @@ end
 let () = UrlClient.def_notfound begin fun req res -> 
 
   let! cuid, key, iid, instance = extract req res in
-  C404.render ~iid cuid res
+  C404.render ~iid (snd key) cuid res
 
 end 
     
@@ -92,7 +92,7 @@ let action f req res =
 
     (* Redirect or run action *)
     let url = UrlLogin.save_url ~iid path in
-    let js  = Js.redirect (Action.url UrlLogin.login () url) () in
+    let js  = Js.redirect (Action.url UrlLogin.login (snd key) url) () in
     return $ Action.javascript js res
 
   in

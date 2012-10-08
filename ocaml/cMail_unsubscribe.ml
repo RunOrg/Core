@@ -21,7 +21,7 @@ let send_unsubscribe_confirmation =
 	begin fun self user send -> 
 
 	  let  token = IUser.Deduce.make_unsub_token self in
-	  let  url = Action.url UrlMail.post_unsubscribe () (arg # user, token, arg # instance) in
+	  let  url = Action.url UrlMail.post_unsubscribe (user # white) (arg # user, token, arg # instance) in
 	  
 	  let  body = Asset_Mail_Unsubscribe.render (object
 	    method url   = url 
@@ -29,7 +29,7 @@ let send_unsubscribe_confirmation =
 	    method email = user # email
 	  end) in
 	  
-	  let! from, html = ohm $ Wrap.render ?iid:(arg # instance) self body in
+	  let! from, html = ohm $ Wrap.render ?iid:(arg # instance) (user # white) self body in
 	  let  subject = AdLib.get `Mail_Unsubscribe_Title in
  
 	  send ~from ~subject ~html
@@ -51,13 +51,13 @@ let () = UrlMail.def_unsubscribe begin fun req res ->
   let title = AdLib.get `Unsubscribe_Send_Title in
 
   let html = Asset_Unsubscribe_Send.render (object
-    method navbar = (None,iid)
+    method navbar = (req # server, None, iid)
     method title  = title 
   end) in
 
   let! () = ohm $ send_unsubscribe_confirmation ~iid ~uid in
 
-  CPageLayout.core `Unsubscribe_Send_Title html res
+  CPageLayout.core (req # server) `Unsubscribe_Send_Title html res
 
 end
 
@@ -65,7 +65,7 @@ let () = UrlMail.def_post_unsubscribe begin fun req res ->
   
   let uid, token, iid = req # args in
   let fail = return $ Action.redirect 
-    (Action.url UrlMail.unsubscribe () (uid,iid)) res in
+    (Action.url UrlMail.unsubscribe (req # server) (uid,iid)) res in
 
   let! uid = req_or fail $ IUser.Deduce.from_unsub_token token uid in
   
@@ -79,10 +79,10 @@ let () = UrlMail.def_post_unsubscribe begin fun req res ->
   in
 
   let html = html (object
-    method navbar = (None,iid)
+    method navbar = (req # server, None,iid)
     method title  = AdLib.get title 
   end) in
 
-  CPageLayout.core title html res
+  CPageLayout.core (req # server) title html res
 	  
 end

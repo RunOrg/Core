@@ -15,7 +15,7 @@ let resend_confirmation =
       let! _ = ohm $ MMail.other_send_to_self uid
 	begin fun self user send -> 
 
-	  let  url = Action.url UrlMail.signupConfirm () (uid, token) in
+	  let  url = Action.url UrlMail.signupConfirm (user # white) (uid, token) in
 	  
 	  let  body = Asset_Mail_SignupConfirm.render (object
 	    method url   = url 
@@ -23,7 +23,7 @@ let resend_confirmation =
 	    method email = user # email
 	  end) in
 	  
-	  let! from, html = ohm $ CMail.Wrap.render self body in
+	  let! from, html = ohm $ CMail.Wrap.render (user # white) self body in
 	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
  
 	  send ~from ~subject ~html
@@ -41,11 +41,11 @@ let () = UrlMail.def_signupConfirm begin fun req res ->
     let! () = ohm $ resend_confirmation uid in 
     
     let html = Asset_Confirm_Resend.render (object
-      method navbar = (None,None)
+      method navbar = (req # server,None,None)
       method title  = AdLib.get `Confirm_Resend_Title
     end) in
 
-    CPageLayout.core `Confirm_Resend_Title html res
+    CPageLayout.core (req # server) `Confirm_Resend_Title html res
 
   in
 
@@ -55,7 +55,7 @@ let () = UrlMail.def_signupConfirm begin fun req res ->
   let  uid  = IUser.Deduce.old_can_confirm cuid in 
   let!  _   = ohm $ MUser.confirm uid in 
 
-  let  url  = Action.url UrlMe.Account.home () () in
+  let  url  = Action.url UrlMe.Account.home (req # server) () in
   
   return $ CSession.start (`Old cuid) (Action.redirect url res)
 

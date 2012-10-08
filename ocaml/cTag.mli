@@ -1,3 +1,3 @@
 (* © 2012 RunOrg *)
 
-val prepare : string -> < url : string ; text : string > 
+val prepare : IWhite.t option -> string -> < url : string ; text : string > 

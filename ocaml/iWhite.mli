@@ -8,3 +8,4 @@ end
 module Deduce : sig
 end
 
+type key = string * t option

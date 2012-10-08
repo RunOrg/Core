@@ -36,7 +36,7 @@ let () = UrlClient.def_website begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Title (instance # name)) html res
 
 end
 
@@ -48,7 +48,7 @@ let () = UrlClient.def_articles begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `Home ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Title (instance # name)) html res
 
 end
    
@@ -57,7 +57,7 @@ let () = UrlClient.def_article begin fun req res ->
   let! cuid, key, iid, instance = CClient.extract req res in
 
   let  bid, str  = req # args in
-  let! broadcast = ohm_req_or (C404.render cuid res) $ MBroadcast.get bid in
+  let! broadcast = ohm_req_or (C404.render (snd key) cuid res) $ MBroadcast.get bid in
 
   let! status = ohm $ Run.opt_map (MAvatar.status iid) cuid in 
 
@@ -84,6 +84,6 @@ let () = UrlClient.def_article begin fun req res ->
     | `RSS  r -> r # title
   in 
 
-  CPageLayout.core (`Website_Article_Title (instance # name, title)) html res
+  CPageLayout.core (snd key) (`Website_Article_Title (instance # name, title)) html res
 
 end

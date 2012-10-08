@@ -34,7 +34,7 @@ let () = UrlClient.def_calendar begin fun req res ->
   let left = Left.render ~calendar:false cuid key iid in 
   let html = VNavbar.public `Calendar ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_Calendar_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_Calendar_Title (instance # name)) html res
 
 end
 
@@ -43,7 +43,7 @@ let () = UrlClient.def_event begin fun req res ->
   let! cuid, key, iid, instance = CClient.extract req res in 
 
   let  eid = req # args in
-  let! entity = ohm_req_or (C404.render cuid res) $ MEntity.get_if_public eid in  
+  let! entity = ohm_req_or (C404.render (snd key) cuid res) $ MEntity.get_if_public eid in  
 
   let  tmpl = MEntity.Get.template entity in 
   let! name = ohm $ CEntityUtil.name entity in
@@ -127,7 +127,7 @@ let () = UrlClient.def_event begin fun req res ->
   end in 
 
   let data = object
-    method navbar   = cuid, Some iid 
+    method navbar   = snd instance # key, cuid, Some iid 
     method side     = List.filter (#info|-(<>)[]) [ (object
       method title = AdLib.write `Website_Event_When
       method map   = None
@@ -149,6 +149,6 @@ let () = UrlClient.def_event begin fun req res ->
  end in
  
   let html = Asset_Entity_Public.render data in
-  CPageLayout.core (`Website_Event_Title (instance # name, name)) html res
+  CPageLayout.core (snd key) (`Website_Event_Title (instance # name, name)) html res
 
 end

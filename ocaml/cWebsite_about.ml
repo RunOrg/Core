@@ -10,7 +10,7 @@ let () = UrlClient.def_about begin fun req res ->
 
   let! cuid, key, iid, instance = CClient.extract req res in
   
-  let! profile = ohm_req_or (C404.render cuid res) $ MInstance.Profile.get iid in  
+  let! profile = ohm_req_or (C404.render (snd (req # server)) cuid res) $ MInstance.Profile.get iid in  
 
   let! status = ohm $ Run.opt_map (MAvatar.status iid) cuid in 
 
@@ -23,7 +23,7 @@ let () = UrlClient.def_about begin fun req res ->
     else []
   in
 
-  let tags = List.map CTag.prepare (profile # tags) in
+  let tags = List.map (CTag.prepare (snd key)) (profile # tags) in
 
   let! map = ohm begin
     let! addr = req_or (return None) (profile # address) in 
@@ -53,7 +53,7 @@ let () = UrlClient.def_about begin fun req res ->
   let left = Left.render cuid key iid in 
   let html = VNavbar.public `About ~cuid ~left ~main instance in
 
-  CPageLayout.core (`Website_About_Title (instance # name)) html res
+  CPageLayout.core (snd key) (`Website_About_Title (instance # name)) html res
 
 end
 

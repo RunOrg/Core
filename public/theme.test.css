@@ -1,0 +1,7 @@
+#navbar {
+  background: #D60;
+  background: -moz-linear-gradient(center top , #E80, #D60); 
+  background: -webkit-linear-gradient(center top , #E80, #D60);
+  padding: 8px 0;
+  text-shadow: 0 -1px 0 #940;
+}
