@@ -103,11 +103,8 @@ let head ~count uid =
   let uid = IUser.decay uid in 
   let! lock = ohm $ Lock.grab uid in 
   let! () = ohm (if not lock # locked then cache_task (uid, lock # last) else return ()) in
-  if lock # recent then 
-    let! list, next = ohm (raw_user_cache ~count uid) in
-    return $ Some (list, next)
-  else
-    return None
+  let! list, next = ohm (raw_user_cache ~count uid) in
+  return (lock # recent, list, next)
 
 let rest ~count uid start = 
   raw_user_cache ~count ~start uid

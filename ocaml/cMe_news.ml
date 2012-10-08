@@ -33,7 +33,7 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 
     let  uid = IUser.Deduce.is_anyone cuid in 
 
-    let! items, next = ohm_req_or (return ignore) (MNews.Cache.head ~count:10 uid) in
+    let! fresh, items, next = ohm (MNews.Cache.head ~count:10 uid) in
     let! htmls = ohm (Run.list_filter (render access) items) in 
     let  html  = Html.concat htmls in
 
