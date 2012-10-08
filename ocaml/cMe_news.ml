@@ -63,23 +63,54 @@ let render_item access itid =
 let render access = function
   | `Item itid -> render_item access itid
 
-let () = define UrlMe.News.def_home begin fun owid cuid ->
-  O.Box.fill (O.decay begin
+module ArchiveFmt = Fmt.Make(struct type json t = (float option) end)
 
-    let  access = Util.memoize (fun iid -> Run.memo begin
-      (* Acting as confirmed self to view items. *)
-      let  cuid = ICurrentUser.Assert.is_old cuid in    
-      let! inst = ohm_req_or (return None) (MInstance.get iid) in
-      CAccess.make cuid iid inst
+let () = define UrlMe.News.def_home begin fun owid cuid ->
+
+  let  access = Util.memoize (fun iid -> Run.memo begin
+    (* Acting as confirmed self to view items. *)
+    let  cuid = ICurrentUser.Assert.is_old cuid in    
+    let! inst = ohm_req_or (return None) (MInstance.get iid) in
+    CAccess.make cuid iid inst
+  end) in
+  
+  let  uid = IUser.Deduce.is_anyone cuid in 
+  
+  let count = 7 in
+
+  let! more = O.Box.react ArchiveFmt.fmt begin fun time _ self res ->
+
+    let! fresh, items, next = ohm (O.decay begin 
+      match time with 
+	| None -> MNews.Cache.head ~count uid	
+	| Some time -> let! items, next = ohm $ MNews.Cache.rest ~count uid time in
+		       return (true, items, next)
     end) in
 
-    let  uid = IUser.Deduce.is_anyone cuid in 
+    let! htmls = ohm (O.decay (Run.list_filter (render access) items)) in 
 
-    let! fresh, items, next = ohm (MNews.Cache.head ~count:10 uid) in
-    let! htmls = ohm (Run.list_filter (render access) items) in 
-    let  html  = Html.concat htmls in
+    let more = match next with 
+      | None -> None
+      | Some time -> Some (OhmBox.reaction_endpoint self (Some time), Json.Null)
+    in
 
-    return html
+    let! result = ohm $ Asset_News_More.render (object
+      method items = Html.concat htmls 
+      method more  = more
+      method old   = not fresh
+    end) in
+
+    return $ Action.json ["more", Html.to_json result] res 
+
+  end in 
+
+  O.Box.fill (O.decay begin
+
+    let more = (OhmBox.reaction_endpoint more None, Json.Null) in
+
+    Asset_News_Page.render (object
+      method more = more
+    end) 
 
   end)
 end
