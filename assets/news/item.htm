@@ -1,0 +1,56 @@
+<a href="{url}" class="news-item">
+  <span class="-body">{body}</span>
+  {?pic}<img src="{this}" class="-img"/>{else}<span class="-img"></span>{/?}
+  <span class="-name">{name}</span>
+  <span class="-date">{`DateRelative date}</span>
+</a>
+
+<style>
+.news-item {
+
+  border-bottom: 1px solid #DDD;
+  border-top: 1px solid #DDD;
+  display: block;
+  font-size: 13px;
+  margin-bottom: -1px;
+  overflow: hidden;
+  padding: 16px 6px;
+  width: 600px;
+
+  &:hover { background-color: #EEE }
+
+  .-body {
+    color: #555;
+    float: right;
+    height: 51px;
+    line-height: 17px;
+    overflow: hidden;
+    width: 400px;
+  }
+
+  .-img {
+    float: left;
+    height: 50px;
+    margin-right: 8px;
+    width: 50px;
+  }
+  
+  .-name {
+    color: #333;
+    display: block;
+    line-height: 18px;
+    margin: 4px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .-date {
+    color: #888;
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+    overflow: hidden;
+  }
+
+}
+</style>
