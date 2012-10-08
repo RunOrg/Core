@@ -14,7 +14,11 @@ let core default = object
   method port _ = 80
   method cookie_domain owid = Some ("." ^ domain default owid)
   method matches protocol domain port = 
-    if protocol <> `HTTP then None else Some (ConfigWhite.white domain)      
+    if protocol <> `HTTP then None else 
+      if domain = default then Some None else
+	match ConfigWhite.white domain with 
+	  | Some wid -> Some (Some wid)
+	  | None -> None     
 end
 
 let secure default = object
@@ -23,7 +27,11 @@ let secure default = object
   method port _ = 443
   method cookie_domain owid = Some ("." ^ domain default owid)
   method matches protocol domain port = 
-    if protocol <> `HTTPS then None else Some (ConfigWhite.white domain)
+    if protocol <> `HTTPS then None else
+      if domain = default then Some None else
+	match ConfigWhite.white domain with 
+	  | Some wid -> Some (Some wid)
+	  | None -> None
 end 
 
 let client default = object 
