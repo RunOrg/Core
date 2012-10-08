@@ -12,10 +12,12 @@ let js ~deeplink =
     Some Asset.js
   ] 
 
+let white_css = function None -> [] | Some wid ->
+  [ "/theme." ^ IWhite.to_string wid ^ ".css" ] 
 
 let splash title html res = 
   let! html = ohm $ Run.list_map identity html in 
-  let  html = Html.concat html in 
+  let  html = Html.concat html in
   return $ Action.page
     (Html.print_page
        ~js:(js false)
@@ -25,14 +27,15 @@ let splash title html res =
        ~body_classes:["theme-splash"]
        html) res
 
-let core ?(deeplink=false) title html res =
+let core ?(deeplink=false) owid title html res =
   let! title = ohm $ AdLib.get title in 
   let! html  = ohm html in 
   let  js    = js deeplink in 
+  let  css = Asset.css :: white_css owid in 
   return $ Action.page 
     (Html.print_page 
        ~js
-       ~css:[Asset.css] 
+       ~css
        ~favicon:"/public/favicon.ico"
        ~title html) res
 

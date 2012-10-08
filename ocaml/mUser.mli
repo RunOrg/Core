@@ -63,6 +63,7 @@ class type user_short = object
   method lastname  : string
   method password  : string 
   method email     : string
+  method white     : IWhite.t option
 end
 
 val quick_create : user_short -> [ `created   of [`New] ICurrentUser.id 

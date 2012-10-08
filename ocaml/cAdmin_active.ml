@@ -21,11 +21,11 @@ let () = UrlAdmin.def_active $ admin_only begin fun cuid req res ->
 
   let! items = ohm $ Run.list_filter begin fun (iid,count) ->
     let! instance = ohm_req_or (return None) $ MInstance.get iid in
-    let  url = Action.url UrlAdmin.instance () iid in
+    let  url = Action.url UrlAdmin.instance None iid in
     let! pic = ohm $ CPicture.small_opt (instance # pic) in    
     return $ Some (object
       method url   = url
-      method key   = instance # key
+      method key   = fst (instance # key)
       method name  = instance # name
       method count = count
       method pic   = pic
@@ -38,7 +38,7 @@ let () = UrlAdmin.def_active $ admin_only begin fun cuid req res ->
 
   let choices = Asset_Admin_ActiveInstances.render (object
     method list = items 
-    method prev = Action.url UrlAdmin.active () (Some (ago + 1))
+    method prev = Action.url UrlAdmin.active None (Some (ago + 1))
     method date = date
   end) in
 

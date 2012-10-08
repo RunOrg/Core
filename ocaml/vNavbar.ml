@@ -4,28 +4,28 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-type t = ICurrentUser.t option * IInstance.t option 
+type t = IWhite.t option * ICurrentUser.t option * IInstance.t option 
 
-let render ?(hidepic=false) ~public ~menu (cuid,iid) = 
+let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) = 
 
   let  uid      = BatOption.map IUser.Deduce.can_view cuid in
   let! user     = ohm $ Run.opt_bind MUser.get uid in
   let! instance = ohm $ Run.opt_bind MInstance.get iid in
 
   let  home =
-    if user = None then Action.url UrlSplash.index () []
-    else Action.url UrlMe.Account.home () ()
+    if user = None then Action.url UrlSplash.index owid []
+    else Action.url UrlMe.Account.home owid ()
   in
 
   let! account = ohm $ Run.opt_map begin fun user -> 
     let! pic = ohm $ CPicture.small (user # picture) in
     return (object 
-       method url    = Action.url UrlMe.Account.home () ()
+       method url    = Action.url UrlMe.Account.home owid ()
        method name   = user # fullname
        method pic    = pic
-       method notif  = Action.url UrlMe.Notify.home () ()
-       method logout = Action.url UrlLogin.logout () ()
-       method unread = Action.url UrlMe.Notify.count () ()
+       method notif  = Action.url UrlMe.Notify.home owid ()
+       method logout = Action.url UrlLogin.logout owid ()
+       method unread = Action.url UrlMe.Notify.count None ()
      end)
    end user in
   
@@ -85,13 +85,13 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
   end in
 
   let news = if user = None then
-      Action.url UrlNetwork.news () None
+      Action.url UrlNetwork.news owid None
     else 
-      Action.url UrlMe.News.home () ()
+      Action.url UrlMe.News.home owid ()
   in
 
   let admin = if BatOption.bind MAdmin.user_is_admin cuid <> None then
-      Some (Action.url UrlAdmin.home () ())
+      Some (Action.url UrlAdmin.home None ())
     else 
       None
   in
@@ -102,12 +102,12 @@ let render ?(hidepic=false) ~public ~menu (cuid,iid) =
     method public    = public
     method account   = account
     method instances = BatOption.default [] instances
-    method network   = Action.url UrlNetwork.root () ()
+    method network   = Action.url UrlNetwork.root owid ()
     method news      = news
     method asso      = asso
   end)
 
-let intranet (cuid,iid) = 
+let intranet (owid,cuid,iid) = 
 
   let menu key = 
     List.map (fun (url,label) -> (object
@@ -122,7 +122,7 @@ let intranet (cuid,iid) =
     ]
   in
   
-  render ~public:false ~menu (cuid,iid) 
+  render ~public:false ~menu (owid,cuid,iid) 
 
 let public_menu menu key = 
   List.map (fun (url,label,id) -> (object
@@ -136,8 +136,8 @@ let public_menu menu key =
     Action.url UrlClient.join     key None, `PageLayout_Navbar_Public_Join,     `Join 
   ]
 
-let event (cuid,iid) = 
-  render ~public:true ~menu:(public_menu `Calendar) (cuid,iid)
+let event (owid,cuid,iid) = 
+  render ~public:true ~menu:(public_menu `Calendar) (owid,cuid,iid)
   
 let public menu ~left ~main ~cuid instance = 
 
@@ -155,7 +155,7 @@ let public menu ~left ~main ~cuid instance =
   in
 
   let navbar = 
-    render ~public:true ~hidepic:true ~menu:(public_menu menu) (cuid,Some (instance # id))
+    render ~public:true ~hidepic:true ~menu:(public_menu menu) (snd (instance # key),cuid,Some (instance # id))
   in
       
   let data = object

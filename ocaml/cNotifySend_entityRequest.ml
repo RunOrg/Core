@@ -26,11 +26,11 @@ let send url uid eid aid =
     let body = Asset_Mail_NotifyEntityRequest.render (object
       method name      = user # fullname
       method requester = (name, entity, instance # name)
-      method url       = url 
+      method url       = url (snd (instance # key))
       method asso      = instance # name
     end) in
     
-    let! _, html = ohm $ CMail.Wrap.render ~iid self body in 
+    let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
     send ~from ~subject ~html 

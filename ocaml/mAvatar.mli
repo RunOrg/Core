@@ -101,6 +101,10 @@ val user_instances :
   ->  [`ViewInstances] IUser.id
   ->  ( #Ohm.CouchDB.ctx, (Status.t * [`IsContact] IInstance.id) list ) Ohm.Run.t
 
+val user_avatars :
+  [`IsSelf] IUser.id
+  -> ( #Ohm.CouchDB.ctx, ([`IsSelf] IAvatar.id * [`IsToken] IIsIn.id) list ) Ohm.Run.t
+
 val count_user_instances :
      [`ViewInstances] IUser.id
   -> ( #Ohm.CouchDB.ctx, int ) Ohm.Run.t

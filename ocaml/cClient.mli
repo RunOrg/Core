@@ -1,34 +1,34 @@
 (* © 2012 RunOrg *)
 
 val extract :
-     (string,'any) Ohm.Action.request
+     (IWhite.key,'any) Ohm.Action.request
   -> Ohm.Action.response
-  -> (ICurrentUser.t option * string * IInstance.t * MInstance.t -> Ohm.Action.response O.run) 
+  -> (ICurrentUser.t option * IWhite.key * IInstance.t * MInstance.t -> Ohm.Action.response O.run) 
   -> Ohm.Action.response O.run
 
 val extract_ajax :
-     (string,'any) Ohm.Action.request
+     (IWhite.key,'any) Ohm.Action.request
   -> Ohm.Action.response
-  -> (ICurrentUser.t option * string * IInstance.t * MInstance.t -> Ohm.Action.response O.run) 
+  -> (ICurrentUser.t option * IWhite.key * IInstance.t * MInstance.t -> Ohm.Action.response O.run) 
   -> Ohm.Action.response O.run
 
 val action :
   (    [ `IsToken ] CAccess.t 
-    -> (string, 'a) Ohm.Action.request
+    -> (IWhite.key, 'a) Ohm.Action.request
     -> Ohm.Action.response
     -> Ohm.Action.response O.run)
-  -> (string, 'a) Ohm.Action.request
+  -> (IWhite.key, 'a) Ohm.Action.request
   -> Ohm.Action.response
   -> Ohm.Action.response O.run
 
 val define :
-     ?back:(string -> 'a list -> string)
+     ?back:(IWhite.key -> 'a list -> string)
   ->  UrlClient.definition
   ->  ([ `IsToken ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
   ->  unit 
 
 val define_admin : 
-     ?back:(string -> 'a list -> string)
+     ?back:(IWhite.key -> 'a list -> string)
   ->  UrlClient.definition
   ->  ([ `IsAdmin ] CAccess.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t) 
   ->  unit 

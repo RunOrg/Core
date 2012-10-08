@@ -68,7 +68,7 @@ let send_signup_confirmation =
       let! _ = ohm $ MMail.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
-	  let  url = Action.url UrlMail.signupConfirm () (arg # user, token) in
+	  let  url = Action.url UrlMail.signupConfirm (user # white) (arg # user, token) in
 	  
 	  let  body = Asset_Mail_SignupConfirm.render (object
 	    method url   = url 
@@ -76,7 +76,7 @@ let send_signup_confirmation =
 	    method email = user # email
 	  end) in
 	  
-	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) self body in
+	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) (user # white) self body in
 	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
  
 	  send ~from ~subject ~html
@@ -142,6 +142,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
       method lastname  = lname
       method password  = pass
       method email     = email
+      method white     = req # server
     end) in
 
     match result with 
@@ -152,9 +153,9 @@ let () = UrlLogin.def_post_signup begin fun req res ->
 	let! ins = ohm $ Run.opt_bind MInstance.get iid in 
 
 	let  url  = match ins, path with 
-	  | None, []   -> Action.url UrlMe.Account.home () ()
-	  | None, "me" :: path -> UrlMe.url path 
-	  | None, path -> Action.url UrlSplash.index () path
+	  | None, []   -> Action.url UrlMe.Account.home (req # server) ()
+	  | None, "me" :: path -> UrlMe.url (req # server) path 
+	  | None, path -> Action.url UrlSplash.index (req # server) path
 	  | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
 	  | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
 	in

@@ -578,6 +578,23 @@ let is_admin ?other_than uid =
   let  iids  = List.map (snd |- IInstance.decay) list in 
   return $ List.exists (fun iid -> other_than <> Some iid) iids
 
+let user_avatars uid = 
+
+  let  uid = IUser.decay uid in 
+  let  startkey = (uid,`Token) and endkey = (uid,`Admin) in
+  let! list = ohm $ ByUserView.query ~startkey ~endkey ~limit:200 () in
+  
+  Run.list_filter begin fun item ->
+    let  iid = item # value and aid = IAvatar.of_id item # id in
+    let  _, sta = item # key in 
+    let  role = (sta :> [`Admin|`Token|`Contact|`Nobody]) in
+    let  aid = IAvatar.Assert.is_self aid in
+    let  uid = IUser.Assert.is_old uid in
+    let  isin = IIsIn.Assert.make ~id:(Some aid) ~role ~ins:iid ~usr:uid in
+    let! isin = req_or (return None) (IIsIn.Deduce.is_token isin) in
+    return (Some (aid, isin))
+  end list 
+      
 module CountByUserView = CouchDB.ReduceView(struct
   module Key    = IUser
   module Value  = Fmt.Int

@@ -6,7 +6,7 @@ open BatPervasives
 
 let make title endpoint arg = object
   method title = (return title : string O.run)
-  method url   = Action.url endpoint () arg
+  method url   = Action.url endpoint None arg
 end
 
 open UrlAdmin

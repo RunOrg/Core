@@ -22,6 +22,16 @@ let make cuid iid instance =
     method iid = IIsIn.instance isin
   end)
 
+let of_isin isin = 
+  let! inst = ohm_req_or (return None) $ MInstance.get (IIsIn.instance isin) in
+  let! self = ohm $ MAvatar.get isin in 
+  return $ Some (object
+    method self = self
+    method isin = isin 
+    method instance = inst
+    method iid = IIsIn.instance isin 
+  end) 
+
 let admin (access : 'any t) = 
   let! isin = req_or None $ IIsIn.Deduce.is_admin (access # isin) in 
   Some (object

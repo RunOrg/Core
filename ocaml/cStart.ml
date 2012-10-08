@@ -8,7 +8,7 @@ let () = UrlStart.def_home begin fun req res ->
 
   let login = 
     let url = UrlLogin.save_url (BatString.nsplit req # path "/") in
-    return $ Action.redirect (Action.url UrlLogin.login () url) res
+    return $ Action.redirect (Action.url UrlLogin.login (req # server) url) res
   in
 
   let! cuid = req_or login $ CSession.get req in
@@ -16,17 +16,17 @@ let () = UrlStart.def_home begin fun req res ->
   let vertical = BatOption.default `Simple (req # args) in
 
   let html = Asset_Start_Page.render (object
-    method navbar     = (Some cuid,None)
+    method navbar     = (req # server, Some cuid,None)
     method back       = "/" 
     method categories = PreConfig_Vertical.Catalog.list
-    method url        = Action.url UrlStart.create () ()
-    method upload     = Action.url UrlUpload.Core.root () ()  
-    method free       = Action.url UrlStart.free () ()
+    method url        = Action.url UrlStart.create (req # server) ()
+    method upload     = Action.url UrlUpload.Core.root (req # server) ()  
+    method free       = Action.url UrlStart.free (req # server) ()
     method init       = PreConfig_Vertical.Catalog.init vertical
-    method pics       = Action.url UrlUpload.Core.find () () 
+    method pics       = Action.url UrlUpload.Core.find (req # server) () 
   end) in
 
-  CPageLayout.core `Start_Title html res 
+  CPageLayout.core (req # server) `Start_Title html res 
 
 end
 
@@ -79,9 +79,10 @@ let () = UrlStart.def_create begin fun req res ->
     ~site:None
     ~contact:None
     ~vertical
+    ~white:(req # server)
   in
 
-  let url = Action.url UrlClient.Home.home key [] in
+  let url = Action.url UrlClient.Home.home (key,req # server) [] in
   
   return $ Action.javascript (Js.redirect ~url ()) res
 

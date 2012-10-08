@@ -9,13 +9,13 @@ module A = Action.Args
 let root, def_root = O.declare O.core "me" A.none
 let ajax, def_ajax = O.declare O.core "me/ajax" (A.n A.string)
 
-let url list = 
-  OhmBox.url (Action.url root () ()) list 
+let url owid list = 
+  OhmBox.url (Action.url root owid ()) list 
 
 let declare ?p url = 
   let endpoint, define = O.declare O.core ("me/ajax/" ^ url) (A.n A.string) in
   let endpoint = Action.setargs (Action.rewrite endpoint "me/ajax" "me/#") [] in
-  let root = Action.url root () () in
+  let root owid = Action.url root owid () in
   let prefix = "/" ^ url in
   let parents = match p with 
     | None -> [] 

@@ -95,7 +95,7 @@ let template instances =
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Notify_Settings_Submit) 
 
-let () = define UrlMe.Notify.def_settings begin fun cuid -> 
+let () = define UrlMe.Notify.def_settings begin fun owid cuid -> 
 
   let! instances = ohm $ O.decay begin
 
@@ -144,7 +144,7 @@ let () = define UrlMe.Notify.def_settings begin fun cuid ->
     
     (* Redirect to main page *)
 
-    let url = Action.url UrlMe.Notify.home () () in 
+    let url = Action.url UrlMe.Notify.home owid () in 
     return $ Action.javascript (Js.redirect url ()) res
 
 
@@ -169,7 +169,7 @@ let () = define UrlMe.Notify.def_settings begin fun cuid ->
     Asset_Admin_Page.render (object
       method parents = [ object
 	method title = AdLib.get `Notify_Title
-	method url   = Action.url UrlMe.Notify.home () () 
+	method url   = Action.url UrlMe.Notify.home owid () 
       end ]
       method here  = AdLib.get `Notify_Settings_Title
       method body  = Asset_Notify_Settings.render (OhmForm.render form url)

@@ -22,8 +22,8 @@ let declare ?p url =
 let root url = declare url 
 let child p url = declare ~p url 
 
-type definition = (string -> string) * string * string list * 
-    (   (   (string, string list) Ohm.Action.request
+type definition = (IWhite.key -> string) * string * string list * 
+    (   (   (IWhite.key, string list) Ohm.Action.request
           -> Ohm.Action.response 
           -> (O.ctx, Ohm.Action.response) Ohm.Run.t)
      -> unit)

@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let prepare tag = object
-  method url  = Action.url UrlNetwork.tag () (String.lowercase tag) 
+let prepare owid tag = object
+  method url  = Action.url UrlNetwork.tag owid (String.lowercase tag) 
   method text = tag
 end

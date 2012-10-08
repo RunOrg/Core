@@ -247,7 +247,7 @@ let create iid data =
   (* Apply a first round of sharing to the old data *)
 
   let! instance = ohm $ MInstance.get iid in 
-  let  white    = BatOption.bind (#white) instance in 
+  let  white    = BatOption.bind (#key |- snd) instance in 
 
   let! (uid, source, data) = ohm $ 
     let! uid_opt = ohm $ Run.opt_bind MUser.by_email data.Data.email in
