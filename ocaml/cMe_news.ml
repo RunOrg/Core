@@ -14,6 +14,8 @@ let render_item access itid =
     str "<li><b>" ; 
     esc (IItem.to_string (item # id)) ; 
     str "</b> &mdash; " ; 
+    esc (IInstance.to_string (item # iid)) ;
+    str " &middot; " ;
     esc (MFmt.date_of_float (item # time)) ;
     str "</li>"
   ])
