@@ -8,18 +8,20 @@ open CMe_common
 
 let render_item access itid = 
 
-  let! iid = ohm_req_or (return None) $ MItem.iid itid in 
-  let! access = ohm_req_or (return None) $ access iid in 
+  let none = return None in 
 
-  let! item = ohm_req_or (return None) $ MItem.try_get access itid in 
+  let! iid = ohm_req_or none $ MItem.iid itid in 
+  let! access = ohm_req_or none $ access iid in 
+
+  let! item = ohm_req_or none $ MItem.try_get access itid in 
 
   let! now  = ohmctx (#time) in
 
-  let! aid  = req_or (return None) $ MItem.author_by_payload (item # payload) in 
+  let! aid  = req_or none $ MItem.author_by_payload (item # payload) in 
   let! author = ohm $ CAvatar.mini_profile aid in
-  let! name = req_or (return None) (author # nameo) in 
+  let! name = req_or none (author # nameo) in 
 
-  let! body = req_or (return None) begin 
+  let! body = req_or none begin 
     match item # payload with 
       | `Mail m -> Some (m # body)
       | `MiniPoll p -> Some (p # text)
@@ -30,11 +32,30 @@ let render_item access itid =
       | `ChatReq _ -> None 
   end in 
 
+  let! url = ohm_req_or none begin 
+    match item # where with 
+      | `feed fid -> begin
+	let! feed = ohm_req_or none $ MFeed.try_get access fid in 
+	match MFeed.Get.owner feed with 
+	  | `of_instance _ -> return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
+	  | `of_entity eid -> begin 
+	    let! entity = ohm_req_or none $ MEntity.try_get access eid in 
+	    return $ Some (Action.url 
+			     (if MEntity.Get.kind entity = `Event then UrlClient.Events.see
+			      else UrlClient.Forums.see) 
+			     (access # instance # key) [ IEntity.to_string eid ])
+	  end 
+	  | `of_message  _ -> return None
+      end
+      | `album  aid -> return None
+      | `folder fid -> return None			
+  end in 
+
   let! html = ohm $ Asset_News_Item.render (object
     method body = OhmText.cut ~ellipsis:"…" 200 body
     method name = name
     method date = (item # time, now)
-    method url  = ""
+    method url  = url
     method pic  = author # pico
   end) in
   return (Some html)
