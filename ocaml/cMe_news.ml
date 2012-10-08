@@ -6,39 +6,38 @@ open BatPervasives
 
 open CMe_common
 
+let render_item access itid = 
+  let! iid = ohm_req_or (return None) $ MItem.iid itid in 
+  let! access = ohm_req_or (return None) $ access iid in 
+  let! item = ohm_req_or (return None) $ MItem.try_get access itid in 
+  return $ Some Html.(concat [ 
+    str "<li><b>" ; 
+    esc (IItem.to_string (item # id)) ; 
+    str "</b> &mdash; " ; 
+    esc (MFmt.date_of_float (item # time)) ;
+    str "</li>"
+  ])
+
+let render access = function
+  | `Item itid -> render_item access itid
+
 let () = define UrlMe.News.def_home begin fun owid cuid ->
   O.Box.fill (O.decay begin
 
-    (* Acting as confirmed self to view items. *)
-    let  uid = IUser.Deduce.current_is_self (ICurrentUser.Assert.is_old cuid) in
-    let! avatars = ohm $ MAvatar.user_avatars uid in
+    let  access = Util.memoize (fun iid -> Run.memo begin
+      (* Acting as confirmed self to view items. *)
+      let  cuid = ICurrentUser.Assert.is_old cuid in    
+      let! inst = ohm_req_or (return None) (MInstance.get iid) in
+      CAccess.make cuid iid inst
+    end) in
 
-    let! items = ohm (Run.list_collect begin fun (self, isin) ->
+    let  uid = IUser.Deduce.is_anyone cuid in 
 
-      let  access = Run.memo (CAccess.of_isin isin) in
-      let  readable fid = 
-	let! access = ohm_req_or (return None) access in 
-	let! feed   = ohm_req_or (return None) (MFeed.try_get access fid) in
-	let! feed   = ohm_req_or (return None) (MFeed.Can.read feed) in
-	return (Some (MFeed.Get.id feed))
-      in
+    let! items, next = ohm_req_or (return ignore) (MNews.Cache.head ~count:10 uid) in
+    let! htmls = ohm (Run.list_filter (render access) items) in 
+    let  html  = Html.concat htmls in
 
-      MItem.news ~self readable (IIsIn.instance isin) 
+    return html
 
-    end avatars) in 
-
-    let items = List.sort (fun a b -> compare (b # time) (a # time)) items in 
-		     
-    let item item = Html.(concat [ 
-      str "<li><b>" ; 
-      esc (IItem.to_string (item # id)) ; 
-      str "</b> &mdash; " ; 
-      esc (MFmt.date_of_float (item # time)) ;
-      str "</li>"
-    ]) in
-
-    let items = Html.concat (List.map item items) in
-
-    return items
   end)
 end
