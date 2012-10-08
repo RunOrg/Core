@@ -31,7 +31,7 @@ let render_item access itid =
   end in 
 
   let! html = ohm $ Asset_News_Item.render (object
-    method body = body
+    method body = OhmText.cut ~ellipsis:"…" 200 body
     method name = name
     method date = (item # time, now)
     method url  = ""
