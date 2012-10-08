@@ -10,15 +10,18 @@ let render_item access itid =
   let! iid = ohm_req_or (return None) $ MItem.iid itid in 
   let! access = ohm_req_or (return None) $ access iid in 
   let! item = ohm_req_or (return None) $ MItem.try_get access itid in 
-  return $ Some Html.(concat [ 
-    str "<li><b>" ; 
-    esc (IItem.to_string (item # id)) ; 
-    str "</b> &mdash; " ; 
-    esc (IInstance.to_string (item # iid)) ;
-    str " &middot; " ;
-    esc (MFmt.date_of_float (item # time)) ;
-    str "</li>"
-  ])
+  let! now  = ohmctx (#time) in
+  let! aid  = req_or (return None) $ MItem.author_by_payload (item # payload) in 
+  let! author = ohm $ CAvatar.mini_profile aid in
+  let! name = req_or (return None) (author # nameo) in 
+  let! html = ohm $ Asset_News_Item.render (object
+    method body = "Lorem ipsum"
+    method name = name
+    method date = (item # time, now)
+    method url  = ""
+    method pic  = author # pico
+  end) in
+  return (Some html)
 
 let render access = function
   | `Item itid -> render_item access itid
