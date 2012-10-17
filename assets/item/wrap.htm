@@ -2,34 +2,42 @@
 
   <div class="shadow -top"><div class="-inner"></div></div>
 
-  {=author}<a href="{url}"><img src="{pic}"/></a>{/=}
+  <div class="-top">
 
-  <div class="-body">
-    <span class="-info">
-      {=author}<a class="-author" href="{url}">{name}</a>{/=} { `Item_Author_Action action }
-    </span>
-    { body | ohm } 
-    <div class="-foot">
+  <div class="-side">
+    <div class="-topblock">
+      {=author}
+        <a href="{url}"><img src="{pic}"/></a>
+        <a class="-author" href="{url}">{name}</a>
+      {/=}
       {`DateRelative time}
+    </div>
+    <span class="-info">
+      { `Item_Author_Action action }
       {?like}&middot; {this | ohm}{/?}
-      <span class="-actions">
-	{?remove}
-	  &middot; <a {$a} href="javascript:void(0)">{ `Item_Remove }</a> 
-	  <script type="url:string">
+      {?remove}
+        &middot; <a class="-action" {$a} href="javascript:void(0)">{ `Item_Remove }</a> 
+        <script type="url:string">
 here.$a.click ->
   post url, {}, ->
     false  
   here.$a.closest(".item").slideUp () -> 
     $(@).remove()
-	  </script>
-	{/?}
-      </span>
-    </div>
-    <div {$c} class="-comments">
-      {=comments}
-        {?more}
-  	  <a {$a} href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
-	  <script type="url:string">
+        </script>
+      {/?}
+    </span>
+  </div>
+  <div class="-body">
+    { body | ohm } 
+  </div>
+
+  </div>
+
+  <div {$c} class="-comments">
+    {=comments}
+      {?more}
+        <a {$a} href="javascript:void(0)" class="-more">{ `Item_Comments_More }</a>
+        <script type="url:string">
 lock = false
 here.$a.click () -> 
   return if lock
@@ -41,12 +49,11 @@ here.$a.click () ->
     here.$c.find(".comment").remove()
     here.$c.prepend(data.all.html)
     call data.all.code
-	  </script>
-	{/?}
-        { list | ohm | Ohm.Html.concat }
-      {/=}
-      { reply | ohm }
-    </div>
+        </script>
+      {/?}
+      { list | ohm | Ohm.Html.concat }
+    {/=}
+    { reply | ohm }
   </div>
   
 </div>

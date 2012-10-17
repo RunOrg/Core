@@ -16,7 +16,7 @@ here.$t.val('').focus () ->
   init = true
   $f = here.$t.closest("form")
   $a = $f.parent()
-  here.$t.keydown () -> 
+  here.$t.keyup () -> 
     full = here.$t.val().length > 0
     $f.toggleClass("-active",full)
   $f.submit () -> 
@@ -33,61 +33,60 @@ here.$t.val('').focus () ->
 
 <style>
 .comments-reply {
-  border: 1px solid #CCC;
   display: block;
-  line-height: 52px;
-  padding: 3px;
   position: relative;
-  background-color: #EEE;
-  height: 52px;
 
   label {
     background-color: white;
-    color: #BBBBBB;
+    color: #BBB;
+    margin: 1px 0 0 16px;
     display: block;
     float: left;
-    height: 44px;
+    height: 22px;
     line-height: 17px;
-    margin: 1px 0;
     padding: 3px 6px;
-    width: 414px;
+    width: 365px;
   }
 
   img {
     float: left;
-    width: 50px;
-    height: 50px;
-    margin: 1px 5px 1px 5px;
+    height: 24px;
+    margin: 1px 0 1px 163px;
+    opacity: 0.5;
+    width: 24px;
   }
 
   .-button {
     overflow: hidden;
-    text-align: center;
-    line-height:52px;
+    text-align: left;
+    line-height: 102px;
   }
 
   button {
     display: none;
-    vertical-align: middle;
+    vertical-align: bottom;
   }
 
   textarea {
-    border: 1px solid #BBB;
+    border: 1px solid #DDD;
     .asap();
     font-size: 12px;
-    height: 44px;
+    height: 19px;
     line-height: 14px;
     overflow: hidden;
     padding: 2px;
     position: absolute;
-    top: 3px;
-    width: 420px;
+    top: 0px;
+    width: 362px;
     background-color: transparent;
-    left: 63px;
+    left: 200px;
   }
 
   .-active textarea, textarea:focus {
      background-color: white;
+  }
+  .-active textarea, .-active label {
+     height: 100px;
   }
   
   .-active button { display: inline-block } 
