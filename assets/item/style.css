@@ -1,110 +1,71 @@
 .item { 
   font-size: 13px;
-  padding: 20px;
+  padding: 20px 20px 12px;
   overflow: hidden;
   position: relative;
 
-  .-actions a {
-    color: #888;
+  .-top { 
+    overflow: hidden; 
+    margin-bottom: 8px;
   }
 
-  > a img {
-    width: 50px;
-    height: 50px;
-    margin: 0 8px 0 0;
+  .-side {
+    color: #888;
     float: left;
+    font-size: 11px;
+    width: 170px;
+    background-color: #EEE;
+    padding: 9px 9px 7px;
+  
+    .-topblock {
+      overflow: hidden;
+      height: 50px;
+      margin-bottom: 12px;
+    }
+  
+    .-author {
+      display: block;
+      font-size: 13px;
+      margin: 8px 0 2px;
+    }
+
+    img {
+      float: left;
+      width: 50px;
+      height: 50px;
+      margin-right: 8px;
+    } 
+
+    .-info {
+      display: block;
+      margin-top: 4px; 
+      color: #888;
+      text-align: center; 
+
+      .-action {
+        color: #888;
+        &:hover { color: #AAA }
+      }
+    }
   }
 
   .-body {
+    margin: -8px 0 0 186px;
     overflow: hidden;
-  }
-
-  .-info {
-    font-size: 12px;
-    color: #888;
-  }
-
-  .-info .-author {
-    text-decoration: none;
+    padding-left: 16px;
   }
 
   .-message {
     color: #333;
-    font-size: 14px;
-    width: 500px;
-    padding: 0 16px;
+    font-size: 13px;
+    padding: 0;
   }
 
   .-title {
-    padding: 0 16px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     margin: 8px 0;
     color: #333;
-  }
-
-  .-foot {
-    font-family: "Arial", sans-serif;
-    font-size: 10px;
-    color: #888;
-    height: 20px;
-  }
-
-  .-pictures {
-    margin: 8px 5px;
-    width: 599px;
-    overflow: hidden;
-  }
-
-  .-pictures a {
-    display: block;
-    padding: 2px;
-    float: left;
-    width: 178px;
-    margin-right: 10px;
-    border: 1px solid #CCC;
-  }
-
-  .-pictures a:hover {
-    border-color: #555;
-  }
-
-  .-pictures img {
-    width: 178px;
-    height: 128px;
-    display: block;
-  }
-
-  .-file {
-    border-left: 3px solid #CCC;
-    background-color: #EEE;
-    padding: 5px 5px 5px 10px;
-    margin: 8px 0;
-    line-height: 21px;
-    height: 21px;
-  }
-
-  .-file .-download {
-    float: right;
-    margin: 0;
-  }
-
-  .-file .-filename {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    overflow: hidden;
-    height: 21px;
-  }
-
-  .-file .-fileinfo {
-    background: url(http://runorg.com/public/icon/page_white.png) left center no-repeat;
-    padding-left: 20px;
-    margin: 3px 20px; 
-    color: #555;
-    line-height: 16px;
-    font-size: 11px;
-    float: right;
   }
 
   .-comments {
@@ -113,9 +74,11 @@
   }
 
   .-comments .-more {
-    margin-bottom: -1px;
-    padding: 8px;
+    padding: 6px;
+    margin: 0 50px 8px;
     display: block;
-    border: 1px solid #CCC;
+    text-align: center;
+    font-size: 12px;
+    border: 1px solid #DDD;
   }
 }

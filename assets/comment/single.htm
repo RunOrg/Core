@@ -1,53 +1,33 @@
 <div class="comment">
-  {=author}<a href="{url}"><img src="{pic}"/></a>{/=}
+  <div class="-side">
+    {=author}
+      <a href="{url}"><img src="{pic}"/></a>
+      <a class="-author" href="{url}">{name}</a>
+    {/=}
+    {`DateRelative time}
+  </div> 
   <div class="-body"> 
-    <span class="-action">{=author}<a class="-author" href="{url}">{name}</a>{/=} { `Comment_Action }</span> 
     <div class="-message">
-      { body | VText.format } 
-    </div>
-    <div class="-foot"> 
-      {`DateRelative time}
-      {?like}&middot; {this | ohm}{/?}
-      <span class="-actions">
-	{?remove}
-	  &middot; <a href="javascript:void(0)">{ `Comment_Remove }</a> 
-	{/?}
-      </span>
-    </div>
+      { body | VText.format }
+    </div> 
   </div>
 </div>
 
 <style>
 .comment {
-  border: 1px solid #CCC;
-  padding: 8px;
-  margin-bottom: -1px;
-  color: #888;
+  
+  overflow: hidden; 
+  margin-bottom: 8px;
 
-  > a {
-    float: left;
-    width: 50px;
-    height: 50px;
-    margin-right: 8px;
+  .-side img { 
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
   }
 
-  .-action { 
-    font-size: 12px;
+  .-side .-author {
+    margin-top: 4px;
   }
 
-  .-body {
-    overflow: hidden;
-  }
-
-  .-message {
-    color: black;
-    border: none;
-  }
-
-  .-foot {
-    font-family: "Arial", sans-serif;
-    font-size: 10px;
-    height: auto;
-  }
 }
 </style>
