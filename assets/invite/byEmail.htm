@@ -47,8 +47,10 @@
 
 imported = []
 
+trim = if 'trim' of String.prototype then (s) -> s.trim() else (s) -> s
+
 fill = (filled) -> 
-  filled = filled || here.$list.val().trim().length > 0
+  filled = filled || trim(here.$list.val()).length > 0
   here.$import.toggleClass "-filled", filled
 
 fill false
@@ -60,32 +62,32 @@ send = () ->
   return
 
 email = (text) ->
-  text.trim().toLowerCase()
+  trim(text).toLowerCase()
 
 parse = () ->
   # Dis be clever parsing, bro!
   imported = []
-  $.each here.$list.val().trim().split("\n"), (i,line) ->
+  $.each trim(here.$list.val()).split("\n"), (i,line) ->
     o = {l:""}
-    $.each line.trim().split(/[\t;|<>]/), (i,cell) ->
-      return if cell.trim().length == 0 
+    $.each trim(line).split(/[\t;|<>]/), (i,cell) ->
+      return if trim(cell).length == 0 
       return o.e = email cell if /@/.test cell
-      return o.f = cell.trim() if !o.f
-      return o.l = (o.l + " " + cell.trim()).trim()
+      return o.f = trim(cell) if !o.f
+      return o.l = trim(o.l + " " + trim(cell))
     return if !o.e
     if !o.l && /[ ]/.test o.f
       split = o.f.split(" ")
-      o.f = split.shift().trim()
-      o.l = split.join(" ").trim()
+      o.f = trim(split.shift())
+      o.l = trim(split.join(" "))
     imported.push o
 
 here.$act.click  () ->
   data = []
   here.$check.find("tbody tr").each () ->
     data.push [
-      $(@).find("input:nth(0)").val().trim(),
-      $(@).find("input:nth(1)").val().trim(),
-      $(@).find("input:nth(2)").val().trim()
+      trim($(@).find("input:nth(0)").val()),
+      trim($(@).find("input:nth(1)").val()),
+      trim($(@).find("input:nth(2)").val())
     ]
   OhmBox.remote url, data, (r) -> 
     call r.code
