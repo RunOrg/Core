@@ -40,9 +40,9 @@
     else
       day ^ " " ^ month ^ " " ^ year
   in
-  if now > time then
+  if now +. 60. > time then
     if now -. time < 60.0 then 
-      "Il y a quelques instants"
+      "Il y a un instant"
     else if now -. time < 120.0 then
       "Il y a une minute"
     else if now -. time < 3600.0 then 

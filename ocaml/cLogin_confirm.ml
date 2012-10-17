@@ -55,7 +55,7 @@ let () = UrlMail.def_signupConfirm begin fun req res ->
   let  uid  = IUser.Deduce.old_can_confirm cuid in 
   let!  _   = ohm $ MUser.confirm uid in 
 
-  let  url  = Action.url UrlMe.Account.home (req # server) () in
+  let  url  = Action.url UrlMe.News.home (req # server) () in
   
   return $ CSession.start (`Old cuid) (Action.redirect url res)
 

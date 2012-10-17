@@ -13,7 +13,7 @@ module News    = CMe_news
 let () = UrlMe.def_root begin fun req res -> 
 
   let url = Action.url UrlMe.ajax (req # server) [] in
-  let default = "/account" in
+  let default = "/news" in
   let uid = CSession.get req in
 
   let html = Asset_Me_Page.render (object
