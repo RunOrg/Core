@@ -963,7 +963,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 		    `Text "100€/an" ] ;
 	  "Accès inclus", [ `Text "2000" ;
 			    `Text "50" ;
-			    `Text "200" ;
+			    `Text "500" ;
 			    `Text "10000" ;
 			    `Text "10" ] ;
 	  "Espace disque", [ `Text "4 Go" ;
@@ -993,8 +993,8 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 					    `NoTick ] ;
 	  "100 accès suppl.", [ `Link ("/contact", "Nous Contacter") ;
 					 `Text "70€/an" ;
-					 `Text "400€/an" ;
-					 `Text "25€/an"  ;
+					 `Text "20€/an" ;
+					 `Text "20€/an"  ;
 					 `Text "800€/an" ] ;
 	  "Espace disque suppl.", [ `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ;
