@@ -63,7 +63,7 @@ module Profile : sig
     val update : 
          IInstance.t
       -> name:string
-      -> key:string 
+      -> key:IWhite.key
       -> pic:IFile.t option
       -> phone:string option
       -> desc:MRich.OrText.t option
