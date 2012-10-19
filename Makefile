@@ -7,6 +7,7 @@ server:
 	./plugins.sh
 	splash/gen.sh
 	config/gen.sh
+	ohm plugins.ohmStatic portals/FFBAD FFBAD
 	make -C ocaml
 	ohm publish
 	cp $(EXE) $(REAL)
