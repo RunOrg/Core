@@ -24,6 +24,7 @@ module Actions = struct
   open CContact
   open CSplash
   open CProfile
+  open CPortal
   open Splash
 end
 

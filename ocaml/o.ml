@@ -59,6 +59,8 @@ let async : ctx Async.manager = new Async.manager
 let run_async () = 
   async # run (fun () -> ctx `FR) 
 
+let page = Ohm.Html.print_page
+
 (* Action management ---------------------------------------------------------------------------------------- *)
 
 let domain = match environment with 
