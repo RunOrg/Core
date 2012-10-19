@@ -208,7 +208,7 @@ module Backdoor = struct
 
     let getinfo obj = Info.({ obj with 
       name ;
-      key ;
+      key = fst key ;
       pic ; 
       phone ; 
       desc ; 
@@ -220,6 +220,7 @@ module Backdoor = struct
       tags ; 
       search = visible ;
       pub_rss ; 
+      white = snd key ;
     }) in
     
     update iid getinfo

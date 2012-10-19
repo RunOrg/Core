@@ -6,10 +6,11 @@ open BatPervasives
 
 open CAdmin_common
 
-module Stats   = CAdmin_stats
-module Parents = CAdmin_parents
-module Active  = CAdmin_active
-module Public  = CAdmin_public
+module Stats    = CAdmin_stats
+module Parents  = CAdmin_parents
+module Active   = CAdmin_active
+module Public   = CAdmin_public
+module Instance = CAdmin_instance
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 
