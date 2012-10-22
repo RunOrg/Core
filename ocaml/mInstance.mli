@@ -40,6 +40,7 @@ module Profile : sig
   val search :
        ?start:IInstance.t
     ->  count:int
+    ->  IWhite.t option
     ->  search list
     -> (t list * IInstance.t option) O.run
 
@@ -47,7 +48,7 @@ module Profile : sig
 
   val get : 'any IInstance.id -> t option O.run
 
-  val tag_stats : unit -> (string * int) list O.run
+  val tag_stats : IWhite.t option -> (string * int) list O.run
 
   val by_rss : IPolling.RSS.t -> IInstance.t list O.run
 

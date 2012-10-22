@@ -1,0 +1,6 @@
+| `News_Welcome -> "Bienvenue !"
+| `News_Welcome_Instances -> "Vos espaces privés apparaissent à gauche de cette page."
+| `News_Welcome_Instances_Click -> "Cliquez dessus pour vous y rendre."
+| `News_Instances_All -> "Liste complète"
+| `News_Instances_Empty -> "Vous n'êtes membre d'aucun espace privé"
+| `News_Instances_Create -> "Créer un espace"

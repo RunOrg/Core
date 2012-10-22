@@ -42,6 +42,10 @@ let attempt how fail email password req res =
     how
   in
 
+  (* Start refreshing the news *)
+
+  let! () = ohm $ MNews.Cache.prepare uid in
+
   (* Determine the URL we should redirect to. *)
 
   let  path = UrlLogin.path_of (req # args) in
