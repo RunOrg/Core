@@ -82,25 +82,43 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 
   let! more = O.Box.react ArchiveFmt.fmt begin fun time _ self res ->
 
-    let! fresh, items, next = ohm (O.decay begin 
-      match time with 
-	| None -> MNews.Cache.head ~count uid	
-	| Some time -> let! items, next = ohm $ MNews.Cache.rest ~count uid time in
-		       return (true, items, next)
-    end) in
+    let! result = ohm begin 
 
-    let! htmls = ohm (O.decay (Run.list_filter (render access) items)) in 
+      let! fresh, items, next = ohm (O.decay begin 
+	match time with 
+	  | None -> MNews.Cache.head ~count uid	
+	  | Some time -> let! items, next = ohm $ MNews.Cache.rest ~count uid time in
+			 return (true, items, next)
+      end) in
+      
+      let! htmls = ohm (O.decay (Run.list_filter (render access) items)) in 
+      
+      match htmls, time, next with 
+	| [], None, None -> begin 
 
-    let more = match next with 
-      | None -> None
-      | Some time -> Some (OhmBox.reaction_endpoint self (Some time), Json.Null)
-    in
+	  (* There is nothing to display, and we're displaying the "first page" *)
 
-    let! result = ohm $ Asset_News_More.render (object
-      method items = Html.concat htmls 
-      method more  = more
-      method old   = not fresh
-    end) in
+	  Asset_News_Welcome.render ()
+
+	end 
+	| _ -> begin 
+
+	  (* There are things to display *)
+
+	  let more = match next with 
+	    | None -> None
+	    | Some time -> Some (OhmBox.reaction_endpoint self (Some time), Json.Null)
+	  in
+	  
+	  Asset_News_More.render (object
+	    method items = Html.concat htmls 
+	    method more  = more
+	    method old   = not fresh
+	  end) 
+
+	end
+
+    end in
 
     return $ Action.json ["more", Html.to_json result] res 
 
