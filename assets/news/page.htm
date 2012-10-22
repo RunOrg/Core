@@ -1,10 +1,39 @@
 <div class="news-list">
-  {more|VMore.div|ohm}
+  <div class="-side">
+    {=user}
+      <a href="{url}" class="-me">
+        <img src="{pic}"/>
+	<span class="-name">{name}</span>
+	<span class="-mail">{email}</span>
+      </a>
+    {/=}
+  </div>
+  <div class="-list">
+    {more|VMore.div|ohm}
+  </div>
 </div>
 
 <style>
 .news-list {
   margin: auto;
-  width: 616px;
+  width: 950px;
+  overflow: hidden; 
+  .-side {
+    float: left; 
+    width: 280px;
+    padding: 10px; 
+    background-color: #EEE;
+    border-right: 1px solid #DDD;
+    .-me {
+      display: block;
+      img { width: 40px; height: 40px; float: left; }
+      span { margin-left: 48px; display: block; line-height: 20px; font-size: 13px }
+      .-name { font-weight: bold; color: #333 }
+      .-mail { color: #888 }
+    }
+  }
+  .-list {
+    margin-left: 320px;
+  }
 }
 </style>
