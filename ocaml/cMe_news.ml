@@ -128,20 +128,48 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 
   O.Box.fill (O.decay begin
 
+    (* User info extraction *)
     let  uid  = IUser.Deduce.can_view cuid in 
     let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
     let! pic  = ohm $ CPicture.small (user # picture) in
 
+    (* Instance info extraction *)
+    let uid = IUser.Deduce.can_view_inst cuid in 
+    let render_instance iid = 
+      let! ins = ohm_req_or (return None) $ MInstance.get iid in
+      let! pic = ohm $ CPicture.small_opt (ins # pic) in
+      return $ Some (object
+	method pic    = pic
+	method name   = ins # name
+	method url    = Action.url UrlClient.Home.home (ins # key) [] 
+      end)
+    in
+
+    let rec draw_instances = function 
+      | [] -> return None
+      | query :: rest -> let! list = ohm query in
+			 let! list = ohm $ Run.list_filter render_instance list in
+			 if list = [] then draw_instances rest else return (Some list)
+    in
+
+    let! instances = ohm $ draw_instances [
+      Run.map (List.map IInstance.decay) (MInstance.visited ~count:4 cuid) ;
+      Run.map (List.map (snd |- IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Admin uid) ;
+      Run.map (List.map (snd |- IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Token uid) ; 
+    ] in
+
+    (* News feed render seed *)
     let more = (OhmBox.reaction_endpoint more None, Json.Null) in
 
     Asset_News_Page.render (object
       method more = more
-      method user = object
+      method user = (object
 	method pic   = pic
 	method name  = user # fullname
 	method email = user # email
 	method url   = Action.url UrlMe.Account.home owid ()
-      end
+      end)
+      method instances = instances
     end) 
 
   end)
