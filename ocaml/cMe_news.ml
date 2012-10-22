@@ -145,11 +145,19 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
       end)
     in
 
+    let more_instances_url = Action.url UrlMe.Account.home owid () in
+    let create_instance_url = Action.url UrlStart.home owid None in
+
     let rec draw_instances = function 
       | [] -> return None
       | query :: rest -> let! list = ohm query in
 			 let! list = ohm $ Run.list_filter render_instance list in
-			 if list = [] then draw_instances rest else return (Some list)
+			 if list = [] then draw_instances rest 
+			 else return (Some (object
+			   method list   = list
+			   method all    = more_instances_url
+			   method create = create_instance_url
+			 end))
     in
 
     let! instances = ohm $ draw_instances [
@@ -170,6 +178,7 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 	method url   = Action.url UrlMe.Account.home owid ()
       end)
       method instances = instances
+      method create = create_instance_url
     end) 
 
   end)
