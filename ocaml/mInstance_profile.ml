@@ -13,7 +13,14 @@ module Design = struct
   module Database = MyDB
   let name = "profile"
 end
+
+let only_tag tag = 
+  "tag:" ^ Util.fold_all tag
   
+let split_name name = 
+  List.map Util.fold_all 
+    (BatString.nsplit name " ")
+
 module Info = struct
   module T = struct
     module RSS = IPolling.RSS 
@@ -33,9 +40,22 @@ module Info = struct
      ?unbound  : bool = false ;
      ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
      ?white    : IWhite.t option ;
+     ?vtag "v" : string list = [] ;
     }
+
+    let json_of_t t = 
+      let vtag = 
+	BatList.sort_unique compare (
+	  List.map Util.fold_all t.tags
+	  @ List.map only_tag t.tags 
+	  @ split_name t.name
+	)
+      in
+      json_of_t { t with vtag }
+	
   end
   include T
+
   include Fmt.Extend(T)
 end
 
@@ -77,6 +97,15 @@ end)
 
 module Tbl = CouchDB.Table(MyDB)(IInstance)(Info)
 
+let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
+  IInstance.fmt (Tbl.all_ids ~count:10) 
+  (fun iid -> 
+    let! profile = ohm_req_or (return ()) $ Tbl.get iid in
+    Tbl.set iid profile)
+    
+(* Uncomment the line below if the vtag generation function changes *)
+let () = O.put (refresh_all ()) 
+
 let empty_info = Info.({
   name  = "" ;
   key   = "" ;
@@ -93,6 +122,7 @@ let empty_info = Info.({
   search   = false ;
   unbound  = true ;
   pub_rss  = [] ;
+  vtag     = [] 
 })
 
 let empty iid = extract iid empty_info
@@ -105,31 +135,7 @@ let update iid getinfo =
   let update info = getinfo (BatOption.default empty_info info) in
   Tbl.replace (IInstance.decay iid) update
 
-module TagView = CouchDB.DocView(struct
-  module Key    = Fmt.String
-  module Value  = Fmt.Unit
-  module Doc    = Info
-  module Design = Design
-  let name = "by_tag"
-  let map  = "if (!doc.unbound && doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
-end)
-
-let by_tag ?start ~count tag = 
-
-  let tag = Util.fold_all tag in
-  let startkey = tag and endkey = tag and limit = count + 1 
-  and startid = BatOption.map IInstance.to_id start in
-
-  let! list = ohm $ TagView.doc_query 
-    ~startkey ~endkey ?startid ~limit ~descending:true ()
-  in
-  
-  let list, next = OhmPaging.slice ~count list in 
-  
-  return begin 
-    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) list,
-    BatOption.map (#id |- IInstance.of_id) next
-  end
+(* Tag stats =============================================================================================== *)
 
 module TagStatsView = CouchDB.ReduceView(struct
   module Key    = Fmt.String
@@ -148,30 +154,65 @@ let tag_stats () =
   let  list = List.sort (fun a b -> compare (snd b) (snd a)) list in
   return list
 
-module AllView = CouchDB.DocView(struct
-  module Key    = Fmt.Unit
+(* Search instances ======================================================================================== *)
+
+module SearchView = CouchDB.DocView(struct
+  module Key    = Fmt.String
   module Value  = Fmt.Unit
   module Doc    = Info
   module Design = Design
-  let name = "searchable"
-  let map  = "if (!doc.unbound && doc.search) emit(null)"
+  let name = "search"
+  let map  = "if (!doc.unbound && doc.search) {
+                emit('');               
+                for (var i = 0; i < doc.v.length; ++i) 
+                  if (doc.v[i]) 
+                    emit(doc.v[i])
+              }"
 end)
 
-let all ?start ~count () = 
+type search = [`WORD of string | `TAG of string] 
 
-  let startkey = () and endkey = () and limit = count + 1 
-  and startid = BatOption.map IInstance.to_id start in
+let vtag_of_search = function
+  | `WORD w -> Util.fold_all w
+  | `TAG  t -> "tag:" ^ Util.fold_all t
 
-  let! list = ohm $ AllView.doc_query 
-    ~startkey ~endkey ?startid ~limit ~descending:true () 
+let contains_vtags expected = 
+  let expected = BatList.sort_unique compare expected in 
+  fun vtags ->
+    let rec aux = function 
+      |       [], _ -> true
+      |        _, [] -> false       
+      | h1 :: t1, h2 :: t2 when h1 = h2 -> aux (t1,t2)
+      | h1 :: t1, h2 :: t2 when h1 < h2 -> false
+      |       l1,  _ :: t2 -> aux (l1,t2) 
+    in
+    aux (expected, vtags)
+
+let search ?start ~count search = 
+
+  let startid = BatOption.map IInstance.to_id start in
+  let limit   = count + 1 in
+
+  let startkey, endkey, filter = 
+    match List.map vtag_of_search search with 
+      | [] -> "", "", (fun _ -> true)
+      | [x] -> x, x, (fun _ -> true)
+      | h :: t -> h, h, contains_vtags t
+  in 
+
+  let! list = ohm $ SearchView.doc_query 
+    ~startkey ~endkey ?startid ~limit ~descending:true ()
   in
   
   let list, next = OhmPaging.slice ~count list in 
   
   return begin 
-    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) list,
+    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) 
+      (List.filter (fun i -> filter (i#doc).Info.vtag) list),
     BatOption.map (#id |- IInstance.of_id) next
   end
+
+(* Find the instance bound to an RSS feed ================================================================== *)
 
 module ByRSSView = CouchDB.MapView(struct
   module Key    = IPolling.RSS
@@ -184,6 +225,8 @@ end)
 let by_rss rss_id = 
   let! list = ohm $ ByRSSView.by_key rss_id in
   return $ List.map (#id |- IInstance.of_id) list
+
+(* Backdoor manipulation =================================================================================== *)
 
 module Backdoor = struct
 

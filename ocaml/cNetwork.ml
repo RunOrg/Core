@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let renderlist ?tag owid list next = 
+let renderlist search owid list next = 
 
   let! list = ohm $ Run.list_map begin fun profile -> 
     let! pic = ohm $ CPicture.small_opt (profile # pic) in
@@ -17,7 +17,7 @@ let renderlist ?tag owid list next =
   end list in
 
   let next = BatOption.map (fun next -> 
-    JsCode.Endpoint.of_url (Action.url UrlNetwork.more owid (next,tag)), Json.Null
+    JsCode.Endpoint.of_url (Action.url UrlNetwork.more owid (next,search)), Json.Null
   ) next in 
   
   return (object
@@ -25,7 +25,7 @@ let renderlist ?tag owid list next =
     method more = next
   end)
 
-let render ?tag title list next req res = 
+let render search title list next req res = 
 
   let uid = CSession.get req in
 
@@ -35,50 +35,43 @@ let render ?tag title list next req res =
     method count = count
   end)) stats in 
 
-  let! list = ohm $ renderlist ?tag:(BatOption.map fst tag) (req # server) list next in
+  let! list = ohm $ renderlist search (req # server) list next in
 
   let html = Asset_Network_List.render (object
     method navbar = (req # server,uid,None)
     method tags   = tags
-    method tag    = BatOption.map (fun (tag,home) -> (object
-      method tag  = tag
-      method home = home
-    end)) tag
+    method search = String.concat " " search 
     method list   = list 
   end) in
 
   CPageLayout.core (req # server) title html res
 
+let atoms_of_search search =     
+  List.map (fun atom ->
+    if BatString.starts_with atom "tag:" then `TAG (BatString.tail atom (String.length "tag:"))
+    else `WORD atom) search
+
 let () = UrlNetwork.def_root begin fun req res -> 
 
-  let! list, next = ohm $ MInstance.Profile.all ~count:20 () in
+  let search = BatOption.default "" (req # get "q") in
+  let search = BatString.nsplit search " " in
+  let atoms = atoms_of_search search in 
+
+  let! list, next = ohm $ MInstance.Profile.search ~count:20 atoms in
   let  title      = `Network_Title in
 
-  render title list next req res
-
-end
-
-let () = UrlNetwork.def_tag begin fun req res -> 
-
-  let  tag        = req # args in
-  let  home       = Action.url UrlNetwork.root (req # server) () in
-  let! list, next = ohm $ MInstance.Profile.by_tag ~count:20 tag in
-  let  title      = `Network_Title_WithTag tag in
-
-  render ~tag:(tag,home) title list next req res
+  render search title list next req res
 
 end
 
 let () = UrlNetwork.def_more begin fun req res -> 
 
-  let iid, tag = req # args in 
+  let iid, search = req # args in 
+  let atoms = atoms_of_search search in
 
-  let! list, next = ohm begin match tag with 
-    | None     -> MInstance.Profile.all    ~start:iid ~count:20 () 
-    | Some tag -> MInstance.Profile.by_tag ~start:iid ~count:20 tag
-  end in 
+  let! list, next = ohm $ MInstance.Profile.search ~start:iid ~count:20 atoms in 
 
-  let! list = ohm $ renderlist ?tag (req # server) list next in 
+  let! list = ohm $ renderlist search (req # server) list next in 
   let! html = ohm $ Asset_Network_List_List.render list in 
   
   return $ Action.json [ "more", Html.to_json html ] res
