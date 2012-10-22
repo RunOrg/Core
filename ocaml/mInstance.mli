@@ -35,6 +35,14 @@ module Profile : sig
     pub_rss  : ( string * IPolling.RSS.t ) list 
   > ;;
 
+  type search = [`WORD of string | `TAG of string]
+
+  val search :
+       ?start:IInstance.t
+    ->  count:int
+    ->  search list
+    -> (t list * IInstance.t option) O.run
+
   val empty : IInstance.t -> t 
 
   val get : 'any IInstance.id -> t option O.run

@@ -203,6 +203,59 @@ let all ?start ~count () =
     BatOption.map (#id |- IInstance.of_id) next
   end
 
+module SearchView = CouchDB.DocView(struct
+  module Key    = Fmt.String
+  module Value  = Fmt.Unit
+  module Doc    = Info
+  module Design = Design
+  let name = "search"
+  let map  = "emit(''); 
+              if (!doc.unbound && doc.search) 
+                for (var i = 0; i < doc.v.length; ++i) 
+                  emit(doc.v[i])"
+end)
+
+type search = [`WORD of string | `TAG of string] 
+
+let vtag_of_search = function
+  | `WORD w -> Util.fold_all w
+  | `TAG  t -> "tag:" ^ Util.fold_all t
+
+let contains_vtags expected = 
+  let expected = BatList.sort_unique compare expected in 
+  fun vtags ->
+    let rec aux = function 
+      |       [], _ -> true
+      |        _, [] -> false       
+      | h1 :: t1, h2 :: t2 when h1 = h2 -> aux (t1,t2)
+      | h1 :: t1, h2 :: t2 when h1 < h2 -> false
+      |       l1,  _ :: t2 -> aux (l1,t2) 
+    in
+    aux (expected, vtags)
+
+let search ?start ~count search = 
+
+  let startid = BatOption.map IInstance.to_id start in
+  let limit   = count + 1 in
+
+  let startkey, endkey, filter = 
+    match List.map vtag_of_search search with 
+      | [] -> "", "", (fun _ -> true)
+      | h :: t -> h, h, contains_vtags t
+  in 
+
+  let! list = ohm $ SearchView.doc_query 
+    ~startkey ~endkey ?startid ~limit ~descending:true ()
+  in
+  
+  let list, next = OhmPaging.slice ~count list in 
+  
+  return begin 
+    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) 
+      (List.filter (fun i -> filter (i#doc).Info.vtag) list),
+    BatOption.map (#id |- IInstance.of_id) next
+  end
+
 module ByRSSView = CouchDB.MapView(struct
   module Key    = IPolling.RSS
   module Value  = Fmt.Unit
