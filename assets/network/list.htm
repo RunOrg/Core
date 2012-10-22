@@ -16,8 +16,16 @@
 
     <form method="GET" action="">
       <input type="text" name="q" value="{search}"/>
+      <input type="hidden" name="s" value="s"/>
       <button type="submit"><span>{`Network_Search}</span></button>
     </form>
+    
+    {?create}
+    <div class="-create">
+      {`Network_Missing}
+      <a href="{this}">{`Network_Missing_Create}</a>
+    </div>
+    {/?}
 
     <ul>
       {@!list}
@@ -76,6 +84,20 @@
     button { width: 100px }
   }
 
+  .-create {
+    padding: 8px 16px;
+    background-color: #EEE;
+    border: 1px solid #CCC;
+    margin-top: -1px;
+    font-size: 13px;
+    text-align: center;
+    color: #555;
+    a {
+      color: #79B;
+      &:hover { color: #8AD }
+    }
+  }
+  
   h1 {
     font-size: 40px;
     font-weight: normal;
@@ -120,9 +142,8 @@
     }
 
     li {
-      padding: 16px;
+      padding: 32px 16px;
       overflow: hidden;
-      border-top: 1px solid #EEE;
       > img { float: left; width: 50px; height: 50px; } 
 
       .-tags, .-name, .-desc { 
