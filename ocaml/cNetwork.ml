@@ -37,10 +37,16 @@ let render search title list next req res =
 
   let! list = ohm $ renderlist search (req # server) list next in
 
+  let create = 
+    if req # get "s" = None then None else
+      Some (Action.url UrlStart.home (req # server) None)
+  in
+ 
   let html = Asset_Network_List.render (object
     method navbar = (req # server,uid,None)
     method tags   = tags
     method search = String.concat " " search 
+    method create = create
     method list   = list 
   end) in
 
