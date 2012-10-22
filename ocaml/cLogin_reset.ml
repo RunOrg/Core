@@ -150,6 +150,8 @@ let () = UrlMail.def_passReset begin fun req res ->
 
   let  url  = Action.url UrlMe.Account.pass (req # server) () in
   
+  let! () = ohm $ MNews.Cache.prepare uid in
+
   return $ CSession.start (`Old cuid) (Action.redirect url res)
 
 end

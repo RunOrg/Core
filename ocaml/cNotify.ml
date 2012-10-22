@@ -135,6 +135,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 				(MAdminLog.Payload.LoginWithNotify 
 				   (MNotify.Payload.channel notify # payload))
 			      in
+			      let! () = ohm $ MNews.Cache.prepare uid in
 			      let! () = ohm $ MNotify.Stats.from_site nid in 
 			      let! url = ohm (url cuid notify) in 
 			      let  url = BatOption.default home url in 
@@ -145,6 +146,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 			method navbar = (req # server,None,None)
 			method title  = title 
 		      end) in
+		      let! () = ohm $ MNews.Cache.prepare uid in
 		      let! () = ohm $ resend_notification ~nid ~uid in 
 		      CPageLayout.core (req # server) `Notify_Expired_Title html res	
 end

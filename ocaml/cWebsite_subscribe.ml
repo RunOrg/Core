@@ -84,6 +84,7 @@ let () = UrlClient.def_subscribe begin fun req res ->
 
 	  | Some cuid -> 
 	    let!  ()  = ohm $ MDigest.Subscription.subscribe cuid iid in
+	    let! () = ohm $ MNews.Cache.prepare (IUser.Deduce.is_anyone cuid) in
 	    return $ CSession.start (`New cuid) 
 	      (Action.javascript (Js.reload ()) res)
 
