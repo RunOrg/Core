@@ -67,14 +67,16 @@ module ArchiveFmt = Fmt.Make(struct type json t = (float option) end)
 
 let () = define UrlMe.News.def_home begin fun owid cuid ->
 
+  let  uid = IUser.Deduce.is_anyone cuid in 
+
+  (* Rendering the actual news section *)
+
   let  access = Util.memoize (fun iid -> Run.memo begin
     (* Acting as confirmed self to view items. *)
     let  cuid = ICurrentUser.Assert.is_old cuid in    
     let! inst = ohm_req_or (return None) (MInstance.get iid) in
     CAccess.make cuid iid inst
   end) in
-  
-  let  uid = IUser.Deduce.is_anyone cuid in 
   
   let count = 7 in
 
@@ -106,10 +108,20 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 
   O.Box.fill (O.decay begin
 
+    let  uid  = IUser.Deduce.can_view cuid in 
+    let! user = ohm_req_or (Asset_Me_PageNotFound.render ()) $ MUser.get uid in
+    let! pic  = ohm $ CPicture.small (user # picture) in
+
     let more = (OhmBox.reaction_endpoint more None, Json.Null) in
 
     Asset_News_Page.render (object
       method more = more
+      method user = object
+	method pic   = pic
+	method name  = user # fullname
+	method email = user # email
+	method url   = Action.url UrlMe.Account.home owid ()
+      end
     end) 
 
   end)
