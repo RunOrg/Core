@@ -135,31 +135,7 @@ let update iid getinfo =
   let update info = getinfo (BatOption.default empty_info info) in
   Tbl.replace (IInstance.decay iid) update
 
-module TagView = CouchDB.DocView(struct
-  module Key    = Fmt.String
-  module Value  = Fmt.Unit
-  module Doc    = Info
-  module Design = Design
-  let name = "by_tag"
-  let map  = "if (!doc.unbound && doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
-end)
-
-let by_tag ?start ~count tag = 
-
-  let tag = Util.fold_all tag in
-  let startkey = tag and endkey = tag and limit = count + 1 
-  and startid = BatOption.map IInstance.to_id start in
-
-  let! list = ohm $ TagView.doc_query 
-    ~startkey ~endkey ?startid ~limit ~descending:true ()
-  in
-  
-  let list, next = OhmPaging.slice ~count list in 
-  
-  return begin 
-    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) list,
-    BatOption.map (#id |- IInstance.of_id) next
-  end
+(* Tag stats =============================================================================================== *)
 
 module TagStatsView = CouchDB.ReduceView(struct
   module Key    = Fmt.String
@@ -178,30 +154,7 @@ let tag_stats () =
   let  list = List.sort (fun a b -> compare (snd b) (snd a)) list in
   return list
 
-module AllView = CouchDB.DocView(struct
-  module Key    = Fmt.Unit
-  module Value  = Fmt.Unit
-  module Doc    = Info
-  module Design = Design
-  let name = "searchable"
-  let map  = "if (!doc.unbound && doc.search) emit(null)"
-end)
-
-let all ?start ~count () = 
-
-  let startkey = () and endkey = () and limit = count + 1 
-  and startid = BatOption.map IInstance.to_id start in
-
-  let! list = ohm $ AllView.doc_query 
-    ~startkey ~endkey ?startid ~limit ~descending:true () 
-  in
-  
-  let list, next = OhmPaging.slice ~count list in 
-  
-  return begin 
-    List.map (fun i -> extract (IInstance.of_id i#id) i#doc) list,
-    BatOption.map (#id |- IInstance.of_id) next
-  end
+(* Search instances ======================================================================================== *)
 
 module SearchView = CouchDB.DocView(struct
   module Key    = Fmt.String
@@ -209,10 +162,12 @@ module SearchView = CouchDB.DocView(struct
   module Doc    = Info
   module Design = Design
   let name = "search"
-  let map  = "emit(''); 
-              if (!doc.unbound && doc.search) 
+  let map  = "if (!doc.unbound && doc.search) {
+                emit('');               
                 for (var i = 0; i < doc.v.length; ++i) 
-                  emit(doc.v[i])"
+                  if (doc.v[i]) 
+                    emit(doc.v[i])
+              }"
 end)
 
 type search = [`WORD of string | `TAG of string] 
@@ -241,6 +196,7 @@ let search ?start ~count search =
   let startkey, endkey, filter = 
     match List.map vtag_of_search search with 
       | [] -> "", "", (fun _ -> true)
+      | [x] -> x, x, (fun _ -> true)
       | h :: t -> h, h, contains_vtags t
   in 
 
@@ -256,6 +212,8 @@ let search ?start ~count search =
     BatOption.map (#id |- IInstance.of_id) next
   end
 
+(* Find the instance bound to an RSS feed ================================================================== *)
+
 module ByRSSView = CouchDB.MapView(struct
   module Key    = IPolling.RSS
   module Value  = Fmt.Unit
@@ -267,6 +225,8 @@ end)
 let by_rss rss_id = 
   let! list = ohm $ ByRSSView.by_key rss_id in
   return $ List.map (#id |- IInstance.of_id) list
+
+(* Backdoor manipulation =================================================================================== *)
 
 module Backdoor = struct
 

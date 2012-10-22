@@ -51,7 +51,7 @@ let render ?tag title list next req res =
 
 let () = UrlNetwork.def_root begin fun req res -> 
 
-  let! list, next = ohm $ MInstance.Profile.all ~count:20 () in
+  let! list, next = ohm $ MInstance.Profile.search ~count:20 [] in
   let  title      = `Network_Title in
 
   render title list next req res
@@ -61,8 +61,9 @@ end
 let () = UrlNetwork.def_tag begin fun req res -> 
 
   let  tag        = req # args in
+  let  search     = [`TAG tag] in 
   let  home       = Action.url UrlNetwork.root (req # server) () in
-  let! list, next = ohm $ MInstance.Profile.by_tag ~count:20 tag in
+  let! list, next = ohm $ MInstance.Profile.search ~count:20 search in
   let  title      = `Network_Title_WithTag tag in
 
   render ~tag:(tag,home) title list next req res
@@ -73,10 +74,9 @@ let () = UrlNetwork.def_more begin fun req res ->
 
   let iid, tag = req # args in 
 
-  let! list, next = ohm begin match tag with 
-    | None     -> MInstance.Profile.all    ~start:iid ~count:20 () 
-    | Some tag -> MInstance.Profile.by_tag ~start:iid ~count:20 tag
-  end in 
+  let search = match tag with None -> [] | Some tag -> [`TAG tag] in
+
+  let! list, next = ohm $ MInstance.Profile.search ~start:iid ~count:20 search in 
 
   let! list = ohm $ renderlist ?tag (req # server) list next in 
   let! html = ohm $ Asset_Network_List_List.render list in 

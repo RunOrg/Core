@@ -47,20 +47,7 @@ module Profile : sig
 
   val get : 'any IInstance.id -> t option O.run
 
-  val by_tag :
-       ?start:IInstance.t
-    ->  count:int
-    ->  string
-    ->  (t list * IInstance.t option) O.run
-
   val tag_stats : unit -> (string * int) list O.run
-
-  val all : 
-       ?start:IInstance.t
-    ->  count:int
-    ->  unit
-    ->  (t list * IInstance.t option) O.run
-
 
   val by_rss : IPolling.RSS.t -> IInstance.t list O.run
 
