@@ -13,7 +13,14 @@ module Design = struct
   module Database = MyDB
   let name = "profile"
 end
+
+let only_tag tag = 
+  "tag:" ^ Util.fold_all tag
   
+let split_name name = 
+  List.map Util.fold_all 
+    (BatString.nsplit name " ")
+
 module Info = struct
   module T = struct
     module RSS = IPolling.RSS 
@@ -33,9 +40,22 @@ module Info = struct
      ?unbound  : bool = false ;
      ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
      ?white    : IWhite.t option ;
+     ?vtag "v" : string list = [] ;
     }
+
+    let json_of_t t = 
+      let vtag = 
+	BatList.sort_unique compare (
+	  List.map Util.fold_all t.tags
+	  @ List.map only_tag t.tags 
+	  @ split_name t.name
+	)
+      in
+      json_of_t { t with vtag }
+	
   end
   include T
+
   include Fmt.Extend(T)
 end
 
@@ -77,6 +97,15 @@ end)
 
 module Tbl = CouchDB.Table(MyDB)(IInstance)(Info)
 
+let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
+  IInstance.fmt (Tbl.all_ids ~count:10) 
+  (fun iid -> 
+    let! profile = ohm_req_or (return ()) $ Tbl.get iid in
+    Tbl.set iid profile)
+    
+(* Uncomment the line below if the vtag generation function changes *)
+let () = O.put (refresh_all ()) 
+
 let empty_info = Info.({
   name  = "" ;
   key   = "" ;
@@ -93,6 +122,7 @@ let empty_info = Info.({
   search   = false ;
   unbound  = true ;
   pub_rss  = [] ;
+  vtag     = [] 
 })
 
 let empty iid = extract iid empty_info
