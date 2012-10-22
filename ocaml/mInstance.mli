@@ -31,7 +31,7 @@ module Profile : sig
     tags     : string list ;
     pic      : [`GetPic] IFile.id option ;
     search   : bool ;
-    unbound  : bool ;
+    unbound  : string list option ;
     pub_rss  : ( string * IPolling.RSS.t ) list 
   > ;;
 

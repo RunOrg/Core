@@ -37,6 +37,7 @@ module Info = struct
       tags     : string list ;
      ?pic      : IFile.t option ;
      ?search   : bool = false ;
+     ?owners   : string list = [] ;
      ?unbound  : bool = false ;
      ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
      ?white    : IWhite.t option ;
@@ -73,7 +74,7 @@ type t = <
   tags     : string list ;
   pic      : [`GetPic] IFile.id option ;
   search   : bool ;
-  unbound  : bool ;
+  unbound  : string list option ;
   pub_rss  : ( string * IPolling.RSS.t ) list
 > ;;
 
@@ -91,7 +92,7 @@ let extract iid i = Info.(object
   method tags     = i.tags
   method pic      = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
   method search   = i.search 
-  method unbound  = i.unbound
+  method unbound  = if i.unbound then Some i.owners else None
   method pub_rss  = i.pub_rss
 end)
 
@@ -121,6 +122,7 @@ let empty_info = Info.({
   tags     = [] ;
   search   = false ;
   unbound  = true ;
+  owners   = [] ;
   pub_rss  = [] ;
   vtag     = [] 
 })
@@ -142,7 +144,7 @@ module TagStatsView = CouchDB.ReduceView(struct
   module Value  = Fmt.Int
   module Design = Design
   let name = "stats_by_tag"
-  let map  = "if (!doc.unbound && doc.search) 
+  let map  = "if (doc.search) 
                 for (var i = 0; i < doc.tags.length; ++i) {
                    emit([null,doc.tags[i]],1);
                    if (doc.white) emit([doc.white,doc.tags[i]],1);
@@ -193,7 +195,7 @@ module SearchView = CouchDB.DocView(struct
   module Doc    = Info
   module Design = Design
   let name = "search"
-  let map  = "if (!doc.unbound && doc.search) {
+  let map  = "if (doc.search) {
                 emit([null,'']);               
                 if (doc.white) emit([doc.white,'']);
                 for (var i = 0; i < doc.v.length; ++i) 
