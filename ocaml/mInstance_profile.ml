@@ -138,35 +138,69 @@ let update iid getinfo =
 (* Tag stats =============================================================================================== *)
 
 module TagStatsView = CouchDB.ReduceView(struct
-  module Key    = Fmt.String
+  module Key    = Fmt.Make(struct type json t = (IWhite.t option * string) end)
   module Value  = Fmt.Int
   module Design = Design
   let name = "stats_by_tag"
-  let map  = "if (!doc.unbound && doc.search) for (var i = 0; i < doc.tags.length; ++i) emit(doc.tags[i],1)"
+  let map  = "if (!doc.unbound && doc.search) 
+                for (var i = 0; i < doc.tags.length; ++i) {
+                   emit([null,doc.tags[i]],1);
+                   if (doc.white) emit([doc.white,doc.tags[i]],1);
+                }"
   let reduce = "return sum(values)"
   let group  = true
   let level  = None
 end)
 
-let tag_stats () = 
+(* Caching... *)
+let tag_stats_cache_ttl = 3600.
+let tag_stats_cache = ref None
+
+let tag_stats_get () = 
+
   let! list = ohm $ TagStatsView.reduce_query () in
-  let  list = List.filter (fun (tag,count) -> count > 0) list in
-  let  list = List.sort (fun a b -> compare (snd b) (snd a)) list in
-  return list
+  let  list = List.filter (fun (_,count) -> count > 0) list in
+
+  let  map  = List.fold_left (fun map ((owid,tag),count) -> 
+    let list = try BatPMap.find owid map with Not_found -> [] in
+    BatPMap.add owid ((tag,count) :: list) map
+  ) BatPMap.empty list in 
+
+  let  map  = BatPMap.map (List.sort (fun a b -> compare (snd b) (snd a))) map in
+
+  return map
+
+let tag_stats owid = 
+  let! time = ohmctx (#time) in
+  let cached = match !tag_stats_cache with 
+    | Some (map,t) when t +. tag_stats_cache_ttl > time -> Some map
+    | _ -> None
+  in
+  let! map = ohm begin
+    match cached with 
+      | Some map -> return map
+      | None     -> let! map = ohm $ tag_stats_get () in
+		    let () = tag_stats_cache := Some (map, time) in
+		    return map
+  end in
+  return (try BatPMap.find owid map with Not_found -> [])
 
 (* Search instances ======================================================================================== *)
 
 module SearchView = CouchDB.DocView(struct
-  module Key    = Fmt.String
+  module Key    = Fmt.Make(struct type json t = (IWhite.t option * string) end)
   module Value  = Fmt.Unit
   module Doc    = Info
   module Design = Design
   let name = "search"
   let map  = "if (!doc.unbound && doc.search) {
-                emit('');               
+                emit([null,'']);               
+                if (doc.white) emit([doc.white,'']);
                 for (var i = 0; i < doc.v.length; ++i) 
-                  if (doc.v[i]) 
-                    emit(doc.v[i])
+                  if (doc.v[i]) {
+                    emit([null,doc.v[i]]);
+                    if (doc.white) emit([doc.white,doc.v[i]]);
+                  }
               }"
 end)
 
@@ -188,7 +222,7 @@ let contains_vtags expected =
     in
     aux (expected, vtags)
 
-let search ?start ~count search = 
+let search ?start ~count owid search = 
 
   let startid = BatOption.map IInstance.to_id start in
   let limit   = count + 1 in
@@ -199,6 +233,8 @@ let search ?start ~count search =
       | [x] -> x, x, (fun _ -> true)
       | h :: t -> h, h, contains_vtags t
   in 
+
+  let startkey = owid, startkey and endkey = owid, endkey in
 
   let! list = ohm $ SearchView.doc_query 
     ~startkey ~endkey ?startid ~limit ~descending:true ()

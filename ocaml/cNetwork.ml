@@ -29,7 +29,7 @@ let render search title list next req res =
 
   let uid = CSession.get req in
 
-  let! stats = ohm $ MInstance.Profile.tag_stats () in
+  let! stats = ohm $ MInstance.Profile.tag_stats (req # server) in
   let tags = List.map (fun (tag,count) -> (object
     method tag   = CTag.prepare (req # server) tag
     method count = count
@@ -57,7 +57,7 @@ let () = UrlNetwork.def_root begin fun req res ->
   let search = BatString.nsplit search " " in
   let atoms = atoms_of_search search in 
 
-  let! list, next = ohm $ MInstance.Profile.search ~count:20 atoms in
+  let! list, next = ohm $ MInstance.Profile.search ~count:10 (req # server) atoms in
   let  title      = `Network_Title in
 
   render search title list next req res
@@ -69,7 +69,7 @@ let () = UrlNetwork.def_more begin fun req res ->
   let iid, search = req # args in 
   let atoms = atoms_of_search search in
 
-  let! list, next = ohm $ MInstance.Profile.search ~start:iid ~count:20 atoms in 
+  let! list, next = ohm $ MInstance.Profile.search ~start:iid ~count:10 (req # server) atoms in 
 
   let! list = ohm $ renderlist search (req # server) list next in 
   let! html = ohm $ Asset_Network_List_List.render list in 
