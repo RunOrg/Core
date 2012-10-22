@@ -97,10 +97,7 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 	| [], None, None -> begin 
 
 	  (* There is nothing to display, and we're displaying the "first page" *)
-
-	  Asset_News_Welcome.render (object
-	    method create = Action.url UrlStart.home owid None
-	  end)
+	  Asset_News_Welcome.render ()
 
 	end 
 	| _ -> begin 
