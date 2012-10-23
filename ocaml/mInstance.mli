@@ -71,6 +71,7 @@ module Profile : sig
       -> tags:string list
       -> visible:bool
       -> rss:string list
+      -> owners:string list
       -> unit O.run
 
   end

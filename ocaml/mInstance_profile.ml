@@ -272,7 +272,7 @@ let by_rss rss_id =
 module Backdoor = struct
 
   let update iid ~name ~key ~pic ~phone ~desc ~site ~address 
-      ~contact ~facebook ~twitter ~tags ~visible ~rss =     
+      ~contact ~facebook ~twitter ~tags ~visible ~rss ~owners =     
 
     let tags = BatList.sort_unique compare (List.map Util.fold_all tags) in
 
@@ -305,6 +305,7 @@ module Backdoor = struct
       search = visible ;
       pub_rss ; 
       white = snd key ;
+      owners ;
     }) in
     
     update iid getinfo
