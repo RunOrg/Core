@@ -139,7 +139,7 @@ let update iid getinfo =
   Tbl.replace (IInstance.decay iid) update
 
 (* Tag stats =============================================================================================== *)
-,
+
 module TagStatsView = CouchDB.ReduceView(struct
   module Key    = Fmt.Make(struct type json t = (IWhite.t option * string) end)
   module Value  = Fmt.Int
