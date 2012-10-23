@@ -102,9 +102,8 @@ let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
   IInstance.fmt (Tbl.all_ids ~count:10) 
   (fun iid -> 
     let! profile = ohm_req_or (return ()) $ Tbl.get iid in
-    let  profile = Info.({
-      profile with search = profile.search && not (profile.unbound && profile.owners = []) 
-    }) in
+    let  search  = Info.(profile.search && not (profile.unbound && profile.owners = [])) in
+    let  profile = Info.({ profile with search ; pub_rss = if search then profile.pub_rss else [] }) in
     Tbl.set iid profile)
     
 (* Uncomment the line below if the vtag generation function changes *)
