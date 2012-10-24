@@ -22,6 +22,10 @@ include Make(struct
   let action cuid json =
     let  email = json # email in
     let! uid = ohm_req_or (fail "Utilisateur inconnu: '%s'" email) $ MUser.by_email email in 
-    return (Bad "Not implemented")
+    let  domain = json # url in 
+    let  okey, owid = ConfigWhite.slice_domain domain in
+    let! key = req_or (fail "Domaine inconnu: '%s'" domain) okey in
+    let! iid = ohm_req_or (fail "Domaine inconnu: '%s'" domain) $ MInstance.by_key key in
+    fail "Not implemented %s" (IInstance.to_string iid)
 
 end)
