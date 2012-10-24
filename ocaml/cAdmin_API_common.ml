@@ -31,3 +31,9 @@ module Make = functor (Def:DEF) -> struct
   end)
 
 end
+
+let fail format = 
+  Printf.ksprintf (fun s -> return (Bad s)) format
+
+let ok format = 
+  Printf.ksprintf (fun s -> return (Ok s)) format
