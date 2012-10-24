@@ -19,7 +19,9 @@ include Make(struct
     method email = "vnicollet@runorg.com"
   end)
     
-  let action cuid json = 
+  let action cuid json =
+    let  email = json # email in
+    let! uid = ohm_req_or (fail "Utilisateur inconnu: '%s'" email) $ MUser.by_email email in 
     return (Bad "Not implemented")
 
 end)
