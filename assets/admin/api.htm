@@ -1,18 +1,25 @@
-<form {$f}>
+<form {$f} style="display:block; width: 500px; margin:auto">
 
-  <select {$e}>
-    {#endpoints}
-      <option value="{url}">{label}</option>
-    {/#}
-  </select>
+  <div>
+    <select {$e}>
+      {#endpoints}
+        <option value="{url}">{label}</option>
+      {/#}
+    </select>
+  </div>
 
-  <textarea {$t}></textarea>
+  <div>
+    <textarea {$t} style="width:491px; height:150px"></textarea>
+  </div>
 
-  <button type="submit"><span>Envoyer</span></button>
+  <div style="text-align:right">
+    <button type="submit"><span>Envoyer</span></button>
+  </div>
 
 </form>
 
-<ul {$c}>
+<ul {$c} class="admin-api"
+    style="list-style-type: none;width: 500px;margin: auto;color: #4A4">
 </ul>
 
 <script>
@@ -33,9 +40,9 @@ here.$f.submit ->
     for item in json 
       post url, item, (data) ->
         if "ok" of data
-          here.$c.append("<li>OK: " + data.ok + "</li>")
+          here.$c.prepend("<li>OK: " + data.ok + "</li>")
         if "fail" of data
-          here.$c.append("<li class=fail>" + data.fail + "</li>")
+          here.$c.prepend("<li class=fail>" + data.fail + "</li>")
         remaining = remaining - 1
         if remaining < 1 
           here.$f.find('button').attr("disabled",false)
@@ -45,3 +52,8 @@ here.$f.submit ->
   false
 
 </script>
+
+<style>
+.API .-fail { color: red; }
+</style>
+
