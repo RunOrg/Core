@@ -1,0 +1,47 @@
+<form {$f}>
+
+  <select {$e}>
+    {#endpoints}
+      <option value="{url}">{label}</option>
+    {/#}
+  </select>
+
+  <textarea {$t}></textarea>
+
+  <button type="submit"><span>Envoyer</span></button>
+
+</form>
+
+<ul {$c}>
+</ul>
+
+<script>
+here.$f.submit ->
+
+  url = here.$e.val() 
+  return if !url 
+
+  json = here.$t.val()
+  
+  here.$c.html ""
+
+  here.$f.find('button').attr("disabled",true)
+  remaining = json.length
+  
+  act = () -> 
+    json = eval('('+json+')')
+    for item in json 
+      post url, item, (data) ->
+        if "ok" of data
+          here.$c.append("<li>OK: " + data.ok + "</li>")
+        if "fail" of data
+          here.$c.append("<li class=fail>" + data.fail + "</li>")
+        remaining = remaining - 1
+        if remaining < 1 
+          here.$f.find('button').attr("disabled",false)
+
+  setTimeout act, 0
+
+  false
+
+</script>
