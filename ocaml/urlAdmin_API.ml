@@ -18,5 +18,5 @@ let all_endpoints server =
     method url = Action.url endpoint server ()
   end)) !endpoints
 
-let def_add_instance_admin = declare "Ajouter un Administrateur à un Espace" "add-instance-admin"
+let add_instance_admin = declare "Ajouter un Administrateur à un Espace" "add-instance-admin"
 
