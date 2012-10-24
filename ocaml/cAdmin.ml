@@ -11,6 +11,7 @@ module Parents  = CAdmin_parents
 module Active   = CAdmin_active
 module Public   = CAdmin_public
 module Instance = CAdmin_instance
+module API      = CAdmin_API
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 
@@ -35,6 +36,13 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method url      = Parents.stats # url 
       method title    = return "Statistiques"
       method subtitle = Some (return "Données quotidiennes sur l'utilisation de RunOrg") 
+     end) ;
+
+    (object
+      method img      = VIcon.Large.chart_organisation
+      method url      = Parents.api # url 
+      method title    = return "API Administrateur"
+      method subtitle = Some (return "Traitement de masse sur des données") 
      end)
 
   ] in
