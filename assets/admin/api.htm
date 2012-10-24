@@ -23,6 +23,20 @@
 </ul>
 
 <script>
+dirty = false
+here.$t.change () ->
+  dirty = true
+
+reload = () ->
+  if !dirty
+    url = here.$e.val()
+    $.get url, {sig:true}, (data) ->
+      if !dirty && 'example' of data
+        here.$t.val("[\n  " + data.example + ",\n]")
+
+here.$e.change reload
+do reload
+
 here.$f.submit ->
 
   url = here.$e.val() 
@@ -54,6 +68,6 @@ here.$f.submit ->
 </script>
 
 <style>
-.API .-fail { color: red; }
+.admin-api .fail { color: red; }
 </style>
 
