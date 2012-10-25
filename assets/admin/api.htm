@@ -47,10 +47,10 @@ here.$f.submit ->
   here.$c.html ""
 
   here.$f.find('button').attr("disabled",true)
-  remaining = json.length
   
   act = () -> 
     json = eval('('+json+')')
+    remaining = json.length
     for item in json 
       post url, item, (data) ->
         if "ok" of data
