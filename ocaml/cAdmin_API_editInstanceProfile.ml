@@ -45,6 +45,23 @@ include Make(struct
 	(profile # unbound <> None)
     in
 
+    let! () = ohm $ MInstance.Profile.Backdoor.update iid
+      ~name:(json # name)
+      ~key:(key,owid)
+      ~pic:(BatOption.map IFile.decay (profile # pic))
+      ~phone:(profile # phone)
+      ~desc:(profile # desc)
+      ~site:(profile # site)
+      ~address:(json # address)
+      ~contact:(profile # contact)
+      ~facebook:(profile # facebook)
+      ~twitter:(profile # twitter)
+      ~tags:(json # tags)
+      ~visible:true
+      ~rss:[]
+      ~owners:(json # owners)
+    in
+
     ok "Profil %s (%s) mis à jour" (IInstance.to_string iid) (json # url) 
 
 end)
