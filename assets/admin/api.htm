@@ -1,0 +1,73 @@
+<form {$f} style="display:block; width: 500px; margin:auto">
+
+  <div>
+    <select {$e}>
+      {#endpoints}
+        <option value="{url}">{label}</option>
+      {/#}
+    </select>
+  </div>
+
+  <div>
+    <textarea {$t} style="width:491px; height:150px"></textarea>
+  </div>
+
+  <div style="text-align:right">
+    <button type="submit"><span>Envoyer</span></button>
+  </div>
+
+</form>
+
+<ul {$c} class="admin-api"
+    style="list-style-type: none;width: 500px;margin: auto;color: #4A4">
+</ul>
+
+<script>
+dirty = false
+here.$t.change () ->
+  dirty = true
+
+reload = () ->
+  if !dirty
+    url = here.$e.val()
+    $.get url, {sig:true}, (data) ->
+      if !dirty && 'example' of data
+        here.$t.val("[\n  " + data.example + ",\n]")
+
+here.$e.change reload
+do reload
+
+here.$f.submit ->
+
+  url = here.$e.val() 
+  return if !url 
+
+  json = here.$t.val()
+  
+  here.$c.html ""
+
+  here.$f.find('button').attr("disabled",true)
+  remaining = json.length
+  
+  act = () -> 
+    json = eval('('+json+')')
+    for item in json 
+      post url, item, (data) ->
+        if "ok" of data
+          here.$c.prepend("<li>OK: " + data.ok + "</li>")
+        if "fail" of data
+          here.$c.prepend("<li class=fail>" + data.fail + "</li>")
+        remaining = remaining - 1
+        if remaining < 1 
+          here.$f.find('button').attr("disabled",false)
+
+  setTimeout act, 0
+
+  false
+
+</script>
+
+<style>
+.admin-api .fail { color: red; }
+</style>
+
