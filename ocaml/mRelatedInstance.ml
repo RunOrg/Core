@@ -130,7 +130,7 @@ let describe (t:Data.t) =
 		      method picture     = prof # pic
 		      method site        = prof # site
 		      method access      = t.Data.access
-		      method url         = if prof # unbound 
+		      method url         = if prof # unbound <> None
 			                   then `Profile iid else `Key (prof # key)
 		      method profile     = None
 		    end in 
@@ -308,7 +308,7 @@ let follow iid aid followed_iid =
   let! followed = ohm_req_or (return ()) $ MInstance.Profile.get followed_iid in
   
   let profile, bound =
-    if followed # unbound then 
+    if followed # unbound <> None then 
       Some followed_iid, 
       `Unbound Unbound.({
 	name  = followed # name ;
