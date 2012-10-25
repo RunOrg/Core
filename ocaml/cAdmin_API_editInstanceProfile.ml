@@ -34,6 +34,17 @@ include Make(struct
     let  okey, owid = ConfigWhite.slice_domain domain in
     let! key = req_or (fail "Domaine inconnu: '%s'" domain) okey in
 
-    ok "Instance profile %s (%s) edited" (Util.uniq ()) (json # url) 
+    let! iid_opt = ohm $ MInstance.Profile.Backdoor.by_key (key,owid) in
+    let  iid = match iid_opt with Some iid -> iid | None -> IInstance.gen () in
+
+    let! profile_opt = ohm $ MInstance.Profile.get iid in 
+    let  profile = match profile_opt with Some profile -> profile | None -> MInstance.Profile.empty iid in
+
+    let! () = 
+      true_or (fail "Profil %s (%s) déjà créé par ses propriétaires" (IInstance.to_string iid) domain)
+	(profile # unbound <> None)
+    in
+
+    ok "Profil %s (%s) mis à jour" (IInstance.to_string iid) (json # url) 
 
 end)

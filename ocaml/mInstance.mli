@@ -74,6 +74,8 @@ module Profile : sig
       -> owners:string list
       -> unit O.run
 
+    val by_key : IWhite.key -> IInstance.t option O.run 
+
   end
 
 end
