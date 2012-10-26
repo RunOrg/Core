@@ -16,3 +16,5 @@
 | `Network_Unbound_Teaser_Public -> "Un site web public avec des actualités, un agenda et la possibilité d'adhérer en ligne."
 | `Network_Unbound_Teaser_Private -> "Un espace membres privé avec forums de discussions, albums photo, agenda privé et partage de documents."
 | `Network_Unbound_Installing -> "L'installation de cet espace n'est pas encore achevée, mais il sera bientôt disponible."
+| `Network_Unbound_Finish -> "Vous êtes responsable de cet espace ?"
+| `Network_Unbound_Finish_Submit -> "Finir l'installation"
