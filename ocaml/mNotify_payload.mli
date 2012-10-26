@@ -11,6 +11,7 @@ include Ohm.Fmt.FMT with type t =
   | `NewInstance   of IInstance.t * IAvatar.t 
   | `NewUser       of IUser.t 
   | `NewJoin       of IInstance.t * IAvatar.t 
+  | `CanInstall    of IInstance.t
   ]
 
 val instance : t -> IInstance.t option O.run 

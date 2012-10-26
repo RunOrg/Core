@@ -37,7 +37,7 @@ let item_url cuid itid =
     | `album  aid -> return None
     | `folder fid -> return None		
 		 
-let url cuid notify =
+let url cuid (notify:MNotify.Store.t) =
   (* We're looking for an URL, so it's safe to act as a confirmed user *)
   let cuid = ICurrentUser.Assert.is_old cuid in  
   match notify # payload with 
@@ -69,6 +69,11 @@ let url cuid notify =
 				    | `Forum -> UrlClient.Forums.join
 				    | `Event -> UrlClient.Events.join
 				    | _      -> UrlClient.Members.join)
+
+    | `CanInstall iid -> let! ins  = ohm_req_or none $ MInstance.Profile.get iid in 
+			 let  owid = snd (ins # key) in
+			 if ins # unbound = None then none else 
+			   return $ Some (Action.url UrlNetwork.install owid iid) 
 
     | `NewWallItem (_,itid) 
     | `NewFavorite (_,_,itid) -> item_url cuid itid
@@ -102,7 +107,7 @@ let resend_notification =
 	  let! from, html = ohm $ CMail.Wrap.render (user # white) self body in
 	  let  subject = AdLib.get `Mail_NotifyResend_Title in
  
-	  send ~from ~subject ~html
+	  send ~owid:(user # white) ~from ~subject ~html
 
 	end in
 

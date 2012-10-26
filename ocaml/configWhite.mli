@@ -10,7 +10,9 @@ val white : string -> IWhite.t option
 
 val slice_domain : string -> string option * IWhite.t option  
 
+val name : IWhite.t option -> string
 val the : IWhite.t option -> string
 val of_the : IWhite.t option -> string
-
 val email : IWhite.t option -> string
+val no_reply : IWhite.t option -> string
+val short : IWhite.t option -> string

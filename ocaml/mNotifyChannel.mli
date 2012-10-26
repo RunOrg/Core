@@ -10,5 +10,6 @@ include Ohm.Fmt.FMT with type t =
   | `EntityRequest
   | `Broadcast
   | `SuperAdmin
+  | `CanInstall
   ]
 

@@ -6,7 +6,8 @@ open BatPervasives
 open Ohm.Universal
 
 let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t -> 
-			    (from:string option -> 
+			    (owid:IWhite.t option ->
+			     from:string option -> 
 			     subject:string O.run ->
 			     html:Html.writer O.run -> unit O.run) -> unit O.run) = 
  
@@ -19,7 +20,7 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
   (* Never send anything to destroyed users *)
   let! () = true_or (return false) (user # destroyed = None) in 
 
-  let! () = ohm $ build uid user begin fun ~from ~subject ~html ->
+  let! () = ohm $ build uid user begin fun ~owid ~from ~subject ~html ->
 
     let! () = ohm $ MAdminLog.log ~uid:(IUser.decay uid) MAdminLog.Payload.SendMail in 
     
@@ -29,10 +30,10 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
     
     let to_email   = user # email in 
     let to_name    = user # fullname in
-    let from_email = "no-reply@runorg.com" in
+    let from_email = ConfigWhite.no_reply owid in
     let from_name  = match from with 
-      | None      -> "RunOrg" 
-      | Some name -> name ^ " (RunOrg)"
+      | None      -> ConfigWhite.name owid 
+      | Some name -> name ^ " (" ^ ConfigWhite.short owid ^ ")"
     in
     
     let () = 
@@ -49,7 +50,7 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	  html
 	|> Netsendmail.sendmail ;
 	
-	Util.log "Sent to: %s <%s>" to_name to_email 
+	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name
 
       with exn -> 
 

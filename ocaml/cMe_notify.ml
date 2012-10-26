@@ -21,7 +21,7 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
 
   let! now = ohmctx (#time) in
 
-  let render_item (who,what) = 
+  let render_item (who, (what:MNotify.Store.t)) = 
 
     let! pic, name = ohm begin 
       match who with 
@@ -68,7 +68,8 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
 
 	return (`NewCommentOther1, [ name , `NewCommentOther2 ])
       end
-      | `NewWallItem  _ -> return (`NewWallItem1, []) 
+      | `NewWallItem  _ -> return (`NewWallItem1, [])
+      | `CanInstall _ -> return (`CanInstall1, [])  
     end in
 
     return (object

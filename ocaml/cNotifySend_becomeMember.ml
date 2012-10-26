@@ -14,17 +14,19 @@ let send url uid iid aid =
     
     let subject = AdLib.get (`Mail_Notify_BecomeMember_Title (instance # name)) in
     
+    let owid = snd (instance # key) in
+
     let body = Asset_Mail_NotifyBecomeMember.render (object
       method name = user # fullname
       method invite = (name, instance # name) 
-      method url = url (snd (instance # key))
+      method url = url owid
       method asso = instance # name
     end) in
     
     let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
-    send ~from ~subject ~html 
+    send ~owid ~from ~subject ~html 
       
   end in
   

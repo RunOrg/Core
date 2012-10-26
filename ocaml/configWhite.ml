@@ -33,6 +33,10 @@ let slice_domain domain =
       prefix, white domain      
   with _ -> None, None
 
+let name id = match represent id with
+  | `RunOrg -> "RunOrg"
+  | `Test -> "Fédération de Test"
+
 let the id = match represent id with 
   | `RunOrg -> "RunOrg"
   | `Test   -> "la Fédération de Test"
@@ -44,3 +48,11 @@ let of_the id = match represent id with
 let email id = match represent id with 
   | `RunOrg -> "contact@runorg.com"
   | `Test -> "contact+test@runorg.com"
+
+let no_reply id = match represent id with
+  | `RunOrg -> "no-reply@runorg.com"
+  | `Test -> "no-reply+test@runorg.com"
+
+let short id = match represent id with 
+  | `RunOrg -> "RunOrg"
+  | `Test -> "FdT"

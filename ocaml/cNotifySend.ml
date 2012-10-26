@@ -11,6 +11,7 @@ module CommentItem = CNotifySend_commentItem
 module PublishItem = CNotifySend_publishItem
 module EntityInvite = CNotifySend_entityInvite
 module EntityRequest = CNotifySend_entityRequest
+module CanInstall = CNotifySend_canInstall
 
 let () = 
   let! uid, nid, payload = Sig.listen MNotify.Send.immediate in 
@@ -24,6 +25,7 @@ let () =
     | `NewWallItem (_,itid) -> PublishItem.send url uid itid
     | `EntityInvite (eid,aid) -> EntityInvite.send url uid eid aid 
     | `EntityRequest (eid,aid) -> EntityRequest.send url uid eid aid 
+    | `CanInstall iid -> CanInstall.send url uid iid 
     | `NewUser _ 
     | `NewFavorite _ 
     | `NewInstance _

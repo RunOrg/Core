@@ -90,18 +90,18 @@
 
 | `Mail_Notify_Welcome_Title -> "Bienvenue sur RunOrg !"
 | `Mail_Notify_Welcome_Intro name -> !! "Bonjour %s" name
-| `Mail_Notify_Welcome_Explanation_WithPassword -> "Vous venez de créer un compte sur notre plateforme et nous vous en remercions !
-
-RunOrg vous permet de personnaliser votre profil et les informations que vous partagez avec vos organisations. Pour en savoir plus, cliquez sur le lien ci-dessous :"
+| `Mail_Notify_Welcome_Explanation_WithPassword -> "Vous venez de créer un compte sur notre plateforme et nous vous en remercions ! RunOrg vous permet de personnaliser votre profil et les informations que vous partagez avec vos organisations. Pour en savoir plus, cliquez sur le lien ci-dessous :"
 | `Mail_Notify_Welcome_Explanation_WithoutPassword -> 
-   "Vous venez de vous connecter pour la première fois sur notre plateforme et nous vous en remercions !
+   "Vous venez de vous connecter pour la première fois sur notre plateforme et nous vous en remercions ! Pour vous y connecter à l'avenir et pour protéger votre vie privée : un mot de passe vous sera demandé. Pour le saisir, cliquez sur lien ci-dessous :"
 
-Pour vous y connecter à l'avenir et pour protéger votre vie privée : un mot de passe vous sera demandé. Pour le saisir, cliquez sur lien ci-dessous :"
+| `Mail_Notify_Welcome_Thanks -> "Bien cordialement, L'équipe RunOrg"
 
-| `Mail_Notify_Welcome_Thanks -> "Bien cordialement,
-
-L'équipe RunOrg"
-
+| `Mail_Notify_CanInstall_Title asso -> !! "Installation - %s" asso
+| `Mail_Notify_CanInstall_Intro -> "Bonjour,"
+| `Mail_Notify_CanInstall_Explanation asso -> 
+  !! "Vous (ou un autre responsable) avez demandé à finir l'installation de l'espace privé en ligne pour %s." asso
+| `Mail_Notify_CanInstall_Explanation2 -> "Il ne vous reste plus qu'à vérifier l'exactitude des données de cet espace. Pour cela, cliquez sur le lien ci-dessus et suivez les instructions :"
+| `Mail_Notify_CanInstall_Thanks asso -> !! "À bientôt sur %s" asso
 
 
 

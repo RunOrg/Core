@@ -15,5 +15,6 @@ include Fmt.Make(struct
     | `EntityInvite  "ei"
     | `EntityRequest "er"	
     | `Broadcast     "b"
+    | `CanInstall    "ci"
     ]
 end)

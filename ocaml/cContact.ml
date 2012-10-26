@@ -27,6 +27,7 @@ let () = UrlSplash.def_contact begin fun req res ->
     let! _ = ohm $ MMail.send_to_self uid begin fun uid user send -> 
 
       send 
+	~owid:(user # white) 
 	~subject:(return "Demande de contact")
 	~html:(return body) 
 
