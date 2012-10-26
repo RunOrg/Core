@@ -42,24 +42,26 @@ here.$f.submit ->
   url = here.$e.val() 
   return if !url 
 
-  json = here.$t.val()
+  json = null
   
   here.$c.html ""
 
   here.$f.find('button').attr("disabled",true)
   
-  act = () -> 
-    json = eval('('+json+')')
-    remaining = json.length
-    for item in json 
+  act = () ->
+    if json is null   
+      json = eval('('+here.$t.val()+')')    
+    if json.length == 0 
+      here.$f.find('button').attr("disabled",false)
+    else
+      item = json.shift()
       post url, item, (data) ->
         if "ok" of data
           here.$c.prepend("<li>OK: " + data.ok + "</li>")
         if "fail" of data
           here.$c.prepend("<li class=fail>" + data.fail + "</li>")
-        remaining = remaining - 1
-        if remaining < 1 
-          here.$f.find('button').attr("disabled",false)
+        do act
+
 
   setTimeout act, 0
 
