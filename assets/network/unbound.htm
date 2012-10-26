@@ -18,11 +18,14 @@
       <p class="-finish">
 	{`Network_Unbound_Finish}&emsp;
 	<a class="action-button -green" 
-	   style="display:inline-block" href="{url}">{`Network_Unbound_Finish_Submit}</a>
+	   onclick="$('#install').submit()"
+	   style="display:inline-block" href="javascript:void(0)">{`Network_Unbound_Finish_Submit}</a>
       </p>
     </div>
   </div>
 </div>
+
+<form id="install" action="{url}" method="POST"></form>
 
 { Asset_PageLayout_Footer.render | ohm } 
 

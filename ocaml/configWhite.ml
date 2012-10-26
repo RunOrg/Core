@@ -41,3 +41,6 @@ let of_the id = match represent id with
   | `RunOrg -> "de RunOrg"
   | `Test -> "de la Fédération de Test"
 
+let email id = match represent id with 
+  | `RunOrg -> "contact@runorg.com"
+  | `Test -> "contact+test@runorg.com"

@@ -18,3 +18,9 @@
 | `Network_Unbound_Installing -> "L'installation de cet espace n'est pas encore achevée."
 | `Network_Unbound_Finish -> "Vous êtes responsable de cet espace ?"
 | `Network_Unbound_Finish_Submit -> "Finir l'installation"
+
+| `Network_Install_Intro -> "Pour finir l'installation, nous venons de vous envoyer un email."
+| `Network_Install_NextSteps -> "Il décrit les prochaines étapes pour la mise en place de votre espace dédié."
+| `Network_Install_Soon -> "À tout de suite sur votre nouvel outil de gestion en ligne !" 
+| `Network_Install_SentTo owid -> "L'email a été envoyé aux adresses électroniques des responsables telles qu'elles ont été déclarées auprès " ^ (ConfigWhite.of_the owid) ^ "."
+| `Network_Install_Contact owid -> "En cas de problèmes ou pour plus d'informations, contactez directement " ^ (ConfigWhite.the owid) ^ " :"  

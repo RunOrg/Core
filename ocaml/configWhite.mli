@@ -12,3 +12,5 @@ val slice_domain : string -> string option * IWhite.t option
 
 val the : IWhite.t option -> string
 val of_the : IWhite.t option -> string
+
+val email : IWhite.t option -> string

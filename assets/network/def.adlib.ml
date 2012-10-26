@@ -19,3 +19,8 @@
 | `Network_Unbound_Finish
 | `Network_Unbound_Finish_Submit
 
+| `Network_Install_Intro
+| `Network_Install_NextSteps
+| `Network_Install_Soon
+| `Network_Install_SentTo of IWhite.t option
+| `Network_Install_Contact of IWhite.t option
