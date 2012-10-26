@@ -31,6 +31,7 @@ let () = UrlNetwork.def_unbound begin fun req res ->
     let html = Asset_Network_Unbound.render (object
       method navbar = (req # server,uid,None)
       method name   = profile # name
+      method url    = Action.url UrlNetwork.bind (req # server) (req # args) 
     end) in
     
     CPageLayout.core (req # server) `Network_Unbound html res
