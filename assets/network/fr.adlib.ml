@@ -9,3 +9,5 @@
 
 | `Network_News_Title -> "Actualités - Le Réseau des Associations - RunOrg"
 | `Network_News_Explain -> "Cette page recense les actualités des associations du réseau RunOrg. Vous pouvez vous abonner individuellement aux associations dont les actualités vous intéressent."
+
+| `Network_Unbound -> "Installation en cours"
