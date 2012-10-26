@@ -132,6 +132,4 @@ module Backdoor : sig
 
   val count : unit -> int O.run
 
-  val key_by_id : (IInstance.t * string) list O.run
-
 end

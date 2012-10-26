@@ -270,8 +270,6 @@ module Backdoor = struct
       | _ -> 0
     end
 
-  let key_by_id = 
-    let! list = ohm $ ViewByKey.doc_query () in
-    return $ List.map (fun item -> IInstance.of_id item # id, (item # doc).Data.key) list
+
 	
 end
