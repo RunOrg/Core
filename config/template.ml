@@ -2875,7 +2875,10 @@ let subscriptionForever = template "SubscriptionForever"
   ~kind:`Group
   ~name:"Adhésion Permanente"
   ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
+  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
+  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
+  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
+  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 

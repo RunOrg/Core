@@ -113,13 +113,23 @@ let headers = [
     ] ;
 
 (*  header "collectivites" 
-    ~title:"Des intranets pour votre collectivité"
+    ~title:"L'espace numérique de votre collectivité"
     ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos agents, vos administrés, vos associations et vos sympathisants"
-    ~trynow:( "Essayer Gratuitement", "/catalog#collec" ) 
+    ~trynow:( "Essayer Gratuitement", "/catalog#collectivites" ) 
     [ "Accueil",         "accueil",         "/collectivites" ;
       "Avantages",       "avantages",       "/collectivites/benefits";
       "Fonctionnalités", "fonctionnalites", "/collectivites/features";
       "Tarifs", "pricing-collectivites", "/collectivites/pricing";
+    ] ; *)
+
+(*  header "entreprises" 
+    ~title:"L'espace numérique 2.0 de votre entreprise"
+    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec salariés, clients, fournisseurs ou abonnés."
+    ~trynow:( "Essayer Gratuitement", "/catalog#company" ) 
+    [ "Accueil",         "accueil",         "/entreprises" ;
+      "Avantages",       "avantages",       "/entreprises/benefits";
+      "Fonctionnalités", "fonctionnalites", "/entreprises/features";
+      "Tarifs", "pricing-collectivites", "/entreprises/pricing";
     ] ; *)
 
    

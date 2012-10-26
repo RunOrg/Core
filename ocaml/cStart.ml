@@ -34,7 +34,7 @@ let () = UrlStart.def_free begin fun req res ->
 
   let name = BatOption.default "test" (req # get "name") in
 
-  let! key = ohm $ MInstance.free_name name in 
+  let! key = ohm $ MInstance.free_name (name,req # server) in 
 
   return $ Action.json [ "key", Json.String key ] res
 
@@ -61,7 +61,7 @@ let () = UrlStart.def_create begin fun req res ->
 
   let! vertical = req_or fail $ PreConfig_Vertical.Catalog.vertical (post # vertical) in
 
-  let! key = ohm $ MInstance.free_name (post # key) in 
+  let! key = ohm $ MInstance.free_name (post # key, req # server) in 
 
   let! pic = ohm begin 
     let! pic = req_or (return None) (post # pic) in
