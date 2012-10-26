@@ -151,25 +151,29 @@ let set_pic id pic =
   Tbl.update (IInstance.decay id) update
     
 module ViewByKey = CouchDB.DocView(struct
-  module Key    = Fmt.String
+  module Key    = Fmt.Make(struct type json t = (string * IWhite.t option) end)
   module Value  = Fmt.Unit
   module Doc    = Data
   module Design = Design
   let name = "by_key"
-  let map =  "if (doc.t == 'inst') emit(doc.key,null)"
+  let map =  "if (doc.t == 'inst') emit([doc.key,doc.white],null)"
 end)
 
 let by_key_cache = Hashtbl.create 100
 
-let by_key key =
-  try return (Some (Hashtbl.find by_key_cache key))
-  with Not_found -> 
-    let! list = ohm $ ViewByKey.doc key in
-    match list with [] -> return None | first :: _ ->
-      let iid = IInstance.of_id (first # id) in 
-      Hashtbl.add by_key_cache key iid ;
-      return $ Some iid
+let by_key_real key = 
+  let! list = ohm $ ViewByKey.doc key in
+  match list with [] -> return None | first :: _ ->
+    let iid = IInstance.of_id (first # id) in 
+    return $ Some iid
       
+let by_key ?(fresh=false)key =
+  if fresh then by_key_real key else
+    try return (Some (Hashtbl.find by_key_cache key))
+    with Not_found -> let! iid = ohm_req_or (return None) $ by_key_real key in
+		      let () = Hashtbl.add by_key_cache key iid in
+		      return $ Some iid 
+			
 let get iid = 
   Tbl.using (IInstance.decay iid) (extract iid)
   
@@ -179,7 +183,7 @@ let get_free_space id =
     | None     -> 0.0
   end
 
-let free_name name =
+let free_name (name,owid) =
   
   let name = IInstanceKey.clean name in
 
@@ -191,7 +195,7 @@ let free_name name =
       
       let! forbidden = ohm begin
 	if IInstanceKey.forbidden full_name then return true else
-	  by_key full_name |> Run.map BatOption.is_some
+	  by_key (full_name,owid) |> Run.map BatOption.is_some
       end in
       
       if forbidden then aux (i+1) name else return full_name 

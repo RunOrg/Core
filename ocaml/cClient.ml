@@ -10,7 +10,7 @@ let do_extract fail req res =
   let  p404 = return $ Bad (fail cuid res) in
 
   let  key      = req # server in
-  let! iid      = ohm_req_or p404 $ MInstance.by_key (fst key) in
+  let! iid      = ohm_req_or p404 $ MInstance.by_key key in
   let! instance = ohm_req_or p404 $ MInstance.get iid in
 
   return $ Ok (cuid, key, iid, instance) 
