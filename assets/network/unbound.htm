@@ -3,6 +3,19 @@
 <div class="network-unbound">
   <div class="-inner">
     <h1>{name}</h1>
+    <div class="-text">
+      <p>
+	{`Network_Unbound_Welcome}
+	{`Network_Unbound_Soon}
+      </p>
+      <ul>
+	<li><p>{`Network_Unbound_Teaser_Public}</p></li>
+	<li><p>{`Network_Unbound_Teaser_Private}</p></li>
+      </ul>
+      <p>
+	{`Network_Unbound_Installing}
+      </p>
+    </div>
   </div>
 </div>
 
@@ -18,6 +31,9 @@
   border-radius: 16px;
   padding: 8px;
   margin-top: 30px;
+  color: #333;
+  font-size: 16px;
+  text-shadow: 0 1px 0 #FFF;
 
   .-inner {
     border: 2px solid #333;
@@ -27,12 +43,25 @@
     min-height: 100px;
   }
 
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    background: url(/public/icon/bullet_black.png) 0px 2px no-repeat;
+    padding-left: 16px;
+  }
+
+  .-text {
+    width: 550px;
+    line-height: 20px;
+  }
+
   h1 {
     margin: 0;
     font-weight: normal;
     font-size: 32px;
-    color: #333;
-    text-shadow: 0 1px 0 #FFF;
   }
 
 }

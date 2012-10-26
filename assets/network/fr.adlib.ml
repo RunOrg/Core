@@ -11,3 +11,8 @@
 | `Network_News_Explain -> "Cette page recense les actualités des associations du réseau RunOrg. Vous pouvez vous abonner individuellement aux associations dont les actualités vous intéressent."
 
 | `Network_Unbound -> "Installation en cours"
+| `Network_Unbound_Welcome -> "Bienvenue !"
+| `Network_Unbound_Soon -> "À cette adresse, vous trouverez bientôt :"
+| `Network_Unbound_Teaser_Public -> "Un site web public avec des actualités, un agenda et la possibilité d'adhérer en ligne."
+| `Network_Unbound_Teaser_Private -> "Un espace membres privé avec forums de discussions, albums photo, agenda privé et partage de documents."
+| `Network_Unbound_Installing -> "L'installation de cet espace n'est pas encore achevée, mais il sera bientôt disponible."
