@@ -1,0 +1,31 @@
+{ navbar | VNavbar.intranet | ohm }
+
+<div class="overlaid-box network-unbound">
+  <div class="-inner">
+    <h1>{name}</h1>
+    <div class="-text">
+      <p>{`Network_Install_Intro} {`Network_Install_NextSteps}</p>
+      <p>{`Network_Install_Soon}</p>
+      <div class="-footnote">
+	<p>{`Network_Install_SentTo owid} {`Network_Install_Contact owid}</p>
+	<p style="text-align:center"><a style="color:#888" href="mailto:{email}">{email}</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{ Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+.network-unbound {
+
+  .-footnote {
+    font-size: 14px;
+    color: #888; 
+    text-shadow: none;
+    margin-top: 10px;
+    border-top: 1px solid #DDD;
+  }
+
+}
+</style>

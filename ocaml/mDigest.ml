@@ -78,15 +78,6 @@ let on_network_connect =
   fun connect -> task (connect :> Connection.t) 
 
 let _ = Sig.listen MRelatedInstance.Signals.after_connect on_network_connect
-
-(* React to confirming user accounts ------------------------------------------------------- *)
-
-let follow_runorg uid = 
-  let! iid = ohm_req_or (return ()) $ MInstance.by_key "nous" in
-  let! ()  = ohm $ Subscription.user_subscribe uid iid in 
-  return ()
-
-let _ = Sig.listen MUser.Signals.on_confirm (fun (uid,_) -> follow_runorg uid)
   
 (* React to listening and unlistening ------------------------------------------------------ *)
   

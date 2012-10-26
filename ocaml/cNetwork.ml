@@ -4,12 +4,20 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Unbound = CNetwork_unbound
+
+let profile_url profile = 
+  if profile # unbound = None then
+    Action.url UrlClient.website (profile # key) ()
+  else
+    Action.url UrlNetwork.unbound (snd (profile # key)) (profile # id)
+
 let renderlist search owid list next = 
 
   let! list = ohm $ Run.list_map begin fun profile -> 
     let! pic = ohm $ CPicture.small_opt (profile # pic) in
     return (object
-      method url  = Action.url UrlClient.website (profile # key) ()
+      method url  = profile_url profile
       method pic  = pic 
       method name = profile # name
       method tags = List.map (CTag.prepare owid) (profile # tags)

@@ -327,5 +327,18 @@ module Backdoor = struct
       | _ -> 0
     end
 
+  module ByKeyView = CouchDB.MapView(struct
+    module Key = Fmt.Make(struct type json t = (string * IWhite.t option) end)
+    module Value = Fmt.Unit
+    module Design = Design
+    let name = "backdoor-by-key"
+    let map  = "emit([doc.key,doc.white])"
+  end)
+
+  let by_key key = 
+    ByKeyView.by_key key |> Run.map begin function 
+      | item :: _ -> Some (IInstance.of_id (item # id))
+      | [] -> None
+    end
     
 end

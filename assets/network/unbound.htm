@@ -1,0 +1,60 @@
+{ navbar | VNavbar.intranet | ohm }
+
+<div class="overlaid-box network-unbound">
+  <div class="-inner">
+    <h1>{name}</h1>
+    <div class="-text">
+      <p>
+	{`Network_Unbound_Welcome}
+	{`Network_Unbound_Soon}
+      </p>
+      <ul>
+	<li><p>{`Network_Unbound_Teaser_Public}</p></li>
+	<li><p>{`Network_Unbound_Teaser_Private}</p></li>
+      </ul>
+      <p>
+	{`Network_Unbound_Installing}
+      </p>
+      <p class="-finish -bottom">
+	{`Network_Unbound_Finish}&emsp;
+	<a class="action-button -green" 
+	   onclick="$('#install').submit()"
+	   style="display:inline-block" href="javascript:void(0)">{`Network_Unbound_Finish_Submit}</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<form id="install" action="{url}" method="POST"></form>
+
+{ Asset_PageLayout_Footer.render | ohm } 
+
+<style>
+.network-unbound {
+
+  width: 586px; 
+  margin-top: 30px;
+
+  .-finish {
+    background-color: #CEC;
+    text-align: center;
+    border-top: 1px solid #ACA;
+    color: #262;
+  } 
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    background: url(/public/icon/bullet_go.png) 0px 2px no-repeat;
+    padding-left: 20px;
+  }
+
+  .-text {
+    width: 550px;
+    line-height: 20px;
+  }
+}
+</style>

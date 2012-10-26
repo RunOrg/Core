@@ -20,3 +20,8 @@ let all_endpoints server =
 
 let add_instance_admin = declare "Ajouter un Administrateur à un Espace" "add-instance-admin"
 
+let edit_instance_profile = declare "Modifier un Profil d'Association" "edit-instance-profile"
+
+let reboot = declare "Redémarrer le Serveur" "reboot"
+
+let rename_instance = declare "Changer l'URL d'une Association" "rename-instance"

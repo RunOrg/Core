@@ -27,7 +27,7 @@ include Make(struct
     let  domain = json # url in 
     let  okey, owid = ConfigWhite.slice_domain domain in
     let! key = req_or (fail "Domaine inconnu: '%s'" domain) okey in
-    let! iid = ohm_req_or (fail "Domaine inconnu: '%s'" domain) $ MInstance.by_key key in
+    let! iid = ohm_req_or (fail "Domaine inconnu: '%s'" domain) $ MInstance.by_key (key,owid) in
 
     let! aid = ohm $ MAvatar.become_contact iid uid in 
 

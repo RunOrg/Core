@@ -74,6 +74,8 @@ module Profile : sig
       -> owners:string list
       -> unit O.run
 
+    val by_key : IWhite.key -> IInstance.t option O.run 
+
   end
 
 end
@@ -115,17 +117,13 @@ val set_pic :
   -> [`InsPic] IFile.id option
   -> unit O.run 
 
-val by_key        : string -> IInstance.t option O.run
-val by_servername : string -> IInstance.t option O.run
-val by_url        : string -> IInstance.t option O.run
-
-val key_of_servername : string -> string 
+val by_key : ?fresh:bool -> IWhite.key -> IInstance.t option O.run
 
 val get : 'any IInstance.id -> (#Ohm.CouchDB.ctx, t option) Ohm.Run.t
 
 val get_free_space : [`SeeUsage] IInstance.id -> float O.run
 
-val free_name : string -> string O.run
+val free_name : IWhite.key -> string O.run
 
 val visited : count:int -> 'any ICurrentUser.id -> (#Ohm.CouchDB.ctx, IInstance.t list) Ohm.Run.t
 val visit : 'any ICurrentUser.id -> IInstance.t -> unit O.run
@@ -134,6 +132,6 @@ module Backdoor : sig
 
   val count : unit -> int O.run
 
-  val key_by_id : (IInstance.t * string) list O.run
+  val relocate : src:IWhite.key -> dest:IWhite.key -> [ `OK | `NOT_FOUND | `EXISTS ] O.run
 
 end
