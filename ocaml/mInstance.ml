@@ -270,6 +270,16 @@ module Backdoor = struct
       | _ -> 0
     end
 
+  let relocate ~src ~dest = 
+    let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
+    let! collision = ohm $ by_key ~fresh:true dest in
+    if collision <> None then
+      if collision = Some iid then return `OK else return `EXISTS
+    else
+      let key, white = dest in 
+      let! _ = ohm $ Tbl.update iid begin fun ins ->
+	Data.({ ins with key ; white })
+      end in 
+      return `OK
 
-	
 end
