@@ -118,10 +118,6 @@ val set_pic :
   -> unit O.run 
 
 val by_key        : string -> IInstance.t option O.run
-val by_servername : string -> IInstance.t option O.run
-val by_url        : string -> IInstance.t option O.run
-
-val key_of_servername : string -> string 
 
 val get : 'any IInstance.id -> (#Ohm.CouchDB.ctx, t option) Ohm.Run.t
 

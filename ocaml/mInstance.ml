@@ -170,29 +170,6 @@ let by_key key =
       Hashtbl.add by_key_cache key iid ;
       return $ Some iid
       
-let key_of_servername name = 
-  List.fold_left (fun name remove ->
-    snd (BatString.replace name remove "" ))
-    name
-    [ ".local.host" ; ".dev.runorg.com" ; ".test.runorg.com" ; ".runorg.com" ]
-    
-let by_servername name = 
-  by_key (key_of_servername name)
-
-let servername_of_url url = 
-  
-  try let no_protocol = 
-	let url = snd (BatString.replace url "http://" "") in
-	snd (BatString.replace url "https://" "")
-      in
-      
-      Some (String.sub no_protocol 0 (BatString.find no_protocol "/"))
-
-  with _ -> None
-  
-let by_url url =
-  Run.opt_bind by_servername (servername_of_url url)
-
 let get iid = 
   Tbl.using (IInstance.decay iid) (extract iid)
   
