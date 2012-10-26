@@ -6,11 +6,17 @@ let all = [
   test ;
 ]
 
-let domain id = match IWhite.to_string id with 
-  | "test" -> "test.local" 
-  | other -> let error = "Unknown white id #" ^ other in
-	     Ohm.Util.log "%s" error ;
-	     raise Not_found
+let represent = function
+  | None -> `RunOrg 
+  | Some id -> match IWhite.to_string id with 
+      | "test" -> `Test 
+      | other -> let error = "Unknown white id #" ^ other in
+		 Ohm.Util.log "%s" error ;
+		 raise Not_found
+		   
+let domain id = match represent (Some id) with 
+  | `RunOrg -> "runorg.com"
+  | `Test -> "test.local" 
 
 let white = function 
   | "test.local" -> Some test
@@ -26,3 +32,12 @@ let slice_domain domain =
       in
       prefix, white domain      
   with _ -> None, None
+
+let the id = match represent id with 
+  | `RunOrg -> "RunOrg"
+  | `Test   -> "la Fédération de Test"
+
+let of_the id = match represent id with 
+  | `RunOrg -> "de RunOrg"
+  | `Test -> "de la Fédération de Test"
+
