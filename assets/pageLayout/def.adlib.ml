@@ -1,6 +1,4 @@
 | `PageLayout_Navbar_Logout
-| `PageLayout_Navbar_Network
-| `PageLayout_Navbar_News
 | `PageLayout_Navbar_Home
 | `PageLayout_Navbar_Members
 | `PageLayout_Navbar_Events

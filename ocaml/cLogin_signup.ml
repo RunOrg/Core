@@ -79,7 +79,7 @@ let send_signup_confirmation =
 	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) (user # white) self body in
 	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
  
-	  send ~from ~subject ~html
+	  send ~owid:(user # white) ~from ~subject ~html
 
 	end in
 

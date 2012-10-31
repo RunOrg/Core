@@ -73,3 +73,9 @@
 | `Mail_Notify_Welcome_Explanation_WithPassword 
 | `Mail_Notify_Welcome_Explanation_WithoutPassword
 | `Mail_Notify_Welcome_Thanks 
+
+| `Mail_Notify_CanInstall_Title of string
+| `Mail_Notify_CanInstall_Intro
+| `Mail_Notify_CanInstall_Explanation of string
+| `Mail_Notify_CanInstall_Explanation2 
+| `Mail_Notify_CanInstall_Thanks of string

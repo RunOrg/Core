@@ -1,6 +1,4 @@
 | `PageLayout_Navbar_Logout -> "Déconnexion"
-| `PageLayout_Navbar_Network -> "Réseau"
-| `PageLayout_Navbar_News -> "Actualités"
 | `PageLayout_Navbar_Home -> "Accueil"
 | `PageLayout_Navbar_Members -> "Membres"
 | `PageLayout_Navbar_Events -> "Activités"

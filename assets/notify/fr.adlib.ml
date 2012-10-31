@@ -16,6 +16,7 @@
     | `EntityInvite2 -> "»"
     | `EntityRequest1 -> "a demandé son inscription à «"
     | `EntityRequest2 -> "»"
+    | `CanInstall1 -> "Terminez l'installation de votre espace privé !"
     | `Whatever -> "a fait quelque chose, mais nous ne savons pas quoi."
 end
 

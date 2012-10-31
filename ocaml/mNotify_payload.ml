@@ -16,6 +16,7 @@ include Fmt.Make(struct
     | `EntityRequest "er" of IEntity.t * IAvatar.t 
     | `NewUser       "nu" of IUser.t 
     | `NewJoin       "nj" of IInstance.t * IAvatar.t  
+    | `CanInstall    "ci" of IInstance.t
     ]
 end)
 
@@ -42,6 +43,7 @@ let instance = function
     | `NewInstance (iid,_)
     | `NewJoin (iid,_) -> return $ Some iid 
 
+    | `CanInstall _
     | `NewUser _ -> return None
 	
 let author cuid = 
@@ -86,9 +88,10 @@ let author cuid =
     | `NewInstance (iid,aid) -> 
       return $ Some (`Person (aid,iid))
 	
+    | `CanInstall _ 
     | `NewUser _ -> 
       return $ Some (`RunOrg None)
-	
+
     | `NewJoin (iid,aid) -> 
       return None
 	
@@ -100,6 +103,7 @@ let channel : t -> MNotifyChannel.t = function
   | `BecomeAdmin   (_,_)      -> `BecomeAdmin
   | `EntityInvite  (_,_)      -> `EntityInvite
   | `EntityRequest (_,_)      -> `EntityRequest
+  | `CanInstall     _         -> `CanInstall
   | `NewInstance   (_,_) 
   | `NewUser        _
   | `NewJoin       (_,_)      -> `SuperAdmin

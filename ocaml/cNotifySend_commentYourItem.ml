@@ -24,9 +24,11 @@ let send url uid cid =
     
     let subject = AdLib.get (`Mail_Notify_CommentYourItem_Title name) in
     
+    let owid = snd (instance # key) in
+
     let body = Asset_Mail_NotifyCommentYourItem.render (object
       method sender = (name, instance # name)
-      method url    = url (snd (instance # key))
+      method url    = url owid
       method asso   = instance # name
       method text   = comm # what
     end) in
@@ -34,7 +36,7 @@ let send url uid cid =
     let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
-    send ~from ~subject ~html 
+    send ~owid ~from ~subject ~html 
       
   end in
   

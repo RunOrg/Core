@@ -13,6 +13,7 @@ module Payload : sig
     | `NewInstance   of IInstance.t * IAvatar.t 
     | `NewUser       of IUser.t 
     | `NewJoin       of IInstance.t * IAvatar.t 
+    | `CanInstall    of IInstance.t
     ]
 
   val author : 'any ICurrentUser.id -> t -> 
