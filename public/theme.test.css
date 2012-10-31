@@ -1,7 +1,27 @@
+/* BLUE: #101f69 ; RED: #e2001a */
+
 #navbar {
-  background: #D60;
-  background: -moz-linear-gradient(center top , #E80, #D60); 
-  background: -webkit-linear-gradient(center top , #E80, #D60);
-  padding: 8px 0;
-  text-shadow: 0 -1px 0 #940;
+  height: 63px;
+  overflow: hidden;
+  background: #101f69;
+  text-shadow: 0 -1px 0 #081036;
+}
+
+#navbar a {
+  margin-top: 11px;
+}
+
+#navbar a:hover {
+  background: #e2001a;
+  text-shadow: 0 -1px 0 #b00014; 
+  border-bottom: 1px solid #b00014; 
+}
+
+#navbar a img {
+  border-radius: 2px;
+}
+
+#navbar .-inner {
+  overflow: hidden;
+  padding: 5px 0;
 }
