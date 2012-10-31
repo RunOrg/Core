@@ -70,6 +70,7 @@ let domain = match environment with
       | None -> "dev.runorg.com"
       | Some _ -> "runorg.local"
 
+let server = Server.server domain
 let core   = Server.core domain 
 let client = Server.client domain
 let secure = Server.secure domain

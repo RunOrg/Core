@@ -1,9 +1,23 @@
 (* © 2012 RunOrg *) 
 
-let rename path = "portals/FFBAD/" ^ OhmStatic.canonical path
+open Ohm
+open Ohm.Universal
+open BatPervasives
+
+let owid = Some ConfigWhite.ffbad
+
+let render ?(css=[]) ?(js=[]) ?head ?favicon ?(body_classes=[]) ~title html = 
+  Html.print_page
+    ~js:(CPageLayout.js false @ js)
+    ~css:([Asset.css] @ CPageLayout.white_css owid @ css)
+    ?head
+    ~favicon:(ConfigWhite.favicon owid)
+    ~title
+    ~body_classes:("splash" :: body_classes)
+    html
 
 let _ = OhmStatic.export 
-  ~rename
-  ~server:  O.core 
+  ~render:(OhmStatic.custom_render render)
+  ~server:(O.server owid) 
   ~title:   "FFBAD"
   Static_FFBAD.site
