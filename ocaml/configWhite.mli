@@ -2,6 +2,13 @@
 
 val test : IWhite.t
 
+type t = 
+  [ `RunOrg
+  | `Test
+  ]
+
+val represent : IWhite.t option -> t 
+
 val all : IWhite.t list
 
 val domain : IWhite.t -> string

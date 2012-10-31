@@ -6,6 +6,11 @@ let all = [
   test ;
 ]
 
+type t = 
+  [ `RunOrg
+  | `Test
+  ]
+
 let represent = function
   | None -> `RunOrg 
   | Some id -> match IWhite.to_string id with 

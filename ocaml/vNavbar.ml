@@ -14,7 +14,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 
   let  home =
     if user = None then Action.url UrlSplash.index owid []
-    else Action.url UrlMe.Account.home owid ()
+    else Action.url UrlMe.News.home owid ()
   in
 
   let! account = ohm $ Run.opt_map begin fun user -> 
@@ -84,12 +84,6 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 
   end in
 
-  let news = if user = None then
-      Action.url UrlNetwork.news owid None
-    else 
-      Action.url UrlMe.News.home owid ()
-  in
-
   let admin = if BatOption.bind MAdmin.user_is_admin cuid <> None then
       Some (Action.url UrlAdmin.home None ())
     else 
@@ -97,13 +91,14 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
   in
 
   Asset_PageLayout_Navbar.render (object
-    method home      = home
+    method logo      = (object 
+      method owid = owid 
+      method url  = home
+    end) 
     method admin     = admin
     method public    = public
     method account   = account
     method instances = BatOption.default [] instances
-    method network   = Action.url UrlNetwork.root owid ()
-    method news      = news
     method asso      = asso
   end)
 

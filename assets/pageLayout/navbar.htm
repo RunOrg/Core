@@ -1,12 +1,11 @@
+{?admin}<a id="superadmin" class="action-button -red" href="{this}">{ `PageLayout_Navbar_Admin }</a>{/?}
+
 <div id="topbar" {if public} class="-public" {/if}>
   
   <div id="navbar" {?account} class="-with-account" {/?}>
     <div class="-inner">
       <div class="-left">
-	<a style="font-size:17px;line-height:17px" href="{home}">RUN<strong>ORG</strong></a>
-	<a href="{network}">{ `PageLayout_Navbar_Network }</a>
-	<a href="{news}">{ `PageLayout_Navbar_News }</a>
-	{?admin}<a href="{this}">{ `PageLayout_Navbar_Admin }</a>{/?}
+	{logo|Asset_Logo_Logo.render|ohm}
 	{#instances} 
   	  <a style="padding: 8px 4px" href="{url}"><img src="{pic}"/></a>
 	{/#}
@@ -68,6 +67,13 @@ setTimeout load, 2000
 </div>
 
 <style>
+
+#superadmin {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  box-shadow: none;
+}
 
 #notifications {
   height: 26px;
