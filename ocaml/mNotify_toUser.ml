@@ -70,6 +70,7 @@ let default = function
   | `BecomeAdmin
   | `EntityInvite
   | `EntityRequest
+  | `CanInstall
   | `SuperAdmin -> `Immediate
 
   | `Broadcast

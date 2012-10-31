@@ -14,6 +14,7 @@
 	     | `EntityInvite2
 	     | `EntityRequest1
 	     | `EntityRequest2
+	     | `CanInstall1
 	     | `Whatever 
 	     ]
 

@@ -35,9 +35,11 @@ let send url uid itid =
     
     let subject = return title in 
     
+    let owid = snd (instance # key) in
+
     let body = Asset_Mail_NotifyPublishItem.render (object
       method sender = (name, instance # name)
-      method url    = url (snd (instance # key))
+      method url    = url owid
       method asso   = instance # name
       method text   = body
     end) in
@@ -45,7 +47,7 @@ let send url uid itid =
     let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
-    send ~from ~subject ~html 
+    send ~owid ~from ~subject ~html 
       
   end in
   

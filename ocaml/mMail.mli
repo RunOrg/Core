@@ -4,7 +4,8 @@ val other_send_to_self :
      'a IUser.id 
   -> (    [ `IsSelf ] IUser.id
        -> MUser.t
-       -> (    from:string option 
+       -> (    owid:IWhite.t option
+	    -> from:string option 
             -> subject:string O.run
             -> html:Ohm.Html.writer O.run
             -> unit O.run )
@@ -15,7 +16,8 @@ val send_to_self:
      'a IUser.id 
   -> (    [ `IsSelf ] IUser.id
        -> MUser.t
-       -> (    subject:string O.run
+       -> (    owid:IWhite.t option
+            -> subject:string O.run
             -> html:Ohm.Html.writer O.run
             -> unit O.run) 
        -> unit O.run )

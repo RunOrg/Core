@@ -23,18 +23,20 @@ let send url uid eid aid =
     
     let subject = AdLib.get (`Mail_Notify_EntityInvite_Title (name,entity)) in
     
+    let owid = snd (instance # key) in
+
     let body = Asset_Mail_NotifyEntityInvite.render (object
       method name      = user # fullname
       method inviter   = (name, entity, instance # name)
       method who       = name
-      method url       = url (snd (instance # key))
+      method url       = url owid
       method asso      = instance # name
     end) in
     
     let! _, html = ohm $ CMail.Wrap.render ~iid (user # white) self body in 
     let from = Some name in
     
-    send ~from ~subject ~html 
+    send ~owid ~from ~subject ~html 
       
   end in
   
