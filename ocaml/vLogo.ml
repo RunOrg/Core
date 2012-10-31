@@ -8,4 +8,5 @@ let render owid =
   match ConfigWhite.represent owid with 
     | `RunOrg -> Asset_Logo_Runorg.render ()
     | `Test   -> Asset_Logo_Ffbad.render () 
-
+    | `FFBAD  -> Asset_Logo_Ffbad.render () 
+ 

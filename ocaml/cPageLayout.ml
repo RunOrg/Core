@@ -36,6 +36,6 @@ let core ?(deeplink=false) owid title html res =
     (Html.print_page 
        ~js
        ~css
-       ~favicon:"/public/favicon.ico"
+       ~favicon:(ConfigWhite.favicon owid) 
        ~title html) res
 
