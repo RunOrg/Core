@@ -1,6 +1,7 @@
 #!/bin/sh
 PATH=/usr/local/bin:/usr/bin:/bin
 portals/FFBAD/refresh.sh
+portals/AssoHelp/refresh.sh
 git remote update > /dev/null
 git status -uno | grep 'branch is behind' -q && git pull && ohm init .
 curl http://runorg.local -s > /dev/null
