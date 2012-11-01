@@ -18,8 +18,15 @@ let render ?(css=[]) ?(js=[]) ?head ?favicon ?(body_classes=[]) ~title html =
     ~body_classes:("splash" :: body_classes)
     html
 
+let wrapper info = 
+  Asset_Ffbad_Page.render (object
+    method body = info
+    method head = OhmStatic.get_page (info # site) (info # req) "blocks/head.htm"
+    method foot = OhmStatic.get_page (info # site) (info # req) "blocks/foot.htm"
+  end)
+
 let _ = OhmStatic.export 
-  ~render:(OhmStatic.custom_render render)
+  ~render:(OhmStatic.extend ~page:render wrapper)
   ~server:(O.server owid) 
   ~title:   "FFBAD"
   Static_FFBAD.site
