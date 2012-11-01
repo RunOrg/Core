@@ -19,11 +19,19 @@ let render ?(css=[]) ?(js=[]) ?head ?favicon ?(body_classes=[]) ~title html =
     html
 
 let wrapper info = 
-  Asset_Help_Page.render (object
-    method body = info # body
-    method home = BatOption.default "" (OhmStatic.Exported.url (info # site) (info # req # server) "index.htm")
-    method back = "/me/#/news"
-  end) 
+
+  let home = 
+    BatOption.default "" 
+      (OhmStatic.Exported.url (info # site) (info # req # server) "index.htm") 
+  in
+
+  Run.with_context (O.ctx `FR) begin
+    Asset_Help_Page.render (object
+      method body = info # body
+      method home = home
+      method back = "/me/#/news"
+    end)
+  end 
 
 let _ = OhmStatic.export 
   ~rename
