@@ -772,6 +772,15 @@ module Backdoor = struct
       end
     ) (return ()) 
 
+  let list ~count start = 
+    let! ids, next = ohm $ Tbl.all_ids ~count start in
+    let! avatars = ohm $ Run.list_filter begin fun aid ->
+      let! avatar = ohm_req_or (return None) $ Tbl.get aid in 
+      return (Some (avatar # who, avatar # ins, avatar # sta))
+    end ids in
+
+    return (avatars, next)
+
 end
 
 module List    = MAvatar_list

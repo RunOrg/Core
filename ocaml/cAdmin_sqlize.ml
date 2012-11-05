@@ -125,7 +125,19 @@ CREATE TABLE ins_usr (
   ins_id, usr_id, ins_usr_status
 ) VALUES\n"
 
-    | 8 -> respond None "" 
+    | 8 -> let  aid_opt = BatOption.map IAvatar.of_id id_opt in 
+	   let! avatars, aid_opt = ohm $ MAvatar.Backdoor.list ~count:20 aid_opt in
+ 	   let  count = List.length avatars in 
+	   let  id_opt = BatOption.map IAvatar.to_id aid_opt in  
+	   respond ~count id_opt (String.concat ",\n" (List.map begin fun (uid,iid,sta) ->
+	     Printf.sprintf "(%s,%s,%s)" 
+	       (sql_str (IInstance.to_string iid))
+	       (sql_str (IUser.to_string uid))
+	       (match sta with
+		 | `Contact -> "'visitor'"
+		 | `Token -> "'member'"
+		 | `Admin -> "'admin'")
+	   end avatars))
 
     | 9 -> respond None ";\n"
 

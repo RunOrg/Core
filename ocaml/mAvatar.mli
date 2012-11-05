@@ -148,4 +148,6 @@ module Backdoor : sig
 
   val count : int O.run
 
+  val list : count:int -> IAvatar.t option -> ((IUser.t * IInstance.t * Status.t) list * IAvatar.t option) O.run
+	
 end
