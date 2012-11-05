@@ -52,94 +52,101 @@ let () = UrlAdmin.def_getSQL $ admin_only begin fun cuid req res ->
 
     (* Initial insert *)
 
-    | 0 -> respond None "DROP TABLE IF EXISTS user ;
-CREATE TABLE user (
-  usr_id CHAR(11) NOT NULL PRIMARY KEY,
-  usr_firstname VARCHAR(255), 
-  usr_lastname VARCHAR(255), 
-  usr_email VARCHAR(255) NOT NULL,
-  usr_white VARCHAR(255) NOT NULL
+    | 0 -> respond None "DROP TABLE IF EXISTS `user` ;
+CREATE TABLE `user` (
+  `usr_id` CHAR(11) NOT NULL PRIMARY KEY,
+  `usr_firstname` VARCHAR(255), 
+  `usr_lastname` VARCHAR(255), 
+  `usr_email` VARCHAR(255) NOT NULL,
+  `usr_white` VARCHAR(255) NOT NULL
 ) ;
 
-DROP TABLE IF EXISTS instance ;
-CREATE TABLE instance (
-  ins_id CHAR(11) NOT NULL PRIMARY KEY,
-  ins_name VARCHAR(255) NOT NULL,
-  ins_key VARCHAR(255) NOT NULL, 
-  ins_white VARCHAR(255)
+DROP TABLE IF EXISTS `instance` ;
+CREATE TABLE `instance` (
+  `ins_id` CHAR(11) NOT NULL PRIMARY KEY,
+  `ins_name` VARCHAR(255) NOT NULL,
+  `ins_key` VARCHAR(255) NOT NULL, 
+  `ins_white` VARCHAR(255)
 ) ;
 
-DROP TABLE IF EXISTS ins_usr ;
-CREATE TABLE ins_usr (
-  ins_id CHAR(11) NOT NULL,
-  usr_id CHAR(11) NOT NULL,
+DROP TABLE IF EXISTS `ins_usr` ;
+CREATE TABLE `ins_usr` (
+  `ins_id` CHAR(11) NOT NULL,
+  `usr_id` CHAR(11) NOT NULL,
   ins_usr_status ENUM('visitor','member','admin') NOT NULL,
-  PRIMARY KEY (ins_id,usr_id)
-) ;
-"
+  PRIMARY KEY (`ins_id`,`usr_id`)
+) ;\n\n"
 
     (* Inserting users ===================================================================== *)
 
-    | 1 -> respond None "INSERT INTO user (
-  usr_id, usr_firstname, usr_lastname, usr_email, usr_white
-) VALUES\n"
-
-    | 2 -> let  uid_opt = BatOption.map IUser.of_id id_opt in 
+    | 1 -> let  uid_opt = BatOption.map IUser.of_id id_opt in 
 	   let! users, uid_opt = ohm $ MUser.Backdoor.list ~count:10 uid_opt in
  	   let  count = List.length users in 
 	   let  id_opt = BatOption.map IUser.to_id uid_opt in  
-	   respond ~count id_opt (String.concat ",\n" (List.map begin fun (uid,user) ->
-	     Printf.sprintf "(%s,%s,%s,%s,%s)" 
-	       (sql_str (IUser.to_string uid))
-	       (sql_optstr (user # firstname))
-	       (sql_optstr (user # lastname)) 
-	       (sql_str (user # email)) 
-	       (sql_str (domain (user # white)))
-	   end users))
+	   respond ~count id_opt begin
+	     "INSERT IGNORE INTO `user` (
+  `usr_id`, `usr_firstname`, `usr_lastname`, `usr_email`, `usr_white`
+) VALUES\n" 
+
+	     ^ String.concat ",\n" 
+	       (List.map begin fun (uid,user) ->
+		 Printf.sprintf "(%s,%s,%s,%s,%s)" 
+		   (sql_str (IUser.to_string uid))
+		   (sql_optstr (user # firstname))
+		   (sql_optstr (user # lastname)) 
+		   (sql_str (user # email)) 
+		   (sql_str (domain (user # white)))
+	       end users)
+	       
+	     ^ ";\n\n"
+	   end
 	   
-    | 3 -> respond None ";\n"
 
     (* Inserting instances ================================================================= *)
 
-    | 4 -> respond None "INSERT INTO instance (
-  ins_id, ins_name, ins_key, ins_white
-) VALUES\n"
-
-    | 5 -> let  iid_opt = BatOption.map IInstance.of_id id_opt in 
+    | 2 -> let  iid_opt = BatOption.map IInstance.of_id id_opt in 
 	   let! insts, iid_opt = ohm $ MInstance.Backdoor.list ~count:10 iid_opt in
  	   let  count = List.length insts in 
 	   let  id_opt = BatOption.map IInstance.to_id iid_opt in  
-	   respond ~count id_opt (String.concat ",\n" (List.map begin fun (iid,ins) ->
-	     Printf.sprintf "(%s,%s,%s,%s)" 
-	       (sql_str (IInstance.to_string iid))
-	       (sql_str (ins # name))
-	       (sql_str (fst (ins # key)))
-	       (sql_str (domain (snd (ins # key))))
-	   end insts))
+	   respond ~count id_opt begin
+	     "INSERT IGNORE INTO `instance` (
+  `ins_id`, `ins_name`, `ins_key`, `ins_white`
+) VALUES\n"
+	     ^ String.concat ",\n" 
+	       (List.map begin fun (iid,ins) ->
+		 Printf.sprintf "(%s,%s,%s,%s)" 
+		   (sql_str (IInstance.to_string iid))
+		   (sql_str (ins # name))
+		   (sql_str (fst (ins # key)))
+		   (sql_str (domain (snd (ins # key))))
+	       end insts)
 
-    | 6 -> respond None ";\n"
+	     ^ ";\n\n"
+	   end
 
     (* Inserting instances ================================================================= *)
 
-    | 7 -> respond None "INSERT INTO ins_usr (
-  ins_id, usr_id, ins_usr_status
-) VALUES\n"
-
-    | 8 -> let  aid_opt = BatOption.map IAvatar.of_id id_opt in 
+    | 3 -> let  aid_opt = BatOption.map IAvatar.of_id id_opt in 
 	   let! avatars, aid_opt = ohm $ MAvatar.Backdoor.list ~count:20 aid_opt in
  	   let  count = List.length avatars in 
 	   let  id_opt = BatOption.map IAvatar.to_id aid_opt in  
-	   respond ~count id_opt (String.concat ",\n" (List.map begin fun (uid,iid,sta) ->
-	     Printf.sprintf "(%s,%s,%s)" 
-	       (sql_str (IInstance.to_string iid))
-	       (sql_str (IUser.to_string uid))
-	       (match sta with
-		 | `Contact -> "'visitor'"
-		 | `Token -> "'member'"
-		 | `Admin -> "'admin'")
-	   end avatars))
+	   respond ~count id_opt begin
+	     "INSERT IGNORE INTO `ins_usr` (
+  `ins_id`, `usr_id`, `ins_usr_status`
+) VALUES\n"
+	     ^ String.concat ",\n" 
+	       (List.map begin fun (uid,iid,sta) ->
+		 Printf.sprintf "(%s,%s,%s)" 
+		   (sql_str (IInstance.to_string iid))
+		   (sql_str (IUser.to_string uid))
+		   (match sta with
+		     | `Contact -> "'visitor'"
+		     | `Token -> "'member'"
+		     | `Admin -> "'admin'")
+	       end avatars)
 
-    | 9 -> respond None ";\n"
+	     ^ ";\n\n"
+	   end
 
     (* Finish everything =================================================================== *)
 
