@@ -53,6 +53,13 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method subtitle = Some (return "Utilisateurs qui ont supprimé leur compte RunOrg")
      end) ;
 
+    (object
+      method img      = VIcon.Large.table_go
+      method url      = Parents.sqlize # url 
+      method title    = return "Export SQL"
+      method subtitle = Some (return "Télécharger une base SQL pour faire des statistiques")
+     end) ;
+
   ] in
   
   page cuid "Administration" (object
