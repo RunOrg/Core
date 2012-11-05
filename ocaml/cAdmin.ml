@@ -39,11 +39,11 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
      end) ;
 
     (object
-      method img      = VIcon.Large.chart_organisation
+      method img      = VIcon.Large.database_lightning
       method url      = Parents.api # url 
       method title    = return "API Administrateur"
       method subtitle = Some (return "Traitement de masse sur des données") 
-     end)
+     end) ;
 
   ] in
   
