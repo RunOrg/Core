@@ -45,6 +45,13 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method subtitle = Some (return "Traitement de masse sur des données") 
      end) ;
 
+    (object
+      method img      = VIcon.Large.user_delete
+      method url      = Parents.unsbs # url 
+      method title    = return "Désinscriptions"
+      method subtitle = Some (return "Utilisateurs qui ont supprimé leur compte RunOrg")
+     end) ;
+
   ] in
   
   page cuid "Administration" (object
