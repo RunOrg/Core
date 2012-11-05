@@ -42,6 +42,9 @@ let () = UrlAdmin.def_getSQL $ admin_only begin fun cuid req res ->
   in
 
   match step with 
+
+    (* Initial insert *)
+
     | 0 -> respond None "DROP TABLE IF EXISTS user ;
 CREATE TABLE user (
   usr_id CHAR(11) NOT NULL PRIMARY KEY,
@@ -67,6 +70,39 @@ CREATE TABLE ins_usr (
   PRIMARY KEY (ins_id,usr_id)
 ) ;
 "
+
+    (* Inserting users ===================================================================== *)
+
+    | 1 -> respond None "INSERT INTO user (
+  usr_id, usr_firstname, usr_lastname, usr_email, usr_white
+) VALUES\n"
+
+    | 2 -> respond None ""
+
+    | 3 -> respond None ";\n"
+
+    (* Inserting instances ================================================================= *)
+
+    | 4 -> respond None "INSERT INTO instance (
+  ins_id, ins_name, ins_key, ins_white
+) VALUES\n"
+
+    | 5 -> respond None ""
+
+    | 6 -> respond None ";\n"
+
+    (* Inserting instances ================================================================= *)
+
+    | 7 -> respond None "INSERT INTO ins_usr (
+  ins_id, usr_id, ins_usr_status
+) VALUES\n"
+
+    | 8 -> respond None "" 
+
+    | 9 -> respond None ";\n"
+
+    (* Finish everything =================================================================== *)
+
     | _ -> return (Action.json [
       "count", Json.Int 0 ;
       "cache", Json.Bool false ;
