@@ -284,4 +284,13 @@ module Backdoor = struct
       end in 
       return `OK
 
+  let list ~count start = 
+    let! ids, next = ohm $ Tbl.all_ids ~count start in
+    let! insts = ohm $ Run.list_filter begin fun iid ->
+      let! inst = ohm_req_or (return None) $ get iid in 
+      return (Some (iid, inst))
+    end ids in
+
+    return (insts, next)
+
 end

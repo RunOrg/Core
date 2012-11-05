@@ -105,7 +105,17 @@ CREATE TABLE ins_usr (
   ins_id, ins_name, ins_key, ins_white
 ) VALUES\n"
 
-    | 5 -> respond None ""
+    | 5 -> let  iid_opt = BatOption.map IInstance.of_id id_opt in 
+	   let! insts, iid_opt = ohm $ MInstance.Backdoor.list ~count:10 iid_opt in
+ 	   let  count = List.length insts in 
+	   let  id_opt = BatOption.map IInstance.to_id iid_opt in  
+	   respond ~count id_opt (String.concat ",\n" (List.map begin fun (iid,ins) ->
+	     Printf.sprintf "(%s,%s,%s,%s)" 
+	       (sql_str (IInstance.to_string iid))
+	       (sql_str (ins # name))
+	       (sql_str (fst (ins # key)))
+	       (sql_str (domain (snd (ins # key))))
+	   end insts))
 
     | 6 -> respond None ";\n"
 

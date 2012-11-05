@@ -134,4 +134,6 @@ module Backdoor : sig
 
   val relocate : src:IWhite.key -> dest:IWhite.key -> [ `OK | `NOT_FOUND | `EXISTS ] O.run
 
+  val list : count:int -> IInstance.t option -> ((IInstance.t * t) list * IInstance.t option) O.run
+
 end
