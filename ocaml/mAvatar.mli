@@ -146,4 +146,6 @@ module Backdoor : sig
 
   val all : (IUser.t * IInstance.t * Status.t) list O.run 
 
+  val count : int O.run
+
 end

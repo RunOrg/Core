@@ -264,11 +264,13 @@ module Backdoor = struct
     let level  = None
   end)
 
-  let count () = 
-    CountView.reduce_query () |> Run.map begin function
-      | ( _, v ) :: _ -> v 
-      | _ -> 0
-    end
+  let count =
+    Run.bind (fun () -> 
+      CountView.reduce_query () |> Run.map begin function
+	| ( _, v ) :: _ -> v 
+	| _ -> 0
+      end
+    ) (return ()) 
 
   let relocate ~src ~dest = 
     let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in

@@ -16,7 +16,6 @@ let getStats, def_getStats = O.declare O.secure "admin/stats/get" (A.r A.int)
 let api,      def_api      = O.declare O.secure "admin/api" A.none
 let unsbs,    def_unsbs    = O.declare O.secure "admin/unsbs" A.none
 let sqlize,   def_sqlize   = O.declare O.secure "admin/sql" A.none
-let getSQL,   def_getSQL   = O.declare O.secure "admin/sql/get" (A.r Id.arg)
-let pingSQL,  def_pingSQL  = O.declare O.secure "admin/sql/ping" (A.r Id.arg)
+let getSQL,   def_getSQL   = O.declare O.secure "admin/sql/get" (A.ro A.int Id.arg)
 
 module API = UrlAdmin_API

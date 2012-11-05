@@ -13,6 +13,7 @@ module Public   = CAdmin_public
 module Instance = CAdmin_instance
 module API      = CAdmin_API
 module Unsbs    = CAdmin_unsbs
+module Sqlize   = CAdmin_sqlize
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 

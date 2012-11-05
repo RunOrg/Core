@@ -130,7 +130,7 @@ val visit : 'any ICurrentUser.id -> IInstance.t -> unit O.run
 
 module Backdoor : sig
 
-  val count : unit -> int O.run
+  val count : int O.run
 
   val relocate : src:IWhite.key -> dest:IWhite.key -> [ `OK | `NOT_FOUND | `EXISTS ] O.run
 
