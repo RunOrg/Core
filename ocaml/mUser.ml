@@ -755,6 +755,25 @@ module Backdoor = struct
   let all = 
     AllView.query () |> Run.map 
 	(List.map (fun item -> IUser.of_id (item # id), item # value))      
+
+  module DeletedView = CouchDB.MapView(struct
+    module Key = Fmt.Unit
+    module Value = Fmt.Make(struct
+      type json t = <
+	email     "e" : string ;
+        time      "t" : float
+      >
+    end)
+    module Design = Design
+    let name = "backdoor-deleted"
+    let map  = "if (doc.t == 'user' && doc.destroyed) emit(doc.destroyed,{
+      e:doc.email,t:doc.destroyed});"
+  end)
+
+  let unsubscribed ~count = 
+    let! list = ohm $ DeletedView.query ~limit:count ~descending:true () in
+    return (List.map (#value) list) 
+
 end
 
 let obliterate uid =

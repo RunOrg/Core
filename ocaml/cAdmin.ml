@@ -12,6 +12,7 @@ module Active   = CAdmin_active
 module Public   = CAdmin_public
 module Instance = CAdmin_instance
 module API      = CAdmin_API
+module Unsbs    = CAdmin_unsbs
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 
@@ -39,11 +40,18 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
      end) ;
 
     (object
-      method img      = VIcon.Large.chart_organisation
+      method img      = VIcon.Large.database_lightning
       method url      = Parents.api # url 
       method title    = return "API Administrateur"
       method subtitle = Some (return "Traitement de masse sur des données") 
-     end)
+     end) ;
+
+    (object
+      method img      = VIcon.Large.user_delete
+      method url      = Parents.unsbs # url 
+      method title    = return "Désinscriptions"
+      method subtitle = Some (return "Utilisateurs qui ont supprimé leur compte RunOrg")
+     end) ;
 
   ] in
   

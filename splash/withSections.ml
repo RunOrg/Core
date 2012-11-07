@@ -41,7 +41,7 @@ let page url title ?section ?head ?subsection layers =
 
   "let _ = " ^
   (call "O.register" 
-     [ "O.core" ;
+     [ "(O.server None)" ;
        string url ;
        "Ohm.Action.Args.none" ;
        "(fun _ -> " 

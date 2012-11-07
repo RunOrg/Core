@@ -11,8 +11,9 @@ end
 
 open UrlAdmin
 
-let home    = make "Administration" home   () 
-let active  = make "Instances"      active None
-let public  = make "Sites Web"      public None
-let stats   = make "Statistiques"   stats  ()
-let api     = make "API"            api    ()
+let home   = make "Administration"  home   () 
+let active = make "Instances"       active None
+let public = make "Sites Web"       public None
+let stats  = make "Statistiques"    stats  ()
+let api    = make "API"             api    ()
+let unsbs  = make "Désinscriptions" unsbs  () 
