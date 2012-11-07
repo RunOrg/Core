@@ -774,6 +774,16 @@ module Backdoor = struct
     let! list = ohm $ DeletedView.query ~limit:count ~descending:true () in
     return (List.map (#value) list) 
 
+
+  let list ~count start = 
+    let! ids, next = ohm $ Tbl.all_ids ~count start in
+    let! users = ohm $ Run.list_filter begin fun uid ->
+      let! user = ohm_req_or (return None) $ get uid in 
+      return (Some (uid, user))
+    end ids in
+
+    return (users, next)
+
 end
 
 let obliterate uid =

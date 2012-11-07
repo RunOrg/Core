@@ -1,0 +1,19 @@
+<div style="text-align:center;width:800px;margin:30px auto;">
+  <b {$p}>0</b>% (<span {$c}>0</span> / {count|string_of_int|esc}) 
+  <textarea {$t} style="display:block;width:750px;height:350px;margin:10px auto;"></textarea>
+</div>
+
+<script type="url:string,count:int">
+c = 0
+l = -> 
+  if url 
+    $.get url, {}, (data) ->
+      c = c + data.count
+      p = (100 * c / count).toFixed(2) 
+      url = data.url 
+      here.$t.val( here.$t.val() + data.sql )
+      here.$c.text c
+      here.$p.text p 
+      do l  
+do l
+</script>

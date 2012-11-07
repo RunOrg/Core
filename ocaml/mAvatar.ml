@@ -752,6 +752,35 @@ module Backdoor = struct
     let! list = ohm $ AllView.query () in
     return $ List.map (#value) list
 
+  module CountView = CouchDB.ReduceView(struct
+    module Key = Fmt.Unit
+    module Value = Fmt.Int
+    module Reduced = Fmt.Int
+    module Design = Design
+    let name   = "backdoor-count"
+    let map    = "if (doc.t == 'avtr') emit(null,1);"
+    let reduce = "return sum(values);"
+    let group  = true
+    let level  = None
+  end)
+
+  let count =
+    Run.bind (fun () -> 
+      CountView.reduce_query () |> Run.map begin function
+	| ( _, v ) :: _ -> v 
+	| _ -> 0
+      end
+    ) (return ()) 
+
+  let list ~count start = 
+    let! ids, next = ohm $ Tbl.all_ids ~count start in
+    let! avatars = ohm $ Run.list_filter begin fun aid ->
+      let! avatar = ohm_req_or (return None) $ Tbl.get aid in 
+      return (Some (avatar # who, avatar # ins, avatar # sta))
+    end ids in
+
+    return (avatars, next)
+
 end
 
 module List    = MAvatar_list
