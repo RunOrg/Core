@@ -155,6 +155,8 @@ module Backdoor : sig
   val count_confirmed : int O.run
   val count_undeleted : int O.run
 
+  val list : count:int -> IUser.t option -> ((IUser.t * t) list * IUser.t option) O.run
+
   val all : (IUser.t * <
         firstname : string option ;
         lastname  : string option ;
