@@ -162,4 +162,9 @@ module Backdoor : sig
 	join      : float
       >) list O.run
 
+  val unsubscribed : count:int -> (<
+    email : string ;
+    time  : float ; 
+  >) list O.run
+
 end

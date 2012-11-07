@@ -8,6 +8,18 @@ let domain default = function
   | None -> default 
   | Some wid -> try ConfigWhite.domain wid with Not_found -> default
 
+let server default owid = object
+  val domain = domain default owid
+  method protocol () = `HTTP
+  method domain () = domain
+  method port () = 80
+  method cookie_domain () = Some ("." ^ domain)
+  method matches protocol domain' port = 
+    if protocol <> `HTTP then None else
+      ( Util.log "%S = %S ?" domain domain' ; 
+	if domain = domain' then Some () else None )
+end
+
 let core default = object
   method protocol _ = `HTTP
   method domain = domain default 

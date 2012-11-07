@@ -2,6 +2,8 @@
 
 val js : deeplink:bool -> string list
 
+val white_css : IWhite.t option -> string list 
+
 val splash : 
      string
   -> Ohm.Html.writer O.run list
