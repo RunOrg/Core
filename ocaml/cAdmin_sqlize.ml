@@ -41,7 +41,17 @@ let () = UrlAdmin.def_getSQL $ admin_only begin fun cuid req res ->
     ] res) 
   in
 
-  let sql_str = Printf.sprintf "%S" in
+  let sql_str str = 
+    "\"" 
+    ^ String.concat "\\\\"
+      (List.map 
+	 (fun str -> 
+	   String.concat "\\\"" 
+	     (BatString.nsplit str "\""))
+	 (BatString.nsplit str "\\"))
+    ^ "\""
+  in
+
   let sql_optstr = function None -> "NULL" | Some s -> sql_str s in
   let sql_bool = function
     | true -> "1"
