@@ -80,10 +80,10 @@ CREATE TABLE `ins_usr` (
     (* Inserting users ===================================================================== *)
 
     | 1 -> let  uid_opt = BatOption.map IUser.of_id id_opt in 
-	   let! users, uid_opt = ohm $ MUser.Backdoor.list ~count:10 uid_opt in
+	   let! users, uid_opt = ohm $ MUser.Backdoor.list ~count:20 uid_opt in
  	   let  count = List.length users in 
 	   let  id_opt = BatOption.map IUser.to_id uid_opt in  
-	   respond ~count id_opt begin
+	   respond ~count id_opt (if count = 0 then "" else begin
 	     "INSERT IGNORE INTO `user` (
   `usr_id`, `usr_firstname`, `usr_lastname`, `usr_email`, `usr_white`
 ) VALUES\n" 
@@ -99,16 +99,16 @@ CREATE TABLE `ins_usr` (
 	       end users)
 	       
 	     ^ ";\n\n"
-	   end
+	   end)
 	   
 
     (* Inserting instances ================================================================= *)
 
     | 2 -> let  iid_opt = BatOption.map IInstance.of_id id_opt in 
-	   let! insts, iid_opt = ohm $ MInstance.Backdoor.list ~count:10 iid_opt in
+	   let! insts, iid_opt = ohm $ MInstance.Backdoor.list ~count:20 iid_opt in
  	   let  count = List.length insts in 
 	   let  id_opt = BatOption.map IInstance.to_id iid_opt in  
-	   respond ~count id_opt begin
+	   respond ~count id_opt (if count = 0 then "" else begin
 	     "INSERT IGNORE INTO `instance` (
   `ins_id`, `ins_name`, `ins_key`, `ins_white`
 ) VALUES\n"
@@ -122,7 +122,7 @@ CREATE TABLE `ins_usr` (
 	       end insts)
 
 	     ^ ";\n\n"
-	   end
+	   end)
 
     (* Inserting instances ================================================================= *)
 
@@ -130,7 +130,7 @@ CREATE TABLE `ins_usr` (
 	   let! avatars, aid_opt = ohm $ MAvatar.Backdoor.list ~count:20 aid_opt in
  	   let  count = List.length avatars in 
 	   let  id_opt = BatOption.map IAvatar.to_id aid_opt in  
-	   respond ~count id_opt begin
+	   respond ~count id_opt (if count = 0 then "" else begin
 	     "INSERT IGNORE INTO `ins_usr` (
   `ins_id`, `usr_id`, `ins_usr_status`
 ) VALUES\n"
@@ -146,7 +146,7 @@ CREATE TABLE `ins_usr` (
 	       end avatars)
 
 	     ^ ";\n\n"
-	   end
+	   end)
 
     (* Finish everything =================================================================== *)
 
