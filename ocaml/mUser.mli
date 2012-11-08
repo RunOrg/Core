@@ -61,7 +61,7 @@ val by_facebook : OhmFacebook.t -> IUser.t option O.run
 class type user_short = object
   method firstname : string
   method lastname  : string
-  method password  : string 
+  method password  : string option 
   method email     : string
   method white     : IWhite.t option
 end

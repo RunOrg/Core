@@ -225,7 +225,7 @@ let by_facebook uid =
 class type user_short = object
   method firstname : string
   method lastname  : string
-  method password  : string 
+  method password  : string option 
   method email     : string
   method white     : IWhite.t option
 end 
@@ -287,7 +287,7 @@ let quick_create (user : user_short) =
 	default with
 	  firstname = clip (user # firstname) ;
 	  lastname  = clip (user # lastname) ;
-	  passhash  = Some (ConfigKey.passhash (user # password)) ;
+	  passhash  = BatOption.map ConfigKey.passhash (user # password) ;
 	  email     ;
 	  white     = user # white ; 
       }) in
