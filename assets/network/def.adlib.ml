@@ -24,3 +24,7 @@
 | `Network_Install_Soon
 | `Network_Install_SentTo of IWhite.t option
 | `Network_Install_Contact of IWhite.t option
+
+| `Network_ConfirmOwner_Intro
+| `Network_ConfirmOwner_NextSteps
+| `Network_ConfirmOwner_Soon 

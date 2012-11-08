@@ -37,7 +37,7 @@ module Info = struct
       tags     : string list ;
      ?pic      : IFile.t option ;
      ?search   : bool = false ;
-     ?owners   : string list = [] ;
+     ?owners   : IUser.t list = [] ;
      ?unbound  : bool = false ;
      ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
      ?white    : IWhite.t option ;
@@ -74,7 +74,7 @@ type t = <
   tags     : string list ;
   pic      : [`GetPic] IFile.id option ;
   search   : bool ;
-  unbound  : string list option ;
+  unbound  : IUser.t list option ;
   pub_rss  : ( string * IPolling.RSS.t ) list
 > ;;
 
@@ -107,7 +107,7 @@ let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
     Tbl.set iid profile)
     
 (* Uncomment the line below if the vtag generation function changes *)
-let () = O.put (refresh_all ()) 
+(* let () = O.put (refresh_all ()) *)
 
 let empty_info = Info.({
   name  = "" ;

@@ -43,11 +43,33 @@ let () = UrlNetwork.def_install begin fun req res ->
   let uid = CSession.get req in
   let iid = req # args in 
 
-  let not_found = C404.render (req # server) uid res in
+  let! profile_opt = ohm $ MInstance.Profile.get iid in
+  let  owners_opt  = BatOption.bind (#unbound) profile_opt in 
+  
+  let status = 
+    match owners_opt with None -> `Missing | Some owners ->
+      match CSession.check req with 
+	| `New cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
+	  `UnconfirmedOwner (IUser.Deduce.is_anyone cuid) 
+	| `Old cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
+	  `ConfirmedOwner cuid
+	| _ -> `NotOwner owners
+  in
+
 
   if req # post <> None then
 
-    (* This is a POST : trigger the URLs *)
+    (* This is a POST : trigger the notifications *)
+    
+    let  payload = `CanInstall iid in 
+
+    let! () = ohm begin 
+      match status with 
+	| `UnconfirmedOwner uid -> MNotify.Store.create payload uid
+	| `NotOwner owners -> Run.list_iter (MNotify.Store.create payload) owners
+	| `ConfirmedOwner _
+	| `Missing -> return () 
+    end in
 
     let redirect = 
       let url = Action.url (req # self) (req # server) (req # args) in
@@ -60,15 +82,35 @@ let () = UrlNetwork.def_install begin fun req res ->
 
     (* This is a GET (which happened, probably, after a POST) *)
 
-    let! profile = ohm_req_or not_found (MInstance.Profile.get iid) in
+    let not_found = C404.render (req # server) uid res in
 
-    let html = Asset_Network_Install.render (object
-      method navbar = (req # server,uid,None)
-      method name   = profile # name
-      method owid   = snd (profile # key) 
-      method email  = ConfigWhite.email (snd (profile # key))
-    end) in
-    
-    CPageLayout.core (req # server) `Network_Unbound html res
+    let! profile = req_or not_found profile_opt in
+    let! owners  = req_or not_found owners_opt in 
+
+    match status with 
+      | `Missing -> not_found
+      | `NotOwner _ -> 
+
+	let html = Asset_Network_Install.render (object
+	  method navbar = (req # server,uid,None)
+	  method name   = profile # name
+	  method owid   = snd (profile # key) 
+	  method email  = ConfigWhite.email (snd (profile # key))
+	end) in
+	
+	CPageLayout.core (req # server) `Network_Unbound html res
+
+      | `UnconfirmedOwner _ ->
+
+	let html = Asset_Network_ConfirmOwner.render (object
+	  method navbar = (req # server,uid,None)
+	  method name   = profile # name
+	end) in
+	
+	CPageLayout.core (req # server) `Network_Unbound html res	
+
+      | `ConfirmedOwner cuid -> 
+
+	not_found
 
 end

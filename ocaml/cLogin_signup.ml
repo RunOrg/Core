@@ -140,7 +140,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
     let! result = ohm $ MUser.quick_create (object
       method firstname = fname
       method lastname  = lname
-      method password  = pass
+      method password  = Some pass
       method email     = email
       method white     = req # server
     end) in
