@@ -47,7 +47,17 @@ let () = UrlNetwork.def_install begin fun req res ->
 
   if req # post <> None then
 
-    (* This is a POST : trigger the URLs *)
+    (* This is a POST : trigger the notifications *)
+
+    let! profile = ohm $ MInstance.Profile.get iid in
+    let  owners  = BatOption.bind (#unbound) profile in 
+    
+    let  payload = `CanInstall iid in 
+
+    let! () = ohm begin 
+      match owners with None -> return () | Some owners ->
+	Run.list_iter (MNotify.Store.create payload) owners
+    end in
 
     let redirect = 
       let url = Action.url (req # self) (req # server) (req # args) in

@@ -107,7 +107,7 @@ let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
     Tbl.set iid profile)
     
 (* Uncomment the line below if the vtag generation function changes *)
-let () = O.put (refresh_all ()) 
+(* let () = O.put (refresh_all ()) *)
 
 let empty_info = Info.({
   name  = "" ;
