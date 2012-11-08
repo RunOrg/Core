@@ -16,7 +16,7 @@ include Make(struct
       url  : string ;
      ?address : string option ;
      ?tags : string list = [] ;
-      owners : string list
+      owners : (string * string * string) list
     >
   end)
 
@@ -25,7 +25,10 @@ include Make(struct
     method url  = "fc75020.runorg.com"
     method address = Some "22 rue Planchat, 75020 Paris"
     method tags = [ "football" ; "sport" ; "club" ; "paris" ]
-    method owners = [ "vnicollet@runorg.com" ; "mfoughali@runorg.com" ]
+    method owners = [ 
+      "Victor", "Nicollet", "vnicollet@runorg.com" ; 
+      "Mehdi",  "Foughali", "mfoughali@runorg.com" ;
+    ]
   end)
     
   let action cuid json =
@@ -45,6 +48,26 @@ include Make(struct
 	(profile # unbound <> None)
     in
 
+    let! owners = ohm $ Run.list_map begin fun (firstname,lastname,email) ->
+
+      let data = object
+	method firstname = firstname
+	method lastname  = lastname
+	method password  = None
+	method email     = email 
+	method white     = owid 
+      end in 
+
+      let! result = ohm $ MUser.quick_create data in 
+
+      match result with 
+	| `duplicate uid -> return uid 
+	| `created cuid -> return (IUser.Deduce.is_anyone cuid) 
+
+    end (json # owners) in
+
+    let owners = BatList.sort_unique compare owners in 
+
     let! () = ohm $ MInstance.Profile.Backdoor.update iid
       ~name:(json # name)
       ~key:(key,owid)
@@ -59,7 +82,7 @@ include Make(struct
       ~tags:(json # tags)
       ~visible:true
       ~rss:[]
-      ~owners:(json # owners)
+      ~owners
     in
 
     ok "Profil %s (%s) mis à jour" (IInstance.to_string iid) (json # url) 

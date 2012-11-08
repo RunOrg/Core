@@ -16,8 +16,7 @@ let server default owid = object
   method cookie_domain () = Some ("." ^ domain)
   method matches protocol domain' port = 
     if protocol <> `HTTP then None else
-      ( Util.log "%S = %S ?" domain domain' ; 
-	if domain = domain' then Some () else None )
+      if domain = domain' then Some () else None 
 end
 
 let core default = object
