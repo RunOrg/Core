@@ -87,13 +87,30 @@ let () = UrlNetwork.def_install begin fun req res ->
     let! profile = req_or not_found profile_opt in
     let! owners  = req_or not_found owners_opt in 
 
-    let html = Asset_Network_Install.render (object
-      method navbar = (req # server,uid,None)
-      method name   = profile # name
-      method owid   = snd (profile # key) 
-      method email  = ConfigWhite.email (snd (profile # key))
-    end) in
-    
-    CPageLayout.core (req # server) `Network_Unbound html res
+    match status with 
+      | `Missing -> not_found
+      | `NotOwner _ -> 
+
+	let html = Asset_Network_Install.render (object
+	  method navbar = (req # server,uid,None)
+	  method name   = profile # name
+	  method owid   = snd (profile # key) 
+	  method email  = ConfigWhite.email (snd (profile # key))
+	end) in
+	
+	CPageLayout.core (req # server) `Network_Unbound html res
+
+      | `UnconfirmedOwner _ ->
+
+	let html = Asset_Network_ConfirmOwner.render (object
+	  method navbar = (req # server,uid,None)
+	  method name   = profile # name
+	end) in
+	
+	CPageLayout.core (req # server) `Network_Unbound html res	
+
+      | `ConfirmedOwner cuid -> 
+
+	not_found
 
 end
