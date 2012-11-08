@@ -43,6 +43,10 @@ let () = UrlAdmin.def_getSQL $ admin_only begin fun cuid req res ->
 
   let sql_str = Printf.sprintf "%S" in
   let sql_optstr = function None -> "NULL" | Some s -> sql_str s in
+  let sql_bool = function
+    | true -> "1"
+    | false -> "0"
+  in
   let domain = function
     | None -> "runorg.com"
     | Some wid -> try (ConfigWhite.domain wid) with _ -> "[INCONNU]"
@@ -58,7 +62,8 @@ CREATE TABLE `user` (
   `usr_firstname` VARCHAR(255), 
   `usr_lastname` VARCHAR(255), 
   `usr_email` VARCHAR(255) NOT NULL,
-  `usr_white` VARCHAR(255) NOT NULL
+  `usr_white` VARCHAR(255) NOT NULL,
+  `usr_hasPic` BOOL NOT NULL
 ) ;
 
 DROP TABLE IF EXISTS `instance` ;
@@ -66,7 +71,8 @@ CREATE TABLE `instance` (
   `ins_id` CHAR(11) NOT NULL PRIMARY KEY,
   `ins_name` VARCHAR(255) NOT NULL,
   `ins_key` VARCHAR(255) NOT NULL, 
-  `ins_white` VARCHAR(255)
+  `ins_white` VARCHAR(255),
+  `ins_hasPic` BOOL NOT NULL
 ) ;
 
 DROP TABLE IF EXISTS `ins_usr` ;
@@ -85,17 +91,18 @@ CREATE TABLE `ins_usr` (
 	   let  id_opt = BatOption.map IUser.to_id uid_opt in  
 	   respond ~count id_opt (if count = 0 then "" else begin
 	     "INSERT IGNORE INTO `user` (
-  `usr_id`, `usr_firstname`, `usr_lastname`, `usr_email`, `usr_white`
+  `usr_id`, `usr_firstname`, `usr_lastname`, `usr_email`, `usr_white`, `usr_hasPic`
 ) VALUES\n" 
 
 	     ^ String.concat ",\n" 
 	       (List.map begin fun (uid,user) ->
-		 Printf.sprintf "(%s,%s,%s,%s,%s)" 
+		 Printf.sprintf "(%s,%s,%s,%s,%s,%s)" 
 		   (sql_str (IUser.to_string uid))
 		   (sql_optstr (user # firstname))
 		   (sql_optstr (user # lastname)) 
 		   (sql_str (user # email)) 
 		   (sql_str (domain (user # white)))
+		   (sql_bool (user # picture <> None))
 	       end users)
 	       
 	     ^ ";\n\n"
@@ -110,15 +117,16 @@ CREATE TABLE `ins_usr` (
 	   let  id_opt = BatOption.map IInstance.to_id iid_opt in  
 	   respond ~count id_opt (if count = 0 then "" else begin
 	     "INSERT IGNORE INTO `instance` (
-  `ins_id`, `ins_name`, `ins_key`, `ins_white`
+  `ins_id`, `ins_name`, `ins_key`, `ins_white`, `ins_hasPic` 
 ) VALUES\n"
 	     ^ String.concat ",\n" 
 	       (List.map begin fun (iid,ins) ->
-		 Printf.sprintf "(%s,%s,%s,%s)" 
+		 Printf.sprintf "(%s,%s,%s,%s,%s)" 
 		   (sql_str (IInstance.to_string iid))
 		   (sql_str (ins # name))
 		   (sql_str (fst (ins # key)))
 		   (sql_str (domain (snd (ins # key))))
+		   (sql_bool (ins # pic <> None))
 	       end insts)
 
 	     ^ ";\n\n"
