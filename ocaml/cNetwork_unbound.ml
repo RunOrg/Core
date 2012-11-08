@@ -46,6 +46,17 @@ let () = UrlNetwork.def_install begin fun req res ->
   let! profile_opt = ohm $ MInstance.Profile.get iid in
   let  owners_opt  = BatOption.bind (#unbound) profile_opt in 
   
+  let status = 
+    match owners_opt with None -> `Missing | Some owners ->
+      match CSession.check req with 
+	| `New cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
+	  `UnconfirmedOwner (IUser.Deduce.is_anyone cuid) 
+	| `Old cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
+	  `ConfirmedOwner cuid
+	| _ -> `NotOwner owners
+  in
+
+
   if req # post <> None then
 
     (* This is a POST : trigger the notifications *)
@@ -53,8 +64,11 @@ let () = UrlNetwork.def_install begin fun req res ->
     let  payload = `CanInstall iid in 
 
     let! () = ohm begin 
-      match owners_opt with None -> return () | Some owners ->
-	Run.list_iter (MNotify.Store.create payload) owners
+      match status with 
+	| `UnconfirmedOwner uid -> MNotify.Store.create payload uid
+	| `NotOwner owners -> Run.list_iter (MNotify.Store.create payload) owners
+	| `ConfirmedOwner _
+	| `Missing -> return () 
     end in
 
     let redirect = 
