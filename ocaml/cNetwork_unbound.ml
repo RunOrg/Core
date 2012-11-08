@@ -43,19 +43,17 @@ let () = UrlNetwork.def_install begin fun req res ->
   let uid = CSession.get req in
   let iid = req # args in 
 
-  let not_found = C404.render (req # server) uid res in
-
+  let! profile_opt = ohm $ MInstance.Profile.get iid in
+  let  owners_opt  = BatOption.bind (#unbound) profile_opt in 
+  
   if req # post <> None then
 
     (* This is a POST : trigger the notifications *)
-
-    let! profile = ohm $ MInstance.Profile.get iid in
-    let  owners  = BatOption.bind (#unbound) profile in 
     
     let  payload = `CanInstall iid in 
 
     let! () = ohm begin 
-      match owners with None -> return () | Some owners ->
+      match owners_opt with None -> return () | Some owners ->
 	Run.list_iter (MNotify.Store.create payload) owners
     end in
 
@@ -70,7 +68,10 @@ let () = UrlNetwork.def_install begin fun req res ->
 
     (* This is a GET (which happened, probably, after a POST) *)
 
-    let! profile = ohm_req_or not_found (MInstance.Profile.get iid) in
+    let not_found = C404.render (req # server) uid res in
+
+    let! profile = req_or not_found profile_opt in
+    let! owners  = req_or not_found owners_opt in 
 
     let html = Asset_Network_Install.render (object
       method navbar = (req # server,uid,None)
