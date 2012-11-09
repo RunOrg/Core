@@ -37,7 +37,7 @@ module Deduce : sig
 
   val see_contacts : [<`IsAdmin|`Rights] id -> [`ViewContacts] id
 
-  val make_canInstall_token : [`CanInstall] id -> [`Unsafe] ICurrentUser.id -> string
-  val from_canInstall_token : 'any id -> [`Unsafe] ICurrentUser.id -> string -> [`CanInstall] id option     
+  val make_canInstall_token : [`CanInstall] id -> 'any ICurrentUser.id -> string
+  val from_canInstall_token : 'any id -> 'a ICurrentUser.id -> string -> [`CanInstall] id option     
 
 end

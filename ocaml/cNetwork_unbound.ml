@@ -117,6 +117,11 @@ let () = UrlNetwork.def_install begin fun req res ->
 
       | `ConfirmedOwner (cuid,iid) -> 
 
+	let token = IInstance.Deduce.make_canInstall_token iid cuid in
+	let url   = Action.url UrlNetwork.create (req # server) (IInstance.decay iid, token) in
+
+	ignore url ; 
+
 	not_found
 
 end
