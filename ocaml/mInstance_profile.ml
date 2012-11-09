@@ -252,6 +252,13 @@ let search ?start ~count owid search =
     BatOption.map (#id |- IInstance.of_id) next
   end
 
+(* Install the instance if not bound and owner ============================================================= *)
+
+let can_install t cuid = 
+  let uid = IUser.Deduce.is_anyone cuid in 
+  match t # unbound with None -> None | Some uids ->
+    if List.mem uid uids then Some (IInstance.Assert.canInstall (t # id)) else None
+
 (* Find the instance bound to an RSS feed ================================================================== *)
 
 module ByRSSView = CouchDB.MapView(struct

@@ -50,6 +50,8 @@ module Profile : sig
 
   val tag_stats : IWhite.t option -> (string * int) list O.run
 
+  val can_install : t -> [`Old] ICurrentUser.id -> [`CanInstall] IInstance.id option
+
   val by_rss : IPolling.RSS.t -> IInstance.t list O.run
 
   module Backdoor : sig
