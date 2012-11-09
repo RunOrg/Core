@@ -248,6 +248,66 @@ let visit user inst =
 
   RecentTable.transact id (add_recent inst |- return)
 
+(* Installing instances ------------------------------------------------------------- *)
+
+let install iid ~pic ~who ~key ~name ~desc = 
+
+  let iid = IInstance.decay iid in 
+
+  let! profile = ohm_req_or (return None) $ Profile.get iid in 
+  let! () = true_or (return (Some (profile # key))) (profile # unbound <> None) in
+  
+  let name = BatString.strip name in 
+  let name = if name = "" then profile # name else name in 
+
+  let owid = snd (profile # key) in
+  
+  let! key = ohm $ free_name (key,owid) in 
+
+  let clip n s = if String.length s > n then String.sub s 0 n else s in 
+  let now = Unix.gettimeofday () in
+
+  let obj = Data.({
+    t       = `Instance ;
+    key     ;
+    name    = clip 80 name ;
+    theme   = None ;
+    disk    = 50.0 ;
+    seats   = 30 ;
+    create  = now ;
+    usr     = IUser.Deduce.is_anyone who ;
+    ver     = ConfigWhite.default_vertical owid ;
+    pic     = BatOption.map IFile.decay pic ;
+    install = true ;
+    light   = true ;
+    stub    = false ;
+    address = None ;
+    desc    = None ;
+    site    = None ;
+    contact = None ;
+    white   = owid ;
+  }) in 
+
+  let info old = Profile.Info.({ 
+    old with     
+      name     = clip 80 name ;
+      key      ;
+      desc     ;
+      unbound  = false ;
+  }) in
+
+  (* Log that we're creating this *)
+  let! () = ohm $ MAdminLog.log ~uid:(IUser.Deduce.is_anyone who) ~iid MAdminLog.Payload.InstanceCreate in
+
+  (* Created right here. *)
+  let  cid = IInstance.Assert.created iid in
+
+  let!  () = ohm $ Profile.update iid info in 
+  let!  _  = ohm $ Tbl.set iid obj in
+  let!  () = ohm $ Signals.on_create_call cid in
+
+  return (Some (key,owid))
+
 (* The backdoor --------------------------------------------------------------------- *)
 
 module Backdoor = struct

@@ -44,7 +44,7 @@
 	  { `Network_Install_Field_Description } 
 	</label>
 	<br/>
-	<textarea style="width:400px;height:100px" name="desc"></textarea>
+	<textarea {$desc} style="width:400px;height:100px" name="desc"></textarea>
       </div>
       
       <div class="-bottom -green" style="margin-top: 20px">
@@ -107,6 +107,18 @@ $f.find(".-more").click ->
   $(@).hide().next().show()
 
 here.$submit.attr("disabled",false)
+
+$f.submit ->
+  here.$submit.attr("disabled",true)
+  url = $f.attr("action")
+  data = 
+    name: here.$name.val(), 
+    desc: here.$desc.val() || null,
+    key:  $k.val(), 
+    pic:  here.$pic.val() || null
+  post url, data, () -> 
+    here.$submit.attr("disabled",false)
+  return false  
 
 xhr = null
 

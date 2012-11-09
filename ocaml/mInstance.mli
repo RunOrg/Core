@@ -101,6 +101,15 @@ val create :
   -> white:IWhite.t option
   -> [`Created] IInstance.id O.run
 
+val install : 
+     [`CanInstall] IInstance.id 
+  -> pic:[`OwnPic] IFile.id option
+  -> who:('any ICurrentUser.id)
+  -> key:string 
+  -> name:string 
+  -> desc:MRich.OrText.t option
+  -> IWhite.key option O.run
+
 val update : 
      [`IsAdmin] IInstance.id
   -> name:string

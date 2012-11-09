@@ -150,5 +150,34 @@ module FormFmt = Fmt.Make(struct
 end)
 
 let () = UrlNetwork.def_create begin fun req res -> 
-  return res
+
+  let  fail = return res in
+
+  let  iid, proof = req # args in
+
+  let! cuid = req_or fail $ CSession.get req in
+
+  let! iid = req_or fail $ IInstance.Deduce.from_canInstall_token iid cuid proof in
+
+  let! json = req_or fail (Action.Convenience.get_json req) in
+  let! post = req_or fail (FormFmt.of_json_safe json) in
+
+  let! pic = ohm begin 
+    let! pic = req_or (return None) (post # pic) in
+    let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
+    MFile.own_pic cuid (IFile.of_string fid) 
+  end in
+
+  let! key = ohm_req_or fail $ MInstance.install iid 
+    ~pic
+    ~who:cuid
+    ~key:(post # key)
+    ~name:(post # name)
+    ~desc:(BatOption.map (fun t -> `Text t) (post # desc))
+  in
+
+  let url = Action.url UrlClient.Home.home key [] in
+  
+  return $ Action.javascript (Js.redirect url ()) res
+
 end
