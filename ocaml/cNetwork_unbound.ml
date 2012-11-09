@@ -139,3 +139,7 @@ let () = UrlNetwork.def_install begin fun req res ->
 	CPageLayout.core (req # server) `Network_Unbound html res
 
 end
+
+let () = UrlNetwork.def_create begin fun req res -> 
+  return res
+end
