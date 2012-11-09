@@ -1,4 +1,4 @@
-(* © 2012 IRunOrg *)
+(* © 2012 RunOrg *)
 
 type 'rel id = {
   role     : [`Admin|`Token|`Contact|`Nobody] ;
