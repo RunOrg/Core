@@ -44,16 +44,23 @@ let () = UrlNetwork.def_install begin fun req res ->
   let iid = req # args in 
 
   let! profile_opt = ohm $ MInstance.Profile.get iid in
-  let  owners_opt  = BatOption.bind (#unbound) profile_opt in 
   
   let status = 
-    match owners_opt with None -> `Missing | Some owners ->
-      match CSession.check req with 
-	| `New cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
-	  `UnconfirmedOwner (IUser.Deduce.is_anyone cuid) 
-	| `Old cuid when List.mem (IUser.Deduce.is_anyone cuid) owners ->
-	  `ConfirmedOwner cuid
-	| _ -> `NotOwner owners
+    match profile_opt with None -> `Missing | Some profile -> 
+      match profile # unbound with None -> `Missing | Some owners ->
+	match CSession.check req with 
+
+	  | `None -> `NotOwner owners
+
+	  | `New cuid -> 
+	    let uid = IUser.Deduce.is_anyone cuid in
+	    if List.mem uid owners then	`UnconfirmedOwner uid else `NotOwner owners
+
+	  | `Old cuid -> 
+	    match MInstance.Profile.can_install profile cuid with 
+	      | Some iid -> `ConfirmedOwner (cuid,iid) 
+	      | None -> `NotOwner owners
+	      
   in
 
 
@@ -85,7 +92,6 @@ let () = UrlNetwork.def_install begin fun req res ->
     let not_found = C404.render (req # server) uid res in
 
     let! profile = req_or not_found profile_opt in
-    let! owners  = req_or not_found owners_opt in 
 
     match status with 
       | `Missing -> not_found
