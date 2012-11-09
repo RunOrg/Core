@@ -28,3 +28,12 @@
 | `Network_ConfirmOwner_Intro -> "Pour finir l'installation, nous venons de vous envoyer un email."
 | `Network_ConfirmOwner_NextSteps -> "Il décrit les prochaines étapes pour la mise en place de votre espace dédié."
 | `Network_ConfirmOwner_Soon -> "À tout de suite sur votre nouvel outil de gestion en ligne !" 
+
+| `Network_Install_Field_Name -> "Le nom de votre espace"
+| `Network_Install_Field_Key -> "L'adresse web pour y accéder"
+| `Network_Install_Add_Picture -> "Ajouter un logo ou une photo..."
+| `Network_Install_Field_Picture -> "Le logo ou la photo de l'espace" 
+| `Network_Install_Edit_Picture -> "Modifier"
+| `Network_Install_Add_Description -> "Ajouter une description..."
+| `Network_Install_Field_Description -> "Une courte description"
+| `Network_Install_Submit -> "Confirmer ces informations"

@@ -120,8 +120,22 @@ let () = UrlNetwork.def_install begin fun req res ->
 	let token = IInstance.Deduce.make_canInstall_token iid cuid in
 	let url   = Action.url UrlNetwork.create (req # server) (IInstance.decay iid, token) in
 
-	ignore url ; 
+	let domain = match snd (profile # key) with 
+	  | None -> "runorg.com"
+	  | Some wid -> ConfigWhite.domain wid 
+	in
 
-	not_found
+	let html = Asset_Network_InstallForm.render (object
+	  method navbar = (req # server,uid,None) 
+	  method name   = profile # name
+	  method key    = fst (profile # key) 
+	  method domain = domain
+	  method upload = Action.url UrlUpload.Core.root (req # server) ()  
+	  method free   = Action.url UrlStart.free (req # server) ()
+	  method pics   = Action.url UrlUpload.Core.find (req # server) () 	    
+	  method url    = url 
+	end) in 
+
+	CPageLayout.core (req # server) `Network_Unbound html res
 
 end

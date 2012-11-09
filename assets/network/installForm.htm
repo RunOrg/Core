@@ -1,0 +1,105 @@
+{ navbar | VNavbar.intranet | ohm } 
+
+<form {$form} action="{url}" method="POST">
+  
+  <div class="-field">
+    <label>
+      { `Network_Install_Field_Name }
+      <br/>
+      <input {$name} style="width:400px" type="text" name="name" value="{name}"/>
+    </label>
+  </div>
+  
+  <div class="-field">
+    <label>
+      { `Network_Install_Field_Key } 
+      <br/>
+      <code>http://</code>
+      <input {$key} style="width:200px;text-align:center" type="text" name="key" value="{key}"/>
+      <code>.{domain}/</code>
+    </label>
+  </div>
+  
+  <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Picture }</a>
+  
+  <div style="display:none" class="-field">
+    { `Network_Install_Field_Picture } 
+    <input {$pic} type="hidden" name="pic"/>
+    <div class="upload-picture">
+      <img class="-l" src="/public/img/404_large.png"/>
+      <img class="-s" src="/public/img/404_small.png"/>
+      <a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
+	{ `Network_Install_Edit_Picture } 
+      </a>
+    </div>
+  </div>
+  
+  <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Description }</a>
+  
+  <div style="display:none" class="-field">
+    <label>
+      { `Network_Install_Field_Description } 
+    </label>
+    <br/>
+    <textarea style="width:400px;height:100px" name="desc"></textarea>
+  </div>
+  
+  <div style="text-align:right; padding-right:27px;">
+    <button {$submit} type="submit"><span>{ `Network_Install_Submit }</span></button>
+  </div>
+  
+</form>
+
+{ Asset_PageLayout_Footer.render | ohm }
+
+<script type="free:string,upload:string,pics:string">
+
+$f = here.$form
+$k = here.$key 
+$p = here.$pic
+
+$f.find(".-more").click -> 
+  $(@).hide().next().show()
+
+here.$submit.attr("disabled",false)
+
+fresh = -> 
+  v = $(@).val()
+  return if !v
+  xhr = $.getJSON free, {name:$(@).val()}, (data,s,x) -> 
+    return if xhr is not x
+    $k.val(data.key)
+
+$k.change fresh
+$k.change()
+
+refresh = -> 
+  [id,proof] = $p.val().split("/")
+  return if !id || !proof 
+  $i = $p.next().addClass("-loading")
+  $.getJSON pics, {id:id,proof:proof}, (data) -> 
+    return if id != $p.val().split("/")[0] 
+    return setTimeout refresh, 1000 if !data.large
+    $i.find(".-l").attr("src",data.large)
+    $i.find(".-s").attr("src",data.small)
+    $i.removeClass("-loading")
+        
+here.$upload.click -> 
+  $iframe = $ "<iframe/>", {src : upload}  
+  close = -> 
+    $iframe.parent(".upload-picture").removeClass("-up")
+    do $iframe.remove
+  $(@).parent(".upload-picture").addClass("-up").prepend($iframe)
+  $iframe.load -> 
+    location = $iframe.contents().get(0).location.href
+    do close if /cancel/.test location
+    if /confirm/.test location      
+      what = /[a-zA-Z0-9]*\/[a-zA-Z0-9]*\?/.exec(location)[0]            
+      what = what.substr 0, what.length-1
+      $p.val(what)
+      do close
+      do refresh
+ 
+xhr = null
+
+</script>
