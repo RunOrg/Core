@@ -16,31 +16,25 @@ include Common
 type t = <
   id      : IInstance.t ;
   key     : IWhite.key ;
-  name    : string ;
-  theme   : string option ;
   disk    : float ;
-  create  : float ;
   seats   : int ;
+  name    : string ;
+  create  : float ;
   usr     : IUser.t ; 
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
-  install : bool ;
-  stub    : bool 
 > ;; 
 
 let extract id i = Data.(object
   method id = IInstance.decay id 
   method key = i.key, i.white
   method name = i.name
-  method theme = i.theme
-  method disk = if i.stub then 10.0 else i.disk
+  method disk = i.disk
   method create = i.create
-  method seats = if i.stub then 1 else i.seats
+  method seats = i.seats
   method usr = i.usr
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
-  method install = i.install
-  method stub = i.stub
 end)
 
 (* Signals --------------------------------------------------------------------------------- *)
@@ -63,20 +57,12 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     t       = `Instance ;
     key     ;
     name    = clip 80 name ;
-    theme   = None ;
     disk    = 50.0 ;
     seats   = 30 ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = vertical ;
     pic     = BatOption.map IFile.decay pic ;
-    install = true ;
-    light   = true ;
-    stub    = false ;
-    address = None ;
-    desc    = None ;
-    site    = None ;
-    contact = None ;
     white   ;
   }) in 
 
@@ -110,12 +96,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
   let id = IInstance.decay id in 
   let clip n s = if String.length s > n then String.sub s 0 n else s in
   let update ins = Data.({ 
-    ins with 
-      name    = clip 80 name ;
-      address = None ;
-      desc    = None ;
-      site    = None ; 
-      contact = None ;
+    ins with name = clip 80 name ;
   }) in
 
   let! current = ohm_req_or (return ()) $ Tbl.get id in 
@@ -271,26 +252,19 @@ let install iid ~pic ~who ~key ~name ~desc =
     t       = `Instance ;
     key     ;
     name    = clip 80 name ;
-    theme   = None ;
     disk    = 50.0 ;
     seats   = 30 ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = ConfigWhite.default_vertical owid ;
     pic     = BatOption.map IFile.decay pic ;
-    install = true ;
-    light   = true ;
-    stub    = false ;
-    address = None ;
-    desc    = None ;
-    site    = None ;
-    contact = None ;
     white   = owid ;
   }) in 
 
   let info old = Profile.Info.({ 
     old with     
       name     = clip 80 name ;
+      pic      = BatOption.map IFile.decay pic ;
       key      ;
       desc     ;
       unbound  = false ;

@@ -4,15 +4,12 @@ type t = <
   id      : IInstance.t ;
   key     : IWhite.key ;
   name    : string ;
-  theme   : string option ;
   disk    : float ;
   create  : float ;
   seats   : int ;
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
-  install : bool ;
-  stub    : bool 
 > ;;
 
 module Profile : sig
