@@ -7,6 +7,7 @@ let footer = [
   "Accompagnement", "/autres/accompagnement" ;
   "Tarifs", "/pricing";
   "Presse", "/press" ;
+  "Réseau", "/network/search" ;
 
   (* END FOOTER ------------------------------------------------------------- *)
 ]     
