@@ -27,3 +27,5 @@ val no_reply : IWhite.t option -> string
 val short : IWhite.t option -> string
 
 val favicon : IWhite.t option -> string
+
+val default_vertical : IWhite.t option -> IVertical.t 

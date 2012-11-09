@@ -16,31 +16,25 @@ include Common
 type t = <
   id      : IInstance.t ;
   key     : IWhite.key ;
-  name    : string ;
-  theme   : string option ;
   disk    : float ;
-  create  : float ;
   seats   : int ;
+  name    : string ;
+  create  : float ;
   usr     : IUser.t ; 
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
-  install : bool ;
-  stub    : bool 
 > ;; 
 
 let extract id i = Data.(object
   method id = IInstance.decay id 
   method key = i.key, i.white
   method name = i.name
-  method theme = i.theme
-  method disk = if i.stub then 10.0 else i.disk
+  method disk = i.disk
   method create = i.create
-  method seats = if i.stub then 1 else i.seats
+  method seats = i.seats
   method usr = i.usr
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
-  method install = i.install
-  method stub = i.stub
 end)
 
 (* Signals --------------------------------------------------------------------------------- *)
@@ -63,20 +57,12 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     t       = `Instance ;
     key     ;
     name    = clip 80 name ;
-    theme   = None ;
     disk    = 50.0 ;
     seats   = 30 ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = vertical ;
     pic     = BatOption.map IFile.decay pic ;
-    install = true ;
-    light   = true ;
-    stub    = false ;
-    address = None ;
-    desc    = None ;
-    site    = None ;
-    contact = None ;
     white   ;
   }) in 
 
@@ -110,12 +96,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
   let id = IInstance.decay id in 
   let clip n s = if String.length s > n then String.sub s 0 n else s in
   let update ins = Data.({ 
-    ins with 
-      name    = clip 80 name ;
-      address = None ;
-      desc    = None ;
-      site    = None ; 
-      contact = None ;
+    ins with name = clip 80 name ;
   }) in
 
   let! current = ohm_req_or (return ()) $ Tbl.get id in 
@@ -247,6 +228,59 @@ let visit user inst =
   in
 
   RecentTable.transact id (add_recent inst |- return)
+
+(* Installing instances ------------------------------------------------------------- *)
+
+let install iid ~pic ~who ~key ~name ~desc = 
+
+  let iid = IInstance.decay iid in 
+
+  let! profile = ohm_req_or (return None) $ Profile.get iid in 
+  let! () = true_or (return (Some (profile # key))) (profile # unbound <> None) in
+  
+  let name = BatString.strip name in 
+  let name = if name = "" then profile # name else name in 
+
+  let owid = snd (profile # key) in
+  
+  let! key = ohm $ free_name (key,owid) in 
+
+  let clip n s = if String.length s > n then String.sub s 0 n else s in 
+  let now = Unix.gettimeofday () in
+
+  let obj = Data.({
+    t       = `Instance ;
+    key     ;
+    name    = clip 80 name ;
+    disk    = 50.0 ;
+    seats   = 30 ;
+    create  = now ;
+    usr     = IUser.Deduce.is_anyone who ;
+    ver     = ConfigWhite.default_vertical owid ;
+    pic     = BatOption.map IFile.decay pic ;
+    white   = owid ;
+  }) in 
+
+  let info old = Profile.Info.({ 
+    old with     
+      name     = clip 80 name ;
+      pic      = BatOption.map IFile.decay pic ;
+      key      ;
+      desc     ;
+      unbound  = false ;
+  }) in
+
+  (* Log that we're creating this *)
+  let! () = ohm $ MAdminLog.log ~uid:(IUser.Deduce.is_anyone who) ~iid MAdminLog.Payload.InstanceCreate in
+
+  (* Created right here. *)
+  let  cid = IInstance.Assert.created iid in
+
+  let!  () = ohm $ Profile.update iid info in 
+  let!  _  = ohm $ Tbl.set iid obj in
+  let!  () = ohm $ Signals.on_create_call cid in
+
+  return (Some (key,owid))
 
 (* The backdoor --------------------------------------------------------------------- *)
 

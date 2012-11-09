@@ -28,3 +28,12 @@
 | `Network_ConfirmOwner_Intro
 | `Network_ConfirmOwner_NextSteps
 | `Network_ConfirmOwner_Soon 
+
+| `Network_Install_Field_Name
+| `Network_Install_Field_Key 
+| `Network_Install_Add_Picture
+| `Network_Install_Field_Picture
+| `Network_Install_Edit_Picture 
+| `Network_Install_Add_Description
+| `Network_Install_Field_Description
+| `Network_Install_Submit 
