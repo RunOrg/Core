@@ -1,56 +1,101 @@
 { navbar | VNavbar.intranet | ohm } 
 
-<form {$form} action="{url}" method="POST">
-  
-  <div class="-field">
-    <label>
-      { `Network_Install_Field_Name }
-      <br/>
-      <input {$name} style="width:400px" type="text" name="name" value="{name}"/>
-    </label>
+<div class="overlaid-box network-install">
+  <div class="-inner">
+    <h1 {$h}>{name}</h1>
+    <form {$form} action="{url}" method="POST">
+      
+      <div class="-field">
+	<label>
+	  { `Network_Install_Field_Name }
+	  <br/>
+	  <input {$name} style="width:400px" type="text" name="name" value="{name}"/>
+	</label>
+      </div>
+    
+      <div class="-field">
+	<label>
+	  { `Network_Install_Field_Key } 
+	  <br/>
+	  <code>http://</code>
+	  <input {$key} class="-key" type="text" name="key" value="{key}"/>
+	  <code>.{domain}/</code>
+	</label>
+      </div>
+      
+      <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Picture }</a>
+      
+      <div style="display:none" class="-field">
+	<label>{ `Network_Install_Field_Picture }</label> 
+	<input {$pic} type="hidden" name="pic"/>
+	<div class="upload-picture">
+	  <img class="-l" src="/public/img/404_large.png"/>
+	  <img class="-s" src="/public/img/404_small.png"/>
+	  <a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
+	    { `Network_Install_Edit_Picture } 
+	  </a>
+	</div>
+      </div>
+      
+      <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Description }</a>
+      
+      <div style="display:none" class="-field">
+	<label>
+	  { `Network_Install_Field_Description } 
+	</label>
+	<br/>
+	<textarea style="width:400px;height:100px" name="desc"></textarea>
+      </div>
+      
+      <div style="text-align:right;padding-right:9px">
+	<button {$submit} type="submit"><span>{ `Network_Install_Submit }</span></button>
+      </div>
+      
+    </form>
   </div>
-  
-  <div class="-field">
-    <label>
-      { `Network_Install_Field_Key } 
-      <br/>
-      <code>http://</code>
-      <input {$key} style="width:200px;text-align:center" type="text" name="key" value="{key}"/>
-      <code>.{domain}/</code>
-    </label>
-  </div>
-  
-  <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Picture }</a>
-  
-  <div style="display:none" class="-field">
-    { `Network_Install_Field_Picture } 
-    <input {$pic} type="hidden" name="pic"/>
-    <div class="upload-picture">
-      <img class="-l" src="/public/img/404_large.png"/>
-      <img class="-s" src="/public/img/404_small.png"/>
-      <a {$upload} class="action-button" style="float:right" href="javascript:void(0)">
-	{ `Network_Install_Edit_Picture } 
-      </a>
-    </div>
-  </div>
-  
-  <a class="-more" href="javascript:void(0)">{ `Network_Install_Add_Description }</a>
-  
-  <div style="display:none" class="-field">
-    <label>
-      { `Network_Install_Field_Description } 
-    </label>
-    <br/>
-    <textarea style="width:400px;height:100px" name="desc"></textarea>
-  </div>
-  
-  <div style="text-align:right; padding-right:27px;">
-    <button {$submit} type="submit"><span>{ `Network_Install_Submit }</span></button>
-  </div>
-  
-</form>
+</div>
 
 { Asset_PageLayout_Footer.render | ohm }
+
+<style>
+.network-install {
+ 
+  width: 466px;
+  margin-top: 30px;
+
+  input, textarea {
+    .asap();
+    border: 1px solid #BBB;
+    padding: 3px;
+    font-size: 14px;
+  }
+
+  label {
+    font-weight: bold;
+    line-height: 24px; 
+    font-size: 17px;
+  }
+
+  code {
+    font-size: 14px;
+  }
+
+  .-field {
+    margin: 20px 10px;
+  }
+
+  .-more {
+    display: block;
+    margin: 10px;
+  }
+
+  .-key {
+    text-align: center;
+    font-family: monospace;
+  }
+
+}
+</style>
 
 <script type="free:string,upload:string,pics:string">
 
@@ -63,15 +108,27 @@ $f.find(".-more").click ->
 
 here.$submit.attr("disabled",false)
 
+xhr = null
+
 fresh = -> 
   v = $(@).val()
   return if !v
   xhr = $.getJSON free, {name:$(@).val()}, (data,s,x) -> 
     return if xhr is not x
     $k.val(data.key)
+    sizek() 
+
+sizek = () ->
+  $k.attr("size",$k.val().length+1) 
 
 $k.change fresh
 $k.change()
+
+$k.keyup sizek
+
+here.$name.change ->
+  v = $(@).val()
+  here.$h.text v
 
 refresh = -> 
   [id,proof] = $p.val().split("/")
@@ -99,7 +156,5 @@ here.$upload.click ->
       $p.val(what)
       do close
       do refresh
- 
-xhr = null
 
 </script>
