@@ -18,7 +18,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
   in
 
   let! account = ohm $ Run.opt_map begin fun user -> 
-    let! pic = ohm $ CPicture.small (user # picture) in
+    let! pic = ohm $ CPicture.small_opt (user # picture) in
     return (object 
        method url    = Action.url UrlMe.Account.home owid ()
        method name   = user # fullname
