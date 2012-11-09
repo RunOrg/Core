@@ -140,6 +140,15 @@ let () = UrlNetwork.def_install begin fun req res ->
 
 end
 
+module FormFmt = Fmt.Make(struct
+  type json t = <
+    desc : string option ;
+    name : string ;
+    key  : string ;
+    pic  : string option ;
+  >
+end)
+
 let () = UrlNetwork.def_create begin fun req res -> 
   return res
 end
