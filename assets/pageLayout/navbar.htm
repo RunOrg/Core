@@ -13,6 +13,7 @@
       {?account}
         <div class="-right">
   	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
+	  <a href="/aide/asso">{ `PageLayout_Navbar_Help }</a>
           <a href="{url}">{name}<img src="{pic}" style="margin-left: 10px"/></a>
 	  <a id="notifications" href="{notif}"><span></span></a>
 	  <script type="unread:string">
@@ -29,6 +30,10 @@ setTimeout load, 2000
 
 	  </script>
         </div>
+      {else}
+        <div class="-right">
+	  <a href="/aide/asso">{ `PageLayout_Navbar_Help }</a>
+	</div>
       {/?}
     </div>
   </div>
