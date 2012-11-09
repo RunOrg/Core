@@ -1,4 +1,4 @@
-(* © 2012 IRunOrg *)
+(* © 2012 RunOrg *)
 
 include Ohm.Id.PHANTOM
 

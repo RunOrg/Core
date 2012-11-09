@@ -78,3 +78,9 @@ let favicon id = match represent id with
   | `RunOrg -> "/public/favicon.ico"
   | `Test -> "/ffbad-favicon.ico"
   | `FFBAD -> "/ffbad-favicon.ico"
+
+let default_vertical id = match represent id with 
+  | `RunOrg -> `Simple
+  | `Test -> `Simple
+  | `FFBAD -> `Badminton
+

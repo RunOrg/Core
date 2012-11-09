@@ -1,4 +1,4 @@
-(* © 2012 IRunOrg *)
+(* © 2012 RunOrg *)
 
 open Ohm
 open BatPervasives
@@ -6,33 +6,32 @@ open BatPervasives
 include Id.Phantom
 
 module Assert = struct
-  let created              id = id
-  let is_contact           id = id
-  let is_token             id = id
-  let is_admin             id = id
-  let bot                  id = id
-  let create_event         id = id
-  let upload               id = id
-  let rights               id = id
+
+  let created      = identity
+  let canInstall   = identity
+
+  let is_contact   = identity
+  let is_token     = identity
+  let is_admin     = identity
+
+  let create_event = identity
+
+  let upload       = identity
+  let rights       = identity
+  let bot          = identity
+
   let see_contacts = identity
+
 end
   
 module Deduce = struct
 
-  let can_see_usage id = id      
-  let create_can_upload    id = id
+  let can_see_usage     = identity
+  let create_can_upload = identity
 
-  let admin_upload id = id
-  let admin_edit   id = id
-  let admin_view_members id = id
-  let admin_create_event id = id
-  let admin_create_group id = id
-  let admin_create_forum id = id
-  let admin_create_poll  id = id
-  let admin_create_album id = id
-  let admin_create_subscription id = id
-  let admin_create_course id = id
-  let admin_view_profile id = id
+  let admin_create_group = identity
+  let admin_create_forum = identity
+  let admin_view_profile = identity
 
   let upload = identity
 
@@ -40,18 +39,11 @@ module Deduce = struct
 
   let see_contacts = identity
 
-  let make_createEvent_token id user = 
-    ICurrentUser.prove "create_event" user [Id.str id]
+  let make_canInstall_token id user = 
+    ICurrentUser.prove "can_install" user [Id.str id]
       
-  let from_createEvent_token id user proof =
-    if ICurrentUser.is_proof proof "create_event" user [Id.str id] 
-    then Some id else None
-      
-  let make_seeContacts_token id user = 
-    ICurrentUser.prove "see_contacts" user [Id.str id]
-      
-  let from_seeContacts_token id user proof =
-    if ICurrentUser.is_proof proof "see_contacts" user [Id.str id] 
+  let from_canInstall_token id user proof =
+    if ICurrentUser.is_proof proof "can_install" user [Id.str id] 
     then Some id else None
 
 end

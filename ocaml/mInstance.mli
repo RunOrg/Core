@@ -4,15 +4,12 @@ type t = <
   id      : IInstance.t ;
   key     : IWhite.key ;
   name    : string ;
-  theme   : string option ;
   disk    : float ;
   create  : float ;
   seats   : int ;
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
-  install : bool ;
-  stub    : bool 
 > ;;
 
 module Profile : sig
@@ -49,6 +46,8 @@ module Profile : sig
   val get : 'any IInstance.id -> t option O.run
 
   val tag_stats : IWhite.t option -> (string * int) list O.run
+
+  val can_install : t -> [`Old] ICurrentUser.id -> [`CanInstall] IInstance.id option
 
   val by_rss : IPolling.RSS.t -> IInstance.t list O.run
 
@@ -98,6 +97,15 @@ val create :
   -> vertical:IVertical.t
   -> white:IWhite.t option
   -> [`Created] IInstance.id O.run
+
+val install : 
+     [`CanInstall] IInstance.id 
+  -> pic:[`OwnPic] IFile.id option
+  -> who:('any ICurrentUser.id)
+  -> key:string 
+  -> name:string 
+  -> desc:MRich.OrText.t option
+  -> IWhite.key option O.run
 
 val update : 
      [`IsAdmin] IInstance.id

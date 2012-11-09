@@ -8,20 +8,12 @@ module T = struct
     t       : MType.t ;
     key     : string ;
     name    : string ;
-   ?address : string option ;
-   ?contact : string option ;
     disk    : Float.t ;
     seats   : int ;
    ?create  : Float.t = Unix.gettimeofday () ;
-   ?theme   : string option ;
     usr     : IUser.t ; 
     ver     : IVertical.t ;
     pic     : IFile.t option ;
-    site    : string option ;
-    desc    : string option ;
-   ?install : bool = false ;
-   ?light   : bool = true ;
-   ?stub    : bool = false ;
    ?white   : IWhite.t option 
   } ;; 
 end
