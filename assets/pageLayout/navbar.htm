@@ -35,21 +35,35 @@ setTimeout load, 2000
 	  <a id="help" href="http://runorg.com/aide/asso">{ `PageLayout_Navbar_Help }</a>
 	</div>
       {/?}
-      <div class="help-block">
-	<div>
-	  {`PageLayout_Navbar_NewHere} <a href="javascript:void(0)">&times;</a> 
-	</div>
-      </div>
     </div>
   </div>
 
   {?asso}
+
     <div class="-asso{if hidepic} -hidepic{/if}">
+
+      <div class="help-block" style="display: none">
+        <div>
+          {`PageLayout_Navbar_NewHere} <a href="javascript:void(0)">&times;</a> 
+        </div>
+      </div>
+      <script type="newhere:string">
+check = () ->
+  post newhere, {mode:"check"}, (data) ->
+    if data.ok 
+      $(".help-block").fadeIn("slow").find("a").click ->  
+        post newhere, {mode:"close"}, () -> 
+          $(".help-block").remove() 
+     
+setTimeout check, 1000 
+      </script>
+
       {?picture}
         <a href="{url}" class="-pic">
   	  <img src="{pic}"/>
         </a>
       {/?}
+
       <div class="-main">
         <h1><a href="{url}">{name}</a></h1>
         <ul>
@@ -177,6 +191,7 @@ setTimeout load, 2000
     width: 950px;
     margin: 2px auto 0;
     height: 72px;
+    position: relative; 
  
     .-main {
       overflow: hidden;

@@ -1,7 +1,7 @@
-#navbar .help-block {
+#topbar .help-block {
   position: absolute;
-  top: 40px;
-  right: 48px;
+  top: 4px;
+  right: 40px;
   padding: 8px 16px;
   background-color: #333;
   color: #EEE;

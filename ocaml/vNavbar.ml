@@ -26,7 +26,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
        method notif  = Action.url UrlMe.Notify.home owid ()
        method logout = Action.url UrlLogin.logout owid ()
        method unread = Action.url UrlMe.Notify.count None ()
-     end)
+   end)
    end user in
   
   let! instances = ohm $ Run.opt_map begin fun cuid -> 
@@ -71,6 +71,10 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 	Action.url UrlClient.website key () 	  
     in
 
+    let newhere = 
+      Action.url UrlClient.newhere key () 
+    in
+
     return $ Some (object
       method hidepic = hidepic
       method picture = pic
@@ -80,7 +84,8 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
       method desc    = None
       method name    = instance # name
       method website = website
-    end)
+      method newhere = newhere
+    end)      
 
   end in
 
