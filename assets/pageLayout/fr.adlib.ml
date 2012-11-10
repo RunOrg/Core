@@ -7,6 +7,7 @@
 | `PageLayout_Navbar_Admin -> "Admin"
 | `PageLayout_Navbar_Intranet -> "Espace Membres"
 | `PageLayout_Navbar_Help -> "Support"
+| `PageLayout_Navbar_NewHere -> "Un peu perdus ? Consultez l'aide en ligne." 
 | `PageLayout_Foot_PoweredBy -> "Propulsé par"
 | `PageLayout_Navbar_Public_Website -> "Accueil"
 | `PageLayout_Navbar_Public_Calendar -> "Agenda"

@@ -7,6 +7,7 @@
 | `PageLayout_Navbar_Admin 
 | `PageLayout_Navbar_Intranet
 | `PageLayout_Navbar_Help 
+| `PageLayout_Navbar_NewHere
 | `PageLayout_Foot_PoweredBy
 | `PageLayout_Navbar_Public_Website
 | `PageLayout_Navbar_Public_Calendar
