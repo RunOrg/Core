@@ -13,10 +13,8 @@
 | `Login_Form_Pass2 -> "Mot de passe (encore)"
 | `Login_Form_Signup_Submit -> "Inscription"
 | `Login_Form_Signup_Mismatch -> "Les mots de passe ne se correspondent pas"
-| `Login_Section_Login -> "Vous avez déjà un compte ?"
-| `Login_Section_Signup -> "Créer un nouveau compte"
-| `Login_Heading_Core -> "Avec votre compte RunOrg gratuit, rejoignez ou créez des associations"
-| `Login_Heading_Client -> "Pour accéder à cet espace, vous devez disposer d'un compte RunOrg"
+| `Login_Section_Login -> "Vous avez déjà un passeport ?"
+| `Login_Section_Signup -> "Créer un nouveau passeport"
 | `Login_PopConfirmReset_Title -> "Mot de passe perdu" 
 | `Login_PopConfirmReset_Intro  
 | `Login_PopReset_Intro -> 
@@ -28,3 +26,5 @@
 | `Login_ResetResend_Prelude -> "Votre lien de changement de mot de passe n'est plus valable !"
 | `Login_ResetResend_Body -> "Pour des raisons de sécurité, tous les liens de connexion ont une date limite de validité de trois jours. Au-delà, ils ne sont plus utilisables."
 | `Login_ResetResend_Sorry -> "Nous vous avons envoyé un nouveau lien par mail."
+| `Login_RunOrg_Passport -> "Connectez-vous avec votre passeport RunOrg"
+| `Login_RunOrg_Passport_Info -> "Votre passeport vous permet de vous connecter aux espaces privés des associations, clubs et organisations dont vous êtes membre."
