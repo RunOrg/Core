@@ -49,10 +49,10 @@ setTimeout load, 2000
       </div>
       <script type="newhere:string">
 check = () ->
-  post newhere, {mode:"check"}, (data) ->
+  $.get newhere, {mode:"check"}, (data) ->
     if data.ok 
       $(".help-block").fadeIn("slow").find("a").click ->  
-        post newhere, {mode:"close"}, () -> 
+        $.post (newhere+"?mode=close", {}, () -> 
           $(".help-block").remove() 
      
 setTimeout check, 1000 
