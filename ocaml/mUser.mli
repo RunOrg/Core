@@ -45,6 +45,8 @@ type t = <
   white     : IWhite.t option 
 > ;;
 
+module Registry : OhmCouchRegistry.REGISTRY with type id = IUser.t
+
 module Signals : sig
 
   val on_create     : ([`Created] IUser.id * t, unit O.run) Ohm.Sig.channel
