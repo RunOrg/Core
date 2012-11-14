@@ -44,7 +44,8 @@ setTimeout load, 2000
 
       <div class="help-block" style="display: none">
         <div>
-          {`PageLayout_Navbar_NewHere} <a href="javascript:void(0)">&times;</a> 
+	  <a href="javascript:void(0)">&times;</a> 
+          {`PageLayout_Navbar_NewHere}
         </div>
       </div>
       <script type="newhere:string">
@@ -52,7 +53,7 @@ check = () ->
   $.get newhere, {mode:"check"}, (data) ->
     if data.ok 
       $(".help-block").fadeIn("slow").find("a").click ->  
-        $.post (newhere+"?mode=close", {}, () -> 
+        $.post (newhere+"?mode=close"), {}, () -> 
           $(".help-block").remove() 
      
 setTimeout check, 1000 
