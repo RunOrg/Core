@@ -5,7 +5,7 @@ let page url title list =
   let url = "/entreprises"^url in
   page url title 
     ~section:"entreprises"
-    ~head:"entreprises"
+    (* ~head:"entreprises" *)
     ~subsection:url 
     list
 
@@ -155,13 +155,14 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	) ; 
 ];
 
+(*
   page "/entreprises/pricing" "RunOrg - Tarifs Entreprises"
       [ pricing 
 	~foot:"Prix exprimés hors taxes. Consultez nos <a href=\"/autres/accompagnement\">offres d'accompagnement</a> et <a href=\"/contact\">contactez-nous</a> pour toutes informations supplémentaires."
-	 [ "Petit espace" ]; 
-	  [  "Espace moyen"] ;
-	  [  "Gros espace" ];
-	   [ "Très gros espace" ] 
+	[ "Petit espace" ; 
+	  "Espace moyen" ;
+	  "Gros espace" ;
+	  "Très gros espace" ] 
 	[ "Prix", [ `Text "10€/mois" ; 
 		    `Text "100€/mois" ;
 		    `Text "200€/mois" ;
@@ -215,6 +216,6 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 				    `Text "2€/Go/mois" ] 
 	] ;
     ] ;
-	       
+*)	       
   (* END PAGES -------------------------------------------------------------- *)
 ] 
