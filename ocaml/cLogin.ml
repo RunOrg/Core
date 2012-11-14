@@ -24,15 +24,9 @@ let () = UrlLogin.def_login begin fun req res ->
   in
 
   let iid = UrlLogin.instance_of (req # args) in
-
-  let title = 
-    AdLib.get 
-      (if iid = None then `Login_Heading_Core else `Login_Heading_Client)
-  in
-
+ 
   let html = Asset_Login_Page.render (object
     method navbar = (req # server,None,iid)
-    method title  = title 
     method login  = login
     method signup = signup
     method lost   = Js.remote ~url:(Action.url UrlLogin.lost (req # server) (req # args)) ()

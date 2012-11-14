@@ -13,7 +13,8 @@
       {?account}
         <div class="-right">
   	  <a href="{logout}">{ `PageLayout_Navbar_Logout }</a>
-          <a href="{url}">{name}<img src="{pic}" style="margin-left: 10px"/></a>
+	  <a id="help" target="_blank" href="http://runorg.com/aide/asso">{ `PageLayout_Navbar_Help }</a>
+          <a href="{url}">{name}{?pic}<img src="{this}" style="margin-left: 10px"/>{/?}</a>
 	  <a id="notifications" href="{notif}"><span></span></a>
 	  <script type="unread:string">
 
@@ -29,17 +30,40 @@ setTimeout load, 2000
 
 	  </script>
         </div>
+      {else}
+        <div class="-right">
+	  <a id="help" href="http://runorg.com/aide/asso">{ `PageLayout_Navbar_Help }</a>
+	</div>
       {/?}
     </div>
   </div>
 
   {?asso}
+
     <div class="-asso{if hidepic} -hidepic{/if}">
+
+      <div class="help-block" style="display: none">
+        <div>
+          {`PageLayout_Navbar_NewHere} <a href="javascript:void(0)">&times;</a> 
+        </div>
+      </div>
+      <script type="newhere:string">
+check = () ->
+  post newhere, {mode:"check"}, (data) ->
+    if data.ok 
+      $(".help-block").fadeIn("slow").find("a").click ->  
+        post newhere, {mode:"close"}, () -> 
+          $(".help-block").remove() 
+     
+setTimeout check, 1000 
+      </script>
+
       {?picture}
         <a href="{url}" class="-pic">
   	  <img src="{pic}"/>
         </a>
       {/?}
+
       <div class="-main">
         <h1><a href="{url}">{name}</a></h1>
         <ul>
@@ -112,6 +136,7 @@ setTimeout load, 2000
   .-inner {
     width: 966px;
     margin: 0 auto;
+    position: relative;
   }
 
   a {
@@ -166,6 +191,7 @@ setTimeout load, 2000
     width: 950px;
     margin: 2px auto 0;
     height: 72px;
+    position: relative; 
  
     .-main {
       overflow: hidden;
