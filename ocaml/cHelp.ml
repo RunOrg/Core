@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Tooltip = CHelp_tooltip
+
 let rename key = "/aide/asso/" ^ OhmStatic.canonical key
 
 let help_css = "/AssoHelp/style.css"
