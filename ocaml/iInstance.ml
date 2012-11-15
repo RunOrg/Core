@@ -29,6 +29,8 @@ module Deduce = struct
   let can_see_usage     = identity
   let create_can_upload = identity
 
+  let token_see_contacts = identity
+
   let admin_create_group = identity
   let admin_create_forum = identity
   let admin_view_profile = identity

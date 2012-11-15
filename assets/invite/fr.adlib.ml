@@ -24,3 +24,9 @@ end
 | `Import_ByEmail -> "Par e-mail"
 | `Import_ByName -> "Par nom"
 | `Import_ByGroup -> "Par groupe"
+
+| `Import_ByName_Submit how -> begin 
+  match how with 
+    | `Add    -> "Inscrire ces personnes"
+    | `Invite -> "Inviter ces personnes"
+end

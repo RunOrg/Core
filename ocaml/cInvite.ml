@@ -4,8 +4,49 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module ByNameArgs = Fmt.Make(struct
+  type json t = ( IAvatar.t list )
+end)
+
 let by_name kind back access gid render = 
-  render $ Asset_Invite_ByName.render ()
+
+  let  how = match kind with 
+    | `Group | `Forum -> `Add
+    | `Event -> `Invite
+  in
+
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
+
+    let aids = BatOption.default [] (ByNameArgs.of_json_safe json) in
+
+    let aids = BatList.sort_unique compare aids in
+    
+    let! () = ohm $ O.decay begin MMembership.Mass.admin
+	~from:(access # self) gid aids 
+	(match kind with 
+	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
+	  | `Event -> [ `Accept true ; `Invite ])
+    end in 
+
+    let delay = 1000 + max (List.length aids * 1000) 4000 in
+
+    return $ Action.javascript (Js.redirect ~delay ~url:back ()) res
+
+  end in
+
+  render begin
+
+    let! submit = ohm $ AdLib.get (`Import_ByName_Submit how) in
+    
+    let config = object
+      method submit = submit
+      method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
+      method post   = OhmBox.reaction_json post () 
+    end in 
+
+    Asset_Invite_ByName.render config
+
+  end 
 
 (* Handling by-group invitations ------------------------------------------------------------------- *)
 
