@@ -53,8 +53,8 @@ check = () ->
   $.get newhere, {mode:"check"}, (data) ->
     if data.ok 
       $(".help-block").fadeIn("slow").find("a").click ->  
-        $.post (newhere+"?mode=close"), {}, () -> 
-          $(".help-block").remove() 
+        post newhere, {}, () -> 
+          $(".help-block").fadeOut("fast")
      
 setTimeout check, 1000 
       </script>

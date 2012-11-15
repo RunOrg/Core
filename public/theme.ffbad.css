@@ -83,3 +83,15 @@
   width: auto; 
   margin-right: 20px;
 }
+
+#topbar .help-block {
+  background-color: #E2001A;
+}
+
+#topbar .help-block > div:before {
+  border-bottom-color: #E2001A;
+}
+
+#topbar .help-block a {
+  color: white;
+}
