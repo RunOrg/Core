@@ -5,7 +5,7 @@ let page url title list =
   let url = "/entreprises"^url in
   page url title 
     ~section:"entreprises"
-    (* ~head:"entreprises" *)
+    ~head:"entreprises" 
     ~subsection:url 
     list
 
@@ -55,7 +55,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
       composite `LR
        (bullets
 	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Toute la communication numérique depuis un même espace"
+	   ~subtitle:"Toute votre communication numérique"
 	   ~ordered:false
 	   [ "Communication interne via l'espace membre" ;
 	     "Communication externe via le site Internet" ;
@@ -80,15 +80,15 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	    "Directeur Institut Européen des Politiques Publiques" ,
 	    "RunOrg nous permet de garder le lien avec les stagiaires que nous formons ce qui augmente leur taux de retour dans nos formations." ) ;
 	  ( "Virginie Do Carmo" ,
-	    "Présidente Ile De France News", 
+	    "Editrice et fondatrice Ile De France News", 
 	    "Grâce au portail abonnés de RunOrg je peux intéragir avec mes abonnés, leur offrir de nouveaux services et augmenter mon audience." ) ;
 	  ( "Laurent Villemur" , 
-	    "Directeur de ActeIII formation" ,
+	    "Directeur de Acte-trois formation" ,
 	    "La mise en place rapide et facile de RunOrg nous a permis de répondre aux besoins de nos stagiaires qui souhaitaient rester en lien après les formations." ) 
 	] ;
  ];
 
-  page "/entreprises/Company" "RunOrg Entreprises"
+  page "/Company" "RunOrg Entreprises"
     [ composite `LR
 	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
 	(create "Company")  ;
@@ -122,7 +122,7 @@ Vous avez également la possiblité d'ouvrir votre outil à vos clients privilé
 	) ; 
 ];
 
-  page "/entreprises/CompanyTraining" "RunOrg Entreprises - Centres de formation"
+  page "/CompanyTraining" "RunOrg Entreprises - Centres de formation"
     [ composite `LR
 	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
 	(create "CompanyTraining")  ;
@@ -155,14 +155,38 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	) ; 
 ];
 
-(*
-  page "/entreprises/pricing" "RunOrg - Tarifs Entreprises"
+  page "/PortailAbonnes" "RunOrg Entreprises - Portail Abonnés"
+    [ composite `LR
+	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
+		(pride 
+	   ~title:"Prototype en cours"
+	   ~subtitle:"Cette solution est en cours de conception"
+	   ~link:("/contact",
+		  "Contactez-nous pour en savoir plus") 
+	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
+	)   ;
+];
+
+  page "/PortailClients" "RunOrg Entreprises - Portail Clients"
+    [ composite `LR
+	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
+		(pride 
+	   ~title:"Prototype en cours"
+	   ~subtitle:"Cette solution est en cours de conception"
+	   ~link:("/contact",
+		  "Contactez-nous pour en savoir plus") 
+	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
+	)   ;
+];
+
+
+  page "/pricing" "RunOrg - Tarifs Entreprises"
       [ pricing 
-	~foot:"Prix exprimés hors taxes. Consultez nos <a href=\"/autres/accompagnement\">offres d'accompagnement</a> et <a href=\"/contact\">contactez-nous</a> pour toutes informations supplémentaires."
-	[ "Petit espace" ; 
-	  "Espace moyen" ;
-	  "Gros espace" ;
-	  "Très gros espace" ] 
+	~foot:"Prix exprimés hors taxes. <a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires."
+	[ ["/entreprises/pricing", "Petit espace" ]; 
+	  [ "/entreprises/pricing","Espace moyen"] ;
+	  ["/entreprises/pricing","Gros espace"] ;
+	  ["/entreprises/pricing", "Très gros espace"] ] 
 	[ "Prix", [ `Text "10€/mois" ; 
 		    `Text "100€/mois" ;
 		    `Text "200€/mois" ;
@@ -171,51 +195,307 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 			    `Text "5000" ;
 			    `Text "10000" ;
 			    `Text "+ de 10000" ];
+	  "Option Pack Pro", 	[ `Tick ; 
+				`Tick ;
+				`Tick ; 
+				`Tick ] ;
 	  "Option personnalisation+", [ `Text "100€/mois" ;
 				`Text "100€/mois" ;
 				`Tick ;
 				`Tick ];
 	  "Option Multi-portails", [ `NoTick ;
-				`Text "100€/mois" ;
+				`NoTick ;
 				`Text "100€/mois" ;
 				`Text "100€/mois" ];				
-	  "Espace disque", [ `Text "4 Go" ;
-			     `Text "5 Go" ;
-			     `Text "5 Go" ;
+	  "Espace disque", [ `Text "2 Go" ;
 			     `Text "10 Go" ;
-			     `Text "10 Go" ] ;
+			     `Text "20 Go" ;
+			     `Text "30 Go" ];
 	  "Hébergement et mises à jour", [ `Tick ; 
 					   `Tick ;
 					   `Tick ; 
-					   `Tick ; 
 					   `Tick ] ;
-	  "Assistance premium", [ `Text "95€/an" ;
-				`Text "95€/an" ;
+	  "Assistance premium", [ `Text "10€/mois" ;
 				`Tick ;
 				`Tick ;
-				`Text "95€/an" ] ;
+				`Tick ] ;
 	  "Formation initiale", [ `NoTick ;
 				       `NoTick ; 
 				       `Text "2 heures" ;
-				       `Text "2 heures" ;
-				       `NoTick ] ;
+				       `Text "2 heures" ] ;
 	  "Assistance téléphonique", [ `NoTick ;
 					    `NoTick ;
 					    `Text "2 heures" ;
-					    `Text "2 heures" ;
-					    `NoTick ] ;
-	  "100 accès suppl.", [ `Link ("/contact", "Nous Contacter") ;
-					 `Text "70€/an" ;
-					 `Text "20€/an" ;
-					 `Text "20€/an"  ;
-					 `Text "800€/an" ] ;
+					    `Text "2 heures"] ;
 	  "Espace disque suppl.", [ `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ] 
 	] ;
     ] ;
-*)	       
+
+  page "/features" "RunOrg Entreprises - Fonctionnalités"
+     [ 
+      ribbon 
+	(important 
+	   "Vos données sont en sécurité"
+	   "Par défaut, toutes vos informations privées sont accessibles uniquement aux membres de votre espace.
+
+Vous pouvez choisir de rendre sélectivement publiques certaines de ces informations, 
+ou au contraire les rendre accessibles aux membres de certains groupes uniquement."
+	) ;
+
+
+      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
+      composite `LR 
+	(screenshots [ (*"/public/img/2012-08-29-1-cut.png" ;
+		       "/public/img/2012-08-28-9-cut.png" *)])
+	(features [ 
+	  "Groupes de membres",
+	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
+	  
+	  "Demandes d'inscription",
+	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
+	  
+	  "Gestion des inscrits",
+	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
+	  
+	  "Inscriptions multiples",
+	  "Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
+	  
+	  "Annuaire à jour",
+	  "Visualisez facilement la liste des inscrits d'un groupe et leurs informations." ;
+	  
+	  "Indépendance des groupes",
+	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
+	]) ;
+      
+      ribbon_title ~name:"organisationdesactivites" "Organisation des activités" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-5-cut.png" ;
+		       "/public/img/2012-08-29-4-cut.png" ;
+		       "/public/img/2012-08-29-3-cut.png" ])
+	(features [ 
+	  "Création d'activités",
+	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
+	  
+	  "Nombreux modèles disponibles",
+	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
+	  
+	  "Agenda privé",
+	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
+	  
+	  "Invitation par groupes",
+	  "Pour n'oublier personne et gagner du temps, invitez directement les membres des groupes de votre choix";
+	  
+	  "Gestion des participants",
+	  "Indiquez pour chaque activité si les demandes d'inscriptions sont validées manuellement ou automatiquement";
+	  
+	  "Niveau de visibilité des activités",
+	  "Déterminez si une activité n'est visible qu'aux inscrits, à tous les membres, ou si elle est publiée sur votre site Internet";
+	  
+	  "Discussions dans les activités",
+	  "Chaque activité permet les discussions (mur), la consultation (sondage) et le partage (photos et documents)";
+	  
+	  "Brouillons",
+	  "Prenez votre temps pour créer une activité avant de la publier"	
+	]) ;  
+  
+      ribbon_title ~name:"espacedepartage" "Espace de partage" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-2-cut.png" ])
+	(features [ 
+	  "Partagez vos documents",
+	  "Vos membres et vous même pouvez mettre en ligne et télécharger des documents quel que soit leur format";
+	  
+	  "Partagez vos albums photo",
+	  "Vos membres et vous même pouvez publier et visionner des albums photo";
+	  
+	  "Définissez qui voit quoi",
+	  "Au sein de votre espace vous définissez de manière sélective qui accède à vos photos et vos documents"	
+	]) ;
+   
+  
+      ribbon_title ~name:"messagescommunication" "Messages et communication" ; 
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-5-cut.png" ])
+	(features [ 
+	  "Murs de discussions",
+	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
+	  
+	  "Listes de diffusion",
+	  "Les messages publiés sur les murs sont envoyés en totalité par email aux destinataires concernés";
+	  
+	  "Notifications",
+	  "Les membres peuvent paramétrer la fréquence des notifications qu'ils reçoivent.";
+	  
+	  "Réponses aux messages",
+	  "Chaque message constitue un flux de discussion indépendant, dont seuls les participants reçoivent des notifications"	
+	]) ;   
+
+      ribbon_title ~name:"consultationdesmembres" "Consultation des membres" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-7-cut.png" ])
+	(features [ 
+	  "Création de mini-sondages",
+	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
+	  
+	  "Réponses aux invitations",
+	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
+	  
+	  "Formulaires d'inscription",
+	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
+	]) ;
+    
+      
+      ribbon_title ~name:"forumsdiscussions" "Forums et discussions" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-10-cut.png" ])
+	(features [ 
+	  "Forums de discussion",
+	  "Un forum permet la discussion (mur), la consultation (sondage) et le partage (photos, documents) autour d'un thème";
+	  
+	  "Forums publics",
+	  "Tous les membres peuvent voir et participer aux forums publics de votre espace";
+	  
+	  "Forums privés",
+	  "Seuls les inscrits peuvent voir les forums privés, vous avez le contrôle sur les inscriptions";
+	  
+	  "Forums de groupes",
+	  "Les groupes peuvent disposer de forums privés réservés à leurs membres"	
+	]) ;   
+
+      ribbon_title ~name:"priseenmainrapide" "Prise en main rapide" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-7-cut.png" ;
+		       "/public/img/2012-08-28-8-cut.png" ])
+	(features [ 
+	  "Espace pré-adapté à vos besoins",
+	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
+	  
+	  "Import des membres",
+	  "Utilisez un tableur ou votre carnet d'adresses pour importer vos membres avec un simple copier/coller";
+	  
+	  "Rien à installer",
+	  "RunOrg est entièrement en ligne : tous vos membres peuvent l'utiliser sans rien installer sur leurs postes.";
+	  
+	  "Ergonomique et simple",
+	  "Peut être utilisé sans formation, et avec plaisir !";
+	  
+	  "Connexions en un clic",
+	  "Lorsque vous recevez une notification, cliquez sur le lien pour vous connecter à votre espace et au bon endroit.";
+	  
+	  "Transition en douceur",
+	  "Les membres que vous avez inscrits et qui n'ont pas encore rejoint RunOrg reçoivent tous vos messages par mail."	
+	]) ;   
+
+      ribbon_title ~name:"personnalisationintranet" "Personnalisation de votre intranet" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-6-cut.png" ])
+	(features [ 
+	  "Créez le miroir virtuel de votre organisation réelle",
+	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
+	  
+	  "Créez vos propres formulaires",
+	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
+	  
+	  "Personnalisez vos tableaux",
+	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
+	  
+	  "Logos et images",
+	  "Insérez votre logo et définissez des images pour vos différents évènements"	
+	]) ;
+     
+      ribbon_title ~name:"espacepriveconfidentialite" "Espace privé et confidentialité" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-8-cut.png" ;
+		       "/public/img/2012-08-29-12-cut.png" ])
+	(features [ 
+	  "Connexion sécurisée",
+	  "Tous les accès à RunOrg se font de façon cryptée et sécurisée";
+	  
+	  "Accès nominatifs et contrôlés",
+	  "Chaque personne dispose d'un compte pour lequel nous avons vérifié la validité de l'adresse email";
+	  
+	  "Niveaux de visibilité",
+	  "Chaque groupe ou activité peut être visible sur internet, par tous les membres, ou seulement par les invités.";
+	  
+	  "Vous avez le contrôle total",
+	  "Les administrateurs de votre association définissent les accès à votre espace, et qui peut voir ou participer à vos activités";
+	  
+	  "Vie privée respectée",
+	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
+	  
+	  "Gestion des informations personnelles",
+	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
+	]) ;
+
+      ribbon_title ~name:"profilsmembres" "Profils membres" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-1-cut.png" ])
+	(features [ 
+	  "Informations personnelles",
+	  "Retrouvez les coordonnées et les informations personnelles de chaque membre sur sa page de profil";
+	  
+	  "Fiches d'information",
+	  "Associez des remarques ou des fiches d'informations au profil d'un membre";
+	  
+	  "Liste des groupes",
+	  "En un coup d'oeil, visualisez dans quels groupes est inscrit un membre";
+	  
+	  "Restrictions d'accès",
+	  "Seuls les administrateurs ont accès aux données personnelles des membres";
+	  
+	  "Historique des publications",
+	  "Le profil contient la liste des messages, photos et fichiers mis en ligne par le membre"	
+	]) ;
+    
+      ribbon_title ~name:"website" "Site Internet" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
+		       "/public/img/2012-08-28-3-cut.png"])
+	(features [ 
+	  "Publication d'articles",
+	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
+	  
+	  "Abonnement aux articles",
+	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
+	  
+	  "Agenda en ligne",
+	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
+	  
+	  "Inscriptions et adhésions en ligne",
+	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne";
+	  
+	  "Page de présentation",
+	  "Une page de présentation publique vous permet de présenter votre association, de renseigner son logo et ses coordonnées";
+	  
+	  "Hébergement gratuit",
+	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
+	]) ;   
+  
+      ribbon_title ~name:"administration" "Administration" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-29-9-cut.png" ;
+		       "/public/img/2012-08-29-11-cut.png"])
+	(features [ 
+	  "Administrateurs globaux",
+	  "En tant qu'administrateur de votre espace privé vous pouvez tout voir et tout faire";
+	  
+	  "Délégation de l'administration",
+	  "Nommez des personnes responsables de votre espace, ou d'une activité en particulier.";
+	  
+	  "Modération",
+	  "Les administrateurs peuvent modérer les messages, les photos et les documents";
+	  
+	  "Publication d'articles sur Internet",
+	  "Seuls les administrateurs peuvent publier des articles sur votre site Internet";
+	  
+	  "Export des listes",
+	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
+	]) ;
+    ] ;
+
+
   (* END PAGES -------------------------------------------------------------- *)
 ] 
