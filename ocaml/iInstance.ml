@@ -29,7 +29,7 @@ module Deduce = struct
   let can_see_usage     = identity
   let create_can_upload = identity
 
-  let toke_nsee_contacts = identity
+  let token_see_contacts = identity
 
   let admin_create_group = identity
   let admin_create_forum = identity
