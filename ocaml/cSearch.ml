@@ -8,7 +8,7 @@ let () = UrlClient.Search.def_avatars $ CClient.action begin fun access req res 
 
   let  iid   = IInstance.Deduce.token_see_contacts (access # iid) in
 
-  let! list  = ohm $ MAvatar.search iid (BatOption.default "" (req # get "prefix")) 12 in
+  let! list  = ohm $ MAvatar.search iid (BatOption.default "" (req # get "prefix")) 9 in
 
   let! htmls = ohm $ Run.list_filter begin fun (aid,prefix,details) ->
     let! name = req_or (return None) (details # name) in

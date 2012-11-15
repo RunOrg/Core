@@ -21,6 +21,15 @@ selected = {}
 
 lastsearch = 0
 
+here.$a.hide()
+
+count = ->
+  tot = 0
+  for i of selected
+    if selected[i]
+      ++tot
+  return tot
+
 dosearch = (prefix) ->
   mysearch = ++lastsearch
   $.get search, {prefix:prefix}, (data) ->
@@ -41,6 +50,9 @@ dosearch = (prefix) ->
         id = $t.attr "id"
         selected[id] = !selected[id] 
         $t.toggleClass("-selected",selected[id])
+        c = count()
+        here.$count.text(c)
+        here.$a.toggle(c > 0)
     call data.code
 
 dosearch ""
@@ -128,7 +140,7 @@ here.$src.keyup ->
   }
 
   .-list {
-    min-height: 200px;
+    min-height: 204px;
     overflow: hidden;
     width: 600px;
     margin: 20px auto;
