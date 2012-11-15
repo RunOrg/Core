@@ -6,8 +6,12 @@
 <script type="search:string">
 selected = {}
 
+lastsearch = 0
+
 dosearch = (prefix) ->
+  mysearch = ++lastsearch
   $.get search, {prefix:prefix}, (data) ->
+    return if mysearch != lastsearch
     if "list" of data
       here.$list.html("")
       html = []
