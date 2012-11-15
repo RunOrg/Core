@@ -6,7 +6,15 @@ open BatPervasives
 
 let by_name kind back access gid render = 
 
+  let  how = match kind with 
+    | `Group | `Forum -> `Add
+    | `Event -> `Invite
+  in
+
+  let! submit = ohm $ AdLib.get (`Import_ByName_Submit how) in
+
   let config = object
+    method submit = submit
     method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
   end in 
 

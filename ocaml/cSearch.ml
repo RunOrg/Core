@@ -4,11 +4,13 @@ open Ohm
 open Ohm.Universal 
 open BatPervasives
 
+let count = 9
+
 let () = UrlClient.Search.def_avatars $ CClient.action begin fun access req res ->
 
   let  iid   = IInstance.Deduce.token_see_contacts (access # iid) in
 
-  let! list  = ohm $ MAvatar.search iid (BatOption.default "" (req # get "prefix")) 9 in
+  let! list  = ohm $ MAvatar.search iid (BatOption.default "" (req # get "prefix")) count in
 
   let! htmls = ohm $ Run.list_filter begin fun (aid,prefix,details) ->
     let! name = req_or (return None) (details # name) in
@@ -23,6 +25,8 @@ let () = UrlClient.Search.def_avatars $ CClient.action begin fun access req res 
     let! html = ohm $ Asset_Search_Avatar.render data in
     return (Some (Html.to_json html))
   end list in
+
+  let htmls = BatList.take count htmls in
 
   return (Action.json [ "list", Json.Array htmls ] res)
 
