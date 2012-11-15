@@ -1,24 +1,36 @@
 { navbar | VNavbar.intranet | ohm } 
 
-{ title | Asset_PageLayout_Heading.render | ohm } 
-
 <div style="width: 950px ; margin: 40px auto">
   <div id="substack"> 
     <div style="width: 740px ; margin: auto ; overflow: hidden">
-      <div style="float: left ; margin : 2px">
-	<div class="formsection">
-	  <h2>{ `Login_Section_Login }</h2>
-	  <div>{ login  | ohm }</div>
-	</div>
-	<div style="text-align:center">
-	  <a href="javascript:void(0)" 
-	     onclick="{ lost | Ohm.JsCode.to_event | esc }">{ `Login_Lost_Link }</a> 
-	</div>
-      </div>
-      <div style="float: right ; margin : 2px">
-	<div class="formsection">
-	  <h2>{ `Login_Section_Signup }</h2>
-	  <div>{ signup | ohm }</div>
+      <div class="overlaid-box">
+	<div class="-inner">
+	  <h1 style="margin-bottom:20px">
+	    <img src="/public/img/logo-50x50.png"
+		 style="float:left;width:50px;height:50px;margin: 0 20px 0 0"/>
+	    <div style="font-size:18px;font-weight: bold;color:#111">
+	      {`Login_RunOrg_Passport}
+	    </div>
+	    <div style="font-size:13px;max-width: 600px;color: #888;">
+	      {`Login_RunOrg_Passport_Info}
+	    </div>	      
+	  </h1>
+	  <div style="float: left ; margin : 2px">
+	    <div class="formsection">
+	      <h2>{ `Login_Section_Login }</h2>
+	      <div>{ login  | ohm }</div>
+	    </div>
+	    <div style="text-align:center">
+	      <a href="javascript:void(0)" 
+		 onclick="{ lost | Ohm.JsCode.to_event | esc }">{ `Login_Lost_Link }</a> 
+	    </div>
+	  </div>
+	  <div style="float: right ; margin : 2px">
+	    <div class="formsection">
+	      <h2>{ `Login_Section_Signup }</h2>
+	      <div>{ signup | ohm }</div>
+	    </div>
+	  </div>
 	</div>
       </div>
     </div>

@@ -5,6 +5,15 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
+module Registry = OhmCouchRegistry.Make(struct
+  module Id = IUser
+  module Store = struct
+    let host = "localhost"
+    let port = 5984
+    let database = O.db "user-r"
+  end
+end)
+
 module MyDB = CouchDB.Convenience.Database(struct let db = O.db "user" end)
 
 module Design = struct

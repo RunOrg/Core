@@ -1,39 +1,37 @@
 <div class="dialog" style="width:{width}px">
-  <div class="-head">
-    <a class="-close" href="javascript:void(0)" onclick="stackBack()">&times;</a>
-    <h2>{title|ohm|esc}</h2>
+  <div class="overlaid-box">
+    <div class="-inner">
+      <h1>
+	<a class="-close" href="javascript:void(0)" onclick="stackBack()">&times;</a>
+	{title|ohm|esc}
+      </h1>
+      {body|ohm}
+    </div>
   </div>
-  {body|ohm}
 </div>
 
 <style>
-.dialog { 
-  border: 1px solid #AAA;
-  border-radius: 3px;
-  margin: 15px auto;
-  box-shadow: 0 0 5px #BBB;
-  background-color: white;
-  padding:8px;
+.dialog {
 
-  .-head h2 { 
-    margin: 0;
-    color: #888;
-    font-size: 20px; 
+  margin: auto;
+
+  h1 {
+    margin-bottom: 20px;
   }
 
-  .-head  .-close {
-    background-color: #CCC;
+  .-close {
     color: white;
     font-weight: bold;
     float: right;
-    width: 27px;
-    height: 27px;
-    line-height: 25px;
     font-size: 28px;
     text-align: center;
     border-radius: 27px;
     text-decoration: none;
-
+    width: 28px;
+    text-shadow: 0 -1px 0 #AAA;
+    background-color: #BBB;
+    height: 28px;
+    line-height: 22px;
     &:hover {
       background-color: #888;
     }

@@ -1201,7 +1201,7 @@ Vous avez également la possiblité d'ouvrir votre outil à vos clients privilé
 	   "/public/img/preconf_companytraining.jpg")
 	(features [ 
 	  "Point fort",
-	  "Annimation du réseaux des formateurs et des stagiaires" ;
+	  "Animation du réseaux des formateurs et des stagiaires" ;
 	    
 	  "Idéal pour...",
 	  "Offrir des espaces privés d'échange durant et après la formation" ;

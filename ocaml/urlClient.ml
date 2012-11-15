@@ -52,6 +52,8 @@ let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
 
 let ajax,    def_ajax      = O.declare O.client "intranet/ajax" (A.n A.string)
 
+let newhere, def_newhere   = O.declare O.client "newhere" A.none
+
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
 module Like     = UrlClient_like

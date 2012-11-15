@@ -15,8 +15,6 @@
 | `Login_Form_Signup_Mismatch
 | `Login_Section_Login
 | `Login_Section_Signup
-| `Login_Heading_Core
-| `Login_Heading_Client
 | `Login_PopConfirmReset_Title
 | `Login_PopConfirmReset_Intro
 | `Login_PopConfirmReset_Outro
@@ -26,3 +24,5 @@
 | `Login_ResetResend_Prelude
 | `Login_ResetResend_Body 
 | `Login_ResetResend_Sorry 
+| `Login_RunOrg_Passport
+| `Login_RunOrg_Passport_Info
