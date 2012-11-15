@@ -11,14 +11,18 @@ let by_name kind back access gid render =
     | `Event -> `Invite
   in
 
-  let! submit = ohm $ AdLib.get (`Import_ByName_Submit how) in
+  render begin
 
-  let config = object
-    method submit = submit
-    method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
-  end in 
+    let! submit = ohm $ AdLib.get (`Import_ByName_Submit how) in
+    
+    let config = object
+      method submit = submit
+      method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
+    end in 
 
-  render $ Asset_Invite_ByName.render config
+    Asset_Invite_ByName.render config
+
+  end 
 
 (* Handling by-group invitations ------------------------------------------------------------------- *)
 
