@@ -16,7 +16,7 @@
 
 </div>
 
-<script type="search:string">
+<script type="post:json,search:string">
 selected = {}
 
 lastsearch = 0
@@ -60,6 +60,15 @@ dosearch ""
 here.$src.keyup ->
   dosearch $(@).val()
 
+here.$a.click ->
+  ids = []
+  for id of selected
+    if selected[id]
+      ids.push id
+  here.$a.remove()
+  OhmBox.remote post, ids, (d) -> 
+    call d.code
+
 </script>
 
 <style>
@@ -85,7 +94,7 @@ here.$src.keyup ->
 
     background-color: #EEE;
     border-top: 1px solid #CCC;
-    margin: 10px;
+    margin: 10px 0;
     padding: 5px;
     text-align: right;
     height: 28px;
