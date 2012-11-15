@@ -3,7 +3,7 @@ let sections = [
   
   "associations", "Associations", "/" ;
  (* "collectivites", "Collectivités", "/collectivites" ; *)
- (* "entreprises", "Entreprises", "/entreprises" ; *)
+  (*"entreprises", "Entreprises", "/entreprises" ; *)
   "catalogue", "Catalogue", "/catalog" ;
   (* "network", "Réseau", "/network" ; *)
   "login", "Connexion", "/me" ;
