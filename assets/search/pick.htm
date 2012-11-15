@@ -4,27 +4,76 @@
 </div>
 
 <script type="search:string">
-$.get search, {}, (data) ->
-  if "list" of data
-    here.$list.html("")
-    for item in list
-      html.push item.html
-    here.$list.html(html.join("")).removeClass("-loading")
-    for item in list
-      call item.code
-  call data.code
+selected = {}
+
+dosearch = (prefix) ->
+  $.get search, {prefix:prefix}, (data) ->
+    if "list" of data
+      here.$list.html("")
+      html = []
+      for item in data.list
+        html.push item.html
+      here.$list.html(html.join("")).removeClass("-loading")
+      for item in data.list
+        call item.code
+      here.$list.find("a").each ->
+        $t = $(@) 
+        $t.toggleClass("-selected",selected[$t.attr("id")] || false)
+      here.$list.find("a").click ->
+        $t = $(@) 
+        id = $t.attr "id"
+        selected[id] = !selected[id] 
+        $t.toggleClass("-selected",selected[id])
+    call data.code
+
+dosearch ""
+
 </script>
 
 <style>
 .avatar-picker {
 
+  .-list a {
+    color: #333;
+    height: 40px;
+    float: left;
+    width: 172px;
+    background-color: #DDD;
+    background: -webkit-linear-gradient(top,#DDD,#CCC);    
+    background: -moz-linear-gradient(top,#DDD,#CCC);    
+    margin-right: 16px;
+    margin-bottom: 16px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid #BBB;
+
+    img {
+      width: 50px;
+      height: 50px;
+      margin: -5px 5px -5px -5px;
+      border-right: 1px solid #BBB;
+      float: left;
+    }
+
+    &.-selected {
+      background: #356;
+      border-color: #356;
+      color: white;
+      img { border-color: #356 }
+    }
+  }
+
   .-list {
-    height: 200px;
+    min-height: 200px;
+    overflow: hidden;
     width: 600px;
     margin: 20px auto;
-    padding: 16px;
+    padding: 16px 0 0 16px;
     border: 1px solid #CCC;
-    background-color: white;
+    background-color: white;    
   }
 
   .-list.-loading {
