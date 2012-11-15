@@ -20,3 +20,5 @@
 
 | `Import_ByGroup_Selected
 | `Import_ByGroup_Submit of [ `Add | `Invite ]
+
+| `Import_ByName_Submit of [ `Add | `Invite ]
