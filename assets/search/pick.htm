@@ -3,6 +3,17 @@
 
   <div {$list} class="-list -loading">
   </div>
+
+  <div class="-actions">
+    <span class="-count">
+      { `Search_Picked } <span {$count}>0</span>
+    </span> 
+    </span>
+    <a {$a} href="javascript:void(0)" class="action-button -green" style="display:inline-block">
+      -
+    </a>
+  </div>
+
 </div>
 
 <script type="search:string">
@@ -56,6 +67,28 @@ here.$src.keyup ->
     width: 520px;
     .asap();
     border: 1px solid #BBB;
+  }
+
+  .-actions {
+
+    background-color: #EEE;
+    border-top: 1px solid #CCC;
+    margin: 10px;
+    padding: 5px;
+    text-align: right;
+    height: 28px;
+
+    .-count {
+      color: #555;
+      float: left;
+      font-size: 13px;
+      padding: 5px;
+      span {
+        color: black;
+        font-weight: bold;
+        margin-left: 6px;
+      }
+    }
   }
 
   width: 618px;
