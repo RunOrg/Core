@@ -5,7 +5,12 @@ open Ohm.Universal
 open BatPervasives
 
 let by_name kind back access gid render = 
-  render $ Asset_Invite_ByName.render ()
+
+  let config = object
+    method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
+  end in 
+
+  render $ Asset_Invite_ByName.render config
 
 (* Handling by-group invitations ------------------------------------------------------------------- *)
 

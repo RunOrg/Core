@@ -3,6 +3,18 @@
   </div>
 </div>
 
+<script type="search:string">
+$.get search, {}, (data) ->
+  if "list" of data
+    here.$list.html("")
+    for item in list
+      html.push item.html
+    here.$list.html(html.join("")).removeClass("-loading")
+    for item in list
+      call item.code
+  call data.code
+</script>
+
 <style>
 .avatar-picker {
 
