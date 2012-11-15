@@ -27,6 +27,8 @@ module Deduce : sig
 
   val can_see_usage : [<`IsAdmin|`Upload] id -> [`SeeUsage] id
 
+  val token_see_contacts : [<`IsToken|`IsAdmin] id -> [`ViewContacts] id 
+
   val is_admin : [`Created] id -> [`IsAdmin] id
     
   val upload : [<`IsAdmin|`IsToken] id -> [`Upload] id
