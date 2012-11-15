@@ -1,4 +1,6 @@
 <div class="avatar-picker">
+  <label>{`Search_Label} <input {$src} type="text"/></label>
+
   <div {$list} class="-list -loading">
   </div>
 </div>
@@ -32,10 +34,32 @@ dosearch = (prefix) ->
 
 dosearch ""
 
+here.$src.keyup ->
+  dosearch $(@).val()
+
 </script>
 
 <style>
 .avatar-picker {
+
+  label {
+    line-height: 24px;
+    display: block;
+    font-weight: bold;
+  }
+
+  input {
+    margin: 0 0 0 10px;
+    padding: 4px;
+    float: right;
+    font-size: 14px;
+    width: 520px;
+    .asap();
+    border: 1px solid #BBB;
+  }
+
+  width: 618px;
+  margin: 20px auto;
 
   .-list a {
     color: #333;
