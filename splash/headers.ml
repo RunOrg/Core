@@ -122,15 +122,17 @@ let headers = [
       "Tarifs", "pricing-collectivites", "/collectivites/pricing";
     ] ; 
 
-	 multiheader "company-pages" 
+	 multiheader "entreprises" 
     ~title:"L'espace 2.0 de votre entreprise"
     ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos clients, salariés, fournisseurs ou abonnés."
      [ "Accueil",    "/entreprises" , [];
       "Solutions",     "/entreprises/Company",
 	[ "Entreprises", "/entreprises/Company" ;
-	  "Centres de formation", "/entreprises/CompanyTraining"
+	  "Centres de formation", "/entreprises/CompanyTraining";
+	  "Portail abonnés", "/entreprises/PortailAbonnes";
+	  "Portail clients", "/entreprises/PortailClients"
 	  ] ;
-	"Offres",  "/entreprises/offres", 
+	"Options",  "/entreprises/offres", 
 	[ "Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
 	  "Multi-portails", "/entreprises/multiportails";
