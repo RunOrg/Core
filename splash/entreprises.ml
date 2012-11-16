@@ -155,7 +155,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	) ; 
 ];
 
-  page "/PortailAbonnes" "RunOrg Entreprises - Portail Abonnés"
+  page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
     [ composite `LR
 	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
 		(pride 
@@ -167,7 +167,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	)   ;
 ];
 
-  page "/PortailClients" "RunOrg Entreprises - Portail Clients"
+  page "/portail-clients" "RunOrg Entreprises - Portail Clients"
     [ composite `LR
 	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
 		(pride 
@@ -181,7 +181,39 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 
 
   page "/pricing" "RunOrg - Tarifs Entreprises"
-      [ pricing 
+      [ 
+	prices [
+	  ("25",  "HT par mois",[ "500 personnes"   ; "2 Go"  ],[ "Assistance en ligne"]) ;
+	  ("225", "HT par mois",[ "5000 personnes"  ; "10 Go" ],[ "Assistance téléphonique" ]) ;
+	  ("400", "HT par mois",[ "10000 personnes" ; "20 Go" ],[ "Assistance téléphonique" ; "Personnalisation +" ])	  
+	] 
+
+	  "Toutes nos offres incluent l'hébergement, la maintenance et les mises à jour logicielles"
+	  "<a href=\"contact\">Contactez-nous</a> si vous souhaitez créer des espaces pour plus de 10000 personnes." 
+
+;
+
+	ribbon_title ~name:"tarifsoptionsentreprises" "Options disponibles" ;
+
+	option_offer ~before:"À partir de" ~link:("/entreprises/formation","En savoir plus...") 
+	  "800" "HT par jour" "Formation"
+	  "Notre offre de formation est trop cool. Venez en acheter, on vient vous former chez vous sur place.
+
+Deux jours de formation sont offerts avec l'offre à 400€/mois"
+	;
+
+	option_offer ~link:("/entreprises/formation","En savoir plus...") 
+	  "100" "HT par mois" "Personnalisation +"
+	  "Mettez l'espace de votre entreprise à vos couleurs et sur votre nom de domaine."
+	;
+	
+	option_priceless ~link:("/foo","En savoir plus...")
+	  "Sur mesure"
+	  "Faites faire des modifications sur mesure..."
+	;
+
+(*
+	pricing 
 	~foot:"Prix exprimés hors taxes. <a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires."
 	[ ["/entreprises/pricing", "Petit espace" ]; 
 	  [ "/entreprises/pricing","Espace moyen"] ;
@@ -284,7 +316,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ] 
 	] ;
-
+	*)
     ] ;
 
   page "/features" "RunOrg Entreprises - Fonctionnalités"

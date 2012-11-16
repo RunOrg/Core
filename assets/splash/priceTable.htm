@@ -1,0 +1,95 @@
+<div class="block-prices">
+
+<div style="overflow: hidden">
+  {#offers}    
+    <div class="-item">
+      <div class="overlaid-box">
+	<div class="-inner">
+	  <h1 class="-price">
+	    {price} €
+	    <span>{subtitle}</span>
+	  </h1>
+	  <div class="-contents">
+	    {#contents}
+	    <span>{this}</span>
+	    {/#}
+	  </div>
+	  <div class="-options">
+	    {#options}
+	    <span>{this}</span>
+	    {/#}
+	  </div>
+	</div>
+      </div>
+    </div>
+  {/#}
+</div>
+
+  <div class="-text">{text|raw}</div>
+  <div class="-subtext">{subtext|raw}</div>
+
+</div>
+
+<style>
+
+.theme-splash .block-prices {
+
+  overflow: hidden;
+  width: 960px;
+  margin: 60px auto;
+
+  .-text {
+    margin-top: 60px;
+    color: #333;
+    font-size: 13px;
+    p { margin: 8px 0; }
+  }
+
+  .-subtext {
+    color: #888;
+    font-size: 13px;
+    p { margin: 8px 0; }
+  }
+
+  .-item {
+    float: left;
+    width: 280px;
+    margin: 0 20px;
+    text-align: center;
+
+    .-price { 
+      height: 48px; 
+      font-size: 30px;
+      font-weight: bold;
+      span {
+        display: block;
+        font-weight: normal;
+        font-size: 12px;
+        color: #555;
+      }
+    }
+
+    .-contents {
+      height: 50px;
+      font-size: 17px;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #CCC;
+      span { 
+        display: block;
+      }
+    }
+
+    .-options {
+      height: 40px;
+      color: #888;
+      font-size: 13px;
+      padding-top: 8px;
+      span {
+        display: block; 
+      }
+    }
+  }
+
+}
+</style>
