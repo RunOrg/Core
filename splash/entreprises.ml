@@ -193,7 +193,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 
 ;
 
-	ribbon_title ~name:"tarifsoptionsentreprises" "Options disponibles" ;
+	ribbon_title ~name:"options" "Options disponibles" ;
 
 	option_offer ~before:"À partir de" ~link:("/entreprises/formation","En savoir plus...") 
 	  "800" "HT par jour" "Formation"
