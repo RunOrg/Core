@@ -132,7 +132,7 @@ let headers = [
 	  "Portail abonnés", "/entreprises/PortailAbonnes";
 	  "Portail clients", "/entreprises/PortailClients"
 	  ] ;
-	"Options",  "/entreprises/offres", 
+	"Options",  "/entreprises/pack", 
 	[ "Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
 	  "Multi-portails", "/entreprises/multiportails";

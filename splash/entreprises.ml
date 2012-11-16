@@ -232,6 +232,59 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ] 
 	] ;
+	  ribbon_title ~name:"tarifsoptionsentreprises" "Tarif des options" ;
+
+	pricing 
+	~foot:"Prix exprimés hors taxes. <a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires."
+	[ ["/entreprises/pricing", "Option Pack Pro" ]; 
+	  [ "/entreprises/pricing","Option personnalisation+"] ;
+	  ["/entreprises/pricing","Option Multi-portails"] ] 
+	[ "Prix", [ `Text "10€/mois" ; 
+		    `Text "100€/mois" ;
+		    `Text "200€/mois" ;
+		    `Link ("/contact", "Nous Contacter") ];
+	  "Accès inclus", [ `Text "500" ;
+			    `Text "5000" ;
+			    `Text "10000" ;
+			    `Text "+ de 10000" ];
+	  "Option Pack Pro", 	[ `Tick ; 
+				`Tick ;
+				`Tick ; 
+				`Tick ] ;
+	  "Option personnalisation+", [ `Text "100€/mois" ;
+				`Text "100€/mois" ;
+				`Tick ;
+				`Tick ];
+	  "Option Multi-portails", [ `NoTick ;
+				`NoTick ;
+				`Text "100€/mois" ;
+				`Text "100€/mois" ];				
+	  "Espace disque", [ `Text "2 Go" ;
+			     `Text "10 Go" ;
+			     `Text "20 Go" ;
+			     `Text "30 Go" ];
+	  "Hébergement et mises à jour", [ `Tick ; 
+					   `Tick ;
+					   `Tick ; 
+					   `Tick ] ;
+	  "Assistance premium", [ `Text "10€/mois" ;
+				`Tick ;
+				`Tick ;
+				`Tick ] ;
+	  "Formation initiale", [ `NoTick ;
+				       `NoTick ; 
+				       `Text "2 heures" ;
+				       `Text "2 heures" ] ;
+	  "Assistance téléphonique", [ `NoTick ;
+					    `NoTick ;
+					    `Text "2 heures" ;
+					    `Text "2 heures"] ;
+	  "Espace disque suppl.", [ `Text "2€/Go/mois" ;
+				    `Text "2€/Go/mois" ;
+				    `Text "2€/Go/mois" ;
+				    `Text "2€/Go/mois" ] 
+	] ;
+
     ] ;
 
   page "/features" "RunOrg Entreprises - Fonctionnalités"
