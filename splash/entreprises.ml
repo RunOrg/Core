@@ -299,16 +299,16 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	) ;
 
 
-      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
+      ribbon_title ~name:"organisationdesmembres" "Organisation des membres et des accès" ;
       composite `LR 
-	(screenshots [ (*"/public/img/2012-08-29-1-cut.png" ;
-		       "/public/img/2012-08-28-9-cut.png" *)])
+	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
+		       "/public/img/2012-08-28-9-cut.png" ])
 	(features [ 
 	  "Groupes de membres",
-	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
+	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, salariés, clients, etc.)" ;
 	  
 	  "Demandes d'inscription",
-	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
+	  "Les clients peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
 	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
@@ -330,10 +330,10 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-29-3-cut.png" ])
 	(features [ 
 	  "Création d'activités",
-	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
+	  "Votre communauté ne se résume pas qu'à des membres. RunOrg gère également les activités.";
 	  
 	  "Nombreux modèles disponibles",
-	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
+	  "Selon votre type d'organisation des modèles adaptés vous sont proposés (réunions, cours, rencontres, événements, etc.)";
 	  
 	  "Agenda privé",
 	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
@@ -377,7 +377,10 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
 	  
 	  "Listes de diffusion",
-	  "Les messages publiés sur les murs sont envoyés en totalité par email aux destinataires concernés";
+	  "Les messages publiés sur les murs ne sont visibles qu'aux membres des groupes concernés";
+
+	  "Emails ciblés",
+	  "Les administrateurs peuvent envoyer des messages par emails aux membres des groupes via les murs de discussions.";
 	  
 	  "Notifications",
 	  "Les membres peuvent paramétrer la fréquence des notifications qu'ils reçoivent.";
@@ -424,7 +427,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-28-8-cut.png" ])
 	(features [ 
 	  "Espace pré-adapté à vos besoins",
-	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
+	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type de besoin.";
 	  
 	  "Import des membres",
 	  "Utilisez un tableur ou votre carnet d'adresses pour importer vos membres avec un simple copier/coller";
@@ -450,7 +453,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
 	  
 	  "Créez vos propres formulaires",
-	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
+	  "Créez vos propres formulaire d'accès ou de participation à un groupe ou une activité";
 	  
 	  "Personnalisez vos tableaux",
 	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
@@ -480,7 +483,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
 	  
 	  "Gestion des informations personnelles",
-	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
+	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses organisations"	
 	]) ;
 
       ribbon_title ~name:"profilsmembres" "Profils membres" ;
@@ -503,29 +506,6 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Le profil contient la liste des messages, photos et fichiers mis en ligne par le membre"	
 	]) ;
     
-      ribbon_title ~name:"website" "Site Internet" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
-		       "/public/img/2012-08-28-3-cut.png"])
-	(features [ 
-	  "Publication d'articles",
-	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
-	  
-	  "Abonnement aux articles",
-	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
-	  
-	  "Agenda en ligne",
-	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
-	  
-	  "Inscriptions et adhésions en ligne",
-	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne";
-	  
-	  "Page de présentation",
-	  "Une page de présentation publique vous permet de présenter votre association, de renseigner son logo et ses coordonnées";
-	  
-	  "Hébergement gratuit",
-	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
-	]) ;   
   
       ribbon_title ~name:"administration" "Administration" ;
       composite `LR 
@@ -547,6 +527,31 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Export des listes",
 	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
 	]) ;
+
+      ribbon_title ~name:"website" "Site Internet" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
+		       "/public/img/2012-08-28-3-cut.png"])
+	(features [ 
+	  "Publication d'articles",
+	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
+	  
+	  "Abonnement aux articles",
+	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
+	  
+	  "Agenda en ligne",
+	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
+	  
+	  "Inscriptions et adhésions en ligne",
+	  "Les internautes peuvent demander à s'inscrire à votre espace ou à participer à vos activités en ligne";
+	  
+	  "Page de présentation",
+	  "Une page de présentation publique vous permet de présenter votre entreprise, de renseigner son logo et ses coordonnées";
+	  
+	  "Hébergement gratuit",
+	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
+	]) ;   
+
     ] ;
 
 
