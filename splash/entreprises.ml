@@ -155,7 +155,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	) ; 
 ];
 
-  page "/PortailAbonnes" "RunOrg Entreprises - Portail Abonnés"
+  page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
     [ composite `LR
 	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
 		(pride 
@@ -167,7 +167,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	)   ;
 ];
 
-  page "/PortailClients" "RunOrg Entreprises - Portail Clients"
+  page "/portail-clients" "RunOrg Entreprises - Portail Clients"
     [ composite `LR
 	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
 		(pride 
@@ -179,9 +179,150 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 	)   ;
 ];
 
+  page "/options" "RunOrg Entreprises - Options"
+    [ offer 
+	~title: "Pack Pro"
+	~price: "Inclus dans les offres entreprises"
+	"Pour les professionnels nous avons créé un pack de services et de fonctionnalités leur permettant de gagner du temps lors de la mise en place de l'outil et de bénéficier d'une assistance prioritaire."
+	[ "Assistance+ en ligne : support moins de 24h (jours ouvrés)" ;
+	  "Fonctionnalités Pro : administrateurs de groupe, fiches administrateurs sur les membres, [et d'autres à venir]" ;
+	  "Offert : 30 minutes de conseils sur l'utilisation de l'outil pour votre entreprise" ] ;
+
+	 offer 
+	~title: "Personnalisation+"
+	~price: "A partir de 100€/mois"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos clients ou vos salariés le meilleurs de notre technologie sous votre marque !"
+	[ "Application personnalisée à vos couleurs" ;
+	  "Votre logo même sur les pages personnelles des membres" ;
+	  "Votre nom de domaine" ;
+	  "C'est le nom de votre entreprise qui apparait dans les envois emails" ] ;
+
+	 offer 
+	~title: "Portail Multi-espaces"
+	~price: "A partir de 200€/mois"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos clients ou vos salariés le meilleurs de notre technologie sous votre marque ! Permet par exemple à un centre de formation de créer des espaces distincs pour chacun de ses clients grands comptes, ou à une société d'édition de créer un espace pour chacun de ses titres."
+	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
+	  "Nombre illimité d'espaces" ;
+	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;
+	  "Une page portail donnant l'accès à l'ensemble de vos espaces" ;
+	  "D'autres options sont disponibles. Contactez-nous." ] ;
+];
+
+  page "/services" "RunOrg Entreprises - Services"
+    [ offer 
+	~title: "Assistance+ en ligne"
+	~price: "Inclus dans les offres entreprises"
+	"Vous avez des questions et vous souhaitez des réponses rapides ? Avec ce service nous nous engageons à vous répondre dans les 24h ouvrés !"
+	[ "Support en ligne moins de 24h" ] ;
+
+	offer 
+	~title: "Assistance téléphonique"
+	~price: "40€/mois"
+	"Si vous recherchez la tranquilité : c'est ce service qu'il faut souscrire ! Si vous avez des questions ou que vous souhaitez des conseils pour utiliser au mieux votre outil : on en parle directement au téléphone. Dans le cadre de ce service, nous pouvons prendre la main dans votre espace pour vous aider à réaliser certaines opérations."
+	[ "Envoyez-nous un message : nous vous rappelons" ;
+	  "Support téléphonique en moins de 24h (jours ouvrés)";
+	  "1h disponible par mois pour du support ou des conseils" ] ;
+
+	offer 
+	~title: "Community Management"
+	~price: "A partir de 150€/mois"
+	"Vous avez une communauté à animer en ligne, mais vous n'êtes pas à l'aise avec les codes et les usages, ou vous craignez que cela vous prenne trop de temps : nous nous en chargeons pour vous ! Nous définissons ensemble le plan de communication le plus adapté à votre communauté et à son public."
+	[ "Animation de votre espace" ;
+	  "Modalités précises à définir ensemble" ] ;
+
+   offer 
+	~title: "Pack de lancement"
+	~price: "500 €"
+	"Cette offre comprend la prise en main de votre espace, la configuration par nos soins selon vos besoins. Accompagnement dans la communication vers vos membres et leurs inscriptions. Vous disposez ensuite de 2 heures de support téléphonique durant lesquels nous pouvons également intervenir dans votre espace."
+	[ "Adaptation de votre espace selon vos besoins" ;
+	  "Inscription de vos membres" ;
+	  "2 heures d’assistance téléphonique sur le premier mois d’abonnement" ] ;
+
+	offer 
+	~title: "Formation"
+	~price: "800€/jour"
+	"Sur la base d'une formation par demi-journée nous formons les profils administrateurs et/ou les profils membres de vos espaces. Les formations sont adaptées à vos besoins et à votre type d'utilisation de RunOrg."
+	[ "Formation profils membres ou administrateurs" ;
+	  "Contenu adapté à vos besoins et vos usages" ] ;
+
+	offer 
+	~title: "Fonctionnalités sur mesure"
+	~price: "Selon les besoins"
+	"Vous avez des besoins particuliers pour lesquels il n'existe pas encore de fonctionnalité dans RunOrg ? Contactez-nous pour nous en faire part. Nous sommes en mesure de développer des fonctionnalités adaptées à vos besoins dans le cadre de notre outil. Vous réduisez ainsi les coûts et les risques par rapport au développement d'un outil complet car vous bénéficiez de toutes les fonctionnalités déjà disponibles dans RunOrg."
+	[ "Equipe projet dédiée" ;
+	  "Conseils techniques et fonctionnels" ;
+	  "Développements intégrés dans l'application RunOrg";
+	  "Maintenance des développements incluse" ] ;
+
+	offer 
+	~title: "Espace disque supplémentaire"
+	~price: "2€/Go/mois"
+	"Si vous vous sentez à l'étroit dans l'espace que nous vous offrons par défaut : agrandissez-vous !"
+	[ "Espace disponible en cloud" ] ;
+
+];
+
 
   page "/pricing" "RunOrg - Tarifs Entreprises"
-      [ pricing 
+      [    ribbon 
+	(important 
+	   "L'offre la plus compétitive du marché !"
+	   "Des tarifs adaptés à vos besoins et à votre organisation."
+	) ;
+
+	prices [
+	  ("25",  "HT par mois",[ "500 personnes"   ; "2 Go"  ],[ "Assistance+ en ligne"]) ;
+	  ("225", "HT par mois",[ "5000 personnes"  ; "10 Go" ],[ "Assistance téléphonique" ]) ;
+	  ("400", "HT par mois",[ "10000 personnes" ; "20 Go" ],[ "Assistance téléphonique" ; "Personnalisation+" ])	  
+	] 
+
+	  "Toutes nos offres incluent l'hébergement, la maintenance et les mises à jour logicielles"
+	  "<a href=\"contact\">Contactez-nous</a> si vous souhaitez créer des espaces pour plus de 10000 personnes." 
+
+;
+
+	ribbon_title ~name:"options" "Options disponibles" ;
+
+
+	option_offer  ~before:"À partir de" ~link:("/entreprises/options","En savoir plus...") 
+	  "100" "HT par mois" "Personnalisation+"
+	  "Mettez l'espace de votre entreprise à vos couleurs et sur votre nom de domaine."
+	;
+
+	option_offer  ~before:"À partir de" ~link:("/entreprises/options","En savoir plus...") 
+	  "200" "HT par mois" "Portail Multi-espaces"
+	  "Inclus l'option personnalisation+, créez autant d'espaces à vos couleurs que vous le souhaitez, disposez d'un portail pour les recencer, permettez à vos clients d'en bénéficier."
+	;
+
+	option_offer  ~before:"À partir de" ~link:("/entreprises/services","En savoir plus...") 
+	  "150" "HT par mois" "Community Management"
+	  "Nous vous proposons de vous aider à animer votre communauté en ligne. Modalités précises à définir ensemble."
+	;
+
+	option_offer  ~before:"" ~link:("/entreprises/services","En savoir plus...") 
+	  "40" "HT par mois" "Assistance téléphonique"
+	  "Ne cherchez plus : demandez ! 1h d'assistance téléphonique pour vous dépanner ou vous conseiller chaque mois."
+	;
+
+	option_offer ~before:"" ~link:("/entreprises/services","En savoir plus...") 
+	  "800" "HT par jour" "Formation"
+	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre d'utilisation de l'outil.
+
+Un jour de formation est offert avec l'offre à 400€/mois"
+	;
+
+	option_offer  ~before:"" ~link:("/entreprises/services","En savoir plus...") 
+	  "500" "HT" "Pack lancement de votre espace"
+	  "Configuration de votre espace selon vos besoins, invitation de vos membres et support téléphonique durant le premier mois."
+	;
+
+	option_priceless ~link:("/entreprises/services","En savoir plus...")
+	  "Fonctionnalités sur mesure"
+	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y répondre ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
+	;
+
+(*
+	pricing 
 	~foot:"Prix exprimés hors taxes. <a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires."
 	[ ["/entreprises/pricing", "Petit espace" ]; 
 	  [ "/entreprises/pricing","Espace moyen"] ;
@@ -231,7 +372,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ;
 				    `Text "2€/Go/mois" ] 
-	] ;
+	] ;	*)
     ] ;
 
   page "/features" "RunOrg Entreprises - Fonctionnalités"
@@ -246,16 +387,16 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	) ;
 
 
-      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
+      ribbon_title ~name:"organisationdesmembres" "Organisation des membres et des accès" ;
       composite `LR 
-	(screenshots [ (*"/public/img/2012-08-29-1-cut.png" ;
-		       "/public/img/2012-08-28-9-cut.png" *)])
+	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
+		       "/public/img/2012-08-28-9-cut.png" ])
 	(features [ 
 	  "Groupes de membres",
-	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
+	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, salariés, clients, etc.)" ;
 	  
 	  "Demandes d'inscription",
-	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
+	  "Les clients peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
 	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
@@ -277,10 +418,10 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-29-3-cut.png" ])
 	(features [ 
 	  "Création d'activités",
-	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
+	  "Votre communauté ne se résume pas qu'à des membres. RunOrg gère également les activités.";
 	  
 	  "Nombreux modèles disponibles",
-	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
+	  "Selon votre type d'organisation des modèles adaptés vous sont proposés (réunions, cours, rencontres, événements, etc.)";
 	  
 	  "Agenda privé",
 	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
@@ -324,7 +465,10 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
 	  
 	  "Listes de diffusion",
-	  "Les messages publiés sur les murs sont envoyés en totalité par email aux destinataires concernés";
+	  "Les messages publiés sur les murs ne sont visibles qu'aux membres des groupes concernés";
+
+	  "Emails ciblés",
+	  "Les administrateurs peuvent envoyer des messages par emails aux membres des groupes via les murs de discussions.";
 	  
 	  "Notifications",
 	  "Les membres peuvent paramétrer la fréquence des notifications qu'ils reçoivent.";
@@ -371,7 +515,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-28-8-cut.png" ])
 	(features [ 
 	  "Espace pré-adapté à vos besoins",
-	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
+	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type de besoin.";
 	  
 	  "Import des membres",
 	  "Utilisez un tableur ou votre carnet d'adresses pour importer vos membres avec un simple copier/coller";
@@ -397,7 +541,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
 	  
 	  "Créez vos propres formulaires",
-	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
+	  "Créez vos propres formulaire d'accès ou de participation à un groupe ou une activité";
 	  
 	  "Personnalisez vos tableaux",
 	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
@@ -427,7 +571,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
 	  
 	  "Gestion des informations personnelles",
-	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
+	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses organisations"	
 	]) ;
 
       ribbon_title ~name:"profilsmembres" "Profils membres" ;
@@ -450,29 +594,6 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Le profil contient la liste des messages, photos et fichiers mis en ligne par le membre"	
 	]) ;
     
-      ribbon_title ~name:"website" "Site Internet" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
-		       "/public/img/2012-08-28-3-cut.png"])
-	(features [ 
-	  "Publication d'articles",
-	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
-	  
-	  "Abonnement aux articles",
-	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
-	  
-	  "Agenda en ligne",
-	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
-	  
-	  "Inscriptions et adhésions en ligne",
-	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne";
-	  
-	  "Page de présentation",
-	  "Une page de présentation publique vous permet de présenter votre association, de renseigner son logo et ses coordonnées";
-	  
-	  "Hébergement gratuit",
-	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
-	]) ;   
   
       ribbon_title ~name:"administration" "Administration" ;
       composite `LR 
@@ -494,6 +615,31 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Export des listes",
 	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
 	]) ;
+
+      ribbon_title ~name:"website" "Site Internet" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
+		       "/public/img/2012-08-28-3-cut.png"])
+	(features [ 
+	  "Publication d'articles",
+	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
+	  
+	  "Abonnement aux articles",
+	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
+	  
+	  "Agenda en ligne",
+	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
+	  
+	  "Inscriptions et adhésions en ligne",
+	  "Les internautes peuvent demander à s'inscrire à votre espace ou à participer à vos activités en ligne";
+	  
+	  "Page de présentation",
+	  "Une page de présentation publique vous permet de présenter votre entreprise, de renseigner son logo et ses coordonnées";
+	  
+	  "Hébergement gratuit",
+	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
+	]) ;   
+
     ] ;
 
 

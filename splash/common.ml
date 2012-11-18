@@ -100,6 +100,49 @@ let price title subtitle text =
 	    "subtitle", string subtitle ;
 	    "text",     html   text ]]
 
+let prices offers text subtext = 
+  let offers = 
+    list (List.map (fun (price, subtitle, contents, options) ->
+      obj [ "price", string price ;
+	    "subtitle", string subtitle ;
+	    "contents", list (List.map string contents) ;
+	    "options", list (List.map string options) ]
+    ) offers)
+  in
+  call "Asset_Splash_PriceTable.render" 
+    [ obj [ "offers", offers ;
+	    "text", html text ;
+	    "subtext", string subtext ]]
+
+let option_offer ?before ?link price subtitle name text = 
+  call "Asset_Splash_Option.render"
+    [ obj [ "name", string name ;
+	    "price", "Some " ^ obj
+	      [ "before", (match before with 
+		| None -> "None"
+		| Some t -> "Some "^string t) ;
+		"after", string subtitle ;
+		"price", string price ;
+	      ] ;
+	    "text", html text ;
+	    "link", (match link with 
+	    | None -> "None"
+	    | Some (link,text) -> 
+		"Some " ^ obj [ "text", string text ; "url", string link ]) 
+	  ]]
+
+
+let option_priceless ?link name text = 
+  call "Asset_Splash_Option.render"
+    [ obj [ "name", string name ;
+	    "price", "None" ;
+	    "text", html text ;
+	    "link", (match link with 
+	    | None -> "None"
+	    | Some (link,text) -> 
+		"Some " ^ obj [ "text", string text ; "url", string link ]) 
+	  ]]
+
 let screenshot url = 
   call "Asset_Splash_Screenshot.render" 
     [ obj [ "url", string url ]]
