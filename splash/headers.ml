@@ -128,14 +128,14 @@ let headers = [
      [ "Accueil",    "/entreprises" , [];
       "Solutions",     "/entreprises/Company",
 	[ "Entreprises", "/entreprises/Company" ;
-	  "Centres de formation", "/entreprises/company-training";
+	  "Centres de formation", "/entreprises/CompanyTraining";
 	  "Portail abonnés", "/entreprises/portail-abonnes";
 	  "Portail clients", "/entreprises/portail-clients"
 	  ] ;
-	"Options",  "/entreprises/pack", 
-	[ "Pack Pro", "/entreprises/offres" ;
+	"Options",  "/entreprises/options", 
+	[ (*"Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
-	  "Multi-portails", "/entreprises/multiportails";
+	  "Multi-portails", "/entreprises/multiportails"; *)
 	  ] ; 
 	"Services",  "/entreprises/services", [];    
 	"Fonctionnalités",  "/entreprises/features", [];
