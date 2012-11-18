@@ -126,9 +126,9 @@ let headers = [
     ~title:"L'espace 2.0 de votre entreprise"
     ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos clients, salariés, fournisseurs ou abonnés."
      [ "Accueil",    "/entreprises" , [];
-      "Solutions",     "/entreprises/Company",
-	[ "Entreprises", "/entreprises/Company" ;
-	  "Centres de formation", "/entreprises/CompanyTraining";
+      "Solutions",     "/entreprises/CompanyTraining",
+	[ "Centres de formation", "/entreprises/CompanyTraining";
+	  "RSE", "/entreprises/Company" ;
 	  "Portail abonnés", "/entreprises/portail-abonnes";
 	  "Portail clients", "/entreprises/portail-clients"
 	  ] ;
