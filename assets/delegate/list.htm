@@ -6,6 +6,13 @@
   <div class="-admin">
     {`Delegate_Admins} &laquo;&nbsp;<span>{admins|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
   </div>
+  {#delegates}
+    <div class="-item">
+      {?pic}<img src="{this}"/>{/?}
+      <span>{name}</span>
+      <a href="javscript:void(0)">{`Delegate_Remove}</a>
+    </div>
+  {/#}
   {?add}
     <div class="-add">
       <a class="action-button -green" href="{this}">{`Delegate_Add}</a>
@@ -34,7 +41,7 @@
     border-bottom: 1px solid #CCC;
     padding: 8px 0;
   }
-  
+
   .-admin {
     color: #888;
     span {
@@ -42,5 +49,10 @@
     }
   }
 
+  .-add.-denied {
+    padding: 8px 0;
+    font-size: 12px;
+    color: #888;
+  }
 }
 </style>
