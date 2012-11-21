@@ -13,7 +13,7 @@ let () = define UrlClient.Events.def_access begin fun parents entity access ->
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ] 
       method here = parents # access # title
-      method body = return ignore
+      method body = Asset_Delegate_List.render (object method kind = `Event end)
     end)
 
   end
