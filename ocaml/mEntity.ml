@@ -204,6 +204,18 @@ let get_if_public eid =
 
 let instance eid = 
   MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
+
+(* Admin group entity name ------------------------------------------------------------------ *)
+
+let admin_group_name iid = 
+  let  pcnamer = MPreConfigNamer.load iid in 
+  let  default = `label `EntityAdminName in
+  let! eid     = ohm $ MPreConfigNamer.entity "admin" pcnamer in 
+  let! entity  = ohm_req_or (return default) $ naked_get eid in 
+  return (BatOption.default default (Get.name entity))   
+
+let instance eid = 
+  MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
       
 (* Create the initial entities. ------------------------------------------------------------- *)
 

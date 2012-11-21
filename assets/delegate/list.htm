@@ -3,6 +3,18 @@
     {`Delegate_Help kind} 
     {`Delegate_Help_List kind}
   </p>
+  <div class="-admin">
+    {`Delegate_Admins} &laquo;&nbsp;<span>{admins|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
+  </div>
+  {?add}
+    <div class="-add">
+      <a class="action-button -green" href="{this}">{`Delegate_Add}</a>
+    </div>
+  {else}
+    <div class="-add -denied">
+      {`Delegate_Add_Denied}
+    </div>
+  {/?}
 </div>
 
 <style>
@@ -16,6 +28,18 @@
     font-size: 13px;
     color: #333;
     line-height: 1.5em;
+  }
+
+  .-admin, .-item {  
+    border-bottom: 1px solid #CCC;
+    padding: 8px 0;
+  }
+  
+  .-admin {
+    color: #888;
+    span {
+      color: #111;
+    }
   }
 
 }
