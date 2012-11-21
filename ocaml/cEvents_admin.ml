@@ -6,15 +6,15 @@ open BatPervasives
 
 open CEvents_admin_common
 
-module Edit    = CEvents_admin_edit
-module Picture = CEvents_admin_picture
-module Access  = CEvents_admin_access
-module People  = CEvents_admin_people
-module Join    = CEvents_admin_join
-module Invite  = CEvents_admin_invite
-module JForm   = CEvents_admin_jForm
-module Columns = CEvents_admin_cols
-module Delete  = CEvents_admin_delete
+module Edit     = CEvents_admin_edit
+module Picture  = CEvents_admin_picture
+module Delegate = CEvents_admin_delegate
+module People   = CEvents_admin_people
+module Join     = CEvents_admin_join
+module Invite   = CEvents_admin_invite
+module JForm    = CEvents_admin_jForm
+module Columns  = CEvents_admin_cols
+module Delete   = CEvents_admin_delete
 
 let () = define UrlClient.Events.def_admin begin fun parents entity access -> 
   O.Box.fill begin 
@@ -43,9 +43,9 @@ let () = define UrlClient.Events.def_admin begin fun parents entity access ->
       
       (object
 	method img      = VIcon.Large.key
-	method url      = parents # access # url 
-	method title    = AdLib.get `Event_Access_Link
-	method subtitle = Some (AdLib.get `Event_Access_Sub)
+	method url      = parents # delegate # url 
+	method title    = AdLib.get `Event_Delegate_Link
+	method subtitle = Some (AdLib.get `Event_Delegate_Sub)
        end) ;
 
       (object

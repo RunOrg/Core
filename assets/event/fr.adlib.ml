@@ -79,9 +79,9 @@ end
 | `Event_DraftNoPeople -> "Cette activité n'a pas encore été publiée : vous ne pouvez pas encore y inviter des participants."
 | `Event_DraftNoPeople_Link -> "Publier cette activité"
 
-| `Event_Access_Title -> "Organisateurs"
-| `Event_Access_Link -> "Organisateurs"
-| `Event_Access_Sub -> "Déléguez l'organisation de cette activité à des membres"
+| `Event_Delegate_Title -> "Organisateurs"
+| `Event_Delegate_Link -> "Organisateurs"
+| `Event_Delegate_Sub -> "Déléguez l'organisation de cette activité à des membres"
 
 | `Event_JoinForm_Title -> "Formulaire"
 | `Event_JoinForm_Link -> "Formulaire d'inscription"
