@@ -126,16 +126,16 @@ let headers = [
     ~title:"L'espace 2.0 de votre entreprise"
     ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos clients, salariés, fournisseurs ou abonnés."
      [ "Accueil",    "/entreprises" , [];
-      "Solutions",     "/entreprises/Company",
-	[ "Entreprises", "/entreprises/Company" ;
-	  "Centres de formation", "/entreprises/company-training";
+      "Solutions",     "/entreprises/CompanyTraining",
+	[ "Centres de formation", "/entreprises/CompanyTraining";
+	  "RSE", "/entreprises/Company" ;
 	  "Portail abonnés", "/entreprises/portail-abonnes";
 	  "Portail clients", "/entreprises/portail-clients"
 	  ] ;
-	"Options",  "/entreprises/pack", 
-	[ "Pack Pro", "/entreprises/offres" ;
+	"Options",  "/entreprises/options", 
+	[ (*"Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
-	  "Multi-portails", "/entreprises/multiportails";
+	  "Multi-portails", "/entreprises/multiportails"; *)
 	  ] ; 
 	"Services",  "/entreprises/services", [];    
 	"Fonctionnalités",  "/entreprises/features", [];
