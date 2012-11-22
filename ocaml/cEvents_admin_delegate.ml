@@ -12,10 +12,20 @@ let () = define UrlClient.Events.def_delegate begin fun parents entity access ->
     
     let! admin = ohm $ O.decay (MEntity.admin_group_name (access # iid)) in 
 
+    let delegates = MAccess.delegates (MEntity.Access.managers entity) in
+
+    let! delegates = ohm $ O.decay (Run.list_map begin fun aid ->
+      let! profile = ohm $ CAvatar.mini_profile aid in 
+      return (object
+	method pic  = profile # pico
+	method name = profile # name
+      end)
+    end delegates) in 
+
     let body = Asset_Delegate_List.render (object 
       method kind      = `Event 
       method admins    = admin
-      method delegates = []
+      method delegates = delegates
       method add       = None
     end) in
 
