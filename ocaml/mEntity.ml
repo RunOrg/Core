@@ -154,7 +154,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
     archive  = false ;
     draft    ;
     public   = false ;
-    admin    = `Admin ;
+    admin    = `List [ IAvatar.decay creator ] ;
     view     = `Token ;
     group    = IGroup.decay gid ;
     config   = MEntityConfig.default ;
