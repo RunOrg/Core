@@ -47,3 +47,6 @@ val optimize : t -> t
 
 val summarize : t -> [> `Admin | `Member ]
 
+val delegates : t -> IAvatar.t list
+
+val set_delegates : IAvatar.t list -> t -> t
