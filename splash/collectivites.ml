@@ -88,38 +88,10 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	] ;  *)
  ];
 
-  page "/Company" "RunOrg Entreprises"
-    [ composite `LR
-	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
-	(create "Company")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
-		       "Alex E. Proimos")
-	   "/public/img/preconf_company.jpg")
-	(features [ 
-	  "Points forts",
-	  "Un réseau privé complet, fexible, simple à prendre en main et sans maintenance informatique" ;
-	    
-	  "Idéal pour...",
-	  "Mettre en place des groupes de traivail autour des services existants ou des projets transversaux" ;
-	  
-	  "Egalement pensé pour...",
-	  "Communiquer vers les clients et les fournisseurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Plus fexible qu'un RSE !"
-	   "La solution RunOrg pour les entreprises offre toutes les fonctionnalités d'un intranet d'entreprise, et y ajoute les avantages des outils de travail collaboratif et des réseaux sociaux d’entreprises.
-
-La communication interne de l'entreprise est structurée autour de ses équipes, de ses services et de ses projets. Il est simple et rapide de créer un espace d'échange regroupant les conversations et la documentation et d'y inviter les personnes concernées par le sujet. Vous pouvez déléguer l'administration des différents nœuds d'échange.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos salariés, et disposez d'un outil de statiques intégré.
-
-Vous avez également la possiblité d'ouvrir votre outil à vos clients privilégiés ou vos prestataire pour en faire le portail de votre entreprise."
-	) ; 
+  page "/collectivites" "RunOrg Mairies & Collectivités"
+    [ Catalog.collectivite_all_title ;
+	Catalog.collectivite_all_desc_a ;
+	Catalog.collectivite_all_desc_b ;
 ];
 
   page "/CompanyTraining" "RunOrg Entreprises - Centres de formation"

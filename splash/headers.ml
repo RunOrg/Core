@@ -112,16 +112,14 @@ let headers = [
 	  ] ;
     ] ;
 
-	(*header "collectivites" 
+	multiheader "collectivites" 
     ~title:"L'espace numérique de votre collectivité"
-    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos administrés, vos agents, vos associations et vos sympathisants"
+    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos administrés, vos agents, vos associations et vos sympathisants."
      [ "Accueil",    "/collectivites" , [];
-      "Solutions",     "/collectivites/",
-	[ "Centres de formation", "/entreprises/CompanyTraining";
-	  "RSE", "/entreprises/Company" ;
-	  "Portail abonnés", "/entreprises/portail-abonnes";
-	  "Portail clients", "/entreprises/portail-clients"
-	  ] ;
+      "Solutions",     "/collectivites/collectivites",
+	[ "Mairies & collectivités", "/collectivites/collectivites";
+	  "RSE", "/entreprises/Company"
+	] ;
 	"Options",  "/collectivites/options", 
 	[ (*"Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
@@ -130,7 +128,7 @@ let headers = [
 	"Services",  "/collectivites/services", [];    
 	"Fonctionnalités",  "/collectivites/features", [];
       "Tarifs", "/collectivites/pricing", [];
-    ] ; *)
+    ] ; 
 
 	 multiheader "entreprises" 
     ~title:"L'espace 2.0 de votre entreprise"

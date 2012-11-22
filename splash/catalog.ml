@@ -20,6 +20,37 @@ let default_price =
     "Gratuit"
     "pour les associations"
     "de moins de 2000 adhérents"
+
+let collectivite_all_title =
+composite `LR
+	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
+	(create "Collectivites") 
+
+let collectivite_all_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/26700188@N05/5633798012/",
+		       "Besopha")
+	   "/public/img/preconf_collectivites.jpg")
+	(features [ 
+	  "Point fort",
+	  "Modernisation de la communication sans modification de l'organisation" ;
+	    
+	  "Idéal pour...",
+	  "Faciliter la communication inter-service, notamment autour de projets ou d'évènements" ;
+	  
+	  "Egalement pensé pour...",
+	  "Déléguer aux responsables la gestion de l'espace dédié à leur service, offrir un espace communication pour les élus"	])  
+
+let collectivite_all_desc_b =
+	(pride 
+	   ~title:"L'outil s'adapte à votre organisation"
+	   "Pour les collectivités territoriales nous proposons un intranet collaboratif qui s’adapte à leur organisation existante et à prix très compétitif.
+ 
+Tous les agents ont accès à un espace privé et sécurisé qui centralise la communication interne. Les différents services disposent d’espace privés, dont l’administration peut être déléguée aux responsables.
+
+Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènements et des réunions, de la possibilité d'échanger de manière sécurisé des documents, et de les partager aux seins de groupes restreins.")  
+
 	
 let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
@@ -522,36 +553,9 @@ N’hésitez pas à nous contacter pour que nous aider à concevoir la solution 
     ] ;
 
   page "/collectivites/Collectivites" "RunOrg Collectivités - Mairies et collectivités territoriales"
-    [ composite `LR
-	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
-	(create "Collectivites")   ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/26700188@N05/5633798012/",
-		       "Besopha")
-	   "/public/img/preconf_collectivites.jpg")
-	(features [ 
-	  "Point fort",
-	  "Modernisation de la communication sans modification de l'organisation" ;
-	    
-	  "Idéal pour...",
-	  "Faciliter la communication inter-service, notamment autour de projets ou d'évènements" ;
-	  
-	  "Egalement pensé pour...",
-	  "Déléguer aux responsables la gestion de l'espace dédié à leur service, offrir un espace communication pour les élus"	
-
-	]) ; 
-
-	(pride 
-	   ~title:"L'outil s'adapte à votre organisation"
-	   "Pour les collectivités territoriales nous proposons un intranet collaboratif qui s’adapte à leur organisation existante et à prix très compétitif.
- 
-Tous les agents ont accès à un espace privé et sécurisé qui centralise la communication interne. Les différents services disposent d’espace privés, dont l’administration peut être déléguée aux responsables.
-
-Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènements et des réunions, de la possibilité d'échanger de manière sécurisé des documents, et de les partager aux seins de groupes restreins.
-"
-	) ; 
+    [ collectivite_all_title ;
+	collectivite_all_desc_a ;
+	collectivite_all_desc_b ;
 
       hr () ;
 
