@@ -154,7 +154,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
     archive  = false ;
     draft    ;
     public   = false ;
-    admin    = `Admin ;
+    admin    = `List [ IAvatar.decay creator ] ;
     view     = `Token ;
     group    = IGroup.decay gid ;
     config   = MEntityConfig.default ;
@@ -201,6 +201,18 @@ let get_if_public eid =
       return $ Some (MEntity_can.make_visible eid entity)
 
 (* Collect the instance of an entity -------------------------------------------------------- *)
+
+let instance eid = 
+  MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
+
+(* Admin group entity name ------------------------------------------------------------------ *)
+
+let admin_group_name iid = 
+  let  pcnamer = MPreConfigNamer.load iid in 
+  let  default = `label `EntityAdminName in
+  let! eid     = ohm $ MPreConfigNamer.entity "admin" pcnamer in 
+  let! entity  = ohm_req_or (return default) $ naked_get eid in 
+  return (BatOption.default default (Get.name entity))   
 
 let instance eid = 
   MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
