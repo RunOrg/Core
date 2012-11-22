@@ -105,3 +105,27 @@ let rec summarize = function
   | `Token     -> `Member
   | _          -> `Admin
 
+let rec delegates = function 
+  | `Union l -> BatList.sort_unique compare (List.concat (List.map delegates l))
+  | `List l -> BatList.sort_unique compare l 
+  | `TokOnly t -> delegates t
+  | `Admin 
+  | `Token 
+  | `Nobody
+  | `Contact
+  | `Entity (_,_)
+  | `Message _
+  | `Groups (_,_) -> []
+
+let rec remove_delegates = function 
+  | `Union l -> `Union (List.map remove_delegates l) 
+  | `List _ -> `Nobody 
+  | `TokOnly t -> `TokOnly (remove_delegates t)
+  | other -> other
+
+let set_delegates aids access = 
+  let access = optimize (remove_delegates access) in 
+  match access with 
+    | `Union l -> `Union (`List aids :: l)
+    | `Nobody -> `List aids
+    | other -> `Union [ `List aids ; other ]

@@ -1,0 +1,78 @@
+<div class="delegate">
+  <p class="-help">
+    {`Delegate_Help kind} 
+    {`Delegate_Help_List kind}
+  </p>
+  <div class="-admin">
+    {`Delegate_Admins} &laquo;&nbsp;<span>{admins|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
+  </div>
+  {#delegates}
+    <div class="-item">
+      {?pic}<img src="{this}"/>{/?}
+      <a href="javscript:void(0)">{`Delegate_Remove}</a>
+      <span>{name}</span>
+    </div>
+  {/#}
+  {?add}
+    <div class="-add">
+      <a class="action-button -green" href="{this}">{`Delegate_Add}</a>
+    </div>
+  {else}
+    <div class="-add -denied">
+      {`Delegate_Add_Denied}
+    </div>
+  {/?}
+</div>
+
+<style>
+.delegate {
+
+  width: 500px;
+  margin: 10px auto;
+
+  .-item {
+    overflow: hidden;
+    line-height: 20px;
+    span {
+      display: block;
+      padding-left: 28px;
+      font-size: 14px;
+    }
+    img { 
+      float: left;
+      width: 20px;
+      height: 20px;
+    }
+    a {
+      font-size: 12px;
+      color: #888;
+      float: right;
+    }
+  }
+
+  .-help {
+    margin: 0 0 20px 0;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5em;
+  }
+
+  .-admin, .-item {  
+    border-bottom: 1px solid #CCC;
+    padding: 8px 0;
+  }
+
+  .-admin {
+    color: #888;
+    span {
+      color: #111;
+    }
+  }
+
+  .-add.-denied {
+    padding: 8px 0;
+    font-size: 12px;
+    color: #888;
+  }
+}
+</style>
