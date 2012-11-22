@@ -14,6 +14,12 @@ Pour uniformiser la taille des images
 exporter depuis flickr en 500x333
 paint : réduir à 93%
 puis découper à : 465x270 *)
+
+let default_price = 
+  price
+    "Gratuit"
+    "pour les associations"
+    "de moins de 2000 adhérents"
 	
 let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
@@ -24,10 +30,7 @@ let pages = [
 	(create "Simple") ;
 	
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -126,10 +129,7 @@ RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -177,10 +177,7 @@ Jamais organiser un spectacle, inviter votre public et partager ensuite les phot
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -227,10 +224,7 @@ RunOrg Club multi-sports vous offre une solution clef en main, ludique et effica
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -277,10 +271,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -333,10 +324,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -383,10 +371,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -422,10 +407,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	]) ; 
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -472,10 +454,7 @@ RunOrg Salles de sport et coaching sportif vous offre une solution clef en main,
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
@@ -530,10 +509,7 @@ N’hésitez pas à nous contacter pour que nous aider à concevoir la solution 
       hr () ;
 
       composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	default_price
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
