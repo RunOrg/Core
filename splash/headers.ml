@@ -112,15 +112,25 @@ let headers = [
 	  ] ;
     ] ;
 
-	header "collectivites" 
+	(*header "collectivites" 
     ~title:"L'espace numérique de votre collectivité"
-    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos agents, vos administrés, vos associations et vos sympathisants"
-    ~trynow:( "Essayer Gratuitement", "/catalog/collectivites/Collectivites" ) 
-    [ "Accueil",         "accueil",         "/collectivites" ;
-      "Offres",       "offres",       "/collectivites/products";
-      "Fonctionnalités", "fonctionnalites", "/collectivites/features";
-      "Tarifs", "pricing-collectivites", "/collectivites/pricing";
-    ] ; 
+    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos administrés, vos agents, vos associations et vos sympathisants"
+     [ "Accueil",    "/collectivites" , [];
+      "Solutions",     "/collectivites/",
+	[ "Centres de formation", "/entreprises/CompanyTraining";
+	  "RSE", "/entreprises/Company" ;
+	  "Portail abonnés", "/entreprises/portail-abonnes";
+	  "Portail clients", "/entreprises/portail-clients"
+	  ] ;
+	"Options",  "/collectivites/options", 
+	[ (*"Pack Pro", "/entreprises/offres" ;
+	  "Personnalisation+", "/entreprises/personnalisation";
+	  "Multi-portails", "/entreprises/multiportails"; *)
+	  ] ; 
+	"Services",  "/collectivites/services", [];    
+	"Fonctionnalités",  "/collectivites/features", [];
+      "Tarifs", "/collectivites/pricing", [];
+    ] ; *)
 
 	 multiheader "entreprises" 
     ~title:"L'espace 2.0 de votre entreprise"
