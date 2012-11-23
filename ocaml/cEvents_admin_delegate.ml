@@ -6,14 +6,38 @@ open BatPervasives
 
 open CEvents_admin_common
 
+module DelPickArgs = Fmt.Make(struct
+  type json t = (IAvatar.t list) 
+end)
+
 let () = define UrlClient.Events.def_delpick begin fun parents entity access ->
 
+  let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
+
+    let aids = BatOption.default [] (DelPickArgs.of_json_safe json) in
+
+    let admin = MAccess.add_delegates aids (MEntity.Get.admin entity) in
+    let self  = access # self in 
+    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
+
+    return $ Action.javascript (Js.redirect ~url:(parents # delegate # url) ()) res
+
+  end in
+
   O.Box.fill begin 
+
+    let! submit = ohm $ AdLib.get (`Delegate_Submit `Event) in
+
+    let body = Asset_Search_Pick.render (object
+      method submit = submit
+      method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
+      method post   = OhmBox.reaction_json post () 
+    end) in 
 
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ; parents # delegate ] 
       method here = parents # delpick # title
-      method body = return ignore 
+      method body = body
     end)
 
   end

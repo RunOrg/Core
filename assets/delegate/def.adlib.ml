@@ -4,3 +4,4 @@
 | `Delegate_Add
 | `Delegate_Add_Denied
 | `Delegate_Remove
+| `Delegate_Submit of [`Event|`Group|`Forum]
