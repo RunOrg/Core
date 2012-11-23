@@ -14,6 +14,334 @@ Pour uniformiser la taille des images
 exporter depuis flickr en 500x333
 paint : réduir à 93%
 puis découper à : 465x270 *)
+
+let default_price_asso = 
+	composite `LR
+	(price
+    		"Gratuit"
+    		"pour les associations"
+   		"de moins de 2000 adhérents")
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ])
+
+let plateforme_complete =
+	(bullets
+	   ~title:"La plateforme la plus complète"
+	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
+	   ~ordered:false
+	   [ "Communication interne via l'espace membre" ;
+	     "Communication externe via le site Internet" ;
+	     "Outils de gestion et d'organisation collaboratifs" ;
+	     "Hébergement, mises à jour et maintenance informatique" ]) 	
+
+let technologie_accessible_collectivites =
+        (pride
+	   ~title:"La technologie accessible"
+	   ~subtitle:"L'offre la plus économique du marché"
+	   ~link:("/collectivites/pricing",
+		  "Tarifs des offres") 
+	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
+	   
+	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
+	   
+	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. " ) 
+
+let technologie_accessible_entreprises =
+        (pride
+	   ~title:"La technologie accessible"
+	   ~subtitle:"L'offre la plus économique du marché"
+	   ~link:("/entreprises/pricing",
+		  "Tarifs des offres") 
+	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
+	   
+	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
+	   
+	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. " ) 
+
+(* NEW ITEM------------------- *)
+let collectivite_all_title =
+	composite `LR
+	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
+	(create "Collectivites") 
+let collectivite_all_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/26700188@N05/5633798012/",
+		       "Besopha")
+	   "/public/img/preconf_collectivites.jpg")
+	(features [ 
+	  "Point fort",
+	  "Modernisation de la communication sans modification de l'organisation" ;
+	    
+	  "Idéal pour...",
+	  "Faciliter la communication inter-service, notamment autour de projets ou d'évènements" ;
+	  
+	  "Egalement pensé pour...",
+	  "Déléguer aux responsables la gestion de l'espace dédié à leur service, offrir un espace communication pour les élus"	])  
+let collectivite_all_desc_b =
+	(pride 
+	   ~title:"L'outil s'adapte à votre organisation"
+	   "Pour les collectivités territoriales nous proposons un intranet collaboratif qui s’adapte à leur organisation existante et à prix très compétitif.
+ 
+Tous les agents ont accès à un espace privé et sécurisé qui centralise la communication interne. Les différents services disposent d’espace privés, dont l’administration peut être déléguée aux responsables.
+
+Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènements et des réunions, de la possibilité d'échanger de manière sécurisé des documents, et de les partager aux seins de groupes restreins.")  
+
+(* NEW ITEM------------------- *)
+let collectivites_localnpportal_title =
+	composite `LR
+	(pride ~title:"Portail associatif communal" "Dotez gratuitement votre commune d'un outil pour organiser efficacement ses associations")
+	(create "LocalNpPortal")   
+let collectivites_localnpportal_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/mattymatt/4821997419/",
+		       "Mattymatt")
+	   "/public/img/preconf_localnpportal.jpg")
+	(features [ 
+	  "Point fort",
+	  "Gestion et organisation de la vie associative de la commune" ;
+	    
+	  "Idéal pour...",
+	  "Coordonner les actions avec les responsables associatifs et les élus" ;
+	  
+	  "Egalement pensé pour...",
+	  "Offrir des espaces privés pour les associations, permettre aux élus de communiquer avec les responsables associatifs" ]) 
+let collectivites_localnpportal_desc_b =
+	(pride 
+	   ~title:"Le portail associatif de votre commune"
+	   "Communiquez avec les responsables associatifs de votre commune et offrez à leurs associations un espace numérique pour améliorer et sécuriser leurs échanges.
+
+RunOrg Portail associatif vous permet d’offrir aux associations de votre commune un espace privé en ligne dans lequel elles vont pouvoir communiquer et échanger (photos, documents, activités, évènement, sondages, etc.) avec leurs membres. De plus, grâce à cet espace, vous pourrez très facilement communiquer avec les responsables de ces associations et coordonner les évènements inter-associations.
+
+Vous disposez d’un annuaire des responsables associatif de votre commune, d’un agenda à jour des activités et des évènements des associations de votre commune, d’un moyen simple de communication vers les responsables et les personnes engagés. De plus ce portail vous permet d’offrir à vos associations la possibilité d’inscrire leurs membres en lignes." 	) 
+
+(* NEW ITEM------------------- *)
+let collectivites_maisonasso_title =
+	composite `LR
+	(pride ~title:"Maisons des associations" "Equipez gratuitement votre MDA d'un outil pour accompagner et annimer facilement ses associations")
+	(create "MaisonAsso")  
+let collectivites_maisonasso_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/papalars/3250085382/",
+		       "Papalars")
+	   "/public/img/preconf_maisonasso.jpg")
+	(features [ 
+	  "Point fort",
+	  "Gestion et organisation de la vie associative et des activités" ;
+	    
+	  "Idéal pour...",
+	  "Coordonner les actions avec les responsables associatifs et mettre en avant les services de la MDA" ;
+	  
+	  "Egalement pensé pour...",
+	  "Offrir des espaces privés pour les associations, permettre responsables associatifs de communiquer entre eux" ]) 
+let collectivites_maisonasso_desc_b =
+	ribbon ( important
+		"Solution approuvée par le RNMA"
+		"(Réseau National des Maisons des Associations)") 
+let collectivites_maisonasso_desc_c =
+	(pride 
+	   ~title:"Votre outil au service des associations"
+	   "Communiquez avec les responsables associatifs de votre commune et offrez à leurs associations un espace numérique pour améliorer et sécuriser leurs échanges. RunOrg permet également à votre Maison des associations de s'équiper d'un intranet pour ses agents.
+
+RunOrg Maison des associations vous permet d’offrir aux associations de votre commune un espace privé en ligne dans lequel elles vont pouvoir communiquer et échanger (photos, documents, activités, évènement, sondages, etc.) avec leurs membres. De plus, grâce à cet espace, vous pourrez très facilement communiquer avec les responsables de ces associations et coordonner les évènements inter-associations.
+
+Vous disposez d’un annuaire des responsables associatif de votre commune, d’un agenda à jour des activités et des évènements des associations de votre commune, d’un moyen simple de communication vers les responsables et les personnes engagés. De plus ce portail vous permet d’offrir à vos associations la possibilité d’inscrire leurs membres en lignes.
+
+Toutes les fonctionnalités de gestion, de communication et d'organisation d'activités sont également disponibles pour l'usage propre des équipes de la maison des associations."	)  
+
+(* NEW ITEM------------------- *)
+let collectivites_campaigns_title =
+	composite `LR
+	(pride ~title:"Campagnes électorales" "Un moyen efficace et original de mener sa campagne. Utilisé par plusieurs députés élus en 2012.")
+	(create "Campaigns")
+let collectivites_campaigns_desc_a =	
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/stevebott/2805560252/",
+		       "Stevebott")
+	   "/public/img/preconf_campaigns.jpg")
+	(features [ 
+	  "Point fort",
+	  "Organiser, gérer et communiquer pour sa campagne depuis un même outil" ;
+	    
+	  "Idéal pour...",
+	  "Mobiliser les sympathisants et les transformer en militants" ;
+	  
+	  "Egalement pensé pour...",
+	  "Gérer les tractages et les boitages, communiquer au-près du public par le biais du site Internet"	]) 
+let collectivites_campaigns_desc_b =	
+	ribbon ( important
+		""
+		"Votre solution complète de communication sur Internet pour le prix de l’impression d’un trac papier ")
+let collectivites_campaigns_desc_c =
+	(pride 
+	   ~title:"Un outil impactant pour votre campagne"
+	   "Pour les campagnes électorales nous proposons un intranet collaboratif qui permet de structurer la communication de la campagne de manière efficace et contrôlée. Il vous permet de mobiliser des militants et des sympathisants qui ne l'auraient pas été avec les moyens traditionnels. 
+
+Tous les sympathisants on accès à un espace privé et sécurisé qui centralise la communication. Des sous espaces indépendant sont disponibles et administrés par des coordinateurs locaux. La campagne est pilotée par le cabinet du candidat qui peut s’adresser directement aux sympathisants ou faire relayer via les militants les évènements, les actions, les messages et les documents.
+
+Ainsi impliqués et en s’appuyant sur les fonctionnalités offertes par RunOrg, les militants deviennent, les relais efficaces de l’action du candidat. Ils disposent d’un espace qui centralise tous les éléments dont ils ont besoin et qui les concernent. Leur communication  et leurs actions sont plus facilement coordonnées et accompagnées.
+
+Utilisé par plusieurs candidats ou députés durant les législatives 2012, l'outil a donné d'excellents résultats en terme de mobilisation et en terme de voix." )  
+
+(* NEW ITEM------------------- *)
+let collectivites_elementaryschool_title =
+	composite `LR
+	(pride ~title:"Ecoles primaires" "Elaboré avec le concours de spécialistes du numérique dans l'éducation, d'écoles, d'instituteurs et d'associations")
+	(create "ElementarySchool") 
+let collectivites_elementaryschool_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/wwworks/4005631298/",
+		       "Woodleywonderworks")
+	   "/public/img/preconf_elementaryschool.jpg")
+	(features [ 
+	  "Point fort",
+	  "Un outil commun pour les élèves, les enseignants et les parents" ;
+	    
+	  "Idéal pour...",
+	  "Apprendre en toute sécurité et confidentialité la base des échange communautaire et des intranets" ;
+	  
+	  "Egalement pensé pour...",
+	  "Faciliter la communication entre les enseignants et les parents d'élèves"	])  
+let collectivites_elementaryschool_desc_b =
+	(pride 
+	   ~title:"Premier intranet collaboratif pour les écoles"
+	   "La solution RunOrg pour les écoles primaires permet de regrouper dans un seul espace en ligne tous les outils de communication et d'organisation utiles aux enseignants.
+	   
+	   Ils peuvent utiliser cet espace privé pour initier leurs élèves à la communication numérique en toute sérénité, ils peuvent également communiquer et partager des documents et des photos avec les parents.
+	   
+	   Grâces aux groupes privés, les enseignants peuvent s'organiser et collaborer entres eux, dans des espaces réservés. 
+	   
+	   RunOrg pour les écoles primaires est actuellement en test dans une vingtaine d'écoles primaires en France." 	)  
+
+(* NEW ITEM------------------- *)
+let entreprises_company_title =
+	composite `LR
+	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
+	(create "Company") 
+let entreprises_company_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
+		       "Alex E. Proimos")
+	   "/public/img/preconf_company.jpg")
+	(features [ 
+	  "Points forts",
+	  "Un réseau privé complet, fexible, simple à prendre en main et sans maintenance informatique" ;
+	    
+	  "Idéal pour...",
+	  "Mettre en place des groupes de traivail autour des services existants ou des projets transversaux" ;
+	  
+	  "Egalement pensé pour...",
+	  "Communiquer vers les clients et les fournisseurs"	])  
+let entreprises_company_desc_b =	
+	(pride 
+	   ~title:"Plus fexible qu'un RSE !"
+	   "La solution RunOrg pour les entreprises offre toutes les fonctionnalités d'un intranet d'entreprise, et y ajoute les avantages des outils de travail collaboratif et des réseaux sociaux d’entreprises.
+
+La communication interne de l'entreprise est structurée autour de ses équipes, de ses services et de ses projets. Il est simple et rapide de créer un espace d'échange regroupant les conversations et la documentation et d'y inviter les personnes concernées par le sujet. Vous pouvez déléguer l'administration des différents nœuds d'échange.
+
+A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos salariés, et disposez d'un outil de statiques intégré.
+
+Vous avez également la possiblité d'ouvrir votre outil à vos clients privilégiés ou vos prestataire pour en faire le portail de votre entreprise."	)  
+
+(* NEW ITEM------------------- *)
+let entreprises_companytraining_title =
+	composite `LR
+	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
+	(create "CompanyTraining")  
+let entreprises_companytraining_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/76029035@N02/6829406809/",
+		       "Victor1558")
+	   "/public/img/preconf_companytraining.jpg")
+	(features [ 
+	  "Point fort",
+	  "Animation du réseaux des formateurs et des stagiaires" ;
+	    
+	  "Idéal pour...",
+	  "Offrir des espaces privés d'échange durant et après la formation" ;
+	  
+	  "Egalement pensé pour...",
+	  "Organiser les activités du centre et communiquer au-près des salariés et des formateurs"	])  
+let entreprises_companytraining_desc_b =	
+	(pride 
+	   ~title:"Animer votre réseaux de stagiaires"
+	   "La solution RunOrg pour les entreprises et les centres de formation offre toutes les fonctionnalités d'un réseau social d’entreprise, et y ajoute les accès et la gestion des formateurs et des stagiaires.
+
+L'entreprise dispose d'outils puissants pour sa communication interne, et offre des espaces séparés et privés pour la communication avec ses formateurs, et entre ses formateurs et leurs stagiaires. Elle anime ainsi un réseau privé de formateurs et de clients.
+
+A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos stagiaires, et disposez d'un outil de statiques intégré. Chacun des groupes ou des cours peut être indépendant et caché des autres. "	)  
+
+(* NEW ITEM------------------- *)
+let entreprises_comiteent_title =
+	composite `LR
+	(pride ~title:"Comités d'Entreprise" "Solution conçue pour organiser et animer des comités de petites et moyennes entreprises" )
+	(create "ComiteEnt")  
+let entreprises_comiteent_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/highwaysagency/5998133376/",
+		       "Highways Agency")
+	   "/public/img/preconf_comiteent.jpg")
+	(features [ 
+	  "Point fort",
+	  "Disposer d'un intranet collaboratif indépendant de celui de l'entreprise" ;
+	    
+	  "Idéal pour...",
+	  "Organiser les activités du CE et communiquer avec les salariés" ;
+	  
+	  "Egalement pensé pour...",
+	  "Gérer les projets, les services et les activités (cours, voyages, etc.)"	]) 
+let entreprises_comiteent_desc_b =	
+	(pride 
+	   ~title:"Un intranet privé pour votre CE"
+	   "La solution RunOrg pour les Comités d'Entreprise regroupe tous les outils de communication et d'organisation dont les CE ont besoin. 
+
+Les élus et les responsables disposent d'espaces privés et sécurisés dans lesquels ils peuvent discuter et échanger des documents. Les salariés accèdent aux activités et évènements du CE auxquels ils peuvent s'inscrire en ligne. Les communications peuvent se faire par la messagerie interne de RunOrg. 
+
+RunOrg Comités d'Entreprise vous offre une solution clef en main, ludique et efficace pour améliorer la communication et les actions de votre CE. "	)  
+
+(* NEW ITEM------------------- *)
+let entreprises_events_title =
+	composite `LR
+	(pride ~title:"Organisation d'évènements" "Cette solution vous permet d'organiser un évènement, d'animer les participants, et de les relancer pour les évènements suivants")
+	(create "Events") 
+let entreprises_events_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/pagedooley/3194564161/",
+		       "Kevin Dooley")
+	   "/public/img/preconf_events.jpg")
+	(features [ 
+	  "Point fort",
+	  "Animation d'une communauté festive ou en lien avec de grands événements" ;
+	    
+	  "Idéal pour...",
+	  "Mobiliser et fidéliser les participants à un événements et les relancer d'une fois sur l'autre" ;
+	  
+	  "Egalement pensé pour...",
+	  "Offrir aux participants un espace qui perdure aux événements et dans lequel ils vont pouvoir continuer à échanger"	]) 
+let entreprises_events_desc_b =	
+	(pride 
+	   ~title:"Fidélisez les participants"
+	   "La solution de RunOrg dédiée à l'organisation d'évènements vous ouvre de très nombreuses possibilités pour gérer votre relation avec vos participants. Désormais vous animez et faite vivre la communauté créée lors de vos évènements d'un rendez-vous à l'autre. Cela simplement, à la manière d'un réseau social, et en impliquant les plus passionnés.
+
+Les membres échangent sur le mur et postent leurs photos directement dans l'évènement, et ont accès à d'autres options que vous déterminez. Ce service supplémentaire offert à vos participants permet de capitaliser sur vos évènements en augmentant leur fidélité et leur retour, simplifiant les inscriptions et offrant à ces communautés un fort sentiment d'appartenance qui contribue à la promotion de vos activités. 
+
+RunOrg Organisation d'évènement vous offre une solution clef en main et ludique et efficace pour organiser vos soirées et vos évènements. De plus vous bénéficiez de tous les autres points forts de RunOrg pour récupérer des informations sur vos participants et leur envoyer des messages ciblés. Cette solution s'adresse aux professionnels de l'évènementiel et à toute structure dont l'activité principale est l'organisation d'évènements."	) 
+
+
 	
 let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
@@ -23,20 +351,9 @@ let pages = [
 	(pride ~title:"Configuration standard" "Une configuration généraliste adaptée à toutes les associations")
 	(create "Simple") ;
 	
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	);
+     
+	default_price_asso ;
+	
     ] ;
 	
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
@@ -74,20 +391,7 @@ De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les assos étudiantes"
-	   "de moins de 8000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+      default_price_asso ;
     ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
@@ -125,20 +429,7 @@ RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+      default_price_asso ;
     ] ;
 
   page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
@@ -176,20 +467,7 @@ Jamais organiser un spectacle, inviter votre public et partager ensuite les phot
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+      default_price_asso ;
     ] ;
 
   page "/clubs-sports/MultiSports" "RunOrg Clubs - Clubs multi-sports "
@@ -226,20 +504,7 @@ RunOrg Club multi-sports vous offre une solution clef en main, ludique et effica
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+      default_price_asso ;
     ] ;
 
   page "/clubs-sports/Judo" "RunOrg Clubs - Judo et Jujitsu"
@@ -276,20 +541,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+     default_price_asso ;
     ] ;
 
 	page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
@@ -332,20 +584,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) ;
+      default_price_asso ;
     ] ;	
 
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
@@ -382,20 +621,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+      default_price_asso ;
     ] ;
 
   page "/clubs-sports/Athle" "RunOrg Clubs - Athlétisme "
@@ -421,20 +647,7 @@ Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilis
 	  	  
 	]) ; 
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+      default_price_asso ;
     ] ;
 
   page "/clubs-sports/SalleSport" "RunOrg Clubs - Salle de sport et coaching "
@@ -471,20 +684,7 @@ RunOrg Salles de sport et coaching sportif vous offre une solution clef en main,
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+      default_price_asso ;
     ] ;
 
   page "/clubs-sports/Sports" "RunOrg Clubs - Autres sports"
@@ -529,248 +729,49 @@ N’hésitez pas à nous contacter pour que nous aider à concevoir la solution 
 
       hr () ;
 
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	);
+      default_price_asso ;
     ] ;
 
   page "/collectivites/Collectivites" "RunOrg Collectivités - Mairies et collectivités territoriales"
-    [ composite `LR
-	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
-	(create "Collectivites")   ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/26700188@N05/5633798012/",
-		       "Besopha")
-	   "/public/img/preconf_collectivites.jpg")
-	(features [ 
-	  "Point fort",
-	  "Modernisation de la communication sans modification de l'organisation" ;
-	    
-	  "Idéal pour...",
-	  "Faciliter la communication inter-service, notamment autour de projets ou d'évènements" ;
-	  
-	  "Egalement pensé pour...",
-	  "Déléguer aux responsables la gestion de l'espace dédié à leur service, offrir un espace communication pour les élus"	
-
-	]) ; 
-
-	(pride 
-	   ~title:"L'outil s'adapte à votre organisation"
-	   "Pour les collectivités territoriales nous proposons un intranet collaboratif qui s’adapte à leur organisation existante et à prix très compétitif.
- 
-Tous les agents ont accès à un espace privé et sécurisé qui centralise la communication interne. Les différents services disposent d’espace privés, dont l’administration peut être déléguée aux responsables.
-
-Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènements et des réunions, de la possibilité d'échanger de manière sécurisé des documents, et de les partager aux seins de groupes restreins.
-"
-	) ; 
-
+    [ collectivite_all_title ;
+	collectivite_all_desc_a ;
+	collectivite_all_desc_b ;
       hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
-	
-    ] ;
+       plateforme_complete
+	technologie_accessible_collectivites ;
+	    ] ;
 
   page "/collectivites/LocalNpPortal" "RunOrg Collectivités - Portail associatif communal"
-    [ composite `LR
-	(pride ~title:"Portail associatif communal" "Dotez gratuitement votre commune d'un outil pour organiser efficacement ses associations")
-	(create "LocalNpPortal")   ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/mattymatt/4821997419/",
-		       "Mattymatt")
-	   "/public/img/preconf_localnpportal.jpg")
-	(features [ 
-	  "Point fort",
-	  "Gestion et organisation de la vie associative de la commune" ;
-	    
-	  "Idéal pour...",
-	  "Coordonner les actions avec les responsables associatifs et les élus" ;
-	  
-	  "Egalement pensé pour...",
-	  "Offrir des espaces privés pour les associations, permettre aux élus de communiquer avec les responsables associatifs"	
-	  
-	]) ; 
-
-	(pride 
-	   ~title:"Le portail associatif de votre commune"
-	   "Communiquez avec les responsables associatifs de votre commune et offrez à leurs associations un espace numérique pour améliorer et sécuriser leurs échanges.
-
-RunOrg Portail associatif vous permet d’offrir aux associations de votre commune un espace privé en ligne dans lequel elles vont pouvoir communiquer et échanger (photos, documents, activités, évènement, sondages, etc.) avec leurs membres. De plus, grâce à cet espace, vous pourrez très facilement communiquer avec les responsables de ces associations et coordonner les évènements inter-associations.
-
-Vous disposez d’un annuaire des responsables associatif de votre commune, d’un agenda à jour des activités et des évènements des associations de votre commune, d’un moyen simple de communication vers les responsables et les personnes engagés. De plus ce portail vous permet d’offrir à vos associations la possibilité d’inscrire leurs membres en lignes."
-	) ; 
-
+    [ collectivites_localnpportal_title ;
+	collectivites_localnpportal_desc_a ;
+	collectivites_localnpportal_desc_b ;
       hr () ;
-
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les portails"
-	   "de moins de 10 000 accès") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+	     composite `LR
+       plateforme_complete
+	technologie_accessible_collectivites ;
     ] ;
 
   page "/collectivites/MaisonAsso" "RunOrg Collectivités - Maisons des associations"
-    [ composite `LR
-	(pride ~title:"Maisons des associations" "Equipez gratuitement votre MDA d'un outil pour accompagner et annimer facilement ses associations")
-	(create "MaisonAsso")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/papalars/3250085382/",
-		       "Papalars")
-	   "/public/img/preconf_maisonasso.jpg")
-	(features [ 
-	  "Point fort",
-	  "Gestion et organisation de la vie associative et des activités" ;
-	    
-	  "Idéal pour...",
-	  "Coordonner les actions avec les responsables associatifs et mettre en avant les services de la MDA" ;
-	  
-	  "Egalement pensé pour...",
-	  "Offrir des espaces privés pour les associations, permettre responsables associatifs de communiquer entre eux"	
-	  
-	]) ; 
-
-	ribbon ( important
-		"Solution approuvée par le RNMA"
-		"(Réseau National des Maisons des Associations)") ;
-
-	(pride 
-	   ~title:"Votre outil au service des associations"
-	   "Communiquez avec les responsables associatifs de votre commune et offrez à leurs associations un espace numérique pour améliorer et sécuriser leurs échanges. RunOrg permet également à votre Maison des associations de s'équiper d'un intranet pour ses agents.
-
-RunOrg Maison des associations vous permet d’offrir aux associations de votre commune un espace privé en ligne dans lequel elles vont pouvoir communiquer et échanger (photos, documents, activités, évènement, sondages, etc.) avec leurs membres. De plus, grâce à cet espace, vous pourrez très facilement communiquer avec les responsables de ces associations et coordonner les évènements inter-associations.
-
-Vous disposez d’un annuaire des responsables associatif de votre commune, d’un agenda à jour des activités et des évènements des associations de votre commune, d’un moyen simple de communication vers les responsables et les personnes engagés. De plus ce portail vous permet d’offrir à vos associations la possibilité d’inscrire leurs membres en lignes.
-
-Toutes les fonctionnalités de gestion, de communication et d'organisation d'activités sont également disponibles pour l'usage propre des équipes de la maison des associations."
-	) ; 
-
+    [ collectivites_maisonasso_title ;
+	collectivites_maisonasso_desc_a ;
+	collectivites_maisonasso_desc_b ;
+	collectivites_maisonasso_desc_c ;
       hr () ;
-
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les portails"
-	   "de moins de 10 000 accès") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	);
+	     composite `LR
+       plateforme_complete
+	technologie_accessible_collectivites ;
     ] ;	
 
   page "/collectivites/Campaigns" "RunOrg Collectivités - Campagnes électorales"
-    [ composite `LR
-	(pride ~title:"Campagnes électorales" "Un moyen efficace et original de mener sa campagne. Utilisé par plusieurs députés élus en 2012.")
-	(create "Campaigns")    ;
-	
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/stevebott/2805560252/",
-		       "Stevebott")
-	   "/public/img/preconf_campaigns.jpg")
-	(features [ 
-	  "Point fort",
-	  "Organiser, gérer et communiquer pour sa campagne depuis un même outil" ;
-	    
-	  "Idéal pour...",
-	  "Mobiliser les sympathisants et les transformer en militants" ;
-	  
-	  "Egalement pensé pour...",
-	  "Gérer les tractages et les boitages, communiquer au-près du public par le biais du site Internet"	
-	  
-	]) ; 
-	
-	ribbon ( important
-		""
-		"Votre solution complète de communication sur Internet pour le prix de l’impression d’un trac papier ") ;
-
-	(pride 
-	   ~title:"Un outil impactant pour votre campagne"
-	   "Pour les campagnes électorales nous proposons un intranet collaboratif qui permet de structurer la communication de la campagne de manière efficace et contrôlée. Il vous permet de mobiliser des militants et des sympathisants qui ne l'auraient pas été avec les moyens traditionnels. 
-
-Tous les sympathisants on accès à un espace privé et sécurisé qui centralise la communication. Des sous espaces indépendant sont disponibles et administrés par des coordinateurs locaux. La campagne est pilotée par le cabinet du candidat qui peut s’adresser directement aux sympathisants ou faire relayer via les militants les évènements, les actions, les messages et les documents.
-
-Ainsi impliqués et en s’appuyant sur les fonctionnalités offertes par RunOrg, les militants deviennent, les relais efficaces de l’action du candidat. Ils disposent d’un espace qui centralise tous les éléments dont ils ont besoin et qui les concernent. Leur communication  et leurs actions sont plus facilement coordonnées et accompagnées.
-
-Utilisé par plusieurs candidats ou députés durant les législatives 2012, l'outil a donné d'excellents résultats en terme de mobilisation et en terme de voix.
-
-Cette offre inclue l’ accompagnement et le support."
-	) ; 
-
+    [  collectivites_campaigns_title ;
+	collectivites_campaigns_desc_a ;
+	collectivites_campaigns_desc_b ;
+	collectivites_campaigns_desc_c ;	
       hr () ;
-
        composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+       plateforme_complete
+	technologie_accessible_collectivites ;
     ] ;	
 
   page "/federations/Federations" "RunOrg Fédérations - Structure fédérale"
@@ -808,15 +809,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
       hr () ;
 
        composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+       plateforme_complete
 
        (bullets
 	   ~title:"De nombreuses possibilités"
@@ -886,15 +879,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
       hr () ;
 
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+       plateforme_complete
 
         (pride
 	   ~title:"La technologie accessible"
@@ -910,38 +895,9 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
     ] ;
 
   page "/education/ElementarySchool" "RunOrg Education - Ecoles primaires "
-    [ composite `LR
-	(pride ~title:"Ecoles primaires" "Elaboré avec le concours de spécialistes du numérique dans l'éducation, d'écoles, d'instituteurs et d'associations")
-	(create "ElementarySchool")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/wwworks/4005631298/",
-		       "Woodleywonderworks")
-	   "/public/img/preconf_elementaryschool.jpg")
-	(features [ 
-	  "Point fort",
-	  "Un outil commun pour les élèves, les enseignants et les parents" ;
-	    
-	  "Idéal pour...",
-	  "Apprendre en toute sécurité et confidentialité la base des échange communautaire et des intranets" ;
-	  
-	  "Egalement pensé pour...",
-	  "Faciliter la communication entre les enseignants et les parents d'élèves"	
-	  
-	]) ; 
-
-	(pride 
-	   ~title:"Premier intranet collaboratif pour les écoles"
-	   "La solution RunOrg pour les écoles primaires permet de regrouper dans un seul espace en ligne tous les outils de communication et d'organisation utiles aux enseignants.
-	   
-	   Ils peuvent utiliser cet espace privé pour initier leurs élèves à la communication numérique en toute sérénité, ils peuvent également communiquer et partager des documents et des photos avec les parents.
-	   
-	   Grâces aux groupes privés, les enseignants peuvent s'organiser et collaborer entres eux, dans des espaces réservés. 
-	   
-	   RunOrg pour les écoles primaires est actuellement en test dans une vingtaine d'écoles primaires en France."
-	) ; 
-
+    [ collectivites_elementaryschool_title ;
+	collectivites_elementaryschool_desc_a ;
+	collectivites_elementaryschool_desc_b ;
       hr () ;
 
       composite `LR
@@ -949,15 +905,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	   "Gratuit"
 	   ""
 	   "jusqu'en décembre 2012") 
-	(bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	); 
+       plateforme_complete
     ] ;
 
   page "/education/SectionSportEtudes" "RunOrg Education - Sections sport-études"
@@ -993,15 +941,7 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
       hr () ;
 
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+       plateforme_complete
 
         (pride
 	   ~title:"La technologie accessible"
@@ -1049,15 +989,7 @@ RunOrg Copropriétés vous offre une solution clef en main, ludique et efficace 
       hr () ;
 
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+       plateforme_complete
 
         (pride
 	   ~title:"La technologie accessible"
@@ -1107,15 +1039,7 @@ RunOrg Copropriétés pour syndics bénévoles vous offre une solution clef en m
       hr () ;
 
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+       plateforme_complete
 
         (pride
 	   ~title:"La technologie accessible"
@@ -1131,235 +1055,43 @@ RunOrg Copropriétés pour syndics bénévoles vous offre une solution clef en m
     ] ;
 
   page "/entreprises/Company" "RunOrg Entreprises"
-    [ composite `LR
-	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
-	(create "Company")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
-		       "Alex E. Proimos")
-	   "/public/img/preconf_company.jpg")
-	(features [ 
-	  "Points forts",
-	  "Un réseau privé complet, fexible, simple à prendre en main et sans maintenance informatique" ;
-	    
-	  "Idéal pour...",
-	  "Mettre en place des groupes de traivail autour des services existants ou des projets transversaux" ;
-	  
-	  "Egalement pensé pour...",
-	  "Communiquer vers les clients et les fournisseurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Plus fexible qu'un RSE !"
-	   "La solution RunOrg pour les entreprises offre toutes les fonctionnalités d'un intranet d'entreprise, et y ajoute les avantages des outils de travail collaboratif et des réseaux sociaux d’entreprises.
-
-La communication interne de l'entreprise est structurée autour de ses équipes, de ses services et de ses projets. Il est simple et rapide de créer un espace d'échange regroupant les conversations et la documentation et d'y inviter les personnes concernées par le sujet. Vous pouvez déléguer l'administration des différents nœuds d'échange.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos salariés, et disposez d'un outil de statiques intégré.
-
-Vous avez également la possiblité d'ouvrir votre outil à vos clients privilégiés ou vos prestataire pour en faire le portail de votre entreprise."
-	) ; 
-
+    [ entreprises_company_title ;
+	entreprises_company_desc_a ;
+	entreprises_company_desc_b ;
       hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+       plateforme_complete
+	technologie_accessible_entreprises ;
     ] ;
 
   page "/entreprises/CompanyTraining" "RunOrg Entreprises - Centres de formation"
-    [ composite `LR
-	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
-	(create "CompanyTraining")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/76029035@N02/6829406809/",
-		       "Victor1558")
-	   "/public/img/preconf_companytraining.jpg")
-	(features [ 
-	  "Point fort",
-	  "Animation du réseaux des formateurs et des stagiaires" ;
-	    
-	  "Idéal pour...",
-	  "Offrir des espaces privés d'échange durant et après la formation" ;
-	  
-	  "Egalement pensé pour...",
-	  "Organiser les activités du centre et communiquer au-près des salariés et des formateurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Animer votre réseaux de stagiaires"
-	   "La solution RunOrg pour les entreprises et les centres de formation offre toutes les fonctionnalités d'un réseau social d’entreprise, et y ajoute les accès et la gestion des formateurs et des stagiaires.
-
-L'entreprise dispose d'outils puissants pour sa communication interne, et offre des espaces séparés et privés pour la communication avec ses formateurs, et entre ses formateurs et leurs stagiaires. Elle anime ainsi un réseau privé de formateurs et de clients.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos stagiaires, et disposez d'un outil de statiques intégré. Chacun des groupes ou des cours peut être indépendant et caché des autres. 
-"
-	) ; 
-
+    [ entreprises_companytraining_title ;
+	entreprises_companytraining_desc_a ;
+	entreprises_companytraining_desc_b ;
       hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+       plateforme_complete
+	technologie_accessible_entreprises ;
     ] ;
 	
   page "/ComiteEnt" "RunOrg Comités d'Entreprise"
-    [ composite `LR
-	(pride ~title:"Comités d'Entreprise" "Solution conçue pour organiser et annimer des comités de petites et moyennes entreprises" )
-	(create "ComiteEnt")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/highwaysagency/5998133376/",
-		       "Highways Agency")
-	   "/public/img/preconf_comiteent.jpg")
-	(features [ 
-	  "Point fort",
-	  "Disposer d'un intranet collaboratif indépendant de celui de l'entreprise" ;
-	    
-	  "Idéal pour...",
-	  "Organiser les activités du CE et communiquer avec les salariés" ;
-	  
-	  "Egalement pensé pour...",
-	  "Gérer les projets, les services et les activités (cours, voyages, etc.)"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Un intranet privé pour votre CE"
-	   "La solution RunOrg pour les Comités d'Entreprise regroupe tous les outils de communication et d'organisation dont les CE ont besoin. 
-
-Les élus et les responsables disposent d'espaces privés et sécurisés dans lesquels ils peuvent discuter et échanger des documents. Les salariés accèdent aux activités et évènements du CE auxquels ils peuvent s'inscrire en ligne. Les communications peuvent se faire par la messagerie interne de RunOrg. 
-
-RunOrg Comités d'Entreprise vous offre une solution clef en main, ludique et efficace pour améliorer la communication et les actions de votre CE. 
-"
-	) ; 
-
+    [ entreprises_comiteent_title ;
+	entreprises_comiteent_desc_a ;
+	entreprises_comiteent_desc_b ;
       hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+       plateforme_complete
+	technologie_accessible_entreprises ;
     ] ;
 
   page "/others/Events" "RunOrg - Organisation d'évènements"
-    [ composite `LR
-	(pride ~title:"Organisation d'évènements" "Cette solution vous permet d'organiser un évènement, d'animer les participants, et de les relancer pour les évènements suivants")
-	(create "Events") ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/pagedooley/3194564161/",
-		       "Kevin Dooley")
-	   "/public/img/preconf_events.jpg")
-	(features [ 
-	  "Point fort",
-	  "Animation d'une communauté festive ou en lien avec de grands événements" ;
-	    
-	  "Idéal pour...",
-	  "Mobiliser et fidéliser les participants à un événements et les relancer d'une fois sur l'autre" ;
-	  
-	  "Egalement pensé pour...",
-	  "Offrir aux participant un espace qui perdure aux événements et dans lequel ils vont pouvoir continuer à échanger"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Fidélisez les participants"
-	   "La solution de RunOrg dédiée à l'organisation d'évènements vous ouvre de très nombreuses possibilités pour gérer votre relation avec vos participants. Désormais vous animez et faite vivre la communauté créée lors de vos évènements d'un rendez-vous à l'autre. Cela simplement, à la manière d'un réseau social, et en impliquant les plus passionnés.
-
-Les membres échangent sur le mur et postent leurs photos directement dans l'évènement, et ont accès à d'autres options que vous déterminez. Ce service supplémentaire offert à vos participants permet de capitaliser sur vos évènements en augmentant leur fidélité et leur retour, simplifiant les inscriptions et offrant à ces communautés un fort sentiment d'appartenance qui contribue à la promotion de vos activités. 
-
-RunOrg Organisation d'évènement vous offre une solution clef en main et ludique et efficace pour organiser vos soirées et vos évènements. De plus vous bénéficiez de tous les autres points forts de RunOrg pour récupérer des informations sur vos participants et leur envoyer des messages ciblés. Cette solution s'adresse aux professionnels de l'évènementiel et à toute structure dont l'activité principale est l'organisation d'évènements."
-	) ; 
-
+    [ entreprises_events_title ;
+	entreprises_events_desc_a ;
+	entreprises_events_desc_b ;
       hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+       plateforme_complete
+	technologie_accessible_entreprises ;
     ] 
 	       
   (* END PAGES -------------------------------------------------------------- *)
