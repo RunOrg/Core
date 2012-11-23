@@ -14,3 +14,9 @@ end
 | `Delegate_Add -> "Ajouter..."
 | `Delegate_Add_Denied -> "Vous ne pouvez pas nommer de responsables sur ce groupe."
 | `Delegate_Remove -> "Supprimer"
+
+| `Delegate_Submit kind -> begin match kind with 
+    | `Event -> "Nommer organisateurs"
+    | `Group -> "Nommer responsables"
+    | `Forum -> "Nommer modérateurs"
+end

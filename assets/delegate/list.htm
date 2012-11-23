@@ -7,11 +7,16 @@
     {`Delegate_Admins} &laquo;&nbsp;<span>{admins|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
   </div>
   {#delegates}
-    <div class="-item">
+    <div {$i} class="-item">
       {?pic}<img src="{this}"/>{/?}
-      <a href="javscript:void(0)">{`Delegate_Remove}</a>
+      <a href="javascript:void(0)">{`Delegate_Remove}</a>
       <span>{name}</span>
     </div>
+    <script type="remove:json">
+here.$i.find("a").click ->
+  to_endpoint remove, null, ->
+    here.$i.remove()
+    </script>
   {/#}
   {?add}
     <div class="-add">
@@ -67,6 +72,11 @@
     span {
       color: #111;
     }
+  }
+
+  .-add {
+    padding: 5px 0;
+    a { display: inline-block ! important }
   }
 
   .-add.-denied {

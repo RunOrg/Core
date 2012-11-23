@@ -50,3 +50,5 @@ val summarize : t -> [> `Admin | `Member ]
 val delegates : t -> IAvatar.t list
 
 val set_delegates : IAvatar.t list -> t -> t
+val add_delegates : IAvatar.t list -> t -> t 
+val remove_delegates : IAvatar.t list -> t -> t

@@ -96,3 +96,5 @@ end
 | `Event_Delete_Warning -> "La suppression d'une activité est permanente !"
 | `Event_Delete_Submit -> "Supprimer"
 | `Event_Delete_Cancel -> "Ne pas supprimer"
+
+| `Event_DelPick_Title -> "Ajouter"
