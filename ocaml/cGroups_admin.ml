@@ -41,6 +41,13 @@ let () = define UrlClient.Members.def_admin begin fun parents entity access ->
        end) ;
 
       (object
+	method img      = VIcon.Large.user_suit
+	method url      = parents # delegate # url
+	method title    = AdLib.get `Group_Delegate_Link
+	method subtitle = Some (AdLib.get `Group_Delegate_Sub)
+       end) ;
+
+      (object
 	method img      = VIcon.Large.cross
 	method url      = parents # delete # url 
 	method title    = AdLib.get `Group_Delete_Link
