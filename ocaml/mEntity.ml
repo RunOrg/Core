@@ -149,16 +149,18 @@ let _create ?pcname ?name ?pic ?access template iid creator =
   in
 
   let! data = ohm $ MEntity_data.create ~id:eid ~who ?name ?data () in
-  
+
+  let kind = PreConfig_Template.kind template in  
+
   let init = E.Init.({
     archive  = false ;
     draft    ;
     public   = false ;
-    admin    = `List [ IAvatar.decay creator ] ;
+    admin    = if kind = `Group then `Nobody else `List [ IAvatar.decay creator ] ;
     view     = `Token ;
     group    = IGroup.decay gid ;
     config   = MEntityConfig.default ;
-    kind     = PreConfig_Template.kind template ;
+    kind     ;
     template = ITemplate.decay template ;
     instance = IInstance.decay iid ;
     deleted  = None ;
