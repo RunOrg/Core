@@ -17,45 +17,48 @@ module Delegate = CGroups_admin_delegate
 
 let () = define UrlClient.Members.def_admin begin fun parents entity access -> 
 
-  O.Box.fill begin 
-    let choices = Asset_Admin_Choice.render [
+  let! is_admin = ohm $ O.decay (MEntity.is_admin entity) in
+  let! is_all_members = ohm $ O.decay (MEntity.is_all_members entity) in
 
-      (object
+  O.Box.fill begin 
+    let choices = Asset_Admin_Choice.render (BatList.filter_map identity [
+
+      Some (object
 	method img      = VIcon.Large.cog_edit
 	method url      = parents # edit # url 
 	method title    = AdLib.get `Group_Edit_Link
 	method subtitle = Some (AdLib.get `Group_Edit_Sub)
        end) ;
       
-      (object
+      Some (object
 	method img      = VIcon.Large.group
 	method url      = parents # people # url 
 	method title    = AdLib.get `Group_People_Link
 	method subtitle = Some (AdLib.get `Group_People_Sub)
        end) ;
 
-      (object
+      Some (object
 	method img      = VIcon.Large.textfield
 	method url      = parents # jform # url 
 	method title    = AdLib.get `Group_JoinForm_Link
 	method subtitle = Some (AdLib.get `Group_JoinForm_Sub)
        end) ;
 
-      (object
+      Some (object
 	method img      = VIcon.Large.user_suit
 	method url      = parents # delegate # url
 	method title    = AdLib.get `Group_Delegate_Link
 	method subtitle = Some (AdLib.get `Group_Delegate_Sub)
        end) ;
 
-      (object
-	method img      = VIcon.Large.cross
-	method url      = parents # delete # url 
-	method title    = AdLib.get `Group_Delete_Link
-	method subtitle = Some (AdLib.get `Group_Delete_Sub)
-       end) ;
-      
-    ] in
+      (if is_admin || is_all_members then None else
+	  Some (object
+	    method img      = VIcon.Large.cross
+	    method url      = parents # delete # url 
+	    method title    = AdLib.get `Group_Delete_Link
+	    method subtitle = Some (AdLib.get `Group_Delete_Sub)
+	  end)) ;
+    ]) in
     
     Asset_Admin_Page.render (object
       method parents = [ parents # home ] 
