@@ -57,3 +57,9 @@ end
 | `Group_Delete_Warning -> "La suppression d'un groupe est permanente !"
 | `Group_Delete_Submit -> "Supprimer"
 | `Group_Delete_Cancel -> "Ne pas supprimer"
+
+| `Group_Delegate_Title -> "Responsables"
+| `Group_Delegate_Link  -> "Responsables"
+| `Group_Delegate_Sub   -> "Déléguer la gestion du groupe à des membres"
+
+| `Group_DelPick_Title  -> "Ajouter"

@@ -53,3 +53,9 @@
 | `Group_Delete_Warning 
 | `Group_Delete_Submit
 | `Group_Delete_Cancel
+
+| `Group_Delegate_Title
+| `Group_Delegate_Link
+| `Group_Delegate_Sub
+
+| `Group_DelPick_Title
