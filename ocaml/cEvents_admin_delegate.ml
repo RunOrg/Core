@@ -6,6 +6,20 @@ open BatPervasives
 
 open CEvents_admin_common
 
+let () = define UrlClient.Events.def_delpick begin fun parents entity access ->
+
+  O.Box.fill begin 
+
+    Asset_Admin_Page.render (object
+      method parents = [ parents # home ; parents # admin ; parents # delegate ] 
+      method here = parents # delpick # title
+      method body = return ignore 
+    end)
+
+  end
+
+end
+
 let () = define UrlClient.Events.def_delegate begin fun parents entity access -> 
 
   let delegates = MAccess.delegates (MEntity.Get.admin entity) in
@@ -35,7 +49,7 @@ let () = define UrlClient.Events.def_delegate begin fun parents entity access ->
       method kind      = `Event 
       method admins    = admin
       method delegates = delegates
-      method add       = None
+      method add       = Some (parents # delpick # url) 
     end) in
 
     Asset_Admin_Page.render (object
