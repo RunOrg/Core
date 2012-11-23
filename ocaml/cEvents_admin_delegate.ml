@@ -7,12 +7,19 @@ open BatPervasives
 open CEvents_admin_common
 
 let () = define UrlClient.Events.def_delegate begin fun parents entity access -> 
+
+  let delegates = MAccess.delegates (MEntity.Get.admin entity) in
+
+  let! remove = O.Box.react IAvatar.fmt begin fun aid _ _ res ->
+    let admin = MAccess.remove_delegates [aid] (MEntity.Get.admin entity) in
+    let self  = access # self in 
+    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
+    return res
+  end in 
   
   O.Box.fill begin 
-    
-    let! admin = ohm $ O.decay (MEntity.admin_group_name (access # iid)) in 
 
-    let delegates = MAccess.delegates (MEntity.Get.admin entity) in
+    let! admin = ohm $ O.decay (MEntity.admin_group_name (access # iid)) in     
 
     let! delegates = ohm $ O.decay (Run.list_map begin fun aid ->
       let! profile = ohm $ CAvatar.mini_profile aid in 
