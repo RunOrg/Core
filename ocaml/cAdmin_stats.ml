@@ -12,14 +12,14 @@ let () = UrlAdmin.def_stats $ admin_only begin fun cuid req res ->
 
   let urls = BatList.init 28 (Action.url UrlAdmin.getStats None) in
 
-  let choices = Asset_Admin_Stats.render (object
+  let body = Asset_Admin_Stats.render (object
     method urls = urls 
   end) in
 
   page cuid "Administration" (object
     method parents = [ Parents.home ] 
     method here  = Parents.stats # title 
-    method body  = choices
+    method body  = body
   end) res
 
 end
