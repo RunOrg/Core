@@ -22,20 +22,9 @@
   </div>
   
   <div class="-list">
-    {#list}
-      <div class="short-private-event">
-	<span class="-status">
-	</span>
-	<a href="{url}">
-	  {?pic}<img src="{this}"/>{/?}
-	  <span class="-title">{title}</span>
-	  <span class="-details">
-	    {?date}{`ShortWeekDate this}{else}{`Events_NoDate}{/?} 
-	    {?coming}&middot; {`Events_CountComing this}{/?} 
-	    {?status}&emsp;{ this | Asset_Status_Tag.render | ohm }{/?}
-	  </span>
-	</a>
-      </div>
+
+    {if future | OhmAsset.notEmpty}
+      {#future}{this | Asset_Event_ShortPrivate.render | ohm}{/#}      
     {else}
       <div class="empty-list">
 	{ `Events_List_Empty } 
@@ -44,61 +33,35 @@
 	  { `Events_Link_New }
 	</a>	
       </div>
-    {/#}
+    {/if}
+
+    {if unbound | OhmAsset.notEmpty}
+      <h2>{`Events_List_Unbound}</h2>
+      {#unbound}{this | Asset_Event_ShortPrivate.render | ohm}{/#}
+    {/if}
+
+    {if past | OhmAsset.notEmpty}
+      <h2>{`Events_List_Past}</h2>
+      {#past}{this | Asset_Event_ShortPrivate.render | ohm}{/#}
+    {/if}
+
   </div>
 
 </div>
-
-<style>
-.short-private-event {  
-  overflow: hidden;
-  border-top: 1px solid #CCC;
-  padding: 15px 0;
-
-  img {
-    display: block;
-    float: left;
-    border: none;
-    margin-left: 3px;
-  }
-
-  .-status {
-    float: right;
-    margin: 11px 0 11px 30px;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  .-title {
-    display: block;
-    overflow: hidden;
-    margin: 8px 0 0 65px;
-    color: #333;
-    height: 19px;
-    line-height: 16px;
-    font-size: 16.99px;
-    text-shadow: 0 -1px 0 #FFF;
-  }
-
-  .-details {
-    display: block;
-    overflow: hidden;
-    margin-left: 65px;
-    color: #888;
-    height: 15px;
-    line-height: 15px;
-    font-size: 12px;
-  }
-}
-</style>
 
 <style>
 .intranet-events {
 
   .-list {
     overflow: hidden;
+    h2 {
+      background-color: #EEE;
+      box-shadow: 0 0 20px #DDD inset;
+      color: #555;
+      margin: 40px 0 0;
+      padding: 4px 8px;
+      text-shadow: 0 1px 0 white;
+    }
   }
 
   .-right {
