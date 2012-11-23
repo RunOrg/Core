@@ -3,6 +3,9 @@
 
 | `Events_List_Empty
 
+| `Events_List_Unbound
+| `Events_List_Past
+
 | `Events_Title
 
 | `Events_CountComing of int
