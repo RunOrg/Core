@@ -43,7 +43,7 @@ let headers = [
    ];
   
   header "pricing" 
-    ~title:"Les tarifs"
+    ~title:"Les tarifs associations"
     ~text:"L'offre la plus compétitive du marché ! 
     Des tarifs adaptés à vos besoins et à votre organisation."
     [] ;   
@@ -112,14 +112,25 @@ let headers = [
 	  ] ;
     ] ;
 
-	header "collectivites" 
+	multiheader "collectivites" 
     ~title:"L'espace numérique de votre collectivité"
-    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos agents, vos administrés, vos associations et vos sympathisants"
-    ~trynow:( "Essayer Gratuitement", "/catalog/collectivites/Collectivites" ) 
-    [ "Accueil",         "accueil",         "/collectivites" ;
-      "Offres",       "offres",       "/collectivites/products";
-      "Fonctionnalités", "fonctionnalites", "/collectivites/features";
-      "Tarifs", "pricing-collectivites", "/collectivites/pricing";
+    ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos administrés, vos agents, vos associations et vos sympathisants."
+     [ "Accueil",    "/collectivites" , [];
+      "Solutions",     "/collectivites/MaisonAsso",
+	[ "Maison des associations", "/collectivites/MaisonAsso";
+	  "Mairies & collectivités", "/collectivites/collectivites";
+	  "Portail associatif communal", "/collectivites/LocalNpPortal";
+	  "Campagnes électorales", "/collectivites/Campaigns";
+	  "Ecoles primaires", "/collectivites/ElementarySchool";
+	] ;
+	"Options",  "/collectivites/options", 
+	[ (*"Pack Pro", "/entreprises/offres" ;
+	  "Personnalisation+", "/entreprises/personnalisation";
+	  "Multi-portails", "/entreprises/multiportails"; *)
+	  ] ; 
+	"Services",  "/collectivites/services", [];    
+	"Fonctionnalités",  "/collectivites/features", [];
+      "Tarifs", "/collectivites/pricing", [];
     ] ; 
 
 	 multiheader "entreprises" 
@@ -130,7 +141,9 @@ let headers = [
 	[ "Centres de formation", "/entreprises/CompanyTraining";
 	  "RSE", "/entreprises/Company" ;
 	  "Portail abonnés", "/entreprises/portail-abonnes";
-	  "Portail clients", "/entreprises/portail-clients"
+	  "Portail clients", "/entreprises/portail-clients";
+	  "Comité d'Entreprise", "/entreprises/ComiteEnt";
+	  "Organisation d'évènements", "/entreprises/Events"
 	  ] ;
 	"Options",  "/entreprises/options", 
 	[ (*"Pack Pro", "/entreprises/offres" ;
