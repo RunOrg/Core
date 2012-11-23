@@ -23,9 +23,11 @@ let () = define UrlClient.Events.def_delegate begin fun parents entity access ->
 
     let! delegates = ohm $ O.decay (Run.list_map begin fun aid ->
       let! profile = ohm $ CAvatar.mini_profile aid in 
+      let remove = OhmBox.reaction_endpoint remove aid in 
       return (object
-	method pic  = profile # pico
-	method name = profile # name
+	method pic    = profile # pico
+	method name   = profile # name
+	method remove = JsCode.Endpoint.to_json remove
       end)
     end delegates) in 
 
