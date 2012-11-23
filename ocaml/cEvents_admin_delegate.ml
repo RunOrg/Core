@@ -6,82 +6,38 @@ open BatPervasives
 
 open CEvents_admin_common
 
-module DelPickArgs = Fmt.Make(struct
-  type json t = (IAvatar.t list) 
-end)
-
 let () = define UrlClient.Events.def_delpick begin fun parents entity access ->
 
-  let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
+  let back = parents # delegate # url in
 
-    let aids = BatOption.default [] (DelPickArgs.of_json_safe json) in
+  let wrap body = 
+    O.Box.fill begin 
+      Asset_Admin_Page.render (object
+	method parents = [ parents # home ; parents # admin ; parents # delegate ] 
+	method here = parents # delpick # title
+	method body = O.decay body
+      end)
+    end
+  in
 
-    let admin = MAccess.add_delegates aids (MEntity.Get.admin entity) in
-    let self  = access # self in 
-    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
-
-    return $ Action.javascript (Js.redirect ~url:(parents # delegate # url) ()) res
-
-  end in
-
-  O.Box.fill begin 
-
-    let! submit = ohm $ AdLib.get (`Delegate_Submit `Event) in
-
-    let body = Asset_Search_Pick.render (object
-      method submit = submit
-      method search = Action.url UrlClient.Search.avatars (access # instance # key) () 
-      method post   = OhmBox.reaction_json post () 
-    end) in 
-
-    Asset_Admin_Page.render (object
-      method parents = [ parents # home ; parents # admin ; parents # delegate ] 
-      method here = parents # delpick # title
-      method body = body
-    end)
-
-  end
+  CDelegate.picker `Event back access entity wrap 
 
 end
 
 let () = define UrlClient.Events.def_delegate begin fun parents entity access -> 
 
-  let delegates = MAccess.delegates (MEntity.Get.admin entity) in
+  let pick = Some (parents # delpick # url) in 
 
-  let! remove = O.Box.react IAvatar.fmt begin fun aid _ _ res ->
-    let admin = MAccess.remove_delegates [aid] (MEntity.Get.admin entity) in
-    let self  = access # self in 
-    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
-    return res
-  end in 
-  
-  O.Box.fill begin 
+  let wrap body = 
+    O.Box.fill begin 
+      Asset_Admin_Page.render (object
+	method parents = [ parents # home ; parents # admin ] 
+	method here = parents # delegate # title
+	method body = O.decay body
+      end)	
+    end
+  in
 
-    let! admin = ohm $ O.decay (MEntity.admin_group_name (access # iid)) in     
-
-    let! delegates = ohm $ O.decay (Run.list_map begin fun aid ->
-      let! profile = ohm $ CAvatar.mini_profile aid in 
-      let remove = OhmBox.reaction_endpoint remove aid in 
-      return (object
-	method pic    = profile # pico
-	method name   = profile # name
-	method remove = JsCode.Endpoint.to_json remove
-      end)
-    end delegates) in 
-
-    let body = Asset_Delegate_List.render (object 
-      method kind      = `Event 
-      method admins    = admin
-      method delegates = delegates
-      method add       = Some (parents # delpick # url) 
-    end) in
-
-    Asset_Admin_Page.render (object
-      method parents = [ parents # home ; parents # admin ] 
-      method here = parents # delegate # title
-      method body = body
-    end)
-
-  end
+  CDelegate.list `Event pick access entity wrap
 
 end
