@@ -117,15 +117,21 @@ let rec delegates = function
   | `Message _
   | `Groups (_,_) -> []
 
-let rec remove_delegates = function 
-  | `Union l -> `Union (List.map remove_delegates l) 
+let rec remove_all_delegates = function 
+  | `Union l -> `Union (List.map remove_all_delegates l) 
   | `List _ -> `Nobody 
-  | `TokOnly t -> `TokOnly (remove_delegates t)
+  | `TokOnly t -> `TokOnly (remove_all_delegates t)
   | other -> other
 
 let set_delegates aids access = 
-  let access = optimize (remove_delegates access) in 
+  let access = optimize (remove_all_delegates access) in 
   match access with 
     | `Union l -> `Union (`List aids :: l)
     | `Nobody -> `List aids
     | other -> `Union [ `List aids ; other ]
+
+let add_delegates aids access = 
+  set_delegates (BatList.sort_unique compare (aids @ delegates access)) access
+
+let remove_delegates aids access = 
+  set_delegates (BatList.remove_if (fun aid -> List.mem aid aids) (delegates access)) access

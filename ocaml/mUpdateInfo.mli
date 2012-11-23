@@ -9,3 +9,5 @@ module type F = Ohm.Fmt.FMT with type t = info
 include F
 
 val info : who:who -> t
+
+val self : ?key:Ohm.Id.t -> [`IsSelf] IAvatar.id -> info 

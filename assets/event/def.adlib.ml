@@ -88,3 +88,5 @@
 | `Event_Delete_Warning 
 | `Event_Delete_Submit 
 | `Event_Delete_Cancel 
+
+| `Event_DelPick_Title

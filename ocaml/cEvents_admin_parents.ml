@@ -26,5 +26,6 @@ let parents title key eid = object
   method jform    = make `Event_JoinForm_Title jform    key eid
   method cols     = make `Event_Columns_Title  cols     key eid 
   method delete   = make `Event_Delete_Title   delete   key eid
+  method delpick  = make `Event_DelPick_Title  delpick  key eid
 end
 

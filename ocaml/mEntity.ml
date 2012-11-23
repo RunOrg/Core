@@ -47,17 +47,10 @@ let () =
     
 let delete self t = 
 
-  let  mod_id = Id.gen () in
-
-  let  aid = IAvatar.decay self in
-  let  who = `user (mod_id, aid) in
-
-  let  diffs = [ `Status (`Delete aid) ] in
-
   let! _ = ohm $ E.Store.update
     ~id:(IEntity.decay (Get.id t)) 
-    ~diffs
-    ~info:(MUpdateInfo.info ~who)
+    ~diffs:[ `Status (`Delete (IAvatar.decay self)) ]
+    ~info:(MUpdateInfo.self self)
     ()
   in
 
@@ -67,11 +60,9 @@ let delete self t =
     
 let try_update self t ~draft ~name ~data ~view = 
 
-  let  mod_id = Id.gen () in
-
-  let  avatar = IAvatar.decay self in
-  let  who    = `user (mod_id, avatar) in
-
+  let upinfo = MUpdateInfo.self self in
+  let who    = upinfo.MUpdateInfo.who in 
+  
   let e = Can.data t in
 
   let draft = 
@@ -91,7 +82,7 @@ let try_update self t ~draft ~name ~data ~view =
       E.Store.update
 	~id:(IEntity.decay (Get.id t)) 
 	~diffs
-	~info:(MUpdateInfo.info ~who)
+	~info:(MUpdateInfo.self self)
 	()
   in
 
@@ -99,10 +90,8 @@ let try_update self t ~draft ~name ~data ~view =
   
 let set_picture self t pic = 
 
-  let  mod_id = Id.gen () in
-
-  let  avatar = IAvatar.decay self in
-  let  who    = `user (mod_id, avatar) in
+  let upinfo = MUpdateInfo.self self in
+  let who    = upinfo.MUpdateInfo.who in 
   
   let! key = req_or (return ()) $ PreConfig_Template.Meaning.picture (Get.template t) in
 
@@ -110,6 +99,17 @@ let set_picture self t pic =
   let data = [ key, pic ] in
 
   MEntity_data.update ~id:(Get.id t) ~who ~data ()
+    
+let set_admins self t access =
+  
+  let! _ = ohm $ E.Store.update 
+    ~id:(IEntity.decay (Get.id t))
+    ~diffs:[ `Admin access ]
+    ~info:(MUpdateInfo.self self) 
+    ()
+  in
+
+  return () 
 
 (* Creating entities ----------------------------------------------------------------------- *)
 
@@ -149,16 +149,18 @@ let _create ?pcname ?name ?pic ?access template iid creator =
   in
 
   let! data = ohm $ MEntity_data.create ~id:eid ~who ?name ?data () in
-  
+
+  let kind = PreConfig_Template.kind template in  
+
   let init = E.Init.({
     archive  = false ;
     draft    ;
     public   = false ;
-    admin    = `List [ IAvatar.decay creator ] ;
+    admin    = if kind = `Group then `Nobody else `List [ IAvatar.decay creator ] ;
     view     = `Token ;
     group    = IGroup.decay gid ;
     config   = MEntityConfig.default ;
-    kind     = PreConfig_Template.kind template ;
+    kind     ;
     template = ITemplate.decay template ;
     instance = IInstance.decay iid ;
     deleted  = None ;
