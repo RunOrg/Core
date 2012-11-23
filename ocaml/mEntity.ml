@@ -216,8 +216,17 @@ let admin_group_name iid =
   let! entity  = ohm_req_or (return default) $ naked_get eid in 
   return (BatOption.default default (Get.name entity))   
 
-let instance eid = 
-  MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
+let is_admin e = 
+  if Get.kind e <> `Group then return false else
+    let  pcnamer = MPreConfigNamer.load (Get.instance e) in 
+    let! eid     = ohm $ MPreConfigNamer.entity "admin" pcnamer in 
+    return (eid = IEntity.decay (Get.id e))
+      
+let is_all_members e = 
+  if Get.kind e <> `Group then return false else
+    let  pcnamer = MPreConfigNamer.load (Get.instance e) in 
+    let! eid     = ohm $ MPreConfigNamer.entity "members" pcnamer in 
+    return (eid = IEntity.decay (Get.id e))
       
 (* Create the initial entities. ------------------------------------------------------------- *)
 

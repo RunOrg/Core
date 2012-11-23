@@ -1,0 +1,56 @@
+<div class="short-private-event">
+  <a href="{url}">
+    {?pic}<img src="{this}"/>{/?}
+    <span class="-title">{title}</span>
+    <span class="-details">
+      {?date}{`ShortWeekDate this}{else}{`Events_NoDate}{/?} 
+      {?coming}&middot; {`Events_CountComing this}{/?} 
+      {?status}&emsp;{ this | Asset_Status_Tag.render | ohm }{/?}
+    </span>
+  </a>
+</div>
+
+<style>
+.short-private-event {  
+  overflow: hidden;
+  border-top: 1px solid #CCC;
+  padding: 15px 0;
+
+  img {
+    display: block;
+    float: left;
+    border: none;
+    margin-left: 3px;
+  }
+
+  .-status {
+    float: right;
+    margin: 11px 0 11px 30px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .-title {
+    display: block;
+    overflow: hidden;
+    margin: 8px 0 0 65px;
+    color: #333;
+    height: 19px;
+    line-height: 16px;
+    font-size: 16.99px;
+    text-shadow: 0 -1px 0 #FFF;
+  }
+
+  .-details {
+    display: block;
+    overflow: hidden;
+    margin-left: 65px;
+    color: #888;
+    height: 15px;
+    line-height: 15px;
+    font-size: 12px;
+  }
+}
+</style>
