@@ -94,61 +94,30 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	Catalog.collectivite_all_desc_b ;
 ];
 
-  page "/CompanyTraining" "RunOrg Entreprises - Centres de formation"
-    [ composite `LR
-	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
-	(create "CompanyTraining")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/76029035@N02/6829406809/",
-		       "Victor1558")
-	   "/public/img/preconf_companytraining.jpg")
-	(features [ 
-	  "Point fort",
-	  "Animation du réseaux des formateurs et des stagiaires" ;
-	    
-	  "Idéal pour...",
-	  "Offrir des espaces privés d'échange durant et après la formation" ;
-	  
-	  "Egalement pensé pour...",
-	  "Organiser les activités du centre et communiquer au-près des salariés et des formateurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Animer votre réseaux de stagiaires"
-	   "La solution RunOrg pour les entreprises et les centres de formation offre toutes les fonctionnalités d'un réseau social d’entreprise, et y ajoute les accès et la gestion des formateurs et des stagiaires.
-
-L'entreprise dispose d'outils puissants pour sa communication interne, et offre des espaces séparés et privés pour la communication avec ses formateurs, et entre ses formateurs et leurs stagiaires. Elle anime ainsi un réseau privé de formateurs et de clients.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos stagiaires, et disposez d'un outil de statiques intégré. Chacun des groupes ou des cours peut être indépendant et caché des autres. 
-"
-	) ; 
+  page "/LocalNpPortal" "RunOrg Collectivités - Portail associatif communal"
+    [ Catalog.collectivites_localnpportal_title ;
+	Catalog.collectivites_localnpportal_desc_a ;
+	Catalog.collectivites_localnpportal_desc_b ;
 ];
 
-  page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
-    [ composite `LR
-	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
-		(pride 
-	   ~title:"Prototype en cours"
-	   ~subtitle:"Cette solution est en cours de conception"
-	   ~link:("/contact",
-		  "Contactez-nous pour en savoir plus") 
-	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
-	)   ;
+  page "/MaisonAsso" "RunOrg Collectivités - Maisons des associations"
+    [ Catalog.collectivites_maisonasso_title ;
+	Catalog.collectivites_maisonasso_desc_a ;
+	Catalog.collectivites_maisonasso_desc_b ;
+	Catalog.collectivites_maisonasso_desc_c ;
 ];
 
-  page "/portail-clients" "RunOrg Entreprises - Portail Clients"
-    [ composite `LR
-	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
-		(pride 
-	   ~title:"Prototype en cours"
-	   ~subtitle:"Cette solution est en cours de conception"
-	   ~link:("/contact",
-		  "Contactez-nous pour en savoir plus") 
-	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
-	)   ;
+  page "/Campaigns" "RunOrg Collectivités - Campagnes électorales"
+    [  Catalog.collectivites_campaigns_title ;
+	Catalog.collectivites_campaigns_desc_a ;
+	Catalog.collectivites_campaigns_desc_b ;
+	Catalog.collectivites_campaigns_desc_c ;
+];
+
+  page "/ElementarySchool" "RunOrg Education - Ecoles primaires "
+    [ Catalog.collectivites_elementaryschool_title ;
+	Catalog.collectivites_elementaryschool_desc_a ;
+	Catalog.collectivites_elementaryschool_desc_b ;
 ];
 
   page "/options" "RunOrg Collectivités - Options"

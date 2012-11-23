@@ -89,70 +89,15 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
  ];
 
   page "/Company" "RunOrg Entreprises"
-    [ composite `LR
-	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
-	(create "Company")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
-		       "Alex E. Proimos")
-	   "/public/img/preconf_company.jpg")
-	(features [ 
-	  "Points forts",
-	  "Un réseau privé complet, fexible, simple à prendre en main et sans maintenance informatique" ;
-	    
-	  "Idéal pour...",
-	  "Mettre en place des groupes de traivail autour des services existants ou des projets transversaux" ;
-	  
-	  "Egalement pensé pour...",
-	  "Communiquer vers les clients et les fournisseurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Plus fexible qu'un RSE !"
-	   "La solution RunOrg pour les entreprises offre toutes les fonctionnalités d'un intranet d'entreprise, et y ajoute les avantages des outils de travail collaboratif et des réseaux sociaux d’entreprises.
-
-La communication interne de l'entreprise est structurée autour de ses équipes, de ses services et de ses projets. Il est simple et rapide de créer un espace d'échange regroupant les conversations et la documentation et d'y inviter les personnes concernées par le sujet. Vous pouvez déléguer l'administration des différents nœuds d'échange.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos salariés, et disposez d'un outil de statiques intégré.
-
-Vous avez également la possiblité d'ouvrir votre outil à vos clients privilégiés ou vos prestataire pour en faire le portail de votre entreprise."
-	) ; 
+    [ Catalog.entreprises_company_title ;
+	Catalog.entreprises_company_desc_a ;
+	Catalog.entreprises_company_desc_b ;
 ];
 
   page "/CompanyTraining" "RunOrg Entreprises - Centres de formation"
-    [ composite `LR
-	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
-	(create "CompanyTraining")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/76029035@N02/6829406809/",
-		       "Victor1558")
-	   "/public/img/preconf_companytraining.jpg")
-	(features [ 
-	  "Point fort",
-	  "Animation du réseaux des formateurs et des stagiaires" ;
-	    
-	  "Idéal pour...",
-	  "Offrir des espaces privés d'échange durant et après la formation" ;
-	  
-	  "Egalement pensé pour...",
-	  "Organiser les activités du centre et communiquer au-près des salariés et des formateurs"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Animer votre réseaux de stagiaires"
-	   "La solution RunOrg pour les entreprises et les centres de formation offre toutes les fonctionnalités d'un réseau social d’entreprise, et y ajoute les accès et la gestion des formateurs et des stagiaires.
-
-L'entreprise dispose d'outils puissants pour sa communication interne, et offre des espaces séparés et privés pour la communication avec ses formateurs, et entre ses formateurs et leurs stagiaires. Elle anime ainsi un réseau privé de formateurs et de clients.
-
-A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'évènements, de documents partagés, de forum et d'albums. Vous organisez des sondages, créer des fiches personnalisés sur les compétences de vos stagiaires, et disposez d'un outil de statiques intégré. Chacun des groupes ou des cours peut être indépendant et caché des autres. 
-"
-	) ; 
+    [ Catalog.entreprises_companytraining_title ;
+	Catalog.entreprises_companytraining_desc_a ;
+	Catalog.entreprises_companytraining_desc_b ;
 ];
 
   page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
@@ -177,6 +122,18 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 		  "Contactez-nous pour en savoir plus") 
 	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
 	)   ;
+];
+
+  page "/ComiteEnt" "RunOrg Entreprises - Comités d'Entreprise"
+    [ Catalog.entreprises_comiteent_title ;
+	Catalog.entreprises_comiteent_desc_a ;
+	Catalog.entreprises_comiteent_desc_b ;
+];
+
+  page "/Events" "RunOrg Entreprises - Organisation d'évènements"
+    [ Catalog.entreprises_events_title ;
+	Catalog.entreprises_events_desc_a ;
+	Catalog.entreprises_events_desc_b ;
 ];
 
   page "/options" "RunOrg Entreprises - Options"
