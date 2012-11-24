@@ -30,6 +30,8 @@ let attempt how fail email password req res =
   let! uid  = ohm_req_or fail $ MUser.by_email email in
   let! cuid = ohm_req_or fail $ MUser.knows_password password uid in
 
+  let! () = ohm $ TrackLog.(log (IsUser (IUser.decay uid))) in
+
   let res = CSession.start (`Old cuid) res in
 
   (* Log the login success *)

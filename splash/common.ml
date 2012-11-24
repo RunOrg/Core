@@ -166,6 +166,11 @@ let action url text sub =
 	    "text", string text ;
 	    "sub", string sub ] ]
 
+let contact_demo = 
+  action ("/contact") 
+    "Prototype gratuit"
+    "Contactez-nous pour une démonstration rapide et gratuite"
+
 let create kind = 
   action ("/start/"^kind) 
     "Créez votre espace"

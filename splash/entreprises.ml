@@ -103,25 +103,13 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
   page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
     [ composite `LR
 	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
-		(pride 
-	   ~title:"Prototype en cours"
-	   ~subtitle:"Cette solution est en cours de conception"
-	   ~link:("/contact",
-		  "Contactez-nous pour en savoir plus") 
-	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
-	)   ;
+		(contact_demo)   ;
 ];
 
   page "/portail-clients" "RunOrg Entreprises - Portail Clients"
     [ composite `LR
 	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
-		(pride 
-	   ~title:"Prototype en cours"
-	   ~subtitle:"Cette solution est en cours de conception"
-	   ~link:("/contact",
-		  "Contactez-nous pour en savoir plus") 
-	   "Cette solution est en cours de développement ou de prototypage. Si vous le souhaitez, contactez-nous pour participer à sa conception."
-	)   ;
+		(contact_demo)   ;
 ];
 
   page "/ComiteEnt" "RunOrg Entreprises - Comités d'Entreprise"

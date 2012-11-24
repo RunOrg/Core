@@ -143,7 +143,8 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 			      let! () = ohm $ MNews.Cache.prepare uid in
 			      let! () = ohm $ MNotify.Stats.from_site nid in 
 			      let! url = ohm (url cuid notify) in 
-			      let  url = BatOption.default home url in 
+			      let  url = BatOption.default home url in
+			      let! () = ohm $ TrackLog.(log (IsUser uid)) in 
 			      return $ CSession.start (`Old cuid) (Action.redirect url res)
     | `Missing -> return (Action.redirect home res)
     | `Expired uid -> let title = AdLib.get `Notify_Expired_Title in
