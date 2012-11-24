@@ -159,6 +159,8 @@ let () = UrlLogin.def_post_signup begin fun req res ->
 	  | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
 	  | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
 	in
+
+	let! () = ohm $ TrackLog.(log (IsUser (IUser.Deduce.is_anyone cuid))) in
 		
 	return $ CSession.start (`New cuid) (Action.javascript (Js.redirect url ()) res)
     
