@@ -54,7 +54,7 @@
       </div>
       <div>
 	<label>
-	  <span>{`Splash_Contact_Form_Email}</span><br/>
+	  <span>{`Splash_Contact_Form_Email}</span>&emsp;<small>({`Splash_Contact_Form_Required})</small><br/>
 	  <input type="text" name="email"/>
 	</label>
       </div>
@@ -106,4 +106,18 @@ here.$form.submit () ->
     data[$(@).attr 'name'] = $(@).val()
   $.post '/post-contact', data
   return false
+</script>
+
+<!-- Google Code for test Conversion Page -->
+<script>
+@google_conversion_id = 962111094
+@google_conversion_language = "en"
+@google_conversion_format = "3"
+@google_conversion_color = "ffffff"
+@google_conversion_label = "sy2GCIK4rwQQ9sziygM"
+@google_conversion_value = 0
+$.ajax
+  type: "GET"
+  dataType: "jsonp"
+  url: "http://www.googleadservices.com/pagead/conversion.js"
 </script>
