@@ -68,7 +68,7 @@ let technologie_accessible_entreprises =
 let collectivite_all_title =
 	composite `LR
 	(pride ~title:"Mairies et collectivités territoriales" "Solution dédiée aux mairies, communautés de communes et autres collectivités territoriales")
-	(create "Collectivites") 
+	(contact_demo) 
 let collectivite_all_desc_a =
     composite `LR 
 	(image 
@@ -97,7 +97,7 @@ Les services disposent d'un annuaire en ligne, d'un agenda partagé des évènem
 let collectivites_localnpportal_title =
 	composite `LR
 	(pride ~title:"Portail associatif communal" "Dotez gratuitement votre commune d'un outil pour organiser efficacement ses associations")
-	(create "LocalNpPortal")   
+	(contact_demo)   
 let collectivites_localnpportal_desc_a =
     composite `LR 
 	(image 
@@ -126,7 +126,7 @@ Vous disposez d’un annuaire des responsables associatif de votre commune, d’
 let collectivites_maisonasso_title =
 	composite `LR
 	(pride ~title:"Maisons des associations" "Equipez gratuitement votre MDA d'un outil pour accompagner et annimer facilement ses associations")
-	(create "MaisonAsso")  
+	(contact_demo)  
 let collectivites_maisonasso_desc_a =
     composite `LR 
 	(image 
@@ -161,7 +161,7 @@ Toutes les fonctionnalités de gestion, de communication et d'organisation d'act
 let collectivites_campaigns_title =
 	composite `LR
 	(pride ~title:"Campagnes électorales" "Un moyen efficace et original de mener sa campagne. Utilisé par plusieurs députés élus en 2012.")
-	(create "Campaigns")
+	(contact_demo)
 let collectivites_campaigns_desc_a =	
     composite `LR 
 	(image 
@@ -196,7 +196,7 @@ Utilisé par plusieurs candidats ou députés durant les législatives 2012, l'o
 let collectivites_elementaryschool_title =
 	composite `LR
 	(pride ~title:"Ecoles primaires" "Elaboré avec le concours de spécialistes du numérique dans l'éducation, d'écoles, d'instituteurs et d'associations")
-	(create "ElementarySchool") 
+	(contact_demo) 
 let collectivites_elementaryschool_desc_a =
     composite `LR 
 	(image 
@@ -227,7 +227,7 @@ let collectivites_elementaryschool_desc_b =
 let entreprises_company_title =
 	composite `LR
 	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
-	(create "Company") 
+	(contact_demo) 
 let entreprises_company_desc_a =
     composite `LR 
 	(image 
@@ -258,7 +258,7 @@ Vous avez également la possiblité d'ouvrir votre outil à vos clients privilé
 let entreprises_companytraining_title =
 	composite `LR
 	(pride ~title:"Centres de formation" "Solution idéale pour organiser les échanges entre les stagiaires et garder le contact avec eux une fois la formation terminée")
-	(create "CompanyTraining")  
+	(contact_demo)  
 let entreprises_companytraining_desc_a =
     composite `LR 
 	(image 
@@ -287,7 +287,7 @@ A la manière des réseaux sociaux vous disposez d'un annuaire, d'agenda, d'év�
 let entreprises_comiteent_title =
 	composite `LR
 	(pride ~title:"Comités d'Entreprise" "Solution conçue pour organiser et animer des comités de petites et moyennes entreprises" )
-	(create "ComiteEnt")  
+	(contact_demo)  
 let entreprises_comiteent_desc_a =
     composite `LR 
 	(image 
@@ -316,7 +316,7 @@ RunOrg Comités d'Entreprise vous offre une solution clef en main, ludique et ef
 let entreprises_events_title =
 	composite `LR
 	(pride ~title:"Organisation d'évènements" "Cette solution vous permet d'organiser un évènement, d'animer les participants, et de les relancer pour les évènements suivants")
-	(create "Events") 
+	(contact_demo) 
 let entreprises_events_desc_a =
     composite `LR 
 	(image 
