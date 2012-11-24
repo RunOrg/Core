@@ -58,6 +58,7 @@ let () = UrlMail.def_signupConfirm begin fun req res ->
   let  url  = Action.url UrlMe.News.home (req # server) () in
   
   let! () = ohm $ MNews.Cache.prepare uid in
+  let! () = ohm $ TrackLog.(log (IsUser (IUser.decay uid))) in
 
   return $ CSession.start (`Old cuid) (Action.redirect url res)
 

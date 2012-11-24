@@ -36,14 +36,15 @@ module Proof    = OhmCouchProof.Make(ConfigDB)
 
 type i18n = Asset_AdLib.key
 
-class ctx adlib = object
+class ctx ?session adlib = object
   inherit CouchDB.init_ctx
   inherit Async.ctx
   inherit [i18n] AdLib.ctx adlib
+  method track_logs = (session : OhmTrackLogs.session option)
 end
 
-let ctx = function
-  | `FR -> new ctx Asset_AdLib.fr
+let ctx ?session = function
+  | `FR -> new ctx ?session Asset_AdLib.fr
 
 let put action = 
   if role = `Put then 
@@ -63,6 +64,9 @@ let page = Ohm.Html.print_page
 
 (* Action management ---------------------------------------------------------------------------------------- *)
 
+let () = 
+  OhmTrackLogs.file_prefix := "/var/log/ozone/track." ^ env
+
 let domain = match environment with 
   | `Prod    -> "runorg.com"
   | `Dev     -> 
@@ -76,7 +80,23 @@ let client = Server.client domain
 let secure = Server.secure domain
 
 let action f req res = 
-  Run.with_context (ctx `FR) (f req res)
+  let existed, session, res = OhmTrackLogs.get_session req res in 
+  Run.with_context (ctx ~session `FR) begin 
+
+    let url  = Action.url (req # self) (req # server) (req # args) in
+    let mode = if req # post <> None then "POST" else "GET" in
+    let landing = Json.of_opt Json.of_string (req # get "land") in
+
+    (* If first time we see session, log "First" *)
+    let! () = ohm 
+      (if existed then return () else OhmTrackLogs.log (Json.Array [ Json.String "F" ; landing ])) in
+
+    (* Log the request anyway *)
+    let! () = ohm $ OhmTrackLogs.log (Json.Array [ Json.String "R" ; Json.String mode ; Json.String url ]) in
+
+    f req res
+
+  end
 
 let register s u a body = 
   Action.register s u a (action body)
