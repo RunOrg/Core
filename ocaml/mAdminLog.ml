@@ -136,3 +136,52 @@ let stats days_ago =
       method group = count "ecg"
     end)
   end)
+
+module CountActiveUsers = CouchDB.ReduceView(struct
+  module Key = Fmt.Make(struct type json t = float option end) 
+  module Value = Fmt.Make(struct type json t = string list end)
+  module Design = Design
+  let name = "active_users"
+  let map = "emit(doc.time,[doc.uid])"
+  let reduce = "var r = {}; 
+                for (var i = 0; i < values.length; ++i)  
+                  for (var j = 0; j < values[i].length; ++j)
+                    r[values[i][j]] = true;
+                var o = [];
+                for (var k in r) o.push(k);
+                return o;"
+  let group = false
+  let level = None
+end)
+
+let active_users ~period = 
+  let! now = ohmctx (#time) in
+  let  startkey = Some (now -. period) in
+  let! list = ohm $ CountActiveUsers.reduce_query ~startkey () in
+  return $ List.length (List.concat (List.map snd list))
+
+module CountActiveInstances = CouchDB.ReduceView(struct
+  module Key = Fmt.Make(struct type json t = float option end) 
+  module Value = Fmt.Make(struct type json t = string option list end)
+  module Design = Design
+  let name = "active_instances"
+  let map = "if (doc.iid) emit(doc.time,[doc.iid])"
+  let reduce = "var r = {}; 
+                for (var i = 0; i < values.length; ++i)  
+                  for (var j = 0; j < values[i].length; ++j)
+                    if (values[i][j])
+                      r[values[i][j]] = true;
+                var o = [], k = null;
+                for (k in r) o.push(k);
+                return o;"
+  let group = false
+  let level = None
+end)
+
+let active_instances ~period = 
+  let! now = ohmctx (#time) in
+  let  startkey = Some (now -. period) in
+  let! list = ohm $ CountActiveInstances.reduce_query ~startkey () in
+  return $ List.length 
+    (BatList.sort_unique compare
+       (List.concat (List.map snd list)))

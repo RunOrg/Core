@@ -10,9 +10,16 @@ module Parents = CAdmin_parents
 
 let () = UrlAdmin.def_stats $ admin_only begin fun cuid req res -> 
 
+  let week = 7. *. 24. *. 3600. in
+
   let urls = BatList.init 28 (Action.url UrlAdmin.getStats None) in
 
   let body = Asset_Admin_Stats.render (object
+    method users_confirmed  = MUser.Backdoor.count_confirmed
+    method users_undeleted  = MUser.Backdoor.count_undeleted
+    method users_active     = MAdminLog.active_users ~period:week
+    method instances        = MInstance.Backdoor.count
+    method instances_active = MAdminLog.active_instances ~period:week 
     method urls = urls 
   end) in
 

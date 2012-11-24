@@ -46,3 +46,6 @@ val log :
   -> (#Ohm.CouchDB.ctx,unit) Ohm.Run.t
 
 val stats : int -> (#Ohm.CouchDB.ctx,Stats.t) Ohm.Run.t
+
+val active_users : period:float -> int O.run
+val active_instances : period:float -> int O.run
