@@ -2,11 +2,13 @@
 
 val test : IWhite.t
 val ffbad : IWhite.t
+val fscf : IWhite.t
 
 type t = 
   [ `RunOrg
   | `Test
   | `FFBAD
+  | `FSCF
   ]
 
 val represent : IWhite.t option -> t 
