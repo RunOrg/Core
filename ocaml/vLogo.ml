@@ -10,3 +10,4 @@ let render owid =
     | `Test   -> Asset_Logo_Ffbad.render () 
     | `FFBAD  -> Asset_Logo_Ffbad.render () 
     | `FSCF   -> Asset_Logo_Fscf.render () 
+    | `Innov  -> Asset_Logo_MyInnovation.render () 
