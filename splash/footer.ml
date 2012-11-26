@@ -4,8 +4,8 @@ let footer = [
   "À propos", "/about" ;
   "Contact", "/contact" ;
   (* "Support", "/help" ; *)
-  "Accompagnement", "/autres/accompagnement" ;
-  "Tarifs", "/pricing";
+ (* "Accompagnement", "/autres/accompagnement" ;*)
+  (*"Tarifs", "/pricing";*)
   "Presse", "/press" ;
   "Réseau", "/network/search" ;
 

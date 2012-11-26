@@ -64,6 +64,353 @@ let technologie_accessible_entreprises =
 	   
 	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. " ) 
 
+(* -------------------- ASSOCIATIONS ------------------- *)
+(* NEW ITEM------------------- *)
+let associations_standard_title =
+	composite `LR
+	(pride ~title:"Configuration standard" "Une configuration généraliste adaptée à toutes les associations")
+	(create "Simple")
+
+(* NEW ITEM------------------- *)
+let associations_students_title =
+	composite `LR
+	(pride ~title:"Associations étudiantes" "Pour les BDE, les BDA, les BDS et toutes les associations étudiantes")
+	(create "Students")
+let associations_students_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/gaetan_z/6853069363/",
+		       "GaetanZFSHN")
+	   "/public/img/preconf_students.jpg")
+	(features [ 
+	  "Point fort",
+	  "Créer et annimez facilement le réseau social privé de votre association étudiante" ;
+	    
+	  "Idéal pour...",
+	  "Organiser vos soirées et partager ensuite les photos entre vous. Gérer l'inscription en ligne de vos membres" ;
+	  
+	  "Egalement pensé pour...",
+	  "Equiper vos projets et vos commissions d'un outil qui leur permettra d'agir plus efficacement." ])  
+let associations_students_desc_b =	
+	ribbon ( important
+		"Ils vont parler de vous !"
+		"Offrez à vos étudiants le réseau social privé qu’ils attendent de leur asso et de leur école")
+let associations_students_desc_c =
+	(pride 
+	   ~title:"Le réseau privé de votre asso"
+	   "Notre solution dédiée aux associations étudiantes (BDE, BDA, BDS, etc.) vous permet d'équiper votre asso d'un outil de communication et d’organisation complet et puissant. Vous organisez en quelques minutes vos évènements et soirées, offrez des espaces de discussions et d’échanges privés (fini les photos sur Internet !), équipez vos clubs et projets. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants.
+
+De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et vos bénévoles à communiquer via les réseaux sociaux pour alléger considérablement vos tâches administratives et logistiques"	) 
+
+(* NEW ITEM------------------- *)
+let associations_ess_title =
+	composite `LR
+	(pride ~title:"Associations de l'ESS" "Pour toutes les associations de l'économie sociale et solidaire")
+	(create "Ess")
+let associations_ess_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/leo-gruebler/6347903993/",
+		       "Leo Gruebler")
+	   "/public/img/preconf_ess.jpg")
+	(features [ 
+	  "Point fort",
+	  "Communiquez, organiser et mobilisez depuis un seul et même espace" ;
+	    
+	  "Idéal pour...",
+	  "Mobiliser très rapidement tous les membres pour une action commune et pour communiquer de manière transversale" ;
+	  
+	  "Egalement pensé pour...",
+	  "- Travailler de manière collaborative sur des idées ou des actions  - Garder confidentiel les échanges entre les membres" ])  
+let associations_ess_desc_b =
+	(pride 
+	   ~title:"L'ESS a enfin son outil !"
+	   "La solution dédiée aux Associations de l'Economie Sociale et Solidaire (ESS) est conçue pour les aider à s'organiser au mieux dans un environnement démocratique et collaboratif.
+
+Les membres s'organisent autour de projets, de thèmes ou encore d'actions. Chacun des groupes ainsi constitué peut avancer sur ses sujets sans interférer avec la communication globale au sein de l'association.  Les membres on néanmoins accès à tous les sujets qui les intéressent et peuvent apporter leur contribution.
+
+RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en main, ludique et efficace pour organiser vos activité et vos action. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres."	)  
+
+(* NEW ITEM------------------- *)
+let associations_impro_title =
+	composite `LR
+	(pride ~title:"Troupes et clubs d'Improvisation" "Spécialement créé pour les troupes et les clubs pratiquant le théâtre d'improvisation")
+	(create "Impro") 
+let associations_impro_desc_a =	
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/cyberuly/5370448834/",
+		       "Cyberuly")
+	   "/public/img/preconf_impro.jpg")
+	(features [ 
+	  "Points forts",
+	  "Facilite l'organisation des activités (matchs et entrînements) en permettant de réccupérer les disponibilités des joueurs" ;
+	    
+	  "Idéal pour...",
+	  "Organiser les matchs et les spectacles grâce aux modèles d'activités dédiés" ;
+	  
+	  "Déjà utilisé par...",
+	  "Les fondateurs de RunOrg et leur troupe d'impro ! (Donc nous prenons grand soin de cette solution !)"])  
+let associations_impro_desc_b =
+	(pride 
+	   ~title:"N'improvisez plus l'organisation !"
+	   "La solution Théâtre d'improvisation de RunOrg vous permet de bénéficier d'une solution créée spécialement pour répondre aux besoins des troupes d'improvisation professionnelles ou amateures. 
+
+Cette solution a été pensée pour vous aider dans l'organisation de vos matchs, de vos spectacles et de vos entraînements.
+
+En un seul endroit vous centralisez les informations sur vos joueurs, les entrainements, les cotisations, les spectacles, les matchs, les supporteurs. De plus les modèles RunOrg pour le théâtre d'improvisation vous permettent de bénéficier de check liste pour vous faciliter l'organisation de vos événements.
+
+Jamais organiser un spectacle, inviter votre public et partager ensuite les photos n'a été aussi simple. Tout cela dans l'environnement sécurisé RunOrg." 	) 
+
+(* NEW ITEM------------------- *)
+let associations_multisports_title =
+	composite `LR
+	(pride ~title:"Clubs multi-sports" "Une solution adaptée au fonctionnement des clubs multi-sports")
+	(create "MultiSports")
+let associations_multisports_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/loozrboy/3024154654/",
+		       "Loozrboy")
+	   "/public/img/preconf_multisports.jpg")
+	(features [ 
+	  "Point forts",
+	  "Permet de gérer tous les sports de son club en utilisant un seul outil" ;
+	    
+	  "Idéal pour...",
+	  "Gérer plusieurs sports au sein d'un même club et offrir à chacun un espace d'organisation indépendant" ;
+	  
+	  "Egalement pensé pour...",
+	  "Offrir des formulaires d'inscription différenciés pour chacun des sports (inclus et mis à jour)" ])  
+let associations_multisports_desc_b =	
+	(pride 
+	   ~title:"Votre intranet organisé par activités"
+	   "La solution Club multi-sports de RunOrg vous permet de bénéficier d'un intranet conçu pour répondre aux nombreux et complexes besoins des clubs offrants plusieurs sports à leurs membres. 
+
+Cette solution vous permet de bénéficier depuis une seul espace de tous les formulaires sportifs créés pour les sports déjà préconfigurés dans RunOrg. Elle vous permet d’offrir à vos différentes disciplines des espaces dédiés dans lesquels les membres vont pouvoir communiquer et s’organiser. Elle prend en compte qu’un membre peut participer à plusieurs sports et permet de gérer des adhésions différentiées selon les sports.
+
+RunOrg Club multi-sports vous offre une solution clef en main, ludique et efficace pour gérer les activités, les évènements et les différentes structures sportives au sein de votre club. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion d’une communauté en ligne. " 	)  
+
+(* NEW ITEM------------------- *)
+let associations_judo_title =
+	composite `LR
+	(pride ~title:"Clubs de Judo et Jujitsu" "Solution conçue avec des entraîneurs et des clubs de haut niveau")
+	(create "Judo")
+let associations_judo_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/parrhesiastes/",
+		       "Parrhesiastes")
+	   "/public/img/preconf_judo.jpg")
+	(features [ 
+	  "Points forts",
+	  "Facilite la communication au sein du clubs et les tâches administratives des responsables" ;
+	    
+	  "Idéal pour...",
+	  "Gérer les inscriptions, organiser les compétitions, communiquer avec les sportifs ou leurs parents" ;
+
+	  "Modèles et groupes inclus",
+	  "Formulaires d'inscription, classification par âge du judo, compétition de judo"])
+let associations_judo_desc_b =
+	(pride 
+	   ~title:"Plus qu'un outil : une communauté"
+	   "La solution RunOrg pour les club de judo et jujitsu a été conçue en se basant sur les besoins et les conseils de clubs de judo évoluant au plus haut niveau. Son objectif est de faciliter l'organisation des entraînements et des compétitions et de mettre en avant les valeurs du club et du judo.
+
+Grâce à son formulaire spécial judo et jujitsu (comportant les ceintures réglementaires, les dans et les questions relatives aux judokas) et la livraison en standard des groupes de niveau du judo (du petit samouraï au vétéran), vous disposez d'une solution déjà complètement personnalisée aux besoins des clubs de judo et jujitsu.
+
+Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilisé pour faciliter sa communication et son organisation, mais aussi renforcer ses valeurs et la cohésion de ses membres." 	)  
+
+(* NEW ITEM------------------- *)
+let associations_badminton_title =
+	composite `LR
+	(pride ~title:"Clubs de Badminton" "Solution élaborée avec le concours de la Fédération Française de Badminton")
+	(create "Badminton")
+let associations_badminton_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/cdianne/2725181343/",
+		       "Dee'lite")
+	   "/public/img/preconf_badminton.jpg")
+	(features [ 
+	  "Point fort",
+	  "Gestion du loisir et du haut niveau en lien avec la FFBAD" ;
+
+	  "Modèles et groupes inclus",
+	  "Compétition de badminton, formualaire d'inscription badminton, groupes pour le loisir, la compétition et les entraîneurs ";	
+	  
+	  "Déjà utilisé par...",
+	  "Les clubs affiliés à la Fédération Française de Badminton"	])  
+let associations_badminton_desc_b =	
+	ribbon ( important
+		"Solution approuvée par la FFBAD"
+		"") 
+let associations_badminton_desc_c =
+      composite `LR
+	(image "/public/img/preconf_badminton_logo_ffbad.jpg")
+	(pride
+	   ~title:"Portail clubs de la FFBAD"
+	   ~subtitle:"Bientôt disponible"
+	   ~link:("/http://www.ffbad.org",
+	       "Site de la FFBAD")
+	   "La FFBAD met à la disposition exclusive de ses clubs affiliés des espaces privés spécialements adaptés au badminton. 
+	   Ces espaces sont hébergés sous le nom de domaine de la fédération, disposent des couleurs de la FFBAD, et fourniront des services exclusifs aux clubs affiliés."	) 
+
+(* NEW ITEM------------------- *)
+let associations_footus_title =
+	composite `LR
+	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée par un club évoluant en ELITE")
+	(create "Footus") 
+let associations_footus_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/virtualsugar/3967883513/",
+		       "Monica's Dad")
+	   "/public/img/preconf_footus.jpg")
+	(features [ 
+	  "Point fort",
+	  "De l'inscription des membres à l'organistion des matchs dans un seul outil." ;
+	    
+	  "Idéal pour...",
+	  "Motiver les joueurs et communiquer sur les résultats !" ;
+	  
+	  "Modèles et groupes inclus",
+	  "Groupes des niveaux officiels, formulaires d'inscription Football US et cheerleading"]) 
+let associations_footus_desc_b =
+	(pride 
+	   ~title:"Conçu avec les meilleurs"
+	   "La solution RunOrg pour les clubs de football américain et cheerleading a été conçue en se basant sur les besoins et les conseils de clubs évoluant au plus haut niveau. Son objectif est de faciliter l'organisation des entraînements et des compétitions et de mettre en avant les valeurs du club.
+
+Grâce à ses formulaires spéciaux football américain et cheerleading (comportant notamment les positions)  vous disposez d'une solution déjà personnalisée aux besoins des clubs football américain et cheerleading.
+
+Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilisé pour faciliter sa communication et son organisation, mais aussi renforcer ses valeurs et la cohésion de ses membres.") 
+
+(* NEW ITEM------------------- *)
+let associations_athle_title =
+	composite `LR
+	(pride ~title:"Clubs d'Athlétisme" "Solution complète intégrant la gestion des disciplines")
+	(create "Athle")
+let associations_athle_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/virtualsugar/3967883513/",
+		       "GiÃ¥m")
+	   "/public/img/preconf_athle.jpg")
+	(features [ 
+	  "Point fort",
+	  "Gérer er organiser les différentes disciplines et leurs sportifs n'a jamais été aussi simple" ;
+	    
+	  "Idéal pour...",
+	  "Différencier la communication et l'organisation des activités par disciplines" ;
+	  
+	  "Egalement pensé pour...",
+	  "Offrir aux sportifs et leurs parents un lieu d'échanges et de conseils."]) 
+
+(* NEW ITEM------------------- *)
+let associations_sallesport_title =
+	composite `LR
+	(pride ~title:"Salle de sport et coaching sportif" "Solution développée en collaboration avec un coach sportif et un gestionnaire de salle de sport")
+	(create "SalleSport")    
+let associations_sallesport_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/abraj/181196330/",
+		       "Abdullah AL-Naser")
+	   "/public/img/preconf_sallesport.jpg")
+	(features [ 
+	  "Points forts",
+	  "Personnalisation du suivi des sportifs" ;
+	    
+	  "Idéal pour...",
+	  "Organiser les activités et les suivis avec plusieurs sportifs et entraineurs " ;
+	 	  
+	  "Modèles et groupes inclus",
+	  "Cours incluant les objectifs, modèles de bilan sportifs, formulaire d'inscription détaillés"	]) 
+let associations_sallesport_desc_b =
+	(pride 
+	   ~title:"Personnalisez le suivi des sportifs"
+	   "La solution de RunOrg dédiée aux salles de sport et aux coachs sportifs est conçue pour les aider à s'organiser au mieux pour répondre aux besoins et attentes des sportifs qu'ils entraînent. 
+
+Même dans un environnement avec plusieurs profs, Les sportifs bénéficient d'un suivi personnalisé et centralisé de leurs activités, de leurs cours et de leur progression. Ils disposent en plus d'un espace d'échange privilégié avec leurs entraineurs et leurs conseillers. Vous proposez à vos sportifs de rejoindre des groupes (intérêts, cours, etc.) dans lesquels ils vont pouvoir communiquer. Des modèles vous permettent de réaliser des bilans réguliers de leurs performances.
+
+RunOrg Salles de sport et coaching sportif vous offre une solution clef en main, ludique et efficace pour organiser vos activités et vos actions. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres."	) 
+
+(* NEW ITEM------------------- *)
+let associations_sports_title =
+	composite `LR
+	(pride ~title:"Autres clubs de sports" "Solution standard pour les clubs de sports n'ayant pas encore de configuration dédiée")
+	(create "Sports")  
+let associations_sports_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/zachd1_618/6724055197/",
+		       "Zach Dischner")
+	   "/public/img/preconf_sports.jpg")
+	(features [ 
+	  "Point fort",
+	  "Adapté à la plupart des besoins des clubs de sports" ;
+	    
+	  "Idéal pour...",
+	  "Communiquer et organiser l'activité de son club" ;
+
+	  "Modèles et groupes inclus",
+	  "Groupes de niveaux"]) 
+let associations_sports_desc_b =	
+	ribbon ( important
+		"Contactez-nous !"
+		"La solution pour votre sport n'existe pas encore ?
+		Contactez-nous pour toutes informations supplémentaires. pour que nous la construisions ensemble !")
+let associations_sports_desc_c =
+	(pride 
+	   ~title:"Adapté à la plupart des sports !"
+	   ~link:("/contact",
+	       "Contactez-nous !")
+	   "La solution Club de sport de RunOrg vous permet de bénéficier d'un intranet créé pour s'adapter à un très grand nombre de cas et de besoins de clubs de sport.
+
+Cette solution peut très facilement s’adapter pour répondre aux besoins de tous les sports dans le cadre de club mono-sport. Elle incorpore en standard les catégories sportives les plus utilisées. Sa prise en main rapide vous permet de l'adopter très rapidement.
+
+C'est cette configuration que nous vous conseillons s’il n’existe pas encore de préconfiguration dédiée à votre sport. De plus, nous pourrons vous « migrer » gratuitement vers celle conçue pour votre sport dès qu’elle sera disponible. 
+
+N’hésitez pas à nous contacter pour nous aider à concevoir la solution pour votre sport !"	)
+
+(* NEW ITEM------------------- *)
+let associations_federations_title =
+	composite `LR
+	(pride ~title:"Fédérations" "Solution standard pour organiser en ligne la structure fédérale des fédérations.")
+	(contact_demo)   
+let associations_federations_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/-cavin-/2366764272/",
+		       "Cаvin")
+	   "/public/img/preconf_federations.jpg")
+	(features [ 
+	  "Point fort",
+	  "Un réseau social d'association pour votre fédération" ;
+	    
+	  "Idéal pour...",
+	  "Centraliser et organiser la communication des commissions" ;
+	  
+	  "Egalement pensé pour...",
+	  "Fournir un espace de travail pour les salariés, communiquer avec les responsables des clubs affiliés"])  
+let associations_federations_desc_b =
+	(pride 
+	   ~title:"Un outil pour toute votre fédération"
+	   "Disposez d’un outil qui permet à la fois de gérer la communication et l’organisation de la structure fédérale tout en étant ouvert vers les clubs et associations rattachées.
+
+De plus, nous pouvons paramétrer une solution spécialement pour l’ensemble de vos clubs et associations (un partenariat est alors mis en place : contactez-nous pour en savoir plus).
+
+RunOrg vous permet de bénéficier d’un outil moderne de communication et de gestion des membres et des activités comportant toutes les fonctionnalités attendu pour gérer efficacement une communauté (annuaire en ligne, partage de photos et de documents, organisation de réunion, sondages, fiches d’inscription, etc.)" 	) 
+let associations_federations_desc_c =
+       (bullets
+	   ~title:"De nombreuses possibilités"
+	   ~subtitle:"Il existe plusieurs options RunOrg pour les fédérations :"
+	   ~ordered:false
+	   [ "Utiliser l’outil uniquement pour votre structure fédérale" ;
+	     "Utiliser l’outil pour votre structure fédérale et l’ouvrir à vos clubs et association affiliés" ;
+	     "Recommander la solution préconfigurée RunOrg à vos clubs et associations" ;
+	     "Créer un espace commun pour votre fédération et tous les clubs et associations affiliée" ] 	)  
+
+(* -------------------- COLLECTIVITES ------------------- *)
 (* NEW ITEM------------------- *)
 let collectivite_all_title =
 	composite `LR
@@ -224,6 +571,36 @@ let collectivites_elementaryschool_desc_b =
 	   RunOrg pour les écoles primaires est actuellement en test dans une vingtaine d'écoles primaires en France." 	)  
 
 (* NEW ITEM------------------- *)
+let collectivites_copro_title =
+	composite `LR
+	(pride ~title:"Copropriétés" "Gestion d'une copropriété avec un gestionnaire / un syndic professionnel ou bénévole")
+	(contact_demo) 
+let collectivites_copro_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/joiseyshowaa/1279750389/",
+		       "Joiseyshowaa")
+	   "/public/img/preconf_copro.jpg")
+	(features [ 
+	  "Point fort",
+	  "Facilite la communication et l'organisation des actions du syndic" ;
+	    
+	  "Idéal pour...",
+	  "Communiquer sur des points urgents et pour voter des décisions rapdiement" ;
+	  
+	  "Egalement pensé pour...",
+	  "Partager les documents officiels, donner des accès aux prestataires, être informé des évènements de la copro" ]) 
+let collectivites_copro_desc_b =
+	(pride 
+	   ~title:"Un intranet pour votre copropriété"
+	   "La solution RunOrg pour les copropriétés et les syndics est destinée à fournir un espace en ligne de type Intranet adapté aux communautés que représentent les propriétaires et les locataires des immeubles. 
+
+Les propriétaires et locataires bénéficient d’un espace depuis lequel ils peuvent communiquer, s’organiser et gérer les aléas de leur lieu de vie. Les syndics et les gestionnaires disposent d’un moyen simple et rapide d’avoir les coordonnées des habitants, et de pouvoir rationnaliser leurs communications et leurs actions avec les membres du conseil syndical. 
+
+RunOrg Copropriétés vous offre une solution clef en main, ludique et efficace pour améliorer la vie de votre copropriété et prévenir les conflits en facilitant la communication et les actions rapides. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion d’une communauté en ligne. " 	)  
+
+(* -------------------- ENTREPRISES ------------------- *)
+(* NEW ITEM------------------- *)
 let entreprises_company_title =
 	composite `LR
 	(pride ~title:"Entreprises" "Solution simple et flexible à la manière d'un Réseau Social d'Entreprise")
@@ -341,394 +718,98 @@ Les membres échangent sur le mur et postent leurs photos directement dans l'év
 
 RunOrg Organisation d'évènement vous offre une solution clef en main et ludique et efficace pour organiser vos soirées et vos évènements. De plus vous bénéficiez de tous les autres points forts de RunOrg pour récupérer des informations sur vos participants et leur envoyer des messages ciblés. Cette solution s'adresse aux professionnels de l'évènementiel et à toute structure dont l'activité principale est l'organisation d'évènements."	) 
 
+ 
 
+(* NEW ITEM------------------- *)
+(* NEW ITEM------------------- *)
+(* NEW ITEM------------------- *)
 	
 let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
   page "" "RunOrg Associations - Configuration Standard"
-    [ composite `LR
-	(pride ~title:"Configuration standard" "Une configuration généraliste adaptée à toutes les associations")
-	(create "Simple") ;
-	
-     
-	default_price_asso ;
-	
+    [ associations_standard_title;     
+	default_price_asso ;	
     ] ;
 	
   page "/asso/Students" "RunOrg Associations - BDE et Associations Etudiantes"
-   [ composite `LR
-	(pride ~title:"Associations étudiantes" "Pour les BDE, les BDA, les BDS et toutes les associations étudiantes")
-	(create "Students");
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/gaetan_z/6853069363/",
-		       "GaetanZFSHN")
-	   "/public/img/preconf_students.jpg")
-	(features [ 
-	  "Point fort",
-	  "Créer et annimez facilement le réseau social privé de votre association étudiante" ;
-	    
-	  "Idéal pour...",
-	  "Organiser vos soirées et partager ensuite les photos entre vous. Gérer l'inscription en ligne de vos membres" ;
-	  
-	  "Egalement pensé pour...",
-	  "Equiper vos projets et vos commissions d'un outil qui leur permettra d'agir plus efficacement."	
-	  
-	]) ; 
-	
-	ribbon ( important
-		"Ils vont parler de vous !"
-		"Offrez à vos étudiants le réseau social privé qu’ils attendent de leur asso et de leur école") ;
-
-	(pride 
-	   ~title:"Le réseau privé de votre asso"
-	   "Notre solution dédiée aux associations étudiantes (BDE, BDA, BDS, etc.) vous permet d'équiper votre asso d'un outil de communication et d’organisation complet et puissant. Vous organisez en quelques minutes vos évènements et soirées, offrez des espaces de discussions et d’échanges privés (fini les photos sur Internet !), équipez vos clubs et projets. Cet espace en ligne devient le site communautaire pour organiser votre asso et pour tous vos étudiants.
-
-De plus, vous gagnez du temps car vous profitez des facilités vos étudiants et vos bénévoles à communiquer via les réseaux sociaux pour alléger considérablement vos tâches administratives et logistiques"
-	) ; 
-
+   [ associations_students_title ;
+	associations_students_desc_a ;
+	associations_students_desc_b ;
+	associations_students_desc_c ;
       hr () ;
-
       default_price_asso ;
     ] ; 
 	
   page "/asso/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
-    [ composite `LR
-	(pride ~title:"Associations de l'ESS" "Pour toutes les associations de l'économie sociale et solidaire")
-	(create "Ess")
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/leo-gruebler/6347903993/",
-		       "Leo Gruebler")
-	   "/public/img/preconf_ess.jpg")
-	(features [ 
-	  "Point fort",
-	  "Communiquez, organiser et mobilisez depuis un seul et même espace" ;
-	    
-	  "Idéal pour...",
-	  "Mobiliser très rapidement tous les membres pour une action commune et pour communiquer de manière transversale" ;
-	  
-	  "Egalement pensé pour...",
-	  "- Travailler de manière collaborative sur des idées ou des actions  - Garder confidentiel les échanges entre les membres"	
-	  	  
-	]) ; 
-
-
-	(pride 
-	   ~title:"L'ESS a enfin son outil !"
-	   "La solution dédiée aux Associations de l'Economie Sociale et Solidaire (ESS) est conçue pour les aider à s'organiser au mieux dans un environnement démocratique et collaboratif.
-
-Les membres s'organisent autour de projets, de thèmes ou encore d'actions. Chacun des groupes ainsi constitué peut avancer sur ses sujets sans interférer avec la communication globale au sein de l'association.  Les membres on néanmoins accès à tous les sujets qui les intéressent et peuvent apporter leur contribution.
-
-RunOrg Association Economie Sociale et Solidaire vous offre une solution clef en main, ludique et efficace pour organiser vos activité et vos action. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres."
-	) ; 
-
+    [ associations_ess_title ;
+	associations_ess_desc_a ;
+	associations_ess_desc_b ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
   page "/asso/Impro" "RunOrg Associations - Théâtre d'Improvisation"
-    [ composite `LR
-	(pride ~title:"Troupes et clubs d'Improvisation" "Spécialement créé pour les troupes et les clubs pratiquant le théâtre d'improvisation")
-	(create "Impro")     ;
-	
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/cyberuly/5370448834/",
-		       "Cyberuly")
-	   "/public/img/preconf_impro.jpg")
-	(features [ 
-	  "Points forts",
-	  "Facilite l'organisation des activités (matchs et entrînements) en permettant de réccupérer les disponibilités des joueurs" ;
-	    
-	  "Idéal pour...",
-	  "Organiser les matchs et les spectacles grâce aux modèles d'activités dédiés" ;
-	  
-	  "Déjà utilisé par...",
-	  "Les fondateurs de RunOrg et leur troupe d'impro ! (Donc nous prenons grand soin de cette solution !)"	
-	  
-	]) ; 
-
-	(pride 
-	   ~title:"N'improvisez plus l'organisation !"
-	   "La solution Théâtre d'improvisation de RunOrg vous permet de bénéficier d'une solution créée spécialement pour répondre aux besoins des troupes d'improvisation professionnelles ou amateures. 
-
-Cette solution a été pensée pour vous aider dans l'organisation de vos matchs, de vos spectacles et de vos entraînements.
-
-En un seul endroit vous centralisez les informations sur vos joueurs, les entrainements, les cotisations, les spectacles, les matchs, les supporteurs. De plus les modèles RunOrg pour le théâtre d'improvisation vous permettent de bénéficier de check liste pour vous faciliter l'organisation de vos événements.
-
-Jamais organiser un spectacle, inviter votre public et partager ensuite les photos n'a été aussi simple. Tout cela dans l'environnement sécurisé RunOrg."
-	) ; 
-
+    [ associations_impro_title ;
+	associations_impro_desc_a ;
+	associations_impro_desc_b ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
   page "/clubs-sports/MultiSports" "RunOrg Clubs - Clubs multi-sports "
-    [ composite `LR
-	(pride ~title:"Clubs multi-sports" "Une solution adaptée au fonctionnement des clubs multi-sports")
-	(create "MultiSports")
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/loozrboy/3024154654/",
-		       "Loozrboy")
-	   "/public/img/preconf_multisports.jpg")
-	(features [ 
-	  "Point forts",
-	  "Permet de gérer tous les sports de son club en utilisant un seul outil" ;
-	    
-	  "Idéal pour...",
-	  "Gérer plusieurs sports au sein d'un même club et offrir à chacun un espace d'organisation indépendant" ;
-	  
-	  "Egalement pensé pour...",
-	  "Offrir des formulaires d'inscription différenciés pour chacun des sports (inclus et mis à jour)"	
-	  
-	]) ; 
-	
-	(pride 
-	   ~title:"Votre intranet organisé par activités"
-	   "La solution Club multi-sports de RunOrg vous permet de bénéficier d'un intranet conçu pour répondre aux nombreux et complexes besoins des clubs offrants plusieurs sports à leurs membres. 
-
-Cette solution vous permet de bénéficier depuis une seul espace de tous les formulaires sportifs créés pour les sports déjà préconfigurés dans RunOrg. Elle vous permet d’offrir à vos différentes disciplines des espaces dédiés dans lesquels les membres vont pouvoir communiquer et s’organiser. Elle prend en compte qu’un membre peut participer à plusieurs sports et permet de gérer des adhésions différentiées selon les sports.
-
-RunOrg Club multi-sports vous offre une solution clef en main, ludique et efficace pour gérer les activités, les évènements et les différentes structures sportives au sein de votre club. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion d’une communauté en ligne. "
-	) ; 
-
+    [ associations_multisports_title ;
+	associations_multisports_desc_a ;
+	associations_multisports_desc_b ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
   page "/clubs-sports/Judo" "RunOrg Clubs - Judo et Jujitsu"
-    [ composite `LR
-	(pride ~title:"Clubs de Judo et Jujitsu" "Solution conçue avec des entraîneurs et des clubs de haut niveau")
-	(create "Judo")
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/parrhesiastes/",
-		       "Parrhesiastes")
-	   "/public/img/preconf_judo.jpg")
-	(features [ 
-	  "Points forts",
-	  "Facilite la communication au sein du clubs et les tâches administratives des responsables" ;
-	    
-	  "Idéal pour...",
-	  "Gérer les inscriptions, organiser les compétitions, communiquer avec les sportifs ou leurs parents" ;
-
-	  "Modèles et groupes inclus",
-	  "Formulaires d'inscription, classification par âge du judo, compétition de judo"	
-	  
-	]) ; 
-
-	(pride 
-	   ~title:"Plus qu'un outil : une communauté"
-	   "La solution RunOrg pour les club de judo et jujitsu a été conçue en se basant sur les besoins et les conseils de clubs de judo évoluant au plus haut niveau. Son objectif est de faciliter l'organisation des entraînements et des compétitions et de mettre en avant les valeurs du club et du judo.
-
-Grâce à son formulaire spécial judo et jujitsu (comportant les ceintures réglementaires, les dans et les questions relatives aux judokas) et la livraison en standard des groupes de niveau du judo (du petit samouraï au vétéran), vous disposez d'une solution déjà complètement personnalisée aux besoins des clubs de judo et jujitsu.
-
-Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilisé pour faciliter sa communication et son organisation, mais aussi renforcer ses valeurs et la cohésion de ses membres."
-	) ; 
-
+    [ associations_judo_title ;
+	associations_judo_desc_a ;
+	associations_judo_desc_b ;
       hr () ;
-
      default_price_asso ;
     ] ;
 
-	page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
-    [ composite `LR
-	(pride ~title:"Clubs de Badminton" "Solution élaborée avec le concours de la Fédération Française de Badminton")
-	(create "Badminton")
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/cdianne/2725181343/",
-		       "Dee'lite")
-	   "/public/img/preconf_badminton.jpg")
-	(features [ 
-	  "Point fort",
-	  "Gestion du loisir et du haut niveau en lien avec la FFBAD" ;
-
-	  "Modèles et groupes inclus",
-	  "Compétition de badminton, formualaire d'inscription badminton, groupes pour le loisir, la compétition et les entraîneurs ";	
-	  
-	  "Déjà utilisé par...",
-	  "Les clubs affiliés à la Fédération Française de Badminton"	
-	  
-	]) ; 
-	
-	ribbon ( important
-		"Solution approuvée par la FFBAD"
-		"") ;
-
-      composite `LR
-	(image "/public/img/preconf_badminton_logo_ffbad.jpg")
-	(pride
-	   ~title:"Portail clubs de la FFBAD"
-	   ~subtitle:"Bientôt disponible"
-	   ~link:("/http://www.ffbad.org",
-	       "Site de la FFBAD")
-	   "La FFBAD met à la disposition exclusive de ses clubs affiliés des espaces privés spécialements adaptés au badminton. 
-	   Ces espaces sont hébergés sous le nom de domaine de la fédération, disposent des couleurs de la FFBAD, et fourniront des services exclusifs aux clubs affiliés."
-	) ;
-
+  page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
+    [ associations_badminton_title ;
+	associations_badminton_desc_a ;
+	associations_badminton_desc_b ;
+	associations_badminton_desc_c ;
       hr () ;
-
       default_price_asso ;
     ] ;	
 
   page "/clubs-sports/Footus" "RunOrg Clubs - Football US & cheerleading "
-    [ composite `LR
-	(pride ~title:"Clubs de Football US & cheerleading" "Solution utilisée par un club évoluant en ELITE")
-	(create "Footus") 
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/virtualsugar/3967883513/",
-		       "Monica's Dad")
-	   "/public/img/preconf_footus.jpg")
-	(features [ 
-	  "Point fort",
-	  "De l'inscription des membres à l'organistion des matchs dans un seul outil." ;
-	    
-	  "Idéal pour...",
-	  "Motiver les joueurs et communiquer sur les résultats !" ;
-	  
-	  "Modèles et groupes inclus",
-	  "Groupes des niveaux officiels, formulaires d'inscription Football US et cheerleading"	
-
-	]) ; 
-
-	(pride 
-	   ~title:"Conçu avec les meilleurs"
-	   "La solution RunOrg pour les clubs de football américain et cheerleading a été conçue en se basant sur les besoins et les conseils de clubs évoluant au plus haut niveau. Son objectif est de faciliter l'organisation des entraînements et des compétitions et de mettre en avant les valeurs du club.
-
-Grâce à ses formulaires spéciaux football américain et cheerleading (comportant notamment les positions)  vous disposez d'une solution déjà personnalisée aux besoins des clubs football américain et cheerleading.
-
-Offrez à votre club l'espace communautaire en ligne qui va pouvoir être utilisé pour faciliter sa communication et son organisation, mais aussi renforcer ses valeurs et la cohésion de ses membres."
-	) ; 
-
+    [ associations_footus_title ;
+	associations_footus_desc_a ;
+	associations_footus_desc_b ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
   page "/clubs-sports/Athle" "RunOrg Clubs - Athlétisme "
-    [ composite `LR
-	(pride ~title:"Clubs d'Athlétisme" "Solution complète intégrant la gestion des disciplines")
-	(create "Athle")
-    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/virtualsugar/3967883513/",
-		       "GiÃ¥m")
-	   "/public/img/preconf_athle.jpg")
-	(features [ 
-	  "Point fort",
-	  "Gérer er organiser les différentes disciplines et leurs sportifs n'a jamais été aussi simple" ;
-	    
-	  "Idéal pour...",
-	  "Différencier la communication et l'organisation des activités par disciplines" ;
-	  
-	  "Egalement pensé pour...",
-	  "Offrir aux sportifs et leurs parents un lieu d'échanges et de conseils."	
-	  	  
-	]) ; 
-
+    [ associations_athle_title ;
+	associations_athle_desc_a ;
       default_price_asso ;
     ] ;
 
   page "/clubs-sports/SalleSport" "RunOrg Clubs - Salle de sport et coaching "
-    [ composite `LR
-	(pride ~title:"Salle de sport et coaching sportif" "Solution développée en collaboration avec un coach sportif et un gestionnaire de salle de sport")
-	(create "SalleSport")    ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/abraj/181196330/",
-		       "Abdullah AL-Naser")
-	   "/public/img/preconf_sallesport.jpg")
-	(features [ 
-	  "Points forts",
-	  "Personnalisation du suivi des sportifs" ;
-	    
-	  "Idéal pour...",
-	  "Organiser les activités et les suivis avec plusieurs sportifs et entraineurs " ;
-	 	  
-	  "Modèles et groupes inclus",
-	  "Cours incluant les objectifs, modèles de bilan sportifs, formulaire d'inscription détaillés"	
-	  
-	]) ; 
-	
-
-	(pride 
-	   ~title:"Personnalisez le suivi des sportifs"
-	   "La solution de RunOrg dédiée aux salles de sport et aux coachs sportifs est conçue pour les aider à s'organiser au mieux pour répondre aux besoins et attentes des sportifs qu'ils entraînent. 
-
-Même dans un environnement avec plusieurs profs, Les sportifs bénéficient d'un suivi personnalisé et centralisé de leurs activités, de leurs cours et de leur progression. Ils disposent en plus d'un espace d'échange privilégié avec leurs entraineurs et leurs conseillers. Vous proposez à vos sportifs de rejoindre des groupes (intérêts, cours, etc.) dans lesquels ils vont pouvoir communiquer. Des modèles vous permettent de réaliser des bilans réguliers de leurs performances.
-
-RunOrg Salles de sport et coaching sportif vous offre une solution clef en main, ludique et efficace pour organiser vos activités et vos actions. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion de vos membres."
-	) ; 
-
+    [ associations_sallesport_title;
+	associations_sallesport_desc_a ;
+	associations_sallesport_desc_b ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
   page "/clubs-sports/Sports" "RunOrg Clubs - Autres sports"
-    [ composite `LR
-	(pride ~title:"Autres clubs de sports" "Solution standard pour les clubs de sports n'ayant pas encore de configuration dédiée")
-	(create "Sports")   ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/zachd1_618/6724055197/",
-		       "Zach Dischner")
-	   "/public/img/preconf_sports.jpg")
-	(features [ 
-	  "Point fort",
-	  "Adapté à la plupart des besoins des clubs de sports" ;
-	    
-	  "Idéal pour...",
-	  "Communiquer et organiser l'activité de son club" ;
-
-	  "Modèles et groupes inclus",
-	  "Groupes de niveaux"	
-
-	]) ; 
-	
-	ribbon ( important
-		"Contactez-nous !"
-		"La solution pour votre sport n'existe pas encore ?
-		Contactez-nous pour toutes informations supplémentaires. pour que nous la construisions ensemble !") ;
-
-	(pride 
-	   ~title:"Adapté à la plupart des sports !"
-	   ~link:("/contact",
-	       "Contactez-nous !")
-	   "La solution Club de sport de RunOrg vous permet de bénéficier d'un intranet créé pour s'adapter à un très grand nombre de cas et de besoins de clubs de sport.
-
-Cette solution peut très facilement s’adapter pour répondre aux besoins de tous les sports dans le cadre de club mono-sport. Elle incorpore en standard les catégories sportives les plus utilisées. Sa prise en main rapide vous permet de l'adopter très rapidement.
-
-C'est cette configuration que nous vous conseillons s’il n’existe pas encore de préconfiguration dédiée à votre sport. De plus, nous pourrons vous « migrer » gratuitement vers celle conçue pour votre sport dès qu’elle sera disponible. 
-
-N’hésitez pas à nous contacter pour que nous aider à concevoir la solution pour votre sport !"
-	) ; 
-
+    [ associations_sports_title ;
+	associations_sports_desc_a ;
+	associations_sports_desc_b ;
+	associations_sports_desc_c ;
       hr () ;
-
       default_price_asso ;
     ] ;
 
@@ -775,51 +856,13 @@ N’hésitez pas à nous contacter pour que nous aider à concevoir la solution 
     ] ;	
 
   page "/federations/Federations" "RunOrg Fédérations - Structure fédérale"
-    [ composite `LR
-	(pride ~title:"Fédérations" "Solution standard pour organiser en ligne la structure fédérale des fédérations.")
-	(create "Federations")  ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/-cavin-/2366764272/",
-		       "Cаvin")
-	   "/public/img/preconf_federations.jpg")
-	(features [ 
-	  "Point fort",
-	  "Un réseau social d'association pour votre fédération" ;
-	    
-	  "Idéal pour...",
-	  "Centraliser et organiser la communication des commissions" ;
-	  
-	  "Egalement pensé pour...",
-	  "Fournir un espace de travail pour les salariés, communiquer avec les responsables des clubs affiliés"	
-	  
-	]) ; 
-	
-
-	(pride 
-	   ~title:"Un outil pour toute votre fédération"
-	   "Disposez d’un outil qui permet à la fois de gérer la communication et l’organisation de la structure fédérale tout en étant ouvert vers les clubs et associations rattachées.
-
-De plus, nous pouvons paramétrer une solution spécialement pour l’ensemble de vos clubs et associations (un partenariat est alors mis en place : contactez-nous pour en savoir plus).
-
-RunOrg vous permet de bénéficier d’un outil moderne de communication et de gestion des membres et des activités comportant toutes les fonctionnalités attendu pour gérer efficacement une communauté (annuaire en ligne, partage de photos et de documents, organisation de réunion, sondages, fiches d’inscription, etc.)"
-	) ; 
-
+    [ associations_federations_title ;
+	associations_federations_desc_a ;
+	associations_federations_desc_b ;
       hr () ;
-
        composite `LR
-       plateforme_complete
-
-       (bullets
-	   ~title:"De nombreuses possibilités"
-	   ~subtitle:"Il existe plusieurs options RunOrg pour les fédérations :"
-	   ~ordered:false
-	   [ "Utiliser l’outil uniquement pour votre structure fédérale" ;
-	     "Utiliser l’outil pour votre structure fédérale et l’ouvrir à vos clubs et association affiliés" ;
-	     "Recommander la solution préconfigurée RunOrg à vos clubs et associations" ;
-	     "Créer un espace commun pour votre fédération et tous les clubs et associations affiliée" ]
-	)  ;
+       plateforme_complete 
+	associations_federations_desc_c ;
     ] ;
 
   page "/federations/Badminton" "RunOrg Fédérations - FF Badminton"
@@ -956,58 +999,19 @@ RunOrg vous permet de bénéficier d’un outil moderne de communication et de g
 	) ;
     ] ;
   page "/syndic-copropriete/Copro" "RunOrg Copropriétés - Copropriété avec syndic professionnel"
-    [ composite `LR
-	(pride ~title:"Copropriété avec syndic professionnel" "Gestion d'une copropriété avec un gestionnaire ou un syndic professionnel")
-	(create "Copro") ;
-
-    composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/joiseyshowaa/1279750389/",
-		       "Joiseyshowaa")
-	   "/public/img/preconf_copro.jpg")
-	(features [ 
-	  "Point fort",
-	  "Facilite la communication et l'organisation des actions du syndic" ;
-	    
-	  "Idéal pour...",
-	  "Communiquer sur des points urgents et pour voter des décisions rapdiement" ;
-	  
-	  "Egalement pensé pour...",
-	  "Partager les documents officiels, donner des accès aux prestataires, être informé des évènements de la copro"	
-	  
-	]) ; 
-
-	(pride 
-	   ~title:"Un intranet pour votre copropriété"
-	   "La solution RunOrg pour les copropriétés et les syndics est destinée à fournir un espace en ligne de type Intranet adapté aux communautés que représentent les propriétaires et les locataires des immeubles. 
-
-Les propriétaires et locataires bénéficient d’un espace depuis lequel ils peuvent communiquer, s’organiser et gérer les aléas de leur lieu de vie. Les syndics et les gestionnaires disposent d’un moyen simple et rapide d’avoir les coordonnées des habitants, et de pouvoir rationnaliser leurs communications et leurs actions avec les membres du conseil syndical. 
-
-RunOrg Copropriétés vous offre une solution clef en main, ludique et efficace pour améliorer la vie de votre copropriété et prévenir les conflits en facilitant la communication et les actions rapides. De plus vous bénéficiez de tous les autres points forts de RunOrg pour la gestion d’une communauté en ligne. "
-	) ; 
-
+    [collectivites_copro_title ;
+	collectivites_copro_desc_a ;
+	collectivites_copro_desc_b ;
       hr () ;
-
       composite `LR
        plateforme_complete
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+	technologie_accessible_collectivites ;
     ] ;
 
   page "/syndic-copropriete/CoproVolunteer" "RunOrg Copropriétés - Copropriété avec syndic bénévole"
     [ composite `LR
 	(pride ~title:"Copropriété avec syndic bénévole" "Gestion d'une copropriété en syndic bénévol ou regroupement de copropriétaires sans accès pour le syndic professionnel")
-	(create "CoproVolunteer")  ;
+	(contact_demo)  ;
 
     composite `LR 
 	(image 
@@ -1040,18 +1044,7 @@ RunOrg Copropriétés pour syndics bénévoles vous offre une solution clef en m
 
       composite `LR
        plateforme_complete
-
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   ~link:("/pricing",
-		  "Tarifs des offres") 
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
-	) ;
+	technologie_accessible_collectivites ;
     ] ;
 
   page "/entreprises/Company" "RunOrg Entreprises"

@@ -2,10 +2,10 @@ open Common
 open WithSections 
 
 let page url title list =
-  let url = "/collectivites"^url in
+  let url = "/"^url in
   page url title 
-    ~section:"collectivites"
-    ~head:"collectivites" 
+    ~section:"associations"
+    ~head:"associations" 
     ~subsection:url 
     list
 
@@ -18,119 +18,230 @@ puis découper à : 465x270 *)
 let pages = [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
- page "" "RunOrg Collectivités"
- [   composite `LR 
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/26700188@N05/5633798012/",
-		       "Besopha")
-	   "/public/img/preconf_collectivites.jpg")
-	(features [ 
-	  "Des solutions adaptées aux collectivités",
-	  "Nous avons un grand choix d'applications qui s'adaptent aux besoins de votre collectivité" ;
-	    
-	  "Simple et rapide à mettre en oeuvre",
-	  "L'outil existe déjà : cela facilite sa mise en place et réduit les risques" ;
-	  
-	  "Communiquez comme vos administrés",
-	  "De plus en plus de citoyens utilisent l'Internet pour communiquer et s'informer : offrez-leur un espace privé pour communiquer avec vous"	
-	  
-	]) ; 
-
+ page "" "RunOrg Associations"
+ [   composite `LLR
+	(video 
+	   ~height:350
+	   ~poster:"/public/img/2012-04-12-video-poster.png"
+	   [ "/public/videos/2012-04-13.mp4", "video/mp4" ;
+	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
+	(bullets 
+	   ~title:"L'outil des associations"
+	   ~subtitle:"Découvez la meilleure façon de..."
+	   [ "Gérer vos membres, votre annuaire et vos adhésions." ;
+	     "Organiser des évènements, des réunions, des assemblées générales." ;
+	     "Communiquer plus facilement avec les membres de votre association." ;
+		 "Déléguer des responsabilités tout en gardant le contrôle."
+		  ]) ;
+      
 	ribbon ( important
-		"Un outil innovant au service de vos idées"
-		"RunOrg offre des espaces communautaires privés aux collectivités leurs permettant d'être plus efficaces et d'innover dans leurs relations avec leurs administrés, élus, agents, sympathisants, etc.") ;
+		"« Plus simple et plus puissant !»"
+		"« RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,
+les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… 
+Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
+Suzel Chassefeire, présidente de la Chambre Des Associations") ;
 
+(*	ribbon 
+	  (quote ~who:"Suzel Chassefeire, présidente de la Chambre Des Associations" "RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… Une seule plateforme pour tout faire : c’est plus simple et plus puissant !") ; *)
+	     
       composite `LR
 	(pride
 	   ~title:"Prise en main immédiate"
-	   ~subtitle:"Vos administrés vont adorer"
-	   "L'interface de RunOrg est intuitive, facile à maîtriser et ludique : les administrés, les agents et les sympathisants  l'adopteront rapidement pour communiquer entre eux et avec vous.
+	   ~subtitle:"Vos membres vont adorer"
+	   "L'interface de RunOrg est intuitive, facile à maîtriser et ludique : les membres de votre association l'adopteront rapidement pour communiquer entre eux et avec les responsables de l'association.
 
 Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunOrg devient la façon la plus simple de communiquer et de s'organiser."
 	)
 	(image "/public/img/2012-08-28-5-cut.png") ;
 
-      hr () ;
-
       composite `LR
-       (bullets
-	   ~title:"La plateforme la plus complète"
-	   ~subtitle:"Toute votre communication numérique"
-	   ~ordered:false
-	   [ "Communication interne via l'espace membre" ;
-	     "Communication externe via le site Internet" ;
-	     "Outils de gestion et d'organisation collaboratifs" ;
-	     "Hébergement, mises à jour et maintenance informatique" ]
-	) 	
+	(image "/public/img/2012-08-28-9-cut.png")
+	(pride
+	   ~title:"Dédié aux associations"
+	   ~subtitle:"Nous avons pensé à vous"
+	   "Les nouvelles technologies évoluent, pourquoi les entreprises 
+et les particuliers seraient-ils les seuls à en profiter ?
 
-        (pride
-	   ~title:"La technologie accessible"
-	   ~subtitle:"L'offre la plus économique du marché"
-	   "Nous vous offrons un outil à la pointe, adaptable et évolutif. 
-	   
-	   Opter pour une solution déjà existante et en ligne est un choix économiquement plus judicieux et plus sûr que de développer ou faire développer sa solution. 
-	   
-	   Vous êtes dès maintenant en mesure d'évaluer la qualité de l'outil et notre offre tarifaire claire vous permet de connaître précisément les coûts annuels, sans surprise. "
+Plutôt que de recycler des outils pour entreprises, RunOrg a été conçu dès le départ pour répondre aux besoins spécifiques des associations, de leurs responsables et de leurs membres."
 	) ;
 
-     (* recommend 
+      ribbon 
+	(important 
+	   "Respect de la vie privée"
+	   "On dit des réseaux sociaux que si vous n'êtes pas le client, vous êtes le produit. 
+Chez RunOrg, les données privées de nos utilisateurs leur appartiennent, 
+elles ne seront jamais vendues à des annonceurs ou des entreprises."
+	) ;
+
+      composite `LLR
+	(pride
+	   ~title:"Gratuit, pour toujours"
+	   ~subtitle:"Parce que c'est pour la bonne cause"
+	   "Nous avons vu trop d'équipes motivées s'épuiser et renoncer 
+parce qu'elles n'avaient pas les bons outils.
+
+Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas. Mais grâce à RunOrg, au moins cela devient gratuit."
+	)
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") ; 
+      
+      recommend 
 	~title:"Ils recommandent RunOrg"
-	~subtitle:""
-	[ ( "Emir Deniz" ,
-	    "Directeur Institut Européen des Politiques Publiques" ,
-	    "RunOrg nous permet de garder le lien avec les stagiaires que nous formons ce qui augmente leur taux de retour dans nos formations." ) ;
-	  ( "Virginie Do Carmo" ,
-	    "Editrice et fondatrice Ile De France News", 
-	    "Grâce au portail abonnés de RunOrg je peux intéragir avec mes abonnés, leur offrir de nouveaux services et augmenter mon audience." ) ;
-	  ( "Laurent Villemur" , 
-	    "Directeur de Acte-trois formation" ,
-	    "La mise en place rapide et facile de RunOrg nous a permis de répondre aux besoins de nos stagiaires qui souhaitaient rester en lien après les formations." ) 
-	] ;  *)
- ];
+	~subtitle:"Nous avons changé leur vie"
+	[ ( "Frédéric Roualen" ,
+	    "Équipe de France féminine de Judo" ,
+	    "L’interface de l’outil est agréable et facile à prendre en main. Et en plus c’est ludique ! Mes membres y accèdent même depuis leurs smartphones." ) ;
+	  ( "Antoine Pierchon" ,
+	    "Président de la Fédé B", 
+	    "Grâce à RunOrg j’ai pu récupérer très rapidement les informations des participants, les mini-sondages sont parfaits pour planifier des réunions." ) ;
+	  ( "Cédric Esserméant" , 
+	    "Président des Centaures de Grenoble" ,
+	    "RunOrg me permet de confier l’administration des cours et l’organisation des matchs ! Je peux enfin déléguer en gardant la visibilité dessus." ) 
+	] ;
+      
+      hr () ;
+      
+      composite `LR 
+	(pride 
+	   ~title:"Conçu par des experts"
+	   ~subtitle:"Des années d'expérience associative"
+	   ~link:("http://runorg.com/blog"," Et suivez nos conseils com' sur notre blog !")
+	   "La communication dans les associations, c'est compliqué, et on ne sait pas toujours à qui s'adresser. 
 
-  page "/collectivites" "RunOrg Mairies & Collectivités"
-    [ Catalog.collectivite_all_title ;
-	Catalog.collectivite_all_desc_a ;
-	Catalog.collectivite_all_desc_b ;
+	   Notre équipe répond à vos questions ! Devenez fan de notre page Facebook et posez-nous vos questions sur notre mur.")
+	   (facebook ()) ;	
+    ] ;
+
+  page "/associations/benefits" "RunOrg - Avantages"
+    [ composite `LR
+	(image "/public/img/2012-04-19-1.png")
+	(pride
+	   ~title:"Un seul outil pour tous"
+	   ~subtitle:"Tout faire depuis un seul outil c'est bien plus simple !"
+	   "Pour les responsables comme pour les membres : plus besoin d'apprendre à utiliser un logiciel différent pour gérer le fichier adhérents, partager des photos ou des documents, organiser des événements ou des sondages, etc.
+
+RunOrg regroupe en une seule plate-forme tous ces outils, avec une interface commune. Les membres s'y retrouvent facilement, et les responsables n'ont plus besoin de formations multiples."
+	) ;
+      
+      composite `LR
+	(pride
+	   ~title:"Une meilleure mobilisation"
+	   ~subtitle:"S'impliquer n'a jamais été aussi simple"
+	   "Pour les membres, échanger avec son association est difficile : 
+on ne sait pas comment, ça ne marche pas, ou ça prend du temps. Alors, souvent, on ne le fait pas, et on ne se sent pas impliqué.  
+
+RunOrg fournit aux membres un outil simple pour communiquer avec leur association et pour s'informer sur les dernières actualités. Et nous avons constaté que les membres s'impliquent et se mobilisent davantage, et plus efficacement. "
+	) 
+	(image "/public/img/2012-04-19-2.png")
+	   ;
+      composite `LR
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/giena/3361653109/",
+		       "Eugenijus Barzdzius")
+	   "/public/img/imagerugby.jpg")
+	(pride
+	   ~title:"Plus d'échanges et de cohésion"
+	   ~subtitle:"Partager un espace privé, cela soude une communauté"
+	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, un équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
+
+RunOrg offre aux membres l'espace de communication dont ils ont besoin pour échanger entre eux dans le cadre de l'association. Ces échanges directs sont le moteur de la cohésion au sein des associations et des clubs."
+	) ;
+      composite `LR
+
+	(pride
+	   ~title:"Meilleur partage des tâches"
+	   ~subtitle:"Déléguer devient accessible et évident"
+	   "Les responsables associatifs le savent bien : le manque de contrôle et l'ampleur des tâches à réaliser sont deux freins important qui les empèchent de déléguer ou de trouver des volontaires.
+
+RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait. De plus l'outil permet de répartir certaines tâches sur les membres (ex : inscriptions en ligne). Les responsables vont adorer leur nouveau temps libre !")
+	(image  "/public/img/imagephilippines.jpg")
+    ] ;
+
+  page "associations/standard" "RunOrg Associations - Standard"
+    [ Catalog.associations_standard_title;     
+	Catalog.default_price_asso ;
 ];
 
-  page "/LocalNpPortal" "RunOrg Collectivités - Portail associatif communal"
-    [ Catalog.collectivites_localnpportal_title ;
-	Catalog.collectivites_localnpportal_desc_a ;
-	Catalog.collectivites_localnpportal_desc_b ;
+  page "associations/Students" "RunOrg Associations - BDE et Associations Etudiantes"
+   [ Catalog.associations_students_title ;
+	Catalog.associations_students_desc_a ;
+	Catalog.associations_students_desc_b ;
+	Catalog.associations_students_desc_c ;
 ];
 
-  page "/MaisonAsso" "RunOrg Collectivités - Maisons des associations"
-    [ Catalog.collectivites_maisonasso_title ;
-	Catalog.collectivites_maisonasso_desc_a ;
-	Catalog.collectivites_maisonasso_desc_b ;
-	Catalog.collectivites_maisonasso_desc_c ;
+  page "associations/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
+    [ Catalog.associations_ess_title ;
+	Catalog.associations_ess_desc_a ;
+	Catalog.associations_ess_desc_b ;
 ];
 
-  page "/Campaigns" "RunOrg Collectivités - Campagnes électorales"
-    [  Catalog.collectivites_campaigns_title ;
-	Catalog.collectivites_campaigns_desc_a ;
-	Catalog.collectivites_campaigns_desc_b ;
-	Catalog.collectivites_campaigns_desc_c ;
+  page "associations/Impro" "RunOrg Associations - Théâtre d'Improvisation"
+    [ Catalog.associations_impro_title ;
+	Catalog.associations_impro_desc_a ;
+	Catalog.associations_impro_desc_b ;
 ];
 
-  page "/ElementarySchool" "RunOrg Collectivités - Ecoles primaires "
-    [ Catalog.collectivites_elementaryschool_title ;
-	Catalog.collectivites_elementaryschool_desc_a ;
-	Catalog.collectivites_elementaryschool_desc_b ;
+  page "associations/MultiSports" "RunOrg Associations - Clubs multi-sports "
+    [ Catalog.associations_multisports_title ;
+	Catalog.associations_multisports_desc_a ;
+	Catalog.associations_multisports_desc_b ;
 ];
 
-  page "/syndic-copropriete" "RunOrg Collectivités - Copropriétés "
-    [Catalog.collectivites_copro_title ;
-	Catalog.collectivites_copro_desc_a ;
-	Catalog.collectivites_copro_desc_b ;
+  page "associations/Judo" "RunOrg Associations - Judo et Jujitsu"
+    [ Catalog.associations_judo_title ;
+	Catalog.associations_judo_desc_a ;
+	Catalog.associations_judo_desc_b ;
 ];
 
-  page "/options" "RunOrg Collectivités - Options"
+  page "associations/Badminton" "RunOrg Associations - Badminton "
+    [ Catalog.associations_badminton_title ;
+	Catalog.associations_badminton_desc_a ;
+	Catalog.associations_badminton_desc_b ;
+	Catalog.associations_badminton_desc_c ;
+];
+
+  page "associations/Footus" "RunOrg Associations - Football US & cheerleading "
+    [ Catalog.associations_footus_title ;
+	Catalog.associations_footus_desc_a ;
+	Catalog.associations_footus_desc_b ;
+];
+
+  page "associations/Athle" "RunOrg Associations - Athlétisme "
+    [ Catalog.associations_athle_title ;
+	Catalog.associations_athle_desc_a ;
+];
+
+  page "associations/SalleSport" "RunOrg Associations - Salle de sport et coaching "
+    [ Catalog.associations_sallesport_title;
+	Catalog.associations_sallesport_desc_a ;
+	Catalog.associations_sallesport_desc_b ;
+];
+
+  page "associations/Sports" "RunOrg Associations - Autres sports"
+    [ Catalog.associations_sports_title ;
+	Catalog.associations_sports_desc_a ;
+	Catalog.associations_sports_desc_b ;
+	Catalog.associations_sports_desc_c ;
+];
+
+  page "associations/Federations" "RunOrg Associations - Fédérations"
+    [ Catalog.associations_federations_title ;
+	Catalog.associations_federations_desc_a ;
+	Catalog.associations_federations_desc_b ;
+      hr () ;
+       composite `LR
+      Catalog. plateforme_complete 
+	Catalog.associations_federations_desc_c ;
+];
+
+
+  page "/associations/options" "RunOrg Associations - Options"
     [ offer 
 	~title: "Pack Pro"
-	~price: "Inclus dans les offres collectivités"
-	"Pour les collectivités nous avons créé un pack de services et de fonctionnalités leur permettant de gagner du temps lors de la mise en place de l'outil et de bénéficier d'une assistance prioritaire."
+	~price: "20€/mois"
+	"Pour les associations exigentes nous avons créé un pack de services et de fonctionnalités leur permettant de gagner du temps lors de la mise en place de l'outil et de bénéficier d'une assistance prioritaire."
 	[ "Assistance+ en ligne : support moins de 24h (jours ouvrés)" ;
 	  "Fonctionnalités Pro : administrateurs de groupe, fiches administrateurs sur les membres, [et d'autres à venir]" ;
 	  "Offert : 30 minutes de conseils sur l'utilisation de l'outil pour votre collectivité" ] ;
@@ -138,16 +249,16 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	 offer 
 	~title: "Personnalisation+"
 	~price: "A partir de 100€/mois"
-	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos administrés et vos agents le meilleurs de notre technologie sous votre marque !"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos adhérents et membres le meilleurs de notre technologie sous votre marque !"
 	[ "Application personnalisée à vos couleurs" ;
 	  "Votre logo même sur les pages personnelles des membres" ;
 	  "Votre nom de domaine" ;
-	  "C'est le nom de votre collectivité qui apparait dans les envois emails" ] ;
+	  "C'est le nom de votre association qui apparait dans les envois emails" ] ;
 
 	 offer 
 	~title: "Portail Multi-espaces"
 	~price: "A partir de 200€/mois"
-	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une commune de créer des espaces dédiés à ses commerçants, aux parents d'élèves, à ses agents, etc. Cela permet également à une maison des associations d'offrir un espace indépendant et un site Internet à chacune des associations enregistrée, et de bénéficier automatiquement d'un annuaire."
+	"Pour les fédérations ! En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une fédération d'offrir un espace indépendant et un site Internet à chacune des associations affiliées, et de bénéficier automatiquement d'un annuaire."
 	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
 	  "Nombre illimité d'espaces" ;
 	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;
@@ -155,10 +266,10 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	  "D'autres options sont disponibles. Contactez-nous." ] ;
 ];
 
-  page "/services" "RunOrg Collectivités - Services"
+  page "/associations/services" "RunOrg Associations - Services"
     [ offer 
 	~title: "Assistance+ en ligne"
-	~price: "Inclus dans les offres collectivités"
+	~price: "10€/mois"
 	"Vous avez des questions et vous souhaitez des réponses rapides ? Avec ce service nous nous engageons à vous répondre dans les 24h ouvrés !"
 	[ "Support en ligne moins de 24h" ] ;
 
@@ -210,7 +321,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 ];
 
 
-  page "/pricing" "RunOrg - Tarifs Collectivités"
+  page "/associations/pricing" "RunOrg - Tarifs Associations"
       [    ribbon 
 	(important 
 	   "L'offre la plus compétitive du marché !"
@@ -218,9 +329,9 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	) ;
 
 	prices [
-	  ("25",  "HT par mois",[ "500 personnes"   ; "2 Go"  ],[ "Assistance+ en ligne"]) ;
-	  ("225", "HT par mois",[ "5000 personnes"  ; "10 Go" ],[ "Assistance téléphonique" ]) ;
-	  ("400", "HT par mois",[ "10000 personnes" ; "20 Go" ],[ "Assistance téléphonique" ; "Personnalisation+" ])	  
+	  ("GRATUIT",  "free - gratis",[ "2000 personnes"   ; "2 Go"  ],[ ""]) ;
+	  ("125", "HT par mois",[ "5000 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
+	  ("200", "HT par mois",[ "10000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
 	] 
 
 	  "Toutes nos offres incluent l'hébergement, la maintenance et les mises à jour logicielles"
@@ -231,46 +342,46 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	ribbon_title ~name:"options" "Options disponibles" ;
 
 
-	option_offer  ~before:"À partir de" ~link:("/collectivites/options","En savoir plus...") 
+	option_offer  ~before:"À partir de" ~link:("/associations/options","En savoir plus...") 
 	  "100" "HT par mois" "Personnalisation+"
-	  "Mettez l'espace de votre collectivité à vos couleurs et sur votre nom de domaine."
+	  "Mettez l'espace de votre association à vos couleurs et sur votre nom de domaine."
 	;
 
-	option_offer  ~before:"À partir de" ~link:("/collectivites/options","En savoir plus...") 
+	option_offer  ~before:"À partir de" ~link:("/associations/options","En savoir plus...") 
 	  "200" "HT par mois" "Portail Multi-espaces"
-	  "Inclus l'option personnalisation+, créez autant d'espaces à vos couleurs que vous le souhaitez, disposez d'un portail pour les recencer, permettez à vos administrés (associations ou autres organisations) d'en bénéficier."
+	  "Inclus l'option personnalisation+, créez autant d'espaces à vos couleurs que vous le souhaitez, disposez d'un portail pour les recencer, permettez à vos clubs et associations affiliés d'en bénéficier."
 	;
 
-	option_offer  ~before:"À partir de" ~link:("/collectivites/services","En savoir plus...") 
+	option_offer  ~before:"À partir de" ~link:("/associations/services","En savoir plus...") 
 	  "150" "HT par mois" "Community Management"
 	  "Nous vous proposons de vous aider à animer votre communauté en ligne. Modalités précises à définir ensemble."
 	;
 
-	option_offer  ~before:"" ~link:("/collectivites/services","En savoir plus...") 
+	option_offer  ~before:"" ~link:("/associations/services","En savoir plus...") 
 	  "40" "HT par mois" "Assistance téléphonique"
 	  "Ne cherchez plus : demandez ! 1h d'assistance téléphonique pour vous dépanner ou vous conseiller chaque mois."
 	;
 
-	option_offer ~before:"" ~link:("/collectivites/services","En savoir plus...") 
+	option_offer ~before:"" ~link:("/associations/services","En savoir plus...") 
 	  "800" "HT par jour" "Formation"
 	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre d'utilisation de l'outil.
 
 Un jour de formation est offert avec l'offre à 400€/mois"
 	;
 
-	option_offer  ~before:"" ~link:("/collectivites/services","En savoir plus...") 
+	option_offer  ~before:"" ~link:("/associations/services","En savoir plus...") 
 	  "500" "HT" "Pack lancement de votre espace"
 	  "Configuration de votre espace selon vos besoins, invitation de vos membres et support téléphonique durant le premier mois."
 	;
 
-	option_priceless ~link:("/collectivites/services","En savoir plus...")
+	option_priceless ~link:("/associations/services","En savoir plus...")
 	  "Fonctionnalités sur mesure"
 	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y répondre ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
 	;
     ] ;
 
-  page "/features" "RunOrg Collectivités - Fonctionnalités"
-     [ 
+  page "/associations/features" "RunOrg Associations - Fonctionnalités"
+      [ 
       ribbon 
 	(important 
 	   "Vos données sont en sécurité"
