@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Db = CouchDB.Convenience.Config(struct let db = "export" end)
+module Db = CouchDB.Convenience.Config(struct let db = O.db "export" end)
 include OhmCouchExport.Make(OhmCouchExport.Csv)(IExport)(Db)
 
 let create ?size ?heading () =

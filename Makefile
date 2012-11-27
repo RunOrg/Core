@@ -9,6 +9,8 @@ server:
 	splash/gen.sh
 	config/gen.sh
 	ohm plugins.ohmStatic portals/FFBAD FFBAD
+	ohm plugins.ohmStatic portals/FSCF FSCF
+	ohm plugins.ohmStatic portals/MyInnovation MyInnovation
 	ohm plugins.ohmStatic portals/AssoHelp AssoHelp
 	make -C ocaml
 	ohm publish
