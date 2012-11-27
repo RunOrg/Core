@@ -10,7 +10,16 @@ let headers = [
     [ "Accueil",         "accueil",         "/" ;
       "Avantages",       "avantages",       "/associations/benefits";
       "Fonctionnalités", "fonctionnalites", "/features";
-    ] ;
+    ] ; 
+
+  (*multiheader "associations" 
+    ~title:"L'intranet de votre association"
+    ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
+    ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
+    [ "Accueil",         "accueil",         "/" ;
+      "Avantages",       "avantages",       "/associations/benefits";
+      "Fonctionnalités", "fonctionnalites", "/features";
+    ] ; *)
 
   header "about" 
     ~title:"À propos de RunOrg"

@@ -9,4 +9,5 @@ let render owid =
     | `RunOrg -> Asset_Logo_Runorg.render ()
     | `Test   -> Asset_Logo_Ffbad.render () 
     | `FFBAD  -> Asset_Logo_Ffbad.render () 
- 
+    | `FSCF   -> Asset_Logo_Fscf.render () 
+    | `Innov  -> Asset_Logo_MyInnovation.render () 

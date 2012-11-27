@@ -4,3 +4,5 @@ open Ohm
 open BatPervasives
 
 module FFBAD = CPortal_FFBAD
+module FSCF  = CPortal_FSCF
+module MyInnovation = CPortal_MyInnovation
