@@ -114,10 +114,16 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	Catalog.collectivites_campaigns_desc_c ;
 ];
 
-  page "/ElementarySchool" "RunOrg Education - Ecoles primaires "
+  page "/ElementarySchool" "RunOrg Collectivités - Ecoles primaires "
     [ Catalog.collectivites_elementaryschool_title ;
 	Catalog.collectivites_elementaryschool_desc_a ;
 	Catalog.collectivites_elementaryschool_desc_b ;
+];
+
+  page "/syndic-copropriete" "RunOrg Collectivités - Copropriétés "
+    [Catalog.collectivites_copro_title ;
+	Catalog.collectivites_copro_desc_a ;
+	Catalog.collectivites_copro_desc_b ;
 ];
 
   page "/options" "RunOrg Collectivités - Options"
@@ -141,7 +147,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	 offer 
 	~title: "Portail Multi-espaces"
 	~price: "A partir de 200€/mois"
-	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une commune de créer des espaces dédiés à ses commerçants, aux parents d'élèves, à ses agents, etc. Cela permet également à une maison des associations d'offrir un espace indépendant pour chacune des associations enregistrée, et de bénéficier automatiquement d'un annuaire."
+	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une commune de créer des espaces dédiés à ses commerçants, aux parents d'élèves, à ses agents, etc. Cela permet également à une maison des associations d'offrir un espace indépendant et un site Internet à chacune des associations enregistrée, et de bénéficier automatiquement d'un annuaire."
 	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
 	  "Nombre illimité d'espaces" ;
 	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;

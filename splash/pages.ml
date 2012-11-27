@@ -1,10 +1,10 @@
 open Common
 open WithSections 
 
-let pages = Entreprises.pages @ Collectivites.pages @ Catalog.pages @ [
+let pages = Associations.pages @ Entreprises.pages @ Collectivites.pages @ Catalog.pages @ [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
-  page "/" "RunOrg Associations"
+ (* page "/" "RunOrg Associations"
     ~section:"associations" 
     ~head:"associations"
     ~subsection:"accueil"
@@ -457,7 +457,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Export des listes",
 	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
 	]) ;
-    ] ;
+    ] ;  	*)
 
 
   page "/about/team" "À Propos de RunOrg - L'Équipe"
@@ -486,16 +486,6 @@ Il accepte ensuite de rejoindre une SSII à un poste d'encadrement technique pou
 Membre et actuellement secrétaire d'une asso­ciation d'improvisation, il co-fonde RunOrg et met au service du projet ses compétences dans la réalisation de systèmes informatiques complexes."
 	) 
 	(image "/public/img/victor-profil.jpg");
-
-      composite `LRR
-	(image "/public/img/francois-profil.jpg")
-	(pride
-	   ~title:"François Villard"
-	   ~subtitle:"Le Créatif"
-	   "Plus jeune des trois, François fait partie de cette génération qui a bloqué la ligne téléphonique de ses parents à l'arrivée des premiers forfaits d'internet illimité. Fasciné tant par l'informatique que la vidéo, il passe un DUT de Communication Multimédia en Auvergne, qu'il approfondira par différents stages, où il intègrera des équipes de test logiciel puis de création web.
-
-Désireux de creuser davantage le côté vidéo de sa formation, il emménage sur Paris pour une Licence d'Arts du spectacle, option Cinéma. Là, il rejoint une association d'improvisation et prend en main sa communication web et papier, mais ressent un gros manque dès qu'il s'agit de communication interne. Tandis qu'il commence à envisager un outil spécifique, deux de ses collègues lui parlent de RunOrg..."
-	) ;
     ] ;
 
   page "/about" "À Propos de RunOrg"

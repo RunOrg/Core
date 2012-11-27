@@ -3,16 +3,7 @@ open Common
 let headers = [
   (* BEGIN HEADERS ---------------------------------------------------------- *)
 
-  header "associations" 
-    ~title:"L'intranet de votre association"
-    ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
-    ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
-    [ "Accueil",         "accueil",         "/" ;
-      "Avantages",       "avantages",       "/associations/benefits";
-      "Fonctionnalités", "fonctionnalites", "/features";
-    ] ; 
-
-  (*multiheader "associations" 
+ (* header "associations" 
     ~title:"L'intranet de votre association"
     ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
     ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
@@ -20,6 +11,7 @@ let headers = [
       "Avantages",       "avantages",       "/associations/benefits";
       "Fonctionnalités", "fonctionnalites", "/features";
     ] ; *)
+
 
   header "about" 
     ~title:"À propos de RunOrg"
@@ -131,6 +123,7 @@ let headers = [
 	  "Portail associatif communal", "/collectivites/LocalNpPortal";
 	  "Campagnes électorales", "/collectivites/Campaigns";
 	  "Ecoles primaires", "/collectivites/ElementarySchool";
+	  "Copropriétés", "/collectivites/syndic-copropriete";
 	] ;
 	"Options",  "/collectivites/options", 
 	[ (*"Pack Pro", "/entreprises/offres" ;
@@ -163,6 +156,32 @@ let headers = [
 	"Fonctionnalités",  "/entreprises/features", [];
       "Tarifs", "/entreprises/pricing", [];
     ] ;
+
+	 multiheader "associations" 
+    ~title:"L'intranet de votre association"
+    ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
+    ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
+    [ "Accueil",         "/", [] ;
+      "Avantages",     "/associations/benefits", [] ;
+	"Solutions", "/associations/standard",
+	      [ "Standard",              "/associations/standard" ;
+		"Associations étudiantes", "/associations/Students" ;
+		"Economie Sociale et Solidaire", "/associations/Ess" ;
+		"Théâtre d'improvisation", "/associations/Impro"; 
+		"Clubs multi-sports", "/associations/MultiSports" ;
+		"Judo et jujitsu", "/associations/Judo" ;
+		"Badminton", "/associations/Badminton" ;
+		"Football US & cheerleading", "/associations/Footus" ;
+		"Athlétisme", "/associations/Athle" ;
+		"Salle de sport et coaching", "/associations/SalleSport" ;
+		"Fédérations", "/associations/Federations" ;
+		"Autre", "/associations/Sports" ] ;
+	"Options",  "/associations/options", [] ; 
+	"Services",  "/associations/services", [];    
+     	"Fonctionnalités", "/associations/features", [] ;
+	"Tarifs", "/associations/pricing", [];
+    ] ; 
+
 
    
   (* END HEADERS ------------------------------------------------------------ *)
