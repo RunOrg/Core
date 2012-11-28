@@ -165,15 +165,15 @@ let headers = [
       "Avantages",     "/associations/benefits", [] ;
 	"Solutions", "/associations/standard",
 	      [ "Standard",              "/associations/standard" ;
-		"Associations étudiantes", "/associations/Students" ;
-		"Economie Sociale et Solidaire", "/associations/Ess" ;
-		"Théâtre d'improvisation", "/associations/Impro"; 
+		"Asso étudiantes", "/associations/Students" ;
+		"Asso de l'ESS", "/associations/Ess" ;
+		"Improvisation", "/associations/Impro"; 
 		"Clubs multi-sports", "/associations/MultiSports" ;
-		"Judo et jujitsu", "/associations/Judo" ;
+		"Judo", "/associations/Judo" ;
 		"Badminton", "/associations/Badminton" ;
-		"Football US & cheerleading", "/associations/Footus" ;
+		"Football US", "/associations/Footus" ;
 		"Athlétisme", "/associations/Athle" ;
-		"Salle de sport et coaching", "/associations/SalleSport" ;
+		"Salle de sport", "/associations/SalleSport" ;
 		"Fédérations", "/associations/Federations" ;
 		"Autre", "/associations/Sports" ] ;
 	"Options",  "/associations/options", [] ; 

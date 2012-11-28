@@ -159,74 +159,74 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	(image  "/public/img/imagephilippines.jpg")
     ] ;
 
-  page "/associations/standard" "RunOrg Associations - Standard"
+  page "associations/standard" "RunOrg Associations - Standard"
     [ Catalog.associations_standard_title;     
 	Catalog.default_price_asso ;
 ];
 
-  page "/associations/Students" "RunOrg Associations - BDE et Associations Etudiantes"
+  page "associations/Students" "RunOrg Associations - BDE et Associations Etudiantes"
    [ Catalog.associations_students_title ;
 	Catalog.associations_students_desc_a ;
 	Catalog.associations_students_desc_b ;
 	Catalog.associations_students_desc_c ;
 ];
 
-  page "/associations/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
+  page "associations/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
     [ Catalog.associations_ess_title ;
 	Catalog.associations_ess_desc_a ;
 	Catalog.associations_ess_desc_b ;
 ];
 
-  page "/associations/Impro" "RunOrg Associations - Théâtre d'Improvisation"
+  page "associations/Impro" "RunOrg Associations - Théâtre d'Improvisation"
     [ Catalog.associations_impro_title ;
 	Catalog.associations_impro_desc_a ;
 	Catalog.associations_impro_desc_b ;
 ];
 
-  page "/associations/MultiSports" "RunOrg Associations - Clubs multi-sports "
+  page "associations/MultiSports" "RunOrg Associations - Clubs multi-sports "
     [ Catalog.associations_multisports_title ;
 	Catalog.associations_multisports_desc_a ;
 	Catalog.associations_multisports_desc_b ;
 ];
 
-  page "/associations/Judo" "RunOrg Associations - Judo et Jujitsu"
+  page "associations/Judo" "RunOrg Associations - Judo et Jujitsu"
     [ Catalog.associations_judo_title ;
 	Catalog.associations_judo_desc_a ;
 	Catalog.associations_judo_desc_b ;
 ];
 
-  page "/associations/Badminton" "RunOrg Associations - Badminton "
+  page "associations/Badminton" "RunOrg Associations - Badminton "
     [ Catalog.associations_badminton_title ;
 	Catalog.associations_badminton_desc_a ;
 	Catalog.associations_badminton_desc_b ;
 	Catalog.associations_badminton_desc_c ;
 ];
 
-  page "/associations/Footus" "RunOrg Associations - Football US & cheerleading "
+  page "associations/Footus" "RunOrg Associations - Football US & cheerleading "
     [ Catalog.associations_footus_title ;
 	Catalog.associations_footus_desc_a ;
 	Catalog.associations_footus_desc_b ;
 ];
 
-  page "/associations/Athle" "RunOrg Associations - Athlétisme "
+  page "associations/Athle" "RunOrg Associations - Athlétisme "
     [ Catalog.associations_athle_title ;
 	Catalog.associations_athle_desc_a ;
 ];
 
-  page "/associations/SalleSport" "RunOrg Associations - Salle de sport et coaching "
+  page "associations/SalleSport" "RunOrg Associations - Salle de sport et coaching "
     [ Catalog.associations_sallesport_title;
 	Catalog.associations_sallesport_desc_a ;
 	Catalog.associations_sallesport_desc_b ;
 ];
 
-  page "/associations/Sports" "RunOrg Associations - Autres sports"
+  page "associations/Sports" "RunOrg Associations - Autres sports"
     [ Catalog.associations_sports_title ;
 	Catalog.associations_sports_desc_a ;
 	Catalog.associations_sports_desc_b ;
 	Catalog.associations_sports_desc_c ;
 ];
 
-  page "/associations/Federations" "RunOrg Associations - Fédérations"
+  page "associations/Federations" "RunOrg Associations - Fédérations"
     [ Catalog.associations_federations_title ;
 	Catalog.associations_federations_desc_a ;
 	Catalog.associations_federations_desc_b ;
@@ -240,7 +240,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
   page "/associations/options" "RunOrg Associations - Options"
     [ offer 
 	~title: "Pack Pro"
-	~price: "10€/mois"
+	~price: "20€/mois"
 	"Pour les associations exigentes nous avons créé un pack de services et de fonctionnalités leur permettant de gagner du temps lors de la mise en place de l'outil et de bénéficier d'une assistance prioritaire."
 	[ "Assistance+ en ligne : support moins de 24h (jours ouvrés)" ;
 	  "Fonctionnalités Pro : administrateurs de groupe, fiches administrateurs sur les membres, [et d'autres à venir]" ;
@@ -329,7 +329,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	) ;
 
 	prices [
-	  ("GRATUIT",  "",[ "2000 personnes"   ; "2 Go"  ],[ ""]) ;
+	  ("GRATUIT",  "free - gratis",[ "2000 personnes"   ; "2 Go"  ],[ ""]) ;
 	  ("125", "HT par mois",[ "5000 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
 	  ("200", "HT par mois",[ "10000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
 	] 
