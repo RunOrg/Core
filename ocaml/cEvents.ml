@@ -38,13 +38,15 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
 
     (* Construct the list of entities to be displayed *)
     let! now  = ohmctx (#time) in
+    let  past = now +. 24. *. 3600. in
+
     let! list = ohm $ MEntity.All.get_by_kind access `Event in
-    let! list = ohm $ Run.list_map (render_entity access now) list in 
+    let! list = ohm $ Run.list_map (render_entity access past) list in 
     let  list = List.sort (fun a b -> compare (fst b) (fst a)) list in
 
-    let  future  = List.map snd (List.rev (BatList.takewhile (fun e -> fst e > now) list)) in
+    let  future  = List.map snd (List.rev (BatList.takewhile (fun e -> fst e > past) list)) in
     let  unbound = List.map snd (List.filter (fun (_,e) -> e # date = None) list) in
-    let  past    = List.map snd (BatList.dropwhile (fun e -> fst e >= now) list) in
+    let  past    = List.map snd (BatList.dropwhile (fun e -> fst e >= past) list) in
 
     (* The URL of the options page *)
     let options = 

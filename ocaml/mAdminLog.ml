@@ -142,7 +142,9 @@ module CountActiveUsers = CouchDB.ReduceView(struct
   module Value = Fmt.Make(struct type json t = string list end)
   module Design = Design
   let name = "active_users"
-  let map = "emit(doc.time,[doc.uid])"
+  let map = "var k = (typeof doc.what === 'string') ? doc.what : doc.what[0];
+             if (k != 'm') 
+               emit(doc.time,[doc.uid])"
   let reduce = "var r = {}; 
                 for (var i = 0; i < values.length; ++i)  
                   for (var j = 0; j < values[i].length; ++j)
