@@ -176,10 +176,11 @@ let headers = [
 		"Salle de sport", "/associations/SalleSport" ;
 		"Fédérations", "/associations/Federations" ;
 		"Autre", "/associations/Sports" ] ;
-	"Options",  "/associations/options", [] ; 
-	"Services",  "/associations/services", [];    
-     	"Fonctionnalités", "/associations/features", [] ;
-	"Tarifs", "/associations/pricing", [];
+	     	"Fonctionnalités", "/associations/features", [] ;
+	"Tarifs", "/associations/pricing", [
+		"Tarifs", "/associations/pricing";
+		"Options",  "/associations/options" ; 
+		"Services",  "/associations/services"  ];
     ] ; 
 
 
