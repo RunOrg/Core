@@ -114,7 +114,7 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	   (facebook ()) ;	
     ] ;
 
-  page "/associations/benefits" "RunOrg - Avantages"
+  page "associations/benefits" "RunOrg - Avantages"
     [ composite `LR
 	(image "/public/img/2012-04-19-1.png")
 	(pride
@@ -237,7 +237,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 ];
 
 
-  page "/associations/options" "RunOrg Associations - Options"
+  page "associations/options" "RunOrg Associations - Options"
     [ offer 
 	~title: "Pack Pro"
 	~price: "20€/mois"
@@ -266,7 +266,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	  "D'autres options sont disponibles. Contactez-nous." ] ;
 ];
 
-  page "/associations/services" "RunOrg Associations - Services"
+  page "associations/services" "RunOrg Associations - Services"
     [ offer 
 	~title: "Assistance+ en ligne"
 	~price: "10€/mois"
@@ -321,7 +321,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 ];
 
 
-  page "/associations/pricing" "RunOrg - Tarifs Associations"
+  page "associations/pricing" "RunOrg - Tarifs Associations"
       [    ribbon 
 	(important 
 	   "L'offre la plus compétitive du marché !"
@@ -380,28 +380,118 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 	;
     ] ;
 
-  page "/associations/features" "RunOrg Associations - Fonctionnalités"
-      [ 
+  page "associations/features" "RunOrg Associations - Fonctionnalités"
+      [ composite `LR
+	(image "/public/img/2012-08-28-9-cut.png")
+	(pride
+	   ~title:"Gestion des membres"
+	   ~subtitle:"Simplement et rapidement"
+	   ~link:("/features#organisationdesmembres",
+	       "En savoir plus...")
+	   "Toutes les associations ont une liste de leurs adhérents, mais elle est souvent incomplète ou accessible par un seul responsable.
+
+Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en ligne par tous les responsables, et laissez vos membres tenir eux-mêmes à jour leurs informations de contact."
+	) ;
+      
+      composite `LR
+	(pride
+	   ~title:"Evènements et activités"
+	   ~subtitle:"Organisez-vous en ligne"
+	   ~link:("/features#organisationdesactivites",
+	       "En savoir plus...")
+	   "Créez facilement des évènements publics ou privés, informez en un clic tout ou partie de vos membres.  
+
+Chaque évènement comporte un mur de discussion, un album photo, un partage de fichiers."
+	) 
+	(image "/public/img/2012-08-29-5-cut.png") ;
+
+      composite `LR
+	(image "/public/img/2012-08-29-9-cut.png")
+	(pride
+	   ~title:"Déléguez en toute confiance"
+	   ~subtitle:"Ne soyez plus le seul à tout faire"
+	   ~link:("/features#administration",
+	       "En savoir plus...")
+	   "Il y a dans votre association beaucoup de membres motivés, 
+comment faire pour leur donner la main sur une seule activité ?
+
+Vous pouvez donner des responsabilités sur des parties bien définies de votre espace privé RunOrg (activités, forums).
+
+Et en cas de problème, nous gardons une trace des actions de chaque responsable."
+	) ;
+
       ribbon 
 	(important 
 	   "Vos données sont en sécurité"
-	   "Par défaut, toutes vos informations privées sont accessibles uniquement aux membres de votre espace.
+	   "Par défaut, toutes vos informations privées sont accessibles uniquement aux membres de votre association.
 
 Vous pouvez choisir de rendre sélectivement publiques certaines de ces informations, 
 ou au contraire les rendre accessibles aux membres de certains groupes uniquement."
 	) ;
 
+      composite `LR
+	(pride
+	   ~title:"Formulaires configurables"
+	   ~subtitle:"Posez les bonnes questions"
+	   ~link:("/features#personnalisationintranet",
+	       "En savoir plus...")
+	   "Pouvoir récupérer facilement des informations sur les membres arrive en tête des demandes de nos utilisateurs. 
 
-      ribbon_title ~name:"organisationdesmembres" "Organisation des membres et des accès" ;
+Disponibles sur les adhésions et les évènements, des formulaires configurables vous permettent de poser les questions importantes, et les membres y répondent en s'inscrivant. Le résultat est disponible en ligne et facilement téléchargeable."
+	) 
+	(image "/public/img/2012-08-29-6-cut.png") ;
+      
+
+      hr () ;
+
+      composite `LR
+	(image "/public/img/2012-08-28-5-cut.png")
+	(pride
+	   ~title:"Murs de discussion"
+	   ~subtitle:"Donnez la parole à vos membres"
+	   ~link:("/features#messagescommunication",
+	       "En savoir plus...")
+	   "Envie de communiquer une annonce à tous vos membres ? 
+De lancer une conversation autour d'un sujet ?
+
+Les murs de discussion sont en même temps des forums en ligne et des listes de diffusion, pour impliquer à la fois les membres très actifs sur internet et ceux qui le sont moins.
+
+Il est facile de créer un mur de discussion pour un groupe ou une activité, et seuls ceux qui sont inscrits reçoivent les messages."
+	) ;
+      
+      hr () ;
+
+      composite `LR
+	(price
+	   "Gratuit"
+	   "pour les associations"
+	   "de moins de 2000 adhérents") 
+	(bullets
+	   ~title:"Avec services inclus"
+	   ~subtitle:"Pas besoin d'être informaticien"
+	   ~ordered:false
+	   [ "Hébergement de l'application" ;
+	     "Mises à jour régulières" ;
+	     "Maintenance informatique" ;
+	     "Support en ligne" ]
+	); 
+       
+      ribbon 
+	(important 
+	   "Détail des fonctionnalités"
+	   ""
+	) ;
+      
+      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
       composite `LR 
 	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
 		       "/public/img/2012-08-28-9-cut.png" ])
 	(features [ 
 	  "Groupes de membres",
-	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, agents, administrés, etc.)" ;
+	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
 	  
 	  "Demandes d'inscription",
-	  "Les administrés peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
+	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
 	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
@@ -423,10 +513,10 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-29-3-cut.png" ])
 	(features [ 
 	  "Création d'activités",
-	  "Votre communauté ne se résume pas qu'à des membres. RunOrg gère également les activités.";
+	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
 	  
 	  "Nombreux modèles disponibles",
-	  "Selon votre type d'organisation des modèles adaptés vous sont proposés (réunions, CM, rencontres, événements, etc.)";
+	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
 	  
 	  "Agenda privé",
 	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
@@ -470,10 +560,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
 	  
 	  "Listes de diffusion",
-	  "Les messages publiés sur les murs ne sont visibles qu'aux membres des groupes concernés";
-
-	  "Emails ciblés",
-	  "Les administrateurs peuvent envoyer des messages par emails aux membres des groupes via les murs de discussions.";
+	  "Les messages publiés sur les murs sont envoyés en totalité par email aux destinataires concernés";
 	  
 	  "Notifications",
 	  "Les membres peuvent paramétrer la fréquence des notifications qu'ils reçoivent.";
@@ -520,7 +607,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 		       "/public/img/2012-08-28-8-cut.png" ])
 	(features [ 
 	  "Espace pré-adapté à vos besoins",
-	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type de besoin.";
+	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
 	  
 	  "Import des membres",
 	  "Utilisez un tableur ou votre carnet d'adresses pour importer vos membres avec un simple copier/coller";
@@ -546,7 +633,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
 	  
 	  "Créez vos propres formulaires",
-	  "Créez vos propres formulaire d'accès ou de participation à un groupe ou une activité";
+	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
 	  
 	  "Personnalisez vos tableaux",
 	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
@@ -576,7 +663,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
 	  
 	  "Gestion des informations personnelles",
-	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses organisations"	
+	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
 	]) ;
 
       ribbon_title ~name:"profilsmembres" "Profils membres" ;
@@ -599,6 +686,29 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Le profil contient la liste des messages, photos et fichiers mis en ligne par le membre"	
 	]) ;
     
+      ribbon_title ~name:"website" "Site Internet" ;
+      composite `LR 
+	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
+		       "/public/img/2012-08-28-3-cut.png"])
+	(features [ 
+	  "Publication d'articles",
+	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
+	  
+	  "Abonnement aux articles",
+	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
+	  
+	  "Agenda en ligne",
+	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
+	  
+	  "Inscriptions et adhésions en ligne",
+	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne";
+	  
+	  "Page de présentation",
+	  "Une page de présentation publique vous permet de présenter votre association, de renseigner son logo et ses coordonnées";
+	  
+	  "Hébergement gratuit",
+	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
+	]) ;   
   
       ribbon_title ~name:"administration" "Administration" ;
       composite `LR 
@@ -620,31 +730,6 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Export des listes",
 	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
 	]) ;
-
-      ribbon_title ~name:"website" "Site Internet" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
-		       "/public/img/2012-08-28-3-cut.png"])
-	(features [ 
-	  "Publication d'articles",
-	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
-	  
-	  "Abonnement aux articles",
-	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
-	  
-	  "Agenda en ligne",
-	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
-	  
-	  "Inscriptions et adhésions en ligne",
-	  "Les internautes peuvent demander à s'inscrire à votre espace ou à participer à vos activités en ligne";
-	  
-	  "Page de présentation",
-	  "Une page de présentation publique vous permet de présenter votre collectivité, de renseigner son logo et ses coordonnées";
-	  
-	  "Hébergement gratuit",
-	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
-	]) ;   
-
     ] ;
 
 
