@@ -1,67 +1,57 @@
 {#files}
   <div class="-file">
-    <div class="-actions">
-      <a href="{download}" class="action-button -green">{`Folder_File_Download}</a>
-      <a class="action-button" href="{info}">{`Folder_File_Info}</a>
-    </div>
-    <a {$a} class="-name" href="javascript:void(0)">
-      {name}
-      <span class="-size">&ensp;{`Folder_File_Size size}</span>
-    </a>       
     <div class="-foot">
-      <img src="{ext}"/>&ensp;
-      {`ShortWeekDate date} &middot; {author}
-      {?comments}&middot; <span style="color:#555">{`Folder_File_Comments this}</span>{/?}
+      {?del}
+        <a {$a} href="javascript:void(0)">{`Folder_File_Delete}</a>
+        <script type="url:string">
+here.$a.click ->
+  post url, {}, ->
+    false  
+  here.$a.closest(".-file").slideUp () -> 
+    $(@).remove()
+        </script>
+      {/?}
+      {?pic}<img src="{this}"/>&ensp;{/?}{author}
+      &middot; {`ShortWeekDate date} 
     </div>
+    <a class="-name" style="background-image:url({ext})" href="{download}">
+      {name}
+    </a>       
   </div>
-
-<script>
-here.$a.click () ->
-  here.$a.prev().show()
-  here.$a.remove()
-</script>
 {/#}
 
 <style>
 .folder {
   overflow: hidden;
-  padding: 10px 0 16px 16px;
-
-  .-actions {
-    display: none;
-    background-color: #EEE;
-    border-top: 1px solid #BBB;
-    box-shadow: 0 0 20px #CCC inset;
-    a { display: inline-block; }
-  }
 
   .-file {
-    float: left;
-    margin-right: 16px;
-    margin-bottom: 20px;
-    width: 328px;
-  }
-
-  .-size {
-    color: #BBB;
-    font-size: 14px;
+    border-bottom: 1px dotted #DDD;
+    margin: 0 10px;
+    padding: 10px 20px;
   }
 
   .-name {
     overflow: hidden;
+    white-space: nowrap;
     display: block;
-    height: 29px;
-    font-size: 20px;
-    font-weight: bold;
+    height: 23px;
+    font-size: 13px;
+    line-height: 23px;
+    padding-left: 22px;
+    background: url(/public/icon/shader.png) left center no-repeat white;
   }
 
   .-foot {
+    float: right;
+    width: 300px;
     color: #888;
     font-size: 13px;
-    line-height: 16px;
-    margin-top: 3px;
-    a { color: #68C }
-    img { vertical-align: top }
+    line-height: 20px;
+    height: 20px; 
+    margin-top: 1px;
+    overflow: hidden; 
+    a { color: #68C ; float: right; padding: 0 0 0 8px; }
+    img { vertical-align: top; width: 20px; height: 20px; margin: 0; opacity: 0.5; }
   }
 }
 </style>
