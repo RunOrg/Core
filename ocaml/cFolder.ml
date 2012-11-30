@@ -21,7 +21,7 @@ let render access item =
     method author   = avatar # name
     method pic      = avatar # pico
     method date     = (item # time, now)
-    method del      = Some "" 
+    method del      = Some (object method url = "" end) 
     method comments = if item # ncomm = 0 then None else Some item # ncomm 
   end)
  
