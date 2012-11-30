@@ -16,10 +16,10 @@ let render access item =
   return $ Some (object
     method ext      = ext
     method name     = doc # title
-    method info     = "javascript:void(0)"
     method download = download
     method size     = doc # size
     method author   = author
+    method pic      = None
     method date     = (item # time, now) 
     method comments = if item # ncomm = 0 then None else Some item # ncomm 
   end)
