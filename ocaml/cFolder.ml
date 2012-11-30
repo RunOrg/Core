@@ -12,15 +12,16 @@ let render access item =
   let! download = ohm_req_or (return None) $ MFile.Url.get (doc # file) `File in
   let! now = ohmctx (#time) in
   let  ext = VIcon.of_extension (doc # ext) in
-  let! author = ohm $ CAvatar.name (doc # author) in
+  let! avatar = ohm $ CAvatar.mini_profile (doc # author) in
   return $ Some (object
     method ext      = ext
     method name     = doc # title
     method download = download
     method size     = doc # size
-    method author   = author
-    method pic      = None
-    method date     = (item # time, now) 
+    method author   = avatar # name
+    method pic      = avatar # pico
+    method date     = (item # time, now)
+    method del      = Some "" 
     method comments = if item # ncomm = 0 then None else Some item # ncomm 
   end)
  

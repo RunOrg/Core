@@ -6,3 +6,5 @@
 
 | `Folder_Upload_Ok 
 | `Folder_Upload_Fail
+
+| `Folder_File_Delete

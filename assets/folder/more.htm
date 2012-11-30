@@ -1,14 +1,15 @@
 {#files}
   <div class="-file">
+    <div class="-foot">
+      {?del}
+        <a href="javascript:void(0)">{`Folder_File_Delete}</a>
+      {/?}
+      {?pic}<img src="{this}"/>&ensp;{/?}{author}
+      &middot; {`ShortWeekDate date} 
+    </div>
     <a class="-name" style="background-image:url({ext})" href="{download}">
       {name}
     </a>       
-    <div class="-foot">
-      {`ShortWeekDate date} 
-      &middot; {?pic}<img src="{this}"/>{/?} {author}
-      &middot; {`Folder_File_Size size}
-      {?comments}&middot; <span style="color:#555">{`Folder_File_Comments this}</span>{/?}
-    </div>
   </div>
 {/#}
 
@@ -24,21 +25,25 @@
 
   .-name {
     overflow: hidden;
+    white-space: nowrap;
     display: block;
     height: 23px;
-    font-size: 18px;
+    font-size: 13px;
     line-height: 23px;
     padding-left: 22px;
     background: url(/public/icon/shader.png) left center no-repeat white;
   }
 
   .-foot {
+    float: right;
+    width: 300px;
     color: #888;
     font-size: 13px;
-    line-height: 16px;
-    margin-top: 3px;
-    a { color: #68C }
-    img { vertical-align: top; width: 20px; height: 20px; margin: -2px; }
+    line-height: 20px;
+    height: 20px; 
+    margin-top: 1px;
+    a { color: #68C ; float: right; padding: 0 0 0 8px; }
+    img { vertical-align: top; width: 20px; height: 20px; margin: 0; opacity: 0.5; }
   }
 }
 </style>
