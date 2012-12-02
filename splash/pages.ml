@@ -470,20 +470,20 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	   ~subtitle:"Co-gérant, directeur commercial"
 	   "Mehdi a deux vies, qu’il a mené en parallèle et que RunOrg permet de regrouper : la professionnelle et l’associative.
 
-De sa vie associative, on peut dire qu’il fait partie d’associations depuis sa plus tendre enfance : des associations sportives, puis militantes, étudiantes et culturelles. Il a occupé diverses fonctions : secou­riste, responsable de la communication, animateur radio, administrateur du Bureau des arts de Sciences Po et président d’une association d’improvisation. Aujourd’hui, il ne garde qu’un seul mandat : administrateur de la chambre des asso­ciations pour faire bénéficier les autres de son expérience.
+De sa vie associative, on peut dire qu’il fait partie d’associations depuis sa plus tendre enfance : des associations sportives, puis militantes, étudiantes et culturelles. Il a occupé diverses fonctions : secouriste, responsable de la communication, animateur radio, administrateur du Bureau des Arts de Sciences Po et président d’une association d’improvisation. Aujourd’hui, il ne garde qu’un seul mandat : administrateur de la chambre des associations pour faire bénéficier les autres de son expérience.
 
-Côté professionnel, après avoir été diplômé de l’IUP de gestion et de management de l’université Pierre Mendès France à Grenoble, avoir passé un an d’échange à l’Université of California Santa Barbara, il a rejoint Sciences Po Paris. Il s’est ensuite spécialisé dans les outils informatiques de gestion de la relation client qu’il a mis en place en tant que consultant dans plusieurs grands groupes. Fort de son expérience dans la gestion des projets informatiques et de sa connaissance des problé­matiques du monde associatif et des organisations, il contribue activement à leur rendre la plateforme RunOrg pratique et efficace."
+Côté professionnel, après avoir été diplômé de l’IUP de gestion et de management de l’université Pierre Mendès France à Grenoble, avoir passé un an d’échange à l’Université of California Santa Barbara, il a rejoint Sciences Po Paris. Il s’est ensuite spécialisé dans les outils informatiques de gestion de la relation client qu’il a mis en place en tant que consultant dans plusieurs grands groupes. Fort de son expérience dans la gestion des projets informatiques et de sa connaissance des problématiques du monde associatif et des organisations, il contribue activement à leur rendre la plateforme RunOrg pratique et efficace."
 	) ;
       
       composite `LLR
 	(pride
 	   ~title:"Victor Nicollet"
 	   ~subtitle:"Co-gérant, directeur technique"
-	   "Lycéen puis classes préparatoires MP* au Lycée Louis Le Grand, Victor rejoint la prestigieuse École Normale Supérieure. Pendant quatre ans rue d'Ulm, il étudie les mathématiques, l'informatique, l'éco­nomie, la psychologie expérimentale, les neuro­sciences cognitives... et finit ses études avec, outre le diplôme de normalien, un Master de politique économique et un Master de recherche en informatique.
+	   "Lycéen puis classes préparatoires MP* au Lycée Louis Le Grand, Victor rejoint la prestigieuse École Normale Supérieure. Pendant quatre ans rue d'Ulm, il étudie les mathématiques, l'informatique, l'économie, la psychologie expérimentale, les neuro­sciences cognitives... et finit ses études avec, outre le diplôme de normalien, un Master de politique économique et un Master de recherche en informatique.
 
-Il accepte ensuite de rejoindre une SSII à un poste d'encadrement technique pour compléter sa for­mation théorique par des cas pratiques et concrets, et pour s'initier à la gestion de projet et au mana­gement d'équipes.
+Il accepte ensuite de rejoindre une SSII à un poste d'encadrement technique pour compléter sa formation théorique par des cas pratiques et concrets, et pour s'initier à la gestion de projet et au management d'équipes.
 
-Membre et actuellement secrétaire d'une asso­ciation d'improvisation, il co-fonde RunOrg et met au service du projet ses compétences dans la réalisation de systèmes informatiques complexes."
+Membre et actuellement secrétaire d'une association d'improvisation, il co-fonde RunOrg et met au service du projet ses compétences dans la réalisation de systèmes informatiques complexes."
 	) 
 	(image "/public/img/victor-profil.jpg");
     ] ;
@@ -721,7 +721,7 @@ Le client ne doit pas utiliser les données de ses utilisateurs sans leur accord
 
       pride 
 	~title:"Pour l'utilisateur"
-	"L'utilisateur s'engage à ne pas publier ou diffuser sur des espaces publics (notamment les sites Internet et les réseaux sociaux) des informations personnelles et nominatives sur d’autres utilisateurs sans leur accord explicite. Il s'engage à ne pas utiliser les informations personnelles des autres utilisateurs auxquelles il pourrait avoir accès à des fins commerciales, personnelles ou de toutes natures sans leurs accords explicite."
+	"L'utilisateur s'engage à ne pas publier ou diffuser sur des espaces publics (notamment les sites Internet et les réseaux sociaux) des informations personnelles et nominatives sur d’autres utilisateurs sans leur accord explicite. Il s'engage à ne pas utiliser les informations personnelles des autres utilisateurs auxquelles il pourrait avoir accès à des fins commerciales, personnelles ou de toutes natures sans leur accord explicite."
 	;
 
       pride 
@@ -742,14 +742,14 @@ Sur demande des autorités légales compétentes, RunOrg peut suspendre les acc�
     [ offer 
 	~title: "Support Premium"
 	~price: "95 €"
-	"Nous répondons en moins de 24h à vos emails ! (Souvent même la nuit et les weekends). De plus, nous vous offrons un entretient téléphonique avec un expert de la communication interne et externe des associations."
+	"Nous répondons en moins de 24h à vos emails ! (Souvent même la nuit et les weekends). De plus, nous vous offrons un entretien téléphonique avec un expert de la communication interne et externe des associations."
 	[ "Support moins de 24h (engagement sur les jours ouvrés" ;
 	  "Offert : 30 minutes d'entretien et de conseils sur la communication de votre association avec un expert" ] ;
 
    offer 
 	~title: "Bien démarrer avec RunOrg"
 	~price: "500 €"
-	"Cette offre comprend la prise en main de votre espace, la configuration par nos soins selon vos besoins et sous vos yeux. Accompagnement dans la communication vers vos membres concernant ce lancement. Vous disposez ensuite de 2 heures de support téléphonique durant lesquels nous pouvons également intervenir dans votre espace RunOrg."
+	"Cette offre comprend la prise en main de votre espace, la configuration par nos soins selon vos besoins et sous vos yeux. Accompagnement dans la communication vers vos membres concernant ce lancement. Vous disposez ensuite de 2 heures de support téléphonique durant lesquelles nous pouvons également intervenir dans votre espace RunOrg."
 	[ "2 heures de formation à distance avec adaptation de votre espace RunOrg selon vos besoins" ;
 	  "2 heures d’assistance téléphonique sur les 2 premiers mois d’abonnement" ] ;
 
@@ -789,7 +789,7 @@ TVA intracommunautaire : FR2049966992700018
 Siège social : 22 rue Planchat 75020, France
 Directeur de la publication : Victor Nicollet
 
-L'ensemble de ce site relève des législations française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents iconographiques et photographiques."
+L'ensemble de ce site relève des législations françaises et internationales sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents iconographiques et photographiques."
 	;
      
       pride
@@ -914,7 +914,7 @@ RunOrg fournit aux membres un outil simple pour communiquer avec leur associatio
 	(pride
 	   ~title:"Plus d'échanges et de cohésion"
 	   ~subtitle:"Partager un espace privé, cela soude une communauté"
-	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, un équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
+	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, une équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
 
 RunOrg offre aux membres l'espace de communication dont ils ont besoin pour échanger entre eux dans le cadre de l'association. Ces échanges directs sont le moteur de la cohésion au sein des associations et des clubs."
 	) ;
@@ -923,9 +923,9 @@ RunOrg offre aux membres l'espace de communication dont ils ont besoin pour éch
 	(pride
 	   ~title:"Meilleur partage des tâches"
 	   ~subtitle:"Déléguer devient accessible et évident"
-	   "Les responsables associatifs le savent bien : le manque de contrôle et l'ampleur des tâches à réaliser sont deux freins important qui les empèchent de déléguer ou de trouver des volontaires.
+	   "Les responsables associatifs le savent bien : le manque de contrôle et l'ampleur des tâches à réaliser sont deux freins importants qui les empèchent de déléguer ou de trouver des volontaires.
 
-RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait. De plus l'outil permet de répartir certaines tâches sur les membres (ex : inscriptions en ligne). Les responsables vont adorer leur nouveau temps libre !")
+RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait. De plus, l'outil permet de répartir certaines tâches sur les membres (ex : inscriptions en ligne). Les responsables vont adorer leur nouveau temps libre !")
 	(image  "/public/img/imagephilippines.jpg")
     ] ;
   
