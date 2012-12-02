@@ -38,13 +38,13 @@ let pages = [
 
 	ribbon ( important
 		"Un outil innovant au service de vos idées"
-		"RunOrg offre des espaces communautaires privés aux collectivités leurs permettant d'être plus efficaces et d'innover dans leurs relations avec leurs administrés, élus, agents, sympathisants, etc.") ;
+		"RunOrg offre des espaces communautaires privés aux collectivités leur permettant d'être plus efficaces et d'innover dans leurs relations avec leurs administrés, élus, agents, sympathisants, etc.") ;
 
       composite `LR
 	(pride
 	   ~title:"Prise en main immédiate"
 	   ~subtitle:"Vos administrés vont adorer"
-	   "L'interface de RunOrg est intuitive, facile à maîtriser et ludique : les administrés, les agents et les sympathisants  l'adopteront rapidement pour communiquer entre eux et avec vous.
+	   "L'interface de RunOrg est intuitive, facile à maîtriser et ludique : les administrés, les agents et les sympathisants l'adopteront rapidement pour communiquer entre eux et avec vous.
 
 Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunOrg devient la façon la plus simple de communiquer et de s'organiser."
 	)
@@ -138,7 +138,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	 offer 
 	~title: "Personnalisation+"
 	~price: "A partir de 100€/mois"
-	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos administrés et vos agents le meilleurs de notre technologie sous votre marque !"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos administrés et vos agents le meilleur de notre technologie sous votre marque !"
 	[ "Application personnalisée à vos couleurs" ;
 	  "Votre logo même sur les pages personnelles des membres" ;
 	  "Votre nom de domaine" ;
@@ -147,7 +147,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	 offer 
 	~title: "Portail Multi-espaces"
 	~price: "A partir de 200€/mois"
-	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une commune de créer des espaces dédiés à ses commerçants, aux parents d'élèves, à ses agents, etc. Cela permet également à une maison des associations d'offrir un espace indépendant et un site Internet à chacune des associations enregistrée, et de bénéficier automatiquement d'un annuaire."
+	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs, RunOrg vous permet de créer autant d'espaces à vos couleurs que vous le souhaitez ! Permet par exemple à une commune de créer des espaces dédiés à ses commerçants, aux parents d'élèves, à ses agents, etc. Cela permet également à une maison des associations d'offrir un espace indépendant et un site Internet à chacune des associations enregistrées, et de bénéficier automatiquement d'un annuaire."
 	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
 	  "Nombre illimité d'espaces" ;
 	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;
@@ -253,7 +253,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 
 	option_offer ~before:"" ~link:("/collectivites/services","En savoir plus...") 
 	  "800" "HT par jour" "Formation"
-	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre d'utilisation de l'outil.
+	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre utilisation de l'outil.
 
 Un jour de formation est offert avec l'offre à 400€/mois"
 	;
@@ -265,7 +265,7 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 
 	option_priceless ~link:("/collectivites/services","En savoir plus...")
 	  "Fonctionnalités sur mesure"
-	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y répondre ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
+	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y réponde ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
 	;
     ] ;
 
@@ -293,7 +293,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les administrés peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
-	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
+	  "Vous déterminez pour chaque groupe si les demandes d'inscription sont validées manuellement ou automatiquement" ;
 	  
 	  "Inscriptions multiples",
 	  "Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
@@ -324,7 +324,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Pour n'oublier personne et gagner du temps, invitez directement les membres des groupes de votre choix";
 	  
 	  "Gestion des participants",
-	  "Indiquez pour chaque activité si les demandes d'inscriptions sont validées manuellement ou automatiquement";
+	  "Indiquez pour chaque activité si les demandes d'inscription sont validées manuellement ou automatiquement";
 	  
 	  "Niveau de visibilité des activités",
 	  "Déterminez si une activité n'est visible qu'aux inscrits, à tous les membres, ou si elle est publiée sur votre site Internet";
@@ -347,7 +347,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Vos membres et vous même pouvez publier et visionner des albums photo";
 	  
 	  "Définissez qui voit quoi",
-	  "Au sein de votre espace vous définissez de manière sélective qui accède à vos photos et vos documents"	
+	  "Au sein de votre espace vous définissez, de manière sélective, qui accède à vos photos et vos documents"	
 	]) ;
    
   
@@ -379,7 +379,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
 	  
 	  "Réponses aux invitations",
-	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
+	  "Lorsque vous invitez des membres à participer à des activités, ils vous indiquent s'ils viendront ou non.";
 	  
 	  "Formulaires d'inscription",
 	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
