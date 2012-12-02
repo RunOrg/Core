@@ -209,7 +209,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	    let versions = BatList.remove_assoc version versions in 
 	    let versions = ( version , (object
 	      method size = (float_of_int size) /. 1048576.
-	      method name = Util.urlencode (Filename.basename filename)
+	      method name = Netencoding.Url.encode ~plus:false (Filename.basename filename)
 	    end )) :: versions in
 	    (object
 	      method t    = `File
@@ -407,7 +407,7 @@ let define_async_confirmer ~kind ~name ~process =
 		  method name = Some found.ConfigS3.name
 		  method versions = [ MFile_common.original , (object
 		    method size = (float_of_int found.ConfigS3.size) /. 1048576.
-		    method name = Util.urlencode found.ConfigS3.name
+		    method name = Netencoding.Url.encode ~plus:false found.ConfigS3.name
 		  end )]
 		end) 
     in

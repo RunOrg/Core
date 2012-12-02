@@ -4,29 +4,52 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let render access item = 
+let render ?moderate access item = 
+
   let! doc = req_or (return None) begin match item # payload with 
     | `Doc   d -> Some d
     | _        -> None
   end in
   let! download = ohm_req_or (return None) $ MFile.Url.get (doc # file) `File in
+
   let! now = ohmctx (#time) in
+
   let  ext = VIcon.of_extension (doc # ext) in
-  let! author = ohm $ CAvatar.name (doc # author) in
+
+  let! avatar = ohm $ CAvatar.mini_profile (doc # author) in
+
+  let remove = match item # own with 
+    | Some own -> Some (object
+      method url = Action.url UrlClient.Item.remove (access # instance # key) 
+	( let cuid = IIsIn.user (access # isin) in
+	  let proof = IItem.Deduce.(make_remove_token cuid (own_can_remove own)) in
+	  (IItem.decay (item # id), proof) ) 
+    end)
+    | None -> match moderate with 
+	| Some f -> Some (object method url = f (IItem.decay (item #id)) end)
+	| None   -> None
+  in
+
   return $ Some (object
     method ext      = ext
     method name     = doc # title
-    method info     = "javascript:void(0)"
     method download = download
     method size     = doc # size
-    method author   = author
-    method date     = (item # time, now) 
+    method author   = avatar # name
+    method pic      = avatar # pico
+    method date     = (item # time, now)
+    method del      = remove
     method comments = if item # ncomm = 0 then None else Some item # ncomm 
   end)
  
 let items more access folder start = 
   let! items, next = ohm $ MItem.list ~self:(access # self) (`folder (MFolder.Get.id folder)) ~count:9 start in
-  let! items = ohm $ Run.list_filter (render access) items in 
+  let! admin = ohm $ MFolder.Can.admin folder in
+  let  moderate = 
+    if admin = None then None else 
+      Some (Action.url UrlClient.Item.moderate (access # instance # key))  
+  in
+  let! items = ohm $ Run.list_filter (render ?moderate access) items in 
   let  more  = match next with 
     | None      -> None
     | Some time -> Some (OhmBox.reaction_endpoint more time,Json.Null)
