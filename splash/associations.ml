@@ -144,7 +144,7 @@ RunOrg fournit aux membres un outil simple pour communiquer avec leur associatio
 	(pride
 	   ~title:"Plus d'échanges et de cohésion"
 	   ~subtitle:"Partager un espace privé, cela soude une communauté"
-	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, un équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
+	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, une équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
 
 RunOrg offre aux membres l'espace de communication dont ils ont besoin pour échanger entre eux dans le cadre de l'association. Ces échanges directs sont le moteur de la cohésion au sein des associations et des clubs."
 	) ;
@@ -249,16 +249,16 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	 offer 
 	~title: "Personnalisation+"
 	~price: "A partir de 100€/mois"
-	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos adhérents et membres le meilleurs de notre technologie sous votre marque !"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos adhérents et membres le meilleur de notre technologie sous votre marque !"
 	[ "Application personnalisée à vos couleurs" ;
 	  "Votre logo même sur les pages personnelles des membres" ;
 	  "Votre nom de domaine" ;
-	  "C'est le nom de votre association qui apparait dans les envois emails" ] ;
+	  "C'est le nom de votre association qui apparaît dans les envois emails" ] ;
 
 	 offer 
 	~title: "Portail Multi-espaces"
 	~price: "A partir de 200€/mois"
-	"Pour les fédérations ! En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à une fédération d'offrir un espace indépendant et un site Internet à chacune des associations affiliées, et de bénéficier automatiquement d'un annuaire."
+	"Pour les fédérations ! En plus de s'effacer pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs, RunOrg vous permet de créer autant d'espaces à vos couleurs que vous le souhaitez ! Permet par exemple à une fédération d'offrir un espace indépendant et un site Internet à chacune des associations affiliées, et de bénéficier automatiquement d'un annuaire."
 	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
 	  "Nombre illimité d'espaces" ;
 	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;
@@ -364,7 +364,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 
 	option_offer ~before:"" ~link:("/associations/services","En savoir plus...") 
 	  "800" "HT par jour" "Formation"
-	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre d'utilisation de l'outil.
+	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre utilisation de l'outil.
 
 Un jour de formation est offert avec l'offre à 400€/mois"
 	;
@@ -376,7 +376,7 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 
 	option_priceless ~link:("/associations/services","En savoir plus...")
 	  "Fonctionnalités sur mesure"
-	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y répondre ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
+	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y réponde ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
 	;
     ] ;
 
@@ -494,7 +494,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
-	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
+	  "Vous déterminez pour chaque groupe si les demandes d'inscription sont validées manuellement ou automatiquement" ;
 	  
 	  "Inscriptions multiples",
 	  "Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
@@ -516,7 +516,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
 	  
 	  "Nombreux modèles disponibles",
-	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
+	  "Selon votre type d'association, des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
 	  
 	  "Agenda privé",
 	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
@@ -525,7 +525,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Pour n'oublier personne et gagner du temps, invitez directement les membres des groupes de votre choix";
 	  
 	  "Gestion des participants",
-	  "Indiquez pour chaque activité si les demandes d'inscriptions sont validées manuellement ou automatiquement";
+	  "Indiquez pour chaque activité si les demandes d'inscription sont validées manuellement ou automatiquement";
 	  
 	  "Niveau de visibilité des activités",
 	  "Déterminez si une activité n'est visible qu'aux inscrits, à tous les membres, ou si elle est publiée sur votre site Internet";
@@ -548,7 +548,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Vos membres et vous même pouvez publier et visionner des albums photo";
 	  
 	  "Définissez qui voit quoi",
-	  "Au sein de votre espace vous définissez de manière sélective qui accède à vos photos et vos documents"	
+	  "Au sein de votre espace, vous définissez, de manière sélective, qui accède à vos photos et vos documents"	
 	]) ;
    
   
@@ -577,7 +577,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
 	  
 	  "Réponses aux invitations",
-	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
+	  "Lorsque vous invitez des membres à participer à des activités, ils vous indiquent s'ils viendront ou non.";
 	  
 	  "Formulaires d'inscription",
 	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
@@ -636,7 +636,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
 	  
 	  "Personnalisez vos tableaux",
-	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
+	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits, des activités et des groupes.";
 	  
 	  "Logos et images",
 	  "Insérez votre logo et définissez des images pour vos différents évènements"	

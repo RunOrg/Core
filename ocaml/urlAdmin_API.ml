@@ -25,3 +25,5 @@ let edit_instance_profile = declare "Modifier un Profil d'Association" "edit-ins
 let reboot = declare "Redémarrer le Serveur" "reboot"
 
 let rename_instance = declare "Changer l'URL d'une Association" "rename-instance"
+
+let confirm_user = declare "Confirmer un compte utilisateur" "confirm-user"
