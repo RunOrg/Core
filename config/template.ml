@@ -4,12 +4,12 @@ open Common
 module Col = struct
 
   let status = 
-    column ~sort:true ~show:true ~view:`Status
+    column ~view:`Status
       ~label:(adlib "ParticipateFieldState" ~old:"participate.field.state" "Statut")
       (`Self `Status)
 
   let date = 
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) 
 
@@ -1013,12 +1013,12 @@ let eventAg = template "EventAg"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldAgOthervoiceShort" ~old:"join.field.ag.othervoice.short" "Pouvoir")
       (`Self (`Field "othervoice")) ;
     status ; 
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
@@ -1070,16 +1070,16 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
   ~columns:Col.([
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFielBadmintonSeries" "Série choisie")
       (`Self (`Field "badminton-series")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi")
       (`Self (`Field "badminton-table")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldBadmintonDouble" "Partenaire de double (nom, prénom, classement)")
       (`Self (`Field "badminton-double")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)")
       (`Self (`Field "badminton-mixte")) ;
   ])
@@ -1124,10 +1124,10 @@ let eventCampaignAction = template "EventCampaignAction"
   ~columns:Col.([ 
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" "Périmètre couvert lors de l'opération")
       (`Self (`Field "perimeter")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération")
       (`Self (`Field "action-cr")) ;
   ])
@@ -1191,10 +1191,10 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
   ~columns:Col.([ 
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" "Thèmes que vous voulez voir aborder")
       (`Self (`Field "theme")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser")
       (`Self (`Field "question")) ;
   ])
@@ -1509,7 +1509,7 @@ let eventComiteEnt = template "EventComiteEnt"
   ~columns:Col.([
     status ; 
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
@@ -1556,7 +1556,7 @@ let eventCoproMeeting = template "EventCoproMeeting"
   ~columns:Col.([ 
     status ; 
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
@@ -1606,10 +1606,10 @@ let eventImproSimple = template "EventImproSimple"
   ~columns:Col.([ 
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
       (`Self (`Field "ok-for-help")) ;
   ])
@@ -1706,13 +1706,13 @@ let eventImproSpectacle = template "EventImproSpectacle"
   ~columns:Col.([ 
     status ; 
     date ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…")
       (`Self (`Field "ok-for-position")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
       (`Self (`Field "ok-for-help")) ;
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
   ])
@@ -1773,7 +1773,7 @@ let eventJudoCompetition = template "EventJudoCompetition"
   ~columns:Col.([
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFielJudoNoteAthlete" "Remarques sportif")
       (`Self (`Field "judo-note-athlete")) ;
 
@@ -1814,7 +1814,7 @@ let eventMeeting = template "EventMeeting"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
@@ -1863,13 +1863,13 @@ let eventPetition = template "EventPetition"
   ~columns:Col.([
     status ;
     date ; 
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "MemberFieldBirthdate" ~old:"member.field.birthdate" "Date de Naissance")
       (`Profile `Birthdate) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "MemberFieldZipcode" ~old:"member.field.zipcode" "Code Postal")
       (`Profile `Zipcode) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment")) ;
   ])
@@ -1920,7 +1920,7 @@ let eventPublicCommittee = template "EventPublicCommittee"
   ~columns:Col.([ 
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
@@ -2026,10 +2026,10 @@ let groupBadminton = template "GroupBadminton"
     column ~view:`Text
       ~label:(adlib "JoinFormRanking" "Classement")
       (`Self (`Field "Classement")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
       (`Self (`Field "dateofbirth")) ;
     column ~view:`Text
@@ -2038,7 +2038,7 @@ let groupBadminton = template "GroupBadminton"
     column ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
       (`Self (`Field "mobilephone")) ;
     column ~view:`Text
@@ -2101,10 +2101,10 @@ let groupCheerleading = template "GroupCheerleading"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
       (`Self (`Field "dateofbirth")) ;
     column ~view:`Text
@@ -2113,7 +2113,7 @@ let groupCheerleading = template "GroupCheerleading"
     column ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
       (`Self (`Field "mobilephone")) ;
     column ~view:`Text
@@ -2125,7 +2125,7 @@ let groupCheerleading = template "GroupCheerleading"
     column ~view:`Text
       ~label:(adlib "JoinFormOtherSportInfo" ~old:"join.form.other-sport-info" "Durée, niveau et fréquences des sports déjà pratiqués (ex : natation / confirmé / 2 fois semaine)")
       (`Self (`Field "other-sport-info")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormCategoriesChearleading" ~old:"join.form.categories-chearleading" "Catégories")
       (`Self (`Field "categories-chearleading")) ;
     column ~view:`PickOne
@@ -2234,13 +2234,13 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~columns:Col.([ 
     status ;
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
       (`Self (`Field "workphone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel")
       (`Self (`Field "workmobile")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
       (`Self (`Field "workemail")) ;
     column ~view:`Text
@@ -2274,13 +2274,13 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~columns:Col.([
     status ;
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "Mobilephone" ~old:"mobilephone" "")
       (`Self (`Field "mobilephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)")
       (`Self (`Field "appartment")) ;
   ])
@@ -2306,13 +2306,13 @@ let groupCoproManager = template "GroupCoproManager"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
       (`Self (`Field "workphone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkmobile" ~old:"join.form.workmobile" "Portable professionnel")
       (`Self (`Field "workmobile")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
       (`Self (`Field "workemail")) ;
   ])
@@ -2338,19 +2338,19 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~columns:Col.([
     status ; 
     date ; 
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "Mobilephone" ~old:"mobilephone" "")
       (`Self (`Field "mobilephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormAppartment" ~old:"join.form.appartment" "Appartement(s) (batiment, escalier, étage, numéro)")
       (`Self (`Field "appartment")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormNbCoproPart" ~old:"join.form.nb-copro-part" "Nombre de millièmes")
       (`Self (`Field "nb-copro-part")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormLiveCopro" ~old:"join.form.live-copro" "Habitez-vous cet appartement ?")
       (`Self (`Field "live-copro")) ;
   ])
@@ -2381,10 +2381,10 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "ProfileShareConfigPhone" ~old:"profile.share.config.phone" "Numéro de téléphone")
       (`Self (`Field "phone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "ProfileShareConfigBirth" ~old:"profile.share.config.birth" "Date de naissance")
       (`Self (`Field "dateofbirth")) ;
     column ~view:`Text
@@ -2411,16 +2411,16 @@ let groupFitnessMembers = template "GroupFitnessMembers"
     column ~view:`Text
       ~label:(adlib "JoinFormOthersports" ~old:"join.form.othersports" "autres sports pratiqués ou déjà pratiqués")
       (`Self (`Field "othersports")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormSessionType" ~old:"join.form.session-type" "Type de séance")
       (`Self (`Field "session-type")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormCourseType" ~old:"join.form.course-type" "Types de cours souhaités")
       (`Self (`Field "course-type")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormNbSession" ~old:"join.form.nb-session" "Nombre séances envisagées hebdomadaires")
       (`Self (`Field "nb-session")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormPreferedSessionTime" ~old:"join.form.prefered-session-time" "Horaires envisagés pour les séances")
       (`Self (`Field "prefered-session-time")) ;
     column ~view:`Text
@@ -2505,10 +2505,10 @@ let groupFootus = template "GroupFootus"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
       (`Self (`Field "dateofbirth")) ;
     column ~view:`Text
@@ -2517,7 +2517,7 @@ let groupFootus = template "GroupFootus"
     column ~view:`Text
       ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
       (`Self (`Field "homephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
       (`Self (`Field "mobilephone")) ;
     column ~view:`Text
@@ -2597,10 +2597,10 @@ let groupJudoMembers = template "GroupJudoMembers"
   ~columns:Col.([
     status ;
     date ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
       (`Self (`Field "sex")) ;
-    column ~sort:true ~show:true ~view:`DateTime
+    column ~view:`DateTime
       ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
       (`Self (`Field "dateofbirth")) ;
     column ~view:`Text
@@ -2612,13 +2612,13 @@ let groupJudoMembers = template "GroupJudoMembers"
     column ~view:`Text
       ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
       (`Self (`Field "mobilephone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormSize" ~old:"join.form.size" "Taille")
       (`Self (`Field "size")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWeight" ~old:"join.form.weight" "Poids")
       (`Self (`Field "weight")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinFormGradeJudoJujitsu" ~old:"join.form.grade-judo-jujitsu" "Grade Judo / Jujitsu")
       (`Self (`Field "grade-judo-jujitsu")) ;
     column ~view:`PickOne
@@ -2705,16 +2705,16 @@ let groupSchoolParents = template "GroupSchoolParents"
   ~folder:(folderConfig ~read:`Registered ~post:`Registered)
   ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
       (`Self (`Field "children-names")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkphone" ~old:"join.form.workphone" "Tel professionnel")
       (`Self (`Field "workphone")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormMobile" ~old:"join.form.mobile" "Tel portable")
       (`Self (`Field "mobile")) ;
-    column ~sort:true ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinFormWorkemail" ~old:"join.form.workemail" "Email professionnel")
       (`Self (`Field "workemail")) ;
     column ~view:`PickOne
@@ -2783,10 +2783,10 @@ let pollYearly = template "PollYearly"
   ~columns:Col.([
     status ;
     date ;
-    column ~show:true ~view:`Text
+    column ~view:`Text
       ~label:(adlib "JoinPollYearlyBestevent" ~old:"join.poll-yearly.bestevent" "Quel évènement vous a le plus marqué cette année concernant notre association ?")
       (`Self (`Field "bestevent")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinPollYearlyAssiduity" ~old:"join.poll-yearly.assiduity" "Comment qualifieriez-vous votre participation dans notre association cette année ?")
       (`Self (`Field "assiduity")) ;
     column ~view:`Text
@@ -2795,10 +2795,10 @@ let pollYearly = template "PollYearly"
     column ~view:`Text
       ~label:(adlib "JoinPollYearly3improvements" ~old:"join.poll-yearly.3improvements" "Proposez-nous 3 points d'améliorations pour notre association")
       (`Self (`Field "3improvements")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinPollYearlyComingback" ~old:"join.poll-yearly.comingback" "On compte sur vous l'année prochaine ?")
       (`Self (`Field "comingback")) ;
-    column ~sort:true ~show:true ~view:`PickOne
+    column ~view:`PickOne
       ~label:(adlib "JoinPollYearlyInvolvement" ~old:"join.poll-yearly.involvement" "Voulez-vous vous impliquer dans l'organisation ?")
       (`Self (`Field "involvement")) ;
   ])

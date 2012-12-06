@@ -48,17 +48,13 @@ let field ~label ?help ?mean ?(required=false) edit key = {
 }
 
 type column = { 
-  c_show  : bool ;
-  c_sort  : bool ;
   c_label : adlib ;
   c_view  : [ `Text | `Date | `DateTime | `Status | `PickOne | `Checkbox ] ;
   c_eval  : [ `Profile of [ `Zipcode | `Birthdate | `Firstname | `Lastname | `Email ] 
 	    | `Self of [ `Status | `Date | `Field of string ] ] 
 }
 
-let column ?(show=false) ?(sort=false) ~label ~view eval = {
-  c_show  = show ;
-  c_sort  = sort ;
+let column ~label ~view eval = {
   c_label = label ;
   c_view  = view ;
   c_eval  = eval
@@ -402,8 +398,8 @@ module Build = struct
       Printf.sprintf "`%s -> [\n   %s ]" t.t_id
 	(String.concat ";\n    "
 	   (List.map (fun c -> Printf.sprintf 
-	     "MAvatarGridColumn.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
-	     c.c_label (if c.c_show then "true" else "false") 
+	     "MAvatarGridColumn.({ label = `label `%s ; view = `%s ; eval = %s })"
+	     c.c_label
 	     (match c.c_view with 
 	       | `Text -> "Text"
 	       | `Date -> "Date"
@@ -632,8 +628,8 @@ module Build = struct
       Printf.sprintf "`%s -> [\n   %s ]" t.t_id
 	(String.concat ";\n    "
 	   (List.map (fun c -> Printf.sprintf 
-	     "MAvatarGridColumn.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
-	     c.c_label (if c.c_show then "true" else "false") 
+	     "MAvatarGridColumn.({ label = `label `%s ; view = `%s ; eval = %s })"
+	     c.c_label
 	     (match c.c_view with 
 	       | `Text -> "Text"
 	       | `Date -> "Date"

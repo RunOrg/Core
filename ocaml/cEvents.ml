@@ -53,7 +53,6 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
       if None = CAccess.admin access then None else 
 	Some (Action.url UrlClient.Events.options (access # instance # key) [])
     in
-
     Asset_Event_ListPrivate.render (object
       method future      = future
       method unbound     = unbound

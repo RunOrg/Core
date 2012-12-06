@@ -137,7 +137,6 @@ let box access entity fail cols_url invite_url join_url wrapper =
 	  let columns = MAvatarGridColumn.({
 	    eval  = `Profile (IInstance.decay access # iid,`Full) ;
 	    label = `text "" ;
-	    show  = true ;
 	    view  = `Full 
 	  }) :: columns in 
 	    

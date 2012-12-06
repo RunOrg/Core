@@ -260,7 +260,7 @@ let box access entity render =
       | `Profile `Gender    -> `Profile (iid, `Gender) 
     in
 
-    let  col = MAvatarGridColumn.({ label ; show = true ; view ; eval }) in
+    let  col = MAvatarGridColumn.({ label ; view ; eval }) in
 
     let  columns = columns @ [col] in
     let! () = ohm $ O.decay (Grid.MyGrid.set_columns lid columns) in
