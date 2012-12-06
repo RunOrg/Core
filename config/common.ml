@@ -195,7 +195,7 @@ module Build = struct
     ^ "\n  | _ -> None\n"
 
   let templateId_ml () = 
-    "module Event = PreConfig_TemplateId_Event\n\n"
+    "module Events = PreConfig_TemplateId_Events\n\n"
     ^ "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
     ^ String.concat "\n    | " (List.map (fun t -> "`" ^ t.t_id) (!templates))
     ^ " ]\n\n  let json_of_t = function\n    | "
@@ -215,7 +215,7 @@ module Build = struct
       Printf.sprintf "%S%s -> Some `%s" t.t_id old t.t_id) (!templates))
     ^ "\n  | _ -> None\n" 
 
-  let templateIdEvent_ml () = 
+  let templateIdEvents_ml () = 
     let templates = List.filter (fun t -> t.t_kind = `Event) ! templates in
     "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
     ^ String.concat "\n    | " (List.map (fun t -> "`" ^ t.t_id) (templates))
@@ -317,7 +317,7 @@ module Build = struct
   let template_ml () = 
 
     (* Include Event templates ============================================================================== *)
-    "module Event = PreConfig_Template_Event\n\n"
+    "module Events = PreConfig_Template_Events\n\n"
 
     (* Basic configuration data ============================================================================= *)
     ^ "let group = function\n  | "
@@ -558,7 +558,7 @@ module Build = struct
     end
     ^ "\n\nend"
 
-  let templateEvent_ml () = 
+  let templateEvents_ml () = 
 
     let templates = List.filter (fun t -> t.t_kind = `Event) !templates in 
 
@@ -801,10 +801,10 @@ let build dir =
   let list = [
     "preConfig_Adlibs.mli", Build.adlibs_mli () ;
     "preConfig_Adlibs.ml" , Build.adlibs_ml  () ;
-    "preConfig_TemplateId_Event.ml", Build.templateIdEvent_ml () ;
+    "preConfig_TemplateId_Events.ml", Build.templateIdEvents_ml () ;
     "preConfig_TemplateId.ml", Build.templateId_ml () ;
     "preConfig_VerticalId.ml", Build.verticalId_ml () ;
-    "preConfig_Template_Event.ml", Build.templateEvent_ml () ;  
+    "preConfig_Template_Events.ml", Build.templateEvents_ml () ;  
     "preConfig_Template.ml", Build.template_ml () ;
     "preConfig_Vertical.ml", Build.vertical_ml () ;
     "preConfig_ProfileFormId.ml", Build.profileFormId_ml () ;
