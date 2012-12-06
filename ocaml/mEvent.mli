@@ -77,24 +77,24 @@ end
 module All : sig
 
   val future :    
-       ?access:'any MAccess.context
-    -> IInstance.t 
+       ?access:'any # MAccess.context
+    -> 'a IInstance.id 
     -> (#O.ctx,[`View] t list) Ohm.Run.t  
 
-  val drafts : 
-      'any MAccess.context
-    -> IInstance.t
+  val undated : 
+       access:'any # MAccess.context
+    -> 'a IInstance.id
     -> (#O.ctx,[`View] t list) Ohm.Run.t
 
   val past : 
-       ?access:'any MAccess.context
+       ?access:'any # MAccess.context
     -> ?start:Date.t
     -> count:int
-    -> IInstance.t
+    -> 'a IInstance.id
     -> (#O.ctx,[`View] t list * Date.t option) Ohm.Run.t
 
 end
 
-val get : ?access:'any MAccess.context -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
+val get : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
  
 val delete : [`Admin] t -> [`IsSelf] IAvatar.id -> (#O.ctx,unit) Ohm.Run.t 

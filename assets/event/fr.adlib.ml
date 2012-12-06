@@ -3,7 +3,7 @@
 
 | `Events_List_Empty -> "Aucune activité disponible"
 
-| `Events_List_Unbound -> "Sans date"
+| `Events_List_Undated -> "Sans date"
 | `Events_List_Past -> "Archives"
 
 | `Events_Title -> "Activités"
