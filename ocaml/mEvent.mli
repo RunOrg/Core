@@ -70,7 +70,7 @@ val create :
   -> ?vision:Vision.t 
   -> iid:[`CreateEvent] IInstance.id
   -> ITemplate.Event.t
-  -> (#O.ctx,IEntity.t) Ohm.Run.t 
+  -> (#O.ctx,IEvent.t) Ohm.Run.t 
 
 module Set : sig
     
