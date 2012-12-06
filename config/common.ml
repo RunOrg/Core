@@ -199,7 +199,8 @@ module Build = struct
     ^ "\n  | _ -> None\n"
 
   let templateId_ml () = 
-    "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
+    "module Event = PreConfig_TemplateId_Event\n\n"
+    ^ "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
     ^ String.concat "\n    | " (List.map (fun t -> "`" ^ t.t_id) (!templates))
     ^ " ]\n\n  let json_of_t = function\n    | "
     ^ String.concat "\n    | " (List.map (fun t -> 
@@ -216,6 +217,25 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun t -> 
       let old = match t.t_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
       Printf.sprintf "%S%s -> Some `%s" t.t_id old t.t_id) (!templates))
+    ^ "\n  | _ -> None\n" 
+
+  let templateIdEvent_ml () = 
+    let templates = List.filter (fun t -> t.t_kind = `Event) ! templates in
+    "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
+    ^ String.concat "\n    | " (List.map (fun t -> "`" ^ t.t_id) (templates))
+    ^ " ]\n\n  let json_of_t = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> Ohm.Json.String %S" t.t_id t.t_id) (templates))
+    ^ "\n\n  let t_of_json = function\n    | "
+    ^ String.concat "\n    | " (List.map (fun t -> 
+      Printf.sprintf " Ohm.Json.String %S -> `%s" t.t_id t.t_id) (templates))
+    ^ "\n    | json -> Ohm.Json.parse_error \"template-id\" json"
+    ^ "\nend)\n\nlet to_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %S" t.t_id t.t_id) (templates))
+    ^ "\n\nlet of_string = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "%S -> Some `%s" t.t_id t.t_id) (templates))
     ^ "\n  | _ -> None\n" 
 
   let verticalId_ml () = 
@@ -300,8 +320,11 @@ module Build = struct
 
   let template_ml () = 
 
+    (* Include Event templates ============================================================================== *)
+    "module Event = PreConfig_Template_Event\n\n"
+
     (* Basic configuration data ============================================================================= *)
-    "let group = function\n  | "
+    ^ "let group = function\n  | "
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
 	| None -> "None"
@@ -356,12 +379,8 @@ module Build = struct
     ^ String.concat "\n  | " (List.map (fun t -> 
       Printf.sprintf "`%s -> `%s" t.t_id (match t.t_kind with 
 	| `Group -> "Group"
-	| `Subscription -> "Subscription"
 	| `Event -> "Event"
-	| `Forum -> "Forum"
-	| `Course -> "Course"
-	| `Poll -> "Poll"
-	| `Album -> "Album")) (!templates))
+	| `Forum -> "Forum")) (!templates))
 
       (* The name (adlib) of the template =================================================================== *)
     ^ "\n\nlet name = function\n  | "
@@ -543,6 +562,100 @@ module Build = struct
     end
     ^ "\n\nend"
 
+  let templateEvent_ml () = 
+
+    let templates = List.filter (fun t -> t.t_kind = `Event) !templates in 
+
+    (* Basic configuration data ============================================================================= *)
+    "let group = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
+	| None -> "None"
+	| Some (valid,read) -> Printf.sprintf 
+	  "Some (object method validation = %s method read = %s end)"
+	  (match valid with `Manual -> "`Manual" | `None -> "`None")
+	  (access read))) (templates))
+    ^ "\n\nlet wall = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_wall with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (templates))
+    ^ "\n\nlet folder = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_folder with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (templates))
+    ^ "\n\nlet album = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> %s" t.t_id (match t.t_album with 
+	| None -> "None"
+	| Some (read,post) -> Printf.sprintf 
+	  "Some (object method read = %s method post = %s end)"
+	  (access read) (access post))) (templates))
+
+      (* Join form fields =================================================================================== *)
+    ^ "\n\nlet join = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> [\n    %s ]" t.t_id 
+	(String.concat ";\n    " 
+	   (List.map (fun j -> Printf.sprintf 
+	     "(object\n      method name = %S\n      method label = `label `%s\n      method required = %s\n      method edit = %s\n    end)"
+	     j.j_name j.j_label (if j.j_req then "true" else "false") 
+	     (match j.j_type with 
+	       | `Textarea -> "`Textarea"
+	       | `Checkbox -> "`Checkbox"
+	       | `LongText -> "`LongText"
+	       | `Date     -> "`Date"
+	       | `PickOne  l -> Printf.sprintf "`PickOne [%s]"
+		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l))
+	       | `PickMany l -> Printf.sprintf "`PickMany [%s]"
+		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l)))
+	    ) t.t_join)
+	)) (templates))
+
+    (* The name (adlib) of the template =================================================================== *)
+    ^ "\n\nlet name = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (templates))
+
+    (* The name (adlib) of the template =================================================================== *)
+    ^ "\n\nlet desc = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> %s" t.t_id 
+      (match t.t_desc with Some s -> "Some `"^s | None -> "None")) (templates))
+
+    (* Initial grid columns =============================================================================== *)
+    ^ "\n\nlet columns iid gid = function\n  | "
+    ^ String.concat "\n  | " (List.map (fun t -> 
+      Printf.sprintf "`%s -> [\n   %s ]" t.t_id
+	(String.concat ";\n    "
+	   (List.map (fun c -> Printf.sprintf 
+	     "MAvatarGridColumn.({ label = `label `%s ; show = %s ; view = `%s ; eval = %s })"
+	     c.c_label (if c.c_show then "true" else "false") 
+	     (match c.c_view with 
+	       | `Text -> "Text"
+	       | `Date -> "Date"
+	       | `DateTime -> "DateTime"
+	       | `Status -> "Status"
+	       | `PickOne -> "PickOne"
+	       | `Checkbox -> "Checkbox")
+	     (match c.c_eval with 
+	       | `Profile sub -> Printf.sprintf "`Profile (iid,%s)"
+		 (match sub with 
+		   | `Firstname -> "`Firstname"
+		   | `Lastname  -> "`Lastname"
+		   | `Zipcode   -> "`Zipcode"
+		   | `Birthdate -> "`Birthdate"
+		   | `Email     -> "`Email")
+	       | `Self sub -> Printf.sprintf "`Group (gid,%s)"
+		 (match sub with 
+		   | `Status  -> "`Status"
+		   | `Date    -> "`Date"
+		   | `Field s -> Printf.sprintf "`Field %S" s))) t.t_cols))
+    ) (templates))
+
   let vertical_ml () =   
 
     (* List of event templates in a vertical, in order ----------------------------------------------- *)
@@ -692,8 +805,10 @@ let build dir =
   let list = [
     "preConfig_Adlibs.mli", Build.adlibs_mli () ;
     "preConfig_Adlibs.ml" , Build.adlibs_ml  () ;
+    "preConfig_TemplateId_Event.ml", Build.templateIdEvent_ml () ;
     "preConfig_TemplateId.ml", Build.templateId_ml () ;
     "preConfig_VerticalId.ml", Build.verticalId_ml () ;
+    "preConfig_Template_Event.ml", Build.templateEvent_ml () ;  
     "preConfig_Template.ml", Build.template_ml () ;
     "preConfig_Vertical.ml", Build.vertical_ml () ;
     "preConfig_ProfileFormId.ml", Build.profileFormId_ml () ;
