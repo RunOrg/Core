@@ -26,10 +26,10 @@ let pages = [
 	   "/public/img/preconf_company.jpg")
 	(features [ 
 	  "Vous restez maître de vos données",
-	  "Contrairement à un réseaux social classique, vous êtes propriétaires de vos données et pouvez les télécharger" ;
+	  "Contrairement à un réseau social classique, vous êtes propriétaire de vos données et pouvez les télécharger" ;
 	    
 	  "Simple et rapide à mettre en oeuvre",
-	  "L'outil s'adapte et se personnalise en quelques cliques, vous pouvez le faire évoluer selon vos besoins" ;
+	  "L'outil s'adapte et se personnalise en quelques clics, vous pouvez le faire évoluer selon vos besoins" ;
 	  
 	  "Faites des économies",
 	  "Nos solutions vous font gagner du temps et économiser sur vos relations clients"	
@@ -38,7 +38,7 @@ let pages = [
 
 	ribbon ( important
 		"Un outil innovant au service de vos idées"
-		"RunOrg offre des espaces communautaires privés aux entreprises leurs permettant d'être plus efficaces et d'innover dans leurs relations avec leurs clients, salariés, fournisseurs, abonnés, partenaires, etc.") ;
+		"RunOrg offre des espaces communautaires privés aux entreprises leur permettant d'être plus efficaces et d'innover dans leurs relations avec leurs clients, salariés, fournisseurs, abonnés, partenaires, etc.") ;
 
       composite `LR
 	(pride
@@ -81,7 +81,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	    "RunOrg nous permet de garder le lien avec les stagiaires que nous formons ce qui augmente leur taux de retour dans nos formations." ) ;
 	  ( "Virginie Do Carmo" ,
 	    "Editrice et fondatrice Ile De France News", 
-	    "Grâce au portail abonnés de RunOrg je peux intéragir avec mes abonnés, leur offrir de nouveaux services et augmenter mon audience." ) ;
+	    "Grâce au portail abonnés de RunOrg, je peux interagir avec mes abonnés, leur offrir de nouveaux services et augmenter mon audience." ) ;
 	  ( "Laurent Villemur" , 
 	    "Directeur de Acte-trois formation" ,
 	    "La mise en place rapide et facile de RunOrg nous a permis de répondre aux besoins de nos stagiaires qui souhaitaient rester en lien après les formations." ) 
@@ -102,13 +102,13 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 
   page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
     [ composite `LR
-	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leurs offrir de nouveaux services, intéragir avec eux, et créer une communauté autour de votre journal")
+	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leur offrir de nouveaux services, interagir avec eux, et créer une communauté autour de votre journal")
 		(contact_demo)   ;
 ];
 
   page "/portail-clients" "RunOrg Entreprises - Portail Clients"
     [ composite `LR
-	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leurs offrir de nouveaux services.")
+	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leur offrir de nouveaux services.")
 		(contact_demo)   ;
 ];
 
@@ -130,22 +130,22 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	~price: "Inclus dans les offres entreprises"
 	"Pour les professionnels nous avons créé un pack de services et de fonctionnalités leur permettant de gagner du temps lors de la mise en place de l'outil et de bénéficier d'une assistance prioritaire."
 	[ "Assistance+ en ligne : support moins de 24h (jours ouvrés)" ;
-	  "Fonctionnalités Pro : administrateurs de groupe, fiches administrateurs sur les membres, [et d'autres à venir]" ;
+	  "Fonctionnalités Pro : administrateurs de groupes, fiches administrateurs sur les membres, [et d'autres à venir]" ;
 	  "Offert : 30 minutes de conseils sur l'utilisation de l'outil pour votre entreprise" ] ;
 
 	 offer 
 	~title: "Personnalisation+"
 	~price: "A partir de 100€/mois"
-	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos clients ou vos salariés le meilleurs de notre technologie sous votre marque !"
+	"RunOrg s'efface pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs. Ce mode de fonctionnement en 'marque grise' vous permet d'offrir à vos clients ou vos salariés le meilleur de notre technologie sous votre marque !"
 	[ "Application personnalisée à vos couleurs" ;
 	  "Votre logo même sur les pages personnelles des membres" ;
 	  "Votre nom de domaine" ;
-	  "C'est le nom de votre entreprise qui apparait dans les envois emails" ] ;
+	  "C'est le nom de votre entreprise qui apparaît dans les envois emails" ] ;
 
 	 offer 
 	~title: "Portail Multi-espaces"
 	~price: "A partir de 200€/mois"
-	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, nom de domaines et couleurs, RunOrg vous permet de créer autant d'espace à vos couleurs que vous le souhaitez ! Permet par exemple à un centre de formation de créer des espaces distincs pour chacun de ses clients grands comptes, ou à une société d'édition de créer un espace pour chacun de ses titres."
+	"En plus de s'effacer pour vous permettre d'utiliser vos propres logos, noms de domaines et couleurs, RunOrg vous permet de créer autant d'espaces à vos couleurs que vous le souhaitez ! Permet par exemple à un centre de formation de créer des espaces distincs pour chacun de ses clients grands comptes, ou à une société d'édition de créer un espace pour chacun de ses titres."
 	[ "Inclus : toutes les caractériques de l'option Personnalisation+" ;
 	  "Nombre illimité d'espaces" ;
 	  "Annuaire de tous les espaces de votre domaine classés par mots clefs" ;
@@ -251,7 +251,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 
 	option_offer ~before:"" ~link:("/entreprises/services","En savoir plus...") 
 	  "800" "HT par jour" "Formation"
-	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre d'utilisation de l'outil.
+	  "Pour vous ou vos utilisateurs, nous organisons des formations adaptées à vos besoins et à votre utilisation de l'outil.
 
 Un jour de formation est offert avec l'offre à 400€/mois"
 	;
@@ -263,7 +263,7 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 
 	option_priceless ~link:("/entreprises/services","En savoir plus...")
 	  "Fonctionnalités sur mesure"
-	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y répondre ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
+	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y réponde ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
 	;
 
 (*
@@ -344,7 +344,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Les clients peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
 	  
 	  "Gestion des inscrits",
-	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
+	  "Vous déterminez pour chaque groupe si les demandes d'inscription sont validées manuellement ou automatiquement" ;
 	  
 	  "Inscriptions multiples",
 	  "Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
@@ -366,7 +366,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Votre communauté ne se résume pas qu'à des membres. RunOrg gère également les activités.";
 	  
 	  "Nombreux modèles disponibles",
-	  "Selon votre type d'organisation des modèles adaptés vous sont proposés (réunions, cours, rencontres, événements, etc.)";
+	  "Selon votre type d'organisation, des modèles adaptés vous sont proposés (réunions, cours, rencontres, événements, etc.)";
 	  
 	  "Agenda privé",
 	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
@@ -375,7 +375,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Pour n'oublier personne et gagner du temps, invitez directement les membres des groupes de votre choix";
 	  
 	  "Gestion des participants",
-	  "Indiquez pour chaque activité si les demandes d'inscriptions sont validées manuellement ou automatiquement";
+	  "Indiquez pour chaque activité si les demandes d'inscription sont validées manuellement ou automatiquement";
 	  
 	  "Niveau de visibilité des activités",
 	  "Déterminez si une activité n'est visible qu'aux inscrits, à tous les membres, ou si elle est publiée sur votre site Internet";
@@ -398,7 +398,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Vos membres et vous même pouvez publier et visionner des albums photo";
 	  
 	  "Définissez qui voit quoi",
-	  "Au sein de votre espace vous définissez de manière sélective qui accède à vos photos et vos documents"	
+	  "Au sein de votre espace, vous définissez, de manière sélective, qui accède à vos photos et vos documents"	
 	]) ;
    
   
@@ -430,7 +430,7 @@ ou au contraire les rendre accessibles aux membres de certains groupes uniquemen
 	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
 	  
 	  "Réponses aux invitations",
-	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
+	  "Lorsque vous invitez des membres à participer à des activités, ils vous indiquent s'ils viendront ou non.";
 	  
 	  "Formulaires d'inscription",
 	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
