@@ -71,7 +71,7 @@ type template_data = {
   t_name : adlib ;
   t_desc : adlib option ;
   t_join : join list ;
-  t_kind : [ `Group | `Subscription | `Event | `Album | `Forum | `Course | `Poll ] ;  
+  t_kind : [ `Group | `Event | `Forum ] ;  
   t_page : infoSection list ;
   t_group  : groupConfig option ;
   t_wall   : collabConfig option ;
