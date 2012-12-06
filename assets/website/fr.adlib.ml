@@ -36,7 +36,6 @@
 | `Website_Admin_Article_Edit  -> "Modifier un article"
 | `Website_Admin_Article_Submit -> "Publier"
 
-
 | `Website_Admin_About_Edit -> "Modifier"
 | `Website_Admin_About_Name -> "Nom"
 | `Website_Admin_About_Description -> "Description"
@@ -49,3 +48,5 @@
 | `Website_Admin_About_Submit -> "Enregistrer"
 
 | `Website_Admin_Picture_Edit -> "Logo" 
+
+| `Website_Map_Enlarge -> "Agrandir la carte"

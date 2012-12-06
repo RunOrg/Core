@@ -48,3 +48,5 @@
 | `Website_Admin_About_Submit 
 
 | `Website_Admin_Picture_Edit
+
+| `Website_Map_Enlarge
