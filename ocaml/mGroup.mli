@@ -32,7 +32,7 @@ module Get : sig
   val id       :                  'any  t -> 'any IGroup.id    
   val is_admin :                  'any  t -> bool
   val instance :                  'any  t -> IInstance.t
-  val entity   :                  'any  t -> IEntity.t option
+  val owner    :                  'any  t -> [ `Entity of IEntity.t | `Event of IEvent.t ]
   val manual   :                  'any  t -> bool 
   val list     : [<`Admin|`Write|`List] t -> [`List] IAvatarGrid.id 
   val listedit :         [<`Admin|`Bot] t -> [`Edit] IAvatarGrid.id

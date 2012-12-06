@@ -12,7 +12,7 @@ include Fmt.Make(struct
     | `BecomeMember  "bm"
     | `BecomeAdmin   "ba"
     | `SuperAdmin    "sa"
-    | `EntityInvite  "ei"
+    | `EventInvite   "ei"
     | `EntityRequest "er"	
     | `Broadcast     "b"
     | `CanInstall    "ci"

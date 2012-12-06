@@ -131,10 +131,13 @@ let box access entity render =
       let group gid = 
 	let  none   = AdLib.get `Grid_Source_Group_Unknown in
 	let! group  = ohm_req_or none $ O.decay (MGroup.try_get access gid) in 
-	let! eid    = req_or none (MGroup.Get.entity group) in
-	let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
-	let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
-	CEntityUtil.name entity 
+	match MGroup.Get.owner group with 
+	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
+			   let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
+			   CEntityUtil.name entity 
+	  | `Event eid -> let! event = ohm_req_or none $ MEvent.get ~access eid in
+			  let! event = ohm_req_or none $ MEvent.Can.view event in 
+			  MEvent.Get.fullname event
       in
 
       let g gid x = 

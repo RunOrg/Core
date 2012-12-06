@@ -10,8 +10,8 @@
 	     | `NewCommentOther1
 	     | `NewCommentOther2
 	     | `NewWallItem1
-	     | `EntityInvite1
-	     | `EntityInvite2
+	     | `EventInvite1
+	     | `EventInvite2
 	     | `EntityRequest1
 	     | `EntityRequest2
 	     | `CanInstall1

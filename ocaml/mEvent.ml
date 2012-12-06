@@ -4,11 +4,23 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Signals   = MEvent_signals
+
 type 'relation t = unit
 
 module Vision = Fmt.Make(struct
   type json t = [ `Website "w" | `Normal "n" | `Secret "s" ]
 end) 
+
+module Satellite = struct
+
+  type action = 
+    [ `Group of [ `Manage | `Read | `Write ]
+    ]
+
+  let access _ _ = assert false
+
+end
 
 module Can = struct
   let view  _ = assert false
@@ -40,6 +52,7 @@ module Get = struct
   let public   _ = assert false
   let status   _ = assert false
   let data     _ = assert false
+  let fullname t = BatOption.default (AdLib.get `Event_Unnamed) (BatOption.map return (name t))
 
 end
 
@@ -72,8 +85,11 @@ module All = struct
 
 end
 
-let get ?access id = 
+let get ?access eid = 
   assert false
 
 let delete t self = 
+  assert false
+
+let instance eid = 
   assert false

@@ -165,20 +165,32 @@ let push_invite_task inviter_aid invited_aid gid =
   if inviter_aid = invited_aid then return () else
 
     let! group = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-    let! eid   = req_or (return ()) $ MGroup.Get.entity group in 
+    let! eid   = req_or (return ()) begin 
+      match MGroup.Get.owner group with
+	| `Event eid -> Some eid
+	| `Entity _ -> None	  
+    end in 
     
-    let payload = `EntityInvite (eid, inviter_aid) in
+    let payload = `EventInvite (eid, inviter_aid) in
     to_avatar payload invited_aid (INotifyStats.gen ()) 
 
-let push_request_task aid eid admins = 
+let push_request_task aid owner admins = 
+
+  let! iid = ohm_req_or (return ()) begin match owner with 
+    | `Entity eid -> MEntity.instance eid 
+    | `Event  eid -> MEvent.instance eid
+  end in 
 
   (* We're sending a notification, so we can reverse the rights ! *)
-  let! iid = ohm_req_or (return ()) $ MEntity.instance eid in 
   let  iid = IInstance.Assert.rights iid in 
 
   let! admins = ohm $ MReverseAccess.reverse iid [admins] in
 
-  let payload = `EntityRequest (eid, aid) in
+  let payload = match owner with 
+    | `Event eid -> `EventRequest (eid, aid) 
+    | `Entity eid -> `GroupRequest (eid, aid) 
+  in
+
   to_avatars (INotifyStats.gen ()) (List.map (fun aid -> payload, aid) admins)
 
 let () = 
@@ -210,13 +222,13 @@ let () =
       
       if MGroup.Get.manual group then 
 
-	let! eid = req_or (return ()) $ MGroup.Get.entity group in 
+	let  owner  = MGroup.Get.owner group in 
 	let! access = ohm $ MGroup.Get.write_access group in 
 
 	(* Manual validation is on ! *)
 	push_request_task
 	  ((change # after).MMembership.Details.who)  
-	  eid access
+	  owner access
 	
       else
 	return ()

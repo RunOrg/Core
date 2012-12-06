@@ -67,21 +67,29 @@
   !! "%s a répondu dans une conversation que vous suivez sur %s. Vous pouvez lui répondre en cliquant sur le lien ci-dessous :" who asso
 | `Mail_Notify_CommentItem_Thanks asso -> !! "À bientôt sur %s" asso
 
-| `Mail_Notify_EntityInvite_Title (who,what) -> !! "%s vous invite : %s" who what
-| `Mail_Notify_EntityInvite_Intro name -> !! "Bonjour %s" name
-| `Mail_Notify_EntityInvite_Explanation (who,what,asso) -> 
+| `Mail_Notify_EventInvite_Title (who,what) -> !! "%s vous invite : %s" who what
+| `Mail_Notify_EventInvite_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_EventInvite_Explanation (who,what,asso) -> 
   !! "Vous êtes invité par %s à l'évènement %s organisé par %s." who what asso
-| `Mail_Notify_EntityInvite_Explanation2 who -> 
+| `Mail_Notify_EventInvite_Explanation2 who -> 
   !! "%s vous remercie de répondre à cette invitation en utilisant le lien ci-dessous :" who
-| `Mail_Notify_EntityInvite_Thanks asso -> !! "À bientôt sur %s" asso
+| `Mail_Notify_EventInvite_Thanks asso -> !! "À bientôt sur %s" asso
 
-| `Mail_Notify_EntityRequest_Title (who,what) -> !! "%s demande à rejoindre %s" who what
-| `Mail_Notify_EntityRequest_Intro name -> !! "Bonjour %s" name
-| `Mail_Notify_EntityRequest_Explanation (who,what,asso) -> 
+| `Mail_Notify_EventRequest_Title (who,what) -> !! "%s demande à participer à %s" who what
+| `Mail_Notify_EventRequest_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_EventRequest_Explanation (who,what,asso) -> 
   !! "La demande de %s à rejoindre %s est en attente dans %s." who what asso
-| `Mail_Notify_EntityRequest_Explanation2 -> 
+| `Mail_Notify_EventRequest_Explanation2 -> 
    "En tant qu'administrateur vous pouvez visualiser et traiter cette demande en suivant le lien ci-dessous :"
-| `Mail_Notify_EntityRequest_Thanks asso -> !! "À bientôt sur %s" asso
+| `Mail_Notify_EventRequest_Thanks asso -> !! "À bientôt sur %s" asso
+
+| `Mail_Notify_GroupRequest_Title (who,what) -> !! "%s demande à rejoindre %s" who what
+| `Mail_Notify_GroupRequest_Intro name -> !! "Bonjour %s" name
+| `Mail_Notify_GroupRequest_Explanation (who,what,asso) -> 
+  !! "La demande de %s à rejoindre %s est en attente dans %s." who what asso
+| `Mail_Notify_GroupRequest_Explanation2 -> 
+   "En tant qu'administrateur vous pouvez visualiser et traiter cette demande en suivant le lien ci-dessous :"
+| `Mail_Notify_GroupRequest_Thanks asso -> !! "À bientôt sur %s" asso
 
 | `Mail_NotifyResend_Title -> "Nouveau lien de connexion"
 | `Mail_NotifyResend_Intro name -> !! "Bonjour %s" name

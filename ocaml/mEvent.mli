@@ -4,6 +4,29 @@ type 'relation t
 
 module Vision : Ohm.Fmt.FMT with type t = [ `Website | `Normal | `Secret ]
 
+module Satellite : sig
+
+  type action = 
+    [ `Group of [ `Manage | `Read | `Write ]
+    ]
+
+  val access : 'any t -> action -> MAccess.t
+
+end
+
+module Signals : sig
+    
+  val on_update : (IEvent.t, unit O.run) Ohm.Sig.channel
+
+  val on_bind_group : (   IInstance.t
+                        * IEvent.t
+		        * [`Bot] IGroup.id
+                        * ITemplate.Event.t 
+			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
+    
+end
+
+
 module Can : sig
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
@@ -36,6 +59,7 @@ module Get : sig
   val public   : [<`Admin|`View] t -> bool 
   val status   : [<`Admin|`View] t -> [ `Draft | `Website | `Secret ] option 
   val data     :            'any t -> (#O.ctx,'any Data.t option) Ohm.Run.t
+  val fullname : [<`Admin|`View] t -> (#O.ctx,string) Ohm.Run.t
 
 end
 
@@ -98,3 +122,5 @@ end
 val get : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
  
 val delete : [`Admin] t -> [`IsSelf] IAvatar.id -> (#O.ctx,unit) Ohm.Run.t 
+
+val instance : 'any IEvent.id -> (#O.ctx,IInstance.t option) Ohm.Run.t

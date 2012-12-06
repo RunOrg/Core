@@ -8,26 +8,26 @@ open CNotifySend_common
 
 let send url uid eid aid = 
 
-  let! iid  = ohm_req_or (return ()) $ MEntity.instance eid in 
+  let! iid  = ohm_req_or (return ()) $ MEvent.instance eid in 
   let! instance = ohm_req_or (return ()) $ MInstance.get iid in 
 
   let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
   
     let! access = ohm_req_or (return ()) $ access iid self in 
-    let! entity = ohm_req_or (return ()) $ MEntity.try_get access eid in 
-    let! entity = ohm_req_or (return ()) $ MEntity.Can.view entity in 
-    let! entity = ohm $ CEntityUtil.name entity in 
+    let! event = ohm_req_or (return ()) $ MEvent.get ~access eid in 
+    let! event = ohm_req_or (return ()) $ MEvent.Can.view event in 
+    let! event = ohm (MEvent.Get.fullname event) in
 
     let! author = ohm $ CAvatar.mini_profile aid in 
     let! name = req_or (return ()) (author # nameo) in
     
-    let subject = AdLib.get (`Mail_Notify_EntityInvite_Title (name,entity)) in
+    let subject = AdLib.get (`Mail_Notify_EventInvite_Title (name,event)) in
     
     let owid = snd (instance # key) in
 
-    let body = Asset_Mail_NotifyEntityInvite.render (object
+    let body = Asset_Mail_NotifyEventInvite.render (object
       method name      = user # fullname
-      method inviter   = (name, entity, instance # name)
+      method inviter   = (name, event, instance # name)
       method who       = name
       method url       = url owid
       method asso      = instance # name

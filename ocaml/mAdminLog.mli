@@ -3,9 +3,11 @@
 module Payload : sig
 
   type t = 
-      MembershipMass of [ `Invite | `Add | `Remove | `Validate | `Create ] * IEntity.t * int
-    | MembershipAdmin of [ `Invite | `Add | `Remove | `Validate ] * IEntity.t * IAvatar.t
-    | MembershipUser of bool * IEntity.t
+      MembershipMass of [ `Invite | `Add | `Remove | `Validate | `Create ] * 
+	  [ `Entity of IEntity.t | `Event of IEvent.t ] * int
+    | MembershipAdmin of [ `Invite | `Add | `Remove | `Validate ] * 
+	[ `Entity of IEntity.t | `Event of IEvent.t ] * IAvatar.t
+    | MembershipUser of bool * [ `Entity of IEntity.t | `Event of IEvent.t ] 
     | InstanceCreate 
     | LoginManual 
     | LoginSignup
