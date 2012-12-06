@@ -101,3 +101,7 @@ end
 | `Event_Delete_Cancel -> "Ne pas supprimer"
 
 | `Event_DelPick_Title -> "Ajouter"
+
+| `Event_Unnamed -> "Sans Titre"
+| `Event_Public_Map_Enlarge -> "Agrandir la carte"
+| `Event_Public_By -> "Organisé par"

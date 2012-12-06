@@ -93,3 +93,7 @@
 | `Event_Delete_Cancel 
 
 | `Event_DelPick_Title
+
+| `Event_Unnamed
+| `Event_Public_Map_Enlarge
+| `Event_Public_By
