@@ -2764,7 +2764,7 @@ let _ = template "GroupTest"
 
 let pollSimple = template "PollSimple"
   ~old:"poll-simple"
-  ~kind:`Poll
+  ~kind:`Event
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
@@ -2776,7 +2776,7 @@ let pollSimple = template "PollSimple"
 
 let pollYearly = template "PollYearly"
   ~old:"poll-yearly"
-  ~kind:`Poll
+  ~kind:`Event
   ~name:"Bilan de l'année écoulée"
   ~desc:"Questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
