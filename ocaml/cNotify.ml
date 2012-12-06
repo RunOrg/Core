@@ -24,15 +24,11 @@ let item_url cuid itid =
     | `feed fid -> begin
       let! feed = ohm_req_or none $ MFeed.try_get access fid in 
       match MFeed.Get.owner feed with 
-	| `of_instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
-	| `of_entity eid -> begin 
-	  let! entity = ohm_req_or none $ MEntity.try_get access eid in 
-	  return $ Some (Action.url 
-	    (if MEntity.Get.kind entity = `Event then UrlClient.Events.see
-	     else UrlClient.Forums.see) 
-	    (instance # key) [ IEntity.to_string eid ])
-	end 
-	| `of_message  _ -> return None
+	| `Instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
+	| `Entity eid -> return $ Some (Action.url UrlClient.Forums.see 
+					  (instance # key) [ IEntity.to_string eid ])
+	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
+					 (instance # key) [ IEvent.to_string eid ])
     end
     | `album  aid -> return None
     | `folder fid -> return None		

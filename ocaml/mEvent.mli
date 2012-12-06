@@ -7,7 +7,10 @@ module Vision : Ohm.Fmt.FMT with type t = [ `Website | `Normal | `Secret ]
 module Satellite : sig
 
   type action = 
-    [ `Group of [ `Manage | `Read | `Write ]
+    [ `Group  of [ `Manage | `Read | `Write ]
+    | `Wall   of [ `Manage | `Read | `Write ]
+    | `Album  of [ `Manage | `Read | `Write ]
+    | `Folder of [ `Manage | `Read | `Write ]
     ]
 
   val access : 'any t -> action -> MAccess.t

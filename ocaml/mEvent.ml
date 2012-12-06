@@ -15,7 +15,10 @@ end)
 module Satellite = struct
 
   type action = 
-    [ `Group of [ `Manage | `Read | `Write ]
+    [ `Group  of [ `Manage | `Read | `Write ]
+    | `Wall   of [ `Manage | `Read | `Write ]
+    | `Album  of [ `Manage | `Read | `Write ]
+    | `Folder of [ `Manage | `Read | `Write ]
     ]
 
   let access _ _ = assert false

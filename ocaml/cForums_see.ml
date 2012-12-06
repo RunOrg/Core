@@ -91,7 +91,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	    let! status = ohm $ MMembership.status access gid in
 	    let  fields = MGroup.Fields.get group <> [] in
 	    return $ 
-	      Some (CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
+	      Some (CJoin.Self.render (`Entity eid) 
+		      (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
       end in 
 
       (* Administrator URLs ---------------------------------------------------------------- *)

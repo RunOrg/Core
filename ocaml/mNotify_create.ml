@@ -103,14 +103,18 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
     let! interested = ohm begin
       let! feed = ohm_req_or (return []) $ MFeed.bot_get fid in 
       match MFeed.Get.owner feed with 
-	| `of_instance iid ->
+	| `Instance iid ->
 	  let  iid = IInstance.Assert.bot iid in
 	  MAvatar.List.all_members iid 
-	| `of_message _ -> return []
-	| `of_entity eid -> 
+	| `Entity eid -> 
 	  let  eid    = IEntity.Assert.bot eid in 
 	  let! entity = ohm_req_or (return []) $ MEntity.bot_get eid in 
 	  let  gid    = IGroup.Assert.bot $ MEntity.Get.group entity in 
+	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
+	  return $ List.map snd list	
+	| `Event eid -> 
+	  let! event = ohm_req_or (return []) $ MEvent.get eid in 
+	  let  gid    = IGroup.Assert.bot $ MEvent.Get.group event in
 	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
 	  return $ List.map snd list	
     end in 

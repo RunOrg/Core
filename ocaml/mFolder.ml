@@ -17,8 +17,8 @@ module Data = Fmt.Make(struct
   module IEntity = IEntity
   module IInstance = IInstance
   type json t = <
-    ins   : IInstance.t ;
-    owner : [`entity "e" of IEntity.t]
+    iid "ins" : IInstance.t ;
+    owner : [ `Entity "e" of IEntity.t | `Event "ev" of IEvent.t ]
   >
 end)
 
@@ -33,21 +33,22 @@ type 'relation t =
       admin : bool O.run ;
     }
 
-let _make context id data = 
+let _make access id data = 
   let owner = Run.memo begin
     match data # owner with 
-      | `entity  eid -> begin
-	let nil = (fun _ -> `Nobody) in
-	let! entity = ohm_req_or (return nil) $ MEntity.try_get context eid in
-	return (fun what -> MEntity.Satellite.access entity (`Album what))
-      end
+      | `Entity eid -> let nil = (fun _ -> `Nobody) in
+		       let! entity = ohm_req_or (return nil) $ MEntity.try_get access eid in
+		       return (fun what -> MEntity.Satellite.access entity (`Album what))
+      | `Event eid ->  let nil = (fun _ -> `Nobody) in
+		       let! event = ohm_req_or (return nil) $ MEvent.get ~access eid in
+		       return (fun what -> MEvent.Satellite.access event (`Album what))
   end in
   {
     id    = id ;
     data  = data ;
-    read  = ( let! f = ohm owner in MAccess.test context [ f `Read ; f `Write ; f `Manage ] ) ;
-    write = ( let! f = ohm owner in MAccess.test context [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test context [                      f `Manage ] ) ;
+    read  = ( let! f = ohm owner in MAccess.test access [ f `Read ; f `Write ; f `Manage ] ) ;
+    write = ( let! f = ohm owner in MAccess.test access [           f `Write ; f `Manage ] ) ;
+    admin = ( let! f = ohm owner in MAccess.test access [                      f `Manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
@@ -60,14 +61,13 @@ module Get = struct
 
   let id t = t.id
 
-  let entity t = match t.data # owner with 
-    | `entity eid -> Some eid
+  let owner t = t.data # owner
 
-  let instance t = t.data # ins
+  let instance t = t.data # iid
 
   let write_instance t = 
-    (* I can upload, since I can write to the album *)
-    t.data # ins |> IInstance.Assert.upload
+    (* I can upload, since I can write to the folder *)
+    t.data # iid |> IInstance.Assert.upload
 
 end
 
@@ -114,21 +114,30 @@ module Can = struct
 
 end
 
-(* MAccess by entity ------------------------------------------------------------------------ *)
+(* Access by entity ------------------------------------------------------------------------ *)
 
-module ByEntityView = CouchDB.DocView(struct
-  module Key = IEntity
+module ByOwnerView = CouchDB.DocView(struct
+  module Key = Id
   module Value = Fmt.Unit
   module Doc = Data
   module Design = Design
-  let name = "by_entity"
+  let name = "by_owner"
   let map = "if (doc.owner) emit(doc.owner[1]);"
 end)
 
-let get_for_entity ctx eid =   
+let get_for_owner ctx owner =   
 
-  let eid = IEntity.decay eid in 
-  let! found_opt = ohm (ByEntityView.doc eid |> Run.map Util.first) in
+  let  id = match owner with
+    | `Entity eid -> IEntity.to_id eid 
+    | `Event  eid -> IEvent.to_id  eid
+  in
+
+  let owner = match owner with 
+    | `Entity eid -> `Entity (IEntity.decay eid)
+    | `Event  eid -> `Event  (IEvent.decay  eid) 
+  in
+
+  let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
 
   let create_if_missing =  
     match found_opt with 
@@ -136,8 +145,8 @@ let get_for_entity ctx eid =
       | None -> (* MFolder missing, create one *)
 
 	let doc = object
-	  method owner = `entity eid
-	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
+	  method owner = owner
+	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
 	let! id = ohm $ Tbl.create doc in 
@@ -147,3 +156,6 @@ let get_for_entity ctx eid =
   let! id, doc = ohm create_if_missing in
 
   return (_make ctx id doc)
+
+let get_for_event ctx eid = get_for_owner ctx (`Event eid)
+let get_for_entity ctx eid = get_for_owner ctx (`Entity eid)
