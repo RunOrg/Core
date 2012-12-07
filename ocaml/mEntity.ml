@@ -11,7 +11,6 @@ module MyTable = E.Table
 module Can       = MEntity_can
 module Get       = MEntity_get 
 module Data      = MEntity_data
-module Access    = MEntity_access
 module All       = MEntity_all
 module Satellite = MEntity_satellite
 module Signals   = MEntity_signals

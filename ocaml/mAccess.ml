@@ -29,7 +29,6 @@ include Fmt.Make(struct
     | `TokOnly "t" of t
     | `List    "l" of IAvatar.t list    
     | `Groups  "g" of State.t * (IGroup.t list)
-    | `Entity  "e" of IEntity.t * Action.t 
     | `Union   "u" of t list       
     ]
 
@@ -56,8 +55,6 @@ let optimize access =
       
 module Signals = struct
   let in_group_call,  in_group  = Sig.make (Run.list_exists identity) 
-  let of_entity_call, of_entity = Sig.make 
-    (fun list -> let! list = ohm $ Run.list_map identity list in return (`Union list)) 
 end
 
 class type ['any] context = object 
@@ -65,9 +62,6 @@ class type ['any] context = object
   method isin             : 'any IIsIn.id 
 end
 
-let of_entity entity action = 
-  Signals.of_entity_call (entity,action)     
-    
 let in_group aid gid status = 
   Signals.in_group_call (aid,gid,status)
 
@@ -87,7 +81,6 @@ let test (context : 'any #context) accesses =
     | `Token         -> return (None <> IIsIn.Deduce.is_token isin)
     | `Contact       -> return true 
     | `TokOnly    t  -> if None = IIsIn.Deduce.is_token isin then return false else aux t
-    | `Entity  (e,a) -> of_entity e a |> Run.bind aux
   in
   
   aux access

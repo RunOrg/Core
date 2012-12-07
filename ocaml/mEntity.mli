@@ -4,22 +4,6 @@
 
 type 'relation t
 
-(* Creating access rules *)
-
-module Access : sig 
-
-  module Format : Ohm.Fmt.FMT with type t = [ `Viewers | `Registered | `Managers ]
-
-  val viewers    : 'any t -> MAccess.t
-  val registered : 'any t -> MAccess.t
-  val managers   : 'any t -> MAccess.t
-
-  val make       : 'any t    -> [< `Viewers | `Registered | `Managers ] -> MAccess.t
-
-  val which      : MAccess.t -> [> `Viewers | `Registered | `Managers ] 
-
-end
-
 (* Satellites *) 
 
 module Satellite : sig
