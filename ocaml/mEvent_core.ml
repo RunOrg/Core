@@ -34,6 +34,7 @@ module Cfg = struct
       | `SetDate    of Date.t option 
       | `SetAdmins  of MAccess.t	  
       | `EditConfig of Config.Diff.t list
+      | `Delete     of IAvatar.t
       ]
   end)
 
@@ -49,7 +50,8 @@ module Cfg = struct
 	vision : Vision.t ;
 	admins : MAccess.t ;
 	draft  : bool ;
-	config : Config.t
+	config : Config.t ;
+	del    : IAvatar.t option ;
       }
     end
     include T
@@ -72,6 +74,7 @@ module Cfg = struct
     | `SetDate    date   -> { t with date }
     | `SetAdmins  admins -> { t with admins }
     | `EditConfig diffs  -> { t with config = Config.apply diffs t.config }
+    | `Delete     aid    -> { t with del = Some (BatOption.default aid t.del) } 
   )
     
   let apply diff = 

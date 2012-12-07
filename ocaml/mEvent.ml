@@ -35,7 +35,7 @@ let get ?access eid =
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
     let! proj = ohm_req_or (return None) $ E.Store.get (IEvent.decay eid) in
     let  e = E.Store.current proj in 
-    return $ Some (Can.make eid ?access e) 
+    return (Can.make eid ?access e)
   end 
 
 let view ?access eid = 

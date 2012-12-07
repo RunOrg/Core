@@ -2,7 +2,7 @@
 
 type 'relation t 
 
-val make : 'a IEvent.id -> ?access:'any # MAccess.context -> MEvent_core.t -> 'a t
+val make : 'a IEvent.id -> ?access:'any # MAccess.context -> MEvent_core.t -> 'a t option
 
 val id   : 'any t -> 'any IEvent.id
 val data : 'any t -> MEvent_core.t 

@@ -12,7 +12,7 @@ type 'relation t = {
   access : [`IsToken] MAccess.context option ; 
 }
 
-let make eid ?access data = {
+let make eid ?access data = if data.E.del = None then Some {
   eid ;
   data ;
   access = BatOption.bind begin fun access ->
@@ -23,7 +23,7 @@ let make eid ?access data = {
 	method isin = isin 
       end)
   end access
-}
+} else None
   
 let admin_access t = 
   [ `Admin ; t.data.E.admins ]
@@ -45,7 +45,7 @@ let data t = t.data
 
 let view t = 
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
-    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; access = t.access } in
+    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; access = t.access } in   
     if t.data.E.draft then 
       match t.access with
 	| None        -> return None
