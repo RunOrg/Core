@@ -47,6 +47,7 @@ let admin ?access eid =
   Can.admin event
 
 let delete t self = 
+  Set.update t self [`Delete (IAvatar.decay self)]
   assert false
 
 let instance eid = 

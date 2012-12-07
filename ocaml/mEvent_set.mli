@@ -1,4 +1,10 @@
 (* © 2012 RunOrg *)
+
+val update : 
+     [`Admin] MEvent_can.t
+  -> [`IsSelf] IAvatar.id
+  -> MEvent_core.Cfg.Diff.t list
+  -> (#O.ctx,unit) Ohm.Run.t 
     
 val picture :
      [`Admin] MEvent_can.t 
