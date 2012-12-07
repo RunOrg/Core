@@ -5,8 +5,9 @@ open Ohm.Universal
 open BatPervasives
 
 module Vision = MEvent_vision 
+module Config = MEvent_config
 
-module Config = struct
+module Cfg = struct
 
   let name = "event"
 
@@ -32,6 +33,7 @@ module Config = struct
       | `SetPicture of IFile.t option
       | `SetDate    of Date.t option 
       | `SetAdmins  of MAccess.t	  
+      | `EditConfig of Config.Diff.t list
       ]
   end)
 
@@ -47,6 +49,7 @@ module Config = struct
 	vision : Vision.t ;
 	admins : MAccess.t ;
 	draft  : bool ;
+	config : Config.t
       }
     end
     include T
@@ -68,6 +71,7 @@ module Config = struct
     | `SetPicture pic    -> { t with pic }
     | `SetDate    date   -> { t with date }
     | `SetAdmins  admins -> { t with admins }
+    | `EditConfig diffs  -> { t with config = Config.apply diffs t.config }
   )
     
   let apply diff = 
@@ -77,6 +81,6 @@ module Config = struct
 
 end
 
-module Store = OhmCouchVersioned.Make(Config)
+module Store = OhmCouchVersioned.Make(Cfg)
 
-include Config.Data
+include Cfg.Data

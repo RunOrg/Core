@@ -4,26 +4,14 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Vision  = MEvent_vision 
-module Signals = MEvent_signals
-module Can     = MEvent_can 
-module Data    = MEvent_data
-module Get     = MEvent_get
+type 'relation t = 'relation MEvent_can.t
 
-type 'relation t = 'relation Can.t
-
-module Satellite = struct
-
-  type action = 
-    [ `Group  of [ `Manage | `Read | `Write ]
-    | `Wall   of [ `Manage | `Read | `Write ]
-    | `Album  of [ `Manage | `Read | `Write ]
-    | `Folder of [ `Manage | `Read | `Write ]
-    ]
-
-  let access _ _ = assert false
-
-end
+module Vision    = MEvent_vision 
+module Signals   = MEvent_signals
+module Can       = MEvent_can 
+module Data      = MEvent_data
+module Get       = MEvent_get
+module Satellite = MEvent_satellite
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
   assert false

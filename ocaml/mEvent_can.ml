@@ -25,11 +25,19 @@ let make eid ?access data = {
   end access
 }
   
-let admins t = 
+let admin_access t = 
   [ `Admin ; t.data.E.admins ]
 
-let members  t = 
-  `Groups (`Validated,[ t.data.E.gid ]) :: admins t
+let member_access t = 
+  if t.data.E.draft then admin_access t else
+    `Groups (`Validated,[ t.data.E.gid ]) :: admin_access t
+
+let view_access t = 
+  if t.data.E.draft then admin_access t else
+    match t.data.E.vision with 
+      | `Public  -> [ `Contact ]
+      | `Normal  -> [ `Token ]
+      | `Private -> member_access t
 
 let id t = t.eid
 
@@ -41,7 +49,7 @@ let view t =
     if t.data.E.draft then 
       match t.access with
 	| None        -> return None
-	| Some access -> let! ok = ohm $ MAccess.test access (admins t) in
+	| Some access -> let! ok = ohm $ MAccess.test access (admin_access t) in
 			 if ok then return (Some t') else return None
     else
       match t.data.E.vision with 
@@ -49,7 +57,7 @@ let view t =
 	| `Normal  -> if t.access <> None then return (Some t') else return None
 	| `Private -> match t.access with 
 	    | None        -> return None
-	    | Some access -> let! ok = ohm $ MAccess.test access (members t) in
+	    | Some access -> let! ok = ohm $ MAccess.test access (member_access t) in
 			     if ok then return (Some t') else return None
   end
     
@@ -58,6 +66,6 @@ let admin t =
     let t' = { eid = IEvent.Assert.admin t.eid ; data = t.data ; access = t.access } in
     match t.access with 
       | None        -> return None
-      | Some access -> let! ok = ohm $ MAccess.test access (admins t) in
+      | Some access -> let! ok = ohm $ MAccess.test access (admin_access t) in
 		       if ok then return (Some t') else return None
   end
