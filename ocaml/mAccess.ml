@@ -27,10 +27,9 @@ include Fmt.Make(struct
     | `Token   "m"                       
     | `Contact "c"                          
     | `TokOnly "t" of t
-    | `Message "d" of IMessage.t
     | `List    "l" of IAvatar.t list    
     | `Groups  "g" of State.t * (IGroup.t list)
-    | `Entity  "e" of IEntity.t * Action.t
+    | `Entity  "e" of IEntity.t * Action.t 
     | `Union   "u" of t list       
     ]
 
@@ -89,7 +88,6 @@ let test (context : 'any #context) accesses =
     | `Contact       -> return true 
     | `TokOnly    t  -> if None = IIsIn.Deduce.is_token isin then return false else aux t
     | `Entity  (e,a) -> of_entity e a |> Run.bind aux
-    | `Message    m  -> return false
   in
   
   aux access
@@ -114,7 +112,6 @@ let rec delegates = function
   | `Nobody
   | `Contact
   | `Entity (_,_)
-  | `Message _
   | `Groups (_,_) -> []
 
 let rec remove_all_delegates = function 

@@ -15,7 +15,6 @@ type t =
   | `Token                                     (* "m" *)
   | `TokOnly of t                              (* "t" *)
   | `Contact                                   (* "c" *)
-  | `Message of IMessage.t                     (* "d" *)
   | `List    of IAvatar.t list                 (* ["l",[a,b,c,d]] *)
   | `Groups  of State.t * (IGroup.t list)      (* ["g",s,[a,b,c,d]] *)
   | `Entity  of IEntity.t * Action.t           (* ["e",a,x] *)
