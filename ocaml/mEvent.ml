@@ -13,6 +13,7 @@ module Data      = MEvent_data
 module Get       = MEvent_get
 module Satellite = MEvent_satellite
 module Set       = MEvent_set
+module E         = MEvent_core
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
   assert false
@@ -31,7 +32,11 @@ module All = struct
 end
 
 let get ?access eid = 
-  assert false
+  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+    let! proj = ohm_req_or (return None) $ E.Store.get (IEvent.decay eid) in
+    let  e = E.Store.current proj in 
+    return $ Some (Can.make eid ?access e) 
+  end 
 
 let view ?access eid = 
   let! event = ohm_req_or (return None) (get ?access eid) in
