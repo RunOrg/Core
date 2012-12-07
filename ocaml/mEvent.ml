@@ -7,6 +7,8 @@ open BatPervasives
 module Vision  = MEvent_vision 
 module Signals = MEvent_signals
 module Can     = MEvent_can 
+module Data    = MEvent_data
+module Get     = MEvent_get
 
 type 'relation t = 'relation Can.t
 
@@ -20,35 +22,6 @@ module Satellite = struct
     ]
 
   let access _ _ = assert false
-
-end
-
-module Data = struct
- 
-  type 'relation t = unit
-
-  let address _ = assert false
-  let page    _ = assert false
-
-end
-
-module Get = struct
-
-  let id       _ = assert false
-  let draft    _ = assert false
-  let vision   _ = assert false
-  let name     _ = assert false
-  let picture  _ = assert false
-  let date     _ = assert false
-  let group    _ = assert false
-  let iid      _ = assert false
-  let template _ = assert false
-  let admins   _ = assert false
-
-  let public   _ = assert false
-  let status   _ = assert false
-  let data     _ = assert false
-  let fullname t = BatOption.default (AdLib.get `Event_Unnamed) (BatOption.map return (name t))
 
 end
 

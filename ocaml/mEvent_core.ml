@@ -27,9 +27,9 @@ module Config = struct
   module Diff = Fmt.Make(struct
     type json t = 
       [ `SetDraft   of bool 
-      | `SetName    of string
+      | `SetName    of string option
       | `SetVision  of Vision.t
-      | `SetPicture of IFile.t
+      | `SetPicture of IFile.t option
       | `SetDate    of Date.t option 
       | `SetAdmins  of MAccess.t	  
       ]
@@ -41,9 +41,9 @@ module Config = struct
 	iid    : IInstance.t ;
 	tid    : ITemplate.Event.t ;
 	gid    : IGroup.t ;
-	name   : string ;
+	name   : string option ;
 	date   : Date.t option ;
-	pic    : IFile.t ;
+	pic    : IFile.t option ;
 	vision : Vision.t ;
 	admins : MAccess.t ;
 	draft  : bool ;
