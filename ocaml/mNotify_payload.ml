@@ -86,8 +86,7 @@ let author cuid =
     | `EventRequest (eid,aid) ->
       let! iid    = ohm_req_or (return None) $ MEvent.instance eid in 
       let! access = ohm_req_or (return None) $ access cuid iid in 
-      let! event  = ohm_req_or (return None) $ MEvent.get ~access eid in
-      let! event  = ohm_req_or (return None) $ MEvent.Can.view event in 
+      let! event  = ohm_req_or (return None) $ MEvent.view ~access eid in
       return $ Some (`Event (aid,iid,event))
 
     | `GroupRequest (eid,aid) ->

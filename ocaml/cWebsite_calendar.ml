@@ -35,20 +35,17 @@ let () = UrlClient.def_calendar begin fun req res ->
 
 end
 
-let unnamed = AdLib.get `Event_Unnamed
-
 let () = UrlClient.def_event begin fun req res -> 
 
   let! cuid, key, iid, instance = CClient.extract req res in 
   let  e404 = C404.render (snd key) cuid res in
 
   let  eid = req # args in
-  let! event = ohm_req_or e404 $ MEvent.get eid in
-  let! event = ohm_req_or e404 $ MEvent.Can.view event in   
+  let! event = ohm_req_or e404 $ MEvent.view eid in
   let! data  = ohm_req_or e404 $ MEvent.Get.data event in
 
   let! pic  = ohm $ CPicture.large (MEvent.Get.picture event) in
-  let! name = ohm $ BatOption.default unnamed (BatOption.map return (MEvent.Get.name event)) in
+  let! name = ohm $ MEvent.Get.fullname event in 
  
   let  page = MEvent.Data.page data in
 

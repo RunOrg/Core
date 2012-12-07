@@ -91,6 +91,14 @@ end
 let get ?access eid = 
   assert false
 
+let view ?access eid = 
+  let! event = ohm_req_or (return None) (get ?access eid) in
+  Can.view event
+
+let admin ?access eid = 
+  let! event = ohm_req_or (return None) (get ?access eid) in
+  Can.admin event
+
 let delete t self = 
   assert false
 

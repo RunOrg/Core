@@ -135,8 +135,7 @@ let box access entity render =
 	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
 			   let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
 			   CEntityUtil.name entity 
-	  | `Event eid -> let! event = ohm_req_or none $ MEvent.get ~access eid in
-			  let! event = ohm_req_or none $ MEvent.Can.view event in 
+	  | `Event eid -> let! event = ohm_req_or none $ MEvent.view ~access eid in
 			  MEvent.Get.fullname event
       in
 

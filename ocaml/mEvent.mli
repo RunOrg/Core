@@ -123,6 +123,10 @@ module All : sig
 end
 
 val get : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
+
+val view : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,[`View] t option) Ohm.Run.t
+
+val admin : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
  
 val delete : [`Admin] t -> [`IsSelf] IAvatar.id -> (#O.ctx,unit) Ohm.Run.t 
 

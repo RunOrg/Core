@@ -10,8 +10,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
   let! eid = O.Box.parse IEvent.seg in
 
-  let! event = ohm_req_or e404 $ MEvent.get ~access eid in
-  let! event = ohm_req_or e404 $ MEvent.Can.view event in
+  let! event = ohm_req_or e404 $ MEvent.view ~access eid in
   let! data  = ohm_req_or e404 $ MEvent.Get.data event in 
 
   let! admin  = ohm $ MEvent.Can.admin event in

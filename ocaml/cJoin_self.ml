@@ -200,8 +200,7 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
       | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
 		       let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in
 		       return $ Some (MEntity.Get.group entity) 
-      | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.get ~access eid in
-		      let! event = ohm_req_or (return None) $ MEvent.Can.view event in 
+      | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
 		      if MEvent.Get.draft event then return None else
 			return $ Some (MEvent.Get.group event) 
   end in 
@@ -258,8 +257,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 		       | other  -> `Forum
 		     in 
 		     return $ Some (MEntity.Get.group entity, kind) 
-    | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.get ~access eid in
-		    let! event = ohm_req_or (return None) $ MEvent.Can.view event in 
+    | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
 		    if MEvent.Get.draft event then return None else
 		      return $ Some (MEvent.Get.group event, `Event) 
   end in 
