@@ -1,0 +1,82 @@
+(* © 2012 RunOrg *)
+
+open Ohm
+open Ohm.Universal
+open BatPervasives
+
+module Vision = MEvent_vision 
+
+module Config = struct
+
+  let name = "event"
+
+  module DataDB = struct
+    let database = O.db "event"
+    let host = "localhost"
+    let port = 5974
+  end
+
+  module VersionDB = struct
+    let database = O.db "event-v"
+    let host = "localhost"
+    let port = 5987
+  end
+
+  module Id = IEvent
+
+  module Diff = Fmt.Make(struct
+    type json t = 
+      [ `SetDraft   of bool 
+      | `SetName    of string
+      | `SetVision  of Vision.t
+      | `SetPicture of IFile.t
+      | `SetDate    of Date.t option 
+      | `SetAdmins  of MAccess.t	  
+      ]
+  end)
+
+  module Data = struct
+    module T = struct
+      type json t = {
+	iid    : IInstance.t ;
+	tid    : ITemplate.Event.t ;
+	gid    : IGroup.t ;
+	name   : string ;
+	date   : Date.t option ;
+	pic    : IFile.t ;
+	vision : Vision.t ;
+	admins : MAccess.t ;
+	draft  : bool ;
+      }
+    end
+    include T
+    include Fmt.Extend(T)
+  end 
+
+  type ctx = O.ctx
+
+  let couchDB ctx = (ctx : O.ctx :> CouchDB.ctx) 
+
+  module VersionData = MUpdateInfo
+
+  module ReflectedData = Fmt.Unit
+
+  let do_apply t = Data.(function 
+    | `SetDraft   draft  -> { t with draft }
+    | `SetName    name   -> { t with name }
+    | `SetVision  vision -> { t with vision }
+    | `SetPicture pic    -> { t with pic }
+    | `SetDate    date   -> { t with date }
+    | `SetAdmins  admins -> { t with admins }
+  )
+    
+  let apply diff = 
+    return (fun _ _ t -> return (do_apply t diff))
+
+  let reflect _ _ = return () 
+
+end
+
+module Store = OhmCouchVersioned.Make(Config)
+
+include Config.Data

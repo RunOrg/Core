@@ -4,13 +4,11 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Signals   = MEvent_signals
+module Vision  = MEvent_vision 
+module Signals = MEvent_signals
+module Can     = MEvent_can 
 
-type 'relation t = unit
-
-module Vision = Fmt.Make(struct
-  type json t = [ `Public "p" | `Normal "n" | `Private "s" ]
-end) 
+type 'relation t = 'relation Can.t
 
 module Satellite = struct
 
@@ -23,11 +21,6 @@ module Satellite = struct
 
   let access _ _ = assert false
 
-end
-
-module Can = struct
-  let view  _ = assert false
-  let admin _ = assert false
 end
 
 module Data = struct
