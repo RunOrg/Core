@@ -20,7 +20,7 @@ module Cfg = struct
   module VersionDB = struct
     let database = O.db "event-v"
     let host = "localhost"
-    let port = 5987
+    let port = 5974
   end
 
   module Id = IEvent

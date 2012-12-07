@@ -12,22 +12,10 @@ module Can       = MEvent_can
 module Data      = MEvent_data
 module Get       = MEvent_get
 module Satellite = MEvent_satellite
+module Set       = MEvent_set
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
   assert false
-
-module Set = struct
-
-  let picture t self fid = 
-    assert false    
-
-  let admins t self aids = 
-    assert false
-
-  let info t self ~draft ~name ~page ~date ~address ~vision = 
-    assert false
-
-end
 
 module All = struct
 
