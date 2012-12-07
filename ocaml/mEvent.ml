@@ -9,7 +9,7 @@ module Signals   = MEvent_signals
 type 'relation t = unit
 
 module Vision = Fmt.Make(struct
-  type json t = [ `Website "w" | `Normal "n" | `Secret "s" ]
+  type json t = [ `Public "p" | `Normal "n" | `Private "s" ]
 end) 
 
 module Satellite = struct
@@ -70,7 +70,7 @@ module Set = struct
   let admins t self aids = 
     assert false
 
-  let info t self ~draft ~name ~page ~address ~vision = 
+  let info t self ~draft ~name ~page ~date ~address ~vision = 
     assert false
 
 end

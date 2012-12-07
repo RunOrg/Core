@@ -7,7 +7,7 @@ open BatPervasives
 let make title endpoint key eid = object
   method title = (AdLib.get (title : O.i18n) : string O.boxrun) 
   method url = 
-    Action.url endpoint key [ IEntity.to_string eid ]
+    Action.url endpoint key [ IEvent.to_string eid ]
 end
 
 open UrlClient.Events
@@ -15,7 +15,7 @@ open UrlClient.Events
 let parents title key eid = object
   method home    = object
     method title = return title 
-    method url   = Action.url see key [ IEntity.to_string eid ]
+    method url   = Action.url see key [ IEvent.to_string eid ]
   end
   method admin    = make `Event_Admin_Title    admin    key eid 
   method edit     = make `Event_Edit_Title     edit     key eid 

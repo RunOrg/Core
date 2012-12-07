@@ -6,7 +6,7 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_invite begin fun parents entity access -> 
+let () = define UrlClient.Events.def_invite begin fun parents event access -> 
   
   let fail = O.Box.fill begin
 
@@ -28,9 +28,9 @@ let () = define UrlClient.Events.def_invite begin fun parents entity access ->
     end)
   in
 
-  let  draft  = MEntity.Get.draft entity in 
+  let  draft  = MEvent.Get.draft event in 
 
-  let  gid = MEntity.Get.group entity in
+  let  gid = MEvent.Get.group event in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.admin group) in
   let  group = if draft then None else group in   
@@ -38,12 +38,12 @@ let () = define UrlClient.Events.def_invite begin fun parents entity access ->
 
   let url s = 
     Action.url UrlClient.Events.invite (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ; s ]
+      [ IEvent.to_string (MEvent.Get.id event) ; s ]
   in
 
   let back = 
     Action.url UrlClient.Events.people (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ]
+      [ IEvent.to_string (MEvent.Get.id event) ]
   in
 
   CInvite.box `Event url back access (MGroup.Get.id group) wrapper

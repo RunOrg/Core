@@ -2,7 +2,7 @@
 
 type 'relation t 
 
-module Vision : Ohm.Fmt.FMT with type t = [ `Website | `Normal | `Secret ]
+module Vision : Ohm.Fmt.FMT with type t = [ `Public | `Normal | `Private ]
 
 module Satellite : sig
 
@@ -91,10 +91,11 @@ module Set : sig
 
   val info : 
        [`Admin] t
-    -> [`IsSelf] t
+    -> [`IsSelf] IAvatar.id
     -> draft:bool 
     -> name:string option 
     -> page:MRich.OrText.t
+    -> date:Date.t option
     -> address:string option 
     -> vision:Vision.t
     -> (#O.ctx,unit) Ohm.Run.t 

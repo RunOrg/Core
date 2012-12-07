@@ -63,6 +63,9 @@
 | `Event_Edit_SavePublish
 | `Event_Edit_SaveDraft
 | `Event_Edit_Required
+| `Event_Edit_Date
+| `Event_Edit_Address
+| `Event_Edit_Page
 
 | `Event_Picture_Title
 | `Event_Picture_Link

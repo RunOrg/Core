@@ -53,19 +53,14 @@ let local_fields local =
   ) local) in
   return ((`Status,`Status) :: (`Date,`Date) :: list)
 
-let box access entity render = 
+let box access gid render = 
   
   let fail = render (return ignore) in 
 
   (* Extract the AvatarGrid identifier *)
 
-  let  draft  = MEntity.Get.draft entity in 
-
-  let  gid = MEntity.Get.group entity in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
-  let  group = if draft then None else group in   
-  let! group = req_or fail group in 
+  let! group = ohm_req_or fail $ O.decay (Run.opt_bind MGroup.Can.list group) in
 
   let  grid  = MGroup.Get.list group in 
   let  lid   = Grid.list_id grid in

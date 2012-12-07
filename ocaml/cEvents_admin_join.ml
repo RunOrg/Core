@@ -6,7 +6,7 @@ open BatPervasives
 
 open CEvents_admin_common
     
-let () = define UrlClient.Events.def_join begin fun parents entity access -> 
+let () = define UrlClient.Events.def_join begin fun parents event access -> 
 
   let fail = O.Box.fill begin
 
@@ -28,6 +28,8 @@ let () = define UrlClient.Events.def_join begin fun parents entity access ->
     end)
   in 
 
-  CJoin.box entity access fail wrapper
+  if MEvent.Get.draft event then fail else 
+    let gid = MEvent.Get.group event in
+    CJoin.box `Event gid access fail wrapper
 
 end 

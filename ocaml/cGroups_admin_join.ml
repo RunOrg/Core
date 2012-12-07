@@ -28,6 +28,6 @@ let () = define UrlClient.Members.def_join begin fun parents entity access ->
     end)
   in 
 
-  CJoin.box entity access fail wrapper
+  CJoin.box `Group (MEntity.Get.group entity) access fail wrapper
 
 end 

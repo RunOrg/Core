@@ -13,6 +13,9 @@ val to_timestamp : t -> float
 val to_iso8601 : t -> string
 val of_iso8601 : string -> t option 
 
+val to_compact : t -> string
+val of_compact : string -> t option 
+
 (** Create a datetime.
     [datetime Tz.gmt year month day hour minute second] 
 *)

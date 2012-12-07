@@ -29,6 +29,25 @@ let to_iso8601 d =
     | None -> Printf.sprintf "%4d-%02d-%02d" d.y d.m d.d 
     | Some t -> Printf.sprintf "%4d-%02d-%02dT%02d:%02d:%02dZ" d.y d.m d.d t.h t.i t.s
 
+let of_compact s = 
+  try
+    let y = int_of_string (String.sub s 0 4) in
+    let m = int_of_string (String.sub s 4 2) in
+    let d = int_of_string (String.sub s 6 2) in
+    if String.length s = 8 then
+      Some { y ; m ; d ; t = None }
+    else
+      let h = int_of_string (String.sub s 8 2) in
+      let i = int_of_string (String.sub s 10 2) in
+      let s = int_of_string (String.sub s 12 2) in
+      Some { y ; m ; d ; t = Some { h ; i ; s }}
+  with _ -> None
+
+let to_compact d = 
+  match d.t with 
+    | None -> Printf.sprintf "%4d%02d%02d" d.y d.m d.d
+    | Some t -> Printf.sprintf "%4d%02d%02d%02d%02d%02d" d.y d.m d.d t.h t.i t.s
+
 include Fmt.Make(struct
   type t = date
   let t_of_json = function 

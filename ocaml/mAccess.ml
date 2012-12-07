@@ -115,13 +115,8 @@ let rec remove_all_delegates = function
 
 let set_delegates aids access = 
   let access = optimize (remove_all_delegates access) in 
+  let aids = BatList.sort_unique compare aids in 
   match access with 
     | `Union l -> `Union (`List aids :: l)
     | `Nobody -> `List aids
     | other -> `Union [ `List aids ; other ]
-
-let add_delegates aids access = 
-  set_delegates (BatList.sort_unique compare (aids @ delegates access)) access
-
-let remove_delegates aids access = 
-  set_delegates (BatList.remove_if (fun aid -> List.mem aid aids) (delegates access)) access
