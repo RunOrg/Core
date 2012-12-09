@@ -35,6 +35,6 @@ let info t self ~draft ~name ~page ~date ~address ~vision =
     (if date = e.E.date then None else Some (`SetDate date)) ;
     (if vision = e.E.vision then None else Some (`SetVision vision)) ;
   ] in
-  let! () = ohm $ update t self diffs in
+  let! () = ohm (if diffs = [] then return () else update t self diffs) in
   let! () = ohm $ Data.update (Can.id t) self ~page ~address in 
   return ()
