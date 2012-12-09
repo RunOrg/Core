@@ -50,4 +50,5 @@ let delete t self =
   Set.update t self [`Delete (IAvatar.decay self)]
 
 let instance eid = 
-  assert false
+  let! event = ohm_req_or (return None) (get eid) in
+  return $ Some (Get.iid event)
