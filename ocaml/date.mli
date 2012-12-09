@@ -25,3 +25,6 @@ val datetime : Tz.t -> int -> int -> int -> int -> int -> int -> t
     [date year month day]
 *)
 val date : int -> int -> int -> t
+
+val min : t
+val max : t 

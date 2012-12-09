@@ -115,3 +115,6 @@ let datetime tz year month day hour minute second =
 
 let date y m d = 
   { y ; m ; d ; t = None }
+
+let min = { y =    0 ; m =  1 ; d =  1 ; t = None }
+let max = { y = 9999 ; m = 12 ; d = 31 ; t = None }
