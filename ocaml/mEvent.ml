@@ -13,10 +13,39 @@ module Data      = MEvent_data
 module Get       = MEvent_get
 module Satellite = MEvent_satellite
 module Set       = MEvent_set
+module Config    = MEvent_config
 module E         = MEvent_core
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
-  assert false
+
+  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+
+    let iid = IInstance.decay iid in 
+    let eid = IEvent.gen () in
+    let info = MUpdateInfo.self self in
+    let gid  = IGroup.gen () in
+    
+    let init = E.({
+      iid    ;
+      tid    ;
+      gid    ;
+      name   ;
+      pic    = BatOption.map IFile.decay pic ;
+      vision ;
+      date   = None ;
+      admins = `Nobody ;
+      draft  = true ;
+      config = Config.default ;
+      del    = None ;
+    }) in
+    
+    let! _ = ohm $ E.Store.create ~id:eid ~init ~diffs:[] ~info () in
+    let! _ = ohm $ Data.create eid self in
+    let! _ = ohm $ Signals.on_bind_group_call (iid,eid,gid,tid,self) in
+    
+    return eid
+
+  end
 
 module All = struct
 

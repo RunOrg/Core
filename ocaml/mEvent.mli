@@ -23,7 +23,7 @@ module Signals : sig
 
   val on_bind_group : (   IInstance.t
                         * IEvent.t
-		        * [`Bot] IGroup.id
+		        * IGroup.t
                         * ITemplate.Event.t 
 			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     

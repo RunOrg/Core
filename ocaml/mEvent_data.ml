@@ -10,3 +10,4 @@ let update eid self ~address ~page =
 let address _ = assert false
 let page    _ = assert false
 
+let create _ _ = assert false

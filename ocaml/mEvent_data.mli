@@ -14,3 +14,4 @@ val update :
 val address  : [<`Admin|`View] t -> string option
 val page     : [<`Admin|`View] t -> MRich.OrText.t
 
+val create : 'id IEvent.id -> [`IsSelf] IAvatar.id -> (#O.ctx,unit) Ohm.Run.t
