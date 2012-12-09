@@ -12,7 +12,14 @@ type 'relation t = {
   access : [`IsToken] MAccess.context option ; 
 }
 
-let make eid ?access data = if data.E.del = None then Some {
+let valid ?access data = 
+  data.E.del = None && begin
+    match access with 
+      | None -> true
+      | Some access -> IInstance.decay (IIsIn.instance (access # isin)) = data.E.iid 
+  end
+
+let make eid ?access data = if valid ?access data then Some {
   eid ;
   data ;
   access = BatOption.bind begin fun access ->
