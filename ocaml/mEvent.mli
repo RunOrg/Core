@@ -116,10 +116,10 @@ module All : sig
 
   val past : 
        ?access:'any # MAccess.context
-    -> ?start:Date.t
+    -> ?start:(Date.t * IEvent.t)
     -> count:int
     -> 'a IInstance.id
-    -> (#O.ctx,[`View] t list * Date.t option) Ohm.Run.t
+    -> (#O.ctx,[`View] t list * (Date.t * IEvent.t) option) Ohm.Run.t
 
 end
 

@@ -86,4 +86,9 @@ end
 
 module Store = OhmCouchVersioned.Make(Cfg)
 
+module Design = struct
+  module Database = Store.DataDB
+  let name = "event"
+end
+
 include Cfg.Data

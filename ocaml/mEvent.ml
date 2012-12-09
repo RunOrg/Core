@@ -14,6 +14,7 @@ module Get       = MEvent_get
 module Satellite = MEvent_satellite
 module Set       = MEvent_set
 module Config    = MEvent_config
+module All       = MEvent_all
 module E         = MEvent_core
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
@@ -46,19 +47,6 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
     return eid
 
   end
-
-module All = struct
-
-  let future ?access iid = 
-    assert false
-
-  let undated ~access iid = 
-    assert false
-
-  let past ?access ?start ~count iid = 
-    assert false
-
-end
 
 let get ?access eid = 
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
