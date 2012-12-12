@@ -67,8 +67,6 @@ let athle = vertical "Athle"
   Template.([
     groupSimple ;
     groupCollaborative ;
-    pollSimple ;
-    pollYearly ;
     courseSimple ;
     eventSimple ;
     eventMeeting ;

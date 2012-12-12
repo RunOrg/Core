@@ -3,7 +3,6 @@
 type column = {
   eval  : MAvatarGridEval.t ;
   label : TextOrAdlib.t ;
-  show  : bool ;
   view  : MAvatarGridView.t
 }
 

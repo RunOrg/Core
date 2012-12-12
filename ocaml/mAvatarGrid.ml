@@ -44,7 +44,6 @@ let _ =
     let cols = MAvatarGridColumn.({
       eval  = `Profile (iid,`Full) ;
       label = `text "" ;
-      show  = true ;
       view  = `Full 
     }) :: cols in 
     

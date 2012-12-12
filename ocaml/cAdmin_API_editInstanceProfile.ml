@@ -16,7 +16,8 @@ include Make(struct
       url  : string ;
      ?address : string option ;
      ?tags : string list = [] ;
-      owners : (string * string * string) list
+      owners : (string * string * string) list ;
+      visible : bool ;
     >
   end)
 
@@ -29,6 +30,7 @@ include Make(struct
       "Victor", "Nicollet", "vnicollet@runorg.com" ; 
       "Mehdi",  "Foughali", "mfoughali@runorg.com" ;
     ]
+    method visible = true
   end)
     
   let action cuid json =
@@ -80,7 +82,7 @@ include Make(struct
       ~facebook:(profile # facebook)
       ~twitter:(profile # twitter)
       ~tags:(json # tags)
-      ~visible:true
+      ~visible:(json # visible) 
       ~rss:[]
       ~owners
     in

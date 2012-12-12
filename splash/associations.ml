@@ -27,7 +27,7 @@ let pages = [
 	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
 	(bullets 
 	   ~title:"L'outil des associations"
-	   ~subtitle:"Découvez la meilleure façon de..."
+	   ~subtitle:"Découvrez la meilleure façon de..."
 	   [ "Gérer vos membres, votre annuaire et vos adhésions." ;
 	     "Organiser des évènements, des réunions, des assemblées générales." ;
 	     "Communiquer plus facilement avec les membres de votre association." ;
