@@ -311,9 +311,8 @@ module Backdoor = struct
       if collision = Some iid then return `OK else return `EXISTS
     else
       let key, white = dest in 
-      let! _ = ohm $ Tbl.update iid begin fun ins ->
-	Data.({ ins with key ; white })
-      end in 
+      let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with key ; white })) in 
+      let! _ = ohm $ Profile.update iid (fun old -> Profile.Info.({ old with key ; white })) in
       return `OK
 
   let list ~count start = 

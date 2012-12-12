@@ -36,10 +36,11 @@ module Proof    = OhmCouchProof.Make(ConfigDB)
 
 type i18n = Asset_AdLib.key
 
-class ctx ?session adlib = object
+class ctx ?session adlib = object (self)
   inherit CouchDB.init_ctx
   inherit Async.ctx
   inherit [i18n] AdLib.ctx adlib
+  method date = Date.of_timestamp (self # time) 
   method track_logs = (session : OhmTrackLogs.session option)
 end
 
