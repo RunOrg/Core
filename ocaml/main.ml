@@ -5,6 +5,7 @@ open BatPervasives
 
 module Actions = struct
   open MDo
+  open MInboxLine
   open MErrorAudit
   open MNews
   open CAvatarExport

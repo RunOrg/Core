@@ -123,40 +123,32 @@ module ByOwnerView = CouchDB.DocView(struct
   let map = "if (doc.t == 'albm' && doc.owner) emit(doc.owner[1]);"
 end)
 
-let get_for_owner ctx owner =   
+let get_or_create iid owner = 
 
-  let  id = match owner with 
-    | `Entity eid -> IEntity.to_id (IEntity.decay eid) 
-    | `Event  eid -> IEvent.to_id  (IEvent.decay  eid)
-  in 
-
-  let owner = match owner with 
-    | `Entity eid -> `Entity (IEntity.decay eid)
-    | `Event  eid -> `Event  (IEvent.decay  eid) 
-  in
+  let id = IAlbumOwner.to_id owner in 
 
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
 
-  let create_if_missing =  
-    match found_opt with 
-      | Some item -> return (IAlbum.of_id (item # id), item # doc)
-      | None -> (* Mlbum missing, create one *)
+  match found_opt with 
+    | Some item -> return (IAlbum.of_id (item # id), item # doc)
+    | None -> (* Album missing, create one *)
+      
+      let doc = object
+	method owner = IAlbumOwner.decay owner
+	method iid   = IInstance.decay iid 
+      end in 
+      
+      let! id = ohm $ Tbl.create doc in
+      return (id, doc) 
 
-	let doc = object
-	  method owner = owner
-	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
-	end in 
+let by_owner iid owner = 
+  let! id, _ = ohm $ get_or_create iid owner in 
+  return id 
 
-	let! id = ohm $ Tbl.create doc in
-	return (id, doc) 
-  in
-  
-  let! id, doc = ohm create_if_missing in
-
+let get_for_owner ctx owner =   
+  let  iid = IIsIn.instance (ctx # isin) in
+  let! id, doc = ohm $ get_or_create iid owner in
   return (_make ctx id doc)
-
-let get_for_event ctx eid = get_for_owner ctx (`Event eid)
-let get_for_entity ctx eid = get_for_owner ctx (`Entity eid) 
 
 (* {{MIGRATION}} *)
 
