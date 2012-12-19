@@ -17,6 +17,8 @@ module Config    = MEvent_config
 module All       = MEvent_all
 module E         = MEvent_core
 
+module Tbl = CouchDB.ReadTable(E.Store.DataDB)(IEvent)(E.Store.Raw)
+
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
 
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
@@ -43,6 +45,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
     let! _ = ohm $ E.Store.create ~id:eid ~init ~diffs:[] ~info () in
     let! _ = ohm $ Data.create eid self in
     let! _ = ohm $ Signals.on_bind_group_call (iid,eid,gid,tid,self) in
+    let! _ = ohm $ Signals.on_bind_inboxLine_call eid in
     
     return eid
 
@@ -69,3 +72,10 @@ let delete t self =
 let instance eid = 
   let! event = ohm_req_or (return None) (get eid) in
   return $ Some (Get.iid event)
+
+(* {{InboxLine}} *)
+
+let migrate_all = Async.Convenience.foreach O.async "create-event-inboxLines"
+  IEvent.fmt (Tbl.all_ids ~count:100) Signals.on_bind_inboxLine_call 
+
+let () = O.put (migrate_all ()) 

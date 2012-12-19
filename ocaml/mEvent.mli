@@ -19,6 +19,8 @@ end
 
 module Signals : sig
     
+  val on_bind_inboxLine : (IEvent.t, unit O.run) Ohm.Sig.channel
+
   val on_update : (IEvent.t, unit O.run) Ohm.Sig.channel
 
   val on_bind_group : (   IInstance.t
