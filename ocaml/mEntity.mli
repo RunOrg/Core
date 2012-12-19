@@ -191,3 +191,7 @@ module Backdoor : sig
   val count : (MEntityKind.t * int) list O.run
 
 end
+
+(* {{MIGRATION}} *)
+
+val on_migrate : (IEntity.t * IEvent.t * IGroup.t, unit O.run) Ohm.Sig.channel

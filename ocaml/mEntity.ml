@@ -312,6 +312,8 @@ end
 
 (* Migrate the events to new event model *)
 
+(* {{MIGRATION}} *)
+
 let migrate_config config = object
   method group_validation = match config # group with `Some g -> Some (g # validation) | _ -> None
   method group_read = match config # group with `Some g -> Some (g # read) | _ -> None 
@@ -329,8 +331,10 @@ let migrate_template : ITemplate.t -> ITemplate.Event.t option = function
   | (#ITemplate.Event.t) as x -> Some x
   | _ -> None
 
+let on_migrate_call, on_migrate = Sig.make (Run.list_iter identity) 
+
 let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
-  IEntity.fmt (Tbl.all_ids ~count:10) 
+  IEntity.fmt (Tbl.all_ids ~count:100) 
   (fun eid -> 
     let! entity = ohm_req_or (return ()) $ Tbl.get eid in 
     let  evid   = IEvent.of_id (IEntity.to_id eid) in
@@ -362,7 +366,11 @@ let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
 	return () 
       end) in 
 
-      (* TODO : perform satellite migration *)
+      (* Migrate satellites *)
+      let time = Unix.gettimeofday () in 
+      let! () = ohm $ on_migrate_call (eid,evid,entity.E.group) in
+	let () = Util.log "Migrate event - %.3fs - %s (satellites)" (Unix.gettimeofday () -. time) 
+	  (IEvent.to_string evid) in
 
       return () 
 
