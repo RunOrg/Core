@@ -9,21 +9,6 @@ let name entity =
   let! name = ohm_req_or unnamed $ Run.opt_map TextOrAdlib.to_string (MEntity.Get.name entity) in
   return name
 
-(* TODO: Remove this *)
-let pic_large entity = 
-  CPicture.large (MEntity.Get.picture entity)
-
-(* TODO: Remove this *)
-let pic_small_opt entity = 
-  CPicture.small_opt (MEntity.Get.picture entity)
-
-(* TODO: Remove this *)
-let desc entity = 
-  let  eid  = MEntity.Get.id entity in
-  let! data = ohm_req_or (return None) $ MEntity.Data.get eid in 
-  let  tmpl = MEntity.Get.template entity in
-  return (MEntity.Data.description tmpl data) 
-
 let data entity = 
   let  eid  = MEntity.Get.id entity in
   let! data = ohm_req_or (return []) $ MEntity.Data.get eid in 
