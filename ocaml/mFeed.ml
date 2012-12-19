@@ -148,41 +148,34 @@ module ByOwnerView = CouchDB.DocView(struct
              if (doc.t == 'feed' && !doc.own) emit(doc.ins);"
 end)
 
-let get_for_owner ctx own =   
+let get_or_create iid owner =   
 
-  let  id = match own with 
-    | Some (`Entity  eid) -> IEntity.to_id eid   
-    | Some (`Event   eid) -> IEvent.to_id  eid
-    | None                -> IIsIn.instance (ctx # isin) |> IInstance.to_id
-  in 
-
+  let  id = IFeedOwner.to_id owner in
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
-
-  let! id, doc = ohm begin
-    match found_opt with 
-      | Some item -> return (IFeed.of_id (item # id), item # doc)
-      | None -> (* Feed missing, create one *)
-
-	let doc = object
-	  method t     = `Feed
-	  method own   = own
-	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
-	end in 
-
-	let! id = ohm $ Tbl.create doc in
-	return (id, doc) 
-  end in
-
+  match found_opt with 
+    | Some item -> return (IFeed.of_id (item # id), item # doc)
+    | None -> (* Feed missing, create one *)
+      
+      let doc = object
+	method t     = `Feed
+	method own   = match IFeedOwner.decay owner with 
+	  | `Event    eid -> Some (`Event eid)
+	  | `Entity   eid -> Some (`Entity eid)
+	  | `Instance iid -> None 
+	method iid   = IInstance.decay iid
+      end in 
+      
+      let! id = ohm $ Tbl.create doc in
+      return (id, doc) 
+	
+let get_for_owner ctx owner =
+  let  iid = IIsIn.instance (ctx # isin) in
+  let! id, doc = ohm $ get_or_create iid owner in 
   return (_make ctx id doc)
 
-let get_for_entity ctx eid = 
-  get_for_owner ctx (Some (`Entity (IEntity.decay eid)))
-
-let get_for_event ctx eid = 
-  get_for_owner ctx (Some (`Event (IEvent.decay eid)))
-
-let get_for_instance ctx = 
-  get_for_owner ctx None
+let by_owner iid owner = 
+  let! id, _ = ohm $ get_or_create iid owner in 
+  return id
 
 let bot_get fid = 
   let! feed = ohm_req_or (return None) $ Tbl.get (IFeed.decay fid) in
@@ -195,31 +188,6 @@ let bot_get fid =
     read   = return false ;
     admin  = return false
   } 
-
-let bot_find iid own = 
-  let  id = match own with 
-    | Some (`Entity  eid) -> IEntity.to_id eid   
-    | Some (`Event   eid) -> IEvent.to_id eid 
-    | None                -> IInstance.to_id iid
-  in 
-
-  let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
-
-  let! id = ohm begin
-    match found_opt with 
-      | Some item -> return $ IFeed.of_id (item # id)
-      | None -> (* Feed missing, create one *)
-	
-	let doc = object
-	  method t     = `Feed
-	  method own   = own
-	  method iid   = IInstance.decay iid
-	end in 
-	
-	Tbl.create doc 	
-  end in 
-
-  return $ IFeed.Assert.bot id (* This is a bot-only access. *)
 
 (* {{MIGRATION}} *)
 
