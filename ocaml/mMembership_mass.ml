@@ -45,14 +45,14 @@ let admin ~from gid aids what =
 	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
 	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
 	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let! eid = req_or     (return ()) $ MGroup.Get.entity g in
+	let  own = MGroup.Get.owner g in 
 	let  p   = 
 	  if List.mem `Invite what then `Invite else 
 	    if List.mem (`Accept true) what then
 	      if List.mem (`Default true) what then `Add else `Validate
 	    else `Remove
 	in
-	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,eid,List.length aids))
+	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,own,List.length aids))
       end in 
 
       (* Start the insertion task *)
@@ -131,9 +131,9 @@ let create ~from iid gid list what =
 	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
 	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
 	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let! eid = req_or     (return ()) $ MGroup.Get.entity g in
+	let  own = MGroup.Get.owner g in
 	let  p   = `Create in 
-	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,eid,List.length list))
+	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,own,List.length list))
       end in 
 
       (* Run the actual task *)

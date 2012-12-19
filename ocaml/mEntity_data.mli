@@ -24,6 +24,7 @@ val data   : [<`View|`Admin|`Bot] t -> (string * Ohm.Json.t) list
 val name   : [<`View|`Admin|`Bot] t -> TextOrAdlib.t option
 
 val description : ITemplate.t -> [<`View|`Admin|`Bot] t -> string option
+val address : ITemplate.t -> [<`View|`Admin|`Bot] t -> string option
 
 module Signals : sig
 

@@ -14,9 +14,9 @@ end
   
 module Data = Fmt.Make(struct
   type json t = <
-    t     : MType.t ;
-    ins   : IInstance.t ;
-    own   : [`of_entity of IEntity.t | `of_message of IMessage.t] option 
+    t         : MType.t ;
+    iid "ins" : IInstance.t ;
+    own       : [`Entity "of_entity" of IEntity.t | `Event of IEvent.t ] option 
   > 
 end)
   
@@ -33,27 +33,20 @@ type 'relation t =
     }
 
 let _access iid = function 
-  | Some (`of_entity  eid) -> begin
-    let nil = (fun _ -> `Nobody) in
-    let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
-    return (fun what -> MEntity.Satellite.access entity (`Wall what))
-  end
-  | Some (`of_message mid) -> begin
-    return (function
-      | `Read   -> `Nobody
-      | `Write  -> `Message mid  
-      | `Manage -> `Nobody)
-  end
-  | None -> begin
-    let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
-    return (function
-      | `Read   -> `Token
-      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
-      | `Manage -> `Admin)
-  end
+  | Some (`Entity eid) -> let nil = (fun _ -> `Nobody) in
+			  let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
+			  return (fun what -> MEntity.Satellite.access entity (`Wall what))
+  | Some (`Event eid) -> let nil = (fun _ -> `Nobody) in
+			  let! event = ohm_req_or (return nil) $ MEvent.get eid in
+			  return (fun what -> MEvent.Satellite.access event (`Wall what))
+  | None -> let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
+	    return (function
+	      | `Read   -> `Token
+	      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
+	      | `Manage -> `Admin)
     
-let _make context id data = 
-  let owner = Run.memo (_access (data # ins) (data # own)) in
+let _make context id (data:Data.t) = 
+  let owner = Run.memo (_access (data # iid) (data # own)) in
   {
     id     = id ;
     data   = data ;
@@ -75,9 +68,9 @@ module Get = struct
 
   let owner_of_data feed = 	
     match feed # own with
-      | None                 -> `of_instance (feed # ins)
-      | Some (`of_entity e)  -> `of_entity e      
-      | Some (`of_message e) -> `of_message e
+      | None               -> `Instance (feed # iid)
+      | Some (`Entity eid) -> `Entity eid      
+      | Some (`Event  eid) -> `Event  eid
 
   let owner feed = owner_of_data feed.data
 
@@ -85,7 +78,7 @@ module Get = struct
     let id = IFeed.decay fid in 
     Tbl.get id |> Run.map (BatOption.map owner_of_data) 
 	
-  let instance t = t.data # ins
+  let instance t = t.data # iid
 
   let notified t = 
     let! reader = ohm t.access in
@@ -158,9 +151,9 @@ end)
 let get_for_owner ctx own =   
 
   let  id = match own with 
-    | Some (`of_entity  eid) -> IEntity.to_id  eid   
-    | Some (`of_message mid) -> IMessage.to_id mid 
-    | None                   -> IIsIn.instance (ctx # isin) |> IInstance.to_id
+    | Some (`Entity  eid) -> IEntity.to_id eid   
+    | Some (`Event   eid) -> IEvent.to_id  eid
+    | None                -> IIsIn.instance (ctx # isin) |> IInstance.to_id
   in 
 
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
@@ -173,7 +166,7 @@ let get_for_owner ctx own =
 	let doc = object
 	  method t     = `Feed
 	  method own   = own
-	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
+	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
 	let! id = ohm $ Tbl.create doc in
@@ -183,17 +176,17 @@ let get_for_owner ctx own =
   return (_make ctx id doc)
 
 let get_for_entity ctx eid = 
-  get_for_owner ctx (Some (`of_entity (IEntity.decay eid)))
+  get_for_owner ctx (Some (`Entity (IEntity.decay eid)))
 
-let get_for_message ctx mid = 
-  get_for_owner ctx (Some (`of_message (IMessage.decay mid)))
+let get_for_event ctx eid = 
+  get_for_owner ctx (Some (`Event (IEvent.decay eid)))
 
 let get_for_instance ctx = 
   get_for_owner ctx None
 
 let bot_get fid = 
   let! feed = ohm_req_or (return None) $ Tbl.get (IFeed.decay fid) in
-  let owner = Run.memo (_access (feed # ins) (feed # own)) in
+  let owner = Run.memo (_access (feed # iid) (feed # own)) in
   return $ Some {
     id     = fid ;
     data   = feed ;
@@ -205,9 +198,9 @@ let bot_get fid =
 
 let bot_find iid own = 
   let  id = match own with 
-    | Some (`of_entity  eid) -> IEntity.to_id eid   
-    | Some (`of_message mid) -> IMessage.to_id mid 
-    | None                   -> IInstance.to_id iid
+    | Some (`Entity  eid) -> IEntity.to_id eid   
+    | Some (`Event   eid) -> IEvent.to_id eid 
+    | None                -> IInstance.to_id iid
   in 
 
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
@@ -220,7 +213,7 @@ let bot_find iid own =
 	let doc = object
 	  method t     = `Feed
 	  method own   = own
-	  method ins   = IInstance.decay iid
+	  method iid   = IInstance.decay iid
 	end in 
 	
 	Tbl.create doc 	
@@ -228,3 +221,21 @@ let bot_find iid own =
 
   return $ IFeed.Assert.bot id (* This is a bot-only access. *)
 
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
+  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
+  let  doc, id = found # doc, found # id in  
+  if doc # own <> Some (`Event evid) then
+
+    let changed = object
+      method t     = doc # t 
+      method iid   = doc # iid
+      method own   = Some (`Event evid)
+    end in 
+
+    let! _ = ohm $ Tbl.set (IFeed.of_id id) changed in
+    return () 
+    
+  else return () 

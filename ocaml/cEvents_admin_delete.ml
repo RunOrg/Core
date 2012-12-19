@@ -6,15 +6,15 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_delete begin fun parents entity access -> 
+let () = define UrlClient.Events.def_delete begin fun parents event access -> 
   
   let! submit = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res -> 
 
     (* Save the changes to the database *)
 
-    let! () = ohm $ O.decay (MEntity.delete (access # self) entity) in
+    let! () = ohm $ O.decay (MEvent.delete event (access # self)) in
 
-    (* Redirect to entity home *)
+    (* Redirect to event home *)
 
     let url = Action.url UrlClient.Events.home (access # instance # key) [] in
 

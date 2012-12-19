@@ -68,7 +68,7 @@ let default = function
   | `NewComment `ItemFollower
   | `BecomeMember
   | `BecomeAdmin
-  | `EntityInvite
+  | `EventInvite
   | `EntityRequest
   | `CanInstall
   | `SuperAdmin -> `Immediate

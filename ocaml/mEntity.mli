@@ -4,22 +4,6 @@
 
 type 'relation t
 
-(* Creating access rules *)
-
-module Access : sig 
-
-  module Format : Ohm.Fmt.FMT with type t = [ `Viewers | `Registered | `Managers ]
-
-  val viewers    : 'any t -> MAccess.t
-  val registered : 'any t -> MAccess.t
-  val managers   : 'any t -> MAccess.t
-
-  val make       : 'any t    -> [< `Viewers | `Registered | `Managers ] -> MAccess.t
-
-  val which      : MAccess.t -> [> `Viewers | `Registered | `Managers ] 
-
-end
-
 (* Satellites *) 
 
 module Satellite : sig
@@ -207,3 +191,7 @@ module Backdoor : sig
   val count : (MEntityKind.t * int) list O.run
 
 end
+
+(* {{MIGRATION}} *)
+
+val on_migrate : (IEntity.t * IEvent.t * IGroup.t, unit O.run) Ohm.Sig.channel

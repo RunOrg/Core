@@ -51,17 +51,23 @@
 | `Mail_Notify_CommentItem_Explanation of string * string
 | `Mail_Notify_CommentItem_Thanks of string
 
-| `Mail_Notify_EntityInvite_Title of string * string
-| `Mail_Notify_EntityInvite_Intro of string
-| `Mail_Notify_EntityInvite_Explanation of string * string * string
-| `Mail_Notify_EntityInvite_Explanation2 of string
-| `Mail_Notify_EntityInvite_Thanks of string
+| `Mail_Notify_EventInvite_Title of string * string
+| `Mail_Notify_EventInvite_Intro of string
+| `Mail_Notify_EventInvite_Explanation of string * string * string
+| `Mail_Notify_EventInvite_Explanation2 of string
+| `Mail_Notify_EventInvite_Thanks of string
 
-| `Mail_Notify_EntityRequest_Title of string * string
-| `Mail_Notify_EntityRequest_Intro of string
-| `Mail_Notify_EntityRequest_Explanation of string * string * string
-| `Mail_Notify_EntityRequest_Explanation2
-| `Mail_Notify_EntityRequest_Thanks of string
+| `Mail_Notify_EventRequest_Title of string * string
+| `Mail_Notify_EventRequest_Intro of string
+| `Mail_Notify_EventRequest_Explanation of string * string * string
+| `Mail_Notify_EventRequest_Explanation2
+| `Mail_Notify_EventRequest_Thanks of string
+
+| `Mail_Notify_GroupRequest_Title of string * string
+| `Mail_Notify_GroupRequest_Intro of string
+| `Mail_Notify_GroupRequest_Explanation of string * string * string
+| `Mail_Notify_GroupRequest_Explanation2
+| `Mail_Notify_GroupRequest_Thanks of string
 
 | `Mail_NotifyResend_Title 
 | `Mail_NotifyResend_Intro of string

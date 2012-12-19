@@ -5,6 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 include Fmt.Make(struct
+
   type json t = 
     [ `NewWallItem   "i"  of [`WallReader "r"|`WallAdmin "a"] * IItem.t
     | `NewFavorite   "f"  of [`ItemAuthor "a"] * IAvatar.t * IItem.t
@@ -12,12 +13,14 @@ include Fmt.Make(struct
     | `BecomeMember  "bm" of IInstance.t * IAvatar.t 
     | `BecomeAdmin   "ba" of IInstance.t * IAvatar.t  
     | `NewInstance   "ni" of IInstance.t * IAvatar.t 
-    | `EntityInvite  "ei" of IEntity.t * IAvatar.t
-    | `EntityRequest "er" of IEntity.t * IAvatar.t 
+    | `EventInvite   "ei" of IEvent.t * IAvatar.t
+    | `EventRequest  "er" of IEvent.t * IAvatar.t 
+    | `GroupRequest  "gr" of IEntity.t * IAvatar.t
     | `NewUser       "nu" of IUser.t 
     | `NewJoin       "nj" of IInstance.t * IAvatar.t  
     | `CanInstall    "ci" of IInstance.t
     ]
+
 end)
 
 let access cuid iid = 
@@ -35,8 +38,10 @@ let instance = function
     | `NewComment (_,cid) -> let! itid    = ohm_req_or (return None) $ MComment.item cid in 
 			     MItem.iid itid
 
-    | `EntityInvite (eid,_) 
-    | `EntityRequest (eid,_) -> MEntity.instance eid 
+    | `EventInvite (eid,_) 
+    | `EventRequest (eid,_) -> MEvent.instance eid
+
+    | `GroupRequest (eid,_) -> MEntity.instance eid 
 
     | `BecomeMember (iid,_) 
     | `BecomeAdmin (iid,_) 
@@ -77,8 +82,14 @@ let author cuid =
     | `BecomeAdmin (iid,aid) -> 
       return $ Some (`Person (aid,iid))
 
-    | `EntityInvite  (eid,aid) 
-    | `EntityRequest (eid,aid) ->
+    | `EventInvite  (eid,aid) 
+    | `EventRequest (eid,aid) ->
+      let! iid    = ohm_req_or (return None) $ MEvent.instance eid in 
+      let! access = ohm_req_or (return None) $ access cuid iid in 
+      let! event  = ohm_req_or (return None) $ MEvent.view ~access eid in
+      return $ Some (`Event (aid,iid,event))
+
+    | `GroupRequest (eid,aid) ->
       let! iid    = ohm_req_or (return None) $ MEntity.instance eid in 
       let! access = ohm_req_or (return None) $ access cuid iid in 
       let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
@@ -101,8 +112,9 @@ let channel : t -> MNotifyChannel.t = function
   | `NewComment    (what,_)   -> `NewComment what
   | `BecomeMember  (_,_)      -> `BecomeMember
   | `BecomeAdmin   (_,_)      -> `BecomeAdmin
-  | `EntityInvite  (_,_)      -> `EntityInvite
-  | `EntityRequest (_,_)      -> `EntityRequest
+  | `EventInvite   (_,_)      -> `EventInvite
+  | `EventRequest  (_,_)      
+  | `GroupRequest  (_,_)      -> `EntityRequest
   | `CanInstall     _         -> `CanInstall
   | `NewInstance   (_,_) 
   | `NewUser        _

@@ -3,7 +3,7 @@
 
 | `Events_List_Empty
 
-| `Events_List_Unbound
+| `Events_List_Undated
 | `Events_List_Past
 
 | `Events_Title
@@ -63,6 +63,9 @@
 | `Event_Edit_SavePublish
 | `Event_Edit_SaveDraft
 | `Event_Edit_Required
+| `Event_Edit_Date
+| `Event_Edit_Address
+| `Event_Edit_Page
 
 | `Event_Picture_Title
 | `Event_Picture_Link
@@ -93,3 +96,7 @@
 | `Event_Delete_Cancel 
 
 | `Event_DelPick_Title
+
+| `Event_Unnamed
+| `Event_Public_Map_Enlarge
+| `Event_Public_By

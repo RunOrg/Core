@@ -49,6 +49,6 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access entity fail cols_url invite_url join_url wrapper
+  CGrid.box access (MEntity.Get.group entity) fail cols_url invite_url join_url wrapper
 
 end

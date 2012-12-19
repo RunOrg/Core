@@ -1,5 +1,8 @@
 (* © 2012 RunOrg *)
 
+val get_manage_access : MEntity_core.entity -> MAccess.t list
+val get_view_access   : MEntity_core.entity -> MAccess.t list
+
 val has_manage_access : MEntity_core.entity -> 'any # MAccess.context -> bool O.run
 val has_view_access   : MEntity_core.entity -> 'any # MAccess.context -> bool O.run
 
