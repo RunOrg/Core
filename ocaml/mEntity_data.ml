@@ -105,6 +105,14 @@ let description tmpl t =
 	  Some (Json.to_string value)
       with _ -> None
 
+let address tmpl t = 
+  match PreConfig_Template.Meaning.location tmpl with 
+    | None -> None
+    | Some field -> 
+      try let value = List.assoc field t.Data.data in
+	  Some (Json.to_string value)
+      with _ -> None
+
 let data   t = t.Data.data
 let name   t = t.Data.name
 
