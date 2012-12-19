@@ -155,6 +155,8 @@ val news :
 
 val count : [`Read] source -> int O.run 
 
+val stats : [`Bot] source -> (#O.ctx,< n : int ; last : float option >) Ohm.Run.t
+
 val prev_next : item -> (IItem.t option * IItem.t option) O.run
 
 val exists : [`Read] source -> bool O.run

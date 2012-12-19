@@ -7,7 +7,7 @@ val get_for_owner : 'any # MAccess.context -> 'a IFeedOwner.id  -> [`Unknown] t 
 
 val bot_get : [`Bot] IFeed.id -> [`Bot] t option O.run
 
-val by_owner : IInstance.t -> 'a IFeedOwner.id -> IFeed.t O.run
+val try_by_owner : 'a IFeedOwner.id -> (#O.ctx,IFeed.t option) Ohm.Run.t 
 
 module Get : sig
 

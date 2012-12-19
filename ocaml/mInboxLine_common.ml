@@ -12,6 +12,7 @@ module Info = struct
     module T = struct
       type json t = {
 	id : IAlbum.t ;      
+	t  : float option ; 
 	n  : int ;
       }
     end
@@ -22,7 +23,8 @@ module Info = struct
   module Folder = struct
     module T = struct
       type json t = {
-	id : IFolder.t ;      
+	id : IFolder.t ;    
+	t  : float option ; 
 	n  : int ;
       }
     end
@@ -34,20 +36,8 @@ module Info = struct
     module T = struct
       type json t = {
 	id : IFeed.t ;      
+	t  : float option ; 
 	n  : int ;
-      }
-    end
-    include T
-    include Fmt.Extend(T)
-  end
-
-  module People = struct
-    module T = struct
-      type json t = {
-	id     : IGroup.t ;
-	n      : int ;
-	recent : IAvatar.t list ;
-	author : IAvatar.t ;	
       }
     end
     include T
@@ -65,7 +55,6 @@ module Line = struct
      ?album  : Info.Album.t option ;
      ?folder : Info.Folder.t option ; 
      ?wall   : Info.Wall.t option ;
-     ?people : Info.People.t option ;
      ?time   : float = 0.0 ;
      ?show   : bool = false ;
     }
