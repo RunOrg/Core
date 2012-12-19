@@ -25,7 +25,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
   let! album  = ohm $ O.decay (MAlbum.Can.read album) in
   let  album  = if draft then None else album in 
 
-  let! folder = ohm $ O.decay (MFolder.get_for_event access eid) in
+  let! folder = ohm $ O.decay (MFolder.get_for_owner access (`Event eid)) in
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
   let  folder = if draft then None else folder in 
 
