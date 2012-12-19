@@ -451,4 +451,26 @@ let () =
   let! iid, eid, gid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
   create gid iid (`Event (IEvent.decay eid,template)) 
 
+(* {{MIGRATION}} *)
 
+let () = 
+  let! eid, evid, gid = Sig.listen MEntity.on_migrate in 
+  let! group = ohm_req_or (return ()) $ Tbl.get gid in 
+  if group # owner <> `Event evid then
+
+    let group = object
+      method t = group # t
+      method iid = group # iid
+      method admins = group # admins
+      method grants = group # grants
+      method manual = group # manual
+      method owner  = `Event evid
+      method list   = group # list
+      method fields = group # fields
+      method propg  = group # propg
+    end in 
+
+    let! _ = ohm $ Tbl.set gid group in
+    return () 
+    
+  else return () 
