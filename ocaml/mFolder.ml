@@ -159,3 +159,21 @@ let get_for_owner ctx owner =
 
 let get_for_event ctx eid = get_for_owner ctx (`Event eid)
 let get_for_entity ctx eid = get_for_owner ctx (`Entity eid)
+
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
+  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
+  let  doc, id = found # doc, found # id in  
+  if doc # owner <> `Event evid then
+
+    let changed = object
+      method iid   = doc # iid
+      method owner = `Event evid
+    end in 
+
+    let! _ = ohm $ Tbl.set (IFolder.of_id id) changed in
+    return () 
+    
+  else return () 
