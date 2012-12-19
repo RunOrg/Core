@@ -6,7 +6,7 @@ module Data : sig
     firstname : string ;
     lastname  : string ;
     email     : string option ;
-    birthdate : string option ;
+    birthdate : Date.t option ;
     phone     : string option ;
     cellphone : string option ;
     address   : string option ;

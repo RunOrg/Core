@@ -48,14 +48,14 @@ let template =
 	       (OhmForm.Skin.text 
 		  ~label:(AdLib.get `MeAccount_Edit_Birthdate) 
 		  begin fun user -> 
-		    let date = BatOption.bind MFmt.dmy_of_date (user # birthdate) in
+		    let date = BatOption.map Date.ymd (user # birthdate) in
 		    let date = BatOption.map (fun (d,m,y) -> Printf.sprintf "%02d / %02d / %04d" d m y) date in
 		    return $ BatOption.default "" date
 		  end
 		  begin fun field string -> 
 		    let string = BatString.trim string in 
 		    if string = "" then return (Ok None) else
-		      try let date = Scanf.sscanf string "%u / %u / %u" MFmt.date_of_dmy in
+		      try let date = Scanf.sscanf string "%u / %u / %u" Date.date in
 			  return (Ok (Some date))
 		      with _ -> let! error = ohm $ AdLib.get `MeAccount_Edit_DateError in
 				return (Bad (field,error))

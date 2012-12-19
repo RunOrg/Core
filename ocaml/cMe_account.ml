@@ -99,7 +99,7 @@ let () = define UrlMe.Account.def_home begin fun owid cuid  ->
     let! pic  = ohm $ CPicture.large (user # picture) in
     
     let! gender = ohm $ AdLib.get (`Gender (user # gender)) in
-    let  birthdate = BatOption.bind MFmt.float_of_date (user # birthdate) in
+    let  birthdate = BatOption.map Date.to_timestamp (user # birthdate) in
     let! birthdate = ohm $ Run.opt_map (fun d -> AdLib.get (`Date d)) birthdate in
 
     let details = BatList.filter_map 
