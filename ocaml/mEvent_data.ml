@@ -91,7 +91,6 @@ let update eid self ~address ~page =
 
   end
 
-
 let address t = 
   t.Cfg.Data.address
 
@@ -99,15 +98,15 @@ let page t =
   match t.Cfg.Data.page with 
     | `R page -> page
 
-let create eid self =
+let create ?address ?(page=`Text "") eid self =
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
 
     let eid  = IEvent.decay eid in
     let info = MUpdateInfo.self self in 
 
     let init = Cfg.Data.({
-      address = None ;
-      page    = `R (`Text "") ;
+      address ;
+      page    = `R page ;
     }) in
 
     let! _ = ohm $ Store.create ~id:eid ~init ~diffs:[] ~info () in
