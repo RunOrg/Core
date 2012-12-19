@@ -7,7 +7,7 @@ open BatPervasives
 module FormFmt = Fmt.Make(struct
   type json t = <
     name : string ;
-    template : ITemplate.t ;
+    template : ITemplate.Event.t ;
     pic : string option ;
   >
 end)
@@ -33,12 +33,12 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
 
     let name = match BatString.strip (post # name) with 
       | "" -> None
-      | str -> Some (`text str)
+      | str -> Some str
     in
 
-    let! eid = ohm $ O.decay (MEntity.create (access # self) ~name ?pic ~iid (post # template)) in
+    let! eid = ohm $ O.decay (MEvent.create ~self:(access # self) ~name ?pic ~iid (post # template)) in
 
-    let  url = Action.url UrlClient.Events.edit (access # instance # key) [ IEntity.to_string eid ] in
+    let  url = Action.url UrlClient.Events.edit (access # instance # key) [ IEvent.to_string eid ] in
 
     return $ Action.javascript (Js.redirect url ()) res
 
@@ -48,9 +48,9 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
 
     let templates = 
       List.map (fun tid -> (object
-	method name  = PreConfig_Template.name tid
-	method desc  = PreConfig_Template.desc tid 
-	method value = ITemplate.to_string tid 
+	method name  = PreConfig_Template.Events.name tid
+	method desc  = PreConfig_Template.Events.desc tid 
+	method value = ITemplate.Event.to_string tid 
       end))
 	(PreConfig_Vertical.events (access # instance # ver)) 
     in

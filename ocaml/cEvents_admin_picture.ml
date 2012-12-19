@@ -6,7 +6,7 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_picture begin fun parents entity access -> 
+let () = define UrlClient.Events.def_picture begin fun parents event access -> 
   
   let! post = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
 
@@ -16,7 +16,7 @@ let () = define UrlClient.Events.def_picture begin fun parents entity access ->
       O.decay $ MFile.instance_pic (access # iid) (IFile.of_string fid) 
     end in
 
-    let! () = ohm $ O.decay (MEntity.set_picture (access # self) entity pic) in
+    let! () = ohm $ O.decay (MEvent.Set.picture event (access # self) pic) in
 
     let url = parents # home # url in 
     
@@ -28,7 +28,7 @@ let () = define UrlClient.Events.def_picture begin fun parents entity access ->
 
     let cuid = IIsIn.user (access # isin) in
 
-    let  id   = match MEntity.Get.picture entity with 
+    let  id   = match MEvent.Get.picture event with 
       | None -> "" 
       | Some fid -> IFile.to_string (IFile.decay fid) ^ "/" ^ IFile.Deduce.make_getPic_token cuid fid
     in

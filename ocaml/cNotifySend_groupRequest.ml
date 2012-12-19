@@ -21,14 +21,13 @@ let send url uid eid aid =
     let! author = ohm $ CAvatar.mini_profile aid in 
     let! name = req_or (return ()) (author # nameo) in
     
-    let subject = AdLib.get (`Mail_Notify_EntityInvite_Title (name,entity)) in
+    let subject = AdLib.get (`Mail_Notify_GroupRequest_Title (name,entity)) in
     
     let owid = snd (instance # key) in
 
-    let body = Asset_Mail_NotifyEntityInvite.render (object
+    let body = Asset_Mail_NotifyGroupRequest.render (object
       method name      = user # fullname
-      method inviter   = (name, entity, instance # name)
-      method who       = name
+      method requester = (name, entity, instance # name)
       method url       = url owid
       method asso      = instance # name
     end) in
