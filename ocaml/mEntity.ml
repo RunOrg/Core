@@ -6,7 +6,7 @@ open BatPervasives
 open Ohm.Universal
 
 module E = MEntity_core
-module MyTable = E.Table
+module Tbl = E.Table
 
 module Can       = MEntity_can
 module Get       = MEntity_get 
@@ -21,15 +21,15 @@ type 'relation t = 'relation MEntity_can.t
 (* Attempt to load an entity --------------------------------------------------------------- *)
 
 let bot_get (id : [`Bot] IEntity.id) = 
-  MyTable.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_full id))
+  Tbl.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_full id))
 
 let naked_get id = 
-  MyTable.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_naked id)) 
+  Tbl.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_naked id)) 
   
 let try_get context id = 
   let isin = context # isin in
   let instance = IInstance.decay (IIsIn.instance isin) in
-  let! entity = ohm_req_or (return None) $ MyTable.get (IEntity.decay id) in
+  let! entity = ohm_req_or (return None) $ Tbl.get (IEntity.decay id) in
   if instance  <> entity.E.instance then 
     (* MEntity is in another castle^Winstance *)
     return None
@@ -194,7 +194,7 @@ let create self ~name ?pic ~iid ?access template =
 
 let get_if_public eid = 
   let  id = IEntity.decay eid in 
-  let! entity = ohm_req_or (return None) $ MyTable.get id in
+  let! entity = ohm_req_or (return None) $ Tbl.get id in
   if entity.E.draft then return None else
     if not (entity.E.public) then return None else
       (* Can be seen, because it's public *)
@@ -204,7 +204,7 @@ let get_if_public eid =
 (* Collect the instance of an entity -------------------------------------------------------- *)
 
 let instance eid = 
-  MyTable.using (IEntity.decay eid) (fun e -> e.E.instance) 
+  Tbl.using (IEntity.decay eid) (fun e -> e.E.instance) 
 
 (* Admin group entity name ------------------------------------------------------------------ *)
 
@@ -309,3 +309,48 @@ module Backdoor = struct
     CountView.reduce_query ()
 
 end
+
+(* Migrate the events to new event model *)
+
+let migrate_config config = object
+  method group_validation = match config # group with `Some g -> Some (g # validation) | _ -> None
+  method group_read = match config # group with `Some g -> Some (g # read) | _ -> None 
+  method collab_read = match config # wall with `Some w -> Some (w # read) | _ -> None 
+  method collab_write = match config # wall with `Some w -> Some (w # post) | _ -> None
+end
+
+let migrate_vision entity = 
+  if entity.E.public then `Public else 
+    match MAccess.summarize entity.E.view with 
+      | `Admin  -> `Private
+      | `Member -> `Normal
+
+let migrate_template : ITemplate.t -> ITemplate.Event.t option = function
+  | (#ITemplate.Event.t) as x -> Some x
+  | _ -> None
+
+let refresh_all = Async.Convenience.foreach O.async "migrate-event-entities"
+  IEntity.fmt (Tbl.all_ids ~count:10) 
+  (fun eid -> 
+    let! entity = ohm_req_or (return ()) $ Tbl.get eid in 
+    let  evid   = IEvent.of_id (IEntity.to_id eid) in
+    let! exists = ohm $ MEvent_migrate.exists evid in 
+    if not exists || entity.E.kind <> `Event || entity.E.deleted = None then return () else begin 
+      let! data    = ohm_req_or (return ()) $ Data.get (IEntity.Assert.bot eid) in 
+      let! tid     = req_or (return ()) $ migrate_template entity.E.template in 
+      let! self    = req_or (return ()) $ BatOption.map IAvatar.Assert.is_self entity.E.creator in 
+      let  iid     = entity.E.instance in 
+      let  gid     = entity.E.group in 
+      let! name    = ohm $ Run.opt_map TextOrAdlib.to_string entity.E.name in 
+      let  pic     = BatOption.map IFile.decay entity.E.picture in
+      let  date    = BatOption.bind Date.of_compact entity.E.date in
+      let  draft   = entity.E.draft in 
+      let  admins  = entity.E.admin in
+      let  config  = migrate_config entity.E.config in
+      let  vision  = migrate_vision entity in 
+      let  page    = `Text (BatOption.default "" (Data.description entity.E.template data)) in
+      let  address = Data.address entity.E.template data in 
+      MEvent_migrate.create 
+	~eid:evid ~iid ~tid ~gid ~name ~pic ~vision ~date ~admins ~draft ~config ~address ~page ~self
+    end)
+

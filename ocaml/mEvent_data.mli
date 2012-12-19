@@ -16,7 +16,7 @@ val page     : [<`Admin|`View] t -> MRich.OrText.t
 
 val create : 
       'id IEvent.id
-  ->  [`IsSelf] IAvatar.id
   -> ?address:string 
   -> ?page:MRich.OrText.t
+  ->  [`IsSelf] IAvatar.id
   -> (#O.ctx,unit) Ohm.Run.t

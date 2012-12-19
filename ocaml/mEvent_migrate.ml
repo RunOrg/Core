@@ -5,6 +5,11 @@ open Ohm.Universal
 open BatPervasives
 
 module E = MEvent_core
+module Data = MEvent_data
+
+let exists eid = 
+  let! _ = ohm_req_or (return false) (E.Store.get eid) in
+  return true
 
 let create ~eid ~iid ~tid ~gid ~name ~pic ~vision ~date ~admins ~draft ~config ~address ~page ~self = 
 
@@ -24,7 +29,7 @@ let create ~eid ~iid ~tid ~gid ~name ~pic ~vision ~date ~admins ~draft ~config ~
     }) ~diffs:[] ~info:(MUpdateInfo.self self) ()
   in
   
-  let! _ = ohm $ Data.create eid self ~address ~page in
+  let! _ = ohm $ Data.create eid self ?address ~page in
   
   return () 
 

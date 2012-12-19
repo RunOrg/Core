@@ -98,7 +98,7 @@ let page t =
   match t.Cfg.Data.page with 
     | `R page -> page
 
-let create ?address ?(page=`Text "") eid self =
+let create eid ?address ?(page=`Text "") self =
   Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
 
     let eid  = IEvent.decay eid in
