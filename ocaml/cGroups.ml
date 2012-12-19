@@ -53,7 +53,7 @@ let contents access =
 
 	else 
 	  
-	  let! feed   = ohm $ MFeed.get_for_entity access eid in
+	  let! feed   = ohm $ MFeed.get_for_owner access (`Entity eid) in
 	  let! feed   = ohm $ MFeed.Can.read feed in
 	  let! feed   = req_or (return None) feed in 
 	  
