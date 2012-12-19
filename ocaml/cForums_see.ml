@@ -19,7 +19,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
     let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
     
-    let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
+    let! album  = ohm $ O.decay (MAlbum.get_for_owner access (`Entity eid)) in
     let! album  = ohm $ O.decay (MAlbum.Can.read album) in
     
     let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
