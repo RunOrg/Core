@@ -2,10 +2,6 @@
 
 open Ohm
 
-module Gender = Fmt.Make(struct
-  type json t = [`m|`f]
-end)
-
 let year yyyy =  
   if yyyy < 15 then 2000 + yyyy else
     if yyyy < 100 then 1900 + yyyy else yyyy
