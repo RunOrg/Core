@@ -27,10 +27,12 @@ let get_or_create owner =
       
       let line = Line.({
 	owner  = IInboxLineOwner.decay owner ;
+	show   = false ;
 	time   = 0.0 ;
 	album  = None ;
 	folder = None ;
-	wall   = None 
+	wall   = None ;
+	people = None ;
       }) in
       
       Tbl.create line
