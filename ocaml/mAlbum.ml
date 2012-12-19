@@ -21,7 +21,7 @@ module Data = Fmt.Make(struct
   >
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IAlbum)(Data)
+module Tbl = CouchDB.Table(MyDB)(IAlbum)(Data)
 
 type 'relation t = 
     {
@@ -53,7 +53,7 @@ let _make access id data =
 (* Direct access ---------------------------------------------------------------------------- *)
 
 let try_get ctx id = 
-  let! album_opt = ohm (MyTable.get (IAlbum.decay id)) in
+  let! album_opt = ohm (Tbl.get (IAlbum.decay id)) in
   return (BatOption.map (_make ctx id) album_opt)
 
 module Get = struct
@@ -149,7 +149,7 @@ let get_for_owner ctx owner =
 	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
 
-	let! id = ohm $ MyTable.create doc in
+	let! id = ohm $ Tbl.create doc in
 	return (id, doc) 
   in
   
@@ -159,3 +159,22 @@ let get_for_owner ctx owner =
 
 let get_for_event ctx eid = get_for_owner ctx (`Event eid)
 let get_for_entity ctx eid = get_for_owner ctx (`Entity eid) 
+
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
+  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
+  let  doc, id = found # doc, found # id in  
+  if doc # owner <> `Event evid then
+
+    let changed = object
+      method t     = doc # t
+      method iid   = doc # iid
+      method owner = `Event evid
+    end in 
+
+    let! _ = ohm $ Tbl.set (IAlbum.of_id id) changed in
+    return () 
+    
+  else return () 
