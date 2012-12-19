@@ -14,21 +14,6 @@ type date = { y : int ; m : int ; d : int ; t : time option }
 (* Subtract the tzoffset from any localtime to get the UTC time *)
 let tzoffset, _ = Unix.mktime (Unix.gmtime 0.0) 
 
-let of_iso8601 s = 
-  try 
-    if String.length s = 10 then
-      Scanf.sscanf s "%d-%d-%d" 
-	(fun y m d -> Some { y ; m ; d ; t = None }) 
-    else
-      Scanf.sscanf s "%d-%d-%dT%d:%d:%dZ" 
-	(fun y m d h i s -> Some { y ; m ; d ; t = Some { h ; i ; s }})
-  with _ -> None
-
-let to_iso8601 d = 
-  match d.t with 
-    | None -> Printf.sprintf "%4d-%02d-%02d" d.y d.m d.d 
-    | Some t -> Printf.sprintf "%4d-%02d-%02dT%02d:%02d:%02dZ" d.y d.m d.d t.h t.i t.s
-
 let of_compact s = 
   try
     let y = int_of_string (String.sub s 0 4) in
@@ -42,6 +27,23 @@ let of_compact s =
       let s = int_of_string (String.sub s 12 2) in
       Some { y ; m ; d ; t = Some { h ; i ; s }}
   with _ -> None
+
+let of_iso8601 s = 
+  try 
+    if String.length s = 8 || String.length s = 14 then
+      of_compact s 
+    else if String.length s = 10 then
+      Scanf.sscanf s "%d-%d-%d" 
+	(fun y m d -> Some { y ; m ; d ; t = None }) 
+    else
+      Scanf.sscanf s "%d-%d-%dT%d:%d:%dZ" 
+	(fun y m d h i s -> Some { y ; m ; d ; t = Some { h ; i ; s }})
+  with _ -> None
+
+let to_iso8601 d = 
+  match d.t with 
+    | None -> Printf.sprintf "%4d-%02d-%02d" d.y d.m d.d 
+    | Some t -> Printf.sprintf "%4d-%02d-%02dT%02d:%02d:%02dZ" d.y d.m d.d t.h t.i t.s
 
 let to_compact d = 
   match d.t with 
@@ -117,6 +119,8 @@ let date y m d =
   { y ; m ; d ; t = None }
 
 let day_only d = { d with t = None }
+
+let ymd d = d.y, d.m, d.d
 
 let min = { y =    0 ; m =  1 ; d =  1 ; t = None }
 let max = { y = 9999 ; m = 12 ; d = 31 ; t = None }

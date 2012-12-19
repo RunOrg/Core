@@ -65,7 +65,7 @@ let apply_profile aid what =
     | `Firstname -> retstring profile.firstname
     | `Lastname  -> retstring profile.lastname
     | `Email     -> retoptstr profile.email
-    | `Birthdate -> retoptstr profile.birthdate
+    | `Birthdate -> return (Json.of_opt Date.to_json profile.birthdate, None)
     | `Phone     -> retoptstr profile.phone
     | `Cellphone -> retoptstr profile.cellphone 
     | `Address   -> retoptstr profile.address

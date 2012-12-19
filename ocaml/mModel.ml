@@ -8,7 +8,6 @@ open BatPervasives
 
 module MainDB     = CouchDB.Convenience.Database(struct let db = O.db "main" end)
 module TalkDB     = CouchDB.Convenience.Database(struct let db = O.db "talk" end)
-module TemplateDB = CouchDB.Convenience.Database(struct let db = O.db "template" end)
 
 (* Secondary definitions -------------------------------------------------------------- *)
 

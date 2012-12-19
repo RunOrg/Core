@@ -15,7 +15,6 @@ end
 
 module Data = Fmt.Make(struct
   type json t = <
-    t           : MType.t ;
     iid   "ins" : IInstance.t ;
     owner       : [ `Entity "e" of IEntity.t | `Event "ev" of IEvent.t ]
   >
@@ -144,7 +143,6 @@ let get_for_owner ctx owner =
       | None -> (* Mlbum missing, create one *)
 
 	let doc = object
-	  method t     = `Album
 	  method owner = owner
 	  method iid   = IIsIn.instance (ctx # isin) |> IInstance.decay 
 	end in 
@@ -169,7 +167,6 @@ let () =
   if doc # owner <> `Event evid then
 
     let changed = object
-      method t     = doc # t
       method iid   = doc # iid
       method owner = `Event evid
     end in 

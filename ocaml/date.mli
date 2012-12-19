@@ -26,6 +26,8 @@ val datetime : Tz.t -> int -> int -> int -> int -> int -> int -> t
 *)
 val date : int -> int -> int -> t
 
+val ymd : t -> int * int * int 
+
 val day_only : t -> t 
 
 val min : t

@@ -17,7 +17,7 @@ module Data = struct
     firstname : string ;
     lastname  : string ;
     email     : string option ;
-    birthdate : string option ;
+    birthdate : Date.t option ;
     phone     : string option ;
     cellphone : string option ;
     address   : string option ;
@@ -33,7 +33,7 @@ module Data = struct
       firstname : string ;
       lastname  : string ;
       email     : string option ;
-      birthdate : string option ;
+      birthdate : Date.t option ;
       phone     : string option ;
       cellphone : string option ;
       address   : string option ;
@@ -69,7 +69,7 @@ module Data = struct
       Inner.firstname =  clip 50  t.firstname ;
       Inner.lastname  =  clip 50  t.lastname ;
       Inner.email     = oclip 80  t.email ; 
-      Inner.birthdate = oclip 8   t.birthdate ; 
+      Inner.birthdate = t.birthdate ; 
       Inner.phone     = oclip 20  t.phone ; 
       Inner.cellphone = oclip 20  t.cellphone ; 
       Inner.address   = oclip 100 t.address ; 
@@ -83,7 +83,7 @@ module Data = struct
   let fmt = to_json, Fmt.protect of_json
  
   let field v = function
-    | `Birthdate -> Json.of_opt Json.of_string (v.birthdate) 
+    | `Birthdate -> Json.of_opt Date.to_json   (v.birthdate) 
     | `Phone     -> Json.of_opt Json.of_string (v.phone) 
     | `Cellphone -> Json.of_opt Json.of_string (v.cellphone) 
     | `Address   -> Json.of_opt Json.of_string (v.address) 
@@ -99,7 +99,7 @@ module Data = struct
 	List.fold_left (fun v (key,json) ->
 	  try 
 	    match key with 
-	      | `Birthdate -> { v with birthdate = Json.to_opt Json.to_string json }
+	      | `Birthdate -> { v with birthdate = Json.to_opt Date.of_json   json }
 	      | `Phone     -> { v with phone     = Json.to_opt Json.to_string json }
 	      | `Cellphone -> { v with cellphone = Json.to_opt Json.to_string json }
 	      | `Address   -> { v with address   = Json.to_opt Json.to_string json }
