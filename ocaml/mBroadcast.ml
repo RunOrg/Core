@@ -510,9 +510,3 @@ let import data =
   else
     return ()
 
-(* 
-let () = 
-  O.put begin 
-    Run.list_iter import MBroadcast_cda_source.import
-  end
-*)
