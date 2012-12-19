@@ -329,28 +329,46 @@ let migrate_template : ITemplate.t -> ITemplate.Event.t option = function
   | (#ITemplate.Event.t) as x -> Some x
   | _ -> None
 
-let refresh_all = Async.Convenience.foreach O.async "migrate-event-entities"
+let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
   IEntity.fmt (Tbl.all_ids ~count:10) 
   (fun eid -> 
     let! entity = ohm_req_or (return ()) $ Tbl.get eid in 
     let  evid   = IEvent.of_id (IEntity.to_id eid) in
     let! exists = ohm $ MEvent_migrate.exists evid in 
-    if not exists || entity.E.kind <> `Event || entity.E.deleted = None then return () else begin 
-      let! data    = ohm_req_or (return ()) $ Data.get (IEntity.Assert.bot eid) in 
-      let! tid     = req_or (return ()) $ migrate_template entity.E.template in 
-      let! self    = req_or (return ()) $ BatOption.map IAvatar.Assert.is_self entity.E.creator in 
-      let  iid     = entity.E.instance in 
-      let  gid     = entity.E.group in 
-      let! name    = ohm $ Run.opt_map TextOrAdlib.to_string entity.E.name in 
-      let  pic     = BatOption.map IFile.decay entity.E.picture in
-      let  date    = BatOption.bind Date.of_compact entity.E.date in
-      let  draft   = entity.E.draft in 
-      let  admins  = entity.E.admin in
-      let  config  = migrate_config entity.E.config in
-      let  vision  = migrate_vision entity in 
-      let  page    = `Text (BatOption.default "" (Data.description entity.E.template data)) in
-      let  address = Data.address entity.E.template data in 
-      MEvent_migrate.create 
-	~eid:evid ~iid ~tid ~gid ~name ~pic ~vision ~date ~admins ~draft ~config ~address ~page ~self
+    if entity.E.kind <> `Event || entity.E.deleted = None then return () else begin      
+      
+      (* Migrate entities to events *) 
+      let! () = ohm (if exists then return () else begin
+	let  time    = Unix.gettimeofday () in
+	let! data    = ohm_req_or (return ()) $ Data.get (IEntity.Assert.bot eid) in 
+	let! tid     = req_or (return ()) $ migrate_template entity.E.template in 
+	let! self    = req_or (return ()) $ BatOption.map IAvatar.Assert.is_self entity.E.creator in 
+	let  iid     = entity.E.instance in 
+	let  gid     = entity.E.group in 
+	let! name    = ohm $ Run.opt_map TextOrAdlib.to_string entity.E.name in 
+	let  pic     = BatOption.map IFile.decay entity.E.picture in
+	let  date    = BatOption.bind Date.of_compact entity.E.date in
+	let  draft   = entity.E.draft in 
+	let  admins  = entity.E.admin in
+	let  config  = migrate_config entity.E.config in
+	let  vision  = migrate_vision entity in 
+	let  page    = `Text (BatOption.default "" (Data.description entity.E.template data)) in
+	let  address = Data.address entity.E.template data in 
+	let! () = ohm $ MEvent_migrate.create 
+	    ~eid:evid ~iid ~tid ~gid ~name ~pic ~vision ~date ~admins ~draft ~config ~address ~page ~self
+	in
+	let () = Util.log "Migrate event - %.3fs - %s %S" (Unix.gettimeofday () -. time) 
+	  (IEvent.to_string evid) (BatOption.default "" name) in
+	return () 
+      end) in 
+
+      (* TODO : perform satellite migration *)
+
+      return () 
+
     end)
+
+(* Perform entity migration *)
+let () = O.put (migrate_all ()) 
+
 
