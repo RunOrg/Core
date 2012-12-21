@@ -8,7 +8,7 @@ module Admin  = CProfile_admin
 module Groups = CProfile_groups
 module Forms  = CProfile_forms
 
-let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access -> 
+let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access ->
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 

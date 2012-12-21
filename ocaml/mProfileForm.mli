@@ -62,4 +62,9 @@ module All : sig
        [`IsToken] # MAccess.context
     -> ([`View] IProfileForm.id * Info.t) list O.run 
 
+  val as_parent :
+       IAvatar.t 
+    -> [`IsToken] # MAccess.context
+    -> ([`View] IProfileForm.id * Info.t) list O.run
+
 end 
