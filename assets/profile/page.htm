@@ -24,10 +24,15 @@
 
       <ul class="-menu">
 	{#menu}
-	  <li{if selected} class="-selected"{/if}>
+	  <li class="-item{if selected} -selected{/if}">
 	    <a href="{url}">{`Profile_Menu label}</a>
 	  </li>
 	{/#}
+	{?admin}
+	  <li class="-admin">
+	    <a href="{this}" class="action-button -admin">{`Profile_Admin}</a>
+	  </li>
+	{/?}
       </ul>
 
       <div class="-body">
@@ -83,9 +88,10 @@
     padding: 0;
     overflow: hidden;
 
-    li { float: left }
+    li.-item { float: left }
+    li.-admin { float: right }
 
-    a {
+    .-item a {
       display: block;
       padding: 9px 20px;
       border: 1px solid #BBB;

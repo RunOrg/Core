@@ -312,7 +312,8 @@ let body access aid me render =
 			 return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
 	| None when me -> let! list = ohm $ MProfileForm.All.mine access in
 			  return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
-	| None -> return []
+	| None -> let! list = ohm $ MProfileForm.All.as_parent aid access in
+		  return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
     end in     
     
     let create = 
