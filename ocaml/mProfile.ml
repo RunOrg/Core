@@ -33,7 +33,7 @@ module Data = struct
       firstname : string ;
       lastname  : string ;
       email     : string option ;
-      birthdate : Date.t option ;
+      birthdate : Date.RevCompat.t ;
       phone     : string option ;
       cellphone : string option ;
       address   : string option ;
