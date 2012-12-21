@@ -12,7 +12,7 @@ let () = define UrlClient.Profile.def_admin begin fun parents entity access ->
     let choices = Asset_Admin_Choice.render (BatList.filter_map identity [
 
       Some (object
-	method img      = VIcon.Large.cog_edit
+	method img      = VIcon.Large.tree
 	method url      = parents # parents # url 
 	method title    = AdLib.get `Profile_Parents_Link
 	method subtitle = Some (AdLib.get `Profile_Parents_Sub)
