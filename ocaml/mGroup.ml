@@ -14,17 +14,52 @@ module Design = struct
 end
 
 module Data = Fmt.Make(struct
+    
+  module Data = Fmt.Make(struct
+    type json t = <
+      t      : MType.t ;
+      ins    : IInstance.t ;
+     ?admins : bool = false ;
+     ?grants : bool = false ;
+     ?manual : bool = true ;
+      entity : IEntity.t option ;
+      list   : IAvatarGrid.t ;
+     ?fields : Field.t list = [] ;
+     ?propg  : IGroup.t list = []
+    > 
+  end)
+
   type json t = <
     t      : MType.t ;
-    ins    : IInstance.t ;
-    ?admins : bool = false ;
-    ?grants : bool = false ;
-    ?manual : bool = true ;
-    entity : IEntity.t option ;
+    iid    : IInstance.t ;
+    admins : bool ;
+    grants : bool ;
+    manual : bool ;
+    owner  : [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] ;
     list   : IAvatarGrid.t ;
-    ?fields : Field.t list = [] ;
-    ?propg  : IGroup.t list = []
-  > 
+    fields : Field.t list ;
+    propg  : IGroup.t list 
+  >
+
+  let t_of_json json = 
+    try t_of_json json with exn ->
+      match Data.of_json_safe json with 
+	| Some t -> begin
+	  match t # entity with None -> raise exn | Some eid -> 
+	    (object
+	      method t = t # t
+	      method iid = t # ins
+	      method admins = t # admins
+	      method grants = t # grants
+	      method manual = t # manual
+	      method owner  = `Entity eid
+	      method list   = t # list 
+	      method fields = t # fields
+	      method propg  = t # propg
+	     end) 
+	end
+	| None -> raise exn
+	  
 end)
 
 module Tbl = CouchDB.Table(MyDB)(IGroup)(Data)
@@ -50,70 +85,78 @@ type 'relation t = {
   managers : MAccess.t O.run
 }
 
-let _relation_of_data context id data = 
-  let owner = Run.memo begin
+let owner ( data : data ) = 
+  Run.memo begin
     let  nil    = (fun _ -> `Nobody) in
-    let! eid    = req_or (return nil) $ data # entity in
-    let! entity = ohm_req_or (return nil) $ MEntity.try_get context eid in
-    return (fun what -> MEntity.Satellite.access entity (`Group what))
-  end in
+    match data # owner with 
+      | `Entity eid -> let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
+		       return (fun what -> MEntity.Satellite.access entity (`Group what))
+      | `Event  eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
+		       return (fun what -> MEvent.Satellite.access event (`Group what))
+  end
+
+let _relation_of_data access id (data : data) = 
+  let owner = owner data in
   {
     id    = id ;
     data  = data ;
-    view  = ( let! f = ohm owner in MAccess.test context [ f `Read ; f `Write ; f `Manage ] ) ;
-    edit  = ( let! f = ohm owner in MAccess.test context [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test context [                      f `Manage ] ) ;
+    view  = ( let! f = ohm owner in MAccess.test access [ f `Read ; f `Write ; f `Manage ] ) ;
+    edit  = ( let! f = ohm owner in MAccess.test access [           f `Write ; f `Manage ] ) ;
+    admin = ( let! f = ohm owner in MAccess.test access [                      f `Manage ] ) ;
     managers = ( let! f = ohm owner in return (`Union [ f `Write ; f `Manage ]) )
   }
 
-let managers_of_data data = 
-  Run.memo begin 
-    let! eid    = req_or (return `Nobody) $ data # entity in
-    let! entity = ohm_req_or (return `Nobody) $ MEntity.naked_get eid in
-    let  f x = MEntity.Satellite.access entity (`Group x) in
-    return (`Union [ f `Write ; f `Manage ])
-  end
+let managers_of_data (data:data) = 
+  let! f = ohm $ owner data in 
+  return (`Union [ f `Write ; f `Manage ])  
 
-let create gid iid eid tmpl = 
-
-  let admin = tmpl = ITemplate.admin in 
+let create gid iid owner = 
 
   let namer = MPreConfigNamer.load iid in 
 
   let iid = IInstance.decay iid in
   let gid = IGroup.decay    gid in    
-  let eid = IEntity.decay   eid in 
 
   let list = IAvatarGrid.gen () in 
-  let! ()  = ohm $ Signals.on_create_list_call (list,gid,iid,PreConfig_Template.columns iid gid tmpl) in
+
+  let owner, admin, columns, propagate, join = match owner with 
+    | `Entity (eid, tmpl) -> 
+
+      `Entity eid, 
+      (tmpl = ITemplate.admin),
+      PreConfig_Template.columns iid gid tmpl,
+      PreConfig_Template.propagate tmpl,
+      PreConfig_Template.join tmpl
+
+    | `Event (eid, evtmpl) ->  
+
+      `Event eid, 
+      false,
+      PreConfig_Template.Events.columns iid gid evtmpl,
+      [],
+      PreConfig_Template.Events.join evtmpl	
+  in
+ 
+  let! ()  = ohm $ Signals.on_create_list_call (list,gid,iid,columns) in
 
   let! propg = ohm $ Run.list_map 
     (fun name -> MPreConfigNamer.group name namer) 
-    (PreConfig_Template.propagate tmpl)
+    (propagate)
   in
   
   let o = object
     method t      = `Group
-    method ins    = iid
+    method iid    = iid
     method admins = admin
     method grants = false
     method manual = true
-    method entity = Some eid
+    method owner  = owner
     method list   = list
-    method fields = List.map (fun f -> `Local f) (PreConfig_Template.join tmpl)
+    method fields = List.map (fun f -> `Local f) join
     method propg  = propg
   end in
   
-  let! () = ohm $ Tbl.set gid o in
-		   
-  return {
-    id    = IGroup.Assert.admin gid ;
-    data  = o ;
-    view  = return true ;
-    edit  = return true ;
-    admin = return true ;
-    managers = managers_of_data o ;
-  } 
+  Tbl.set gid o
 
 let _get id = 
   Tbl.get (IGroup.decay id)
@@ -147,11 +190,11 @@ let refresh gid ~grants ~manual =
 
   let update d = object
     method t      = `Group
-    method ins    = d # ins
+    method iid    = d # iid
     method admins = d # admins
     method manual = manual
     method grants = grants
-    method entity = d # entity
+    method owner  = d # owner
     method list   = d # list
     method fields = d # fields
     method propg  = d # propg
@@ -167,11 +210,11 @@ module Get = struct
     	  
   let is_admin t = t.data # admins
 
-  let entity   t = t.data # entity 
+  let owner    t = t.data # owner
 
   let manual   t = t.data # manual
 
-  let instance t = t.data # ins
+  let instance t = t.data # iid
 
   let list     t = 
     (* Admin, write, read and list can see the list *)
@@ -234,11 +277,11 @@ module Propagate = struct
 
     let update d = object
       method t      = `Group
-      method ins    = d # ins
+      method iid    = d # iid
       method admins = d # admins
       method grants = d # grants
       method manual = d # manual
-      method entity = d # entity
+      method owner  = d # owner
       method list   = d # list
       method fields = d # fields
       method propg  = propg
@@ -322,10 +365,10 @@ module Fields = struct
     let fields = BatList.take max fields in
     let update d = object
       method t      = `Group
-      method ins    = d # ins
+      method iid    = d # iid
       method admins = d # admins
       method grants = d # grants
-      method entity = d # entity
+      method owner  = d # owner
       method manual = d # manual
       method list   = d # list
       method fields = fields
@@ -402,6 +445,32 @@ let () =
   
 let () = 
   let! iid, eid, gid, template, _ = Sig.listen MEntity.Signals.on_bind_group in 
-  let! _ = ohm $ create gid iid (IEntity.decay eid) template in
-  return () 
+  create gid iid (`Entity (IEntity.decay eid,template))
 
+let () = 
+  let! iid, eid, gid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
+  create gid iid (`Event (IEvent.decay eid,template)) 
+
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, evid, gid = Sig.listen MEntity.on_migrate in 
+  let! group = ohm_req_or (return ()) $ Tbl.get gid in 
+  if group # owner <> `Event evid then
+
+    let group = object
+      method t = group # t
+      method iid = group # iid
+      method admins = group # admins
+      method grants = group # grants
+      method manual = group # manual
+      method owner  = `Event evid
+      method list   = group # list
+      method fields = group # fields
+      method propg  = group # propg
+    end in 
+
+    let! _ = ohm $ Tbl.set gid group in
+    return () 
+    
+  else return () 

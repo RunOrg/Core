@@ -7,13 +7,40 @@ open BatPervasives
 (* Data type definitions ----------------------------------------------------------------------------------- *)
 
 module Payload = struct
+    
+  module Old = struct
+    module T = struct
+      type json t = 
+          MembershipMass          "mm"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" | `Create "c"
+					   ] * IEntity.t * int
+	| MembershipAdmin         "ma"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" 
+					   ] * IEntity.t * IAvatar.t
+	| MembershipUser          "mu"  of bool * IEntity.t 
+	| InstanceCreate          "ic"
+	| LoginManual             "lm"
+	| LoginSignup             "ls"
+	| LoginWithNotify         "ln"  of MNotifyChannel.t
+	| LoginWithReset          "lr"
+	| UserConfirm             "uc"
+	| ItemCreate              "it"  of IItem.t
+	| CommentCreate           "cc"  of IComment.t 
+	| EntityCreate            "ec"  of [ `Event "e" | `Forum "f" | `Group "g" ] * IEntity.t 
+	| BroadcastPublish        "bp"  of [ `Post "p" | `Forward "f" ] * IBroadcast.t
+	| SendMail                "m"   
+    end
+    include T
+    include Fmt.Extend(T)
+  end
+
   module T = struct
     type json t = 
-        MembershipMass          "mm"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" | `Create "c"
-					 ] * IEntity.t * int
-      | MembershipAdmin         "ma"  of [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" 
-					 ] * IEntity.t * IAvatar.t
-      | MembershipUser          "mu"  of bool * IEntity.t 
+        MembershipMass          "mm"  of 
+	    [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" | `Create "c" ] * 
+	      [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] * int
+      | MembershipAdmin         "ma"  of 
+	  [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" ] * 
+	    [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] * IAvatar.t
+      | MembershipUser          "mu"  of bool * [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] 
       | InstanceCreate          "ic"
       | LoginManual             "lm"
       | LoginSignup             "ls"
@@ -27,6 +54,15 @@ module Payload = struct
       | SendMail                "m"   
   end
   include T
+
+  let t_of_json json = 
+    try t_of_json json with exn ->
+      match Old.of_json_safe json with 
+	| Some (Old.MembershipMass (s,eid,i)) -> MembershipMass (s,`Entity eid,i)
+	| Some (Old.MembershipAdmin (s,eid,aid)) -> MembershipAdmin (s,`Entity eid,aid)
+	| Some (Old.MembershipUser (s,eid)) -> MembershipUser (s,`Entity eid)
+	| _ -> raise exn
+
   include Fmt.Extend(T)
 end
 

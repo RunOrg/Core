@@ -3,12 +3,13 @@
 type 'relation t
 
 val try_get        : 'any # MAccess.context -> 'a IFolder.id  -> 'a t option O.run
+val get_for_owner  : 'any # MAccess.context -> 'a IFolderOwner.id -> [`Unknown] t O.run
 
-val get_for_entity : 'any # MAccess.context -> 'a IEntity.id -> [`Unknown] t O.run
+val by_owner : 'a IInstance.id -> 'b IFolderOwner.id -> IFolder.t O.run
 
 module Get : sig
   val id     : 'any t -> 'any IFolder.id
-  val entity : 'any t -> IEntity.t option 
+  val owner  : 'any t -> IFolderOwner.t
   val instance : 'any t -> IInstance.t
   val write_instance : [`Write] t -> [`Upload] IInstance.id
 end

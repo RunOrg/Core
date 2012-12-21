@@ -3,7 +3,7 @@
 
 | `Events_List_Empty -> "Aucune activité disponible"
 
-| `Events_List_Unbound -> "Sans date"
+| `Events_List_Undated -> "Sans date"
 | `Events_List_Past -> "Archives"
 
 | `Events_Title -> "Activités"
@@ -68,6 +68,9 @@ end
 | `Event_Edit_SavePublish -> "Publier"
 | `Event_Edit_SaveDraft -> "Enregistrer Brouillon"
 | `Event_Edit_Required -> "Champ obligatoire"
+| `Event_Edit_Date -> "Date"
+| `Event_Edit_Address -> "Address"
+| `Event_Edit_Page -> "Description"
 
 | `Event_Picture_Title -> "Photo"
 | `Event_Picture_Link -> "Changer de photo"
@@ -101,3 +104,7 @@ end
 | `Event_Delete_Cancel -> "Ne pas supprimer"
 
 | `Event_DelPick_Title -> "Ajouter"
+
+| `Event_Unnamed -> "Sans Titre"
+| `Event_Public_Map_Enlarge -> "Agrandir la carte"
+| `Event_Public_By -> "Organisé par"

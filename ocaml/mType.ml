@@ -33,7 +33,6 @@ type json t = [
 | `MessageSubscription "msbs"
 | `GroupMessage        "gmsg"
 | `News                "news"
-| `Album               "albm"
 | `TemplateVersion     "tmpv"
 | `VerticalVersion     "vrtv"
 | `PreConfigNamer      "pcnm"

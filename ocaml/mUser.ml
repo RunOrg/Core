@@ -56,7 +56,7 @@ module Data = struct
      ?autologin  : bool = true ; 
      ?facebook   : OhmFacebook.t option ; 
      ?picture    : IFile.t option ;
-     ?birthdate  : string option ;
+     ?birthdate  : Date.t option ;
      ?phone      : string option ;
      ?cellphone  : string option ;
      ?address    : string option ;
@@ -110,7 +110,7 @@ type t = <
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
   picture   : [`GetPic] IFile.id option ;
-  birthdate : string option ;
+  birthdate : Date.t option ;
   phone     : string option ;
   cellphone : string option ;
   address   : string option ;
@@ -518,7 +518,7 @@ class type user_full = object
   method firstname : string
   method lastname  : string
   method email     : string
-  method birthdate : string option
+  method birthdate : Date.t option
   method phone     : string option
   method cellphone : string option
   method address   : string option
@@ -558,7 +558,7 @@ let user_bind (user : user_full) =
 		 lastname  = clip (user # lastname) ;
 		 email     ;
 		 emails    = [ email, false ] ; 
-		 birthdate = oclip (user # birthdate) ;
+		 birthdate = user # birthdate ;
 		 phone     = oclip (user # phone) ;
 		 cellphone = oclip (user # cellphone) ;
 		 address   = oclip (user # address) ;
@@ -617,7 +617,7 @@ end
 class type user_edit = object
   method firstname : string
   method lastname  : string
-  method birthdate : string option
+  method birthdate : Date.t option
   method phone     : string option
   method cellphone : string option
   method address   : string option
@@ -638,7 +638,7 @@ let update uid (t:user_edit) =
       e with 
 	firstname =  clip 50  (t # firstname) ;
 	lastname  =  clip 50  (t # lastname) ;
-	birthdate = oclip 8   (t # birthdate) ;
+	birthdate = t # birthdate ;
 	phone     = oclip 20  (t # phone) ;
 	cellphone = oclip 20  (t # cellphone) ; 
 	address   = oclip 100 (t # address) ;

@@ -6,9 +6,9 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_cols begin fun parents entity access -> 
+let () = define UrlClient.Events.def_cols begin fun parents event access ->
 
-  let! body = CGrid.Columns.box access entity in
+  let! body = CGrid.Columns.box access (MEvent.Get.group event) in
 
   O.Box.fill begin 
     Asset_Admin_Page.render (object

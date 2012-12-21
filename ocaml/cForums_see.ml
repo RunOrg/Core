@@ -16,13 +16,13 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
     
     let! admin  = ohm $ O.decay (MEntity.Can.admin entity ) in
         
-    let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
+    let! feed   = ohm $ O.decay (MFeed.get_for_owner access (`Entity eid)) in
     let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
     
-    let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
+    let! album  = ohm $ O.decay (MAlbum.get_for_owner access (`Entity eid)) in
     let! album  = ohm $ O.decay (MAlbum.Can.read album) in
     
-    let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
+    let! folder = ohm $ O.decay (MFolder.get_for_owner access (`Entity eid)) in
     let! folder = ohm $ O.decay (MFolder.Can.read folder) in
 
     let  gid = MEntity.Get.group entity in
@@ -91,7 +91,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 	    let! status = ohm $ MMembership.status access gid in
 	    let  fields = MGroup.Fields.get group <> [] in
 	    return $ 
-	      Some (CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
+	      Some (CJoin.Self.render (`Entity eid) 
+		      (access # instance # key) ~gender:None ~kind:`Forum ~status ~fields)
       end in 
 
       (* Administrator URLs ---------------------------------------------------------------- *)

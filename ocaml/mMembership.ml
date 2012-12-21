@@ -165,14 +165,14 @@ let admin ~from gid aid what =
       let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
       let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
       let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-      let! eid = req_or     (return ()) $ MGroup.Get.entity g in
+      let  own = MGroup.Get.owner g in
       let  p   = 
 	if List.mem `Invite what then `Invite else 
 	  if List.mem (`Accept true) what then
 	    if List.mem (`Default true) what then `Add else `Validate
 	  else `Remove
       in
-      MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipAdmin (p,eid,IAvatar.decay aid))
+      MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipAdmin (p,own,IAvatar.decay aid))
     end in 
 
     (* Apply the change *)
@@ -186,8 +186,8 @@ let user gid aid accept =
     let! uid = ohm_req_or (return ()) $ MAvatar.get_user aid in 
     let! iid = ohm_req_or (return ()) $ MAvatar.get_instance aid in 
     let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-    let! eid = req_or     (return ()) $ MGroup.Get.entity g in
-    MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipUser (accept,eid))
+    let  own = MGroup.Get.owner g in
+    MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipUser (accept,own))
   end in 
   
   (* Apply the change *)

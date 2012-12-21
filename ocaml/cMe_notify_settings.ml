@@ -17,7 +17,7 @@ let never = List.map (fun chan -> chan, `Never)
     `NewComment `ItemAuthor ;
     `NewComment `ItemFollower ;
     `BecomeMember ;
-    `EntityInvite ;
+    `EventInvite ;
     `EntityRequest ;
     `Broadcast ]
 
@@ -25,7 +25,7 @@ let default_of_assoc assoc =
   let get chan = try List.assoc chan assoc with Not_found -> MNotify.ToUser.default chan in 
   if get (`NewWallItem `WallReader) = `Immediate then
     `Everything
-  else if get `EntityInvite = `Immediate then
+  else if get `EventInvite = `Immediate then
     `Relevant
   else
     `Nothing	      

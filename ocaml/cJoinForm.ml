@@ -42,11 +42,10 @@ let profile_fields =
     "Gender"   , `Gender    ; "Country"  , `Country   ;
   ]
 
-let box access entity inner =
+let box access gid inner =
  
   (* Check whether group exists and can be managed by the user. *)
 
-  let  gid   = MEntity.Get.group entity in
   let  error = inner (return ignore) in
 
   let! group = ohm_req_or error $ O.decay (MGroup.try_get access gid) in 

@@ -14,9 +14,9 @@ end
   
 module Data = Fmt.Make(struct
   type json t = <
-    t     : MType.t ;
-    ins   : IInstance.t ;
-    own   : [`of_entity of IEntity.t | `of_message of IMessage.t] option 
+    t         : MType.t ;
+    iid "ins" : IInstance.t ;
+    own       : [`Entity "of_entity" of IEntity.t | `Event of IEvent.t ] option 
   > 
 end)
   
@@ -33,27 +33,20 @@ type 'relation t =
     }
 
 let _access iid = function 
-  | Some (`of_entity  eid) -> begin
-    let nil = (fun _ -> `Nobody) in
-    let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
-    return (fun what -> MEntity.Satellite.access entity (`Wall what))
-  end
-  | Some (`of_message mid) -> begin
-    return (function
-      | `Read   -> `Nobody
-      | `Write  -> `Message mid  
-      | `Manage -> `Nobody)
-  end
-  | None -> begin
-    let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
-    return (function
-      | `Read   -> `Token
-      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
-      | `Manage -> `Admin)
-  end
+  | Some (`Entity eid) -> let nil = (fun _ -> `Nobody) in
+			  let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
+			  return (fun what -> MEntity.Satellite.access entity (`Wall what))
+  | Some (`Event eid) -> let nil = (fun _ -> `Nobody) in
+			  let! event = ohm_req_or (return nil) $ MEvent.get eid in
+			  return (fun what -> MEvent.Satellite.access event (`Wall what))
+  | None -> let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
+	    return (function
+	      | `Read   -> `Token
+	      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
+	      | `Manage -> `Admin)
     
-let _make context id data = 
-  let owner = Run.memo (_access (data # ins) (data # own)) in
+let _make context id (data:Data.t) = 
+  let owner = Run.memo (_access (data # iid) (data # own)) in
   {
     id     = id ;
     data   = data ;
@@ -75,9 +68,9 @@ module Get = struct
 
   let owner_of_data feed = 	
     match feed # own with
-      | None                 -> `of_instance (feed # ins)
-      | Some (`of_entity e)  -> `of_entity e      
-      | Some (`of_message e) -> `of_message e
+      | None               -> `Instance (feed # iid)
+      | Some (`Entity eid) -> `Entity eid      
+      | Some (`Event  eid) -> `Event  eid
 
   let owner feed = owner_of_data feed.data
 
@@ -85,7 +78,7 @@ module Get = struct
     let id = IFeed.decay fid in 
     Tbl.get id |> Run.map (BatOption.map owner_of_data) 
 	
-  let instance t = t.data # ins
+  let instance t = t.data # iid
 
   let notified t = 
     let! reader = ohm t.access in
@@ -155,45 +148,38 @@ module ByOwnerView = CouchDB.DocView(struct
              if (doc.t == 'feed' && !doc.own) emit(doc.ins);"
 end)
 
-let get_for_owner ctx own =   
+let get_or_create iid owner =   
 
-  let  id = match own with 
-    | Some (`of_entity  eid) -> IEntity.to_id  eid   
-    | Some (`of_message mid) -> IMessage.to_id mid 
-    | None                   -> IIsIn.instance (ctx # isin) |> IInstance.to_id
-  in 
-
+  let  id = IFeedOwner.to_id owner in
   let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
-
-  let! id, doc = ohm begin
-    match found_opt with 
-      | Some item -> return (IFeed.of_id (item # id), item # doc)
-      | None -> (* Feed missing, create one *)
-
-	let doc = object
-	  method t     = `Feed
-	  method own   = own
-	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
-	end in 
-
-	let! id = ohm $ Tbl.create doc in
-	return (id, doc) 
-  end in
-
+  match found_opt with 
+    | Some item -> return (IFeed.of_id (item # id), item # doc)
+    | None -> (* Feed missing, create one *)
+      
+      let doc = object
+	method t     = `Feed
+	method own   = match IFeedOwner.decay owner with 
+	  | `Event    eid -> Some (`Event eid)
+	  | `Entity   eid -> Some (`Entity eid)
+	  | `Instance iid -> None 
+	method iid   = IInstance.decay iid
+      end in 
+      
+      let! id = ohm $ Tbl.create doc in
+      return (id, doc) 
+	
+let get_for_owner ctx owner =
+  let  iid = IIsIn.instance (ctx # isin) in
+  let! id, doc = ohm $ get_or_create iid owner in 
   return (_make ctx id doc)
 
-let get_for_entity ctx eid = 
-  get_for_owner ctx (Some (`of_entity (IEntity.decay eid)))
-
-let get_for_message ctx mid = 
-  get_for_owner ctx (Some (`of_message (IMessage.decay mid)))
-
-let get_for_instance ctx = 
-  get_for_owner ctx None
+let by_owner iid owner = 
+  let! id, _ = ohm $ get_or_create iid owner in 
+  return id
 
 let bot_get fid = 
   let! feed = ohm_req_or (return None) $ Tbl.get (IFeed.decay fid) in
-  let owner = Run.memo (_access (feed # ins) (feed # own)) in
+  let owner = Run.memo (_access (feed # iid) (feed # own)) in
   return $ Some {
     id     = fid ;
     data   = feed ;
@@ -203,28 +189,21 @@ let bot_get fid =
     admin  = return false
   } 
 
-let bot_find iid own = 
-  let  id = match own with 
-    | Some (`of_entity  eid) -> IEntity.to_id eid   
-    | Some (`of_message mid) -> IMessage.to_id mid 
-    | None                   -> IInstance.to_id iid
-  in 
+(* {{MIGRATION}} *)
 
-  let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
+let () = 
+  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
+  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
+  let  doc, id = found # doc, found # id in  
+  if doc # own <> Some (`Event evid) then
 
-  let! id = ohm begin
-    match found_opt with 
-      | Some item -> return $ IFeed.of_id (item # id)
-      | None -> (* Feed missing, create one *)
-	
-	let doc = object
-	  method t     = `Feed
-	  method own   = own
-	  method ins   = IInstance.decay iid
-	end in 
-	
-	Tbl.create doc 	
-  end in 
+    let changed = object
+      method t     = doc # t 
+      method iid   = doc # iid
+      method own   = Some (`Event evid)
+    end in 
 
-  return $ IFeed.Assert.bot id (* This is a bot-only access. *)
-
+    let! _ = ohm $ Tbl.set (IFeed.of_id id) changed in
+    return () 
+    
+  else return () 

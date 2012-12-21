@@ -40,7 +40,7 @@ let contents access =
 	let! status = ohm $ MMembership.status access gid in
 	let  fields = MGroup.Fields.get group <> [] in
 	return $ 
-	  CJoin.Self.render eid (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
+	  CJoin.Self.render (`Entity eid) (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
       end in 
 
       (* Url for sending messages ---------------------------------------------------------- *)
@@ -53,7 +53,7 @@ let contents access =
 
 	else 
 	  
-	  let! feed   = ohm $ MFeed.get_for_entity access eid in
+	  let! feed   = ohm $ MFeed.get_for_owner access (`Entity eid) in
 	  let! feed   = ohm $ MFeed.Can.read feed in
 	  let! feed   = req_or (return None) feed in 
 	  

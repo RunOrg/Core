@@ -6,7 +6,7 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_people begin fun parents entity access -> 
+let () = define UrlClient.Events.def_people begin fun parents event access -> 
   
   (* What to do if the group is not available ? *)
 
@@ -24,18 +24,18 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
 
   let cols_url = 
     Action.url UrlClient.Events.cols (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ] 
+      [ IEvent.to_string (MEvent.Get.id event) ] 
   in  
 
   let join_url aid = 
     Action.url UrlClient.Events.join (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ;
+      [ IEvent.to_string (MEvent.Get.id event) ;
 	IAvatar.to_string aid ] 
   in
   
   let invite_url = 
     Action.url UrlClient.Events.invite (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ]
+      [ IEvent.to_string (MEvent.Get.id event) ]
   in
   
   (* Return the box containing the grid. *)
@@ -48,6 +48,8 @@ let () = define UrlClient.Events.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access entity fail cols_url invite_url join_url wrapper
+  if MEvent.Get.draft event then fail else 
+    let gid = MEvent.Get.group event in
+    CGrid.box access gid fail cols_url invite_url join_url wrapper
 
 end

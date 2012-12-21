@@ -31,7 +31,7 @@ type t = <
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
   picture   : [`GetPic] IFile.id option ;
-  birthdate : string option ;
+  birthdate : Date.t option ;
   phone     : string option ;
   cellphone : string option ;
   address   : string option ;
@@ -98,7 +98,7 @@ class type user_full = object
   method firstname : string
   method lastname  : string
   method email     : string
-  method birthdate : string option
+  method birthdate : Date.t option
   method phone     : string option
   method cellphone : string option
   method address   : string option
@@ -113,7 +113,7 @@ end
 class type user_edit = object
   method firstname : string
   method lastname  : string
-  method birthdate : string option
+  method birthdate : Date.t option
   method phone     : string option
   method cellphone : string option
   method address   : string option

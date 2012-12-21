@@ -125,10 +125,10 @@ let css = function
   | `Unpaid    -> css_none
   | `Declined  -> css_none
 
-let render eid key ~gender ~kind ~status ~fields = 
+let render jid key ~gender ~kind ~status ~fields = 
 
   let action what = object
-    method url  = Action.url UrlClient.Join.ajax key eid  
+    method url  = Action.url UrlClient.Join.ajax key jid  
     method data = Json.Bool what
   end in
 
@@ -193,13 +193,18 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   let panic = return $ Action.javascript (Js.reload ()) res in 
 
-  let  eid    = req # args in 
-  let! entity = ohm_req_or panic $ MEntity.try_get access eid in
-  let! entity = ohm_req_or panic $ MEntity.Can.view entity in
-
-  let! () = true_or panic (not (MEntity.Get.draft entity)) in 
+  let  jid = req # args in 
   
-  let  gid    = MEntity.Get.group entity in
+  let! gid = ohm_req_or panic begin 
+    match jid with 
+      | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+		       let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in
+		       return $ Some (MEntity.Get.group entity) 
+      | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
+		      if MEvent.Get.draft event then return None else
+			return $ Some (MEvent.Get.group event) 
+  end in 
+
   let! group  = ohm_req_or panic $ MGroup.try_get access gid in
   let! fields = ohm $ MGroup.Fields.flatten gid in 
 
@@ -242,21 +247,23 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
   (* Extract the group and entity *)
 
-  let  eid    = req # args in 
-  let! entity = ohm_req_or panic $ MEntity.try_get access eid in
-  let! entity = ohm_req_or panic $ MEntity.Can.view entity in
+  let  jid = req # args in 
 
-  let! () = true_or panic (not (MEntity.Get.draft entity)) in 
-  
-  let  gid    = MEntity.Get.group entity in
+  let! gid, kind = ohm_req_or panic begin match jid with 
+    | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+		     let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in
+		     let  kind = match MEntity.Get.kind entity with
+		       | `Group -> `Group
+		       | other  -> `Forum
+		     in 
+		     return $ Some (MEntity.Get.group entity, kind) 
+    | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
+		    if MEvent.Get.draft event then return None else
+		      return $ Some (MEvent.Get.group event, `Event) 
+  end in 
+
   let! group  = ohm_req_or panic $ MGroup.try_get access gid in 
   let! fields = ohm $ MGroup.Fields.flatten gid in
-
-  let  kind = match MEntity.Get.kind entity with
-    | `Event -> `Event
-    | `Group -> `Group
-    | other  -> `Forum
-  in 
 
   let gender = None in 
 
@@ -276,7 +283,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
     let! status = ohm $ MMembership.status access gid in
     
-    let! html   = ohm $ render eid (access # instance # key) 
+    let! html   = ohm $ render jid (access # instance # key) 
       ~gender ~kind ~status ~fields:(fields <> []) in
 
     return $ Action.json ["replace" , Html.to_json html] res 
