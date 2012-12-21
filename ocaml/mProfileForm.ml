@@ -76,9 +76,21 @@ let as_myself pfid access =
   else
     return None
 
+let as_parent pfid access = 
+  let! info = ohm_req_or (return None) $ get pfid in 
+  let! pid   = ohm $ MAvatar.profile info.Info.aid in 
+  let! is_parent = ohm $ MProfile.is_parent (access # self) pid in 
+  if not info.Info.hidden && is_parent then
+    (* I can view this non-hidden form about my child's profile *)
+    return $ Some (IProfileForm.Assert.view pfid) 
+  else
+    return None
+
 let access pfid access = 
   match IIsIn.Deduce.is_admin (access # isin) with 
     | Some _ -> return $ `Edit (as_admin pfid ())
-    | None   -> let! pfid = ohm_req_or (return `None) $ as_myself pfid access in 
-		return $ `View pfid
-
+    | None   -> let! pfid_opt = ohm $ as_myself pfid access in 
+		match pfid_opt with
+		  | Some pfid -> return $ `View pfid
+		  | None -> let! pfid = ohm_req_or (return `None) $ as_parent pfid access in
+			    return $ `View pfid

@@ -4,10 +4,11 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Admin  = CProfile_admin
 module Groups = CProfile_groups
 module Forms  = CProfile_forms
 
-let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access -> 
+let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Profile.def_home begin fun access ->
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 
@@ -36,9 +37,16 @@ let () = CClient.define ~back:(Action.url UrlClient.Members.home) UrlClient.Prof
       Some `Files 
     ] in 
 
+    let admin = match CAccess.admin access with 
+      | None -> None
+      | Some _ -> Some (Action.url UrlClient.Profile.admin (access # instance # key) 
+			  [IAvatar.to_string aid])
+    in
+
     let render body = Asset_Profile_Page_Main.render (object
       method menu = menu
       method body = body 
+      method admin = admin
     end) in 
 
     match seg with 
