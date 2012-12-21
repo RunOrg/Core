@@ -339,7 +339,7 @@ let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
     let! entity = ohm_req_or (return ()) $ Tbl.get eid in 
     let  evid   = IEvent.of_id (IEntity.to_id eid) in
     let! exists = ohm $ MEvent_migrate.exists evid in 
-    if entity.E.kind <> `Event || entity.E.deleted = None then return () else begin      
+    if entity.E.kind <> `Event || entity.E.deleted <> None then return () else begin      
       
       (* Migrate entities to events *) 
       let! () = ohm (if exists then return () else begin
