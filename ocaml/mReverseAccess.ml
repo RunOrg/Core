@@ -6,8 +6,6 @@ open BatPervasives
 
 let reverse iid access = 
 
-  let of_entity e a = MAccess.of_entity e a in
-
   let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
   
   let by_group gid state = 
@@ -20,8 +18,6 @@ let reverse iid access =
       let! list = ohm $ MMembership.InGroup.all gid state in
       return $ List.map snd list
   in
-
-  let by_message mid = return [] in
 
   let rec aux = function 
     | `Nobody -> return []
@@ -36,8 +32,6 @@ let reverse iid access =
     | `TokOnly t -> let! inner  = ohm $ aux t in
 		    let! tokens = ohm $ by_status `Token in
 		    return $ List.filter (flip List.mem tokens) inner
-    | `Entity (e,a) -> let! access = ohm $ of_entity e a in aux access
-    | `Message m -> by_message m 
   in
 
   let! list = ohm $ Run.list_map aux access in

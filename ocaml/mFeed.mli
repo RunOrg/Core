@@ -3,27 +3,22 @@
 type 'relation t 
 
 val try_get : 'any # MAccess.context -> 'a IFeed.id -> 'a t option O.run
-val get_for_entity   : 'any # MAccess.context -> 'a IEntity.id  -> [`Unknown] t O.run
-val get_for_instance : 'any # MAccess.context                   -> [`Unknown] t O.run
-val get_for_message  : 'any # MAccess.context -> 'a IMessage.id -> [`Unknown] t O.run
+val get_for_owner : 'any # MAccess.context -> 'a IFeedOwner.id  -> [`Unknown] t O.run
 
 val bot_get : [`Bot] IFeed.id -> [`Bot] t option O.run
 
-val bot_find : 
-     IInstance.t
-  -> [`of_entity of IEntity.t|`of_message of IMessage.t] option
-  -> [`Bot] IFeed.id O.run
+val by_owner : IInstance.t -> 'a IFeedOwner.id -> IFeed.t O.run
 
 module Get : sig
-  val notified : [`Bot] t -> MAccess.t list O.run
+
+  val id    : 'any t -> 'any IFeed.id
+
+  val notified    : [`Bot] t -> MAccess.t list O.run
   val read_access : [`Bot] t -> MAccess.t list O.run
-  val id     : 'any t -> 'any IFeed.id
-  val owner :
-       'any t
-    -> [ `of_instance of IInstance.t
-       | `of_entity of IEntity.t
-       | `of_message of IMessage.t] 
+
+  val owner : 'any t -> IFeedOwner.t
   val instance : 'any t -> IInstance.t
+
 end
 
 module Can : sig

@@ -53,19 +53,14 @@ let local_fields local =
   ) local) in
   return ((`Status,`Status) :: (`Date,`Date) :: list)
 
-let box access entity render = 
+let box access gid render = 
   
   let fail = render (return ignore) in 
 
   (* Extract the AvatarGrid identifier *)
 
-  let  draft  = MEntity.Get.draft entity in 
-
-  let  gid = MEntity.Get.group entity in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
-  let  group = if draft then None else group in   
-  let! group = req_or fail group in 
+  let! group = ohm_req_or fail $ O.decay (Run.opt_bind MGroup.Can.list group) in
 
   let  grid  = MGroup.Get.list group in 
   let  lid   = Grid.list_id grid in
@@ -131,10 +126,12 @@ let box access entity render =
       let group gid = 
 	let  none   = AdLib.get `Grid_Source_Group_Unknown in
 	let! group  = ohm_req_or none $ O.decay (MGroup.try_get access gid) in 
-	let! eid    = req_or none (MGroup.Get.entity group) in
-	let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
-	let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
-	CEntityUtil.name entity 
+	match MGroup.Get.owner group with 
+	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
+			   let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
+			   CEntityUtil.name entity 
+	  | `Event eid -> let! event = ohm_req_or none $ MEvent.view ~access eid in
+			  MEvent.Get.fullname event
       in
 
       let g gid x = 

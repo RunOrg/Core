@@ -9,8 +9,9 @@ module BecomeAdmin = CNotifySend_becomeAdmin
 module CommentYourItem = CNotifySend_commentYourItem
 module CommentItem = CNotifySend_commentItem
 module PublishItem = CNotifySend_publishItem
-module EntityInvite = CNotifySend_entityInvite
-module EntityRequest = CNotifySend_entityRequest
+module EventInvite = CNotifySend_eventInvite
+module EventRequest = CNotifySend_eventRequest
+module GroupRequest = CNotifySend_groupRequest
 module CanInstall = CNotifySend_canInstall
 
 let () = 
@@ -23,8 +24,9 @@ let () =
     | `NewComment (`ItemAuthor,cid) -> CommentYourItem.send url uid cid
     | `NewComment (`ItemFollower,cid) -> CommentItem.send url uid cid
     | `NewWallItem (_,itid) -> PublishItem.send url uid itid
-    | `EntityInvite (eid,aid) -> EntityInvite.send url uid eid aid 
-    | `EntityRequest (eid,aid) -> EntityRequest.send url uid eid aid 
+    | `EventInvite (eid,aid) -> EventInvite.send url uid eid aid 
+    | `EventRequest (eid,aid) -> EventRequest.send url uid eid aid 
+    | `GroupRequest (eid,aid) -> GroupRequest.send url uid eid aid 
     | `CanInstall iid -> CanInstall.send url uid iid 
     | `NewUser _ 
     | `NewFavorite _ 

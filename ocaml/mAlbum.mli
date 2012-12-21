@@ -3,12 +3,13 @@
 type 'relation t
 
 val try_get        : 'any # MAccess.context -> 'a IAlbum.id  -> 'a t option O.run
+val get_for_owner  : 'any # MAccess.context -> 'a IAlbumOwner.id  -> [`Unknown] t O.run 
 
-val get_for_entity : 'any # MAccess.context -> 'a IEntity.id -> [`Unknown] t O.run
+val by_owner : 'a IInstance.id -> 'b IAlbumOwner.id -> IAlbum.t O.run
 
 module Get : sig
-  val id     : 'any t -> 'any IAlbum.id
-  val entity : 'any t -> IEntity.t option 
+  val id       : 'any t -> 'any IAlbum.id
+  val owner    : 'any t -> IAlbumOwner.t
   val instance : 'any t -> IInstance.t
   val write_instance : [`Write] t -> [`Upload] IInstance.id
 end

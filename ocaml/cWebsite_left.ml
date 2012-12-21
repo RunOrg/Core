@@ -14,17 +14,14 @@ let render ?(calendar=true) cuid key iid =
     
       let  url  = Action.url UrlClient.calendar key () in 
       
-      let! future = ohm $ MEntity.All.get_public_future iid in 
-      let! list = ohm $ Run.list_filter begin fun entity ->       
-	let  eid  = IEntity.decay $ MEntity.Get.id entity in 
+      let! future = ohm $ MEvent.All.future iid in 
+      let! list = ohm $ Run.list_filter begin fun event ->       
+	let  eid  = IEvent.decay $ MEvent.Get.id event in 
 	let  url  = Action.url UrlClient.event key eid in 
-	let! pic  = ohm $ CPicture.small_opt (MEntity.Get.picture entity) in
-	let! name = req_or (return None) begin match MEntity.Get.name entity with 
-	  | Some (`text  t) -> Some t
-	  | _               -> None
-	end in
-	let! date = req_or (return None) $ MEntity.Get.date entity in
-	let! date = req_or (return None) $ MFmt.float_of_date date in
+	let! pic  = ohm $ CPicture.small_opt (MEvent.Get.picture event) in
+	let! name = req_or (return None) (MEvent.Get.name event) in
+	let! date = req_or (return None) $ MEvent.Get.date event in
+	let  date = Date.to_timestamp date in  
 	return $ Some (object
 	  method pic  = pic
 	  method name = name

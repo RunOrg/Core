@@ -8,15 +8,20 @@ module DelPickArgs = Fmt.Make(struct
   type json t = (IAvatar.t list) 
 end)
 
-let picker kind back access entity wrap = 
+type delegator = <
+  get : IAvatar.t list ;
+  set : IAvatar.t list -> unit O.run
+>
+
+let picker kind back access deleg wrap = 
 
   let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
 
-    let aids = BatOption.default [] (DelPickArgs.of_json_safe json) in
+    let aids = 
+      (BatOption.default [] (DelPickArgs.of_json_safe json)) @ (deleg # get)
+    in
 
-    let admin = MAccess.add_delegates aids (MEntity.Get.admin entity) in
-    let self  = access # self in 
-    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
+    let! () = ohm $ O.decay (deleg # set aids) in
 
     return $ Action.javascript (Js.redirect ~url:back ()) res
 
@@ -34,14 +39,13 @@ let picker kind back access entity wrap =
 
   end
 
-let list kind pick access entity wrap = 
+let list kind pick access deleg wrap = 
 
-  let delegates = MAccess.delegates (MEntity.Get.admin entity) in
+  let delegates = deleg # get in
 
   let! remove = O.Box.react IAvatar.fmt begin fun aid _ _ res ->
-    let admin = MAccess.remove_delegates [aid] (MEntity.Get.admin entity) in
-    let self  = access # self in 
-    let! () = ohm $ O.decay (MEntity.set_admins self entity admin) in
+    let aids = List.filter (fun aid' -> aid' <> aid) delegates in
+    let! () = ohm $ O.decay (deleg # set aids) in
     return res
   end in 
   

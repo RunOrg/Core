@@ -10,20 +10,21 @@ module PublishFmt = Fmt.Make(struct
   type json t = [ `Private | `Normal | `Public ]
 end)
 
-let template draft tmpl = 
+let template draft = 
 
   let inner = 
-    OhmForm.begin_object (fun ~name ~publish ~data -> (object
-      method name = name
+    OhmForm.begin_object (fun ~name ~publish ~date ~address ~page -> (object
+      method name    = name
       method publish = publish
-      method data = data
+      method date    = date
+      method address = address
+      method page    = page 
     end))
       
     |> OhmForm.append (fun f name -> return $ f ~name) 
 	(VEliteForm.text
 	   ~label:(AdLib.get `Event_Edit_Name)
-	   (fun (entity,_) -> let! name = req_or (return "") $ MEntity.Get.name entity in
-			      TextOrAdlib.to_string name)
+	   (fun (event,_) -> return $ BatOption.default "" (MEvent.Get.name event))
 	   (OhmForm.required (AdLib.get `Event_Edit_Required)))
 	
     |> OhmForm.append (fun f publish -> return $ f ~publish) 
@@ -39,42 +40,28 @@ let template draft tmpl =
 		      [ `Public,  Some `Website ;
 			`Normal,  None ; 
 			`Private, Some `Secret ])
-	   (fun (entity,_) -> return $ Some (MEntity.Get.real_access entity))
+	   (fun (event,_) -> return $ Some (MEvent.Get.vision event))
 	   OhmForm.keep)
 	
-    |> OhmForm.append (fun f data -> return $ f ~data) 
-	(List.fold_left (fun acc field -> 
-	  acc |> OhmForm.append (fun json result -> return $ (field # key,result) :: json) 
-	      begin match field # edit with 
-		| `Input -> 
-		  (VEliteForm.text 
-		     ~label:(AdLib.get (`PreConfig (field # label)))
-		     ?detail:(BatOption.map (fun d -> AdLib.get (`PreConfig d)) (field # detail))
-		     (fun (_,data) -> return begin 
-		       try Json.to_string (List.assoc (field # key) data)
-		       with _ -> ""
-		     end) 
-		     (OhmForm.keep))
-		| `Date -> 
-		  (VEliteForm.date 
-		     ~label:(AdLib.get (`PreConfig (field # label)))
-		     ?detail:(BatOption.map (fun d -> AdLib.get (`PreConfig d)) (field # detail))
-		     (fun (_,data) -> return begin 
-		       try Json.to_string (List.assoc (field # key) data)
-		       with _ -> ""
-		     end)		   		   
-		     (OhmForm.keep))
-		| `Textarea ->
-		  (VEliteForm.textarea 
-		     ~label:(AdLib.get (`PreConfig (field # label)))
-		     ?detail:(BatOption.map (fun d -> AdLib.get (`PreConfig d)) (field # detail))
-		     (fun (_,data) -> return begin 
-		       try Json.to_string (List.assoc (field # key) data)
-		       with _ -> ""
-		     end)
-		     (OhmForm.keep)) 
-	      end
-	 ) (OhmForm.begin_object []) (PreConfig_Template.fields tmpl))  
+    |> OhmForm.append (fun f date -> return $ f ~date) 
+	(VEliteForm.date 
+	   ~label:(AdLib.get `Event_Edit_Date)
+	   (fun (event,_) -> return (BatOption.default "" 
+				       (BatOption.map Date.to_compact (MEvent.Get.date event))))
+	   (OhmForm.keep))
+	
+    |> OhmForm.append (fun f address -> return $ f ~address) 
+	(VEliteForm.text 
+	   ~label:(AdLib.get `Event_Edit_Address)
+	   (fun (_,data) -> return (BatOption.default "" (MEvent.Data.address data)))
+	   (OhmForm.keep))
+	
+    |> OhmForm.append (fun f page -> return $ f ~page) 
+	(VEliteForm.rich     
+	   ~label:(AdLib.get `Event_Edit_Page)
+	   (fun (_,data) -> return (Html.to_html_string (MRich.OrText.to_html (MEvent.Data.page data))))
+	   (OhmForm.keep))
+	
   in
 
   let html = 
@@ -85,11 +72,11 @@ let template draft tmpl =
 
   OhmForm.wrap "" html inner
 
-let () = define UrlClient.Events.def_edit begin fun parents entity access -> 
+let () = define UrlClient.Events.def_edit begin fun parents event access -> 
   
   let! save = O.Box.react Fmt.Bool.fmt begin fun publish json _ res -> 
     
-    let  template = template None (MEntity.Get.template entity) in
+    let  template = template None in
     let  src  = OhmForm.from_post_json json in 
     let  form = OhmForm.create ~template ~source:src in
         
@@ -107,41 +94,54 @@ let () = define UrlClient.Events.def_edit begin fun parents entity access ->
 
     let name = match BatString.strip result # name with 
       | "" -> None
-      | str -> Some (`text str) 
+      | str -> Some str
     in
 
-    let data = 
-      List.map 
-	(fun (k,v) -> let v = BatString.strip v in 
-		      k, (if v = "" then Json.Null else Json.String v))
-	(result # data) 
+    let address = match BatString.strip result # address with
+      | "" -> None
+      | str -> Some str
     in
+
+    let date = Date.of_compact (result # date) in 
     
-    let view = BatOption.default `Normal (result # publish) in
+    let page = `Rich (MRich.parse (result # page)) in
 
-    let! () = ohm $ O.decay begin
-      MEntity.try_update (access # self) entity ~draft:(not publish) ~name ~data ~view
-    end in
+    let vision = BatOption.default `Normal (result # publish) in
+
+    let! () = ohm $ MEvent.Set.info
+      event (access # self) ~draft:(not publish) ~name ~date ~page ~vision ~address
+    in
 
     (* Redirect to main page *)
 
     let url = 
-      if MEntity.Get.draft entity && publish then parents # people # url
+      if MEvent.Get.draft event && publish then parents # people # url
       else parents # home # url 
     in 
+
     return $ Action.javascript (Js.redirect url ()) res
 
   end in   
   
   O.Box.fill begin 
 
-    let! data = ohm begin
-      let! t = ohm_req_or (return []) $ O.decay (MEntity.Data.get (MEntity.Get.id entity)) in
-      return $ MEntity.Data.data t
-    end in
+    let wrap body = 
+      Asset_Admin_Page.render (object
+	method parents = [ parents # home ; parents # admin ] 
+	method here = parents # edit # title
+	method body = body
+      end)
+    in
+
+    let fail = 
+      (* TODO : fill in this error page *)
+      Asset_Admin_Error.render () 
+    in
+
+    let! data = ohm_req_or (wrap fail) $ MEvent.Get.data event in 
       
     let draft =
-      if MEntity.Get.draft entity then 
+      if MEvent.Get.draft event then 
 	Some (object
 	  method draft   = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint save false)
 	  method publish = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint save true)
@@ -150,15 +150,11 @@ let () = define UrlClient.Events.def_edit begin fun parents entity access ->
 	None
     in
 
-    let template = template draft (MEntity.Get.template entity) in
-    let form = OhmForm.create ~template ~source:(OhmForm.from_seed (entity,data)) in
+    let template = template draft in
+    let form = OhmForm.create ~template ~source:(OhmForm.from_seed (event,data)) in
     let url  = OhmBox.reaction_endpoint save true in
         
-    Asset_Admin_Page.render (object
-      method parents = [ parents # home ; parents # admin ] 
-      method here = parents # edit # title
-      method body = Asset_EliteForm_Form.render (OhmForm.render form url)
-    end)
+    wrap (Asset_EliteForm_Form.render (OhmForm.render form url))
 
   end
 

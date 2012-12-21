@@ -15,13 +15,12 @@ end
 
 module Data = Fmt.Make(struct
   type json t = <
-    t : MType.t ;
-    ins : IInstance.t ;
-    owner : [`entity "e" of IEntity.t]
+    iid   "ins" : IInstance.t ;
+    owner       : [ `Entity "e" of IEntity.t | `Event "ev" of IEvent.t ]
   >
 end)
 
-module MyTable = CouchDB.Table(MyDB)(IAlbum)(Data)
+module Tbl = CouchDB.Table(MyDB)(IAlbum)(Data)
 
 type 'relation t = 
     {
@@ -32,41 +31,41 @@ type 'relation t =
       admin : bool O.run ;
     }
 
-let _make context id data = 
+let _make access id data = 
   let owner = Run.memo begin
     match data # owner with 
-      | `entity  eid -> begin
-	let nil = (fun _ -> `Nobody) in
-	let! entity = ohm_req_or (return nil) $ MEntity.try_get context eid in
-	return (fun what -> MEntity.Satellite.access entity (`Album what))
-      end
+      | `Entity eid -> let nil = (fun _ -> `Nobody) in
+		       let! entity = ohm_req_or (return nil) $ MEntity.try_get access eid in
+		       return (fun what -> MEntity.Satellite.access entity (`Album what))
+      | `Event  eid -> let nil = (fun _ -> `Nobody) in
+		       let! event = ohm_req_or (return nil) $ MEvent.get ~access eid in
+		       return (fun what -> MEvent.Satellite.access event (`Album what))
   end in
   {
     id    = id ;
     data  = data ;
-    read  = ( let! f = ohm owner in MAccess.test context [ f `Read ; f `Write ; f `Manage ] ) ;
-    write = ( let! f = ohm owner in MAccess.test context [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test context [                      f `Manage ] ) ;
+    read  = ( let! f = ohm owner in MAccess.test access [ f `Read ; f `Write ; f `Manage ] ) ;
+    write = ( let! f = ohm owner in MAccess.test access [           f `Write ; f `Manage ] ) ;
+    admin = ( let! f = ohm owner in MAccess.test access [                      f `Manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
 
 let try_get ctx id = 
-  let! album_opt = ohm (MyTable.get (IAlbum.decay id)) in
+  let! album_opt = ohm (Tbl.get (IAlbum.decay id)) in
   return (BatOption.map (_make ctx id) album_opt)
 
 module Get = struct
 
   let id t = t.id
 
-  let entity t = match t.data # owner with 
-    | `entity eid -> Some eid
+  let owner t = t.data # owner
 
-  let instance t = t.data # ins
+  let instance t = t.data # iid
 
   let write_instance t = 
     (* I can upload, since I can write to the album *)
-    t.data # ins |> IInstance.Assert.upload
+    t.data # iid |> IInstance.Assert.upload
 
 end
 
@@ -115,35 +114,56 @@ end
 
 (* Access by entity ------------------------------------------------------------------------- *)
 
-module ByEntityView = CouchDB.DocView(struct
-  module Key = IEntity
+module ByOwnerView = CouchDB.DocView(struct
+  module Key = Id
   module Value = Fmt.Unit
   module Doc = Data
   module Design = Design
-  let name = "by_entity"
+  let name = "by_owner"
   let map = "if (doc.t == 'albm' && doc.owner) emit(doc.owner[1]);"
 end)
 
-let get_for_entity ctx eid =   
+let get_or_create iid owner = 
 
-  let  eid = IEntity.decay eid in 
-  let! found_opt = ohm (ByEntityView.doc eid |> Run.map Util.first) in
+  let id = IAlbumOwner.to_id owner in 
 
-  let create_if_missing =  
-    match found_opt with 
-      | Some item -> return (IAlbum.of_id (item # id), item # doc)
-      | None -> (* MAlbum missing, create one *)
+  let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
 
-	let doc = object
-	  method t     = `Album
-	  method owner = `entity eid
-	  method ins   = IIsIn.instance (ctx # isin) |> IInstance.decay 
-	end in 
+  match found_opt with 
+    | Some item -> return (IAlbum.of_id (item # id), item # doc)
+    | None -> (* Album missing, create one *)
+      
+      let doc = object
+	method owner = IAlbumOwner.decay owner
+	method iid   = IInstance.decay iid 
+      end in 
+      
+      let! id = ohm $ Tbl.create doc in
+      return (id, doc) 
 
-	let! id = ohm $ MyTable.create doc in
-	return (id, doc) 
-  in
-  
-  let! id, doc = ohm create_if_missing in
+let by_owner iid owner = 
+  let! id, _ = ohm $ get_or_create iid owner in 
+  return id 
 
+let get_for_owner ctx owner =   
+  let  iid = IIsIn.instance (ctx # isin) in
+  let! id, doc = ohm $ get_or_create iid owner in
   return (_make ctx id doc)
+
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
+  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
+  let  doc, id = found # doc, found # id in  
+  if doc # owner <> `Event evid then
+
+    let changed = object
+      method iid   = doc # iid
+      method owner = `Event evid
+    end in 
+
+    let! _ = ohm $ Tbl.set (IAlbum.of_id id) changed in
+    return () 
+    
+  else return () 

@@ -29,7 +29,6 @@ type t = [
 | `MessageSubscription
 | `GroupMessage
 | `News
-| `Album
 | `TemplateVersion
 | `VerticalVersion
 | `PreConfigNamer

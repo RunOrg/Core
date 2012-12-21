@@ -78,18 +78,12 @@ let status_edit aid mid access kind group profile = fun edit _ self res ->
   let! html = ohm $ Top.render kind profile mbr.MMembership.status self in   
   return $ Action.json [ "top", Html.to_json html ] res
 
-let box entity access fail wrapper = 
+let box kind gid access fail wrapper = 
 
   let! aid = O.Box.parse IAvatar.seg in 
 
-  let  draft  = MEntity.Get.draft entity in 
-
-  let  kind = MEntity.Get.kind entity in 
-
-  let  gid = MEntity.Get.group entity in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.write group) in
-  let  group = if draft then None else group in   
   let! group = req_or fail group in 
 
   let! profile = ohm $ O.decay (CAvatar.mini_profile aid) in

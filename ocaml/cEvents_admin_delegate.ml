@@ -6,7 +6,12 @@ open BatPervasives
 
 open CEvents_admin_common
 
-let () = define UrlClient.Events.def_delpick begin fun parents entity access ->
+let delegator event access = object
+  method get = MEvent.Get.admins event
+  method set = MEvent.Set.admins event (access # self) 
+end
+
+let () = define UrlClient.Events.def_delpick begin fun parents event access ->
 
   let back = parents # delegate # url in
 
@@ -20,11 +25,11 @@ let () = define UrlClient.Events.def_delpick begin fun parents entity access ->
     end
   in
 
-  CDelegate.picker `Event back access entity wrap 
+  CDelegate.picker `Event back access (delegator event access) wrap 
 
 end
 
-let () = define UrlClient.Events.def_delegate begin fun parents entity access -> 
+let () = define UrlClient.Events.def_delegate begin fun parents event access -> 
 
   let pick = Some (parents # delpick # url) in 
 
@@ -38,6 +43,6 @@ let () = define UrlClient.Events.def_delegate begin fun parents entity access ->
     end
   in
 
-  CDelegate.list `Event pick access entity wrap
+  CDelegate.list `Event pick access (delegator event access) wrap
 
 end

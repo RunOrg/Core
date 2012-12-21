@@ -8,28 +8,28 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 
-  let! eid = O.Box.parse IEntity.seg in
+  let! eid = O.Box.parse IEvent.seg in
 
-  let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
-  let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
+  let! event = ohm_req_or e404 $ MEvent.view ~access eid in
+  let! data  = ohm_req_or e404 $ MEvent.Get.data event in 
 
-  let! admin  = ohm $ O.decay (MEntity.Can.admin entity ) in
+  let! admin  = ohm $ MEvent.Can.admin event in
 
-  let  draft  = MEntity.Get.draft entity in 
+  let  draft  = MEvent.Get.draft event in 
 
-  let! feed   = ohm $ O.decay (MFeed.get_for_entity access eid) in
+  let! feed   = ohm $ O.decay (MFeed.get_for_owner access (`Event eid)) in
   let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
   let  feed   = if draft then None else feed in
 
-  let! album  = ohm $ O.decay (MAlbum.get_for_entity access eid) in
+  let! album  = ohm $ O.decay (MAlbum.get_for_owner access (`Event eid)) in
   let! album  = ohm $ O.decay (MAlbum.Can.read album) in
   let  album  = if draft then None else album in 
 
-  let! folder = ohm $ O.decay (MFolder.get_for_entity access eid) in
+  let! folder = ohm $ O.decay (MFolder.get_for_owner access (`Event eid)) in
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
   let  folder = if draft then None else folder in 
 
-  let  gid = MEntity.Get.group entity in
+  let  gid = MEvent.Get.group event in
   let! group = ohm $ O.decay (MGroup.try_get access gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
   let  group = if draft then None else group in   
@@ -39,7 +39,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     let! the_seg = O.Box.parse UrlClient.Events.tabs in
 
     let! navig = ohm $ Run.list_map (fun seg -> 
-      let! url = ohm $ O.Box.url [ fst IEntity.seg eid ; fst UrlClient.Events.tabs seg ] in
+      let! url = ohm $ O.Box.url [ fst IEvent.seg eid ; fst UrlClient.Events.tabs seg ] in
       return (object
 	method url   = url
 	method dark  = seg = `Album
@@ -48,7 +48,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 	method count = "" 
 	method label = seg
       end))
-      (BatList.filter_map identity 
+      (BatList.filter_map identity
 	 [ Some `Wall ;
 	   ( if group  <> None then Some `People else None ) ;
 	   ( if album  <> None then Some `Album  else None ) ;
@@ -65,7 +65,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     let url =
       if admin <> None then 
 	Some (fun aid -> Action.url UrlClient.Events.join (access # instance # key) 
-	  [ IEntity.to_string eid ; IAvatar.to_string aid ])
+	  [ IEvent.to_string eid ; IAvatar.to_string aid ])
       else
 	None
     in
@@ -85,22 +85,17 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
     let! now  = ohmctx (#time) in
 
-    let  tmpl = MEntity.Get.template entity in 
-    let! name = ohm $ CEntityUtil.name entity in
-    let! pic  = ohm $ CEntityUtil.pic_large entity in
-    let! desc = ohm $ CEntityUtil.desc entity in
-    let  date = BatOption.bind MFmt.float_of_date (MEntity.Get.date entity) in 
-    let! loc  = ohm begin 
-      match PreConfig_Template.Meaning.location tmpl with None -> return None | Some field -> 
-	let! data = ohm $ CEntityUtil.data entity in
-	return (try Some (Json.to_string (List.assoc field data)) with _ -> None)
-    end in 
+    let! name = ohm $ MEvent.Get.fullname event in
+    let! pic  = ohm $ CPicture.large (MEvent.Get.picture event) in
+    let  page = MEvent.Data.page data in 
+    let  date = BatOption.map Date.to_timestamp (MEvent.Get.date event) in 
+    let  address = MEvent.Data.address data in 
     
     let location = 
-      match loc with None -> None | Some addr -> 
+      match address with None -> None | Some address -> 
 	Some (object
-	  method url  = "http://maps.google.fr/maps?f=q&hl=fr&q="^addr
-	  method name = addr
+	  method url  = "http://maps.google.fr/maps?f=q&hl=fr&q="^address
+	  method name = address
 	 end)
     in
 
@@ -109,7 +104,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     let! join = ohm begin match group with None -> return None | Some group ->      
       let! status = ohm $ MMembership.status access gid in
       let  fields = MGroup.Fields.get group <> [] in
-      return $ Some (CJoin.Self.render eid  (access # instance # key) 
+      return $ Some (CJoin.Self.render (`Event eid) (access # instance # key) 
 		       ~gender:None ~kind:`Event ~status ~fields)
     end in 
 
@@ -117,14 +112,14 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
     let pic_change = 
       if admin <> None then 
-	Some (Action.url UrlClient.Events.picture (access # instance # key) [ IEntity.to_string eid ] )
+	Some (Action.url UrlClient.Events.picture (access # instance # key) [ IEvent.to_string eid ] )
       else 
 	None
     in
 
     let invite = 
       if admin <> None && not draft then 
-	Some (Action.url UrlClient.Events.invite (access # instance # key) [ IEntity.to_string eid ] )
+	Some (Action.url UrlClient.Events.invite (access # instance # key) [ IEvent.to_string eid ] )
       else 
 	None
     in
@@ -133,7 +128,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       if admin <> None then 
 	Some (object
 	  method invite = invite
-	  method url = Action.url UrlClient.Events.admin (access # instance # key) [ IEntity.to_string eid ]
+	  method url = Action.url UrlClient.Events.admin (access # instance # key) [ IEvent.to_string eid ]
 	end)
       else 
 	None
@@ -149,8 +144,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       method join       = join
       method pic_change = pic_change 
       method date       = BatOption.map (fun t -> (t,now)) date
-      method status     = MEntity.Get.status entity 
-      method desc       = BatOption.map (OhmText.cut ~ellipsis:"…" 180) desc
+      method status     = BatOption.map (fun s -> (s :> VStatus.t)) (MEvent.Get.status event)
+      method desc       = Some (MRich.OrText.to_text page |> OhmText.cut ~ellipsis:"…" 180)
       method time       = date
       method location   = location
       method details    = "/"

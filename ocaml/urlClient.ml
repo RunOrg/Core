@@ -46,7 +46,7 @@ let article_url key b =
 (* Public calendar ========================================================================== *)
 
 let calendar, def_calendar = O.declare O.client "calendar" A.none
-let event,    def_event    = O.declare O.client "calendar" (A.r IEntity.arg)
+let event,    def_event    = O.declare O.client "calendar" (A.r IEvent.arg)
 
 (* Intranet ================================================================================= *)
 
