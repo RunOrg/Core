@@ -10,7 +10,8 @@ open UrlClient_common
 
 let home,     def_home     = child UrlClient_members.def_home "profile"
 let admin,    def_admin    = child def_home  "p/admin"
-let parents,  def_parents  = child def_admin "p/parents"
+let viewers,  def_viewers  = child def_admin "p/viewers"
+let viewPick, def_viewPick = child def_admin "p/view-pick"
 
 let newForm,  def_newForm  = child def_home "p/new-form"
 let editForm, def_editForm = child def_home "p/edit-form"

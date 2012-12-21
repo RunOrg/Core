@@ -27,8 +27,10 @@ end
 
 | `Profile_Admin -> "Modifier"
 
-| `Profile_Parents_Title -> "Parents"
-| `Profile_Parents_Link -> "Parents et responsables légaux"
-| `Profile_Parents_Sub -> "Les parents peuvent voir les profils de leurs enfants"
+| `Profile_Viewers_Title -> "Parents"
+| `Profile_Viewers_Link -> "Parents et responsables légaux"
+| `Profile_Viewers_Sub -> "Les parents peuvent voir les profils de leurs enfants"
+
+| `Profile_ViewPick_Title -> "Ajouter"
 
 | `Profile_Admin_Title -> "Administration"

@@ -6,6 +6,8 @@ open BatPervasives
 
 open CProfile_admin_common
 
+module Viewers = CProfile_admin_viewers
+
 let () = define UrlClient.Profile.def_admin begin fun parents entity access -> 
 
   O.Box.fill begin 
@@ -13,9 +15,9 @@ let () = define UrlClient.Profile.def_admin begin fun parents entity access ->
 
       Some (object
 	method img      = VIcon.Large.tree
-	method url      = parents # parents # url 
-	method title    = AdLib.get `Profile_Parents_Link
-	method subtitle = Some (AdLib.get `Profile_Parents_Sub)
+	method url      = parents # viewers # url 
+	method title    = AdLib.get `Profile_Viewers_Link
+	method subtitle = Some (AdLib.get `Profile_Viewers_Sub)
        end) ;
       
     ]) in

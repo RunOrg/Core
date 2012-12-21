@@ -19,8 +19,10 @@
 
 | `Profile_Admin
 
-| `Profile_Parents_Title
-| `Profile_Parents_Link
-| `Profile_Parents_Sub
+| `Profile_Viewers_Title
+| `Profile_Viewers_Link
+| `Profile_Viewers_Sub
+
+| `Profile_ViewPick_Title 
 
 | `Profile_Admin_Title

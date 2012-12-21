@@ -18,6 +18,7 @@ let parents title key aid = object
     method url   = Action.url home key [ IAvatar.to_string aid ]
   end
   method admin    = make `Profile_Admin_Title    admin    key aid 
-  method parents  = make `Profile_Parents_Title  parents  key aid
+  method viewers  = make `Profile_Viewers_Title  viewers  key aid
+  method viewpick = make `Profile_ViewPick_Title viewPick key aid
 end
 

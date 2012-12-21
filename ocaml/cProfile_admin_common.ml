@@ -16,7 +16,7 @@ let define d box = CClient.define d begin fun access ->
 
   (* Administrators can edit profiles *)  
   let! admin = req_or forbidden (CAccess.admin access) in
-  let  pid   = IProfile.Assert.admin in
+  let  pid   = IProfile.Assert.admin pid in
 
   let  key = access # instance # key in
   let  parents = Parents.parents name key aid in 
