@@ -66,3 +66,5 @@ type details = <
 >
 
 val details : [`IsSelf] IProfile.id -> details option O.run
+
+val is_parent : 'a IAvatar.id -> 'any IProfile.id -> bool O.run

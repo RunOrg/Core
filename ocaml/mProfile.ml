@@ -439,6 +439,12 @@ module Sharing = struct
 
 end
 
+(* Is a given person a parent of that profile ? *)
+
+let is_parent aid pid = 
+  let! profile = ohm_req_or (return false) $ Tbl.get (IProfile.decay pid) in 
+  return (List.mem (IAvatar.decay aid) profile.Profile.parents) 
+
 (* Obliterate all profiles of a deleted user. *)
 
 module ByUser = CouchDB.DocView(struct
@@ -463,3 +469,4 @@ let _ =
     return () 
   in
   Sig.listen MUser.Signals.on_obliterate on_user_obliterated
+
