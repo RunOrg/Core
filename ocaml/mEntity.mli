@@ -192,6 +192,3 @@ module Backdoor : sig
 
 end
 
-(* {{MIGRATION}} *)
-
-val on_migrate : (IEntity.t * IEvent.t * IGroup.t, unit O.run) Ohm.Sig.channel
