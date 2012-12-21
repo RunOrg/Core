@@ -62,6 +62,14 @@ include Fmt.Make(struct
   let json_of_t d = Json.String (to_iso8601 d) 
 end)
 
+module RevCompat = Fmt.Make(struct
+  type t = date option 
+  let t_of_json json = of_json_safe json 
+  let json_of_t = function 
+    | None -> Json.Null
+    | Some t -> to_json t
+end)  
+
 let of_timestamp ts = 
   let tm = Unix.gmtime ts in
   { y = 1900 + tm.Unix.tm_year ; 
