@@ -69,7 +69,7 @@ end
 | `Event_Edit_SaveDraft -> "Enregistrer Brouillon"
 | `Event_Edit_Required -> "Champ obligatoire"
 | `Event_Edit_Date -> "Date"
-| `Event_Edit_Address -> "Address"
+| `Event_Edit_Address -> "Adresse"
 | `Event_Edit_Page -> "Description"
 
 | `Event_Picture_Title -> "Photo"
