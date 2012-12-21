@@ -445,6 +445,14 @@ let is_parent aid pid =
   let! profile = ohm_req_or (return false) $ Tbl.get (IProfile.decay pid) in 
   return (List.mem (IAvatar.decay aid) profile.Profile.parents) 
 
+let get_parents pid = 
+  let! profile = ohm_req_or (return []) $ Tbl.get (IProfile.decay pid) in 
+  return profile.Profile.parents 
+
+let set_parents pid aids = 
+  Tbl.update (IProfile.decay pid)
+    (fun profile -> Profile.({ profile with parents = aids })) 
+
 (* Obliterate all profiles of a deleted user. *)
 
 module ByUser = CouchDB.DocView(struct
