@@ -6,7 +6,7 @@ type delegator = <
 >
 
 val picker : 
-     [`Event|`Group|`Forum]
+     [`Event|`Group|`Forum|`ProfileView]
   -> string
   -> [<`IsToken|`IsAdmin] CAccess.t
   -> delegator
@@ -14,7 +14,7 @@ val picker :
   -> O.Box.result O.boxrun
 
 val list : 
-     [`Event|`Group|`Forum]
+     [`Event|`Group|`Forum|`ProfileView]
   -> string option
   -> [<`IsToken|`IsAdmin] CAccess.t
   -> delegator 

@@ -189,21 +189,3 @@ let bot_get fid =
     admin  = return false
   } 
 
-(* {{MIGRATION}} *)
-
-let () = 
-  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
-  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
-  let  doc, id = found # doc, found # id in  
-  if doc # own <> Some (`Event evid) then
-
-    let changed = object
-      method t     = doc # t 
-      method iid   = doc # iid
-      method own   = Some (`Event evid)
-    end in 
-
-    let! _ = ohm $ Tbl.set (IFeed.of_id id) changed in
-    return () 
-    
-  else return () 

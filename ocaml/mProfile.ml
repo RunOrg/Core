@@ -33,7 +33,7 @@ module Data = struct
       firstname : string ;
       lastname  : string ;
       email     : string option ;
-      birthdate : Date.t option ;
+      birthdate : Date.RevCompat.t ;
       phone     : string option ;
       cellphone : string option ;
       address   : string option ;
@@ -41,7 +41,7 @@ module Data = struct
       city      : string option ;
       country   : string option ;
       picture   : IFile.t option ;
-      gender    : [`m|`f] option 
+      gender    : [`m|`f] option ;
     } ;;    
   end 
    
@@ -120,11 +120,12 @@ module Profile = struct
   module T = struct
     type json t = {
       t          : MType.t ;
-      ins    "i" : IInstance.t ;
-      user   "u" : IUser.t ;
-      data   "d" : Data.t ; 
-     ?share  "s" : MFieldShare.t list option ;
-     ?source "o" : MFieldShare.t list = []
+      ins     "i" : IInstance.t ;
+      user    "u" : IUser.t ;
+      data    "d" : Data.t ; 
+     ?parents "p" : IAvatar.t list = [] ; 
+     ?share   "s" : MFieldShare.t list option ;
+     ?source  "o" : MFieldShare.t list = []
     }
   end 
   include T
@@ -210,12 +211,13 @@ let create_from_user iid uid =
   let! source, data = ohm $ load_from_user None [] (IUser.Deduce.view uid) in
 
   let insert = {
-    t      = `Profile ;
-    ins    = iid ; 
-    user   = IUser.decay uid ;
-    share  = None ;
-    source ;
-    data   ;
+    t       = `Profile ;
+    ins     = iid ; 
+    user    = IUser.decay uid ;
+    share   = None ;
+    parents = [] ; 
+    source  ;
+    data    ;
   } in
   
   (* We just created the object. *)
@@ -292,12 +294,13 @@ let create iid data =
       
       let pid      = IProfile.gen () in
       let insert   = {
-	t      = `Profile ;
-	ins    = iid ;
-	user   = uid ;
-	data   ;
-	source ;
-	share  ;
+	t       = `Profile ;
+	ins     = iid ;
+	user    = uid ;
+	parents = [] ;  
+	data    ;
+	source  ;
+	share   ;
       } in
       
       (* We just created the object. *)      
@@ -436,6 +439,20 @@ module Sharing = struct
 
 end
 
+(* Is a given person a parent of that profile ? *)
+
+let is_parent aid pid = 
+  let! profile = ohm_req_or (return false) $ Tbl.get (IProfile.decay pid) in 
+  return (List.mem (IAvatar.decay aid) profile.Profile.parents) 
+
+let get_parents pid = 
+  let! profile = ohm_req_or (return []) $ Tbl.get (IProfile.decay pid) in 
+  return profile.Profile.parents 
+
+let set_parents pid aids = 
+  Tbl.update (IProfile.decay pid)
+    (fun profile -> Profile.({ profile with parents = aids })) 
+
 (* Obliterate all profiles of a deleted user. *)
 
 module ByUser = CouchDB.DocView(struct
@@ -460,3 +477,4 @@ let _ =
     return () 
   in
   Sig.listen MUser.Signals.on_obliterate on_user_obliterated
+

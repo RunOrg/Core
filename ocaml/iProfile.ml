@@ -6,6 +6,7 @@ include Id.Phantom
 
 module Assert = struct 
   let is_self     id = id
+  let admin       id = id
   let created     id = id
   let updated     id = id
   let view        id = id
