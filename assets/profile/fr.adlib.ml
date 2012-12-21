@@ -25,6 +25,8 @@ end
 | `Profile_Form_Edit -> "Modifier"
 | `Profile_Form_Back -> "Retour"
 
+| `Profile_Admin -> "Modifier"
+
 | `Profile_Parents_Title -> "Parents"
 | `Profile_Parents_Link -> "Définir les parents de ce profil"
 | `Profile_Parents_Sub -> "Les parents peuvent voir les profils de leurs enfants"

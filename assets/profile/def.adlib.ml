@@ -17,6 +17,8 @@
 | `Profile_Form_Edit 
 | `Profile_Form_Back 
 
+| `Profile_Admin
+
 | `Profile_Parents_Title
 | `Profile_Parents_Link
 | `Profile_Parents_Sub
