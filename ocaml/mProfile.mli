@@ -66,3 +66,7 @@ type details = <
 >
 
 val details : [`IsSelf] IProfile.id -> details option O.run
+
+val is_parent : 'a IAvatar.id -> 'any IProfile.id -> bool O.run
+val get_parents : [<`IsSelf|`Admin] IProfile.id -> IAvatar.t list O.run
+val set_parents : [<`IsSelf|`Admin] IProfile.id -> IAvatar.t list -> unit O.run

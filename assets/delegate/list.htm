@@ -3,9 +3,11 @@
     {`Delegate_Help kind} 
     {`Delegate_Help_List kind}
   </p>
-  <div class="-admin">
-    {`Delegate_Admins} &laquo;&nbsp;<span>{admins|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
-  </div>
+  {?admins}
+    <div class="-admin">
+      {`Delegate_Admins} &laquo;&nbsp;<span>{this|TextOrAdlib.to_html|ohm}</span>&nbsp;&raquo;
+    </div>
+  {/?}
   {#delegates}
     <div {$i} class="-item">
       {?pic}<img src="{this}"/>{/?}
