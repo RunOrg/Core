@@ -4,6 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Admin  = CProfile_admin
 module Groups = CProfile_groups
 module Forms  = CProfile_forms
 

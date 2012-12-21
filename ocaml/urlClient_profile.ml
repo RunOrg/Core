@@ -9,6 +9,9 @@ module A = Action.Args
 open UrlClient_common
 
 let home,     def_home     = child UrlClient_members.def_home "profile"
+let admin,    def_admin    = child def_home  "p/admin"
+let parents,  def_parents  = child def_admin "p/parents"
+
 let newForm,  def_newForm  = child def_home "p/new-form"
 let editForm, def_editForm = child def_home "p/edit-form"
 
