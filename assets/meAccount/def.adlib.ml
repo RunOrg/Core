@@ -21,6 +21,8 @@
 | `MeAccount_Admin_Pass_Sub  
 | `MeAccount_Admin_Picture_Link
 | `MeAccount_Admin_Picture_Sub
+| `MeAccount_Admin_Voeux_Link
+| `MeAccount_Admin_Voeux_Sub
 
 | `MeAccount_Edit_AboutYou
 | `MeAccount_Edit_Title 
@@ -50,3 +52,4 @@
 
 | `MeAccount_Picture_Title
 
+| `MeAccount_Admin_Voeux_Title

@@ -161,6 +161,13 @@ let () = define UrlMe.Account.def_admin begin fun owid cuid ->
 	method title    = AdLib.get `MeAccount_Admin_Picture_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Picture_Sub)
        end) ;
+
+      (object
+	method img      = VIcon.Large.santa
+	method url      = Action.url UrlMe.Account.voeux owid () 
+	method title    = AdLib.get `MeAccount_Admin_Voeux_Link
+	method subtitle = Some (AdLib.get `MeAccount_Admin_Voeux_Sub)
+       end) ;
       
     ] in
     
