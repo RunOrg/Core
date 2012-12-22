@@ -52,4 +52,10 @@
 
 | `MeAccount_Picture_Title
 
-| `MeAccount_Admin_Voeux_Title
+| `MeAccount_Voeux_Title
+
+| `MeAccount_Voeux_Firstname
+| `MeAccount_Voeux_Initials 
+| `MeAccount_Voeux_Body     
+| `MeAccount_Voeux_Required
+| `MeAccount_Voeux_Submit

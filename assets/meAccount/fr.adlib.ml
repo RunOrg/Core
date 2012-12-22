@@ -52,4 +52,10 @@
 
 | `MeAccount_Picture_Title -> "Photo"
 
-| `MeAccount_Admin_Voeux_Title -> "Vœux 2013"
+| `MeAccount_Voeux_Title -> "Vœux 2013"
+
+| `MeAccount_Voeux_Firstname -> "Prénom"
+| `MeAccount_Voeux_Initials  -> "Initiale du nom"
+| `MeAccount_Voeux_Body      -> "Message"
+| `MeAccount_Voeux_Required  -> "Champ obligatoire"
+| `MeAccount_Voeux_Submit    -> "Publier mes vœux"
