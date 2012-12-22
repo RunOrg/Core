@@ -5,6 +5,7 @@ type t = <
   initials  : string ; 
   body      : string ;
   picture   : string option ; 
+  org       : string option ; 
 >
 
 val set : 'a IUser.id -> t -> (#O.ctx,unit) Ohm.Run.t
