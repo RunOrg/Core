@@ -21,6 +21,8 @@
 | `MeAccount_Admin_Pass_Sub  -> "Entrez un nouveau mot de passe pour vous connecter"
 | `MeAccount_Admin_Picture_Link -> "Photo de profil"
 | `MeAccount_Admin_Picture_Sub -> "Aidez vos interlocuteurs à mettre un visage sur votre nom"
+| `MeAccount_Admin_Voeux_Link -> "Vœux 2013"
+| `MeAccount_Admin_Voeux_Sub -> "Avec RunOrg, souhaitez une bonne année 2013"
 
 | `MeAccount_Edit_AboutYou -> "À propos de vous"
 | `MeAccount_Edit_Title -> "Profil"
@@ -50,3 +52,10 @@
 
 | `MeAccount_Picture_Title -> "Photo"
 
+| `MeAccount_Voeux_Title -> "Vœux 2013"
+
+| `MeAccount_Voeux_Firstname -> "Prénom"
+| `MeAccount_Voeux_Initials  -> "Initiale du nom"
+| `MeAccount_Voeux_Body      -> "Message"
+| `MeAccount_Voeux_Required  -> "Champ obligatoire"
+| `MeAccount_Voeux_Submit    -> "Publier mes vœux"
