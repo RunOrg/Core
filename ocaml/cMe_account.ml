@@ -10,6 +10,7 @@ module Parents = CMe_account_parents
 module Edit    = CMe_account_edit
 module Pass    = CMe_account_pass
 module Picture = CMe_account_picture
+module Voeux   = CMe_account_voeux
 
 module LengthSeg = OhmBox.Seg.OfJson(struct
   type json t = [ `long | `short ]
@@ -160,6 +161,13 @@ let () = define UrlMe.Account.def_admin begin fun owid cuid ->
 	method url      = Action.url UrlMe.Account.picture owid () 
 	method title    = AdLib.get `MeAccount_Admin_Picture_Link
 	method subtitle = Some (AdLib.get `MeAccount_Admin_Picture_Sub)
+       end) ;
+
+      (object
+	method img      = VIcon.Large.santa
+	method url      = Action.url UrlMe.Account.voeux owid () 
+	method title    = AdLib.get `MeAccount_Admin_Voeux_Link
+	method subtitle = Some (AdLib.get `MeAccount_Admin_Voeux_Sub)
        end) ;
       
     ] in

@@ -17,4 +17,5 @@ let make owid = object
   method edit    = make `MeAccount_Edit_Title    edit    owid
   method pass    = make `MeAccount_Pass_Title    pass    owid
   method picture = make `MeAccount_Picture_Title picture owid
+  method voeux   = make `MeAccount_Voeux_Title   voeux   owid
 end
