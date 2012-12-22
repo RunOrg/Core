@@ -9,6 +9,7 @@ type t = <
   initials  : string ; 
   body      : string ;
   picture   : string option ; 
+  org       : string option ;
 >
 
 module Item = struct
@@ -20,6 +21,7 @@ module Item = struct
       time      : float ;
      ?picture   : string option ; 
       show      : bool ;
+     ?org       : string option ; 
     }
   end
   include T
@@ -42,12 +44,12 @@ let publish time t =
     let s = BatString.strip s in
     if String.length s > n then BatString.head s n else s
   in 
-  let firstname = clip 30  (t # firstname) in
-  let initials  = clip 30  (t # initials)  in
-  let body      = clip 500 (t # body) in
+  let firstname = clip 30   (t # firstname) in
+  let initials  = clip 30   (t # initials)  in
+  let body      = clip 1000 (t # body) in
   let picture   = t # picture in 
   function 
-    | None -> Item.({ firstname ; initials ; body ; time ; picture ; show = true })
+    | None -> Item.({ firstname ; initials ; body ; time ; picture ; show = true ; org = None })
     | Some i -> Item.({ i with firstname ; initials ; picture ; body }) 
 
 let set uid t = 
@@ -59,6 +61,7 @@ let extract i = Item.(object
   method initials  = i.initials
   method body      = i.body 
   method picture   = i.picture
+  method org       = i.org
 end)
 
 let get uid = 
