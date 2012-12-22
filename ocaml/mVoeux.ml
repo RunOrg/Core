@@ -8,6 +8,7 @@ type t = <
   firstname : string ; 
   initials  : string ; 
   body      : string ;
+  picture   : string option ; 
 >
 
 module Item = struct
@@ -17,6 +18,7 @@ module Item = struct
       initials  : string ; 
       body      : string ; 
       time      : float ;
+     ?picture   : string option ; 
       show      : bool ;
     }
   end
@@ -43,9 +45,10 @@ let publish time t =
   let firstname = clip 30  (t # firstname) in
   let initials  = clip 30  (t # initials)  in
   let body      = clip 500 (t # body) in
+  let picture   = t # picture in 
   function 
-    | None -> Item.({ firstname ; initials ; body ; time ; show = true })
-    | Some i -> Item.({ i with firstname ; initials ; body }) 
+    | None -> Item.({ firstname ; initials ; body ; time ; picture ; show = true })
+    | Some i -> Item.({ i with firstname ; initials ; picture ; body }) 
 
 let set uid t = 
   let! now = ohmctx (#time) in
@@ -55,6 +58,7 @@ let extract i = Item.(object
   method firstname = i.firstname
   method initials  = i.initials
   method body      = i.body 
+  method picture   = i.picture
 end)
 
 let get uid = 
@@ -62,5 +66,5 @@ let get uid =
   return $ Some (extract i) 
 
 let all () = 
-  let! list = ohm $ AllView.doc () in
+  let! list = ohm $ AllView.doc_query () in
   return (List.rev_map (#doc |- extract) list) 

@@ -42,6 +42,7 @@ let () = define UrlMe.Account.def_voeux begin fun owid cuid ->
   let parents = Parents.make owid in 
 
   let  uid  = IUser.Deduce.can_edit cuid in
+  let vuid  = IUser.Deduce.can_view cuid in
   let! save = O.Box.react Fmt.Unit.fmt begin fun () json _ res -> 
 
     let  src  = OhmForm.from_post_json json in 
@@ -59,6 +60,18 @@ let () = define UrlMe.Account.def_voeux begin fun owid cuid ->
 
     (* Save the changes to the database *)
 
+    let! picture = ohm (O.decay begin 
+      let! user = ohm_req_or (return None) $ MUser.get vuid in
+      CPicture.small_opt (user # picture) 
+    end) in
+
+    let result = object
+      method firstname = result # firstname
+      method initials  = result # initials
+      method body      = result # body
+      method picture   = picture
+    end in 
+    
     let! () = ohm $ MVoeux.set uid result in 
 
     (* Redirect to "voeux" page *)
@@ -80,6 +93,7 @@ let () = define UrlMe.Account.def_voeux begin fun owid cuid ->
 	method firstname = BatOption.default "" (user # firstname)
 	method initials  = BatString.head (BatOption.default "" (user # lastname)) 1
 	method body      = ""
+	method picture   = None
       end) 
     in
 

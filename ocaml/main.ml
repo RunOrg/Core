@@ -28,6 +28,7 @@ module Actions = struct
   open CPortal
   open CHelp
   open CSearch
+  open CVoeux
   open Splash
 end
 
