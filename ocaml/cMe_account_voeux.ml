@@ -70,6 +70,7 @@ let () = define UrlMe.Account.def_voeux begin fun owid cuid ->
       method initials  = result # initials
       method body      = result # body
       method picture   = picture
+      method org       = None
     end in 
     
     let! () = ohm $ MVoeux.set uid result in 
@@ -94,6 +95,7 @@ let () = define UrlMe.Account.def_voeux begin fun owid cuid ->
 	method initials  = BatString.head (BatOption.default "" (user # lastname)) 1
 	method body      = ""
 	method picture   = None
+	method org       = None
       end) 
     in
 
