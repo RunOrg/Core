@@ -2,8 +2,8 @@
 
 type 'relation t
 
-val try_get        : 'any # MAccess.context -> 'a IFolder.id  -> 'a t option O.run
-val get_for_owner  : 'any # MAccess.context -> 'a IFolderOwner.id -> [`Unknown] t O.run
+val try_get        : 'any MActor.t -> 'a IFolder.id  -> 'a t option O.run
+val get_for_owner  : 'any MActor.t -> 'a IFolderOwner.id -> [`Unknown] t O.run
 
 val by_owner : 'a IInstance.id -> 'b IFolderOwner.id -> IFolder.t O.run
 
