@@ -53,9 +53,7 @@ let local_fields local =
   ) local) in
   return ((`Status,`Status) :: (`Date,`Date) :: list)
 
-let box access gid render = 
-
-  let  actor  = access # actor in 
+let box actor gid render = 
   
   let fail = render (return ignore) in 
 
