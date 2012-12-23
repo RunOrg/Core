@@ -66,55 +66,49 @@ module CalendarView = CouchDB.DocView(struct
                 emit([doc.c.instance,doc.r.date],null)"
 end)
 
-let as_visible context item = 
+let as_visible actor item = 
   Can.view $
-    Can.make context (IEntity.of_id (item # id)) (item # doc)
+    Can.make actor (IEntity.of_id (item # id)) (item # doc)
 
-let as_administrable context item = 
+let as_administrable actor item = 
   Can.admin $
-    Can.make context (IEntity.of_id (item # id)) (item # doc)
+    Can.make actor (IEntity.of_id (item # id)) (item # doc)
 
 let as_public item =
   Can.make_public (IEntity.of_id (item # id)) (item # doc)
     
-let get_by_kind context kind = 
-  
-  let isin = context # isin in
-  let instance   = IInstance.decay (IIsIn.instance isin) in
-  
-  let! all = ohm $ ActiveView.doc (instance,kind) in
-  Run.list_filter (as_visible context) all
+let get_by_kind actor kind = 
 
-let get_administrable_by_kind context kind = 
-  
-  let isin = context # isin in
-  let instance   = IInstance.decay (IIsIn.instance isin) in
-  
-  let! all = ohm $ ActiveView.doc (instance,kind) in
-  Run.list_filter (as_administrable context) all
+  let iid = IInstance.decay (MActor.instance actor) in
+  let! all = ohm $ ActiveView.doc (aid,kind) in
+  Run.list_filter (as_visible actor) all
 
-let get context = 
+let get_administrable_by_kind actor kind = 
   
-  let isin     = context # isin in
-  let instance = IInstance.decay (IIsIn.instance isin) in
+  let iid = IInstance.decay (MActor.instance actor) in
+  let! all = ohm $ ActiveView.doc (iid,kind) in
+  Run.list_filter (as_administrable actor) all
+
+let get actor = 
   
-  let! all = ohm $ AllView.doc instance in
-  Run.list_filter (as_visible context) all 
+  let iid = IInstance.decay (MActor.instance actor) in
+  let! all = ohm $ AllView.doc iid in
+  Run.list_filter (as_visible actor) all 
 
-let get_public instance kind = 
+let get_public iid kind = 
 
-  let! all = ohm $ PublicView.doc (instance,kind) in 
+  let! all = ohm $ PublicView.doc (iid,kind) in 
   return $ BatList.filter_map as_public all
 
-let get_with_members ctx = 
+let get_with_members actor =
 
-  let   iid = IInstance.decay $ IIsIn.instance (ctx # isin) in
+  let   iid = IInstance.decay (MActor.instance actor) in
   let! list = ohm $ WithMemberView.doc iid in 
   Run.list_filter (as_visible ctx) list 
 
-let get_future ctx = 
+let get_future actor = 
  let  now = MFmt.date_of_float $ Unix.gettimeofday () in
- let  iid = IInstance.decay $ IIsIn.instance (ctx # isin) in
+ let  iid = IInstance.decay (MActor.instance actor) in
  let! list = ohm $ CalendarView.doc_query
    ~startkey:(iid,now)
    ~endkey:(iid,"99991231")
