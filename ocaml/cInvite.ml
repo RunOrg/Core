@@ -133,7 +133,7 @@ let by_email back access gid render =
     let list = BatOption.default [] (CreateArgs.of_json_safe json) in
     
     let! () = ohm $ O.decay begin MMembership.Mass.create
-	~from:(access # self) (access # iid) gid list [ `Accept true ; `Default true ] 
+	~from:(access # actor) (access # iid) gid list [ `Accept true ; `Default true ] 
     end in 
     
     let delay = if List.length list < 3 then 3000 else 6000 in

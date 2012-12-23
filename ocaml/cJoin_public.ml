@@ -37,13 +37,13 @@ let () = UrlClient.def_join begin fun req res ->
     let! token, status = ohm begin
 
       (* Acting as confirmed user to determine current status, if any *)
-      let  self = IUser.Assert.is_self (IUser.Deduce.is_anyone cuid) in 
-      let! isin = ohm $ MAvatar.identify_user iid self in 
-      let! aid  = req_or (return (false,`NotMember)) (IIsIn.avatar isin) in
-      let! ()   = true_or (return (true,`Member)) (IIsIn.Deduce.is_token isin = None) in
+      let  self  = IUser.Assert.is_self (IUser.Deduce.is_anyone cuid) in 
+      let! aid   = ohm_req_or (return (false,`NotMember)) $ MAvatar.find iid self in 
+      let! actor = ohm_req_or (return (false,`NotMember)) $ MAvatar.actor (IAvatar.Assert.is_self aid) in
+      let! ()   = true_or (return (true,`Member)) (MActor.member actor = None) in
 
       let  gid  = MEntity.Get.group entity in
-      let! mid  = ohm $ MMembership.as_user gid aid in
+      let! mid  = ohm $ MMembership.as_user gid actor in
       let! membership = ohm_req_or (return (false,`NotMember)) $ MMembership.get mid in
       return (false,membership.MMembership.status)
     end in 
@@ -105,6 +105,7 @@ let () = UrlClient.def_doJoin begin fun req res ->
   let! cuid = req_or panic cuid in 
 
   let! aid = ohm $ MAvatar.self_become_contact iid cuid in
+  let! actor = ohm_req_or panic $ MAvatar.actor (IAvatar.Assert.is_self aid) in 
 
   let  eid = req # args in
   let! entity = ohm_req_or panic $ MEntity.get_if_public eid in 
@@ -116,7 +117,7 @@ let () = UrlClient.def_doJoin begin fun req res ->
 
   if fields = [] then 
 
-    let! () = ohm $ MMembership.user gid aid true in
+    let! () = ohm $ MMembership.user gid actor true in
     return $ Action.javascript (Js.reload ()) res 
 
   else 
@@ -138,8 +139,8 @@ let () = UrlClient.def_doJoin begin fun req res ->
 
     (* Save the data and process the join request *)
     
-    let! () = ohm $ MMembership.user gid aid true in
-    let! () = ohm $ Self.save_data aid result in 
+    let! () = ohm $ MMembership.user gid actor true in
+    let! () = ohm $ Self.save_data actor result in 
 
     return $ Action.javascript (Js.reload ()) res
 
