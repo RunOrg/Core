@@ -51,19 +51,19 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
 
   end
 
-let get ?access eid = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+let get ?actor eid = 
+  O.decay begin 
     let! proj = ohm_req_or (return None) $ E.Store.get (IEvent.decay eid) in
     let  e = E.Store.current proj in 
-    return (Can.make eid ?access e)
+    return (Can.make eid ?actor e)
   end 
 
-let view ?access eid = 
-  let! event = ohm_req_or (return None) (get ?access eid) in
+let view ?actor eid = 
+  let! event = ohm_req_or (return None) (get ?actor eid) in
   Can.view event
 
-let admin ?access eid = 
-  let! event = ohm_req_or (return None) (get ?access eid) in
+let admin ?actor eid = 
+  let! event = ohm_req_or (return None) (get ?actor eid) in
   Can.admin event
 
 let delete t self = 
