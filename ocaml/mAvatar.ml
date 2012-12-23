@@ -238,12 +238,6 @@ let become_contact instance user =
   in
   return id
 
-let self_become_contact iid cuid = 
-  O.decay begin 
-    let! aid = ohm $ become_contact iid (IUser.Deduce.is_anyone cuid) in
-    return aid 
-  end
-    
 let become_admin instance user =
   let! id, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
   return id

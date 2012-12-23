@@ -104,7 +104,8 @@ let () = UrlClient.def_doJoin begin fun req res ->
   let! cuid, key, iid, instance = CClient.extract req res in  
   let! cuid = req_or panic cuid in 
 
-  let! aid = ohm $ MAvatar.self_become_contact iid cuid in
+  (* Creating an avatar and loading the actor for that avatar. *)
+  let! aid = ohm $ MAvatar.become_contact iid (IUser.Deduce.is_anyone cuid) in
   let! actor = ohm_req_or panic $ MAvatar.actor (IAvatar.Assert.is_self aid) in 
 
   let  eid = req # args in
