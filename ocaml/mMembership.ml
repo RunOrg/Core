@@ -64,7 +64,7 @@ let get mid =
 
 let status actor gid = 
   let  default = return `NotMember in
-  let  aid  = MActor.avatar aid in 
+  let  aid  = MActor.avatar actor in 
   let! mid  = ohm_req_or default $ Unique.find_if_exists gid aid in 
   let! data = ohm_req_or default $ get mid in 
   return data.status  
