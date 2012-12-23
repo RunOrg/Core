@@ -191,21 +191,22 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   (* Check that entity is available for joining *)
 
-  let panic = return $ Action.javascript (Js.reload ()) res in 
+  let  panic = return $ Action.javascript (Js.reload ()) res in 
 
+  let  actor = access # actor in 
   let  jid = req # args in 
   
   let! gid = ohm_req_or panic begin 
     match jid with 
-      | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+      | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get actor eid in
 		       let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in
 		       return $ Some (MEntity.Get.group entity) 
-      | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
+      | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~actor eid in
 		      if MEvent.Get.draft event then return None else
 			return $ Some (MEvent.Get.group event) 
   end in 
 
-  let! group  = ohm_req_or panic $ MGroup.try_get access gid in
+  let! group  = ohm_req_or panic $ MGroup.try_get actor gid in
   let! fields = ohm $ MGroup.Fields.flatten gid in 
 
   (* Extract form data *)
@@ -236,6 +237,7 @@ end
 
 let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res -> 
 
+  let actor = access # actor in 
   let panic = return $ Action.javascript (Js.reload ()) res in 
 
   let! arg  = req_or panic (Action.Convenience.get_json req) in 
@@ -250,19 +252,19 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
   let  jid = req # args in 
 
   let! gid, kind = ohm_req_or panic begin match jid with 
-    | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+    | `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get actor eid in
 		     let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in
 		     let  kind = match MEntity.Get.kind entity with
 		       | `Group -> `Group
 		       | other  -> `Forum
 		     in 
 		     return $ Some (MEntity.Get.group entity, kind) 
-    | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~access eid in
+    | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.view ~actor eid in
 		    if MEvent.Get.draft event then return None else
 		      return $ Some (MEvent.Get.group event, `Event) 
   end in 
 
-  let! group  = ohm_req_or panic $ MGroup.try_get access gid in 
+  let! group  = ohm_req_or panic $ MGroup.try_get actor gid in 
   let! fields = ohm $ MGroup.Fields.flatten gid in
 
   let gender = None in 
@@ -281,7 +283,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 
     (* Return the new status. *)
 
-    let! status = ohm $ MMembership.status access gid in
+    let! status = ohm $ MMembership.status actor gid in
     
     let! html   = ohm $ render jid (access # instance # key) 
       ~gender ~kind ~status ~fields:(fields <> []) in
@@ -292,7 +294,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     
     (* Joining an entity with a join form *)
 
-    let! status = ohm $ MMembership.status access gid in
+    let! status = ohm $ MMembership.status actor gid in
 
     let template = template `Join_Self_Save fields in 
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # self)) in

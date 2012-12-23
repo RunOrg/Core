@@ -25,9 +25,11 @@ end)
 
 let box access gid fail cols_url invite_url join_url wrapper = 
 
+  let actor = access # actor in 
+
   (* Extract the AvatarGrid identifier *)
 
-  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
   let! group = req_or fail group in 
 

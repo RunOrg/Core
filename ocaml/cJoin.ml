@@ -80,9 +80,10 @@ let status_edit aid mid access kind group profile = fun edit _ self res ->
 
 let box kind gid access fail wrapper = 
 
+  let  actor = access # actor in 
   let! aid = O.Box.parse IAvatar.seg in 
 
-  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.write group) in
   let! group = req_or fail group in 
 
