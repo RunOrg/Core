@@ -13,8 +13,8 @@ let send url uid eid aid =
 
   let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
   
-    let! access = ohm_req_or (return ()) $ access iid self in 
-    let! entity = ohm_req_or (return ()) $ MEntity.try_get access eid in 
+    let! actor = ohm_req_or (return ()) $ actor iid self in 
+    let! entity = ohm_req_or (return ()) $ MEntity.try_get actor eid in 
     let! entity = ohm_req_or (return ()) $ MEntity.Can.view entity in 
     let! entity = ohm $ CEntityUtil.name entity in 
 
