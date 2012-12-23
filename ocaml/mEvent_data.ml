@@ -73,9 +73,9 @@ let update eid self ~address ~page =
 
   let! current = ohm_req_or (return ()) (get eid) in
 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin
+  O.decay begin
 
-    let info = MUpdateInfo.self self in
+    let info = MUpdateInfo.self (MActor.avatar self) in
     let eid  = IEvent.decay eid in 
 
     let diffs = BatList.filter_map identity [
@@ -99,10 +99,10 @@ let page t =
     | `R page -> page
 
 let create eid ?address ?(page=`Text "") self =
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+  O.decay begin 
 
     let eid  = IEvent.decay eid in
-    let info = MUpdateInfo.self self in 
+    let info = MUpdateInfo.self (MActor.avatar self) in 
 
     let init = Cfg.Data.({
       address ;

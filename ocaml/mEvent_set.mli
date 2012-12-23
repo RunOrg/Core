@@ -2,25 +2,25 @@
 
 val update : 
      [`Admin] MEvent_can.t
-  -> [`IsSelf] IAvatar.id
+  -> 'a MActor.t
   -> MEvent_core.Cfg.Diff.t list
   -> (#O.ctx,unit) Ohm.Run.t 
     
 val picture :
      [`Admin] MEvent_can.t 
-  -> [`IsSelf] IAvatar.id
+  -> 'a MActor.t
   -> [`InsPic] IFile.id option
   -> (#O.ctx,unit) Ohm.Run.t
   
 val admins : 
      [`Admin] MEvent_can.t
-  -> [`IsSelf] IAvatar.id
+  -> 'a MActor.t
   -> IAvatar.t list
   -> (#O.ctx,unit) Ohm.Run.t
 
 val info : 
      [`Admin] MEvent_can.t
-  -> [`IsSelf] IAvatar.id
+  -> 'a MActor.t
   -> draft:bool 
   -> name:string option 
   -> page:MRich.OrText.t

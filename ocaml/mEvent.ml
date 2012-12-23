@@ -21,11 +21,11 @@ module Tbl = CouchDB.ReadTable(E.Store.DataDB)(IEvent)(E.Store.Raw)
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+  O.decay begin 
 
     let iid = IInstance.decay iid in 
     let eid = IEvent.gen () in
-    let info = MUpdateInfo.self self in
+    let info = MUpdateInfo.self (MActor.avatar self) in
     let gid  = IGroup.gen () in
     
     let init = E.({
@@ -44,7 +44,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
     
     let! _ = ohm $ E.Store.create ~id:eid ~init ~diffs:[] ~info () in
     let! _ = ohm $ Data.create eid self in
-    let! _ = ohm $ Signals.on_bind_group_call (iid,eid,gid,tid,self) in
+    let! _ = ohm $ Signals.on_bind_group_call (iid,eid,gid,tid,MActor.avatar self) in
     let! _ = ohm $ Signals.on_bind_inboxLine_call eid in
     
     return eid
@@ -67,7 +67,7 @@ let admin ?actor eid =
   Can.admin event
 
 let delete t self = 
-  Set.update t self [`Delete (IAvatar.decay self)]
+  Set.update t self [`Delete (IAvatar.decay (MActor.avatar self))]
 
 let instance eid = 
   let! event = ohm_req_or (return None) (get eid) in
