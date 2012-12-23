@@ -12,7 +12,7 @@ class type ['level] t = object
 end
 
 let make cuid iid instance = 
-  let! actor = ohm $ MAvatar.identify iid cuid in
+  let! actor = ohm_req_or (return None) $ MAvatar.identify iid cuid in
   let! actor = req_or (return None) $ MActor.member actor in
   return $ Some (object
     method self     = MActor.avatar actor
@@ -35,7 +35,7 @@ let admin (access : 'any t) =
   Some (object
     method self     = MActor.avatar actor
     method actor    = actor
-    method instance = instance
+    method instance = access # instance
     method iid      = MActor.instance actor
   end)
 

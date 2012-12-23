@@ -22,7 +22,7 @@ let by_name kind back access gid render =
     let aids = BatList.sort_unique compare aids in
     
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # self) gid aids 
+	~from:(access # actor) gid aids 
 	(match kind with 
 	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
@@ -61,7 +61,7 @@ let by_group kind back access gid render =
     let  list = BatOption.default [] (ByGroupArgs.of_json_safe json) in
     
     let! aids = ohm $ O.decay (Run.list_map begin fun gid -> 
-      let! group = ohm_req_or (return []) $ MGroup.try_get access gid in 
+      let! group = ohm_req_or (return []) $ MGroup.try_get (access # actor) gid in 
       let! group = ohm_req_or (return []) $ MGroup.Can.list group in 
       let! all   = ohm $ MMembership.InGroup.all (MGroup.Get.id group) `Validated in
       return (List.map snd all) 
@@ -70,7 +70,7 @@ let by_group kind back access gid render =
     let aids = BatList.sort_unique compare (List.concat aids) in
     
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # self) gid aids 
+	~from:(access # actor) gid aids 
 	(match kind with 
 	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
@@ -84,7 +84,7 @@ let by_group kind back access gid render =
 
   render begin 
 
-    let! list = ohm $ O.decay (MEntity.All.get_by_kind access `Group) in
+    let! list = ohm $ O.decay (MEntity.All.get_by_kind (access # actor) `Group) in
     
     let! list = ohm $ O.decay (Run.list_filter begin fun entity -> 
       
@@ -93,7 +93,7 @@ let by_group kind back access gid render =
       let! ()     = true_or (return None) (not (MEntity.Get.draft entity)) in
       let  gid'   = MEntity.Get.group entity in 
       
-      let! group  = ohm_req_or (return None) $ MGroup.try_get access gid' in
+      let! group  = ohm_req_or (return None) $ MGroup.try_get (access # actor) gid' in
       let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
       let  gid'   = MGroup.Get.id group in 
       

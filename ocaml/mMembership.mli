@@ -69,7 +69,7 @@ val as_admin :
 
 val as_user : 
      'a IGroup.id
-  -> [`IsSelf] IAvatar.id
+  -> 'b MActor.t
   -> [`IsSelf] IMembership.id O.run
 
 val as_viewer :
@@ -78,7 +78,7 @@ val as_viewer :
   -> [`View] IMembership.id O.run
 
 val admin :
-     from:[`IsSelf] IAvatar.id
+     from:'any MActor.t
   -> [<`Admin|`Write|`Bot] IGroup.id
   -> 'a IAvatar.id
   -> [ `Accept of bool | `Invite | `Default of bool ] list
@@ -86,7 +86,7 @@ val admin :
 
 val user : 
      'a IGroup.id
-  -> [`IsSelf] IAvatar.id
+  -> 'b MActor.t
   -> bool
   -> unit O.run
 
@@ -116,14 +116,14 @@ end
 module Mass : sig
 
   val admin : 
-       from:[`IsSelf] IAvatar.id
+       from:'any MActor.t
     -> [<`Admin|`Write|`Bot] IGroup.id
     -> 'a IAvatar.id list
     -> [ `Accept of bool | `Invite | `Default of bool ] list
     -> unit O.run
 
   val create : 
-       from:[`IsSelf] IAvatar.id
+       from:'any MActor.t
     -> 'a IInstance.id 
     -> [<`Admin|`Write|`Bot] IGroup.id
     -> ( string * string * string ) list
@@ -137,15 +137,15 @@ module Data : sig
   val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Ohm.Json.t) list O.run
 
   val self_update :
-        'any IGroup.id
-    -> [`IsSelf] IAvatar.id
+       'any IGroup.id
+    -> 'b MActor.t
     -> MUpdateInfo.t
     -> ?irreversible:string list
     -> (string * Ohm.Json.t) list
     -> unit O.run
 
   val admin_update :
-       [`IsSelf] IAvatar.id
+       'a MActor.t
     -> [<`Write|`Admin|`Bot] IGroup.id
     -> 'any IAvatar.id
     -> MUpdateInfo.t

@@ -148,5 +148,5 @@ let by_owner iid owner =
 let get_for_owner actor owner =   
   let  iid = MActor.instance actor in
   let! id, doc = ohm $ get_or_create iid owner in
-  return (_make ctx id doc)
+  return (_make actor id doc)
 

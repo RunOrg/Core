@@ -1,14 +1,14 @@
 (* © 2012 RunOrg *)
 
 val admin : 
-     from:[`IsSelf] IAvatar.id
+     from:'any MActor.t
   -> [<`Admin|`Write|`Bot] IGroup.id
   -> 'a IAvatar.id list
   -> [ `Accept of bool | `Invite | `Default of bool ] list
   -> unit O.run
     
 val create : 
-     from:[`IsSelf] IAvatar.id
+     from:'any MActor.t
   -> 'a IInstance.id 
   -> [<`Admin|`Write|`Bot] IGroup.id
   -> ( string * string * string ) list

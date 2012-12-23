@@ -8,13 +8,15 @@ let do_join self group =
   let! admin = ohm $ MGroup.Can.write group in   
   match admin with
     | None -> MMembership.user (MGroup.Get.id group) self true 
-    | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) self [ `Accept true ; `Default true ]
+    | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) 
+      (MActor.avatar self) [ `Accept true ; `Default true ]
 
 let save_data self result = 
 
   let  result = MJoinFields.Flat.dispatch result in 
+  let  aid = MActor.avatar self in 
   
-  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay self)) in
+  let  info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay aid)) in
 
   let! ()   = ohm (Run.list_iter begin fun (gid, data) ->
     MMembership.Data.self_update gid self info data
@@ -22,7 +24,7 @@ let save_data self result =
 
   match MProfile.Data.apply (result # profile) with 
     | None -> return ()
-    | Some f -> let! pid = ohm $ MAvatar.my_profile self in 
+    | Some f -> let! pid = ohm $ MAvatar.my_profile aid in 
 		MProfile.update pid f
  
 
@@ -46,7 +48,7 @@ let template button fields =
 		    let! data = ohm $ MMembership.Data.get mid in 
 		    return (try List.assoc name data with Not_found -> Json.Null)
       | `Profile f -> let  what = f # name in 
-		      let! pid  = ohm $ MAvatar.my_profile self in 
+		      let! pid  = ohm $ MAvatar.my_profile (MActor.avatar self) in 
 		      let! _, data = ohm_req_or (return Json.Null) $ MProfile.data pid in
 		      return (MProfile.Data.field data what) 
     in
@@ -228,8 +230,8 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 
   (* Save the data and process the join request *)
 
-  let! () = ohm $ do_join (access # self) group in 
-  let! () = ohm $ save_data (access # self) result in
+  let! () = ohm $ do_join (access # actor) group in 
+  let! () = ohm $ save_data (access # actor) result in
 
   return $ Action.javascript (Js.reload ()) res
 
@@ -276,8 +278,8 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     (* Leaving the entity, refreshing the display, or joining an entity with no form. *)
     
     let! () = ohm begin match join with 
-      | `Join false -> MMembership.user gid (access # self) false
-      | `Join true  -> do_join (access # self) group
+      | `Join false -> MMembership.user gid actor false
+      | `Join true  -> do_join actor group
       | `Refresh -> return ()
     end in 
 
@@ -297,7 +299,7 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
     let! status = ohm $ MMembership.status actor gid in
 
     let template = template `Join_Self_Save fields in 
-    let form = OhmForm.create ~template ~source:(OhmForm.from_seed (access # self)) in
+    let form = OhmForm.create ~template ~source:(OhmForm.from_seed actor) in
     let url  = JsCode.Endpoint.of_url (Action.url UrlClient.Join.post req # server req # args) in    
 
     let! html = ohm $ Asset_Join_SelfEdit.render (object

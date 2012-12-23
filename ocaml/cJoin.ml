@@ -69,7 +69,7 @@ let status_edit aid mid access kind group profile = fun edit _ self res ->
   
   let  gid = MGroup.Get.id group in 
 
-  let! () = ohm $ O.decay (MMembership.admin ~from:(access # self) gid aid diffs) in
+  let! () = ohm $ O.decay (MMembership.admin ~from:(access # actor) gid aid diffs) in
   
   let! mbr = ohm $ O.decay (MMembership.get mid) in 
   let  mbr = BatOption.default 
@@ -116,7 +116,7 @@ let box kind gid access fail wrapper =
     let info = MUpdateInfo.info ~who:(`user (Id.gen (), IAvatar.decay (access # self))) in
 
     let! () = ohm $ O.decay (MMembership.Data.admin_update 
-			       (access # self) (MGroup.Get.id group) aid info result)
+			       (access # actor) (MGroup.Get.id group) aid info result)
     in
 
     return res

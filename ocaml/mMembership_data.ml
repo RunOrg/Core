@@ -80,7 +80,9 @@ let restore_update gid aid data =
     method irreversible = []
   end] 
 
-let self_update gid aid info ?(irreversible=[]) data =
+let self_update gid actor info ?(irreversible=[]) data =
+
+  let aid = MActor.avatar actor in 
 
   let irreversible, self = 
     BatList.partition (fun (key,_) -> List.mem key irreversible) data

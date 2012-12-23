@@ -128,7 +128,7 @@ let mail actor ~subject text iid where =
 let chat_request actor topic iid where = 
   
   let payload = `ChatReq (object
-    method author = IAvatar.decay (MAvatar.avatar actor)
+    method author = IAvatar.decay (MActor.avatar actor)
     method topic  = if String.length topic > 150 then String.sub topic 0 150 else topic
   end) in
 
@@ -145,7 +145,7 @@ let chat_request actor topic iid where =
 let poll actor text poll iid where = 
   
   let payload = `MiniPoll (object
-    method author = IAvatar.decay (MAvatar.self actor)
+    method author = IAvatar.decay (MActor.avatar actor)
     method text   = if String.length text > 3000 then String.sub text 0 3000 else text
     method poll   = IPoll.decay poll 
   end) in
