@@ -64,11 +64,11 @@ val change_to_member     :
 val become_contact : 'a IInstance.id -> 'b IUser.id -> IAvatar.t O.run
 val become_admin   : [`Created] IInstance.id -> 'any IUser.id -> IAvatar.t O.run
 
-val self_become_contact : 'a IInstance.id -> 'b ICurrentUser.id -> (#O.ctx,[`Contact] MActor.t) Ohm.Run.t
-val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> (#O.ctx,[`Contact] MActor.t option) Ohm.Run.t
+val self_become_contact : 'a IInstance.id -> 'b ICurrentUser.id -> (#O.ctx,IAvatar.t) Ohm.Run.t
+val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> (#O.ctx,[`IsContact] MActor.t option) Ohm.Run.t
 val find : 'a IInstance.id -> 'b IUser.id -> (#O.ctx,IAvatar.t option) Ohm.Run.t
 
-val actor : [`IsSelf] IAvatar.id -> (#O.ctx,[`Contact] MActor.t option) Ohm.Run.t
+val actor : [`IsSelf] IAvatar.id -> (#O.ctx,[`IsContact] MActor.t option) Ohm.Run.t
 
 val collect_profile : MProfile.Data.t -> < 
   name : string option ;

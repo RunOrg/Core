@@ -145,6 +145,15 @@ let _get ins usr =
   let! avatar = ohm $ Tbl.get aid in 
   return (aid, avatar) 
 
+let actor_of_avatar aid avatar = 
+  let iid = avatar # ins in 
+  let role = avatar # sta in
+  let uid = IUser.Assert.is_old (avatar # who) in
+  MActor.Make.contact ~role ~aid ~iid ~uid 
+
+let actor aid = 
+  let! avatar = ohm_req_or (return None) $ Tbl.get (IAvatar.decay aid) in 
+  return $ Some (actor_of_avatar aid avatar)
 
 (* Status updates ------------------------------------------------------------------------- *)
 
@@ -280,10 +289,12 @@ let become_contact instance user =
   in
   return id
 
-let self_become_contact instance cuid = 
-  let! aid = ohm $ become_contact instance (IUser.Deduce.is_anyone cuid) in
-  return $ IAvatar.Assert.is_self aid 
-
+let self_become_contact iid cuid = 
+  O.decay begin 
+    let! aid = ohm $ become_contact iid (IUser.Deduce.is_anyone cuid) in
+    return aid 
+  end
+    
 let become_admin instance user =
   let! id, _, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
   return id
@@ -296,42 +307,14 @@ let status iid cuid =
   let! aid, avatar = ohm $ _get iid uid in
   return $ BatOption.default `Contact (BatOption.map (#sta) avatar)
 
-let do_identify_user instance user cuid = 
-  let  usr = IUser.decay     user     in
-  let  ins = IInstance.decay instance in 
-  let! aid, avatar = ohm $ _get ins usr in
-          
-  let role = BatOption.default `Nobody 
-    (BatOption.map (#sta) avatar :> [`Admin|`Contact|`Token|`Nobody] option)
-  in
+let identify iid cuid = 
+  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.Deduce.is_anyone cuid) in
+  let! avatar = req_or (return None) avatar in 
+  return $ Some (actor_of_avatar aid avatar)
 
-  (* The database said so... *)
-  let aid = IAvatar.Assert.is_self aid in
-  
-  (* The database said so... *)
-  return $ IIsIn.Assert.make ~id:(Some aid) ~role ~ins:instance ~usr:cuid
- 
-let identify_user instance user = 
-  do_identify_user instance user (IUser.Deduce.self_is_current user)
-
-let identify_bot instance user = 
-  do_identify_user instance user (IUser.Deduce.self_is_current user)
-    
-let identify instance cuid = 
-  do_identify_user instance (IUser.decay (IUser.Deduce.current_is_self cuid)) cuid
-
-let identify_avatar id = 
-  let! avatar = ohm_req_or (return None) $ Tbl.get (IAvatar.decay id) in
-
-  (* There's an avatar, so we are a contact *)
-  let ins  = IInstance.Assert.is_contact avatar # ins in 
-  let role = (avatar # sta :> [`Admin|`Contact|`Token|`Nobody]) in
-  let usr  = IUser.Assert.is_old (avatar # who) in 
-  
-  let! instance = ohm $ MInstance.get ins in 
-
-  (* The database said so *)
-  return $ Some (IIsIn.Assert.make ~id:(Some id) ~role ~ins ~usr)
+let find iid uid = 
+  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.decay uid) in
+  if avatar = None then return None else return (Some aid) 
 
 let profile aid = 
   let  selfsame = IProfile.of_string (IAvatar.to_string aid) in
@@ -587,12 +570,9 @@ let user_avatars uid =
   Run.list_filter begin fun item ->
     let  iid = item # value and aid = IAvatar.of_id item # id in
     let  _, sta = item # key in 
-    let  role = (sta :> [`Admin|`Token|`Contact|`Nobody]) in
     let  aid = IAvatar.Assert.is_self aid in
     let  uid = IUser.Assert.is_old uid in
-    let  isin = IIsIn.Assert.make ~id:(Some aid) ~role ~ins:iid ~usr:uid in
-    let! isin = req_or (return None) (IIsIn.Deduce.is_token isin) in
-    return (Some (aid, isin))
+    return (MActor.member (MActor.Make.contact ~iid ~aid ~uid ~role:sta))
   end list 
       
 module CountByUserView = CouchDB.ReduceView(struct

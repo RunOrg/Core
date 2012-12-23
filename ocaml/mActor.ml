@@ -43,18 +43,11 @@ let user t =
 
 module Make = struct
 
-  let contact ~aid ~iid ~uid = {
+  let contact ~role ~aid ~iid ~uid = {
     aid  = IAvatar.decay aid ;
     uid  ;
     iid  = IInstance.Assert.is_contact iid ;
-    role = `Contact
-  }
-
-  let member ~admin ~aid ~iid ~uid = {
-    aid  = IAvatar.decay aid ;
-    uid  ; 
-    iid  = IInstance.Assert.is_token iid ;
-    role = if admin then `Admin else `Token
+    role ;
   }
 
 end

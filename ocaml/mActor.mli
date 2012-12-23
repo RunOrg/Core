@@ -14,16 +14,10 @@ val user     : 'any t -> [`Old] ICurrentUser.id
 module Make : sig
 
   val contact :
-       aid:'a IAvatar.id
-    -> iid:'b IInstance.id
-    -> uid:[`Old] ICurrentUser.id
-    -> [`IsContact] t
-
-  val member : 
-       admin:bool
+       role: [`Token|`Admin|`Contact] 
     -> aid:'a IAvatar.id
     -> iid:'b IInstance.id
     -> uid:[`Old] ICurrentUser.id
-    -> [`IsToken] t 
+    -> [`IsContact] t
 
 end
