@@ -32,12 +32,7 @@ module Signals : sig
 
 end
 
-class type ['any] context = object 
-  method self             : [`IsSelf] IAvatar.id 
-  method isin             : 'any IIsIn.id 
-end
-
-val test : 'any #context  -> t list -> bool O.run
+val test : 'any MActor.t  -> t list -> bool O.run
 
 val optimize : t -> t
 
