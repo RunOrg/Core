@@ -16,9 +16,9 @@ module Details = MAvatar_details
 
 (* Data types & formats ------------------------------------------------------------------- *)
 
-module MyDB      = Common.MyDB
-module Tbl   = Common.Tbl
-module Design    = Common.Design
+module MyDB   = Common.MyDB
+module Tbl    = Common.Tbl
+module Design = Common.Design
 
 include Common.Data
 
