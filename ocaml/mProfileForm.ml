@@ -86,7 +86,7 @@ let as_parent pfid actor =
   else
     return None
 
-let actor pfid actor = 
+let access pfid actor = 
   match MActor.admin actor with
     | Some _ -> return $ `Edit (as_admin pfid ())
     | None   -> let! pfid_opt = ohm $ as_myself pfid actor in 
