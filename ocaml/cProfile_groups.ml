@@ -15,7 +15,8 @@ let body access aid me render =
 
   O.Box.fill $ O.decay begin 
 
-    let! list = ohm $ MEntity.All.get_by_kind access `Group in
+    let  actor = access # actor in 
+    let! list = ohm $ MEntity.All.get_by_kind actor `Group in
     
     let! groups = ohm $ Run.list_filter begin fun entity -> 
       
@@ -28,7 +29,7 @@ let body access aid me render =
       if me then 
 	
 	let! status = ohm_req_or (return None) begin 	
-	  let! status = ohm $ MMembership.status access gid in
+	  let! status = ohm $ MMembership.status actor gid in
 	  return (if status <> `NotMember && status <> `Declined then Some status else None) 
 	end in            
 	
@@ -43,7 +44,7 @@ let body access aid me render =
 	  
       else
 	
-	let! group = ohm_req_or (return None) $ MGroup.try_get access gid in 
+	let! group = ohm_req_or (return None) $ MGroup.try_get actor gid in 
 	let! group = ohm_req_or (return None) $ MGroup.Can.list group in 
 	
 	let! mid = ohm $ MMembership.as_viewer (MGroup.Get.id group) aid in
