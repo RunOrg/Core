@@ -9,24 +9,25 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
 
     let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
     
+    let  actor = access # actor in 
     let! eid = O.Box.parse IEntity.seg in
     
-    let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get access eid) in
+    let! entity = ohm_req_or e404 $ O.decay (MEntity.try_get actor eid) in
     let! entity = ohm_req_or e404 $ O.decay (MEntity.Can.view entity) in
     
     let! admin  = ohm $ O.decay (MEntity.Can.admin entity ) in
         
-    let! feed   = ohm $ O.decay (MFeed.get_for_owner access (`Entity eid)) in
+    let! feed   = ohm $ O.decay (MFeed.get_for_owner actor (`Entity eid)) in
     let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
     
-    let! album  = ohm $ O.decay (MAlbum.get_for_owner access (`Entity eid)) in
+    let! album  = ohm $ O.decay (MAlbum.get_for_owner actor (`Entity eid)) in
     let! album  = ohm $ O.decay (MAlbum.Can.read album) in
     
-    let! folder = ohm $ O.decay (MFolder.get_for_owner access (`Entity eid)) in
+    let! folder = ohm $ O.decay (MFolder.get_for_owner actor (`Entity eid)) in
     let! folder = ohm $ O.decay (MFolder.Can.read folder) in
 
     let  gid = MEntity.Get.group entity in
-    let! group = ohm $ O.decay (MGroup.try_get access gid) in
+    let! group = ohm $ O.decay (MGroup.try_get actor gid) in
     let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
 
     let  public = CEntityUtil.public_forum entity in 
@@ -88,7 +89,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Forums.home) UrlClient.Forum
       let! join = ohm begin
 	if public || MEntity.Get.kind entity = `Group then return None else
 	  match group with None -> return None | Some group -> 
-	    let! status = ohm $ MMembership.status access gid in
+	    let! status = ohm $ MMembership.status actor gid in
 	    let  fields = MGroup.Fields.get group <> [] in
 	    return $ 
 	      Some (CJoin.Self.render (`Entity eid) 

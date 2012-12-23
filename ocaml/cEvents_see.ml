@@ -8,29 +8,30 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
   let e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
 
+  let  actor = access # actor in 
   let! eid = O.Box.parse IEvent.seg in
 
-  let! event = ohm_req_or e404 $ MEvent.view ~access eid in
+  let! event = ohm_req_or e404 $ MEvent.view ~actor eid in
   let! data  = ohm_req_or e404 $ MEvent.Get.data event in 
 
   let! admin  = ohm $ MEvent.Can.admin event in
 
   let  draft  = MEvent.Get.draft event in 
 
-  let! feed   = ohm $ O.decay (MFeed.get_for_owner access (`Event eid)) in
+  let! feed   = ohm $ O.decay (MFeed.get_for_owner actor (`Event eid)) in
   let! feed   = ohm $ O.decay (MFeed.Can.read feed) in
   let  feed   = if draft then None else feed in
 
-  let! album  = ohm $ O.decay (MAlbum.get_for_owner access (`Event eid)) in
+  let! album  = ohm $ O.decay (MAlbum.get_for_owner actor (`Event eid)) in
   let! album  = ohm $ O.decay (MAlbum.Can.read album) in
   let  album  = if draft then None else album in 
 
-  let! folder = ohm $ O.decay (MFolder.get_for_owner access (`Event eid)) in
+  let! folder = ohm $ O.decay (MFolder.get_for_owner actor (`Event eid)) in
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
   let  folder = if draft then None else folder in 
 
   let  gid = MEvent.Get.group event in
-  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
   let  group = if draft then None else group in   
 
@@ -102,7 +103,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     (* Join box ------------------------------------------------------------------------------------------ *)
 
     let! join = ohm begin match group with None -> return None | Some group ->      
-      let! status = ohm $ MMembership.status access gid in
+      let! status = ohm $ MMembership.status actor gid in
       let  fields = MGroup.Fields.get group <> [] in
       return $ Some (CJoin.Self.render (`Event eid) (access # instance # key) 
 		       ~gender:None ~kind:`Event ~status ~fields)
