@@ -23,14 +23,9 @@ include Fmt.Make(struct
 
 end)
 
-let access cuid iid = 
-  let! isin = ohm $ MAvatar.identify iid cuid in
-  let! isin = req_or (return None) $ IIsIn.Deduce.is_token isin in
-  let! self = ohm $ MAvatar.get isin in 
-  return $ Some (object
-    method self = self
-    method isin = isin
-   end)
+let actor cuid iid = 
+  let! actor = ohm_req_or (return None) $ MAvatar.identify iid cuid in
+  return (MActor.member actor) 
 
 let instance = function 
     | `NewWallItem (_,itid)
@@ -58,8 +53,8 @@ let author cuid =
 
     | `NewWallItem (_,itid) -> 
       let! iid     = ohm_req_or (return None) $ MItem.iid itid in
-      let! access  = ohm_req_or (return None) $ access cuid iid in
-      let! item    = ohm_req_or (return None) $ MItem.try_get access itid in
+      let! actor   = ohm_req_or (return None) $ actor cuid iid in
+      let! item    = ohm_req_or (return None) $ MItem.try_get actor itid in
       let! author  = req_or (return None) $ MItem.author_by_payload (item # payload) in
       return $ Some (`Person (author, item # iid))
 	
@@ -71,8 +66,8 @@ let author cuid =
     | `NewComment (_,cid) ->
       let! itid    = ohm_req_or (return None) $ MComment.item cid in 
       let! iid     = ohm_req_or (return None) $ MItem.iid itid in
-      let! access  = ohm_req_or (return None) $ access cuid iid in
-      let! item    = ohm_req_or (return None) $ MItem.try_get access itid in 
+      let! actor   = ohm_req_or (return None) $ actor cuid iid in
+      let! item    = ohm_req_or (return None) $ MItem.try_get actor itid in 
       let! _, comm = ohm_req_or (return None) $ MComment.try_get (item # id) cid in 
       return $ Some (`Person (comm # who, item # iid))
 	
@@ -85,14 +80,14 @@ let author cuid =
     | `EventInvite  (eid,aid) 
     | `EventRequest (eid,aid) ->
       let! iid    = ohm_req_or (return None) $ MEvent.instance eid in 
-      let! access = ohm_req_or (return None) $ access cuid iid in 
-      let! event  = ohm_req_or (return None) $ MEvent.view ~access eid in
+      let! actor  = ohm_req_or (return None) $ actor cuid iid in 
+      let! event  = ohm_req_or (return None) $ MEvent.view ~actor eid in
       return $ Some (`Event (aid,iid,event))
 
     | `GroupRequest (eid,aid) ->
       let! iid    = ohm_req_or (return None) $ MEntity.instance eid in 
-      let! access = ohm_req_or (return None) $ access cuid iid in 
-      let! entity = ohm_req_or (return None) $ MEntity.try_get access eid in
+      let! actor  = ohm_req_or (return None) $ actor cuid iid in 
+      let! entity = ohm_req_or (return None) $ MEntity.try_get actor eid in
       let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
       return $ Some (`Entity (aid,iid,entity))
 
