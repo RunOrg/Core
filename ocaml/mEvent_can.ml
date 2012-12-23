@@ -44,8 +44,8 @@ let id t = t.eid
 let data t = t.data
 
 let view t = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
-    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; access = t.access } in   
+  O.decay begin 
+    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; actor = t.actor } in   
     if t.data.E.draft then 
       match t.actor with
 	| None       -> return None
@@ -62,7 +62,7 @@ let view t =
   end
     
 let admin t = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin
+  O.decay begin
     let t' = { eid = IEvent.Assert.admin t.eid ; data = t.data ; actor = t.actor } in
     match t.actor with 
       | None       -> return None
