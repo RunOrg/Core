@@ -56,7 +56,7 @@ end
 
 val relevant_change : Details.data -> Diff.t -> bool 
 
-val status : 'any # MAccess.context -> 'b IGroup.id -> Status.t O.run
+val status : 'any MActor.t -> 'b IGroup.id -> Status.t O.run
 
 val default : mustpay:bool -> group:IGroup.t -> avatar:IAvatar.t -> t
 

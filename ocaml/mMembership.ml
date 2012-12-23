@@ -62,9 +62,9 @@ let get mid =
   let! data = ohm_req_or (return None) $ Versioned.get (IMembership.decay mid) in
   return $ Some (summary (Versioned.current data) (Versioned.reflected data))
 
-let status ctx gid = 
+let status actor gid = 
   let  default = return `NotMember in
-  let  aid  = ctx # self in
+  let  aid  = MActor.avatar aid in 
   let! mid  = ohm_req_or default $ Unique.find_if_exists gid aid in 
   let! data = ohm_req_or default $ get mid in 
   return data.status  
