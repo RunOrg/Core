@@ -75,15 +75,15 @@ let collect_profile details =
       ~picture:details.picture 
   )
 
-let self_data isin =
+let self_data iid uid =
   let default = object 
     method name    = None
     method picture = None
     method role    = None
     method sort    = []
   end in
-  let! profile = ohm $ MProfile.find_self isin in
-  let! details = ohm $ MProfile.details profile in 
+  let! profile = ohm $ MProfile.find_or_create iid uid in
+  let! details = ohm $ MProfile.details (IProfile.Assert.is_self profile) in 
   match details with  
     | None         -> return default
     | Some details -> return $ collect 
@@ -91,44 +91,7 @@ let self_data isin =
       ~firstname:(details # firstname)
       ~email:(details # email)
       ~picture:(details # picture)
-      
-let refresh isin = 
-  
-  let avatar = IIsIn.avatar isin in
-  let update = function 
-    | None -> return ( (), `keep )
-    | Some avatar -> 
-      self_data isin |> Run.map begin fun data ->
-	if 
-	  data # name <> avatar # name 
-	  || data # picture <> avatar # picture
-	  || data # sort <> avatar # sort
-	  || data # role <> avatar # role
-	then 	
-	  (), `put (object
-	    (* Definition *)
-	    method t       = `Avatar
-	    method who     = avatar # who 
-	    method ins     = avatar # ins
-	    (* Own data *)
-	    method sta     = avatar # sta
-	    (* Cached data *)
-	    method name    = data # name
-	    method picture = data # picture
-	    method sort    = data # sort
-	    method role    = data # role
-	  end) 
-      else
-	  (), `keep
-      end
-  in
-
-  match avatar with 
-    | None -> return ()
-    | Some avatar -> let avatar = IAvatar.decay avatar in 
-		     let! () = ohm $ Tbl.transact avatar update in
-		     Signals.on_update_call (avatar, IInstance.decay $ IIsIn.instance isin)
-	
+      	
 (* Details : extracted from the database when looking for details about an avatar --------- *)
 
 include Details
@@ -164,25 +127,12 @@ let _update_status status ins usr =
   
   let! aid = ohm $ Unique.get ins usr in
   
-  let isin newsta = 
-    let role = (newsta :> [`Admin|`Token|`Contact|`Nobody]) in
-    (* 3x assert : We're building this one right now, let him fetch his own data *)
-    let  aid = IAvatar.Assert.is_self aid in
-    let  usr = IUser.Assert.is_old usr in
-    let! instance = ohm $ MInstance.get ins in 
-    match 
-      IIsIn.Assert.make ~id:(Some aid) ~role ~ins ~usr 
-      |> IIsIn.Deduce.is_contact
-    with None -> assert false | Some isin -> return isin 
-  in
-
   let update = function
     | None -> 
       let  newsta = status None in 
-      let! isin   = ohm $ isin newsta in 
-      let! data   = ohm $ self_data isin in
+      let! data   = ohm $ self_data ins usr in
       let! _      = ohm $ Pending.invite ~uid:usr ~iid:ins aid in
-      return ((isin, true), `put (object
+      return (true, `put (object
 	(* Definition *)
 	method t       = `Avatar
 	method who     = usr
@@ -198,11 +148,10 @@ let _update_status status ins usr =
      
     | Some obj -> 
       let  newsta = status (Some (obj # sta)) in
-      let! isin   = ohm $ isin newsta in
       return (
 	if obj # sta = newsta
-	then (isin,false), `keep 
-	else (isin,true), `put (object	
+	then false, `keep 
+	else true, `put (object	
 	  (* Definition *)
 	  method t       = `Avatar
 	  method who     = usr
@@ -218,10 +167,10 @@ let _update_status status ins usr =
       )
   in
   
-  let! isin, changed = ohm $ Tbl.transact aid update in
-  let! () = ohm $ Signals.on_update_call (aid, IInstance.decay $ IIsIn.instance isin) in
+  let! changed = ohm $ Tbl.transact aid update in
+  let! () = ohm $ Signals.on_update_call (aid, ins) in
   
-  return (aid, isin, changed)
+  return (aid, changed)
 				       
 let _update_avatar_status status ?ins avatar =
 
@@ -281,7 +230,7 @@ let change_to_member ?from avatar =
     | `Token   -> upgrade_to_member ?from avatar
 
 let become_contact instance user = 
-  let! id, _, _ = ohm $
+  let! id, _ = ohm $
     _update_status (function 
       | Some `Admin -> `Admin
       | Some `Token -> `Token
@@ -296,7 +245,7 @@ let self_become_contact iid cuid =
   end
     
 let become_admin instance user =
-  let! id, _, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
+  let! id, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
   return id
 
 (* Identify an user for an instance ------------------------------------------------------- *)
@@ -514,20 +463,7 @@ let search iid name count =
 	  None
     end list      
 
-(* Extraction ----------------------------------------------------------------------------- *)
-
-let get isin = 
-  match IIsIn.avatar isin with 
-    | Some avatar -> return avatar
-    | None        -> let  instance = IIsIn.instance isin in
-		     let  cuid     = IIsIn.user isin in
-		     let! aid      = ohm $
-		       become_contact instance (IUser.Deduce.is_anyone cuid)
-		     in
-		     (* Reconstructed an avatar from scratch, but that's still me! *)
-		     return $ IAvatar.Assert.is_self aid
-
-(* MUser instances ------------------------------------------------------------------------- *)
+(* User instances ------------------------------------------------------------------------- *)
 
 module ByUserView = CouchDB.MapView(struct
   module Key = UsrSta
