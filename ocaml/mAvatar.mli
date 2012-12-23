@@ -3,8 +3,6 @@
 module Status : Ohm.Fmt.FMT with type t = 
   [ `Admin | `Token |` Contact ]
 
-val refresh : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> unit O.run
-
 module Signals : sig
 
   type status_event = [`IsSelf] IAvatar.id option * IAvatar.t * IInstance.t
