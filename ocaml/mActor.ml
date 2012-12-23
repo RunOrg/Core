@@ -33,7 +33,7 @@ let admin t = match t.role with
   }
 
 let avatar t = 
-  t.aid
+  IAvatar.Assert.is_self t.aid
 
 let instance t = 
   t.iid

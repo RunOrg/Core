@@ -6,7 +6,7 @@ val contact : 'any t -> [`IsContact] t
 val member  : 'any t -> [`IsToken] t option
 val admin   : 'any t -> [`IsAdmin] t option
   
-val avatar   : 'any t -> IAvatar.t 
+val avatar   : 'any t -> [`IsSelf] IAvatar.id 
 val instance : 'any t -> 'any IInstance.id
 val user     : 'any t -> [`Old] ICurrentUser.id
 
