@@ -46,4 +46,4 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
   end
 
 let schedule ilid = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) (schedule ilid)
+  O.decay (schedule ilid)
