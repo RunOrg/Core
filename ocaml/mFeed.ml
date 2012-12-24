@@ -177,6 +177,11 @@ let by_owner iid owner =
   let! id, _ = ohm $ get_or_create iid owner in 
   return id
 
+let try_by_owner owner = 
+  let  id = IFeedOwner.to_id owner in
+  let! found = ohm_req_or (return None) $ (ByOwnerView.doc id |> Run.map Util.first) in
+  return $ Some (IFeed.of_id (found # id))
+
 let bot_get fid = 
   let! feed = ohm_req_or (return None) $ Tbl.get (IFeed.decay fid) in
   let owner = Run.memo (_access (feed # iid) (feed # own)) in
