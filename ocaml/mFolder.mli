@@ -7,6 +7,8 @@ val get_for_owner  : 'any MActor.t -> 'a IFolderOwner.id -> [`Unknown] t O.run
 
 val by_owner : 'a IInstance.id -> 'b IFolderOwner.id -> IFolder.t O.run
 
+val try_by_owner : 'a IFolderOwner.id -> (#O.ctx,IFolder.t option) Ohm.Run.t 
+
 module Get : sig
   val id     : 'any t -> 'any IFolder.id
   val owner  : 'any t -> IFolderOwner.t

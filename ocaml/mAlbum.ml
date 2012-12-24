@@ -150,3 +150,7 @@ let get_for_owner actor owner =
   let! id, doc = ohm $ get_or_create iid owner in
   return (_make actor id doc)
 
+let try_by_owner owner = 
+  let id = IAlbumOwner.to_id owner in 
+  let! found = ohm_req_or (return None) (ByOwnerView.doc id |> Run.map Util.first) in
+  return $ Some (IAlbum.of_id (found # id))

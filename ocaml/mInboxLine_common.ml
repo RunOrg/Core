@@ -11,9 +11,10 @@ module Info = struct
   module Album = struct
     module T = struct
       type json t = {
-	id : IAlbum.t ;      
-	t  : float option ; 
-	n  : int ;
+	id          : IAlbum.t ;      
+	last    "t" : float option ; 
+	n           : int ;
+	authors "a" : IAvatar.t list 
       }
     end
     include T
@@ -23,9 +24,10 @@ module Info = struct
   module Folder = struct
     module T = struct
       type json t = {
-	id : IFolder.t ;    
-	t  : float option ; 
-	n  : int ;
+	id          : IFolder.t ;    
+	last    "t" : float option ; 
+	n           : int ;
+	authors "a" : IAvatar.t list 
       }
     end
     include T

@@ -7,6 +7,8 @@ val get_for_owner  : 'any MActor.t -> 'a IAlbumOwner.id  -> [`Unknown] t O.run
 
 val by_owner : 'a IInstance.id -> 'b IAlbumOwner.id -> IAlbum.t O.run
 
+val try_by_owner : 'a IAlbumOwner.id -> (#O.ctx,IAlbum.t option) Ohm.Run.t 
+
 module Get : sig
   val id       : 'any t -> 'any IAlbum.id
   val owner    : 'any t -> IAlbumOwner.t
