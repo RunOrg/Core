@@ -10,9 +10,8 @@ let get_wall_info owner current =
 
   let! fid = ohm_req_or (return None) begin 
     match current with Some info -> return (Some info.Info.Wall.id) | None ->
-      match owner with 
-	| (#IFeedOwner.t) as owner -> MFeed.try_by_owner owner 			      
-	| _ -> return None
+      match (owner : IInboxLineOwner.t) with 
+	| (`Event _) as owner -> MFeed.try_by_owner owner 			      	
   end in 
 
   (* Act as a bot to extract the information. 
@@ -32,7 +31,18 @@ let get_wall_info owner current =
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
   begin fun ilid -> 
-    return ()       
+    Tbl.transact ilid begin function
+      | None -> return ((), `keep) 
+      | Some current -> let! wall = ohm $ get_wall_info current.Line.owner current.Line.wall in 
+			let  time = 
+			  List.fold_left max current.Line.time 
+			    (BatList.filter_map identity [ 
+			      BatOption.bind (fun w -> w.Info.Wall.last) wall ;
+			    ])
+			in
+			let fresh = Line.({ current with wall ; time }) in
+			return ((),`put fresh)
+    end        
   end
 
 let schedule ilid = 
