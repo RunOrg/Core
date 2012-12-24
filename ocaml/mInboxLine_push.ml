@@ -6,6 +6,8 @@ open BatPervasives
 
 open MInboxLine_common
 
+module View = MInboxLine_view
+
 let schedule = O.async # define "inbox-line-push" Fmt.( IInboxLine.fmt * Int.fmt ) 
   begin fun (ilid,push) ->
     let! current = ohm_req_or (return ()) $ Tbl.get ilid in
