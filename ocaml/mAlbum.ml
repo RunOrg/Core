@@ -31,29 +31,29 @@ type 'relation t =
       admin : bool O.run ;
     }
 
-let _make access id data = 
+let _make actor id data = 
   let owner = Run.memo begin
     match data # owner with 
       | `Entity eid -> let nil = (fun _ -> `Nobody) in
-		       let! entity = ohm_req_or (return nil) $ MEntity.try_get access eid in
+		       let! entity = ohm_req_or (return nil) $ MEntity.try_get actor eid in
 		       return (fun what -> MEntity.Satellite.access entity (`Album what))
       | `Event  eid -> let nil = (fun _ -> `Nobody) in
-		       let! event = ohm_req_or (return nil) $ MEvent.get ~access eid in
+		       let! event = ohm_req_or (return nil) $ MEvent.get ~actor eid in
 		       return (fun what -> MEvent.Satellite.access event (`Album what))
   end in
   {
     id    = id ;
     data  = data ;
-    read  = ( let! f = ohm owner in MAccess.test access [ f `Read ; f `Write ; f `Manage ] ) ;
-    write = ( let! f = ohm owner in MAccess.test access [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test access [                      f `Manage ] ) ;
+    read  = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
+    write = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
+    admin = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
 
-let try_get ctx id = 
+let try_get actor id = 
   let! album_opt = ohm (Tbl.get (IAlbum.decay id)) in
-  return (BatOption.map (_make ctx id) album_opt)
+  return (BatOption.map (_make actor id) album_opt)
 
 module Get = struct
 
@@ -145,25 +145,8 @@ let by_owner iid owner =
   let! id, _ = ohm $ get_or_create iid owner in 
   return id 
 
-let get_for_owner ctx owner =   
-  let  iid = IIsIn.instance (ctx # isin) in
+let get_for_owner actor owner =   
+  let  iid = MActor.instance actor in
   let! id, doc = ohm $ get_or_create iid owner in
-  return (_make ctx id doc)
+  return (_make actor id doc)
 
-(* {{MIGRATION}} *)
-
-let () = 
-  let! eid, evid, _ = Sig.listen MEntity.on_migrate in 
-  let! found = ohm_req_or (return ()) $ (ByOwnerView.doc (IEntity.to_id eid) |> Run.map Util.first) in
-  let  doc, id = found # doc, found # id in  
-  if doc # owner <> `Event evid then
-
-    let changed = object
-      method iid   = doc # iid
-      method owner = `Event evid
-    end in 
-
-    let! _ = ohm $ Tbl.set (IAlbum.of_id id) changed in
-    return () 
-    
-  else return () 

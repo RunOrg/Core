@@ -2,9 +2,14 @@
 
 val by_avatar :
      IAvatar.t 
-  -> [`IsAdmin] # MAccess.context
+  -> [`IsAdmin] MActor.t
   -> ([`Edit] IProfileForm.id * MProfileForm_info.t) list O.run
   
 val mine : 
-     [`IsToken] # MAccess.context
+     [`IsToken] MActor.t
   -> ([`View] IProfileForm.id * MProfileForm_info.t) list O.run 
+
+val as_parent :
+     IAvatar.t 
+  -> [`IsToken] MActor.t
+  -> ([`View] IProfileForm.id * MProfileForm_info.t) list O.run

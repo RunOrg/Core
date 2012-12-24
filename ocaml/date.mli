@@ -2,6 +2,8 @@
 
 include Ohm.Fmt.FMT
 
+module RevCompat : Ohm.Fmt.FMT with type t = t option 
+
 module Tz : sig
   type t 
   val gmt : t

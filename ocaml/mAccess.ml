@@ -57,30 +57,24 @@ module Signals = struct
   let in_group_call,  in_group  = Sig.make (Run.list_exists identity) 
 end
 
-class type ['any] context = object 
-  method self             : [`IsSelf] IAvatar.id 
-  method isin             : 'any IIsIn.id 
-end
-
 let in_group aid gid status = 
   Signals.in_group_call (aid,gid,status)
 
-let test (context : 'any #context) accesses = 
+let test actor accesses = 
 
   let access     = optimize (`Union accesses) in
   
-  let isin = context # isin in
-  let aid  = IAvatar.decay (context # self) in
+  let aid  = IAvatar.decay (MActor.avatar actor) in
 
   let rec aux = function 
     | `Nobody        -> return false
     | `List       l  -> return (List.mem aid l)
     | `Groups  (s,l) -> Run.list_exists (fun g -> in_group aid g s) l
     | `Union      l  -> Run.list_exists aux l
-    | `Admin         -> return (None <> IIsIn.Deduce.is_admin isin)
-    | `Token         -> return (None <> IIsIn.Deduce.is_token isin)
+    | `Admin         -> return (None <> MActor.admin actor)
+    | `Token         -> return (None <> MActor.member actor)
     | `Contact       -> return true 
-    | `TokOnly    t  -> if None = IIsIn.Deduce.is_token isin then return false else aux t
+    | `TokOnly    t  -> if None = MActor.member actor then return false else aux t
   in
   
   aux access

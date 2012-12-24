@@ -40,7 +40,7 @@ val find : IInstance.t -> IUser.t -> IProfile.t option O.run
 
 val find_view : [`ViewProfile] IInstance.id -> IUser.t -> [`View] IProfile.id option O.run
 
-val find_self : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> [`IsSelf] IProfile.id O.run
+val find_or_create : IInstance.t -> IUser.t -> IProfile.t O.run
 
 val refresh   : [`Bot] IUser.id -> 'b IInstance.id -> unit O.run
 
@@ -66,3 +66,7 @@ type details = <
 >
 
 val details : [`IsSelf] IProfile.id -> details option O.run
+
+val is_parent : 'a IAvatar.id -> 'any IProfile.id -> bool O.run
+val get_parents : [<`IsSelf|`Admin] IProfile.id -> IAvatar.t list O.run
+val set_parents : [<`IsSelf|`Admin] IProfile.id -> IAvatar.t list -> unit O.run

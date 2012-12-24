@@ -15,7 +15,7 @@ end
 type data = (string * Ohm.Json.t) list
 
 val create : 
-     [`IsAdmin] # MAccess.context 
+     [`IsAdmin] MActor.t
   -> IAvatar.t 
   -> kind:IProfileForm.Kind.t
   -> hidden:bool 
@@ -28,7 +28,7 @@ val update :
   -> ?hidden:bool
   -> ?name:MRich.OrText.t
   -> ?data:data
-  -> 'any # MAccess.context
+  -> 'any MActor.t
   -> unit O.run
 
 val get : [<`Edit|`View] IProfileForm.id -> Info.t option O.run
@@ -36,17 +36,17 @@ val get_data : [<`Edit|`View] IProfileForm.id -> data O.run
 
 val as_admin :
      'any IProfileForm.id 
-  -> [`IsAdmin] # MAccess.context
+  -> [`IsAdmin] MActor.t
   -> [`Edit] IProfileForm.id 
 
 val as_myself : 
      'any IProfileForm.id 
-  -> [`IsToken] # MAccess.context
+  -> [`IsToken] MActor.t
   -> [`View] IProfileForm.id option O.run
 
 val access : 
      'any IProfileForm.id 
-  -> [`IsToken] # MAccess.context
+  -> [`IsToken] MActor.t
   -> [ `None
      | `View of [`View] IProfileForm.id 
      | `Edit of [`Edit] IProfileForm.id ] O.run
@@ -55,11 +55,16 @@ module All : sig
 
   val by_avatar :
        IAvatar.t 
-    -> [`IsAdmin] # MAccess.context
+    -> [`IsAdmin] MActor.t
     -> ([`Edit] IProfileForm.id * Info.t) list O.run
 
   val mine : 
-       [`IsToken] # MAccess.context
+       [`IsToken] MActor.t
     -> ([`View] IProfileForm.id * Info.t) list O.run 
+
+  val as_parent :
+       IAvatar.t 
+    -> [`IsToken] MActor.t
+    -> ([`View] IProfileForm.id * Info.t) list O.run
 
 end 

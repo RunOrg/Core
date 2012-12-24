@@ -69,7 +69,7 @@ module Get : sig
 end
 
 val create : 
-     self:[`IsSelf] IAvatar.id
+     self:'any MActor.t
   -> name:string option
   -> ?pic:[`InsPic] IFile.id
   -> ?vision:Vision.t 
@@ -81,19 +81,19 @@ module Set : sig
     
   val picture :
        [`Admin] t 
-    -> [`IsSelf] IAvatar.id
+    -> 'any MActor.t
     -> [`InsPic] IFile.id option
     -> (#O.ctx,unit) Ohm.Run.t
 
   val admins : 
        [`Admin] t
-    -> [`IsSelf] IAvatar.id
+    -> 'any MActor.t
     -> IAvatar.t list
     -> (#O.ctx,unit) Ohm.Run.t
 
   val info : 
        [`Admin] t
-    -> [`IsSelf] IAvatar.id
+    -> 'any MActor.t
     -> draft:bool 
     -> name:string option 
     -> page:MRich.OrText.t
@@ -107,17 +107,17 @@ end
 module All : sig
 
   val future :    
-       ?access:'any # MAccess.context
+       ?actor:'any MActor.t
     -> 'a IInstance.id 
     -> (#O.ctx,[`View] t list) Ohm.Run.t  
 
   val undated : 
-       access:'any # MAccess.context
+       actor:'any MActor.t
     -> 'a IInstance.id
     -> (#O.ctx,[`View] t list) Ohm.Run.t
 
   val past : 
-       ?access:'any # MAccess.context
+       ?actor:'any MActor.t
     -> ?start:(Date.t * IEvent.t)
     -> count:int
     -> 'a IInstance.id
@@ -125,12 +125,12 @@ module All : sig
 
 end
 
-val get : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
+val get : ?actor:'any MActor.t -> 'rel IEvent.id -> (#O.ctx,'rel t option) Ohm.Run.t
 
-val view : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,[`View] t option) Ohm.Run.t
+val view : ?actor:'any MActor.t -> 'rel IEvent.id -> (#O.ctx,[`View] t option) Ohm.Run.t
 
-val admin : ?access:'any # MAccess.context -> 'rel IEvent.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
+val admin : ?actor:'any MActor.t -> 'rel IEvent.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
  
-val delete : [`Admin] t -> [`IsSelf] IAvatar.id -> (#O.ctx,unit) Ohm.Run.t 
+val delete : [`Admin] t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t 
 
 val instance : 'any IEvent.id -> (#O.ctx,IInstance.t option) Ohm.Run.t

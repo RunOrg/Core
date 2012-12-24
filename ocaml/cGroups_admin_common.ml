@@ -11,7 +11,7 @@ let define d box = CClient.define d begin fun access ->
 
   let! eid = O.Box.parse IEntity.seg in
 
-  let! entity = ohm_req_or forbidden $ O.decay (MEntity.try_get access eid) in
+  let! entity = ohm_req_or forbidden $ O.decay (MEntity.try_get (access # actor) eid) in
   let! entity = ohm_req_or forbidden $ O.decay (MEntity.Can.admin entity) in
 
   let  eid = MEntity.Get.id entity in 

@@ -7,29 +7,22 @@ open BatPervasives
 module E = MEvent_core
 
 type 'relation t = {
-  eid    : 'relation IEvent.id ;
-  data   : E.t ;
-  access : [`IsToken] MAccess.context option ; 
+  eid   : 'relation IEvent.id ;
+  data  : E.t ;
+  actor : [`IsToken] MActor.t option ;
 }
 
-let valid ?access data = 
+let valid ?actor data = 
   data.E.del = None && begin
-    match access with 
+    match actor with 
       | None -> true
-      | Some access -> IInstance.decay (IIsIn.instance (access # isin)) = data.E.iid 
+      | Some actor -> IInstance.decay (MActor.instance actor) = data.E.iid 
   end
 
-let make eid ?access data = if valid ?access data then Some {
+let make eid ?actor data = if valid ?actor data then Some {
   eid ;
   data ;
-  access = BatOption.bind begin fun access ->
-    match IIsIn.Deduce.is_token (access # isin) with 
-      | None -> None
-      | Some isin -> Some (object
-	method self = access # self
-	method isin = isin 
-      end)
-  end access
+  actor = BatOption.bind MActor.member actor ;
 } else None
   
 let admin_access t = 
@@ -51,28 +44,28 @@ let id t = t.eid
 let data t = t.data
 
 let view t = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
-    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; access = t.access } in   
+  O.decay begin 
+    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; actor = t.actor } in   
     if t.data.E.draft then 
-      match t.access with
-	| None        -> return None
-	| Some access -> let! ok = ohm $ MAccess.test access (admin_access t) in
-			 if ok then return (Some t') else return None
+      match t.actor with
+	| None       -> return None
+	| Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
+			if ok then return (Some t') else return None
     else
       match t.data.E.vision with 
 	| `Public  -> return (Some t')
-	| `Normal  -> if t.access <> None then return (Some t') else return None
-	| `Private -> match t.access with 
-	    | None        -> return None
-	    | Some access -> let! ok = ohm $ MAccess.test access (member_access t) in
-			     if ok then return (Some t') else return None
+	| `Normal  -> if t.actor <> None then return (Some t') else return None
+	| `Private -> match t.actor with 
+	    | None       -> return None
+	    | Some actor -> let! ok = ohm $ MAccess.test actor (member_access t) in
+			    if ok then return (Some t') else return None
   end
     
 let admin t = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin
-    let t' = { eid = IEvent.Assert.admin t.eid ; data = t.data ; access = t.access } in
-    match t.access with 
-      | None        -> return None
-      | Some access -> let! ok = ohm $ MAccess.test access (admin_access t) in
-		       if ok then return (Some t') else return None
+  O.decay begin
+    let t' = { eid = IEvent.Assert.admin t.eid ; data = t.data ; actor = t.actor } in
+    match t.actor with 
+      | None       -> return None
+      | Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
+		      if ok then return (Some t') else return None
   end

@@ -13,7 +13,7 @@ let render_item access itid =
   let! iid = ohm_req_or none $ MItem.iid itid in 
   let! access = ohm_req_or none $ access iid in 
 
-  let! item = ohm_req_or none $ MItem.try_get access itid in 
+  let! item = ohm_req_or none $ MItem.try_get (access # actor) itid in 
 
   let! now  = ohmctx (#time) in
 
@@ -35,7 +35,7 @@ let render_item access itid =
   let! url = ohm_req_or none begin 
     match item # where with 
       | `feed fid -> begin
-	let! feed = ohm_req_or none $ MFeed.try_get access fid in 
+	let! feed = ohm_req_or none $ MFeed.try_get (access # actor) fid in 
 	match MFeed.Get.owner feed with 
 	  | `Instance _ -> return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
 	  | `Entity eid -> return $ Some (Action.url UrlClient.Forums.see

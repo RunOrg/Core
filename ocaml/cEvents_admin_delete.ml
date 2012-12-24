@@ -12,7 +12,7 @@ let () = define UrlClient.Events.def_delete begin fun parents event access ->
 
     (* Save the changes to the database *)
 
-    let! () = ohm $ O.decay (MEvent.delete event (access # self)) in
+    let! () = ohm $ O.decay (MEvent.delete event (access # actor)) in
 
     (* Redirect to event home *)
 

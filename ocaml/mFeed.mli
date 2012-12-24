@@ -2,8 +2,8 @@
 
 type 'relation t 
 
-val try_get : 'any # MAccess.context -> 'a IFeed.id -> 'a t option O.run
-val get_for_owner : 'any # MAccess.context -> 'a IFeedOwner.id  -> [`Unknown] t O.run
+val try_get : 'any MActor.t -> 'a IFeed.id -> 'a t option O.run
+val get_for_owner : 'any MActor.t -> 'a IFeedOwner.id  -> [`Unknown] t O.run
 
 val bot_get : [`Bot] IFeed.id -> [`Bot] t option O.run
 

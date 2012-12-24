@@ -4,6 +4,7 @@ include Ohm.Id.PHANTOM
   
 module Assert : sig
   val is_self  : 'any id -> [`IsSelf] id
+  val admin    : 'any id -> [`Admin] id
   val created  : 'any id -> [`Created] id
   val updated  : 'any id -> [`Updated] id
   val view     : 'any id -> [`View] id

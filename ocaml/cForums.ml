@@ -47,13 +47,13 @@ let () = CClient.define UrlClient.Forums.def_home begin fun access ->
       MPreConfigNamer.entity IEntity.members namer
     end in 
 
-    let! groups = ohm $ MEntity.All.get_by_kind access `Group in 
-    let! forums = ohm $ MEntity.All.get_by_kind access `Forum in 
+    let! groups = ohm $ MEntity.All.get_by_kind (access # actor) `Group in 
+    let! forums = ohm $ MEntity.All.get_by_kind (access # actor) `Forum in 
 
     let! visible = ohm $ Run.list_filter begin fun entity -> 
       if IEntity.decay (MEntity.Get.id entity) = members_eid then return None else 
 	let  public = CEntityUtil.public_forum entity in  
-	let! feed = ohm $ MFeed.get_for_owner access (`Entity (MEntity.Get.id entity)) in
+	let! feed = ohm $ MFeed.get_for_owner (access # actor) (`Entity (MEntity.Get.id entity)) in
 	let! feed = ohm_req_or (return None) $ MFeed.Can.read feed in 
 	let! last = ohm $ MItem.last (`feed (MFeed.Get.id feed)) in
 	return $ Some (public,(entity,last))

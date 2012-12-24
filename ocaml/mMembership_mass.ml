@@ -42,8 +42,8 @@ let admin ~from gid aids what =
 
       (* Log that we're doing this. *)
       let! () = ohm begin 
-	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
-	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
+	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
+	let  iid = IInstance.decay (MActor.instance from) in
 	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
 	let  own = MGroup.Get.owner g in 
 	let  p   = 
@@ -128,8 +128,8 @@ let create ~from iid gid list what =
 
       (* Log that we're doing this. *)
       let! () = ohm begin 
-	let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
-	let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
+	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
+	let  iid = IInstance.decay (MActor.instance from) in
 	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
 	let  own = MGroup.Get.owner g in
 	let  p   = `Create in 

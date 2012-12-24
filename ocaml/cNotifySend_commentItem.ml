@@ -14,9 +14,9 @@ let send url uid cid =
 
   let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
   
-    let! access = ohm_req_or (return ()) $ access iid self in 
+    let! actor = ohm_req_or (return ()) $ actor iid self in 
 
-    let! item = ohm_req_or (return ()) $ MItem.try_get access itid in
+    let! item = ohm_req_or (return ()) $ MItem.try_get actor itid in
     let! _, comm = ohm_req_or (return ()) $ MComment.try_get (item # id) cid in 
 
     let! author = ohm $ CAvatar.mini_profile (comm # who) in 

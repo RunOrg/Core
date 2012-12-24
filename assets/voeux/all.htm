@@ -1,0 +1,10 @@
+{#this}
+  <li>
+    {?picture}<img src="{this}">{/?}
+    <span class="name">
+      {firstname} {initials}
+      {?org}<span>&middot; {this|raw}</span>{/?}
+    </span>
+    <p>{body}</p>
+  </li>
+{/#}

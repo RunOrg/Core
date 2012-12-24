@@ -95,7 +95,6 @@ module Data : sig
 
 end
 
-
 val instance : 'any IEntity.id -> IInstance.t option O.run
 
 val try_update : 
@@ -127,7 +126,7 @@ val set_picture :
 val bot_get : [`Bot] IEntity.id -> [`Bot] t option O.run
 
 val try_get : 
-     'any # MAccess.context
+     'any MActor.t
   -> 'some IEntity.id
   -> 'some t option O.run
 
@@ -152,21 +151,21 @@ val is_all_members : 'any t -> bool O.run
 module All : sig
 
   val get_by_kind : 
-       'any # MAccess.context
+       'any MActor.t
     -> MEntityKind.t 
     -> [`View] t list O.run
 
   val get_administrable_by_kind : 
-       'any # MAccess.context
+       'any MActor.t
     -> MEntityKind.t 
     -> [`Admin] t list O.run
 
   val get : 
-       'any # MAccess.context
+       'any MActor.t
     -> [`View] t list O.run
 
   val get_with_members : 
-       'any # MAccess.context
+       'any MActor.t
     -> [`View] t list O.run  
 
   val get_public :
@@ -175,7 +174,7 @@ module All : sig
     -> [`View] t list O.run
 
   val get_future : 
-       'any # MAccess.context
+       'any MActor.t
     -> [`View] t list O.run
 
   val get_public_future :
@@ -192,6 +191,3 @@ module Backdoor : sig
 
 end
 
-(* {{MIGRATION}} *)
-
-val on_migrate : (IEntity.t * IEvent.t * IGroup.t, unit O.run) Ohm.Sig.channel

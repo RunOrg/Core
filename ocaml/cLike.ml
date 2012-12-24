@@ -9,7 +9,7 @@ type what = string (* The URL where the like should be posted. *)
 let () = UrlClient.Like.def_item $ CClient.action begin fun access req res -> 
   
   let  fail = return res in
-  let  cuid = IIsIn.user (access # isin) in
+  let  cuid = MActor.user (access # actor) in
 
   let  itid, proof = req # args in
   let! itid = req_or fail $ IItem.Deduce.from_like_token cuid itid proof in
@@ -33,7 +33,7 @@ end
 
 let item access itid = 
   Action.url UrlClient.Like.item (access # instance # key) 
-    ( let cuid = IIsIn.user (access # isin) in
+    ( let  cuid = MActor.user (access # actor) in
       let proof = IItem.Deduce.(make_like_token cuid (read_can_like itid)) in
       (IItem.decay itid, proof) ) 
 

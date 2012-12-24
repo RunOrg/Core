@@ -88,7 +88,7 @@ end
 module Create : sig
 
   val poll : 
-       [`IsSelf] IAvatar.id 
+       'any MActor.t
     -> string 
     -> [`Created] IPoll.id 
     -> IInstance.t
@@ -96,14 +96,14 @@ module Create : sig
     -> [`Created] IItem.id O.run
 
   val message : 
-       [`IsSelf] IAvatar.id 
+       'any MActor.t
     -> string
     -> IInstance.t
     -> [`Write] IFeed.id
     -> [`Created] IItem.id O.run
 
   val mail : 
-       [`IsSelf] IAvatar.id 
+       'any MActor.t
     -> subject:string
     -> string
     -> IInstance.t
@@ -111,19 +111,19 @@ module Create : sig
     -> [`Created] IItem.id O.run
 
   val chat_request : 
-       [`IsSelf] IAvatar.id 
+       'any MActor.t
     -> string
     -> 'any IInstance.id
     -> [`Write] IFeed.id
     -> [`Created] IItem.id O.run
 
   val image :
-       'any # MAccess.context 
+       'any MActor.t 
     -> [`Write] MAlbum.t
     -> ([`Created] IItem.id * [`PutImg] IFile.id) option O.run
 
   val doc :
-       'any # MAccess.context 
+       'any MActor.t 
     -> [`Write] MFolder.t
     -> ([`Created] IItem.id * [`PutDoc] IFile.id) option O.run
 
@@ -162,7 +162,7 @@ val prev_next : item -> (IItem.t option * IItem.t option) O.run
 val exists : [`Read] source -> bool O.run
 
 val try_get : 
-  'any # MAccess.context -> 'a IItem.id -> item option O.run
+  'any MActor.t -> 'a IItem.id -> item option O.run
 
 val author : [`Bot] IItem.id -> IAvatar.t option O.run 
 

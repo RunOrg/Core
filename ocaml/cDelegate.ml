@@ -53,6 +53,13 @@ let list kind pick access deleg wrap =
 
     let! admin = ohm $ MEntity.admin_group_name (access # iid) in     
 
+    let  admins = match kind with 
+      | `ProfileView -> None
+      | `Event
+      | `Group
+      | `Forum -> Some admin
+    in
+
     let! delegates = ohm $ Run.list_map begin fun aid ->
       let! profile = ohm $ CAvatar.mini_profile aid in 
       let remove = OhmBox.reaction_endpoint remove aid in 
@@ -65,7 +72,7 @@ let list kind pick access deleg wrap =
 
     Asset_Delegate_List.render (object 
       method kind      = kind 
-      method admins    = admin
+      method admins    = admins
       method delegates = delegates
       method add       = pick
     end)
