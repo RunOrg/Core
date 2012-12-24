@@ -120,7 +120,7 @@ module ByOwnerView = CouchDB.DocView(struct
   module Doc = Data
   module Design = Design
   let name = "by_owner"
-  let map = "if (doc.t == 'albm' && doc.owner) emit(doc.owner[1]);"
+  let map = "emit(doc.owner[1]);"
 end)
 
 let get_or_create iid owner = 
