@@ -15,20 +15,19 @@ let get_wall_info owner current =
 	| _ -> return None
   end in 
 
-  let fail = return (Some Info.Wall.({ id = fid ; n = 0 })) in
-
   (* Act as a bot to extract the information. 
      Extracted information is general enough to be available to all
      viewers of the inbox line.
   *)
   let fid = IFeed.Assert.bot fid in
   
-  let! stats = ohm $ MItem.count (`feed fid) in
+  let! stats = ohm $ MItem.stats (`feed fid) in
   
   return (Some Info.Wall.({ 
-    id = fid ; 
-    n  = stats # n ; 
-    t  = stats # last ;
+    id      = IFeed.decay fid ; 
+    n       = stats # n ; 
+    last    = stats # last ;
+    authors = stats # authors ; 
   }))
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 

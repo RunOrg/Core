@@ -32,7 +32,6 @@ let get_or_create owner =
 	album  = None ;
 	folder = None ;
 	wall   = None ;
-	people = None ;
       }) in
       
       Tbl.create line

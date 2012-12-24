@@ -35,9 +35,10 @@ module Info = struct
   module Wall = struct
     module T = struct
       type json t = {
-	id : IFeed.t ;      
-	t  : float option ; 
-	n  : int ;
+	id          : IFeed.t ;      
+	last    "t" : float option ; 
+	n           : int ;
+	authors "a" : IAvatar.t list 
       }
     end
     include T
