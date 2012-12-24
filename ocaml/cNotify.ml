@@ -6,23 +6,18 @@ open BatPervasives
 
 let none = return None
 
-let access cuid iid = 
-  let! isin = ohm $ MAvatar.identify iid cuid in
-  let! isin = req_or none $ IIsIn.Deduce.is_token isin in
-  let! self = ohm $ MAvatar.get isin in 
-  return $ Some (object
-    method self = self
-    method isin = isin
-   end)
+let actor cuid iid = 
+  let! actor = ohm_req_or none $ MAvatar.identify iid cuid in
+  return $ MActor.member actor 
 
 let item_url cuid itid = 
   let! iid     = ohm_req_or none $ MItem.iid itid in
-  let! access  = ohm_req_or none $ access cuid iid in
-  let! item    = ohm_req_or none $ MItem.try_get access itid in
+  let! actor   = ohm_req_or none $ actor cuid iid in
+  let! item    = ohm_req_or none $ MItem.try_get actor itid in
   let! instance = ohm_req_or none $ MInstance.get (item # iid) in 			      
   match item # where with 
     | `feed fid -> begin
-      let! feed = ohm_req_or none $ MFeed.try_get access fid in 
+      let! feed = ohm_req_or none $ MFeed.try_get actor fid in 
       match MFeed.Get.owner feed with 
 	| `Instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
 	| `Entity eid -> return $ Some (Action.url UrlClient.Forums.see 

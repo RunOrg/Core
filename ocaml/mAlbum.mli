@@ -2,8 +2,8 @@
 
 type 'relation t
 
-val try_get        : 'any # MAccess.context -> 'a IAlbum.id  -> 'a t option O.run
-val get_for_owner  : 'any # MAccess.context -> 'a IAlbumOwner.id  -> [`Unknown] t O.run 
+val try_get        : 'any MActor.t -> 'a IAlbum.id  -> 'a t option O.run
+val get_for_owner  : 'any MActor.t -> 'a IAlbumOwner.id  -> [`Unknown] t O.run 
 
 val by_owner : 'a IInstance.id -> 'b IAlbumOwner.id -> IAlbum.t O.run
 

@@ -19,6 +19,7 @@ let _ =
 	let  wgid = IGroup.Assert.write gid in
 	let  from = IAvatar.Assert.is_self from in 
 	
+	let! from    = ohm_req_or (return ()) $ MAvatar.actor from in 
 	let! mid     = ohm $ MMembership.as_admin wgid aid in 
 	let! current = ohm $ MMembership.get mid in
 

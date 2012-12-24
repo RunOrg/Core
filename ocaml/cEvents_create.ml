@@ -19,7 +19,7 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
     Asset_Event_CreateForbidden.render (object method url = url end) 
   end in
 
-  let! iid = ohm_req_or forbidden $ O.decay (MInstanceAccess.can_create_event access) in
+  let! iid = ohm_req_or forbidden $ O.decay (MInstanceAccess.can_create_event (access # actor)) in
 
   let! create = O.Box.react Ohm.Fmt.Unit.fmt begin fun () json _ res -> 
 
@@ -36,7 +36,7 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
       | str -> Some str
     in
 
-    let! eid = ohm $ O.decay (MEvent.create ~self:(access # self) ~name ?pic ~iid (post # template)) in
+    let! eid = ohm $ O.decay (MEvent.create ~self:(access # actor) ~name ?pic ~iid (post # template)) in
 
     let  url = Action.url UrlClient.Events.edit (access # instance # key) [ IEvent.to_string eid ] in
 

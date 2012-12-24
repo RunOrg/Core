@@ -48,7 +48,7 @@ let box access gid inner =
 
   let  error = inner (return ignore) in
 
-  let! group = ohm_req_or error $ O.decay (MGroup.try_get access gid) in 
+  let! group = ohm_req_or error $ O.decay (MGroup.try_get (access # actor) gid) in 
   let! group = ohm_req_or error $ O.decay (MGroup.Can.admin group) in
 
   (* Extract fields in (idx, (Field.t, Flat.t)) format. References to 

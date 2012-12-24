@@ -19,4 +19,4 @@ val user   : 'a IAvatar.id -> bool -> t
 val invite : 'a IAvatar.id -> t 
 
 val relevant_change : MMembership_details.t -> t -> bool
-val make : 'a IAvatar.id -> [< `Accept of bool | `Default of bool | `Invite ] -> t
+val make : 'a MActor.t -> [< `Accept of bool | `Default of bool | `Invite ] -> t

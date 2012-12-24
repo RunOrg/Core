@@ -26,15 +26,14 @@ let bot_get (id : [`Bot] IEntity.id) =
 let naked_get id = 
   Tbl.get (IEntity.decay id) |> Run.map (BatOption.map (MEntity_can.make_naked id)) 
   
-let try_get context id = 
-  let isin = context # isin in
-  let instance = IInstance.decay (IIsIn.instance isin) in
+let try_get actor id = 
+  let instance = IInstance.decay (MActor.instance actor) in
   let! entity = ohm_req_or (return None) $ Tbl.get (IEntity.decay id) in
   if instance  <> entity.E.instance then 
     (* MEntity is in another castle^Winstance *)
     return None
   else
-    return $ Some (MEntity_can.make context id entity) 
+    return $ Some (MEntity_can.make actor id entity) 
 
 (* Various refresh routines --------------------------------------------------------------- *)
 

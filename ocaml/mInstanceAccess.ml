@@ -44,21 +44,21 @@ let view_directory id =
   let! t = ohm $ get (IInstance.decay id) in
   return (MAccess.summarize t.Data.directory)
 
-let can_view_directory ctx = 
-  let id = IIsIn.instance (ctx # isin) in
-  let! t = ohm $ get (IInstance.decay id) in
-  let! allowed = ohm $ MAccess.test ctx [ t.Data.directory ; `Admin ] in
-  return (if allowed then Some (IInstance.Assert.see_contacts id) else None)
+let can_view_directory actor = 
+  let iid = MActor.instance actor in 
+  let! t = ohm $ get (IInstance.decay iid) in
+  let! allowed = ohm $ MAccess.test actor [ t.Data.directory ; `Admin ] in
+  return (if allowed then Some (IInstance.Assert.see_contacts iid) else None)
 
 let create_event id = 
   let! t = ohm $ get (IInstance.decay id) in
   return (MAccess.summarize t.Data.events)
 
-let can_create_event ctx = 
-  let id = IIsIn.instance (ctx # isin) in
-  let! t = ohm $ get (IInstance.decay id) in
-  let! allowed = ohm $ MAccess.test ctx [ t.Data.events ; `Admin ] in
-  return (if allowed then Some (IInstance.Assert.create_event id) else None)
+let can_create_event actor = 
+  let iid = MActor.instance actor in 
+  let! t = ohm $ get (IInstance.decay iid) in
+  let! allowed = ohm $ MAccess.test actor [ t.Data.events ; `Admin ] in
+  return (if allowed then Some (IInstance.Assert.create_event iid) else None)
 
 let wall_post id = 
   let! t = ohm $ get (IInstance.decay id) in

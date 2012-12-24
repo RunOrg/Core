@@ -19,7 +19,7 @@ end
 
 type 'relation t 
 
-val try_get   :  'any # MAccess.context -> IGroup.t -> [`Unknown] t option O.run
+val try_get   :  'any MActor.t -> IGroup.t -> [`Unknown] t option O.run
 val bot_get   : [`Bot] IGroup.id -> [`Bot] t option O.run
 val naked_get :  'any  IGroup.id ->  'any  t option O.run
 
@@ -58,9 +58,9 @@ end
 
 module Propagate : sig
     
-  val add : 'any IGroup.id -> [`Admin] IGroup.id -> 'ctx # MAccess.context -> unit O.run
+  val add : 'any IGroup.id -> [`Admin] IGroup.id -> 'ctx MActor.t -> unit O.run
   val rem : 'any IGroup.id -> [`Admin] IGroup.id -> unit O.run
-  val get : [`Admin] IGroup.id -> 'any # MAccess.context -> [`Unknown] t list O.run
+  val get : [`Admin] IGroup.id -> 'any MActor.t -> [`Unknown] t list O.run
   val get_direct : IGroup.t -> IGroup.t list O.run 
 
 end

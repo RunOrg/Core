@@ -10,6 +10,7 @@ module Create = CGroups_create
 let contents access = 
 
   let! eid = O.Box.parse IEntity.seg in
+  let  actor = access # actor in 
 
   let! members_eid = ohm begin 
     let  namer = MPreConfigNamer.load (access # iid) in
@@ -28,16 +29,16 @@ let contents access =
 
       let none = return (false, None, None, None) in
 
-      let! entity = ohm_req_or none $ MEntity.try_get access eid in 
+      let! entity = ohm_req_or none $ MEntity.try_get actor eid in 
       let! entity = ohm_req_or none $ MEntity.Can.view entity in 
       let  gid    = MEntity.Get.group entity in 
 
-      let! group  = ohm_req_or none $ MGroup.try_get access gid in
+      let! group  = ohm_req_or none $ MGroup.try_get actor gid in
 
       (* My own status in this group ------------------------------------------------------- *)
 
       let! join = ohm begin
-	let! status = ohm $ MMembership.status access gid in
+	let! status = ohm $ MMembership.status actor gid in
 	let  fields = MGroup.Fields.get group <> [] in
 	return $ 
 	  CJoin.Self.render (`Entity eid) (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
@@ -53,7 +54,7 @@ let contents access =
 
 	else 
 	  
-	  let! feed   = ohm $ MFeed.get_for_owner access (`Entity eid) in
+	  let! feed   = ohm $ MFeed.get_for_owner actor (`Entity eid) in
 	  let! feed   = ohm $ MFeed.Can.read feed in
 	  let! feed   = req_or (return None) feed in 
 	  
@@ -116,11 +117,12 @@ let contents access =
 
 let () = CClient.define UrlClient.Members.def_home begin fun access -> 
 
+  let  actor    = access # actor in
   let! contents = O.Box.add (contents access) in 
 
   O.Box.fill $ O.decay begin 
 
-    let! list = ohm $ MEntity.All.get_by_kind access `Group in
+    let! list = ohm $ MEntity.All.get_by_kind actor `Group in
 
     let! list = ohm $ Run.list_filter begin fun entity -> 
       let! name = ohm $ CEntityUtil.name entity in
@@ -129,10 +131,10 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 	let! ()     = true_or (return (None,false)) (not (MEntity.Get.draft entity)) in
 	let  gid    = MEntity.Get.group entity in 
 
-	let! status = ohm $ MMembership.status access gid in
+	let! status = ohm $ MMembership.status actor gid in
 	let  mbr    = status = `Member in
  
-	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.try_get access gid in
+	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.try_get actor gid in
 	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.Can.list group in
 	let  gid    = MGroup.Get.id group in 
 	let! count  = ohm $ MMembership.InGroup.count gid in

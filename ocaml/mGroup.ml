@@ -95,14 +95,14 @@ let owner ( data : data ) =
 		       return (fun what -> MEvent.Satellite.access event (`Group what))
   end
 
-let _relation_of_data access id (data : data) = 
+let _relation_of_data actor id (data : data) = 
   let owner = owner data in
   {
     id    = id ;
     data  = data ;
-    view  = ( let! f = ohm owner in MAccess.test access [ f `Read ; f `Write ; f `Manage ] ) ;
-    edit  = ( let! f = ohm owner in MAccess.test access [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test access [                      f `Manage ] ) ;
+    view  = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
+    edit  = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
+    admin = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
     managers = ( let! f = ohm owner in return (`Union [ f `Write ; f `Manage ]) )
   }
 
@@ -161,9 +161,9 @@ let create gid iid owner =
 let _get id = 
   Tbl.get (IGroup.decay id)
 
-let try_get context id =
+let try_get actor id =
   let! group = ohm_req_or (return None) $ _get id in
-  return $ Some (_relation_of_data context id group)
+  return $ Some (_relation_of_data actor id group)
 
 let bot_get id = 
   let! group = ohm_req_or (return None) $ _get id in
@@ -290,10 +290,10 @@ module Propagate = struct
     Tbl.update (IGroup.decay id) update 
 
   (* Members in 'to_what' are added to 'what' automatically *)
-  let add to_what what ctx = 
+  let add to_what what actor = 
     let      what = IGroup.decay    what in 
     let   to_what = IGroup.decay to_what in 
-    let! to_group = ohm_req_or (return ()) $ try_get ctx to_what in
+    let! to_group = ohm_req_or (return ()) $ try_get actor to_what in
     let! to_group = ohm_req_or (return ()) $ Can.admin to_group  in
 
     if List.mem what (to_group.data # propg) then return () else
@@ -338,13 +338,13 @@ module Propagate = struct
                       emit(doc.propg[k],null);" 
   end)
 
-  let get gid context = 
+  let get gid actor = 
     let  id    = IGroup.decay gid in 
     let! items = ohm $ InverseView.doc id in
     
     return $ List.map begin fun item -> 
       let id = IGroup.of_id (item # id) in 
-      _relation_of_data context id (item # doc)
+      _relation_of_data actor id (item # doc)
     end items
 
   let get_direct gid = 

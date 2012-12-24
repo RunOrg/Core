@@ -9,7 +9,7 @@ let reply access itid =
   let! myself = ohm $ CAvatar.mini_profile (access # self) in
 
   let url = Action.url UrlClient.Comment.post (access # instance # key) 
-    ( let cuid = IIsIn.user (access # isin) in
+    ( let cuid = MActor.user (access # actor) in
       let proof = IItem.Deduce.make_reply_token cuid itid in
       (IItem.decay itid, proof) ) 
   in
@@ -42,7 +42,7 @@ let render_by_id cid =
 let () = UrlClient.Comment.def_post $ CClient.action begin fun access req res -> 
   
   let  fail = return res in
-  let  cuid = IIsIn.user (access # isin) in
+  let  cuid = MActor.user (access # actor) in
 
   let  itid, proof = req # args in
   let! itid = req_or fail $ IItem.Deduce.from_reply_token cuid itid proof in

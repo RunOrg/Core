@@ -9,15 +9,15 @@ val restore_update :
   -> unit O.run
 
 val self_update :
-      'any IGroup.id
-  -> [`IsSelf] IAvatar.id
+     'any IGroup.id
+  -> 'b MActor.t
   -> MUpdateInfo.t
   -> ?irreversible:string list
   -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val admin_update :
-     [`IsSelf] IAvatar.id
+     'a MActor.t
   -> [<`Write|`Admin|`Bot] IGroup.id
   -> 'any IAvatar.id
   -> MUpdateInfo.t
