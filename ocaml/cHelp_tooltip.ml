@@ -8,7 +8,7 @@ let newhere_tooltip_closed = MUser.Registry.property Fmt.Bool.fmt "newhere_toolt
 
 let () = UrlClient.def_newhere $ CClient.action begin fun access req res ->
 
-  let uid = IUser.Deduce.is_anyone (IIsIn.user (access # isin)) in
+  let uid = IUser.Deduce.is_anyone (MActor.user (access # actor)) in
 
   if req # get "mode" = Some "check" then
   

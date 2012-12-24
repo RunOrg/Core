@@ -19,7 +19,7 @@ let render_event access event =
   let! coming = ohm begin 	
     let! ()    = true_or (return None) (not (MEvent.Get.draft event)) in
     let  gid   = MEvent.Get.group event in 
-    let! group = ohm_req_or (return None) $ MGroup.try_get access gid in
+    let! group = ohm_req_or (return None) $ MGroup.try_get (access # actor) gid in
     let! group = ohm_req_or (return None) $ MGroup.Can.list group in
     let  gid   = MGroup.Get.id group in 
     let! count = ohm $ MMembership.InGroup.count gid in
@@ -42,14 +42,15 @@ let () = CClient.define UrlClient.Events.def_home begin fun access ->
     (* Construct the list of entities to be displayed *)
     let! now = ohmctx (#time) in
     let  iid = access # iid in 
+    let  actor = access # actor in 
 
-    let! future = ohm $ MEvent.All.future ~access iid in
+    let! future = ohm $ MEvent.All.future ~actor iid in
     let! future = ohm $ Run.list_map (render_event access) future in 
 
-    let! undated = ohm $ MEvent.All.undated ~access iid in
+    let! undated = ohm $ MEvent.All.undated ~actor iid in
     let! undated = ohm $ Run.list_map (render_event access) undated in 
 
-    let! past, _ = ohm $ MEvent.All.past ~access ~count:10 iid in
+    let! past, _ = ohm $ MEvent.All.past ~actor ~count:10 iid in
     let! past = ohm $ Run.list_map (render_event access) past in 
 
     (* The URL of the options page *)

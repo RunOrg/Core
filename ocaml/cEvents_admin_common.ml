@@ -11,7 +11,7 @@ let define d box = CClient.define d begin fun access ->
 
   let! eid = O.Box.parse IEvent.seg in
 
-  let! event = ohm_req_or forbidden $ MEvent.admin ~access eid in
+  let! event = ohm_req_or forbidden $ MEvent.admin ~actor:(access # actor) eid in
 
   let  eid = MEvent.Get.id event in 
   let  key = access # instance # key in

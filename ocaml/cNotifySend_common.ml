@@ -4,11 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let access iid self = 
-  let! isin = ohm $ MAvatar.identify_user iid self in
-  let! isin = req_or (return None) $ IIsIn.Deduce.is_token isin in
-  let! self = ohm $ MAvatar.get isin in 
-  return $ Some (object
-    method self = self
-    method isin = isin
-  end)
+let actor iid self = 
+  let! aid   = ohm_req_or (return None) $ MAvatar.find iid self in
+  let  aid   = IAvatar.Assert.is_self aid in
+  let! actor = ohm_req_or (return None) $ MAvatar.actor aid in 
+  return (MActor.member actor)

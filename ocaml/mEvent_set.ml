@@ -9,8 +9,8 @@ module Can  = MEvent_can
 module Data = MEvent_data
 
 let update t self diffs = 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
-    let info = MUpdateInfo.self self in 
+  O.decay begin 
+    let info = MUpdateInfo.self (MActor.avatar self) in 
     let! _ = ohm $ E.Store.update ~id:(IEvent.decay (Can.id t)) ~diffs ~info () in
     return () 
   end

@@ -109,7 +109,7 @@ let () = define UrlClient.Events.def_edit begin fun parents event access ->
     let vision = BatOption.default `Normal (result # publish) in
 
     let! () = ohm $ MEvent.Set.info
-      event (access # self) ~draft:(not publish) ~name ~date ~page ~vision ~address
+      event (access # actor) ~draft:(not publish) ~name ~date ~page ~vision ~address
     in
 
     (* Redirect to main page *)

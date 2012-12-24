@@ -12,8 +12,8 @@ module E = MEntity_core
 let get_manage_access entity = 
   if entity.E.deleted = None then [ `Admin ; entity.E.admin ] else []
 
-let has_manage_access entity context = 
-  MAccess.test context (get_manage_access entity)
+let has_manage_access entity actor = 
+  MAccess.test actor (get_manage_access entity)
 
 let get_view_access entity = 
   if entity.E.deleted = None then 
@@ -23,8 +23,8 @@ let get_view_access entity =
 	entity.E.view :: `Groups (`Any,[entity.E.group]) :: admin
   else []
 
-let has_view_access entity context = 
-  MAccess.test context (get_view_access entity)
+let has_view_access entity actor = 
+  MAccess.test actor (get_view_access entity)
 
 (* A loaded entity ------------------------------------------------------------------------- *)
 
@@ -35,12 +35,12 @@ type 'relation t = {
   admin : bool O.run ;
 }
 
-let make context id data = 
+let make actor id data = 
   {
     id    = id ;
     data  = data ;
-    admin = has_manage_access data context ;
-    view  = has_view_access data context ; 
+    admin = has_manage_access data actor ;
+    view  = has_view_access data actor ; 
   }
 
 let make_public id data = 

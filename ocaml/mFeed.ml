@@ -45,22 +45,22 @@ let _access iid = function
 	      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
 	      | `Manage -> `Admin)
     
-let _make context id (data:Data.t) = 
+let _make actor id (data:Data.t) = 
   let owner = Run.memo (_access (data # iid) (data # own)) in
   {
     id     = id ;
     data   = data ;
     access = owner ;
-    read   = ( let! f = ohm owner in MAccess.test context [ f `Read ; f `Write ; f `Manage ] ) ;
-    write  = ( let! f = ohm owner in MAccess.test context [           f `Write ; f `Manage ] ) ;
-    admin  = ( let! f = ohm owner in MAccess.test context [                      f `Manage ] ) ;
+    read   = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
+    write  = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
+    admin  = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
 
-let try_get ctx id = 
+let try_get actor id = 
   let! feed_opt = ohm (Tbl.get (IFeed.decay id)) in
-  return (BatOption.map (_make ctx id) feed_opt)
+  return (BatOption.map (_make actor id) feed_opt)
 
 module Get = struct
 
@@ -168,10 +168,10 @@ let get_or_create iid owner =
       let! id = ohm $ Tbl.create doc in
       return (id, doc) 
 	
-let get_for_owner ctx owner =
-  let  iid = IIsIn.instance (ctx # isin) in
+let get_for_owner actor owner =
+  let  iid = MActor.instance actor in 
   let! id, doc = ohm $ get_or_create iid owner in 
-  return (_make ctx id doc)
+  return (_make actor id doc)
 
 let by_owner iid owner = 
   let! id, _ = ohm $ get_or_create iid owner in 

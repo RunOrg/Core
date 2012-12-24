@@ -143,7 +143,7 @@ let newForm aid kind access render =
     let! result = ohm_ok_or fail $ OhmForm.result form in  
 
     (* Save the changes to the database *)
-    let! pfid = ohm $ O.decay (MProfileForm.create access aid 
+    let! pfid = ohm $ O.decay (MProfileForm.create (access # actor) aid 
 			      ~kind
 			      ~hidden:(result # hidden) 
 			      ~name:(result # name) 
@@ -218,7 +218,7 @@ let () = CClient.define UrlClient.Profile.def_editForm begin fun access ->
 
   let! access = req_or e404 (CAccess.admin access) in 
   let! pfid = O.Box.parse IProfileForm.seg in
-  let  pfid = MProfileForm.as_admin pfid access in 
+  let  pfid = MProfileForm.as_admin pfid (access # actor) in 
 
   let! info = ohm_req_or e404 $ O.decay (MProfileForm.get pfid) in
   let! ()  = true_or e404 (info.MProfileForm.Info.iid = IInstance.decay (access # iid)) in 
@@ -251,7 +251,7 @@ let () = CClient.define UrlClient.Profile.def_editForm begin fun access ->
 			      ~hidden:(result # hidden) 
 			      ~name:(result # name) 
 			      ~data:(result # data)
-			      access)
+			      (access # actor))
     in
     
     (* Redirect to main page *)
@@ -300,7 +300,7 @@ end
 let body access aid me render = 
 
   let! pfid = O.Box.parse IProfileForm.seg in 
-  let! item = ohm $ O.decay (MProfileForm.access pfid access) in
+  let! item = ohm $ O.decay (MProfileForm.access pfid (access # actor)) in
 
   (* When the requested item is not available, draw the list of items *)
 
@@ -308,11 +308,11 @@ let body access aid me render =
     
     let! list = ohm begin
       match CAccess.admin access with 
-	| Some access -> let! list = ohm $ MProfileForm.All.by_avatar aid access in
+	| Some access -> let! list = ohm $ MProfileForm.All.by_avatar aid (access # actor) in
 			 return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
-	| None when me -> let! list = ohm $ MProfileForm.All.mine access in
+	| None when me -> let! list = ohm $ MProfileForm.All.mine (access # actor) in
 			  return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
-	| None -> let! list = ohm $ MProfileForm.All.as_parent aid access in
+	| None -> let! list = ohm $ MProfileForm.All.as_parent aid (access # actor) in
 		  return $ List.map (fun (id,info) -> IProfileForm.decay id, info) list
     end in     
     

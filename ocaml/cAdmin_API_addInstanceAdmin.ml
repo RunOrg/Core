@@ -33,13 +33,14 @@ include Make(struct
 
     let! ruid = ohm_req_or (fail "Utilisateur RUNORG introuvable") $ MUser.by_email "contact@runorg.com" in 
     let! raid = ohm $ MAvatar.become_contact iid ruid in
-    let  raid = IAvatar.Assert.is_self raid in 
+    let  raid = IAvatar.Assert.is_self raid in
+    let! from = ohm_req_or (fail "Avatar RUNORG introuvable") $ MAvatar.actor raid in  
 
     let namer = MPreConfigNamer.load iid in     
     let! gid  = ohm $ MPreConfigNamer.group "admin" namer in
     let  gid  = IGroup.Assert.admin gid in 
 
-    let! () = ohm $ MMembership.admin ~from:raid gid aid [ `Accept true ; `Default true ] in
+    let! () = ohm $ MMembership.admin ~from gid aid [ `Accept true ; `Default true ] in
     ok "Admin status granted"
 
 end)
