@@ -60,6 +60,7 @@ module Line = struct
      ?wall   : Info.Wall.t option ;
      ?time   : float = 0.0 ;
      ?show   : bool = false ;
+     ?push   : int = 0 ;
     }
   end
   include T

@@ -29,6 +29,7 @@ let get_or_create owner =
 	owner  = IInboxLineOwner.decay owner ;
 	show   = false ;
 	time   = 0.0 ;
+	push   = 0 ; 
 	album  = None ;
 	folder = None ;
 	wall   = None ;
