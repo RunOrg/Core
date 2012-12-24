@@ -33,8 +33,10 @@ end
 
 
 module Can : sig
+
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
+
 end
 
 module Data : sig
