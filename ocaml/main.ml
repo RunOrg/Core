@@ -30,6 +30,7 @@ module Actions = struct
   open CHelp
   open CSearch
   open CVoeux
+  open CInbox
   open Splash
 end
 
