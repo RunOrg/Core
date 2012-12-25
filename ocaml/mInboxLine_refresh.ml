@@ -84,18 +84,17 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
       | Some current -> let! wall   = ohm $ get_wall_info   current.Line.owner current.Line.wall in 
 			let! album  = ohm $ get_album_info  current.Line.owner current.Line.album in
 			let! folder = ohm $ get_folder_info current.Line.owner current.Line.folder in 
-			let  time = 
-			  List.fold_left max current.Line.time 
-			    (BatList.filter_map identity [ 
-			      BatOption.bind (fun w -> w.Info.Wall.last) wall ;
-			      BatOption.bind (fun a -> a.Info.Album.last) album ;
-			      BatOption.bind (fun f -> f.Info.Folder.last) folder ; 
-			    ])
-			in
-			let push  = current.Line.push + 1 in
-			let show  = true in
-			let fresh = Line.({ current with wall ; album ; folder ; time ; push ; show }) in
-			return (Some push,`put fresh)
+			let  times  = BatList.filter_map identity [ 
+			  BatOption.bind (fun w -> w.Info.Wall.last) wall ;
+			  BatOption.bind (fun a -> a.Info.Album.last) album ;
+			  BatOption.bind (fun f -> f.Info.Folder.last) folder ; 
+			] in
+			if times = [] then return (None, `keep) else 
+			  let time  = List.fold_left max current.Line.time times in 
+			  let push  = current.Line.push + 1 in
+			  let show  = true in
+			  let fresh = Line.({ current with wall ; album ; folder ; time ; push ; show }) in
+			  return (Some push,`put fresh)
     end in
     Push.schedule ilid push 
   end
