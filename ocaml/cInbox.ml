@@ -7,15 +7,13 @@ open BatPervasives
 let render_event_line access line eid =
   let! event = ohm_req_or (return None) $ MEvent.view ~actor:(access # actor) eid in
   let! name  = ohm $ MEvent.Get.fullname event in
-  return $ Some Html.(concat [
-    str "<div>" ;
-    esc name ; 
-    str "<span>" ;
-    esc (string_of_int (line # wall # old_count)) ;
-    str " + " ;
-    esc (string_of_int (line # wall # new_count)) ;
-    str "</span></div>"      
-  ])
+  let! now   = ohmctx (#time) in
+  let! html  = ohm $ Asset_Inbox_Line.render (object
+    method name = name
+    method view = line
+    method time = if line # time = 0. then None else Some (line # time, now) 
+  end) in
+  return (Some html) 
 
 let render_line access line = 
   match line # owner with 

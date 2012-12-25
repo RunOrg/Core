@@ -9,6 +9,7 @@ open MInboxLine_common
 let count o n = object
   method old_count = o
   method new_count = n
+  method read      = if n > 0 then Some o else None 
   method unread    = if n > o then Some (n-o) else None
 end
 
@@ -18,6 +19,7 @@ module Count = Fmt.Make(struct
     old_count : int ;
     new_count : int ;
     unread    : int option ; 
+    read      : int option ; 
   >
 
   let t_of_json = function

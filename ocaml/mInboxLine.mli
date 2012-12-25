@@ -3,7 +3,7 @@
 module View : sig
 
   module Count : sig
-    type t = < old_count : int ; new_count : int ; unread : int option >
+    type t = < old_count : int ; new_count : int ; read : int option ; unread : int option >
   end 
 
   type t = <
