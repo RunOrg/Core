@@ -6,17 +6,29 @@ open BatPervasives
 
 open MInboxLine_common
 
-module Count = Fmt.Make(struct
-  type json t = <
-    old_count "o" : int ;
-    new_count "n" : int ;
-  >
-end)
-
 let count o n = object
   method old_count = o
   method new_count = n
+  method unread    = if n > o then Some (n-o) else None
 end
+
+module Count = Fmt.Make(struct
+
+  type t = <
+    old_count : int ;
+    new_count : int ;
+    unread    : int option ; 
+  >
+
+  let t_of_json = function
+    | Json.Array [ Json.Int o ; Json.Int n] -> count o n
+    | _ -> raise (Json.Error "MInboxLine.View.Count")
+
+  let json_of_t t = 
+    Json.Array [ Json.Int (t # old_count) ;
+		 Json.Int (t # new_count) ]
+
+end)
 
 let view c = 
   count (c # new_count) (c # new_count) 
