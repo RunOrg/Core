@@ -2,13 +2,15 @@
   <span class="-name">{name}</span>
   <span class="-stats">
     {@!statCell}
-      {?read}{this|string_of_int|esc}{/?}
-      {?unread}<em>+{this|string_of_int|esc}</em>{/?}      
+      {?unread}<span class="-c -a">+{this|string_of_int|esc}</span>
+      {else}
+        <span class="-c">{?read}{this|string_of_int|esc}{/?}</span>
+      {/?}      
     {/@}
     {=view}
-      <span class="-c">{wall|Asset_Inbox_Line_StatCell.render|ohm}</span>
-      <span class="-c">{album|Asset_Inbox_Line_StatCell.render|ohm}</span>
-      <span class="-c">{folder|Asset_Inbox_Line_StatCell.render|ohm}</span>
+      {wall|Asset_Inbox_Line_StatCell.render|ohm}
+      {album|Asset_Inbox_Line_StatCell.render|ohm}
+      {folder|Asset_Inbox_Line_StatCell.render|ohm}
     {/=}
     {?time}<span class="-date">{`DateRelative this}</span>{/?}
   </span>
@@ -33,24 +35,18 @@
     float: right;
     padding: 16px 0;
     height: 17px;
-    vertical-align: middle;
     line-height: 13px; 
     .-c {
+      vertical-align: top;
       width: 40px;
       min-height: 1px; 
-      text-align: left; 
+      text-align: center; 
       font-size: 12px;
+      color: #888;
       display: inline-block;
-      em {
-        font-style: normal; 
-        background-color: #E70079;
-        color: white;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 10px;
-        padding: 2px 4px;
-        line-height: 10px;
-        vertical-align: bottom;
+      &.-a {
+        color: #E70079;
+        font-weight: bold;
       }
     }
     .-date {
