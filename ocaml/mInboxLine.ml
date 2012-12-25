@@ -6,6 +6,7 @@ open BatPervasives
 
 open MInboxLine_common
 
+module View    = MInboxLine_view
 module ByOwner = MInboxLine_byOwner
 module Refresh = MInboxLine_refresh
 

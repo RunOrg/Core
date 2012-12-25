@@ -68,3 +68,60 @@ let update ilid aid line =
       last   = line.Line.time ;
     })
   end
+
+type t = <
+  owner  : IInboxLineOwner.t ;
+  wall   : Count.t ;
+  folder : Count.t ;
+  album  : Count.t ; 
+  time   : float ;
+  seen   : bool ;
+  aids   : IAvatar.t list ;
+>
+
+module ByInboxView = CouchDB.DocView(struct
+  module Key    = Fmt.Make(struct type json t = (IAvatar.t * float) end)
+  module Value  = Fmt.Unit
+  module Doc    = Data
+  module Design = Design
+  let name = "by-inbox"
+  let map = "emit([doc.aid,doc.last])"			   
+end)
+
+let list ?start ~count actor f = 
+  let  aid = IAvatar.decay (MActor.avatar actor) in
+  let! now = ohmctx (#time) in
+  let  startkey = match start with None -> (aid,now) | Some time -> (aid,time) in
+  let  endkey   = (aid,0.0) in
+  let  limit    = count + 1 in
+  let! list = ohm $ ByInboxView.doc_query ~startkey ~endkey ~limit ~descending:true () in
+  
+  let delete ilvid = 
+    let! () = ohm $ Tbl.delete ilvid in 
+    return None
+  in 
+
+  let extract item = 
+    let  ilvid = IInboxLine.View.of_id (item # id) in
+    let  view  = item # doc in 
+    let  ilid  = view.Data.ilid in
+    let! line  = ohm_req_or (delete ilvid) $ MInboxLine_common.Tbl.get ilid in
+    if not line.Line.show then delete ilvid else
+      let data : t = object
+	method owner = line.Line.owner
+	method wall  = view.Data.wall
+	method folder = view.Data.folder
+	method album = view.Data.album
+	method time = view.Data.last
+	method seen = view.Data.seen >= view.Data.last
+	method aids = avatars line
+      end in
+      let! result = ohm_req_or (delete ilvid) $ f data in
+      return (Some result) 
+  in
+
+  let  list, next = OhmPaging.slice ~count list in 
+  let! list = ohm $ Run.list_filter extract list in 
+  let  next = BatOption.map (#key |- snd) next in
+
+  return (list, next) 

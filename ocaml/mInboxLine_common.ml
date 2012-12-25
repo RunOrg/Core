@@ -70,3 +70,13 @@ end
 (* Database and table -------------------------------------------------------------------------------------- *)
 
 include CouchDB.Convenience.Table(struct let db = O.db "inbox-line" end)(IInboxLine)(Line)
+
+(* Helper functinos ---------------------------------------------------------------------------------------- *)
+
+let avatars line = 
+  let list = 
+    ( match line.Line.album with None -> [] | Some a -> a.Info.Album.authors ) 
+    @ ( match line.Line.folder with None -> [] | Some f -> f.Info.Folder.authors )
+    @ ( match line.Line.wall with None -> [] | Some w -> w.Info.Wall.authors )
+  in
+  BatList.sort_unique compare list 

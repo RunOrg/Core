@@ -1,2 +1,26 @@
 (* © 2012 RunOrg *)
 
+module View : sig
+
+  module Count : sig
+    type t = < old_count : int ; new_count : int >
+  end 
+
+  type t = <
+    owner  : IInboxLineOwner.t ;
+    wall   : Count.t ;
+    folder : Count.t ;
+    album  : Count.t ; 
+    time   : float ;
+    seen   : bool ;
+    aids   : IAvatar.t list ;
+  >
+
+  val list : 
+       ?start:float
+    -> count:int
+    -> 'any MActor.t
+    -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)
+    -> ('ctx,'a list * float option) Ohm.Run.t  
+
+end
