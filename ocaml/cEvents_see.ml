@@ -82,7 +82,11 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       
   O.Box.fill $ O.decay begin
 
-    (* Top and side details ---------------------------------------------------------------- *)
+    (* Mark everything as read --------------------------------------------------------------------------- *) 
+
+    let! () = ohm $ MInboxLine.View.mark (access # actor) (`Event eid) in
+
+    (* Top and side details ------------------------------------------------------------------------------ *)
 
     let! now  = ohmctx (#time) in
 
