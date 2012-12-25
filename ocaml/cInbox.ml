@@ -25,7 +25,9 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
     let! htmls, next = ohm $ MInboxLine.View.list ~count:10 (access # actor) (render_line access) in
     
-    return (Html.concat htmls) 
+    Asset_Inbox_List.render (object
+      method items = htmls
+    end) 
 
   end
   
