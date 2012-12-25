@@ -93,7 +93,8 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
 			    ])
 			in
 			let push  = current.Line.push + 1 in
-			let fresh = Line.({ current with wall ; album ; folder ; time ; push }) in
+			let show  = true in
+			let fresh = Line.({ current with wall ; album ; folder ; time ; push ; show }) in
 			return (Some push,`put fresh)
     end in
     Push.schedule ilid push 
