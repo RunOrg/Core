@@ -8,11 +8,24 @@ let render_event_line access line eid =
   let! event = ohm_req_or (return None) $ MEvent.view ~actor:(access # actor) eid in
   let! name  = ohm $ MEvent.Get.fullname event in
   let! now   = ohmctx (#time) in
+  let! details = ohm $ Run.list_filter identity [
+
+    ( let  name = PreConfig_Template.Events.name (MEvent.Get.template event) in
+      let! name = ohm $ AdLib.get (`PreConfig name) in
+      return (Some name) ) ;
+
+    ( let! date = req_or (return None) (MEvent.Get.date event) in
+      let  ts   = Date.to_timestamp date in
+      let! time = ohm $ AdLib.get (`ShortWeekDate (ts,now)) in
+      return (Some time) ) ;
+
+  ] in 
   let! html  = ohm $ Asset_Inbox_Line.render (object
     method name = name
     method url  = Action.url UrlClient.Events.see (access # instance # key) [ IEvent.to_string eid ]
     method view = line
     method time = if line # time = 0. then None else Some (line # time, now) 
+    method details = details
   end) in
   return (Some html) 
 

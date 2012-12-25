@@ -14,6 +14,14 @@
     {?time}<span class="-date">{`DateRelative this}</span>{/?}
   </span>
   <span class="-name">{name}</span>
+  <span class="-details">
+    {= details | List.hd}
+      <span>{this}</span>
+    {/=}
+    {# details | List.tl}
+      &middot; <span>{this}</span>
+    {/#}
+  </span>
 </a>
 
 <style>
@@ -25,11 +33,18 @@
   border-bottom: 1px solid #CCC;
   margin-bottom: -1px;
   font-size: 14px;
-  color: #333;
   &:hover {
     color: #111;
     background-color: #EEE;
     box-shadow: inset 0 0 30px #DDD;
+  }
+  .-details {
+    color: #888;
+    overflow: hidden;
+    display: block;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-top: 4px; 
   }
   .-name {
     display: block;
@@ -40,9 +55,9 @@
   .-stats {
     width: 250px;
     float: right;
-    padding: 16px 0;
+    padding: 9px 0;
     height: 17px;
-    line-height: 13px; 
+    line-height: 15px; 
     .-c {
       vertical-align: top;
       width: 40px;
