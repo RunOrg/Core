@@ -10,6 +10,7 @@ let render_event_line access line eid =
   let! now   = ohmctx (#time) in
   let! html  = ohm $ Asset_Inbox_Line.render (object
     method name = name
+    method url  = Action.url UrlClient.Events.see (access # instance # key) [ IEvent.to_string eid ]
     method view = line
     method time = if line # time = 0. then None else Some (line # time, now) 
   end) in
