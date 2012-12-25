@@ -15,6 +15,16 @@ module ByOwnerView = CouchDB.DocView(struct
   let map = "emit(doc.owner[1])"
 end)
 
+let get owner = 
+
+  let id = IInboxLineOwner.to_id owner in 
+  
+  let! found_opt = ohm (ByOwnerView.doc id |> Run.map Util.first) in
+  
+  match found_opt with 
+    | Some item -> return $ Some (IInboxLine.of_id (item # id))
+    | None      -> return None
+  
 let get_or_create owner = 
 
   let id = IInboxLineOwner.to_id owner in 

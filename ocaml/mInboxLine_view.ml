@@ -6,6 +6,8 @@ open BatPervasives
 
 open MInboxLine_common
 
+module ByOwner = MInboxLine_byOwner
+
 let count o n = object
   method old_count = o
   method new_count = n
@@ -32,7 +34,7 @@ module Count = Fmt.Make(struct
 
 end)
 
-let view c = 
+let viewed c = 
   count (c # new_count) (c # new_count) 
       
 module Data = struct
@@ -61,14 +63,6 @@ let default ilid aid = Data.({
   last   = 0.0 ;
 })
 
-let view now line = Data.({
-  line with 
-    album  = view line.album ;
-    folder = view line.folder ;
-    wall   = view line.wall ;
-    seen   = now ;
-})
-
 include CouchDB.Convenience.Table(struct let db = O.db "inbox-line-view" end)(IInboxLine.View)(Data)
 
 let update ilid aid line = 
@@ -81,6 +75,19 @@ let update ilid aid line =
       wall   = count view.wall   (fun w -> w.Info.Wall.n)   line.Line.wall ;
       last   = line.Line.time ;
     })
+  end
+
+let mark actor iloid = 
+  let  aid = MActor.avatar actor in
+  let! ilid = ohm_req_or (return ()) $ ByOwner.get iloid in
+  let! now = ohmctx (#time) in
+  Tbl.update (IInboxLine.View.make ilid aid) begin fun view ->
+    Data.({ view with
+      album  = viewed view.album ;
+      wall   = viewed view.wall ;
+      folder = viewed view.folder ;
+      seen   = max view.last now
+    }) 
   end
 
 type t = <

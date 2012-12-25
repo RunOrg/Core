@@ -23,3 +23,4 @@ val list :
   -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)
   -> ('ctx,'a list * float option) Ohm.Run.t  
   
+val mark : 'a MActor.t -> 'b IInboxLineOwner.id -> (#O.ctx,unit) Ohm.Run.t
