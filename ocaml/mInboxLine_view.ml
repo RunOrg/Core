@@ -127,7 +127,7 @@ let list ?start ~count actor f =
     let  view  = item # doc in 
     let  ilid  = view.Data.ilid in
     let! line  = ohm_req_or (delete ilvid) $ MInboxLine_common.Tbl.get ilid in
-    if not line.Line.show then delete ilvid else
+    if not line.Line.show || line.Line.last = 0.0 then delete ilvid else
       let data : t = object
 	method owner = line.Line.owner
 	method wall  = view.Data.wall
