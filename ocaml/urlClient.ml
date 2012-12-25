@@ -68,6 +68,7 @@ module Invite   = UrlClient_invite
 module Join     = UrlClient_join
 module Profile  = UrlClient_profile
 module Search   = UrlClient_search
+module Inbox    = UrlClient_inbox
 
 module Home = struct
   let home, def_home = root "home"
