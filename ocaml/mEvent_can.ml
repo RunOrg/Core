@@ -6,6 +6,9 @@ open BatPervasives
 
 module E = MEvent_core
 
+type core = E.t
+type 'a id = 'a IEvent.id
+
 type 'relation t = {
   eid   : 'relation IEvent.id ;
   data  : E.t ;
