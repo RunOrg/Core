@@ -14,8 +14,9 @@ module type CAN = sig
   val make : 'a id -> ?actor:'any MActor.t -> core -> 'a t option 
 
   val id   : 'any t -> 'any id
-  val data : 'any t -> core
-    
+  val data : 'any t -> core  
+  val uid  : 'any t -> [`Unknown] id     
+  
   val view_access   : 'any t -> MAccess.t list
   val admin_access  : 'any t -> MAccess.t list 
     
@@ -32,7 +33,8 @@ module type CAN_ARG = sig
   val admin : core -> MAccess.t list 
   val view : core -> MAccess.t list
   val id_view  : 'a id -> [`View] id
-  val id_admin : 'a id -> [`Admin] id 
+  val id_admin : 'a id -> [`Admin] id  
+  val decay : 'a id -> [`Unknown] id 
   val public : core -> bool 
 end
 
@@ -67,6 +69,8 @@ module Can = functor (C:CAN_ARG) -> struct
     C.view t.data  
 
   let id t = t.id
+
+  let uid t = C.decay t.id
     
   let data t = t.data
     
@@ -98,16 +102,20 @@ module type SET = sig
 end
 
 module type SET_ARG = sig
-  type 'a can
-  type diff
-  val update : 'any can -> diff list -> MUpdateInfo.t -> (#O.ctx,unit) Ohm.Run.t
+  type t 
+  module Id : Ohm.CouchDB.ID
+  module Diff : Ohm.Fmt.FMT
+  val update : id:Id.t -> diffs:Diff.t list -> info:MUpdateInfo.t -> unit -> (O.ctx,t option) Ohm.Run.t
 end
 
-module Set = functor(S:SET_ARG) -> struct
-  type 'a can = 'a S.can
-  type diff = S.diff
+module Set = functor(C:CAN) -> functor(S:SET_ARG with type Id.t = [`Unknown] C.id) -> struct
+  type 'a can = 'a C.t
+  type diff = S.Diff.t
   type ('a,'b) t = [`Admin] can -> 'a MActor.t -> ('b,unit) Ohm.Run.t
   let update diffs t self =
-    let info = MUpdateInfo.self (MActor.avatar self) in
-    S.update t diffs info 
+    O.decay begin 
+      let info = MUpdateInfo.self (MActor.avatar self) in
+      let! _ = ohm $ S.update ~id:(C.uid t) ~diffs ~info () in
+      return () 
+    end 
 end

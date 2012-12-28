@@ -19,6 +19,7 @@ include HEntity.Can(struct
 
   let id_view  id = IDiscussion.Assert.view id
   let id_admin id = IDiscussion.Assert.admin id 
+  let decay    id = IDiscussion.decay id
 
 end)
 

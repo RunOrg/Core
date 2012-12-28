@@ -8,15 +8,7 @@ module E    = MEvent_core
 module Can  = MEvent_can
 module Data = MEvent_data
 
-include HEntity.Set(struct
-  type 'a can = 'a MEvent_can.t 
-  type diff = MEvent_core.Cfg.Diff.t
-  let update t diffs info = 
-    O.decay begin 
-      let! _ = ohm $ E.Store.update ~id:(IEvent.decay (Can.id t)) ~diffs ~info () in
-      return () 
-    end
-end) 
+include HEntity.Set(Can)(E.Store)
 
 let picture fid t self = 
   let fid = BatOption.map IFile.decay fid in 

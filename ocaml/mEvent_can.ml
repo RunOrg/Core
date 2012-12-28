@@ -24,6 +24,7 @@ include HEntity.Can(struct
 
   let id_view  id = IEvent.Assert.view id
   let id_admin id = IEvent.Assert.admin id 
+  let decay    id = IEvent.decay id 
 
   let public e = not (deleted e) && e.E.vision = `Public 
 

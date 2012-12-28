@@ -11,7 +11,8 @@ module type CAN = sig
 
   val id   : 'any t -> 'any id
   val data : 'any t -> core
-    
+  val uid  : 'any t -> [`Unknown] id     
+
   val view_access   : 'any t -> MAccess.t list
   val admin_access  : 'any t -> MAccess.t list 
     
@@ -29,6 +30,7 @@ module type CAN_ARG = sig
   val view : core -> MAccess.t list 
   val id_view  : 'a id -> [`View] id
   val id_admin : 'a id -> [`Admin] id 
+  val decay : 'a id -> [`Unknown] id 
   val public : core -> bool 
 end
 
@@ -42,10 +44,12 @@ module type SET = sig
 end
 
 module type SET_ARG = sig
-  type 'a can
-  type diff
-  val update : 'any can -> diff list -> MUpdateInfo.t -> (#O.ctx,unit) Ohm.Run.t
+  type t 
+  module Id : Ohm.CouchDB.ID
+  module Diff : Ohm.Fmt.FMT
+  val update : id:Id.t -> diffs:Diff.t list -> info:MUpdateInfo.t -> unit -> (O.ctx,t option) Ohm.Run.t
 end
 
-module Set : functor(S:SET_ARG) -> SET with type 'a can = 'a S.can and type diff = S.diff
+module Set : functor(C:CAN) -> functor(S:SET_ARG with type Id.t = [`Unknown] C.id) ->
+  SET with type 'a can = 'a C.t and type diff = S.Diff.t
 
