@@ -20,7 +20,7 @@ include HEntity.Can(struct
       match e.E.vision with 
 	| `Public  -> [ `Contact ]
 	| `Normal  -> [ `Token   ]
-	| `Private -> `Groups (`Validated,[ e.E.gid ]) :: admin e
+	| `Private -> `Groups (`Any,[ e.E.gid ]) :: admin e
 
   let id_view  id = IEvent.Assert.view id
   let id_admin id = IEvent.Assert.admin id 
