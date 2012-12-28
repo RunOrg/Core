@@ -57,6 +57,16 @@ let try_get actor id =
   let! album_opt = ohm $ Tbl.get (IFolder.decay id) in
   return $ BatOption.map (_make actor id) album_opt
 
+let bot_get id = 
+  let! data = ohm_req_or (return None) $ Tbl.get (IFolder.decay id) in
+  return $ Some {
+    id    = id ;
+    data  = data ;
+    read  = return false ;
+    write = return false ;
+    admin = return false
+  }
+
 module Get = struct
 
   let id t = t.id

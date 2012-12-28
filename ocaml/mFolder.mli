@@ -5,6 +5,8 @@ type 'relation t
 val try_get        : 'any MActor.t -> 'a IFolder.id  -> 'a t option O.run
 val get_for_owner  : 'any MActor.t -> 'a IFolderOwner.id -> [`Unknown] t O.run
 
+val bot_get : [`Bot] IFolder.id -> (#O.ctx,[`Bot] t option) Ohm.Run.t
+
 val by_owner : 'a IInstance.id -> 'b IFolderOwner.id -> IFolder.t O.run
 
 val try_by_owner : 'a IFolderOwner.id -> (#O.ctx,IFolder.t option) Ohm.Run.t 
