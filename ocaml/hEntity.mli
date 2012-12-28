@@ -19,3 +19,17 @@ module type CAN = sig
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
     
 end
+
+module type CAN_ARG = sig
+  type core
+  type 'a id
+  val deleted : core -> bool
+  val iid : core -> IInstance.t
+  val admin : core -> MAccess.t list 
+  val view : core -> MAccess.t list 
+  val id_view  : 'a id -> [`View] id
+  val id_admin : 'a id -> [`Admin] id 
+  val public : core -> bool 
+end
+
+module Can : functor(C:CAN_ARG) -> CAN with type core = C.core and type 'a id = 'a C.id
