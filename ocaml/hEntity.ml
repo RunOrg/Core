@@ -96,3 +96,18 @@ module type SET = sig
   type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
   val update : diff list -> ('any,#O.ctx) t
 end
+
+module type SET_ARG = sig
+  type 'a can
+  type diff
+  val update : 'any can -> diff list -> MUpdateInfo.t -> (#O.ctx,unit) Ohm.Run.t
+end
+
+module Set = functor(S:SET_ARG) -> struct
+  type 'a can = 'a S.can
+  type diff = S.diff
+  type ('a,'b) t = [`Admin] can -> 'a MActor.t -> ('b,unit) Ohm.Run.t
+  let update diffs t self =
+    let info = MUpdateInfo.self (MActor.avatar self) in
+    S.update t diffs info 
+end
