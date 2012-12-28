@@ -89,3 +89,10 @@ module Can = functor (C:CAN_ARG) -> struct
     end
       
 end
+
+module type SET = sig
+  type 'a can  
+  type diff 
+  type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
+  val update : diff list -> ('any,#O.ctx) t
+end

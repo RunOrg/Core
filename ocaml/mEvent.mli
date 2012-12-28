@@ -82,26 +82,27 @@ val create :
 module Set : sig
     
   val picture :
-       [`Admin] t 
+       [`InsPic] IFile.id option
+    -> [`Admin] t 
     -> 'any MActor.t
-    -> [`InsPic] IFile.id option
     -> (#O.ctx,unit) Ohm.Run.t
 
   val admins : 
-       [`Admin] t
+       IAvatar.t list
+    -> [`Admin] t
     -> 'any MActor.t
-    -> IAvatar.t list
+
     -> (#O.ctx,unit) Ohm.Run.t
 
   val info : 
-       [`Admin] t
-    -> 'any MActor.t
-    -> draft:bool 
+       draft:bool 
     -> name:string option 
     -> page:MRich.OrText.t
     -> date:Date.t option
     -> address:string option 
     -> vision:Vision.t
+    -> [`Admin] t
+    -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t 
 
 end

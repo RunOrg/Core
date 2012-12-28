@@ -8,26 +8,30 @@ module E    = MEvent_core
 module Can  = MEvent_can
 module Data = MEvent_data
 
-let update t self diffs = 
+type 'a can = 'a MEvent_can.t 
+type diff = MEvent_core.Cfg.Diff.t
+type ('a,'b) t = [`Admin] can -> 'a MActor.t -> ('b,unit) Ohm.Run.t
+
+let update diffs t self = 
   O.decay begin 
     let info = MUpdateInfo.self (MActor.avatar self) in 
     let! _ = ohm $ E.Store.update ~id:(IEvent.decay (Can.id t)) ~diffs ~info () in
     return () 
   end
 
-let picture t self fid = 
+let picture fid t self = 
   let fid = BatOption.map IFile.decay fid in 
   if fid = (Can.data t).E.pic then return () else 
-    update t self [`SetPicture fid]
+    update [`SetPicture fid] t self
     
-let admins t self aids = 
+let admins aids t self = 
   if List.sort compare aids <> List.sort compare (MAccess.delegates (Can.data t).E.admins) then
     let admins = MAccess.set_delegates aids (Can.data t).E.admins in 
-    update t self [`SetAdmins admins]
+    update [`SetAdmins admins] t self
   else
     return ()
     
-let info t self ~draft ~name ~page ~date ~address ~vision = 
+let info ~draft ~name ~page ~date ~address ~vision t self= 
   let e = Can.data t in 
   let diffs = BatList.filter_map identity [
     (if draft = e.E.draft then None else Some (`SetDraft draft)) ;
@@ -35,6 +39,6 @@ let info t self ~draft ~name ~page ~date ~address ~vision =
     (if date = e.E.date then None else Some (`SetDate date)) ;
     (if vision = e.E.vision then None else Some (`SetVision vision)) ;
   ] in
-  let! () = ohm (if diffs = [] then return () else update t self diffs) in
+  let! () = ohm (if diffs = [] then return () else update diffs t self) in
   let! () = ohm $ Data.update (Can.id t) self ~page ~address in 
   return ()

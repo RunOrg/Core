@@ -16,7 +16,7 @@ let () = define UrlClient.Events.def_picture begin fun parents event access ->
       O.decay $ MFile.instance_pic (access # iid) (IFile.of_string fid) 
     end in
 
-    let! () = ohm $ O.decay (MEvent.Set.picture event (access # actor) pic) in
+    let! () = ohm $ O.decay (MEvent.Set.picture pic event (access # actor)) in
 
     let url = parents # home # url in 
     

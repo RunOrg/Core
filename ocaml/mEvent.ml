@@ -67,7 +67,7 @@ let admin ?actor eid =
   Can.admin event
 
 let delete t self = 
-  Set.update t self [`Delete (IAvatar.decay (MActor.avatar self))]
+  Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self 
 
 let instance eid = 
   let! event = ohm_req_or (return None) (get eid) in

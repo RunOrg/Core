@@ -33,3 +33,10 @@ module type CAN_ARG = sig
 end
 
 module Can : functor(C:CAN_ARG) -> CAN with type core = C.core and type 'a id = 'a C.id
+
+module type SET = sig
+  type 'a can  
+  type diff 
+  type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
+  val update : diff list -> ('any,#O.ctx) t
+end
