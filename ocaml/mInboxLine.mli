@@ -13,7 +13,7 @@ module View : sig
     album  : Count.t ; 
     time   : float ;
     seen   : bool ;
-    aids   : IAvatar.t list ;
+    aid    : IAvatar.t ;
   >
 
   val list : 

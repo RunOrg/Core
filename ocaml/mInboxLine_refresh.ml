@@ -28,7 +28,6 @@ let get_wall_info owner current =
     id      = IFeed.decay fid ; 
     n       = stats # n ; 
     last    = stats # last ;
-    authors = stats # authors ; 
   }))
 
 let get_album_info owner current = 
@@ -51,7 +50,6 @@ let get_album_info owner current =
     id      = IAlbum.decay aid ; 
     n       = stats # n ; 
     last    = stats # last ;
-    authors = stats # authors ; 
   }))
 
 let get_folder_info owner current = 
@@ -74,7 +72,6 @@ let get_folder_info owner current =
     id      = IFolder.decay fid ; 
     n       = stats # n ; 
     last    = stats # last ;
-    authors = stats # authors ; 
   }))
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
@@ -84,17 +81,16 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
       | Some current -> let! wall   = ohm $ get_wall_info   current.Line.owner current.Line.wall in 
 			let! album  = ohm $ get_album_info  current.Line.owner current.Line.album in
 			let! folder = ohm $ get_folder_info current.Line.owner current.Line.folder in 
-			let  times  = BatList.filter_map identity [ 
+			let  times  = [ 
 			  BatOption.bind (fun w -> w.Info.Wall.last) wall ;
 			  BatOption.bind (fun a -> a.Info.Album.last) album ;
 			  BatOption.bind (fun f -> f.Info.Folder.last) folder ; 
 			] in
-			if times = [] then return (None, `keep) else 
-			  let time  = List.fold_left max current.Line.time times in 
-			  let push  = current.Line.push + 1 in
-			  let show  = true in
-			  let fresh = Line.({ current with wall ; album ; folder ; time ; push ; show }) in
-			  return (Some push,`put fresh)
+			let last  = List.fold_left max current.Line.last times in 
+			let push  = current.Line.push + 1 in
+			let show  = true in
+			let fresh = Line.({ current with wall ; album ; folder ; last ; push ; show }) in
+			return (Some push,`put fresh)
     end in
     Push.schedule ilid push 
   end

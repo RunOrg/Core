@@ -148,23 +148,20 @@ module StatsView = CouchDB.ReduceView(struct
 
   module Key    = Id
   module Value  = Fmt.Make(struct
-    type json t = < n : int ; last "t" : float option ; authors "a" : IAvatar.t list >
+    type json t = < n : int ; last "l" : (float * IAvatar.t) option >
   end) 
   module Design = Design
 
   let name = "stats"
   let map  = "if (!doc.d && !doc.del) { 
-                var a = doc.p[1].a || null, e = {n:1,t:doc.t,a:[a]};
+                var a = doc.p[1].a || null, e = {n:1,l:[doc.t,a]};
                 if (a) emit(doc.w[1],e);
               }"
-  let reduce = "var r = {n:0,t:0,a:[]};
+  let reduce = "var r = {n:0,l:null};
                 for (var i = 0; i < values.length; ++i) {
                   var v = values[i];
-                  if (r.t < v.t) r.t = v.t;
+                  if (r.l === null || r.l[0] < v.l[0]) r.l = v.l;
                   r.n += v.n;
-                  for (var j = 0; j < v.a.length && r.a.length < 10; ++j) {
-                    if (r.a.indexOf(v.a[j]) < 0) r.a.push(v.a[j]);
-                  }
                 }
                 return r;" 
   let group = true
@@ -177,7 +174,6 @@ let stats source =
   let default = object
     method n       = 0 
     method last    = None
-    method authors = []
   end in
   let! result = ohm_req_or (return default) $ StatsView.reduce where in 
   return result

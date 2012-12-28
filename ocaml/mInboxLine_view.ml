@@ -63,32 +63,35 @@ let default ilid aid = Data.({
   last   = 0.0 ;
 })
 
+let markviewed now view =
+  Data.({ view with
+    album  = viewed view.album ;
+    wall   = viewed view.wall ;
+    folder = viewed view.folder ;
+    seen   = max view.last now
+  }) 
+
 include CouchDB.Convenience.Table(struct let db = O.db "inbox-line-view" end)(IInboxLine.View)(Data)
 
 let update ilid aid line = 
   Tbl.replace (IInboxLine.View.make ilid aid) begin fun view_opt ->
     let view = BatOption.default (default ilid aid) view_opt in 
     let count old f x = count (old # old_count) (BatOption.default 0 (BatOption.map f x)) in
-    Data.({ view with 
-      album  = count view.album  (fun a -> a.Info.Album.n)  line.Line.album ;
-      folder = count view.folder (fun f -> f.Info.Folder.n) line.Line.folder ;
-      wall   = count view.wall   (fun w -> w.Info.Wall.n)   line.Line.wall ;
-      last   = line.Line.time ;
-    })
+    match line.Line.last with None -> view | Some (time,author) ->
+      let view = Data.({ view with 
+	album  = count view.album  (fun a -> a.Info.Album.n)  line.Line.album ;
+	folder = count view.folder (fun f -> f.Info.Folder.n) line.Line.folder ;
+	wall   = count view.wall   (fun w -> w.Info.Wall.n)   line.Line.wall ;
+	last   = time ; 
+      }) in
+      if author = IAvatar.decay aid then markviewed time view else view
   end
 
 let mark actor iloid = 
   let  aid = MActor.avatar actor in
   let! ilid = ohm_req_or (return ()) $ ByOwner.get iloid in
   let! now = ohmctx (#time) in
-  Tbl.update (IInboxLine.View.make ilid aid) begin fun view ->
-    Data.({ view with
-      album  = viewed view.album ;
-      wall   = viewed view.wall ;
-      folder = viewed view.folder ;
-      seen   = max view.last now
-    }) 
-  end
+  Tbl.update (IInboxLine.View.make ilid aid) (markviewed now)
 
 type t = <
   owner  : IInboxLineOwner.t ;
@@ -97,7 +100,7 @@ type t = <
   album  : Count.t ; 
   time   : float ;
   seen   : bool ;
-  aids   : IAvatar.t list ;
+  aid    : IAvatar.t ;
 >
 
 module ByInboxView = CouchDB.DocView(struct
@@ -127,7 +130,8 @@ let list ?start ~count actor f =
     let  view  = item # doc in 
     let  ilid  = view.Data.ilid in
     let! line  = ohm_req_or (delete ilvid) $ MInboxLine_common.Tbl.get ilid in
-    if not line.Line.show || line.Line.time = 0.0 then delete ilvid else
+    let! _, aid = req_or (delete ilvid) line.Line.last in
+    if not line.Line.show then delete ilvid else
       let data : t = object
 	method owner = line.Line.owner
 	method wall  = view.Data.wall
@@ -135,7 +139,7 @@ let list ?start ~count actor f =
 	method album = view.Data.album
 	method time = view.Data.last
 	method seen = view.Data.seen >= view.Data.last
-	method aids = avatars line
+	method aid  = aid 
       end in
       let! result = ohm_req_or (delete ilvid) $ f data in
       return (Some result) 

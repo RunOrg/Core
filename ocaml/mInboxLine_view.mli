@@ -12,8 +12,8 @@ type t = <
   folder : Count.t ;
   album  : Count.t ; 
   time   : float ;
+  aid    : IAvatar.t ; 
   seen   : bool ;
-  aids   : IAvatar.t list ;
 >
 
 val list : 
