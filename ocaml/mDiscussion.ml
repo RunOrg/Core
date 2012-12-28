@@ -5,8 +5,9 @@ open Ohm.Universal
 open BatPervasives
 
 module Core = MDiscussion_core
+module Can  = MDiscussion_can
 
-type 'relation t = unit
+type 'relation t = 'relation Can.t
 
 module Satellite = struct
 
@@ -21,11 +22,6 @@ end
 
 module Signals = struct
   let on_update_call, on_update = Sig.make (Run.list_iter identity) 
-end
-
-module Can = struct 
-  let view _ = assert false
-  let admin _ = assert false
 end
 
 module Get = struct
