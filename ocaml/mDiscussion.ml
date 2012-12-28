@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Core = MDiscussion_core
+
 type 'relation t = unit
 
 module Satellite = struct

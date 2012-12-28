@@ -7,6 +7,7 @@ module Actions = struct
   open MDo
   open MErrorAudit
   open MNews
+  open MDiscussion
   open CAvatarExport
   open CExport
   open CAdmin
