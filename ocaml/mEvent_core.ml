@@ -84,11 +84,21 @@ module Cfg = struct
 
 end
 
-module Store = OhmCouchVersioned.Make(Cfg)
+type data_t = Cfg.Data.t = {
+  iid    : IInstance.t ;
+  tid    : ITemplate.Event.t ;
+  gid    : IGroup.t ;
+  name   : string option ;
+  date   : Date.t option ;
+  pic    : IFile.t option ;
+  vision : Vision.t ;
+  admins : MAccess.t ;
+  draft  : bool ;
+  config : Config.t ;
+  del    : IAvatar.t option ;
+}
 
-module Design = struct
-  module Database = Store.DataDB
-  let name = "event"
-end
+include HEntity.Core(Cfg) 
 
-include Cfg.Data
+type diff_t = diff
+

@@ -1,5 +1,26 @@
 (* © 2012 RunOrg *)
 
+(* Core module --------------------------------------------------------------------------------------------- *)
+
+module type CORE = sig
+  type t 
+  type diff 
+  module Id  : Ohm.CouchDB.ID
+  module Raw : Ohm.Fmt.READ_FMT with type t = t 
+  module Tbl : Ohm.CouchDB.READ_TABLE with type id = Id.t and type elt = Raw.t
+  module Design : Ohm.CouchDB.DESIGN 
+  val update : Id.t -> 'any MActor.t -> diff list -> (O.ctx,unit) Ohm.Run.t
+  val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
+end 
+
+module type CORE_ARG = 
+  OhmCouchVersioned.VERSIONED with type ctx = O.ctx and type VersionData.t = MUpdateInfo.info
+
+module Core : functor(V:CORE_ARG) ->
+  CORE with type t = V.Data.t and type diff = V.Diff.t and type Id.t = V.Id.t
+
+(* Access ("can") module ----------------------------------------------------------------------------------- *)
+
 module type CAN = sig 
 
   type core 
@@ -36,6 +57,8 @@ end
 
 module Can : functor(C:CAN_ARG) -> CAN with type core = C.core and type 'a id = 'a C.id
 
+(* Mutation ("set") module ---------------------------------------------------------------------------------- *)
+
 module type SET = sig
   type 'a can  
   type diff 
@@ -43,13 +66,6 @@ module type SET = sig
   val update : diff list -> ('any,#O.ctx) t
 end
 
-module type SET_ARG = sig
-  type t 
-  module Id : Ohm.CouchDB.ID
-  module Diff : Ohm.Fmt.FMT
-  val update : id:Id.t -> diffs:Diff.t list -> info:MUpdateInfo.t -> unit -> (O.ctx,t option) Ohm.Run.t
-end
-
-module Set : functor(C:CAN) -> functor(S:SET_ARG with type Id.t = [`Unknown] C.id) ->
-  SET with type 'a can = 'a C.t and type diff = S.Diff.t
+module Set : functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id) ->
+  SET with type 'a can = 'a C.t and type diff = S.diff
 

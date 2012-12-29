@@ -8,7 +8,7 @@ module E    = MEvent_core
 module Can  = MEvent_can
 module Data = MEvent_data
 
-include HEntity.Set(Can)(E.Store)
+include HEntity.Set(Can)(E)
 
 let picture fid t self = 
   let fid = BatOption.map IFile.decay fid in 

@@ -17,15 +17,12 @@ module Config    = MEvent_config
 module All       = MEvent_all
 module E         = MEvent_core
 
-module Tbl = CouchDB.ReadTable(E.Store.DataDB)(IEvent)(E.Store.Raw)
-
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
 
   O.decay begin 
 
     let iid = IInstance.decay iid in 
     let eid = IEvent.gen () in
-    let info = MUpdateInfo.self (MActor.avatar self) in
     let gid  = IGroup.gen () in
     
     let init = E.({
@@ -42,7 +39,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
       del    = None ;
     }) in
     
-    let! _ = ohm $ E.Store.create ~id:eid ~init ~diffs:[] ~info () in
+    let! _ = ohm $ E.create eid self init [] in
     let! _ = ohm $ Data.create eid self in
     let! _ = ohm $ Signals.on_bind_group_call (iid,eid,gid,tid,MActor.avatar self) in
     let! _ = ohm $ Signals.on_bind_inboxLine_call eid in
@@ -53,8 +50,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
 
 let get ?actor eid = 
   O.decay begin 
-    let! proj = ohm_req_or (return None) $ E.Store.get (IEvent.decay eid) in
-    let  e = E.Store.current proj in 
+    let! e = ohm_req_or (return None) $ E.Tbl.get (IEvent.decay eid) in
     return (Can.make eid ?actor e)
   end 
 
@@ -76,6 +72,6 @@ let instance eid =
 (* {{InboxLine}} *)
 
 let migrate_all = Async.Convenience.foreach O.async "create-event-inboxLines"
-  IEvent.fmt (Tbl.all_ids ~count:100) Signals.on_bind_inboxLine_call 
+  IEvent.fmt (E.Tbl.all_ids ~count:100) Signals.on_bind_inboxLine_call 
 
 let () = O.put (migrate_all ()) 
