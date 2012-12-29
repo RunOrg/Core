@@ -41,11 +41,7 @@ module Set = struct
   let edit _ _ ~title ~body = assert false
 end
 
-let get ?actor did = 
-  assert false
-
-let view ?actor did = 
-  assert false
+include HEntity.Get(Can)(Core)
 
 let delete d actor = 
   assert false

@@ -54,6 +54,8 @@ val get : ?actor:'any MActor.t -> 'rel IDiscussion.id -> (#O.ctx,'rel t option) 
 
 val view : ?actor:'any MActor.t -> 'rel IDiscussion.id -> (#O.ctx,[`View] t option) Ohm.Run.t
 
+val admin : ?actor:'any MActor.t -> 'rel IDiscussion.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
+
 val delete : 
      [`Admin] t 
   -> 'any MActor.t
