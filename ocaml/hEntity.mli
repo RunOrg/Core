@@ -13,11 +13,16 @@ module type CORE = sig
   val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
 end 
 
-module type CORE_ARG = 
-  OhmCouchVersioned.VERSIONED with type ctx = O.ctx and type VersionData.t = MUpdateInfo.info
+module type CORE_ARG = sig
+  val name : string
+  module Id : Ohm.CouchDB.ID
+  module Data : Ohm.Fmt.FMT
+  module Diff : Ohm.Fmt.FMT
+  val apply : Diff.t -> (Id.t -> float -> Data.t -> Data.t O.run) O.run
+end
 
-module Core : functor(V:CORE_ARG) ->
-  CORE with type t = V.Data.t and type diff = V.Diff.t and type Id.t = V.Id.t
+module Core : functor(C:CORE_ARG) ->
+  CORE with type t = C.Data.t and type diff = C.Diff.t and type Id.t = C.Id.t
 
 (* Access ("can") module ----------------------------------------------------------------------------------- *)
 

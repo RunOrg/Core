@@ -6,6 +6,9 @@ open BatPervasives
 
 (* Core module --------------------------------------------------------------------------------------------- *)
 
+module CoreDefaults = struct
+end
+
 module type CORE = sig
   type t 
   type diff 
@@ -17,20 +20,49 @@ module type CORE = sig
   val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
 end 
 
-module type CORE_ARG = 
-  OhmCouchVersioned.VERSIONED with type ctx = O.ctx and type VersionData.t = MUpdateInfo.info
+module type CORE_ARG = sig
+  val name : string
+  module Id : Ohm.CouchDB.ID
+  module Data : Ohm.Fmt.FMT
+  module Diff : Ohm.Fmt.FMT
+  val apply : Diff.t -> (Id.t -> float -> Data.t -> Data.t O.run) O.run
+end
 
-module Core = functor(V:CORE_ARG) -> struct
+module Core = functor(C:CORE_ARG) -> struct
 
-  type t = V.Data.t
-  type diff = V.Diff.t
-  module Id = V.Id
+  module V = struct
+
+    include C
+
+    module DataDB = struct
+      let database = O.db name
+      let host = "localhost"
+      let port = 5984
+    end
+
+    module VersionDB = struct
+      let database = O.db (name ^ "-v") 
+      let host = "localhost"
+      let port = 5984
+    end
+      
+    type ctx = O.ctx
+    let couchDB ctx = (ctx : O.ctx :> CouchDB.ctx) 
+    module VersionData = MUpdateInfo
+    module ReflectedData = Fmt.Unit
+    let reflect _ _ = return () 
+
+  end
+
+  type t = C.Data.t
+  type diff = C.Diff.t
+  module Id = C.Id
 
   module Store = OhmCouchVersioned.Make(V)
 
   module Raw = struct
     module T = struct
-      type t = V.Data.t
+      type t = C.Data.t
       let t_of_json json = 
 	(Store.Raw.of_json json) # current
     end
@@ -41,7 +73,7 @@ module Core = functor(V:CORE_ARG) -> struct
   module Tbl = CouchDB.ReadTable(Store.DataDB)(Id)(Raw)
   module Design = struct
     module Database = Store.DataDB
-    let name = V.name
+    let name = C.name
   end
     
   let update id actor diffs = 
