@@ -13,8 +13,8 @@ let send url uid eid aid =
 
   let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
   
-    let! access = ohm_req_or (return ()) $ access iid self in 
-    let! event = ohm_req_or (return ()) $ MEvent.view ~access eid in 
+    let! actor = ohm_req_or (return ()) $ actor iid self in 
+    let! event = ohm_req_or (return ()) $ MEvent.view ~actor eid in 
     let! event = ohm $ MEvent.Get.fullname event in
 
     let! author = ohm $ CAvatar.mini_profile aid in 

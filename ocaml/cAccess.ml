@@ -5,39 +5,37 @@ open BatPervasives
 open Ohm.Universal
 
 class type ['level] t = object
+  method actor            : 'level MActor.t 
   method self             : [`IsSelf] IAvatar.id
-  method isin             : 'level IIsIn.id 
   method instance         : MInstance.t
   method iid              : 'level IInstance.id 
 end
 
 let make cuid iid instance = 
-  let! isin = ohm $ MAvatar.identify iid cuid in
-  let! isin = req_or (return None) $ IIsIn.Deduce.is_token isin in
-  let! self = ohm $ MAvatar.get isin in 
+  let! actor = ohm_req_or (return None) $ MAvatar.identify iid cuid in
+  let! actor = req_or (return None) $ MActor.member actor in
   return $ Some (object
-    method self = self
-    method isin = isin
+    method self     = MActor.avatar actor
+    method actor    = actor
     method instance = instance
-    method iid = IIsIn.instance isin
+    method iid      = MActor.instance actor
   end)
 
-let of_isin isin = 
-  let! inst = ohm_req_or (return None) $ MInstance.get (IIsIn.instance isin) in
-  let! self = ohm $ MAvatar.get isin in 
+let of_actor actor = 
+  let! instance = ohm_req_or (return None) $ MInstance.get (MActor.instance actor) in
   return $ Some (object
-    method self = self
-    method isin = isin 
-    method instance = inst
-    method iid = IIsIn.instance isin 
+    method self     = MActor.avatar actor
+    method actor    = actor
+    method instance = instance
+    method iid      = MActor.instance actor
   end) 
 
 let admin (access : 'any t) = 
-  let! isin = req_or None $ IIsIn.Deduce.is_admin (access # isin) in 
+  let! actor = req_or None $ MActor.admin (access # actor) in 
   Some (object
-    method self     = access # self
-    method isin     = isin 
+    method self     = MActor.avatar actor
+    method actor    = actor
     method instance = access # instance
-    method iid      = IIsIn.instance isin 
+    method iid      = MActor.instance actor
   end)
 

@@ -26,33 +26,33 @@ module UndatedView = CouchDB.DocView(struct
   let map  = "if (!doc.c.del && !doc.c.date) emit(doc.c.iid)"
 end)
 
-let viewable ?access item = 
+let viewable ?actor item = 
   let eid  = IEvent.of_id (item # id) in
   let data = item # doc # current in 
-  match Can.make eid ?access data with
+  match Can.make eid ?actor data with
     | None   -> return None
     | Some t -> Can.view t 
 
-let future ?access iid =
+let future ?actor iid =
   let iid = IInstance.decay iid in 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+  O.decay begin 
     let! now = ohmctx (#date) in
     let  startkey = (iid,Date.day_only now) in
     let  endkey   = (iid,Date.max) in
     let! list = ohm $ DatedView.doc_query ~startkey ~endkey ~limit:25 () in
-    Run.list_filter (viewable ?access) list 
+    Run.list_filter (viewable ?actor) list 
   end
 
-let undated ~access iid =
+let undated ~actor iid =
   let iid = IInstance.decay iid in 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+  O.decay begin 
     let! list = ohm $ UndatedView.doc_query ~startkey:iid ~endkey:iid ~limit:25 () in
-    Run.list_filter (viewable ~access) list 
+    Run.list_filter (viewable ~actor) list 
   end
 
-let rec past ?access ?start ~count iid =
+let rec past ?actor ?start ~count iid =
   let iid = IInstance.decay iid in 
-  Run.edit_context (fun ctx -> (ctx :> O.ctx)) begin 
+  O.decay begin 
 
     let  limit = count + 1 in
 
@@ -68,7 +68,7 @@ let rec past ?access ?start ~count iid =
     let  list, next = OhmPaging.slice ~count list in 
 
     let  next = BatOption.map (fun next -> (snd next # key), IEvent.of_id (next # id)) next in 
-    let! list = ohm $ Run.list_filter (viewable ?access) list in
+    let! list = ohm $ Run.list_filter (viewable ?actor) list in
 
     (* If it happens to day, don't show as past yet. *)    
     let  list = List.filter (fun t -> match Get.date t with 

@@ -192,9 +192,9 @@ let author itid =
   let! data = ohm_req_or (return None) $ Tbl.get (IItem.decay itid) in
   return $ MItem_data.author data
 
-let try_get context item = 
+let try_get actor item = 
 
-  let self = context # self in
+  let self = MActor.avatar actor in 
   let who  = Some (IAvatar.decay self) in 
   let item = IItem.decay item in
 
@@ -202,15 +202,15 @@ let try_get context item =
   
   let is_visible_in = function 
     | `feed feed     -> 
-      let! feed = ohm_req_or (return false) $ MFeed.try_get context feed in
+      let! feed = ohm_req_or (return false) $ MFeed.try_get actor feed in
       let! feed = ohm_req_or (return false) $ MFeed.Can.read feed in
       return true
     | `album album   -> 
-      let! album = ohm_req_or (return false) $ MAlbum.try_get context album in
+      let! album = ohm_req_or (return false) $ MAlbum.try_get actor album in
       let! album = ohm_req_or (return false) $ MAlbum.Can.read album in 
       return true
     | `folder folder -> 
-      let! folder = ohm_req_or (return false) $ MFolder.try_get context folder in
+      let! folder = ohm_req_or (return false) $ MFolder.try_get actor folder in
       let! folder = ohm_req_or (return false) $ MFolder.Can.read folder in 
       return true
   in

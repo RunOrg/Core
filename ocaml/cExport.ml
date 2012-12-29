@@ -7,7 +7,7 @@ open BatPervasives
 let status_url access exid = 
   Action.url UrlClient.Export.status (access # instance # key) 
     (IExport.decay exid,
-     IExport.Deduce.make_read_token (access # isin |> IIsIn.user) exid)
+     IExport.Deduce.make_read_token (access # actor |> MActor.user) exid)
 
 let download_url cuid key exid =  
   Action.url UrlClient.Export.download key 

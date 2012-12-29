@@ -55,11 +55,12 @@ let local_fields local =
 
 let box access gid render = 
   
+  let actor = access # actor in
   let fail = render (return ignore) in 
 
   (* Extract the AvatarGrid identifier *)
 
-  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
   let! group = ohm_req_or fail $ O.decay (Run.opt_bind MGroup.Can.list group) in
 
   let  grid  = MGroup.Get.list group in 
@@ -125,12 +126,12 @@ let box access gid render =
 
       let group gid = 
 	let  none   = AdLib.get `Grid_Source_Group_Unknown in
-	let! group  = ohm_req_or none $ O.decay (MGroup.try_get access gid) in 
+	let! group  = ohm_req_or none $ O.decay (MGroup.try_get actor gid) in 
 	match MGroup.Get.owner group with 
-	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get access eid) in
+	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get actor eid) in
 			   let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
 			   CEntityUtil.name entity 
-	  | `Event eid -> let! event = ohm_req_or none $ MEvent.view ~access eid in
+	  | `Event eid -> let! event = ohm_req_or none $ MEvent.view ~actor eid in
 			  MEvent.Get.fullname event
       in
 

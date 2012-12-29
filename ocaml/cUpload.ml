@@ -68,7 +68,7 @@ end
 
 let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res -> 
 
-  let cuid = IIsIn.user access # isin in
+  let cuid = MActor.user (access # actor) in
   let iid  = IInstance.Deduce.upload (access # iid) in
     
   let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
@@ -88,13 +88,13 @@ end
 
 let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res -> 
 
-  let cuid = IIsIn.user access # isin in
+  let cuid = MActor.user (access # actor) in
   let fid  = req # args in 
 
-  let! folder = ohm_req_or (white req res) $ MFolder.try_get access fid in 
+  let! folder = ohm_req_or (white req res) $ MFolder.try_get (access # actor) fid in 
   let! folder = ohm_req_or (white req res) $ MFolder.Can.write folder in 
 
-  let! _, fid = ohm_req_or (white req res) $ MItem.Create.doc access folder in
+  let! _, fid = ohm_req_or (white req res) $ MItem.Create.doc (access # actor) folder in
   
   form (snd req # server) cuid fid 
     (Asset_Upload_DocForm.render) 
@@ -107,16 +107,16 @@ end
 
 let () = UrlUpload.Client.Img.def_prepare $ CClient.action begin fun access req res ->
 
-  let cuid = IIsIn.user access # isin in
-  let alid  = req # args in 
+  let cuid = MActor.user (access # actor) in
+  let alid = req # args in 
 
   let! json = req_or (return res) $ Action.Convenience.get_json req in 
   let! filename = req_or (return res) $ Fmt.String.of_json_safe json in 
 
-  let! album = ohm_req_or (return res) $ MAlbum.try_get access alid in 
+  let! album = ohm_req_or (return res) $ MAlbum.try_get (access # actor) alid in 
   let! album = ohm_req_or (return res) $ MAlbum.Can.write album in 
 
-  let! _, fid = ohm_req_or (return res) $ MItem.Create.image access album in
+  let! _, fid = ohm_req_or (return res) $ MItem.Create.image (access # actor) album in
   
   let upload_config = MFile.Upload.configure fid ~filename ~redirect:"-" in
     

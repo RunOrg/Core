@@ -61,7 +61,7 @@ val get_data : [<`Own|`Admin|`View] IRelatedInstance.id -> Data.t option O.run
 
 val get_own : 'any ICurrentUser.id -> 'b IRelatedInstance.id -> ([`Own] IRelatedInstance.id * Data.t) option O.run
 
-val get : 'a #MAccess.context -> 'b IRelatedInstance.id ->
+val get : 'a MActor.t -> 'b IRelatedInstance.id ->
   [ `None
   | `View  of [`View]  IRelatedInstance.id * Data.t
   | `Admin of [`Admin] IRelatedInstance.id * Data.t

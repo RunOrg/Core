@@ -126,4 +126,4 @@ module Box = OhmBox.Make(BoxCtx)
 
 type 'a boxrun = (BoxCtx.t,'a) Run.t 
 
-let decay run = (run : 'a run :> 'a boxrun) 
+let decay run = Run.edit_context (fun ctx -> (ctx :> ctx)) run

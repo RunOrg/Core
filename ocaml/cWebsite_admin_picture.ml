@@ -12,7 +12,7 @@ let () = CClient.define_admin UrlClient.Website.def_picture begin fun access ->
 
   O.Box.fill begin
 
-    let  cuid = IIsIn.user (access # isin) in
+    let  cuid = MActor.user (access # actor) in
 
     let  pic  = access # instance # pic in
     let  id   = match pic with 

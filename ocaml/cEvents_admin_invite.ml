@@ -28,10 +28,11 @@ let () = define UrlClient.Events.def_invite begin fun parents event access ->
     end)
   in
 
-  let  draft  = MEvent.Get.draft event in 
+  let  actor = access # actor in 
+  let  draft = MEvent.Get.draft event in 
 
   let  gid = MEvent.Get.group event in
-  let! group = ohm $ O.decay (MGroup.try_get access gid) in
+  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
   let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.admin group) in
   let  group = if draft then None else group in   
   let! group = req_or fail group in 

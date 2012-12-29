@@ -32,7 +32,7 @@ module Poll = struct
   let () = UrlClient.MiniPoll.def_vote $ CClient.action begin fun access req res -> 
     
     let  fail = return res in
-    let  cuid = IIsIn.user (access # isin) in
+    let  cuid = MActor.user (access # actor) in
     
     let  pid, proof = req # args in
     let! pid = req_or fail $ IPoll.Deduce.from_answer_token cuid pid proof in
@@ -52,7 +52,7 @@ module Poll = struct
       let pid  = IPoll.Deduce.read_can_answer (poll # poll) in
       let vote = 
 	Action.url UrlClient.MiniPoll.vote (access # instance # key) 
-	  ( let cuid = IIsIn.user (access # isin) in
+	  ( let cuid = MActor.user (access # actor) in
 	    let proof = IPoll.Deduce.make_answer_token cuid pid in
 	    (IPoll.decay pid, proof) ) 
       in
@@ -111,7 +111,7 @@ let render ?moderate access item =
 
   let more_comments = 
     Action.url UrlClient.Item.comments (access # instance # key) 
-      ( let cuid = IIsIn.user (access # isin) in
+      ( let cuid = MActor.user (access # actor) in
 	let proof = IItem.Deduce.(make_read_token cuid (item # id)) in
 	(IItem.decay (item # id), proof) )
   in
@@ -137,7 +137,7 @@ let render ?moderate access item =
   let remove = match item # own with 
     | Some own -> Some (object
       method url = Action.url UrlClient.Item.remove (access # instance # key) 
-	( let cuid = IIsIn.user (access # isin) in
+	( let cuid = MActor.user (access # actor) in
 	  let proof = IItem.Deduce.(make_remove_token cuid (own_can_remove own)) in
 	  (IItem.decay (item # id), proof) ) 
     end)
@@ -171,7 +171,9 @@ end)
 let post access feed json res = 
   
   let! post = req_or (return res) $ PostForm.of_json_safe json in 
-  let  self = access # self and iid = IInstance.decay access # iid and fid = MFeed.Get.id feed in 
+  let  iid  = IInstance.decay access # iid 
+  and  fid  = MFeed.Get.id feed
+  and  actor = access # actor  in 
 
   let! afid  = ohm begin 
     let! admin = ohm_req_or (return None) $ MFeed.Can.admin feed in 
@@ -182,9 +184,9 @@ let post access feed json res =
     if post # poll = [] then 
       match afid, post # subject with 
 	| Some afid, Some subject ->
-	  MItem.Create.mail self ~subject (post # text) iid afid
+	  MItem.Create.mail actor ~subject (post # text) iid afid
 	| _ -> 
-	  MItem.Create.message self (post # text) iid fid 
+	  MItem.Create.message actor (post # text) iid fid 
     else 
       let! poll = ohm $ MPoll.create (object
 	method multiple = post # multi
@@ -192,10 +194,10 @@ let post access feed json res =
 	  (List.filter (function "" -> false | _ -> true) 
 	     (List.map BatString.strip (post # poll)))
       end) in
-      MItem.Create.poll self (post # text) poll iid fid
+      MItem.Create.poll actor (post # text) poll iid fid
   end in
 
-  let! item = ohm_req_or (return res) $ MItem.try_get access itid in
+  let! item = ohm_req_or (return res) $ MItem.try_get actor itid in
   let! html = ohm_req_or (return res) $ render access item in 
   
   return $ Action.json ["post", Html.to_json html] res
@@ -203,7 +205,7 @@ let post access feed json res =
 let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -> 
  
   let  fail = return res in
-  let  cuid = IIsIn.user (access # isin) in
+  let  cuid = MActor.user (access # actor) in
 
   let  itid, proof = req # args in
   let! itid = req_or fail $ IItem.Deduce.from_read_token cuid itid proof in
@@ -221,16 +223,18 @@ let () = UrlClient.Item.def_moderate $ CClient.action begin fun access req res -
   let  fail = return res in
   let! json = req_or fail (Action.Convenience.get_json req) in 
 
+  let actor = access # actor in 
+
   let  itid = req # args in
   
   let admin = function
-    | `feed fid -> let! feed = ohm_req_or (return None) $ MFeed.try_get access fid in 
+    | `feed fid -> let! feed = ohm_req_or (return None) $ MFeed.try_get actor fid in 
 		   let! feed = ohm_req_or (return None) $ MFeed.Can.admin feed in 
 		   return (Some (`feed (MFeed.Get.id feed))) 
-    | `album aid -> let! album = ohm_req_or (return None) $ MAlbum.try_get access aid in 
+    | `album aid -> let! album = ohm_req_or (return None) $ MAlbum.try_get actor aid in 
 		    let! album = ohm_req_or (return None) $ MAlbum.Can.admin album in 
 		    return (Some (`album (MAlbum.Get.id album))) 
-    | `folder fid -> let! folder = ohm_req_or (return None) $ MFolder.try_get access fid in 
+    | `folder fid -> let! folder = ohm_req_or (return None) $ MFolder.try_get actor fid in 
 		     let! folder = ohm_req_or (return None) $ MFolder.Can.admin folder in 
 		     return (Some (`folder (MFolder.Get.id folder))) 
   in
@@ -244,7 +248,7 @@ end
 let () = UrlClient.Item.def_remove $ CClient.action begin fun access req res -> 
  
   let  fail = return res in
-  let  cuid = IIsIn.user (access # isin) in
+  let  cuid = MActor.user (access # actor) in
 
   let  itid, proof = req # args in
   let! itid = req_or fail $ IItem.Deduce.from_remove_token cuid itid proof in

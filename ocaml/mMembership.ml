@@ -62,9 +62,9 @@ let get mid =
   let! data = ohm_req_or (return None) $ Versioned.get (IMembership.decay mid) in
   return $ Some (summary (Versioned.current data) (Versioned.reflected data))
 
-let status ctx gid = 
+let status actor gid = 
   let  default = return `NotMember in
-  let  aid  = ctx # self in
+  let  aid  = MActor.avatar actor in 
   let! mid  = ohm_req_or default $ Unique.find_if_exists gid aid in 
   let! data = ohm_req_or default $ get mid in 
   return data.status  
@@ -146,8 +146,8 @@ let as_admin gid aid =
   let! mid = ohm $ Unique.find gid aid in
   return $ IMembership.Assert.admin mid
 
-let as_user gid aid = 
-  let! mid = ohm $ Unique.find gid aid in
+let as_user gid actor = 
+  let! mid = ohm $ Unique.find gid (MActor.avatar actor) in
   return $ IMembership.Assert.self mid
 
 let as_viewer gid aid = 
@@ -162,8 +162,8 @@ let admin ~from gid aid what =
 
     (* Log that we're doing this. *)
     let! () = ohm begin 
-      let! uid = ohm_req_or (return ()) $ MAvatar.get_user from in 
-      let! iid = ohm_req_or (return ()) $ MAvatar.get_instance from in 
+      let  uid = IUser.Deduce.is_anyone (MActor.user from) in
+      let  iid = IInstance.decay (MActor.instance from) in
       let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
       let  own = MGroup.Get.owner g in
       let  p   = 
@@ -179,12 +179,14 @@ let admin ~from gid aid what =
     let! _ = ohm $ Versioned.apply gid aid list in
     return ()
 
-let user gid aid accept = 
+let user gid actor accept = 
+
+  let aid = MActor.avatar actor in 
 
   (* Log that we're doing this. *)
   let! () = ohm begin 
-    let! uid = ohm_req_or (return ()) $ MAvatar.get_user aid in 
-    let! iid = ohm_req_or (return ()) $ MAvatar.get_instance aid in 
+    let  uid = IUser.Deduce.is_anyone (MActor.user actor) in
+    let  iid = IInstance.decay (MActor.instance actor) in 
     let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
     let  own = MGroup.Get.owner g in
     MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipUser (accept,own))
@@ -287,7 +289,8 @@ let () =
   let merge_membership (mid,membership) = 
     let  gid = (membership # current).Details.where in
     (* TODO : be smarter about how the data is retrieved... *)
-    let!  () = ohm $ user gid into_aid true in    
+    let! who = ohm_req_or (return ()) $ MAvatar.actor (IAvatar.Assert.is_self into_aid) in 
+    let!  () = ohm $ user gid who true in    
     return ()
   in
 
@@ -300,5 +303,6 @@ let () =
 let () = 
   let! _, _, gid, tmpl, creator = Sig.listen MEntity.Signals.on_bind_group in 
   if tmpl = ITemplate.admin || tmpl = ITemplate.members then  
-    admin ~from:creator gid creator [ `Accept true ; `Default true ]   
+    let! from = ohm_req_or (return ()) $ MAvatar.actor creator in 
+    admin ~from gid creator [ `Accept true ; `Default true ]   
   else return ()
