@@ -18,7 +18,11 @@ module Satellite = struct
     | `Folder of [ `Manage | `Read | `Write ]
     ]
 
-  let access _ _ = assert false
+  let access t = function
+    | `Wall   `Manage
+    | `Folder `Manage  -> `Union (Can.admin_access t)
+    | `Wall   (`Read | `Write)  
+    | `Folder (`Read | `Write) -> `Union (Can.view_access t)
 
 end
 
