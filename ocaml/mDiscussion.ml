@@ -7,6 +7,7 @@ open BatPervasives
 module Core = MDiscussion_core
 module Can  = MDiscussion_can
 module Set  = MDiscussion_set
+module Get  = MDiscussion_get
 
 type 'relation t = 'relation Can.t
 
@@ -23,16 +24,6 @@ end
 
 module Signals = struct
   let on_update = Core.on_update
-end
-
-module Get = struct
-  let id _ = assert false
-  let title _ = assert false
-  let update _ = assert false
-  let creator _ = assert false
-  let iid _ = assert false
-  let groups _ = assert false
-  let body _ = assert false
 end
 
 let create actor ~title ~body ~groups = 
