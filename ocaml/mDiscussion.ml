@@ -6,6 +6,7 @@ open BatPervasives
 
 module Core = MDiscussion_core
 module Can  = MDiscussion_can
+module Set  = MDiscussion_set
 
 type 'relation t = 'relation Can.t
 
@@ -36,10 +37,6 @@ end
 
 let create actor ~title ~body ~groups = 
   assert false
-
-module Set = struct
-  let edit _ _ ~title ~body = assert false
-end
 
 include HEntity.Get(Can)(Core)
 

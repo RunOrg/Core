@@ -42,10 +42,10 @@ val create :
 module Set : sig
 
   val edit :
-       [`Admin] t
-    -> 'any MActor.t
-    -> title:string
+       title:string
     -> body:MRich.OrText.t
+    -> [`Admin] t
+    -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t
 
 end 
