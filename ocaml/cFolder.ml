@@ -21,12 +21,12 @@ let render ?moderate access item =
   let remove = match item # own with 
     | Some own -> Some (object
       method url = Action.url UrlClient.Item.remove (access # instance # key) 
-	( let cuid = IIsIn.user (access # isin) in
+	( let cuid = MActor.user (access # actor) in
 	  let proof = IItem.Deduce.(make_remove_token cuid (own_can_remove own)) in
 	  (IItem.decay (item # id), proof) ) 
     end)
     | None -> match moderate with 
-	| Some f -> Some (object method url = f (IItem.decay (item #id)) end)
+	| Some f -> Some (object method url = f (IItem.decay (item # id)) end)
 	| None   -> None
   in
 

@@ -6,7 +6,7 @@ val get : 'id IEvent.id -> (#O.ctx,'id t option) Ohm.Run.t
   
 val update :
      'id IEvent.id
-  -> [`IsSelf] IAvatar.id
+  -> 'a MActor.t
   -> address:string option
   -> page:MRich.OrText.t
   -> (#O.ctx,unit) Ohm.Run.t
@@ -18,5 +18,5 @@ val create :
       'id IEvent.id
   -> ?address:string 
   -> ?page:MRich.OrText.t
-  ->  [`IsSelf] IAvatar.id
+  ->  'a MActor.t
   -> (#O.ctx,unit) Ohm.Run.t

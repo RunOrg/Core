@@ -334,16 +334,6 @@ let find_or_create iid uid =
     | Some v -> return (IProfile.of_id v # id)
     | None   -> create_from_user iid uid 
 
-let find_self isin = 
-
-  let iid = IInstance.decay (IIsIn.instance isin) 
-  and uid = IUser.Deduce.is_anyone (IIsIn.user isin) in
-
-  let! pid = ohm $ find_or_create iid uid in 
-
-  (* User was looking for his own profile *)
-  return (IProfile.Assert.is_self pid)
-
 let find iid uid = 
   FindView.doc (iid,uid)
   |> Run.map (Util.first |- BatOption.map (fun v -> IProfile.of_id v # id))

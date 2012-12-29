@@ -40,7 +40,7 @@ val find : IInstance.t -> IUser.t -> IProfile.t option O.run
 
 val find_view : [`ViewProfile] IInstance.id -> IUser.t -> [`View] IProfile.id option O.run
 
-val find_self : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> [`IsSelf] IProfile.id O.run
+val find_or_create : IInstance.t -> IUser.t -> IProfile.t O.run
 
 val refresh   : [`Bot] IUser.id -> 'b IInstance.id -> unit O.run
 

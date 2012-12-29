@@ -33,11 +33,11 @@ let create ~payload ~delayed ~where ~iid (itid:[`Created] IItem.id) =
 
   return () 
   
-let image ctx album =  
+let image actor album =  
 
   let  instance = MAlbum.Get.write_instance album in 
-  let  user     = IIsIn.user (ctx # isin) in 
-  let  self     = ctx # self in
+  let  user     = MActor.user actor in 
+  let  self     = MActor.avatar actor in 
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create image-uploader on this instance *)
@@ -62,11 +62,11 @@ let image ctx album =
 
   return $ Some (itid, img)
   
-let doc ctx folder =  
+let doc actor folder =  
 
   let  instance = MFolder.Get.write_instance folder in 
-  let  user     = IIsIn.user (ctx # isin) in 
-  let  self     = ctx # self in
+  let  user     = MActor.user actor in 
+  let  self     = MActor.avatar actor in 
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create file-uploader on this instance. *)
@@ -94,10 +94,10 @@ let doc ctx folder =
 
   return $ Some (itid, doc)
 
-let message self text iid where = 
+let message actor text iid where = 
   
   let payload = `Message (object
-    method author = IAvatar.decay self 
+    method author = IAvatar.decay (MActor.avatar actor)
     method text   = if String.length text > 3000 then String.sub text 0 3000 else text
   end) in
 
@@ -109,10 +109,10 @@ let message self text iid where =
 
   return itid
 
-let mail self ~subject text iid where = 
+let mail actor ~subject text iid where = 
   
   let payload = `Mail (object
-    method author  = IAvatar.decay self 
+    method author  = IAvatar.decay (MActor.avatar actor)
     method subject = if String.length subject > 100 then String.sub subject 0 100 else subject
     method body    = if String.length text > 30000 then String.sub text 0 30000 else text
   end) in
@@ -125,10 +125,10 @@ let mail self ~subject text iid where =
 
   return itid
 
-let chat_request self topic iid where = 
+let chat_request actor topic iid where = 
   
   let payload = `ChatReq (object
-    method author = IAvatar.decay self 
+    method author = IAvatar.decay (MActor.avatar actor)
     method topic  = if String.length topic > 150 then String.sub topic 0 150 else topic
   end) in
 
@@ -142,10 +142,10 @@ let chat_request self topic iid where =
   return itid
 
 
-let poll self text poll iid where = 
+let poll actor text poll iid where = 
   
   let payload = `MiniPoll (object
-    method author = IAvatar.decay self 
+    method author = IAvatar.decay (MActor.avatar actor)
     method text   = if String.length text > 3000 then String.sub text 0 3000 else text
     method poll   = IPoll.decay poll 
   end) in

@@ -229,15 +229,15 @@ let get_follower rid =
   let! data = ohm_req_or (return None) $ get_data rid in 
   return $ Some data.Data.related_to
 
-let get ctx rid = 
+let get actor rid = 
   let! data = ohm_req_or (return `None) $ Tbl.get (IRelatedInstance.decay rid) in
 
-  if data.Data.related_to <> IInstance.decay (IIsIn.instance (ctx # isin)) then
+  if data.Data.related_to <> IInstance.decay (MActor.instance actor) then
     return `None
   else
     if 
-      None <> IIsIn.Deduce.is_admin (ctx # isin)
-      || data.Data.created_by = IAvatar.decay (ctx # self)
+      None <> MActor.admin actor
+      || data.Data.created_by = IAvatar.decay (MActor.avatar actor)
     then
       (* We just found out it's an admin *)
       return $ `Admin (IRelatedInstance.Assert.admin rid, data) 
@@ -247,7 +247,7 @@ let get ctx rid =
 	  (* It's public *)
 	  return $ `View (IRelatedInstance.Assert.view rid, data) 
 	| `Private -> 
-	  if None <> IIsIn.Deduce.is_token (ctx # isin) then 
+	  if None <> MActor.member actor then
 	    (* A member can view private related instances *)
 	    return $ `View (IRelatedInstance.Assert.view rid, data)
 	  else

@@ -68,20 +68,17 @@ let cache_task = O.async # define "news-cache" CacheTaskArgs.fmt begin fun (uid,
   let uid = IUser.Assert.is_self uid in 
   let! avatars = ohm $ MAvatar.user_avatars uid in
 
-  let! items = ohm (Run.list_collect begin fun (self, isin) ->
-
-    let access = object 
-      method self = self 
-      method isin = isin 
-    end in 
+  let! items = ohm (Run.list_collect begin fun actor ->
   
     let readable fid = 
-      let! feed = ohm_req_or (return None) (MFeed.try_get access fid) in
+      let! feed = ohm_req_or (return None) (MFeed.try_get actor fid) in
       let! feed = ohm_req_or (return None) (MFeed.Can.read feed) in
       return (Some (MFeed.Get.id feed))
     in
 
-    MItem.news ~self ~since readable (IIsIn.instance isin) 
+    let self = MActor.avatar actor in 
+
+    MItem.news ~self ~since readable (MActor.instance actor)
 
   end avatars) in
 

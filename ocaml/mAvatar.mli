@@ -3,8 +3,6 @@
 module Status : Ohm.Fmt.FMT with type t = 
   [ `Admin | `Token |` Contact ]
 
-val refresh : [<`IsAdmin|`IsToken|`IsContact] IIsIn.id -> unit O.run
-
 module Signals : sig
 
   type status_event = [`IsSelf] IAvatar.id option * IAvatar.t * IInstance.t
@@ -66,11 +64,10 @@ val change_to_member     :
 val become_contact : 'a IInstance.id -> 'b IUser.id -> IAvatar.t O.run
 val become_admin   : [`Created] IInstance.id -> 'any IUser.id -> IAvatar.t O.run
 
-val self_become_contact : 'a IInstance.id -> 'b ICurrentUser.id -> [`IsSelf] IAvatar.id O.run
+val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> (#O.ctx,[`IsContact] MActor.t option) Ohm.Run.t
+val find : 'a IInstance.id -> 'b IUser.id -> (#O.ctx,IAvatar.t option) Ohm.Run.t
 
-val identify : 'any IInstance.id -> [`Old] ICurrentUser.id -> 'any IIsIn.id O.run
-val identify_user : 'a IInstance.id -> [`IsSelf] IUser.id -> 'a IIsIn.id O.run
-val identify_avatar : [`IsSelf] IAvatar.id -> [`IsContact] IIsIn.id option O.run
+val actor : [`IsSelf] IAvatar.id -> (#O.ctx,[`IsContact] MActor.t option) Ohm.Run.t
 
 val collect_profile : MProfile.Data.t -> < 
   name : string option ;
@@ -84,8 +81,6 @@ val status : 'a IInstance.id -> 'b ICurrentUser.id -> ( #Ohm.CouchDB.ctx, Status
 val profile : 'a IAvatar.id -> IProfile.t O.run
 
 val my_profile : [`IsSelf] IAvatar.id -> [`IsSelf] IProfile.id O.run
-
-val get : 'any IIsIn.id -> [`IsSelf] IAvatar.id O.run
 
 val usage : [<`ViewContacts|`SeeUsage] IInstance.id -> int O.run
 
@@ -103,7 +98,7 @@ val user_instances :
 
 val user_avatars :
   [`IsSelf] IUser.id
-  -> ( #Ohm.CouchDB.ctx, ([`IsSelf] IAvatar.id * [`IsToken] IIsIn.id) list ) Ohm.Run.t
+  -> ( #Ohm.CouchDB.ctx, [`IsToken] MActor.t list ) Ohm.Run.t
 
 val count_user_instances :
      [`ViewInstances] IUser.id
