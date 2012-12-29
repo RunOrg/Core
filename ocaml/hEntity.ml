@@ -101,14 +101,15 @@ module type CAN = sig
 
   val id   : 'any t -> 'any id
   val data : 'any t -> core  
-  val uid  : 'any t -> [`Unknown] id     
   
   val view_access   : 'any t -> MAccess.t list
   val admin_access  : 'any t -> MAccess.t list 
     
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
-    
+
+  val decay : 'any id -> [`Unknown] id 
+
 end
 
 module type CAN_ARG = sig
@@ -128,6 +129,8 @@ module Can = functor (C:CAN_ARG) -> struct
 
   type core = C.core
   type 'a id = 'a C.id
+
+  let decay id = C.decay id 
 
   type 'relation t = {
     id    : 'relation id ;
@@ -155,8 +158,6 @@ module Can = functor (C:CAN_ARG) -> struct
     C.view t.data  
 
   let id t = t.id
-
-  let uid t = C.decay t.id
     
   let data t = t.data
     
@@ -177,7 +178,7 @@ module Can = functor (C:CAN_ARG) -> struct
 	| Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
 			if ok then return (Some t') else return None
     end
-      
+
 end
 
 (* Mutation ("set") module ---------------------------------------------------------------------------------- *)
@@ -194,5 +195,23 @@ module Set = functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id) 
   type diff = S.diff
   type ('a,'b) t = [`Admin] can -> 'a MActor.t -> ('b,unit) Ohm.Run.t
   let update diffs t self =
-    O.decay (S.update (C.uid t) self diffs) 
+    O.decay (S.update (C.decay (C.id t)) self diffs) 
+end
+
+(* Load ("get") module -------------------------------------------------------------------------------------- *)
+
+module Get = functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id and type t = C.core) -> struct
+
+  let get ?actor id = 
+    O.decay (let! e = ohm_req_or (return None) $ S.Tbl.get (C.decay id) in
+	     return (C.make id ?actor e))
+
+  let view ?actor id = 
+    let! e = ohm_req_or (return None) (get ?actor id) in
+    C.view e
+
+  let admin ?actor id = 
+    let! e = ohm_req_or (return None) (get ?actor id) in
+    C.admin e
+
 end

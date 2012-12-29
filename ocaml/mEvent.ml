@@ -48,19 +48,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
 
   end
 
-let get ?actor eid = 
-  O.decay begin 
-    let! e = ohm_req_or (return None) $ E.Tbl.get (IEvent.decay eid) in
-    return (Can.make eid ?actor e)
-  end 
-
-let view ?actor eid = 
-  let! event = ohm_req_or (return None) (get ?actor eid) in
-  Can.view event
-
-let admin ?actor eid = 
-  let! event = ohm_req_or (return None) (get ?actor eid) in
-  Can.admin event
+include HEntity.Get(Can)(E)
 
 let delete t self = 
   Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self 
