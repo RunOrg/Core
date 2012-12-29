@@ -18,6 +18,7 @@ module type CORE = sig
   module Design : Ohm.CouchDB.DESIGN 
   val update : Id.t -> 'any MActor.t -> diff list -> (O.ctx,unit) Ohm.Run.t
   val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
+  val on_update : (Id.t,unit O.run) Ohm.Sig.channel 
 end 
 
 module type CORE_ARG = sig
@@ -85,6 +86,12 @@ module Core = functor(C:CORE_ARG) -> struct
     let info = MUpdateInfo.self (MActor.avatar actor) in
     let! _ = ohm $ Store.create ~id ~init ~diffs ~info () in
     return () 
+
+  let on_update_call, on_update = Sig.make (Run.list_iter identity) 
+
+  let () = 
+    let! t = Sig.listen Store.Signals.version_create in
+    on_update_call (Store.version_object t) 
 
 end
 

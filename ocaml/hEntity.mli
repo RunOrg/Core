@@ -11,6 +11,7 @@ module type CORE = sig
   module Design : Ohm.CouchDB.DESIGN 
   val update : Id.t -> 'any MActor.t -> diff list -> (O.ctx,unit) Ohm.Run.t
   val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
+  val on_update : (Id.t,unit O.run) Ohm.Sig.channel 
 end 
 
 module type CORE_ARG = sig

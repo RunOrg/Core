@@ -22,7 +22,7 @@ module Satellite = struct
 end
 
 module Signals = struct
-  let on_update_call, on_update = Sig.make (Run.list_iter identity) 
+  let on_update = Core.on_update
 end
 
 module Get = struct
@@ -36,9 +36,28 @@ module Get = struct
 end
 
 let create actor ~title ~body ~groups = 
-  assert false
+  O.decay begin
+    let  did  = IDiscussion.gen () in
+    let! time = ohmctx (#time) in 
+    let  init = Core.({
+      iid   = IInstance.decay (MActor.instance actor) ;
+      gids  = [] ;
+      title = "" ;
+      body  = `Text "" ;
+      time  ;
+      crea  = IAvatar.decay (MActor.avatar actor) ;
+      del   = None ;
+    }) in
+    let diffs = [
+      `SetTitle  title ;
+      `SetBody   body ;
+      `AddGroups groups ;
+    ] in
+    let! () = ohm $ Core.create did actor init diffs in
+    return did 
+  end 
 
 include HEntity.Get(Can)(Core)
 
-let delete d actor = 
-  assert false
+let delete t self = 
+  Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self 
