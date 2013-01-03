@@ -24,6 +24,8 @@ let item_url cuid itid =
 					  (instance # key) [ IEntity.to_string eid ])
 	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
 					 (instance # key) [ IEvent.to_string eid ])
+	| `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see
+					      (instance # key) [ IDiscussion.to_string did ])
     end
     | `album  aid -> return None
     | `folder fid -> return None		

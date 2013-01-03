@@ -24,6 +24,7 @@ let () =
 		     let  owner = MFeed.Get.owner feed in 
 		     return (match owner with 
 		       | `Event eid -> Some (`Event eid)
+		       | `Discussion did -> Some (`Discussion did) 
 		       | `Entity _ -> None
 		       | `Instance _ -> None) 
       | `album aid -> let aid = IAlbum.Assert.bot aid in

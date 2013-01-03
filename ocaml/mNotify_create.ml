@@ -113,10 +113,15 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
 	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
 	  return $ List.map snd list	
 	| `Event eid -> 
-	  let! event = ohm_req_or (return []) $ MEvent.get eid in 
+	  let! event  = ohm_req_or (return []) $ MEvent.get eid in 
 	  let  gid    = IGroup.Assert.bot $ MEvent.Get.group event in
 	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
 	  return $ List.map snd list	
+	| `Discussion did ->
+	  let! discn  = ohm_req_or (return []) $ MDiscussion.get did in 
+	  let  access = MDiscussion.Satellite.access discn (`Wall `Read) in
+	  let  iid    = IInstance.Assert.bot (MDiscussion.Get.iid discn) in
+	  MReverseAccess.reverse iid [access] 
     end in 
     
     (* Preferences further determine who does or does not receive posts. *)

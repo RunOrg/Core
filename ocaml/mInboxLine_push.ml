@@ -12,6 +12,9 @@ let access_of_owner = function
   | `Event eid -> let! event = ohm_req_or (return None) $ MEvent.get eid in 
 		  return $ Some (MEvent.Get.iid event, 
 				 MEvent.Satellite.access event (`Wall `Read))
+  | `Discussion did -> let! discn = ohm_req_or (return None) $ MDiscussion.get did in 
+		       return $ Some (MDiscussion.Get.iid discn,
+				      MDiscussion.Satellite.access discn (`Wall `Read)) 
 
 module LoopFmt = Fmt.Make(struct
   type json t = (IInboxLine.t * IAvatar.t option * IInstance.t * MAccess.t) 
