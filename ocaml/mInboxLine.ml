@@ -38,6 +38,7 @@ let () =
 		       let  owner = MFolder.Get.owner folder in
 		       return (match owner with 
 			 | `Event eid -> Some (`Event eid) 
+			 | `Discussion did -> Some (`Discussion did) 
 			 | `Entity _ -> None)
   end in
   let! ilid = ohm $ ByOwner.get_or_create iloid in

@@ -58,8 +58,7 @@ let get_folder_info owner current =
   let! fid = ohm_req_or (return None) begin 
     match current with Some info -> return (Some info.Info.Folder.id) | None ->
       match (owner : IInboxLineOwner.t) with 
-	| (`Event _) as owner -> MFolder.try_by_owner owner 			      	
-	| `Discussion _ -> return None
+	| (`Event _ | `Discussion _) as owner -> MFolder.try_by_owner owner 			      	
   end in 
 
   (* Act as a bot to extract the information. 
