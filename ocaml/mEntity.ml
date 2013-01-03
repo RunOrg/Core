@@ -309,5 +309,31 @@ module Backdoor = struct
 
 end
 
+(* {{MIGRATION}} *)
 
+let on_migrate_call, on_migrate = Sig.make (Run.list_iter identity)
+
+let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
+  IEntity.fmt (Tbl.all_ids ~count:100)
+  (fun eid ->
+    let! entity = ohm_req_or (return ()) $ Tbl.get eid in
+    if entity.E.kind = `Event || entity.E.deleted <> None then return () else begin
+      
+      (* Migrate groups and forums to discussions *)
+      let time = Unix.gettimeofday () in
+      let! self = req_or (return ()) $ BatOption.map IAvatar.Assert.is_self entity.E.creator in
+      let  iid  = entity.E.instance in
+      let  gid  = entity.E.group in
+      let  kind = entity.E.kind in 
+      let! name = ohm_req_or (return ()) $ Run.opt_map TextOrAdlib.to_string entity.E.name in
+      
+      let! () = ohm $ on_migrate_call (eid, iid, gid, self, kind) in
+      let  () = Util.log "Migrate group - %.3fs - %s %S" (Unix.gettimeofday () -. time)
+	(IEntity.to_string eid) name in
+      return ()
+	
+    end)
+
+(* Perform entity migration *)
+let () = O.put (migrate_all ())
 
