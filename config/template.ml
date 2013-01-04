@@ -167,15 +167,6 @@ let course12sessions = template "Course12sessions"
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment-session12")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ;
-    field ~label:(adlib "EntityFieldTeacher" "Formateur")
-          `LongText "teacher" ;
-    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
-          `Textarea "curriculum" ;
-    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
-          `Textarea "prerequisite" ;
-  ])
   ~join:[
     join ~name:"date-session1" ~label:(adlib "JoinFormDateSession1" ~old:"join.form.date-session1" "Date séance 1") `Date ;
     join ~name:"comment-session1" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
@@ -202,28 +193,7 @@ let course12sessions = template "Course12sessions"
     join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
     join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [ infoField "prerequisite" `LongText ];
-        infoItem
-          ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [ infoField "curriculum" `LongText ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Formateur")
-          [ infoField "teacher" `Text ];
-      ];
-    place ;
-    time 
-  ])
-  ()
+   ()
 
 (* ========================================================================== *)
 
@@ -383,15 +353,6 @@ let course12sessionsFitness = template "Course12sessionsFitness"
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment-session12")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldTeacher" "Formateur")
-          `LongText "teacher" ;
-    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
-          `Textarea "curriculum" ;
-    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
-          `Textarea "prerequisite" ;
-  ])
   ~join:[
     join ~name:"feedback-session1" ~label:(adlib "JoinFormFeedbackSession1" ~old:"join.form.feedback-session1" "Feedback séance 1") 
       (`PickOne [
@@ -490,33 +451,6 @@ let course12sessionsFitness = template "Course12sessionsFitness"
     join ~name:"date-session12" ~label:(adlib "JoinFormDateSession12" ~old:"join.form.date-session12" "Date séance 12") `Date ;
     join ~name:"comment-session12" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [
-            infoField "prerequisite" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [
-            infoField "curriculum" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Formateur")
-          [
-            infoField "teacher" `Text ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -530,43 +464,7 @@ let courseSimple = template "CourseSimple"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldTeacher" "Formateur")
-          `LongText "teacher" ;
-    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
-          `Textarea "curriculum" ;
-    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
-          `Textarea "prerequisite" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [
-            infoField "prerequisite" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [
-            infoField "curriculum" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Formateur")
-          [
-            infoField "teacher" `Text ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
 
 (* ========================================================================== *)
@@ -580,53 +478,7 @@ let courseStage = template "CourseStage"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ;
-    field ~label:(adlib "EntityFieldEnddate" "Date de fin")
-          `Date "enddate" ;
-    location ;
-    field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
-          `Textarea "meal-accomodation" ;
-    field ~label:(adlib "EntityFieldTeacher" "Formateur")
-          `LongText "teacher" ;
-    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
-          `Textarea "curriculum" ;
-    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
-          `Textarea "prerequisite" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [
-            infoField "prerequisite" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [
-            infoField "curriculum" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Formateur")
-          [
-            infoField "teacher" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_MealAccomodation" "Repas et hébergement")
-          [
-            infoField "meal-accomodation" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -640,50 +492,7 @@ let courseTraining = template "CourseTraining"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldMealAccomodation" "Repas et hébergement")
-          `Textarea "meal-accomodation" ;
-    field ~label:(adlib "EntityFieldTeacher" "Formateur")
-          `LongText "teacher" ;
-    field ~label:(adlib "EntityFieldCurriculum" "Programme du cours")
-          `Textarea "curriculum" ;
-    field ~label:(adlib "EntityFieldPrerequisite" "Pré-requis")
-          `Textarea "prerequisite" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Prerequisite" "Pré-requis")
-          [
-            infoField "prerequisite" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Curriculum" "Programme du cours")
-          [
-            infoField "curriculum" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Formateur")
-          [
-            infoField "teacher" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_MealAccomodation" "Repas et hébergement")
-          [
-            infoField "meal-accomodation" `LongText ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
 
 (* ========================================================================== *)
@@ -697,151 +506,7 @@ let eventAfterwork = template "EventAfterwork"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ;
-    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
-          `Textarea "invitations-discounts" ;
-    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
-          `Textarea "ticketing" ;
-    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
-          `Textarea "price-info" ;
-    field ~label:(adlib "EntityFieldSpecialOffer" "Offre spéciale")
-          `Textarea "special-offer" ;
-    field ~label:(adlib "EntityFieldBuffet" "Buffet")
-          `LongText "buffet" ;
-    field ~label:(adlib "EntityFieldDressCode" "Dress code")
-          `LongText "dress-code" ;
-    field ~label:(adlib "EntityFieldDjs" "DJs")
-          `LongText "djs" ;
-    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
-          `LongText "kind-of-music" ;
-    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
-          `Textarea "ambiance" ;
-    field ~label:(adlib "EntityFieldTheme" "Thème")
-          `LongText "theme" ;
-    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
-          `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
-          `LongText "cloakroom" ;
-    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
-          `LongText "reservation-contact" ;
-    field ~label:(adlib "EntityFieldContactInfo" "Contact")
-          `LongText "contact-info" ;
-    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
-          `Textarea "sponsors-partners" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Afterwork" "Afterwork")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Buffet" "Buffet")
-          [
-            infoField "buffet" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_SpecialOffer" "Offre spéciale")
-          [
-            infoField "special-offer" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_SpecialOffer" "Offre spéciale")
-          [
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Price" "Prix")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_PriceInfo" "Infos prix")
-          [
-            infoField "price-info" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ticketing" "Billeterie")
-          [
-            infoField "ticketing" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_InvitationsDiscounts" "Invitations & réductions")
-          [
-            infoField "invitations-discounts" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Ambiance" "Ambiance")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Theme" "Thème")
-          [
-            infoField "theme" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ambiance" "Ambiance")
-          [
-            infoField "ambiance" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_KindOfMusic" "Type de musique")
-          [
-            infoField "kind-of-music" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Djs" "DJs")
-          [
-            infoField "djs" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_DressCode" "Dress code")
-          [
-            infoField "dress-code" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          [
-            infoField "moreinfo" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
-          [
-            infoField "sponsors-partners" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ContactInfo" "Contact")
-          [
-            infoField "contact-info" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ReservationContact" "Réservations")
-          [
-            infoField "reservation-contact" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Cloakroom" "Vestiaire")
-          [
-            infoField "cloakroom" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_TransportationService" "Bus/navette")
-          [
-            infoField "transportation-service" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -855,151 +520,7 @@ let _ = template "EventAfterworkAuto"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ date ; status ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
-          `Textarea "invitations-discounts" ;
-    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
-          `Textarea "ticketing" ;
-    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
-          `Textarea "price-info" ;
-    field ~label:(adlib "EntityFieldSpecialOffer" "Offre spéciale")
-          `Textarea "special-offer" ;
-    field ~label:(adlib "EntityFieldBuffet" "Buffet")
-          `LongText "buffet" ;
-    field ~label:(adlib "EntityFieldDressCode" "Dress code")
-          `LongText "dress-code" ;
-    field ~label:(adlib "EntityFieldDjs" "DJs")
-          `LongText "djs" ;
-    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
-          `LongText "kind-of-music" ;
-    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
-          `Textarea "ambiance" ;
-    field ~label:(adlib "EntityFieldTheme" "Thème")
-          `LongText "theme" ;
-    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
-          `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
-          `LongText "cloakroom" ;
-    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
-          `LongText "reservation-contact" ;
-    field ~label:(adlib "EntityFieldContactInfo" "Contact")
-          `LongText "contact-info" ;
-    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
-          `Textarea "sponsors-partners" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Afterwork" "Afterwork")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Buffet" "Buffet")
-          [
-            infoField "buffet" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_SpecialOffer" "Offre spéciale")
-          [
-            infoField "special-offer" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Price" "Prix")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_PriceInfo" "Infos prix")
-          [
-            infoField "price-info" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ticketing" "Billeterie")
-          [
-            infoField "ticketing" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_InvitationsDiscounts" "Invitations & réductions")
-          [
-            infoField "invitations-discounts" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Ambiance" "Ambiance")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Theme" "Thème")
-          [
-            infoField "theme" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ambiance" "Ambiance")
-          [
-            infoField "ambiance" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_KindOfMusic" "Type de musique")
-          [
-            infoField "kind-of-music" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Djs" "DJs")
-          [
-            infoField "djs" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_DressCode" "Dress code")
-          [
-            infoField "dress-code" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
-          [
-            infoField "sponsors-partners" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ContactInfo" "Contact")
-          [
-            infoField "contact-info" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ReservationContact" "Réservations")
-          [
-            infoField "reservation-contact" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Cloakroom" "Vestiaire")
-          [
-            infoField "cloakroom" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_TransportationService" "Bus/navette")
-          [
-            infoField "transportation-service" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1022,13 +543,6 @@ let eventAg = template "EventAg"
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"subject" 
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
@@ -1039,23 +553,6 @@ let eventAg = template "EventAg"
 		"Si vous ne venez pas, inscrivez ici le nom de la personne à laquelle vous transmettez votre pouvoir") 
       `LongText ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1083,11 +580,6 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
       ~label:(adlib "JoinFieldBadmintonMixte" "Partenaire de mixte (nom, prénom, classement)")
       (`Self (`Field "badminton-mixte")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"badminton-series" ~label:(adlib "JoinFielBadmintonSeries" "Série choisie") `LongText ;
     join ~name:"badminton-table" ~label:(adlib "JoinFieldBadmintonTable" "Tableau choisi") `LongText ;
@@ -1096,18 +588,6 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
     join ~name:"badminton-mixte" ~label:(adlib "JoinFieldBadmintonMixte" 
 					   "Partenaire de mixte (nom, prénom, classement)") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
   
 (* ========================================================================== *)
@@ -1131,50 +611,12 @@ let eventCampaignAction = template "EventCampaignAction"
       ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" "Compte rendu d'opération")
       (`Self (`Field "action-cr")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ;  
-    field ~label:(adlib "EntityFieldActionType" "Type d'opération")
-          ~help:(adlib "EntityFieldActionCrExplain" "Tractage, boitage, porte à porte, affichage, phoning, etc.")
-          ~required:true
-          `LongText "action-type" ;
-    field ~label:(adlib "EntityFieldActionZone" "Zones, rues, quartiers")
-          `LongText "action-zone" ;
-    field ~label:(adlib "EntityFieldActionDetails" "Détails techniques de l'opération")
-          `Textarea "action-details" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"perimeter" ~label:(adlib "JoinFieldPerimeter" ~old:"join.field.perimeter" 
 				     "Périmètre couvert lors de l'opération") `Textarea ;
     join ~name:"action-cr" ~label:(adlib "JoinFieldActionCr" ~old:"join.field.action-cr" 
 				     "Compte rendu d'opération") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_What" "Quoi ?")
-      [
-        infoItem
-          [
-            infoField "action-type" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ActionDetails" "Détails techniques de l'opération")
-          [
-            infoField "action-details" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1198,36 +640,12 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
       ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" "Questions que vous souhaitez poser")
       (`Self (`Field "question")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"theme" ~label:(adlib "JoinFieldTheme" ~old:"join.field.theme" 
 				 "Thèmes que vous voulez voir aborder") `Textarea ;
     join ~name:"question" ~label:(adlib "JoinFieldQuestion" ~old:"join.field.question" 
 				    "Questions que vous souhaitez poser") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1241,125 +659,8 @@ let eventClubbing = template "EventClubbing"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
-          `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
-          `LongText "cloakroom" ;
-    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
-          `LongText "reservation-contact" ;
-    field ~label:(adlib "EntityFieldContactInfo" "Contact")
-          `LongText "contact-info" ;
-    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
-          `Textarea "invitations-discounts" ;
-    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
-          `Textarea "ticketing" ;
-    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
-          `Textarea "price-info" ;
-    field ~label:(adlib "EntityFieldDressCode" "Dress code")
-          `LongText "dress-code" ;
-    field ~label:(adlib "EntityFieldDjs" "DJs")
-          `LongText "djs" ;
-    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
-          `LongText "kind-of-music" ;
-    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
-          `Textarea "ambiance" ;
-    field ~label:(adlib "EntityFieldTheme" "Thème")
-          `LongText "theme" ;
-    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
-          `Textarea "sponsors-partners" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Price" "Prix")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_PriceInfo" "Infos prix")
-          [
-            infoField "price-info" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ticketing" "Billeterie")
-          [
-            infoField "ticketing" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_InvitationsDiscounts" "Invitations & réductions")
-          [
-            infoField "invitations-discounts" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Ambiance" "Ambiance")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Theme" "Thème")
-          [
-            infoField "theme" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ambiance" "Ambiance")
-          [
-            infoField "ambiance" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_KindOfMusic" "Type de musique")
-          [
-            infoField "kind-of-music" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Djs" "DJs")
-          [
-            infoField "djs" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_DressCode" "Dress code")
-          [
-            infoField "dress-code" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
-          [
-            infoField "sponsors-partners" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ContactInfo" "Contact")
-          [
-            infoField "contact-info" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ReservationContact" "Réservations")
-          [
-            infoField "reservation-contact" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Cloakroom" "Vestiaire")
-          [
-            infoField "cloakroom" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_TransportationService" "Bus/navette")
-          [
-            infoField "transportation-service" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
+  
   ()
 
 (* ========================================================================== *)
@@ -1373,127 +674,7 @@ let _ = template "EventClubbingAuto"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ;
-    field ~label:(adlib "EntityFieldInvitationsDiscounts" "Invitations & réductions")
-          `Textarea "invitations-discounts" ;
-    field ~label:(adlib "EntityFieldTicketing" "Billeterie")
-          `Textarea "ticketing" ;
-    field ~label:(adlib "EntityFieldPriceInfo" "Infos prix")
-          `Textarea "price-info" ;
-    field ~label:(adlib "EntityFieldDressCode" "Dress code")
-          `LongText "dress-code" ;
-    field ~label:(adlib "EntityFieldDjs" "DJs")
-          `LongText "djs" ;
-    field ~label:(adlib "EntityFieldKindOfMusic" "Type de musique")
-          `LongText "kind-of-music" ;
-    field ~label:(adlib "EntityFieldAmbiance" "Ambiance")
-          `Textarea "ambiance" ;
-    field ~label:(adlib "EntityFieldTheme" "Thème")
-          `LongText "theme" ;
-    field ~label:(adlib "EntityFieldTransportationService" "Bus/navette")
-          `Textarea "transportation-service" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-    field ~label:(adlib "EntityFieldCloakroom" "Vestiaire")
-          `LongText "cloakroom" ;
-    field ~label:(adlib "EntityFieldReservationContact" "Réservations")
-          `LongText "reservation-contact" ;
-    field ~label:(adlib "EntityFieldContactInfo" "Contact")
-          `LongText "contact-info" ;
-    field ~label:(adlib "EntityFieldSponsorsPartners" "Sponsors & partenaires")
-          `Textarea "sponsors-partners" ;
-  ])
   ~join:[]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Price" "Prix")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_PriceInfo" "Infos prix")
-          [
-            infoField "price-info" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ticketing" "Billeterie")
-          [
-            infoField "ticketing" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_InvitationsDiscounts" "Invitations & réductions")
-          [
-            infoField "invitations-discounts" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Ambiance" "Ambiance")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Theme" "Thème")
-          [
-            infoField "theme" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Ambiance" "Ambiance")
-          [
-            infoField "ambiance" `LongText ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_KindOfMusic" "Type de musique")
-          [
-            infoField "kind-of-music" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Djs" "DJs")
-          [
-            infoField "djs" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_DressCode" "Dress code")
-          [
-            infoField "dress-code" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Moreinfo" "Plus d'info")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_SponsorsPartners" "Sponsors & partenaires")
-          [
-            infoField "sponsors-partners" `LongText ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ContactInfo" "Contact")
-          [
-            infoField "contact-info" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_ReservationContact" "Réservations")
-          [
-            infoField "reservation-contact" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Cloakroom" "Vestiaire")
-          [
-            infoField "cloakroom" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_TransportationService" "Bus/navette")
-          [
-            infoField "transportation-service" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1513,34 +694,10 @@ let eventComiteEnt = template "EventComiteEnt"
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
-  ~join:[
+   ~join:[
     join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
 				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1560,36 +717,10 @@ let eventCoproMeeting = template "EventCoproMeeting"
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-    field ~label:(adlib "EntityFieldMoreinfo" "Informations complémentaires")
-          `Textarea "moreinfo" ;
-  ])
   ~join:[
     join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
 				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;            
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1613,21 +744,6 @@ let eventImproSimple = template "EventImproSimple"
       ~label:(adlib "JoinFormOkForHelp" ~old:"join.form.ok-for-help" "Ok pour aider...")
       (`Self (`Field "ok-for-help")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
-          `LongText "player-time" ;
-    field ~label:(adlib "EntityFieldAgainstTeam" "Equipe rencontrée")
-          `LongText "against-team" ;
-    field ~label:(adlib "EntityFieldAgainstTeamUrl" "Son site web")
-          `LongText "against-team-url" ;
-    field ~label:(adlib "EntityFieldMc" "MC")
-          `LongText "mc" ;
-    field ~label:(adlib "EntityFieldReferee" "Arbitre")
-          `LongText "referee" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition"
 					   ~old:"join.form.ok-for-position" "Ok pour être…") 
@@ -1643,54 +759,7 @@ let eventImproSimple = template "EventImproSimple"
          adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
          adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_PlayerTime" "Heure d'arrivée")
-          [
-            infoField "player-time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Mc" "MC")
-          [
-            infoField "mc" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Referee" "Arbitre")
-          [
-            infoField "referee" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Coord" "Coordinateur")
-          [
-          ];
-      ];
-    place ; 
-    time ; 
-    infoSection
-      (adlib "Info_Section_Against" "Contre Qui ?")
-      [
-        infoItem
-          [
-            infoField "against-team" `Text ;
-          ];
-        infoItem
-          [
-            infoField "against-team-url" `Url ;
-          ];
-      ];
-  ])
-  ()
+   ()
 
 (* ========================================================================== *)
 
@@ -1716,15 +785,6 @@ let eventImproSpectacle = template "EventImproSpectacle"
       ~label:(adlib "ParticipateFieldDateShort" ~old:"participate.field.date.short" "Depuis le")
       (`Self `Date) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldPlayerTime" "Heure d'arrivée des joueurs")
-          `LongText "player-time" ;
-    field ~label:(adlib "EntityFieldMc" "MC")
-          `LongText "mc" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"ok-for-position" ~label:(adlib "JoinFormOkForPosition" ~old:"join.form.ok-for-position" "Ok pour être…") 
       (`PickMany [
@@ -1737,28 +797,6 @@ let eventImproSpectacle = template "EventImproSpectacle"
          adlib "JoinFormOkForHelpSupply" ~old:"join.form.ok-for-help.supply" "Courses et nourriture" ;
          adlib "JoinFormOkForHelpOther" ~old:"join.form.ok-for-help.other" "Autre (selon les besoins)" ] ) ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_PlayerTime" "Heure d'arrivée")
-          [
-            infoField "player-time" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Mc" "MC")
-          [
-            infoField "mc" `Text ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1776,29 +814,11 @@ let eventJudoCompetition = template "EventJudoCompetition"
     column ~view:`Text
       ~label:(adlib "JoinFielJudoNoteAthlete" "Remarques sportif")
       (`Self (`Field "judo-note-athlete")) ;
-
-  ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
   ])
   ~join:[
     join ~name:"judo-note-athlete" ~label:(adlib "JoinFielJudoNoteAthlete" "Remarques du sportif") `LongText ;
       ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-      ];
-    place ; 
-    time
-  ])
-  ()
+    ()
   
 
 (* ========================================================================== *)
@@ -1818,35 +838,11 @@ let eventMeeting = template "EventMeeting"
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
 				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time 
-  ])
-  ()
+   ()
 
 (* ========================================================================== *)
 
@@ -1873,38 +869,9 @@ let eventPetition = template "EventPetition"
       ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire")
       (`Self (`Field "comment")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; 
-    field ~label:(adlib "EntityFieldClosingdate" "Date de clôture")
-          `Date "enddate" ;
-  ])
   ~join:[
     join ~name:"comment" ~label:(adlib "JoinFormComment" ~old:"join.form.comment" "Commentaire") `Textarea ;
   ]
-  ~page:Page.([  
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-      ];
-    infoSection
-      (adlib "Info_Section_Validity" "Validité")
-      [
-        infoItem
-          ~label:(adlib "Info_Item_Date" "Date de début")
-          [
-            infoField "date" `Date ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Enddate" "Date de fin")
-          [
-            infoField "enddate" `Date ;
-          ];
-      ];
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1924,34 +891,10 @@ let eventPublicCommittee = template "EventPublicCommittee"
       ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" "Sujets que vous désirez aborder")
       (`Self (`Field "subject")) ;
   ])
-  ~fields:Field.([
-    desc ; picture ; date ; location ; 
-    field ~label:(adlib "EntityFieldAgenda" "Ordre du jour")
-          `Textarea "agenda" ;
-    field ~label:(adlib "EntityFieldCoord" "Coordinateur")
-          `LongText "coord" ;
-  ])
   ~join:[
     join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject"
 				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-  ~page:Page.([
-    infoSection
-      (adlib "Info_Section_Org" "Organisation")
-      [
-        infoItem
-          [
-            infoField "coord" `Text ;
-          ];
-        infoItem
-          ~label:(adlib "Info_Item_Agenda" "Ordre du jour")
-          [
-            infoField "agenda" `LongText ;
-          ];
-      ];
-    place ; 
-    time
-  ])
   ()
 
 (* ========================================================================== *)
@@ -1966,9 +909,7 @@ let eventSimple = template "EventSimple"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([ desc ; picture ; date ; location ])
   ~join:[]
-  ~page:Page.([ place ; time ])
   ()
 
 (* ========================================================================== *)
@@ -1982,9 +923,7 @@ let _ = template "EventSimpleAuto"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:Field.([ desc ; picture ; date ; location ])
   ~join:[]
-  ~page:Page.([ place ; time ])
   ()
 
 (* ========================================================================== *)
@@ -1998,9 +937,7 @@ let forum = template "ForumPublic"
   ~folder:(folderConfig ~read:`Viewers ~post:`Viewers)
   ~album:(albumConfig ~read:`Viewers ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:[]
   ~join:[]
-  ~page:[]
   ()
 
 (* ========================================================================== *)

@@ -100,15 +100,15 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	Catalog.entreprises_companytraining_desc_b ;
 ];
 
-  page "/portail-abonnes" "RunOrg Entreprises - Portail Abonnés"
+  page "/portail-abonnes" "RunOrg Entreprises - Presse & Portail Abonnés"
     [ composite `LR
-	(pride ~title:"Portail abonnés" "Solution idéale pour fidéliser les abonnés, leur offrir de nouveaux services, interagir avec eux, et créer une communauté autour de votre journal")
+	(pride ~title:"Presse - Portail abonnés" "Solution idéale pour fidéliser les abonnés, leur offrir de nouveaux services, interagir avec eux, et créer une communauté autour de votre journal")
 		(contact_demo)   ;
 ];
 
   page "/portail-clients" "RunOrg Entreprises - Portail Clients"
     [ composite `LR
-	(pride ~title:"Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leur offrir de nouveaux services.")
+	(pride ~title:"CRM - Portail clients" "Solution idéale pour fidéliser les clients, leur mettre à disposition des ressources et leur offrir de nouveaux services.")
 		(contact_demo)   ;
 ];
 
