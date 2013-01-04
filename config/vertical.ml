@@ -1269,6 +1269,9 @@ let () = catalog [
     inCatalog companyPress
               (adlib "VerticalCompanyPressName" "Presse")
               None ;
+    inCatalog companyCRM
+              (adlib "VerticalCompanyCRMName" "CRM")
+              None ;
   ] ;
   subCatalog ~name:(adlib "Catalog_Ce" "Comités d'entreprise") [
     inCatalog comiteEnt

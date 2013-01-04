@@ -142,8 +142,8 @@ let headers = [
       "Solutions",     "/entreprises/CompanyTraining",
 	[ "Centres de formation", "/entreprises/CompanyTraining";
 	  "RSE", "/entreprises/Company" ;
-	  "Portail abonnés", "/entreprises/portail-abonnes";
-	  "Portail clients", "/entreprises/portail-clients";
+	  "Presse - Portail abonnés", "/entreprises/portail-abonnes";
+	  "CRM - Portail clients", "/entreprises/portail-clients";
 	  "Comité d'Entreprise", "/entreprises/ComiteEnt";
 	  "Organisation d'évènements", "/entreprises/Events"
 	  ] ;
