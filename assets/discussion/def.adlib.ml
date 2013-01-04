@@ -11,3 +11,10 @@
 | `Discussion_Forbidden_Title
 | `Discussion_Forbidden_Problem 
 | `Discussion_Forbidden_Solution
+
+| `Discussion_Field_Title 
+| `Discussion_Field_Body
+| `Discussion_Field_Required
+
+| `Discussion_Send 
+| `Discussion_Save

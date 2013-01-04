@@ -6,8 +6,8 @@ open BatPervasives
 
 open CDiscussion_admin_common
 
-(*
 module Edit     = CDiscussion_admin_edit
+(*
 module Delete   = CDiscussion_admin_delete
 *)
 
