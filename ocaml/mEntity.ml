@@ -311,10 +311,10 @@ end
 
 (* {{MIGRATION}} *)
 
-let on_migrate_call, on_migrate = Sig.make (Run.list_iter identity)
+let on_migrate_call, on_migrate = Sig.make (Run.list_exists identity)
 
-let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
-  IEntity.fmt (Tbl.all_ids ~count:100)
+let migrate_all = Async.Convenience.foreach O.async "migrate-discussion-entities"
+  IEntity.fmt (Tbl.all_ids ~count:10)
   (fun eid ->
     let! entity = ohm_req_or (return ()) $ Tbl.get eid in
     if entity.E.kind = `Event || entity.E.deleted <> None then return () else begin
@@ -327,8 +327,8 @@ let migrate_all = Async.Convenience.foreach O.async "migrate-event-entities"
       let  kind = entity.E.kind in 
       let! name = ohm_req_or (return ()) $ Run.opt_map TextOrAdlib.to_string entity.E.name in
       
-      let! () = ohm $ on_migrate_call (eid, iid, gid, self, kind) in
-      let  () = Util.log "Migrate group - %.3fs - %s %S" (Unix.gettimeofday () -. time)
+      let! ok = ohm $ on_migrate_call (eid, iid, gid, self, kind, name) in
+      let  () = if ok then Util.log "Migrate group - %.3fs - %s %S" (Unix.gettimeofday () -. time)
 	(IEntity.to_string eid) name in
       return ()
 	

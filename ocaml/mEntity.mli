@@ -191,3 +191,9 @@ module Backdoor : sig
 
 end
 
+(* {{MIGRATION}} *)
+
+val on_migrate : (IEntity.t * IInstance.t * IGroup.t * [`IsSelf] IAvatar.id * MEntityKind.t * string, 
+		  bool O.run) Ohm.Sig.channel
+
+

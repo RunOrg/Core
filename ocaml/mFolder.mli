@@ -23,3 +23,5 @@ module Can : sig
   val write : 'any t -> [`Write] t option O.run
   val read  : 'any t -> [`Read] t option O.run
 end
+
+val migrate_owner : [`Bot] IFolder.id -> 'a IFolderOwner.id -> (#O.ctx,unit) Ohm.Run.t

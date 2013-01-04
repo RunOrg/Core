@@ -170,3 +170,14 @@ let try_by_owner owner =
   let id = IFolderOwner.to_id owner in 
   let! found = ohm_req_or (return None) (ByOwnerView.doc id |> Run.map Util.first) in
   return $ Some (IFolder.of_id (found # id))
+
+(* Owner migration ------------------------------------------------------------------------ *)
+
+let migrate_owner flid floid = 
+  let! _ = ohm $ Tbl.update (IFolder.decay flid) (fun folder ->
+    (object
+      method iid   = folder # iid
+      method owner = IFolderOwner.decay floid
+     end) 
+  ) in
+  return () 

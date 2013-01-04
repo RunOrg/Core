@@ -27,3 +27,4 @@ module Can : sig
   val read  : 'any t -> [`Read] t option O.run
 end
   
+val migrate_owner : [`Bot] IFeed.id -> 'a IFeedOwner.id -> (#O.ctx,unit) Ohm.Run.t

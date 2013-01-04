@@ -201,3 +201,20 @@ let bot_get fid =
     admin  = return false
   } 
 
+(* Owner migration -------------------------------------------------------------- *)
+
+let migrate_owner fid foid = 
+  let! _ = ohm $ Tbl.update (IFeed.decay fid) (fun feed -> 
+    let iid, own = match IFeedOwner.decay foid with 
+      | `Instance iid -> iid, None
+      | `Entity eid -> feed # iid, Some (`Entity eid) 
+      | `Event eid -> feed # iid, Some (`Event eid) 
+      | `Discussion did -> feed # iid, Some (`Discussion did)
+    in
+    (object
+      method t   = feed # t
+      method iid = iid
+      method own = own
+     end)
+  ) in
+  return () 

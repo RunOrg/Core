@@ -12,6 +12,7 @@ module Actions = struct
   open CExport
   open CAdmin
   open CLogin
+  open MDiscussion_migrate
   open CMe
   open CWebsite
   open CNetwork
