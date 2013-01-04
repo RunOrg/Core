@@ -16,6 +16,11 @@ let () =
   Refresh.schedule ilid
 
 let () = 
+  let! did  = Sig.listen MDiscussion.Signals.on_bind_inboxLine in
+  let! ilid = ohm $ ByOwner.get_or_create (`Discussion did) in 
+  Refresh.schedule ilid
+
+let () = 
   let! item = Sig.listen MItem.Signals.on_post in 
   let! iloid = ohm_req_or (return ()) begin 
     match item # where with 

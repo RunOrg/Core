@@ -14,6 +14,7 @@ module Satellite : sig
 end
 
 module Signals : sig
+  val on_bind_inboxLine : (IDiscussion.t, unit O.run) Ohm.Sig.channel
   val on_update : (IDiscussion.t, unit O.run) Ohm.Sig.channel
 end
 
