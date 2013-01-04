@@ -20,7 +20,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
   let! folder = ohm $ O.decay (MFolder.Can.read folder) in
 
   let! wallbox = O.Box.add (CWall.box (Some `Discussion) access feed) in
-  let! filebox = O.Box.add (CFolder.box access folder) in
+  let! filebox = O.Box.add (CFolder.box ~compact:true access folder) in
       
   O.Box.fill $ O.decay begin
 

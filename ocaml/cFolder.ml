@@ -56,7 +56,7 @@ let items more access folder start =
   in
   return (items, more)
 
-let folder_rw more access folder wfolder = 
+let folder_rw ~compact more access folder wfolder = 
   O.Box.fill begin 
     let! files, more = ohm $ O.decay (items more access folder None) in 
     let upload = Action.url UrlUpload.Client.Doc.root (access # instance # key) 
@@ -65,15 +65,17 @@ let folder_rw more access folder wfolder =
       method upload = Some upload
       method files  = files
       method more   = more
+      method compact = compact
     end)
   end
 
-let folder_ro more access folder = 
+let folder_ro ~compact more access folder = 
   let! files, more = ohm $ O.decay (items more access folder None) in 
   O.Box.fill (Asset_Folder_List.render (object
     method upload = None
     method files  = files
     method more   = more
+    method compact = compact 
   end))
 
 let folder_none () = 
@@ -88,12 +90,12 @@ let getmore access folder = begin fun time _ self res ->
   return $ Action.json ["more", Html.to_json html] res
 end
 
-let box access folder =
+let box ?(compact=false) access folder =
   match folder with
     | None -> folder_none () 
     | Some folder -> let! writable = ohm (O.decay (MFolder.Can.write folder)) in
-		    let! more = O.Box.react Fmt.Float.fmt (getmore access folder) in 
-		    match writable with 
-		      | None         -> folder_ro more access folder
-		      | Some wfolder -> folder_rw more access folder wfolder
-			
+		     let! more = O.Box.react Fmt.Float.fmt (getmore access folder) in 
+		     match writable with 
+		       | None         -> folder_ro ~compact more access folder
+		       | Some wfolder -> folder_rw ~compact more access folder wfolder
+			 
