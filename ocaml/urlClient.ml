@@ -69,10 +69,6 @@ module Profile    = UrlClient_profile
 module Search     = UrlClient_search
 module Inbox      = UrlClient_inbox
 module Discussion = UrlClient_discussion
-
-module Home = struct
-  let home, def_home = root "home"
-end
   
 
 

@@ -176,7 +176,7 @@ let () = UrlNetwork.def_create begin fun req res ->
     ~desc:(BatOption.map (fun t -> `Text t) (post # desc))
   in
 
-  let url = Action.url UrlClient.Home.home key [] in
+  let url = Action.url UrlClient.Inbox.home key [] in
   
   return $ Action.javascript (Js.redirect url ()) res
 

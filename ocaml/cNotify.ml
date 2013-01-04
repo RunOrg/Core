@@ -19,7 +19,7 @@ let item_url cuid itid =
     | `feed fid -> begin
       let! feed = ohm_req_or none $ MFeed.try_get actor fid in 
       match MFeed.Get.owner feed with 
-	| `Instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
+	| `Instance _ -> return None
 	| `Entity eid -> return None
 	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
 					 (instance # key) [ IEvent.to_string eid ])
@@ -44,7 +44,7 @@ let url cuid (notify:MNotify.Store.t) =
 
     | `BecomeMember (iid,_)
     | `BecomeAdmin (iid,_) -> let! instance = ohm_req_or none $ MInstance.get iid in 
-			      return $ Some (Action.url UrlClient.Home.home (instance # key) [])
+			      return $ Some (Action.url UrlClient.Inbox.home (instance # key) [])
 
     | `EventInvite (eid,_) -> let! iid = ohm_req_or none $ MEvent.instance eid in 
 			      let! instance = ohm_req_or none $ MInstance.get iid in 

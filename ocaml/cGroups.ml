@@ -46,27 +46,14 @@ let contents access =
 
       (* Url for sending messages ---------------------------------------------------------- *)
 
-      let! send_url = ohm begin 
-
-	if eid = members_eid then 
-
-	  return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
-
-	else 
-	  
-	  let! feed   = ohm $ MFeed.get_for_owner actor (`Entity eid) in
-	  let! feed   = ohm $ MFeed.Can.read feed in
-	  let! feed   = req_or (return None) feed in 
-	  
-	  return $ Some 
-	    (Action.url UrlClient.Discussion.create (access # instance # key)
-	       [ IEntity.to_string eid ])
-
-      end in 
+      let send_url = 
+	Action.url UrlClient.Discussion.create (access # instance # key)
+	  [ IEntity.to_string eid ]
+      in
 
       let none = return (false, None, Some (object
 	method admin = None
-	method send  = send_url 
+	method send  = Some send_url 
       end), Some join) in
 
       (* List group members ---------------------------------------------------------------- *)
@@ -80,13 +67,13 @@ let contents access =
       
       let not_admin = return (false, Some avatars, (if avatars = [] then None else Some (object
 	method admin = None
-	method send  = send_url
+	method send  = Some send_url
       end)), Some join) in
 
       let! admin = ohm_req_or not_admin $ MEntity.Can.admin entity in 
       
       return (true, Some avatars, Some (object
-	method send = if avatars = [] then None else send_url
+	method send = if avatars = [] then None else Some send_url
 	method admin = Some (object
 	  method invite = Action.url UrlClient.Members.invite (access # instance # key) 
 	    [ IEntity.to_string eid ; fst UrlClient.Invite.seg `ByEmail ]

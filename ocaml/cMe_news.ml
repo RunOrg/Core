@@ -37,7 +37,7 @@ let render_item access itid =
       | `feed fid -> begin
 	let! feed = ohm_req_or none $ MFeed.try_get (access # actor) fid in 
 	match MFeed.Get.owner feed with 
-	  | `Instance _ -> return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
+	  | `Instance _ -> return None
 	  | `Entity eid -> return None
 	  | `Event eid  -> return $ Some (Action.url UrlClient.Events.see
 					    (access # instance # key) [ IEvent.to_string eid ])	
@@ -135,7 +135,7 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
       return $ Some (object
 	method pic    = pic
 	method name   = ins # name
-	method url    = Action.url UrlClient.Home.home (ins # key) [] 
+	method url    = Action.url UrlClient.Inbox.home (ins # key) [] 
       end)
     in
 

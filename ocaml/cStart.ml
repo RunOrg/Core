@@ -82,7 +82,7 @@ let () = UrlStart.def_create begin fun req res ->
     ~white:(req # server)
   in
 
-  let url = Action.url UrlClient.Home.home (key,req # server) [] in
+  let url = Action.url UrlClient.Inbox.home (key,req # server) [] in
   
   return $ Action.javascript (Js.redirect ~url ()) res
 
