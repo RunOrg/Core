@@ -18,3 +18,8 @@
 
 | `Discussion_Send -> "Envoyer"
 | `Discussion_Save -> "Enregistrer"
+
+| `Discussion_Delete_Warning -> "La suppression d'une conversation est permanente !"
+| `Discussion_Delete_Submit -> "Supprimer"
+| `Discussion_Delete_Cancel -> "Ne pas supprimer"
+

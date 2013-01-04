@@ -18,3 +18,8 @@
 
 | `Discussion_Send 
 | `Discussion_Save
+
+| `Discussion_Delete_Warning
+| `Discussion_Delete_Submit
+| `Discussion_Delete_Cancel
+
