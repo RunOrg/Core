@@ -57,7 +57,7 @@ let render_discussion_line access line did =
 
 let render_line access line = 
   match line # owner with 
-    | `Event eid -> render_event_line access line eid 
+    | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
 
 let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
