@@ -44,12 +44,14 @@ let render_discussion_line access line did =
 		       return (Some name) 
   end (MDiscussion.Get.groups discn)) in 
 
+  let! kind = ohm $ AdLib.get `Inbox_Discussion in 
+
   let! html  = ohm $ Asset_Inbox_Line.render (object
     method name = name
     method url  = Action.url UrlClient.Discussion.see (access # instance # key) [ IDiscussion.to_string did ]
     method view = line
     method time = if line # time = 0. then None else Some (line # time, now) 
-    method details = details
+    method details = kind :: details
   end) in
   return (Some html) 
 
