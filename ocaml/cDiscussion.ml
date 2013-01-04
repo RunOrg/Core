@@ -5,3 +5,4 @@ open Ohm.Universal
 open BatPervasives
 
 module See     = CDiscussion_see
+module Admin   = CDiscussion_admin

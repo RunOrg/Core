@@ -1,1 +1,13 @@
 | `Discussion_Admin -> "Modifier"
+
+| `Discussion_Edit_Title -> "Modifier"
+| `Discussion_Edit_Link -> "Modifier"
+| `Discussion_Edit_Sub -> "Changez le titre et la description de cette conversation"
+
+| `Discussion_Delete_Title -> "Supprimer"
+| `Discussion_Delete_Link -> "Supprimer"
+| `Discussion_Delete_Sub -> "Effacer cette conversation et toutes les données associées"
+
+| `Discussion_Forbidden_Title -> "Page inaccessible"
+| `Discussion_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
+| `Discussion_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer une nouvelle conversation..."
