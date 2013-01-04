@@ -38,8 +38,7 @@ let render_item access itid =
 	let! feed = ohm_req_or none $ MFeed.try_get (access # actor) fid in 
 	match MFeed.Get.owner feed with 
 	  | `Instance _ -> return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
-	  | `Entity eid -> return $ Some (Action.url UrlClient.Forums.see
-					    (access # instance # key) [ IEntity.to_string eid ])      
+	  | `Entity eid -> return None
 	  | `Event eid  -> return $ Some (Action.url UrlClient.Events.see
 					    (access # instance # key) [ IEvent.to_string eid ])	
 	  | `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see

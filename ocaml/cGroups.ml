@@ -59,7 +59,7 @@ let contents access =
 	  let! feed   = req_or (return None) feed in 
 	  
 	  return $ Some 
-	    (Action.url UrlClient.Forums.see (access # instance # key)
+	    (Action.url UrlClient.Discussion.create (access # instance # key)
 	       [ IEntity.to_string eid ])
 
       end in 

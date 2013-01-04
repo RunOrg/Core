@@ -115,10 +115,9 @@ let intranet (owid,cuid,iid) =
       method sel = false 
       method label = AdLib.write label
     end)) [
-      Action.url UrlClient.Home.home    key [], `PageLayout_Navbar_Home ;
+      Action.url UrlClient.Inbox.home    key [], `PageLayout_Navbar_Home ;
       Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members ;
       Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events ;
-      Action.url UrlClient.Forums.home  key [], `PageLayout_Navbar_Forums ;
     ]
   in
   

@@ -20,8 +20,7 @@ let item_url cuid itid =
       let! feed = ohm_req_or none $ MFeed.try_get actor fid in 
       match MFeed.Get.owner feed with 
 	| `Instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
-	| `Entity eid -> return $ Some (Action.url UrlClient.Forums.see 
-					  (instance # key) [ IEntity.to_string eid ])
+	| `Entity eid -> return None
 	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
 					 (instance # key) [ IEvent.to_string eid ])
 	| `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see
@@ -66,7 +65,6 @@ let url cuid (notify:MNotify.Store.t) =
 								      IAvatar.to_string aid ])
 				 in
 				 res (match MEntity.Get.kind entity with 
-				   | `Forum -> UrlClient.Forums.join
 				   | `Event -> UrlClient.Events.join
 				   | _      -> UrlClient.Members.join)
 				   

@@ -21,7 +21,6 @@ module Actions = struct
   open CEvents
   open CGroups
   open CHome
-  open CForums
   open CNotifySend
   open CContact
   open CSplash
