@@ -22,4 +22,4 @@
 | `Feed_RO_Empty
 | `Feed_None
 
-| `Feed_Mail_SentTo of [ `Everyone | `Group | `Forum | `Event ]
+| `Feed_Mail_SentTo of [ `Everyone | `Group | `Forum | `Event | `Discussion ]

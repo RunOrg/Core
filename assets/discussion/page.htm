@@ -1,0 +1,57 @@
+<div class="discussion-page">
+  
+  <div class="-head">
+    {?admin}
+    <ul class="actions">
+      <li class="-r">
+	<a class="action-button -admin" href="{url}">
+	  {`Discussion_Admin}
+	</a>
+      </li>
+    </ul>
+    {/?}
+    <h2>{title}</h2>
+    <div class="-details">
+      {page|verbatim}
+    </div>
+  </div>
+  
+  <div class="-body -files">
+    {files|verbatim}      
+  </div>
+  
+  <div class="-body -wall">
+    {wall|verbatim}
+  </div>
+  
+</div>
+  
+<style>  
+.discussion-page {
+
+  width: 710px;
+  margin: auto; 
+
+  .-head .actions { float: right }
+
+  h2 {
+    margin-top: 0px;
+  }
+
+  > .-body {
+    width: 708px;
+    border: 1px solid #BBB;
+    overflow: hidden;
+  }
+
+  .-wall {
+    border-radius: 0 0 5px 5px;
+  }
+
+  .-files {
+    border-bottom: medium none;
+    border-radius: 5px 5px 0 0;
+  }
+
+}
+</style>
