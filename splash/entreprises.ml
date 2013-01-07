@@ -265,59 +265,6 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 	  "Fonctionnalités sur mesure"
 	  "Vous avez des besoins particuliers et vous souhaitez que notre outil y réponde ? Rien de plus simple : nous les développons et les intégrons dans votre application !"
 	;
-
-(*
-	pricing 
-	~foot:"Prix exprimés hors taxes. <a href=\"/contact\">Contactez-nous</a> pour toutes informations supplémentaires."
-	[ ["/entreprises/pricing", "Petit espace" ]; 
-	  [ "/entreprises/pricing","Espace moyen"] ;
-	  ["/entreprises/pricing","Gros espace"] ;
-	  ["/entreprises/pricing", "Très gros espace"] ] 
-	[ "Prix", [ `Text "10€/mois" ; 
-		    `Text "100€/mois" ;
-		    `Text "200€/mois" ;
-		    `Link ("/contact", "Nous Contacter") ];
-	  "Accès inclus", [ `Text "500" ;
-			    `Text "5000" ;
-			    `Text "10000" ;
-			    `Text "+ de 10000" ];
-	  "Option Pack Pro", 	[ `Tick ; 
-				`Tick ;
-				`Tick ; 
-				`Tick ] ;
-	  "Option personnalisation+", [ `Text "100€/mois" ;
-				`Text "100€/mois" ;
-				`Tick ;
-				`Tick ];
-	  "Option Multi-portails", [ `NoTick ;
-				`NoTick ;
-				`Text "100€/mois" ;
-				`Text "100€/mois" ];				
-	  "Espace disque", [ `Text "2 Go" ;
-			     `Text "10 Go" ;
-			     `Text "20 Go" ;
-			     `Text "30 Go" ];
-	  "Hébergement et mises à jour", [ `Tick ; 
-					   `Tick ;
-					   `Tick ; 
-					   `Tick ] ;
-	  "Assistance premium", [ `Text "10€/mois" ;
-				`Tick ;
-				`Tick ;
-				`Tick ] ;
-	  "Formation initiale", [ `NoTick ;
-				       `NoTick ; 
-				       `Text "2 heures" ;
-				       `Text "2 heures" ] ;
-	  "Assistance téléphonique", [ `NoTick ;
-					    `NoTick ;
-					    `Text "2 heures" ;
-					    `Text "2 heures"] ;
-	  "Espace disque suppl.", [ `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" ;
-				    `Text "2€/Go/mois" ] 
-	] ;	*)
     ] ;
 
   page "/features" "RunOrg Entreprises - Fonctionnalités"
