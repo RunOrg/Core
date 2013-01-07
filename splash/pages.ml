@@ -533,7 +533,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	   ~subtitle:"Presse - Portail abonnés"
 	   ~link:("http://www.iledefrance-news.fr/",
 		  "www.iledefrance-news.fr") 
-	   "Ile de France news utilise RunOrg pour créer une communauté de lecteurs et d'abonnées. L'outil lui permet également d'organiser ses soirées réseaux et de partager les photos et les compte-rendus avec les participants." ) ;
+	   "Ile de France news utilise RunOrg pour créer une communauté de lecteurs et d'abonnés. L'outil lui permet également d'organiser ses soirées réseaux et de partager les photos et les compte-rendus avec les participants." ) ;
 
 	 ribbon_title ~name:"referencescollectivites" "Collectivités" ;
 
