@@ -515,6 +515,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 
   page "/references" "RunOrg - Références"
     ~head:"references"
+    ~section:"references"
     [   ribbon_title ~name:"referencesentreprises" "Entreprises" ;
 
 	composite `LRR
@@ -540,7 +541,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	composite `LRR
 	(image "/public/img/ref-logo-clichy.gif")
 	(pride
-	   ~title:"Clichy la garenne"
+	   ~title:"Clichy-la-Garenne"
 	   ~subtitle:"Maison Des Associations"
 	   ~link:("http://www.ville-clichy.fr/",
 		  "www.ville-clichy.fr") 
@@ -560,7 +561,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	composite `LRR
 	(image "/public/img/ref-logo-fscf.gif")
 	(pride
-	   ~title:"Fédération Sportive et Culturel de France"
+	   ~title:"Fédération Sportive et Culturelle de France"
 	   ~subtitle:"Portail fédéral"
 	   ~link:("http://www.fscf.asso.fr/",
 		  "www.fscf.asso.fr") 
