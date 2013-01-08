@@ -185,7 +185,7 @@ let headers = [
 
   header "references" 
     ~title:"Quelques références"
-    ~text:"Nous avons plus de 60 000 utilisateurs. Voilà quelques une de nos références par secteur."
+    ~text:"Nous avons plus de 60 000 inscrits. Voilà quelques-unes de nos références par secteur."
     [] ;
    
   (* END HEADERS ------------------------------------------------------------ *)
