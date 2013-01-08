@@ -183,7 +183,10 @@ let headers = [
 		"Services",  "/associations/services"  ];
     ] ; 
 
-
+  header "references" 
+    ~title:"Quelques références"
+    ~text:"Nous avons plus de 60 000 utilisateurs. Voilà quelques une de nos références par secteur."
+    [] ;
    
   (* END HEADERS ------------------------------------------------------------ *)
 ]
