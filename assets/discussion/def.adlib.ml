@@ -23,3 +23,6 @@
 | `Discussion_Delete_Submit
 | `Discussion_Delete_Cancel
 
+| `Discussion_Create_Step_One
+| `Discussion_Create_Step_Two
+

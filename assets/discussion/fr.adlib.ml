@@ -23,3 +23,5 @@
 | `Discussion_Delete_Submit -> "Supprimer"
 | `Discussion_Delete_Cancel -> "Ne pas supprimer"
 
+| `Discussion_Create_Step_One -> "Sélectionnez les destinataires"
+| `Discussion_Create_Step_Two -> "Composez votre message"

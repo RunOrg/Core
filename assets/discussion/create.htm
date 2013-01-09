@@ -1,0 +1,132 @@
+<form {$form} action="" method="POST" class="create-discussion">
+  
+  <div class="-col" style="float:left">
+    <h2 class="numbered">
+      <span>1</span> { `Discussion_Create_Step_One }
+    </h2>
+    
+    <div class="-list">
+      {#groups}
+        <label>
+	  <input type="radio" name="group" value="{id}"/>
+          <span>
+	    <em>{ name } </em>
+	  </span>
+        </label>
+      {/#}
+    </div>
+    
+  </div>
+
+  <div class="-col" style="float:right">
+    <h2 class="numbered">
+      <span>2</span> { `Discussion_Create_Step_Two } 
+    </h2>
+    
+    <div class="-field">
+      <label>
+	{ `Discussion_Field_Title }
+	<br/>
+	<input {$title} style="width:400px" type="text" name="title"/>
+      </label>
+    </div>     
+    
+    <div class="-field">
+      <label>
+	{ `Discussion_Field_Body }
+	<br/>
+	<input {$body} style="width:400px" type="text" name="body"/>
+      </label>
+    </div>
+        
+    <div style="text-align:right; padding-right:27px;">
+      <button {$submit} type="submit"><span>{ `Discussion_Send }</span></button>
+    </div>
+    
+  </div>
+  
+</form>
+
+<script type="url:json">
+
+$f = here.$form
+
+here.$submit.attr("disabled",false)
+
+$f.submit -> 
+  data = 
+    group: $("input[name='group']:checked").val()
+    title: here.$title.val()
+    body:  here.$body.val() 
+
+  return false if !data.group || !data.title
+  here.$submit.attr("disabled","disabled")
+  boxPost url, data, (result) -> 
+    here.$submit.attr("disabled",false)
+    call result.code
+  false
+
+</script>
+
+<style>
+.create-discussion {
+  overflow: hidden;
+
+  .-col {
+    padding: 10px;
+    width: 455px;
+  }
+
+  .-list {
+    border: 1px solid #BBB;
+    padding: 0 11px 0 11px;
+    overflow: hidden;
+   
+    label {
+      display: block ;
+      padding: 10px 5px 11px;
+      border-top: 1px solid #CCC;
+      position: relative;
+      margin-top: -1px;
+
+      span {
+        display: block;
+        color: #555;
+        font-size: 13px;
+        margin-left: 30px;
+      }
+
+      em {
+        display: block;
+        color: black;
+        font-size: 16px;
+        font-style: normal;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    input {
+      position: absolute;
+      top: 50%;
+      margin-top: -7px;
+      height: 13px;
+    }
+  }
+  
+  .-field {
+    display: block;
+    padding: 4px 16px;
+    margin: 12px 0;
+    color: #888;
+
+    input, textarea {
+      border: 1px solid #CCC;
+      padding: 3px;
+      .asap();
+      font-size: 14px;
+    }
+  }
+
+}
+</style>
