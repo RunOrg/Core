@@ -32,23 +32,28 @@ let of_iso8601 s =
   try 
     if String.length s = 8 || String.length s = 14 then
       of_compact s 
-    else if String.length s = 10 then
-      Scanf.sscanf s "%d-%d-%d" 
-	(fun y m d -> Some { y ; m ; d ; t = None }) 
-    else
+    else if String.length s = 20 then
       Scanf.sscanf s "%d-%d-%dT%d:%d:%dZ" 
 	(fun y m d h i s -> Some { y ; m ; d ; t = Some { h ; i ; s }})
+    else
+      Scanf.sscanf s "%d-%d-%d" 
+	(fun y m d -> Some { y ; m ; d ; t = None }) 
   with _ -> None
+
+let u4 i = if i < 0 then 0 else if i >= 10000 then 9999 else i 
+let u2 i = if i < 0 then 0 else if i >= 100 then 99 else i
 
 let to_iso8601 d = 
   match d.t with 
-    | None -> Printf.sprintf "%4d-%02d-%02d" d.y d.m d.d 
-    | Some t -> Printf.sprintf "%4d-%02d-%02dT%02d:%02d:%02dZ" d.y d.m d.d t.h t.i t.s
+    | None -> Printf.sprintf "%04d-%02d-%02d" (u4 d.y) (u2 d.m) (u2 d.d)
+    | Some t -> Printf.sprintf "%04d-%02d-%02dT%02d:%02d:%02dZ" 
+      (u4 d.y) (u2 d.m) (u2 d.d) (u2 t.h) (u2 t.i) (u2 t.s) 
 
 let to_compact d = 
   match d.t with 
-    | None -> Printf.sprintf "%4d%02d%02d" d.y d.m d.d
-    | Some t -> Printf.sprintf "%4d%02d%02d%02d%02d%02d" d.y d.m d.d t.h t.i t.s
+    | None -> Printf.sprintf "%04d%02d%02d" (u4 d.y) (u2 d.m) (u2 d.d)
+    | Some t -> Printf.sprintf "%04d%02d%02d%02d%02d%02d"  
+      (u4 d.y) (u2 d.m) (u2 d.d) (u2 t.h) (u2 t.i) (u2 t.s) 
 
 include Fmt.Make(struct
   type t = date
