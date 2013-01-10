@@ -1,1 +1,28 @@
+#navbar {
+  background: #222;
+  height: 67px;
+  text-shadow: 0 0 1px rgba(255,255,255,0.5);
+}
 
+#navbar a {
+  margin-top: 17px;
+}
+
+#navbar a:hover {
+  text-shadow: 0 0 2px rgba(255,255,255,0.75);
+  background: #333;
+}
+
+#navbar #logo {
+  margin-top: 5px;
+}
+
+#navbar #logo:hover {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+#navbar #logo img {
+  width: auto; 
+  margin-right: 20px;
+}
