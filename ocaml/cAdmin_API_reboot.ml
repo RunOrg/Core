@@ -15,7 +15,7 @@ include Make(struct
   let example = ()
     
   let action cuid json =
-    let! () = ohm $ O.Reset.run () in
+    let () = O.Reset.send () in
     ok "Admin status granted"
 
 end)
