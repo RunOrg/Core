@@ -49,7 +49,7 @@ let template =
 		  ~label:(AdLib.get `MeAccount_Edit_Birthdate) 
 		  begin fun user -> 
 		    let date = BatOption.map Date.ymd (user # birthdate) in
-		    let date = BatOption.map (fun (d,m,y) -> Printf.sprintf "%02d / %02d / %04d" d m y) date in
+		    let date = BatOption.map (fun (y,m,d) -> Printf.sprintf "%02d / %02d / %04d" d m y) date in
 		    return $ BatOption.default "" date
 		  end
 		  begin fun field string -> 

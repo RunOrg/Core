@@ -4,462 +4,6 @@ open WithSections
 let pages = Associations.pages @ Entreprises.pages @ Collectivites.pages @ Catalog.pages @ [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
- (* page "/" "RunOrg Associations"
-    ~section:"associations" 
-    ~head:"associations"
-    ~subsection:"accueil"
-    [ composite `LLR
-	(video 
-	   ~height:350
-	   ~poster:"/public/img/2012-04-12-video-poster.png"
-	   [ "/public/videos/2012-04-13.mp4", "video/mp4" ;
-	     "/public/videos/2012-04-13.ogv", "video/ogg" ])
-	(bullets 
-	   ~title:"L'outil des associations"
-	   ~subtitle:"Découvez la meilleure façon de..."
-	   [ "Gérer vos membres, votre annuaire et vos adhésions." ;
-	     "Organiser des évènements, des réunions, des assemblées générales." ;
-	     "Communiquer plus facilement avec les membres de votre association." ;
-		 "Déléguer des responsabilités tout en gardant le contrôle."
-		  ]) ;
-      
-	ribbon ( important
-		"« Plus simple et plus puissant !»"
-		"« RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,
-les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… 
-Une seule plateforme pour tout faire : c’est plus simple et plus puissant ! »
-Suzel Chassefeire, présidente de la Chambre Des Associations") ;
-
-(*	ribbon 
-	  (quote ~who:"Suzel Chassefeire, présidente de la Chambre Des Associations" "RunOrg remplace ou centralise : les mailing listes, les fichiers Excel, les documents partagés,les albums photos, les formulaires d’inscription, les newsletters, les sondages, les forums… Une seule plateforme pour tout faire : c’est plus simple et plus puissant !") ; *)
-	     
-      composite `LR
-	(pride
-	   ~title:"Prise en main immédiate"
-	   ~subtitle:"Vos membres vont adorer"
-	   "L'interface de RunOrg est intuitive, facile à maîtriser et ludique : les membres de votre association l'adopteront rapidement pour communiquer entre eux et avec les responsables de l'association.
-
-Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunOrg devient la façon la plus simple de communiquer et de s'organiser."
-	)
-	(image "/public/img/2012-08-28-5-cut.png") ;
-
-      composite `LR
-	(image "/public/img/2012-08-28-9-cut.png")
-	(pride
-	   ~title:"Dédié aux associations"
-	   ~subtitle:"Nous avons pensé à vous"
-	   "Les nouvelles technologies évoluent, pourquoi les entreprises 
-et les particuliers seraient-ils les seuls à en profiter ?
-
-Plutôt que de recycler des outils pour entreprises, RunOrg a été conçu dès le départ pour répondre aux besoins spécifiques des associations, de leurs responsables et de leurs membres."
-	) ;
-
-      ribbon 
-	(important 
-	   "Respect de la vie privée"
-	   "On dit des réseaux sociaux que si vous n'êtes pas le client, vous êtes le produit. 
-Chez RunOrg, les données privées de nos utilisateurs leur appartiennent, 
-elles ne seront jamais vendues à des annonceurs ou des entreprises."
-	) ;
-
-      composite `LLR
-	(pride
-	   ~title:"Gratuit, pour toujours"
-	   ~subtitle:"Parce que c'est pour la bonne cause"
-	   "Nous avons vu trop d'équipes motivées s'épuiser et renoncer 
-parce qu'elles n'avaient pas les bons outils.
-
-Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas. Mais grâce à RunOrg, au moins cela devient gratuit."
-	)
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") ; 
-      
-      recommend 
-	~title:"Ils recommandent RunOrg"
-	~subtitle:"Nous avons changé leur vie"
-	[ ( "Frédéric Roualen" ,
-	    "Équipe de France féminine de Judo" ,
-	    "L’interface de l’outil est agréable et facile à prendre en main. Et en plus c’est ludique ! Mes membres y accèdent même depuis leurs smartphones." ) ;
-	  ( "Antoine Pierchon" ,
-	    "Président de la Fédé B", 
-	    "Grâce à RunOrg j’ai pu récupérer très rapidement les informations des participants, les mini-sondages sont parfaits pour planifier des réunions." ) ;
-	  ( "Cédric Esserméant" , 
-	    "Président des Centaures de Grenoble" ,
-	    "RunOrg me permet de confier l’administration des cours et l’organisation des matchs ! Je peux enfin déléguer en gardant la visibilité dessus." ) 
-	] ;
-      
-      hr () ;
-      
-      composite `LR 
-	(pride 
-	   ~title:"Conçu par des experts"
-	   ~subtitle:"Des années d'expérience associative"
-	   ~link:("http://runorg.com/blog"," Et suivez nos conseils com' sur notre blog !")
-	   "La communication dans les associations, c'est compliqué, et on ne sait pas toujours à qui s'adresser. 
-
-	   Notre équipe répond à vos questions ! Devenez fan de notre page Facebook et posez-nous vos questions sur notre mur.")
-	   (facebook ()) ;
-	
-    ] ;
-
-  page "/features" "RunOrg Associations - Fonctionnalités"
-    ~section:"associations" 
-    ~head:"associations"
-    ~subsection:"fonctionnalites"
-    [ composite `LR
-	(image "/public/img/2012-08-28-9-cut.png")
-	(pride
-	   ~title:"Gestion des membres"
-	   ~subtitle:"Simplement et rapidement"
-	   ~link:("/features#organisationdesmembres",
-	       "En savoir plus...")
-	   "Toutes les associations ont une liste de leurs adhérents, mais elle est souvent incomplète ou accessible par un seul responsable.
-
-Avec RunOrg, gérez la liste de vos membres à un seul endroit, accessible en ligne par tous les responsables, et laissez vos membres tenir eux-mêmes à jour leurs informations de contact."
-	) ;
-      
-      composite `LR
-	(pride
-	   ~title:"Evènements et activités"
-	   ~subtitle:"Organisez-vous en ligne"
-	   ~link:("/features#organisationdesactivites",
-	       "En savoir plus...")
-	   "Créez facilement des évènements publics ou privés, informez en un clic tout ou partie de vos membres.  
-
-Chaque évènement comporte un mur de discussion, un album photo, un partage de fichiers."
-	) 
-	(image "/public/img/2012-08-29-5-cut.png") ;
-
-      composite `LR
-	(image "/public/img/2012-08-29-9-cut.png")
-	(pride
-	   ~title:"Déléguez en toute confiance"
-	   ~subtitle:"Ne soyez plus le seul à tout faire"
-	   ~link:("/features#administration",
-	       "En savoir plus...")
-	   "Il y a dans votre association beaucoup de membres motivés, 
-comment faire pour leur donner la main sur une seule activité ?
-
-Vous pouvez donner des responsabilités sur des parties bien définies de votre espace privé RunOrg (activités, forums).
-
-Et en cas de problème, nous gardons une trace des actions de chaque responsable."
-	) ;
-
-      ribbon 
-	(important 
-	   "Vos données sont en sécurité"
-	   "Par défaut, toutes vos informations privées sont accessibles uniquement aux membres de votre association.
-
-Vous pouvez choisir de rendre sélectivement publiques certaines de ces informations, 
-ou au contraire les rendre accessibles aux membres de certains groupes uniquement."
-	) ;
-
-      composite `LR
-	(pride
-	   ~title:"Formulaires configurables"
-	   ~subtitle:"Posez les bonnes questions"
-	   ~link:("/features#personnalisationintranet",
-	       "En savoir plus...")
-	   "Pouvoir récupérer facilement des informations sur les membres arrive en tête des demandes de nos utilisateurs. 
-
-Disponibles sur les adhésions et les évènements, des formulaires configurables vous permettent de poser les questions importantes, et les membres y répondent en s'inscrivant. Le résultat est disponible en ligne et facilement téléchargeable."
-	) 
-	(image "/public/img/2012-08-29-6-cut.png") ;
-      
-
-      hr () ;
-
-      composite `LR
-	(image "/public/img/2012-08-28-5-cut.png")
-	(pride
-	   ~title:"Murs de discussion"
-	   ~subtitle:"Donnez la parole à vos membres"
-	   ~link:("/features#messagescommunication",
-	       "En savoir plus...")
-	   "Envie de communiquer une annonce à tous vos membres ? 
-De lancer une conversation autour d'un sujet ?
-
-Les murs de discussion sont en même temps des forums en ligne et des listes de diffusion, pour impliquer à la fois les membres très actifs sur internet et ceux qui le sont moins.
-
-Il est facile de créer un mur de discussion pour un groupe ou une activité, et seuls ceux qui sont inscrits reçoivent les messages."
-	) ;
-      
-      hr () ;
-
-      composite `LR
-	(price
-	   "Gratuit"
-	   "pour les associations"
-	   "de moins de 2000 adhérents") 
-	(bullets
-	   ~title:"Avec services inclus"
-	   ~subtitle:"Pas besoin d'être informaticien"
-	   ~ordered:false
-	   [ "Hébergement de l'application" ;
-	     "Mises à jour régulières" ;
-	     "Maintenance informatique" ;
-	     "Support en ligne" ]
-	); 
-       
-      ribbon 
-	(important 
-	   "Détail des fonctionnalités"
-	   ""
-	) ;
-      
-      ribbon_title ~name:"organisationdesmembres" "Organisation des membres" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-1-cut.png" ;
-		       "/public/img/2012-08-28-9-cut.png" ])
-	(features [ 
-	  "Groupes de membres",
-	  "Répartissez vos membres dans des groupes de votre choix (administrateurs, entraîneurs, sportifs, etc.)" ;
-	  
-	  "Demandes d'inscription",
-	  "Les membres peuvent demander à s'inscrire aux groupes - sauf aux groupes secrets." ;
-	  
-	  "Gestion des inscrits",
-	  "Vous déterminez pour chaque groupe si les demandes d'inscriptions sont validées manuellement ou automatiquement" ;
-	  
-	  "Inscriptions multiples",
-	  "Comme dans la vie réelle, vos membres peuvent appartenir à plusieurs groupes simultanément" ;
-	  
-	  "Annuaire à jour",
-	  "Visualisez facilement la liste des inscrits d'un groupe et leurs informations." ;
-	  
-	  "Indépendance des groupes",
-	  "Chaque groupe dispose d'un mur, d'une zone d'échange de documents et d'un album photo réservés à ses membres."	
-	]) ;
-      
-      ribbon_title ~name:"organisationdesactivites" "Organisation des activités" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-5-cut.png" ;
-		       "/public/img/2012-08-29-4-cut.png" ;
-		       "/public/img/2012-08-29-3-cut.png" ])
-	(features [ 
-	  "Création d'activités",
-	  "Votre association ne se résume pas qu'à des membres. RunOrg gère également les activités.";
-	  
-	  "Nombreux modèles disponibles",
-	  "Selon votre type d'association des modèles adaptés vous sont proposés (réunions, cours, compétitions, pétitions, etc.)";
-	  
-	  "Agenda privé",
-	  "Chaque membre dispose d'un agenda des activités auxquelles il peut participer";
-	  
-	  "Invitation par groupes",
-	  "Pour n'oublier personne et gagner du temps, invitez directement les membres des groupes de votre choix";
-	  
-	  "Gestion des participants",
-	  "Indiquez pour chaque activité si les demandes d'inscriptions sont validées manuellement ou automatiquement";
-	  
-	  "Niveau de visibilité des activités",
-	  "Déterminez si une activité n'est visible qu'aux inscrits, à tous les membres, ou si elle est publiée sur votre site Internet";
-	  
-	  "Discussions dans les activités",
-	  "Chaque activité permet les discussions (mur), la consultation (sondage) et le partage (photos et documents)";
-	  
-	  "Brouillons",
-	  "Prenez votre temps pour créer une activité avant de la publier"	
-	]) ;  
-  
-      ribbon_title ~name:"espacedepartage" "Espace de partage" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-2-cut.png" ])
-	(features [ 
-	  "Partagez vos documents",
-	  "Vos membres et vous même pouvez mettre en ligne et télécharger des documents quel que soit leur format";
-	  
-	  "Partagez vos albums photo",
-	  "Vos membres et vous même pouvez publier et visionner des albums photo";
-	  
-	  "Définissez qui voit quoi",
-	  "Au sein de votre espace vous définissez de manière sélective qui accède à vos photos et vos documents"	
-	]) ;
-   
-  
-      ribbon_title ~name:"messagescommunication" "Messages et communication" ; 
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-5-cut.png" ])
-	(features [ 
-	  "Murs de discussions",
-	  "Les communications se font via des murs liés à vos groupes, vos activités ou à des forums";
-	  
-	  "Listes de diffusion",
-	  "Les messages publiés sur les murs sont envoyés en totalité par email aux destinataires concernés";
-	  
-	  "Notifications",
-	  "Les membres peuvent paramétrer la fréquence des notifications qu'ils reçoivent.";
-	  
-	  "Réponses aux messages",
-	  "Chaque message constitue un flux de discussion indépendant, dont seuls les participants reçoivent des notifications"	
-	]) ;   
-
-      ribbon_title ~name:"consultationdesmembres" "Consultation des membres" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-7-cut.png" ])
-	(features [ 
-	  "Création de mini-sondages",
-	  "Sur les murs, posez des questions à choix simple ou multiple, par exemple pour choisir une date de réunion";
-	  
-	  "Réponses aux invitations",
-	  "Lorsque vous invitez des membres à participer à des activités ils vous indiquent s'ils viendront ou non.";
-	  
-	  "Formulaires d'inscription",
-	  "Sur les groupes et les activités, vous pouvez demander aux inscrits de fournir des informations obligatoires";	  
-	]) ;
-    
-      
-      ribbon_title ~name:"forumsdiscussions" "Forums et discussions" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-10-cut.png" ])
-	(features [ 
-	  "Forums de discussion",
-	  "Un forum permet la discussion (mur), la consultation (sondage) et le partage (photos, documents) autour d'un thème";
-	  
-	  "Forums publics",
-	  "Tous les membres peuvent voir et participer aux forums publics de votre espace";
-	  
-	  "Forums privés",
-	  "Seuls les inscrits peuvent voir les forums privés, vous avez le contrôle sur les inscriptions";
-	  
-	  "Forums de groupes",
-	  "Les groupes peuvent disposer de forums privés réservés à leurs membres"	
-	]) ;   
-
-      ribbon_title ~name:"priseenmainrapide" "Prise en main rapide" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-7-cut.png" ;
-		       "/public/img/2012-08-28-8-cut.png" ])
-	(features [ 
-	  "Espace pré-adapté à vos besoins",
-	  "Chaque espace est livré avec des groupes, formulaires et modèles qui sont utiles à votre type d'association";
-	  
-	  "Import des membres",
-	  "Utilisez un tableur ou votre carnet d'adresses pour importer vos membres avec un simple copier/coller";
-	  
-	  "Rien à installer",
-	  "RunOrg est entièrement en ligne : tous vos membres peuvent l'utiliser sans rien installer sur leurs postes.";
-	  
-	  "Ergonomique et simple",
-	  "Peut être utilisé sans formation, et avec plaisir !";
-	  
-	  "Connexions en un clic",
-	  "Lorsque vous recevez une notification, cliquez sur le lien pour vous connecter à votre espace et au bon endroit.";
-	  
-	  "Transition en douceur",
-	  "Les membres que vous avez inscrits et qui n'ont pas encore rejoint RunOrg reçoivent tous vos messages par mail."	
-	]) ;   
-
-      ribbon_title ~name:"personnalisationintranet" "Personnalisation de votre intranet" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-6-cut.png" ])
-	(features [ 
-	  "Créez le miroir virtuel de votre organisation réelle",
-	  "Vous êtes déjà organisés autour de groupes, de projets ou d'activités ? Créez dans votre espace la même organisation.";
-	  
-	  "Créez vos propres formulaires",
-	  "Créez vos propres formulaire d'adhésion ou de participation à un groupe ou une activité";
-	  
-	  "Personnalisez vos tableaux",
-	  "Les administrateurs peuvent ajouter des colonnes aux listes d'inscrits des activités et des groupes.";
-	  
-	  "Logos et images",
-	  "Insérez votre logo et définissez des images pour vos différents évènements"	
-	]) ;
-     
-      ribbon_title ~name:"espacepriveconfidentialite" "Espace privé et confidentialité" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-8-cut.png" ;
-		       "/public/img/2012-08-29-12-cut.png" ])
-	(features [ 
-	  "Connexion sécurisée",
-	  "Tous les accès à RunOrg se font de façon cryptée et sécurisée";
-	  
-	  "Accès nominatifs et contrôlés",
-	  "Chaque personne dispose d'un compte pour lequel nous avons vérifié la validité de l'adresse email";
-	  
-	  "Niveaux de visibilité",
-	  "Chaque groupe ou activité peut être visible sur internet, par tous les membres, ou seulement par les invités.";
-	  
-	  "Vous avez le contrôle total",
-	  "Les administrateurs de votre association définissent les accès à votre espace, et qui peut voir ou participer à vos activités";
-	  
-	  "Vie privée respectée",
-	  "Les informations de votre espace privé sont inaccessibles aux moteurs de recherche et ne sont pas revendues à des tiers";
-	  
-	  "Gestion des informations personnelles",
-	  "Chaque membre contrôle et peut modifier les informations personnelles qu'il partage avec ses associations"	
-	]) ;
-
-      ribbon_title ~name:"profilsmembres" "Profils membres" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-1-cut.png" ])
-	(features [ 
-	  "Informations personnelles",
-	  "Retrouvez les coordonnées et les informations personnelles de chaque membre sur sa page de profil";
-	  
-	  "Fiches d'information",
-	  "Associez des remarques ou des fiches d'informations au profil d'un membre";
-	  
-	  "Liste des groupes",
-	  "En un coup d'oeil, visualisez dans quels groupes est inscrit un membre";
-	  
-	  "Restrictions d'accès",
-	  "Seuls les administrateurs ont accès aux données personnelles des membres";
-	  
-	  "Historique des publications",
-	  "Le profil contient la liste des messages, photos et fichiers mis en ligne par le membre"	
-	]) ;
-    
-      ribbon_title ~name:"website" "Site Internet" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-28-2-cut.png" ;
-		       "/public/img/2012-08-28-3-cut.png"])
-	(features [ 
-	  "Publication d'articles",
-	  "Vous publiez vos annonces à la manière d'un blog et tout aussi facilement";
-	  
-	  "Abonnement aux articles",
-	  "Les internautes peuvent recevoir par mail les annonces que vous publiez";
-	  
-	  "Agenda en ligne",
-	  "Mettez facilement en ligne les évènements que vous voulez rendre publics";
-	  
-	  "Inscriptions et adhésions en ligne",
-	  "Les internautes peuvent demander à adhérer ou à participer à vos activités en ligne";
-	  
-	  "Page de présentation",
-	  "Une page de présentation publique vous permet de présenter votre association, de renseigner son logo et ses coordonnées";
-	  
-	  "Hébergement gratuit",
-	  "Nous assurons gratuitement l'installation, l'hébergement et la maintenance de votre site internet"	
-	]) ;   
-  
-      ribbon_title ~name:"administration" "Administration" ;
-      composite `LR 
-	(screenshots [ "/public/img/2012-08-29-9-cut.png" ;
-		       "/public/img/2012-08-29-11-cut.png"])
-	(features [ 
-	  "Administrateurs globaux",
-	  "En tant qu'administrateur de votre espace privé vous pouvez tout voir et tout faire";
-	  
-	  "Délégation de l'administration",
-	  "Nommez des personnes responsables de votre espace, ou d'une activité en particulier.";
-	  
-	  "Modération",
-	  "Les administrateurs peuvent modérer les messages, les photos et les documents";
-	  
-	  "Publication d'articles sur Internet",
-	  "Seuls les administrateurs peuvent publier des articles sur votre site Internet";
-	  
-	  "Export des listes",
-	  "Les administrateurs peuvent exporter dans un tableur la liste des inscrits à un groupe ou une activité"	
-	]) ;
-    ] ;  	*)
-
-
   page "/about/team" "À Propos de RunOrg - L'Équipe"
     ~head:"about"
     ~subsection:"equipe"
@@ -889,7 +433,7 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 	(image "/public/img/2012-04-19-1.png")
 	(pride
 	   ~title:"Un seul outil pour tous"
-	   ~subtitle:"Tout faire depuis un seul outil c'est bien plus simple !"
+	   ~subtitle:"Tout faire depuis un seul outil c'est bien plus simple !" 
 	   "Pour les responsables comme pour les membres : plus besoin d'apprendre à utiliser un logiciel différent pour gérer le fichier adhérents, partager des photos ou des documents, organiser des événements ou des sondages, etc.
 
 RunOrg regroupe en une seule plate-forme tous ces outils, avec une interface commune. Les membres s'y retrouvent facilement, et les responsables n'ont plus besoin de formations multiples."
@@ -969,6 +513,72 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	] ;
     ] ;
 
+  page "/references" "RunOrg - Références"
+    ~head:"references"
+    ~section:"references"
+    [   ribbon_title ~name:"referencesentreprises" "Entreprises" ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-iepp.png")
+	(pride
+	   ~title:"Institut Européen des Politiques Publiques"
+	   ~subtitle:"Centre de formation"
+	   ~link:("http://www.iepp.fr",
+		  "www.iepp.fr") 
+	   "L'IEPP utilise RUNORG pour fidéliser les personnes qui ont suivi des formations au sein de l'institut et pour communiquer avec ses formateurs." ) ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-idfnews-head.png")
+	(pride
+	   ~title:"Ile de France News"
+	   ~subtitle:"Presse - Portail abonnés"
+	   ~link:("http://www.iledefrance-news.fr/",
+		  "www.iledefrance-news.fr") 
+	   "Ile de France news utilise RunOrg pour créer une communauté de lecteurs et d'abonnés. L'outil lui permet également d'organiser ses soirées réseaux et de partager les photos et les compte-rendus avec les participants." ) ;
+
+	 ribbon_title ~name:"referencescollectivites" "Collectivités" ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-clichy.gif")
+	(pride
+	   ~title:"Clichy-la-Garenne"
+	   ~subtitle:"Maison Des Associations"
+	   ~link:("http://www.ville-clichy.fr/",
+		  "www.ville-clichy.fr") 
+	   "La ville de Clichy utilise RunOrg pour communiquer avec les responsables associatif de la commune, et pour offrir à toutes ses associations un espace intranet et un site Internet." ) ;
+
+	 ribbon_title ~name:"referencesfederations" "Fédérations" ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-badminton.jpg")
+	(pride
+	   ~title:"Fédération Française de Badminton"
+	   ~subtitle:"Portail fédéral"
+	   ~link:("http://www.ffbad.org/",
+		  "www.ffbad.org") 
+	   "La FFBAD offre à tous ses clubs affiliés un espace intranet et un site Internet. RunOrg lui permet également de communiquer avec les différents responsables des ligues et des comités." ) ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-fscf.gif")
+	(pride
+	   ~title:"Fédération Sportive et Culturelle de France"
+	   ~subtitle:"Portail fédéral"
+	   ~link:("http://www.fscf.asso.fr/",
+		  "www.fscf.asso.fr") 
+	   "La FSCF offre à tous ses clubs affiliés un espace intranet et un site Internet. RunOrg lui permet également de communiquer avec les différents responsables des ligues et des comités." ) ;
+
+	 ribbon_title ~name:"referencesassociations" "Associations" ;
+
+	composite `LRR
+	(image "/public/img/ref-logo-careep.png")
+	(pride
+	   ~title:"Carrefour des Entreprises de l'Est Parisien"
+	   ~subtitle:"Association"
+	   ~link:("http://www.careep.fr/",
+		  "www.careep.fr") 
+	   "Le CAREEP utilise RunOrg pour organiser les comités mensuels de ses 5 pôles, et pour communiquer avec ses membres, ses partenaires et ses annonceurs." ) ;
+
+    ] ;
   
   (* END PAGES -------------------------------------------------------------- *)
 ]
