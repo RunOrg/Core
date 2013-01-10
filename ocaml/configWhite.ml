@@ -35,13 +35,13 @@ let domain id = match represent (Some id) with
   | `RunOrg -> "runorg.com"
   | `Test -> "test.local" 
   | `FFBAD -> "ffbad.fr"
-  | `FSCF -> "fscf.fr" (* TODO: find a domain *)
+  | `FSCF -> "lafscf.fr"
   | `Innov -> "my-innovation.org" 
 
 let white = function 
   | "test.local" -> Some test
   | "ffbad.fr" -> Some ffbad
-  | "fscf.fr" -> Some fscf
+  | "lafscf.fr" -> Some fscf
   | "my-innovation.org" -> Some innov
   | _ -> None
 
@@ -81,14 +81,14 @@ let email id = match represent id with
   | `RunOrg -> "contact@runorg.com"
   | `Test   -> "contact+test@runorg.com"
   | `FFBAD  -> "contact@ffbad.fr" (* TODO: find an address *) 
-  | `FSCF   -> "contact@fscf.fr" (* TODO: find an address *)
+  | `FSCF   -> "contact@lafscf.fr" (* TODO: find an address *)
   | `Innov  -> "contact@my-innovation.com" (* TODO : find an address *)
 
 let no_reply id = match represent id with
   | `RunOrg -> "no-reply@runorg.com"
   | `Test   -> "no-reply+test@runorg.com"
   | `FFBAD  -> "no-reply@ffbad.fr" 
-  | `FSCF   -> "no-reply@fscf.fr"
+  | `FSCF   -> "no-reply@lafscf.fr"
   | `Innov  -> "no-reply@my-innovation.com" 
 
 let short id = match represent id with 
