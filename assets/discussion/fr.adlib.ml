@@ -12,6 +12,7 @@
 | `Discussion_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
 | `Discussion_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer une nouvelle conversation..."
 
+| `Discussion_Field_To -> "Destinataires"
 | `Discussion_Field_Title -> "Sujet"
 | `Discussion_Field_Body -> "Texte"
 | `Discussion_Field_Required -> "Champ obligatoire"

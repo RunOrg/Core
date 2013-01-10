@@ -1,0 +1,38 @@
+<div class="elite-field -picker {if left}-left{/if}">
+  <div class="elite-field-label"><label></label>{?detail}<span>{this | ohm | esc }</span>{/?}</div>
+  <div class="elite-field-picker">
+    <input type="hidden"/>
+    <div class="-f">
+      <input type="text" class="-s"/>  
+    </div>
+    <div class="-l">
+    </div>
+  </div>
+  <div class="elite-field-error error-root"><label></label></div>
+</div>
+
+<script>
+$s = @$.find "input.-s"
+$f = @$.find ".-f"
+$h = @$.find "input[type='hidden']"
+$l = @$.find ".-l"
+
+$f.click ->
+  $s.focus() 
+
+</script>
+
+<style>
+.elite-field.-picker {
+  overflow: visible;
+}
+
+.elite-field-picker {
+  input {
+    .asap();
+    padding: 3px; 
+    border: none;
+    display: inline-block;
+  }
+}
+</style>
