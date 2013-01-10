@@ -142,8 +142,8 @@ let headers = [
       "Solutions",     "/entreprises/CompanyTraining",
 	[ "Centres de formation", "/entreprises/CompanyTraining";
 	  "RSE", "/entreprises/Company" ;
-	  "Portail abonnés", "/entreprises/portail-abonnes";
-	  "Portail clients", "/entreprises/portail-clients";
+	  "Presse - Portail abonnés", "/entreprises/portail-abonnes";
+	  "CRM - Portail clients", "/entreprises/portail-clients";
 	  "Comité d'Entreprise", "/entreprises/ComiteEnt";
 	  "Organisation d'évènements", "/entreprises/Events"
 	  ] ;
@@ -183,7 +183,10 @@ let headers = [
 		"Services",  "/associations/services"  ];
     ] ; 
 
-
+  header "references" 
+    ~title:"Quelques références"
+    ~text:"Nous avons plus de 60 000 inscrits. Voilà quelques-unes de nos références par secteur."
+    [] ;
    
   (* END HEADERS ------------------------------------------------------------ *)
 ]
