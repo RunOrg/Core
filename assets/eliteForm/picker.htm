@@ -11,28 +11,198 @@
   <div class="elite-field-error error-root"><label></label></div>
 </div>
 
-<script>
+<script type="stat: (Json.t * string * string) list">
 $s = @$.find "input.-s"
 $f = @$.find ".-f"
 $h = @$.find "input[type='hidden']"
 $l = @$.find ".-l"
 
+search = null # the (normalized) search query being displayed
+inlist = [] # currently displayed list of pickable elements
+sel = 0 # currently selected pickable element
+
+picked = [] # all picked values
+
+fill = (src, list) ->
+
+  # this is the result of an outdated search, don't display
+  return if src is not search
+
+  inlist = []
+  html = []
+  sel = 0
+  
+  for it in list 
+
+    break if inlist.length >= 5
+
+    # do not display elements that have been picked
+    exists = false
+    for it2 in inlist 
+      if it2[0] == it[0]
+        exists = true
+        break
+    continue if exists    
+
+    c = "-i"
+    c = "'-i -s'" if inlist.length == 0
+
+    inlist.push it
+    html.push "<div class=",c,">", it[2], "</div>"
+
+  $l.html(html.join(""))
+
+  if inlist.length > 0
+    $l.addClass("-full")
+
+refill = () ->
+  txt = $f.val().trim()
+  return if txt is search
+
+  # blast the current contents
+  search = txt    
+  $l.removeClass("-full") 
+  inlist = []
+
+  # fill up the suggestion list
+  fill txt, stat
+
+mvsel = (d) ->
+  sel = sel + d 
+  if sel < 0 
+    return sel = 0
+  if sel >= inlist.length    
+    return sel = inlist.length - 1
+  $l.find(".-s").removeClass("-s")
+  $l.children(":nth(" + sel + ")").addClass("-s")  
+
+pick = () ->
+  return if sel >= inlist.length 
+  picked.push inlist[sel]
+  $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
+  $s.val("").before($h) 
+  refill() 
+
+$l.mousedown (e) -> 
+  $e = $ e.target
+  return if $e.is($l)
+  sel = $e.closest(".-i").prevAll().length
+  pick()   
+
 $f.click ->
   $s.focus() 
+
+$s.focus -> 
+  refill() 
+  $l.addClass("-show")
+
+$s.keydown (e) ->
+  console.log(e.which)
+  if e.which == 13 
+    e.stopPropagation()
+    return false   
+
+$s.keyup (e) ->
+  console.log(e.which)
+  if e.which == 40
+    mvsel(1) 
+    return false
+  if e.which == 38
+    mvsel(-1)
+    return false
+  if e.which == 13
+    pick() 
+    e.stopPropagation()
+    return false
+  refill() 
+
+$s.blur ->
+  $s.val "" 
+  $l.removeClass("-show")
 
 </script>
 
 <style>
 .elite-field.-picker {
   overflow: visible;
+  .elite-field-label { 
+    margin-top: 4px; 
+  }
 }
 
 .elite-field-picker {
+
+  .-f {
+    background-color: white; 
+    padding: 3px 3px 1px;
+    border: 1px solid #AAA;
+    width: 394px;
+    overflow: hidden;
+    cursor: text;
+
+    > div {
+      cursor: default;
+      background: none repeat scroll 0 0 #DDD;
+      border: 1px solid #CCC;
+      border-radius: 3px 3px 3px 3px;
+      color: #333;
+      float: left;
+      font-size: 13px;
+      margin: 0 2px 2px 0;
+      padding: 1px 4px;
+      > a {
+        color: #888;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 18px;
+        height: 13px;
+        line-height: 13px;
+        margin-left: 5px;
+        &:hover {
+          color: black;
+        }
+      }
+    }
+  }
+
+  .-l {
+    position: absolute; 
+    min-height: 12px;
+    width: 400px;
+    border: 1px solid #AAA;
+    border-top: none; 
+    background-color: white; 
+    display: none;
+
+    .-i {
+      display: block;
+      padding: 3px 5px;
+      color: #333;
+      font-size: 13px;
+      cursor: pointer; 
+    }
+
+    .-i.-s {
+      background-color: #555;
+      color: white;
+    }
+  }
+
+  .-l.-show.-full {
+    display: block;
+  }
+
   input {
     .asap();
-    padding: 3px; 
+    font-size: 13px;
+    padding: 3px;
+    margin-bottom: 1px; 
+    width: 100px;
     border: none;
-    display: inline-block;
+    float: left;
+    height: 14px;
+    outline: none;
   }
+
 }
 </style>

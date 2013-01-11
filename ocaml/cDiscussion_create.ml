@@ -36,7 +36,7 @@ let template groups =
 	
   in
 
-  let html = Asset_Discussion_Edit.render () in
+  let html = Asset_Discussion_Create.render () in
 
   OhmForm.wrap "" html inner
 
@@ -86,7 +86,7 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
     let wrap body = 
       Asset_Admin_Page.render (object
 	method parents = [] 
-	method here = return ""
+	method here = AdLib.get `Discussion_Create_Title
 	method body = body
       end)
     in

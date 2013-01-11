@@ -12,6 +12,8 @@
 | `Discussion_Forbidden_Problem 
 | `Discussion_Forbidden_Solution
 
+| `Discussion_Create_Title
+
 | `Discussion_Field_To
 | `Discussion_Field_Title 
 | `Discussion_Field_Body

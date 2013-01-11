@@ -52,11 +52,18 @@ let date ~label ?detail seed parse =
        seed parse)
 
 let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse = 
-  OhmForm.wrap ".joy-fields"
-    (Asset_EliteForm_Picker.render (object 
+  let render = 
+    let! static = ohm $ Run.list_map (fun (value,key,html) ->
+      let! html = ohm html in
+      return (format.Fmt.to_json value, key, Html.to_html_string html)
+    ) static in
+    Asset_EliteForm_Picker.render (object 
       method detail = detail
       method left   = left
-    end))
+      method stat   = static 
+    end)
+  in
+  OhmForm.wrap ".joy-fields" render
     (OhmForm.json
        ~field:"input[type='hidden']" 
        ~label:(".elite-field-label label",label)
