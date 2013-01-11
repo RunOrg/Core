@@ -30,7 +30,6 @@ fill = (src, list) ->
 
   inlist = []
   html = []
-  sel = 0
   
   for it in list 
 
@@ -38,27 +37,27 @@ fill = (src, list) ->
 
     # do not display elements that have been picked
     exists = false
-    for it2 in inlist 
+    for it2 in picked 
       if it2[0] == it[0]
         exists = true
         break
     continue if exists    
 
-    c = "-i"
-    c = "'-i -s'" if inlist.length == 0
-
     inlist.push it
-    html.push "<div class=",c,">", it[2], "</div>"
+    html.push "<div class=-i>", it[2], "</div>"
 
   $l.html(html.join(""))
 
   if inlist.length > 0
-    $l.addClass("-full")
+    mvsel 0 
+    $l.addClass "-full"
 
 refill = () ->
   txt = $f.val().trim()
-  return if txt is search
 
+  # don't repeat searches
+  return if txt = search
+  
   # blast the current contents
   search = txt    
   $l.removeClass("-full") 
@@ -70,18 +69,18 @@ refill = () ->
 mvsel = (d) ->
   sel = sel + d 
   if sel < 0 
-    return sel = 0
+    sel = 0
   if sel >= inlist.length    
-    return sel = inlist.length - 1
+    sel = inlist.length - 1
   $l.find(".-s").removeClass("-s")
-  $l.children(":nth(" + sel + ")").addClass("-s")  
+  $l.children(":eq(" + sel + ")").addClass("-s")  
 
 pick = () ->
-  return if sel >= inlist.length 
+  return if sel >= inlist.length
+  search = null # cause list to be re-filtered
   picked.push inlist[sel]
   $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
-  $s.val("").before($h) 
-  refill() 
+  $s.val("").before($h).focus() 
 
 $l.mousedown (e) -> 
   $e = $ e.target
