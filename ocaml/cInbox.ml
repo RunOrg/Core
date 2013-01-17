@@ -64,9 +64,16 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
   O.Box.fill begin 
 
+    let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
+    let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
+
     let! htmls, next = ohm $ MInboxLine.View.list ~count:10 (access # actor) (render_line access) in
     
-    Asset_Inbox_List.render (object
+    Asset_Inbox_List.render (object     
+      method actions = object
+	method new_discussion = new_discussion
+	method new_event = new_event
+      end 
       method items = htmls
     end) 
 
