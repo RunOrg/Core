@@ -1,5 +1,23 @@
 <div class="inbox">
-  <div style="position:relative;height: 20px">
+
+  {=actions}
+  <ul class="actions">
+    <li class="-r">
+      <a href="{new_event}" class="action-button">
+	{ `Inbox_New_Event}
+      </a>
+    </li>
+    <li class="-r">
+      <a href="{new_discussion}" class="action-button -green">
+        { `Inbox_New_Discussion }
+      </a>
+    </li>
+  </ul>
+  {/=}
+
+  <h2>{ `Inbox_Title }</h2>
+
+  <div class="-top">
     <img src="/public/icon/comments.png" style="
       position: absolute; 
       right: 230px
@@ -20,6 +38,21 @@
 
 <style>
 .inbox {
+
+  h2 {
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  >.actions { float: right }
+  .-top {
+    position:relative;
+    height: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #DDD;
+    padding-top: 5px;
+  }
   ul {
     list-style-type: none; 
     padding: 0 0 1px 0; 
