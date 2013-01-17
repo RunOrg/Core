@@ -70,7 +70,8 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
        ~error:(".elite-field-error label")
        (fun s -> let! list = ohm $ seed s in 
 		 return $ Json.of_list format.Fmt.to_json list)
-       (fun f json -> 
+       (fun f json ->
+	 Util.log "Parse: %s" (Json.serialize json) ;
 	 let list = 
 	   try BatList.filter_map format.Fmt.of_json (Json.to_array json) 
 	   with _ -> []

@@ -63,6 +63,8 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
     let title = result # title in
     let body = `Rich (MRich.parse (result # body)) in
 
+    let () = Util.log "%s" (String.concat " " (List.map IEntity.to_string gids)) in
+
     let! groups = ohm $ Run.list_filter begin fun gid -> 
       let! group = ohm_req_or (return None) $ O.decay (MEntity.try_get (access # actor) gid) in 
       let! group = ohm_req_or (return None) $ O.decay (MEntity.Can.view group) in

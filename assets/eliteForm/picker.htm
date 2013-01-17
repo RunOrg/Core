@@ -93,8 +93,7 @@ refill = (force) ->
   fill txt, stat
 
 save = () ->
-  a = [ x[0] for x in picked ]
-  $f.prev().val($.toJSON(a))
+  $f.prev().val($.toJSON(x[0] for x in picked))
 
 mvsel = (d) ->
   sel = sel + d 
