@@ -43,4 +43,10 @@ let schedule = O.async # define "inbox-line-push" Fmt.( IInboxLine.fmt * Int.fmt
   end 
 
 let schedule ilid push = 
+  (* Make sure there's something to work with *)
+  let! line = ohm_req_or (return ()) $ Tbl.get ilid in 
+  let! time, aid = req_or (return ()) (line.Line.last) in
+  (* Notify the author immediately *)
+  let! () = ohm $ View.update ilid aid line in 
+  (* Wait for 30s before notifying others *)
   O.decay (schedule ~delay:30.0 (ilid,push))
