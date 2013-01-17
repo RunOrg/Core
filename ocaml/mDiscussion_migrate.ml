@@ -7,6 +7,10 @@ open Ohm.Universal
 module Core = MDiscussion_core
 
 let () = 
+  let! iid, uid, name = Sig.listen MInstance.on_migrate in 
+  return true
+
+let () = 
   let! eid, iid, gid, self, kind, name = Sig.listen MEntity.on_migrate in 
 
   let owner = `Entity eid in 
