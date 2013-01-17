@@ -8,7 +8,59 @@ module Core = MDiscussion_core
 
 let () = 
   let! iid, uid, name = Sig.listen MInstance.on_migrate in 
-  return true
+
+  let owner = `Instance iid in 
+
+  (* Only keep instances which have messages. *)
+  let! fid_opt = ohm $ MFeed.try_by_owner owner in 
+  let! last = ohm_req_or (return false) (match fid_opt with 
+    | None -> return None
+    | Some fid -> let! stats = ohm $ MItem.stats (`feed (IFeed.Assert.bot fid)) in
+		  return (BatOption.map fst (stats # last)) 
+  ) in
+      
+  (* Only keep instances that have been created by an existing user. *)
+  let! aid = ohm_req_or (return false) $ MAvatar.find iid uid in
+  let  aid = IAvatar.Assert.is_self aid in 
+  let! actor = ohm_req_or (return false) $ MAvatar.actor aid in 
+
+  (* Don't re-create discussions that have already been copied over. *)
+  let did = IDiscussion.of_id (IInstance.to_id iid) in
+  let! exists = ohm $ Core.Tbl.get did in
+
+  if exists <> None then return false else
+
+    let! () = ohm begin
+      let! fid = req_or (return ()) fid_opt in
+      MFeed.migrate_owner (IFeed.Assert.bot fid) (`Discussion did) 
+    end in
+
+    let  pcnamer = MPreConfigNamer.load iid in 
+    let! gid = ohm (MPreConfigNamer.group "members" pcnamer) in
+
+    let! () = ohm $ Run.edit_context (fun ctx -> (object
+      method time       = last
+      method date       = Date.of_timestamp last
+      method couchDB    = ctx # couchDB
+      method async      = ctx # async
+      method adlib      = ctx # adlib	
+      method track_logs = ctx # track_logs 
+    end)) begin 
+      Core.create did actor Core.({
+	iid   ;
+	gids  = [] ;
+	title = "" ;
+	body  = `Text "" ;
+	time  = last ;
+	crea  = IAvatar.decay aid ;
+	del   = None
+      }) [
+	`SetTitle ("Archive - " ^ name) ;
+	`AddGroups [gid] ;
+      ]
+    end in
+    
+    return true
 
 let () = 
   let! eid, iid, gid, self, kind, name = Sig.listen MEntity.on_migrate in 
