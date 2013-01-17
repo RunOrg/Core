@@ -74,6 +74,14 @@ let get_folder_info owner current =
     n       = stats # n ; 
     last    = stats # last ;
   }))
+
+let get_core_info = function 
+  | `Event eid -> return None
+  | `Discussion did -> let  did = IDiscussion.Assert.view did in 
+		       let! discn = ohm_req_or (return None) $ MDiscussion.get did in 
+		       let  aid = MDiscussion.Get.creator discn in
+		       let  t   = MDiscussion.Get.update  discn in 
+		       return (Some (t,aid))
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
   begin fun ilid -> 
@@ -82,10 +90,13 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
       | Some current -> let! wall   = ohm $ get_wall_info   current.Line.owner current.Line.wall in 
 			let! album  = ohm $ get_album_info  current.Line.owner current.Line.album in
 			let! folder = ohm $ get_folder_info current.Line.owner current.Line.folder in 
+			let! core   = ohm $ get_core_info   current.Line.owner in 
+			
 			let  times  = [ 
 			  BatOption.bind (fun w -> w.Info.Wall.last) wall ;
 			  BatOption.bind (fun a -> a.Info.Album.last) album ;
 			  BatOption.bind (fun f -> f.Info.Folder.last) folder ; 
+			  core ; 
 			] in
 			let last  = List.fold_left max current.Line.last times in 
 			let push  = current.Line.push + 1 in
