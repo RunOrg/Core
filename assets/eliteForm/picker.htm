@@ -14,14 +14,29 @@
 <script type="stat: (Json.t * string * string) list">
 $s = @$.find "input.-s"
 $f = @$.find ".-f"
-$h = @$.find "input[type='hidden']"
 $l = @$.find ".-l"
+
+mfoc = false # is the next focus event manually sent ?
 
 search = null # the (normalized) search query being displayed
 inlist = [] # currently displayed list of pickable elements
 sel = 0 # currently selected pickable element
 
 picked = [] # all picked values
+
+matches = (patt,name) ->
+  patts = patt.split(" ")
+  names = foldAccents(name).split(" ")
+  for patt in patts
+    continue if !patt
+    m = false 
+    for name in names
+      continue if name.length < patt.length 
+      if name.substr(0,patt.length) == patt
+        m = true
+        break
+    return false if !m
+  return true      
 
 fill = (src, list) ->
 
@@ -30,10 +45,16 @@ fill = (src, list) ->
 
   inlist = []
   html = []
+
+  fsrc = foldAccents(src)
   
   for it in list 
 
     break if inlist.length >= 5
+
+    # do not display elements that don't have the source as
+    # a prefix
+    continue if !(matches fsrc, it[1])
 
     # do not display elements that have been picked
     exists = false
@@ -52,19 +73,28 @@ fill = (src, list) ->
     mvsel 0 
     $l.addClass "-full"
 
-refill = () ->
-  txt = $f.val().trim()
+refill = (force) ->
+  force = force || false
+  txt = $s.val().trim()
 
   # don't repeat searches
-  return if txt = search
+  return if txt == search
   
   # blast the current contents
-  search = txt    
+  search = null
   $l.removeClass("-full") 
   inlist = []
 
+  # don't search if at least one suggestion and no text
+  return if picked.length > 0 && $s.val() == "" && !force
+  search = txt    
+
   # fill up the suggestion list
   fill txt, stat
+
+save = () ->
+  a = [ x[0] for x in picked ]
+  $f.prev().val($.toJSON(a))
 
 mvsel = (d) ->
   sel = sel + d 
@@ -79,8 +109,17 @@ pick = () ->
   return if sel >= inlist.length
   search = null # cause list to be re-filtered
   picked.push inlist[sel]
+  save() 
   $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
+  mfoc = true
   $s.val("").before($h).focus() 
+
+unpick = (pos) ->
+  pos = pos || picked.length - 1 if !(pos is 0) 
+  picked.splice(pos,1) 
+  $f.children(":eq(" + pos + ")").remove() 
+  save() 
+  refill() 
 
 $l.mousedown (e) -> 
   $e = $ e.target
@@ -88,11 +127,18 @@ $l.mousedown (e) ->
   sel = $e.closest(".-i").prevAll().length
   pick()   
 
-$f.click ->
+$f.mousedown (e) -> 
+  $e = $ e.target 
+  if $e.is("a.-d") && $e.parent().parent().is($f)
+    unpick $e.parent().prevAll().length 
+    e.stopPropagation() 
+
+$f.click () ->
   $s.focus() 
 
 $s.focus -> 
-  refill() 
+  refill(!mfoc)
+  mfoc = false 
   $l.addClass("-show")
 
 $s.keydown (e) ->
@@ -100,6 +146,9 @@ $s.keydown (e) ->
   if e.which == 13 
     e.stopPropagation()
     return false   
+  if e.which == 8 && $s.val() == ""
+    unpick() 
+    return false
 
 $s.keyup (e) ->
   console.log(e.which)
@@ -112,6 +161,9 @@ $s.keyup (e) ->
   if e.which == 13
     pick() 
     e.stopPropagation()
+    return false
+  if e.which == 39 
+    refill(true)
     return false
   refill() 
 
@@ -136,6 +188,7 @@ $s.blur ->
     padding: 3px 3px 1px;
     border: 1px solid #AAA;
     width: 394px;
+    min-height: 22px;
     overflow: hidden;
     cursor: text;
 
