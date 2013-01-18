@@ -60,21 +60,32 @@ let render_line access line =
     | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
 
+let render_list ?start access more = 
+  let! items, next = ohm $ MInboxLine.View.list ?start ~count:10 (access # actor) (render_line access) in  
+  let  more = BatOption.map (fun next -> OhmBox.reaction_endpoint more next, Json.Null) next in
+  Asset_Inbox_List_Inner.render (object
+    method items = items
+    method more  = more
+  end) 
+
 let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
+
+  let! more = O.Box.react Fmt.Float.fmt begin fun start _ self res ->
+    let! html = ohm $ render_list ~start access self in
+    return $ Action.json [ "more", Html.to_json html ] res
+  end in 
 
   O.Box.fill begin 
 
     let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
     let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
-
-    let! htmls, next = ohm $ MInboxLine.View.list ~count:10 (access # actor) (render_line access) in
     
     Asset_Inbox_List.render (object     
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
       end 
-      method items = htmls
+      method inner = render_list access more
     end) 
 
   end

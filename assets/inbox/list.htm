@@ -31,9 +31,21 @@
       right: 143px;
     "/>
   </div>
-  <ul>
-    {#items}<li>{this|verbatim}</li>{/#}
-  </ul>
+  <div class="-list">
+    {inner|ohm}
+    {@!inner}
+      {#items}
+        <div>{this|verbatim}</div>
+      {else}
+        <div class="empty-list">
+	  { `Inbox_Empty }
+        </div>
+      {/#}
+      {?more}     
+        { this | VMore.div | ohm }
+      {/?}
+    {/@}
+  </div>
 </div>
 
 <style>
@@ -53,8 +65,7 @@
     border-top: 1px solid #DDD;
     padding-top: 5px;
   }
-  ul {
-    list-style-type: none; 
+  .-list {
     padding: 0 0 1px 0; 
     margin: 0 0 0 300px;
   }

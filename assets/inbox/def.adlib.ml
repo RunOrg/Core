@@ -4,3 +4,5 @@
 | `Inbox_New_Event 
 
 | `Inbox_Title
+
+| `Inbox_Empty
