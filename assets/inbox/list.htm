@@ -35,15 +35,12 @@
     {#filters}
       {if sel}
         <a class="-f -d{depth|string_of_int|esc} -s" href="javascript:location.reload()">
-	  {name}
-	  <span>{count|string_of_int|esc}</span>
-	</a>
       {else} 
         <a class="-f -d{depth|string_of_int|esc}" href="{url}">
-	  {name}
-	  <span>{count|string_of_int|esc}</span>
-	</a>
       {/if}
+	  <span class="-c">{count|string_of_int|esc}</span>
+	  <span class="-n">{name}</span>
+	</a>
     {/#}
   </div>
   <div class="-list">
@@ -101,10 +98,17 @@
       overflow: hidden;
       &.-d1 { padding-left: 12px; }
       &.-d2 { padding-left: 22px; }
-      span {
+      .-c {
         float: right; 
         color: #888;
         font-weight: normal !important;
+        margin-left: 5px;
+      }
+      .-n {
+        display: block;
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
       }
     }
     .-f + .-f {
