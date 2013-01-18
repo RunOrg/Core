@@ -14,10 +14,14 @@ module View : sig
     time   : float ;
     seen   : bool ;
     aid    : IAvatar.t ;
+    filter : IInboxLine.Filter.t list ; 
   >
+
+  val filters : 'any MActor.t -> (#O.ctx, (IInboxLine.Filter.t * int) list) Ohm.Run.t
 
   val list : 
        ?start:float
+    -> ?filter:IInboxLine.Filter.t
     -> count:int
     -> 'any MActor.t
     -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)

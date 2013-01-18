@@ -58,6 +58,7 @@ module Line = struct
      ?last   : (float * IAvatar.t) option ; 
      ?show   : bool = false ;
      ?push   : int = 0 ;
+     ?filter : IInboxLine.Filter.t list = [`All]
     }
   end
   include T

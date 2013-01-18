@@ -5,7 +5,7 @@ val update : 'a IInboxLine.id -> 'b IAvatar.id -> MInboxLine_common.Line.t -> (#
 module Count : sig
   type t = < old_count : int ; new_count : int ; read : int option ; unread : int option >
 end 
-    
+
 type t = <
   owner  : IInboxLineOwner.t ;
   wall   : Count.t ;
@@ -14,10 +14,14 @@ type t = <
   time   : float ;
   aid    : IAvatar.t ; 
   seen   : bool ;
+  filter : IInboxLine.Filter.t list ;
 >
+
+val filters : 'any MActor.t -> (#O.ctx, (IInboxLine.Filter.t * int) list) Ohm.Run.t
 
 val list : 
      ?start:float
+  -> ?filter:IInboxLine.Filter.t
   -> count:int
   -> 'any MActor.t
   -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)

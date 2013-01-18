@@ -43,6 +43,7 @@ let get_or_create owner =
 	album  = None ;
 	folder = None ;
 	wall   = None ;
+	filter = []
       }) in
       
       Tbl.create line

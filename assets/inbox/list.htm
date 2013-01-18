@@ -34,9 +34,15 @@
   <div class="-filters">
     {#filters}
       {if sel}
-        <a class="-f -d{depth|string_of_int|esc} -s" href="javascript:location.reload()">{name}</a>
+        <a class="-f -d{depth|string_of_int|esc} -s" href="javascript:location.reload()">
+	  {name}
+	  <span>{count|string_of_int|esc}</span>
+	</a>
       {else} 
-        <a class="-f -d{depth|string_of_int|esc}" href="{url}">{name}</a>
+        <a class="-f -d{depth|string_of_int|esc}" href="{url}">
+	  {name}
+	  <span>{count|string_of_int|esc}</span>
+	</a>
       {/if}
     {/#}
   </div>
@@ -89,8 +95,17 @@
       display: block;
       padding: 4px 2px;
       color: #333; 
-      &.-d1 { padding-left: 22px; }
-      &.-d2 { padding-left: 42px; }
+      line-height: 20px;
+      font-size: 13px; 
+      height: 20px;
+      overflow: hidden;
+      &.-d1 { padding-left: 12px; }
+      &.-d2 { padding-left: 22px; }
+      span {
+        float: right; 
+        color: #888;
+        font-weight: normal !important;
+      }
     }
     .-f + .-f {
       border-top: 1px dashed #DDD;

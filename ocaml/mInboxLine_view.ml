@@ -47,6 +47,7 @@ module Data = struct
       wall   : Count.t ; 
       seen   : float ; 
       last   : float ; 
+     ?filter : IInboxLine.Filter.t list = [`All]
     }
   end
   include T
@@ -61,6 +62,7 @@ let default ilid aid = Data.({
   wall   = count 0 0 ;
   seen   = 0.0 ;
   last   = 0.0 ;
+  filter = [`All]
 })
 
 let markviewed now view =
@@ -82,6 +84,7 @@ let update ilid aid line =
 	album  = count view.album  (fun a -> a.Info.Album.n)  line.Line.album ;
 	folder = count view.folder (fun f -> f.Info.Folder.n) line.Line.folder ;
 	wall   = count view.wall   (fun w -> w.Info.Wall.n)   line.Line.wall ;
+	filter = line.Line.filter ; 
 	last   = time ; 
       }) in
       if author = IAvatar.decay aid then markviewed time view else view
@@ -101,22 +104,24 @@ type t = <
   time   : float ;
   seen   : bool ;
   aid    : IAvatar.t ;
+  filter : IInboxLine.Filter.t list ; 
 >
 
 module ByInboxView = CouchDB.DocView(struct
-  module Key    = Fmt.Make(struct type json t = (IAvatar.t * float) end)
+  module Key    = Fmt.Make(struct type json t = (IAvatar.t * IInboxLine.Filter.t * float) end)
   module Value  = Fmt.Unit
   module Doc    = Data
   module Design = Design
   let name = "by-inbox"
-  let map = "emit([doc.aid,doc.last])"			   
+  let map = "for (var i = 0; i < doc.filter.length; ++i) 
+               emit([doc.aid,doc.filter[i],doc.last])"			   
 end)
 
-let list ?start ~count actor f = 
+let list ?start ?(filter=`All) ~count actor f = 
   let  aid = IAvatar.decay (MActor.avatar actor) in
   let! now = ohmctx (#time) in
-  let  startkey = match start with None -> (aid,now) | Some time -> (aid,time) in
-  let  endkey   = (aid,0.0) in
+  let  startkey = match start with None -> (aid,filter,now) | Some time -> (aid,filter,time) in
+  let  endkey   = (aid,filter,0.0) in
   let  limit    = count + 1 in
   let! list = ohm $ ByInboxView.doc_query ~startkey ~endkey ~limit ~descending:true () in
   
@@ -139,7 +144,8 @@ let list ?start ~count actor f =
 	method album = view.Data.album
 	method time = view.Data.last
 	method seen = view.Data.seen >= view.Data.last
-	method aid  = aid 
+	method aid  = aid
+	method filter = view.Data.filter 
       end in
       let! result = ohm_req_or (delete ilvid) $ f data in
       return (Some result) 
@@ -147,6 +153,25 @@ let list ?start ~count actor f =
 
   let  list, next = OhmPaging.slice ~count list in 
   let! list = ohm $ Run.list_filter extract list in 
-  let  next = BatOption.map (#key |- snd) next in
+  let  next = BatOption.map (#key |- (fun (_,_,t) -> t)) next in
 
   return (list, next) 
+
+module FilterCountView = CouchDB.ReduceView(struct
+  module Key    = Fmt.Make(struct type json t = (IAvatar.t * IInboxLine.Filter.t) end)
+  module Value  = Fmt.Int
+  module Design = Design
+  let name = "filters"
+  let map = "for (var i = 0; i < doc.filter.length; ++i) 
+               emit([doc.aid,doc.filter[i]],1)"			   
+  let reduce = "return sum(values)" 
+  let group = true
+  let level = None
+end)
+
+let filters actor = 
+  let  aid = IAvatar.decay (MActor.avatar actor) in
+  let  startkey = (aid,IInboxLine.Filter.smallest) and endkey = (aid,IInboxLine.Filter.largest) in
+  let! list = ohm $ FilterCountView.reduce_query ~startkey ~endkey ~endinclusive:true () in
+  return (List.map (fun ((_,filter),count) -> filter, count) list) 
+  

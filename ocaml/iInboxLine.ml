@@ -51,4 +51,7 @@ module Filter = struct
 
   let seg = to_string, of_string
 
+  let smallest = `All
+  let largest  = `Group (IEntity.of_string "zzzzzzzzzzz")
+
 end

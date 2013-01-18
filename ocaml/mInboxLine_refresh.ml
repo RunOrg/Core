@@ -82,6 +82,19 @@ let get_core_info = function
 		       let  aid = MDiscussion.Get.creator discn in
 		       let  t   = MDiscussion.Get.update  discn in 
 		       return (Some (t,aid))
+
+let get_filter = function
+  | `Event _ -> return [`All;`Events]
+  | `Discussion did -> let  did = IDiscussion.Assert.view did in 
+		       let! discn = ohm_req_or (return []) $ MDiscussion.get did in 
+		       let  gids = MDiscussion.Get.groups discn in
+		       let! eids = ohm $ Run.list_filter begin fun gid -> 
+			 let! group = ohm_req_or (return None) $ MGroup.naked_get gid in 
+			 match MGroup.Get.owner group with 
+			   | `Entity eid -> return (Some eid) 
+			   | `Event   _  -> return None
+		       end  gids in 
+		       return (`All :: `Groups :: List.map (fun eid -> `Group eid) eids) 
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
   begin fun ilid -> 
@@ -91,6 +104,7 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
 			let! album  = ohm $ get_album_info  current.Line.owner current.Line.album in
 			let! folder = ohm $ get_folder_info current.Line.owner current.Line.folder in 
 			let! core   = ohm $ get_core_info   current.Line.owner in 
+			let! filter = ohm $ get_filter      current.Line.owner in 
 			
 			let  times  = [ 
 			  BatOption.bind (fun w -> w.Info.Wall.last) wall ;
@@ -98,10 +112,12 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
 			  BatOption.bind (fun f -> f.Info.Folder.last) folder ; 
 			  core ; 
 			] in
+
 			let last  = List.fold_left max current.Line.last times in 
 			let push  = current.Line.push + 1 in
 			let show  = true in
-			let fresh = Line.({ current with wall ; album ; folder ; last ; push ; show }) in
+			let fresh = Line.({ current with 
+			  wall ; album ; folder ; last ; push ; show ; filter }) in
 			return (Some push,`put fresh)
     end in
     Push.schedule ilid push 

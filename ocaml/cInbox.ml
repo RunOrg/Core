@@ -60,8 +60,9 @@ let render_line access line =
     | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
 
-let render_list ?start access more = 
-  let! items, next = ohm $ MInboxLine.View.list ?start ~count:10 (access # actor) (render_line access) in  
+let render_list ?start filter access more = 
+  let! items, next = ohm $ MInboxLine.View.list 
+    ?start ~filter ~count:10 (access # actor) (render_line access) in  
   let  more = BatOption.map (fun next -> OhmBox.reaction_endpoint more next, Json.Null) next in
   Asset_Inbox_List_Inner.render (object
     method items = items
@@ -73,7 +74,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
   let! filter = O.Box.parse IInboxLine.Filter.seg in
 
   let! more = O.Box.react Fmt.Float.fmt begin fun start _ self res ->
-    let! html = ohm $ render_list ~start access self in
+    let! html = ohm $ render_list ~start filter access self in
     return $ Action.json [ "more", Html.to_json html ] res
   end in 
 
@@ -81,37 +82,63 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
     let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
     let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
-    
-    let! core_filters = ohm $ Run.list_map begin fun filter -> 
-      let! name = ohm (AdLib.get (`Inbox_Filter filter)) in
-      return (filter, name) 
-    end [
-      `All ;
-      `Events ;
-      `Groups ; 
-    ] in
 
-    let filters = (core_filters :> (IInboxLine.Filter.t * 'a) list) in
+    let! filters = ohm $ MInboxLine.View.filters (access # actor) in
 
-    let filters = List.map (fun (filter',name) -> object
-      method name = name
-      method depth = match filter' with 
-	| `All     -> 0 
-	| `Events
-	| `Groups  -> 1
-	| `Group _ -> 2
-      method sel  = filter = filter'
-      method url  = Action.url UrlClient.Inbox.home (access # instance # key) 
-	[ IInboxLine.Filter.to_string filter' ]
-    end) filters in 
+    let! filters = ohm $ O.decay (Run.list_filter begin fun (f',count) -> 
 
+      (* Filter name : extract from group, or display static *)
+      let! name = ohm_req_or (return None) begin 
+	let static f = let! name = ohm (AdLib.get (`Inbox_Filter f)) in return (Some name) in
+	match f' with 
+	  | `All    -> static `All
+	  | `Events -> static `Events
+	  | `Groups -> static `Groups
+	  | `Group eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get (access # actor) eid in 
+			  let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
+			  let! name   = ohm $ CEntityUtil.name entity in 
+			  return (Some name) 
+      end in 
+
+      let url = Action.url UrlClient.Inbox.home (access # instance # key) [ IInboxLine.Filter.to_string f' ] in
+
+      let sort = 
+	let rank = match f' with 
+	  | `All     -> 0 
+	  | `Events  -> 1
+	  | `Groups  -> 2
+	  | `Group _ -> 3
+	in
+	let name = Util.fold_all name in
+	rank, name
+      in
+
+      (* Actual rendering *) 
+      return $ Some (object
+	method sort = sort
+	method name = name
+	method count = count
+	method depth = match f' with 
+	  | `All     -> 0 
+	  | `Events
+	  | `Groups  -> 1
+	  | `Group _ -> 2
+	method sel  = filter = f'
+	method url  = url 
+      end)
+
+    end filters) in 
+
+    (* Sort groups by name *)
+    let filters = List.sort (fun a b -> compare (a # sort) (b # sort)) filters in
+					 
     Asset_Inbox_List.render (object     
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
       end 
       method filters = filters
-      method inner = render_list access more
+      method inner = render_list filter access more
     end) 
 
   end
