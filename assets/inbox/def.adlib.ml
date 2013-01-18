@@ -10,4 +10,6 @@
 | `Inbox_Filter of [ `All
 		   | `Events
 		   | `Groups
+		   | `HasFiles
+		   | `HasPics
 		   ]

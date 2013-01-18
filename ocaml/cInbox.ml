@@ -91,9 +91,11 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
       let! name = ohm_req_or (return None) begin 
 	let static f = let! name = ohm (AdLib.get (`Inbox_Filter f)) in return (Some name) in
 	match f' with 
-	  | `All    -> static `All
-	  | `Events -> static `Events
-	  | `Groups -> static `Groups
+	  | `All       -> static `All
+	  | `Events    -> static `Events
+	  | `Groups    -> static `Groups
+	  | `HasPics   -> static `HasPics
+	  | `HasFiles  -> static `HasFiles
 	  | `Group eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get (access # actor) eid in 
 			  let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
 			  let! name   = ohm $ CEntityUtil.name entity in 
@@ -104,10 +106,12 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
       let sort = 
 	let rank = match f' with 
-	  | `All     -> 0 
-	  | `Events  -> 1
-	  | `Groups  -> 2
-	  | `Group _ -> 3
+	  | `All      -> 0
+	  | `HasFiles -> 1 
+	  | `HasPics  -> 2
+	  | `Events   -> 3
+	  | `Groups   -> 4
+	  | `Group _  -> 5
 	in
 	let name = Util.fold_all name in
 	rank, name
@@ -120,6 +124,8 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	method count = count
 	method depth = match f' with 
 	  | `All     -> 0 
+	  | `HasFiles 
+	  | `HasPics
 	  | `Events
 	  | `Groups  -> 1
 	  | `Group _ -> 2

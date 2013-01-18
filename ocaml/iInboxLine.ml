@@ -22,20 +22,26 @@ end
 module Filter = struct
 
   type f = [ `All
+	   | `HasFiles
+	   | `HasPics
 	   | `Events 
 	   | `Groups 
 	   | `Group of IEntity.t ]
 
   let of_string = function
     | "" 
-    | "a" -> `All
-    | "e" -> `Events
-    | "g" -> `Groups 
+    | "a"  -> `All
+    | "e"  -> `Events
+    | "hf" -> `HasFiles
+    | "hp" -> `HasPics
+    | "g"  -> `Groups 
     | s when s.[0] = 'g' -> `Group (IEntity.of_string (BatString.lchop s))
     |  _ -> `All 
 
   let to_string = function
     | `All       -> "a"
+    | `HasFiles  -> "hf"
+    | `HasPics   -> "hp"
     | `Events    -> "e"
     | `Groups    -> "g"
     | `Group eid -> "g" ^ IEntity.to_string eid  
@@ -52,6 +58,6 @@ module Filter = struct
   let seg = to_string, of_string
 
   let smallest = `All
-  let largest  = `Group (IEntity.of_string "zzzzzzzzzzz")
+  let largest  = `HasPics
 
 end

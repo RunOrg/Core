@@ -18,6 +18,8 @@ end
 module Filter : sig
   include Ohm.Fmt.FMT with type t = 
 		  [ `All 
+		  | `HasFiles
+		  | `HasPics 
 		  | `Events
 		  | `Groups
 		  | `Group of IEntity.t ]

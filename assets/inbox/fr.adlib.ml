@@ -11,4 +11,6 @@
     | `All -> "Tous les messages"
     | `Events -> "Evènements"
     | `Groups -> "Groupes"
+    | `HasFiles -> "Avec pièces jointes"
+    | `HasPics -> "Avec photos"
 end 
