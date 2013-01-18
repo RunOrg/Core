@@ -14,3 +14,12 @@ module View : sig
   val to_id : t -> Ohm.Id.t 
   val make : 'a id -> 'b IAvatar.id -> t 
 end
+
+module Filter : sig
+  include Ohm.Fmt.FMT with type t = 
+		  [ `All 
+		  | `Events
+		  | `Groups
+		  | `Group of IEntity.t ]
+  val seg : t OhmBox.Seg.t
+end 
