@@ -70,6 +70,8 @@ let render_list ?start access more =
 
 let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
+  let! filter = O.Box.parse IInboxLine.Filter.seg in
+
   let! more = O.Box.react Fmt.Float.fmt begin fun start _ self res ->
     let! html = ohm $ render_list ~start access self in
     return $ Action.json [ "more", Html.to_json html ] res
@@ -80,11 +82,35 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
     let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
     let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
     
+    let! core_filters = ohm $ Run.list_map begin fun filter -> 
+      let! name = ohm (AdLib.get (`Inbox_Filter filter)) in
+      return (filter, name) 
+    end [
+      `All ;
+      `Events ;
+      `Groups ; 
+    ] in
+
+    let filters = (core_filters :> (IInboxLine.Filter.t * 'a) list) in
+
+    let filters = List.map (fun (filter',name) -> object
+      method name = name
+      method depth = match filter' with 
+	| `All     -> 0 
+	| `Events
+	| `Groups  -> 1
+	| `Group _ -> 2
+      method sel  = filter = filter'
+      method url  = Action.url UrlClient.Inbox.home (access # instance # key) 
+	[ IInboxLine.Filter.to_string filter' ]
+    end) filters in 
+
     Asset_Inbox_List.render (object     
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
       end 
+      method filters = filters
       method inner = render_list access more
     end) 
 

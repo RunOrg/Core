@@ -31,6 +31,15 @@
       right: 143px;
     "/>
   </div>
+  <div class="-filters">
+    {#filters}
+      {if sel}
+        <a class="-f -d{depth|string_of_int|esc} -s" href="javascript:location.reload()">{name}</a>
+      {else} 
+        <a class="-f -d{depth|string_of_int|esc}" href="{url}">{name}</a>
+      {/if}
+    {/#}
+  </div>
   <div class="-list">
     {inner|ohm}
     {@!inner}
@@ -68,6 +77,28 @@
   .-list {
     padding: 0 0 1px 0; 
     margin: 0 0 0 300px;
+  }
+
+  .-filters {
+    float: left;
+    background-color: #EEE;
+    border-right: 1px solid #DDD;
+    padding: 5px 15px;
+    width: 250px;
+    .-f {
+      display: block;
+      padding: 4px 2px;
+      color: #333; 
+      &.-d1 { padding-left: 22px; }
+      &.-d2 { padding-left: 42px; }
+    }
+    .-f + .-f {
+      border-top: 1px dashed #DDD;
+    }
+    .-s.-f {
+      font-weight: bold;
+      color: #111;
+    }
   }
 }
 </style>

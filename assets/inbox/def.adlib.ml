@@ -6,3 +6,8 @@
 | `Inbox_Title
 
 | `Inbox_Empty
+
+| `Inbox_Filter of [ `All
+		   | `Events
+		   | `Groups
+		   ]

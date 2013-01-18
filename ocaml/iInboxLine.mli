@@ -21,5 +21,7 @@ module Filter : sig
 		  | `Events
 		  | `Groups
 		  | `Group of IEntity.t ]
+  val to_string : t -> string
+  val of_string : string -> t
   val seg : t OhmBox.Seg.t
 end 

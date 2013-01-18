@@ -6,3 +6,9 @@
 | `Inbox_Title -> "Messages et conversations"
 
 | `Inbox_Empty -> "Aucun message à afficher"
+
+| `Inbox_Filter f -> begin match f with 
+    | `All -> "Tous les messages"
+    | `Events -> "Evènements"
+    | `Groups -> "Groupes"
+end 
