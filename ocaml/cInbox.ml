@@ -60,9 +60,9 @@ let render_line access line =
     | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
 
-let render_list ?start filter access more = 
+let render_list ?start ~count filter access more = 
   let! items, next = ohm $ MInboxLine.View.list 
-    ?start ~filter ~count:10 (access # actor) (render_line access) in  
+    ?start ~filter ~count (access # actor) (render_line access) in  
   let  more = BatOption.map (fun next -> OhmBox.reaction_endpoint more next, Json.Null) next in
   Asset_Inbox_List_Inner.render (object
     method items = items
@@ -74,7 +74,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
   let! filter = O.Box.parse IInboxLine.Filter.seg in
 
   let! more = O.Box.react Fmt.Float.fmt begin fun start _ self res ->
-    let! html = ohm $ render_list ~start filter access self in
+    let! html = ohm $ render_list ~start ~count:8 filter access self in
     return $ Action.json [ "more", Html.to_json html ] res
   end in 
 
@@ -144,7 +144,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	method new_event = new_event
       end 
       method filters = filters
-      method inner = render_list filter access more
+      method inner = render_list ~count:0 filter access more
     end) 
 
   end
