@@ -55,7 +55,8 @@ let template =
 		  begin fun field string -> 
 		    let string = BatString.trim string in 
 		    if string = "" then return (Ok None) else
-		      try let date = Scanf.sscanf string "%u / %u / %u" Date.date in
+		      try let date = Scanf.sscanf string "%u / %u / %u" 
+			    (fun d m y -> Date.date y m d) in
 			  return (Ok (Some date))
 		      with _ -> let! error = ohm $ AdLib.get `MeAccount_Edit_DateError in
 				return (Bad (field,error))
