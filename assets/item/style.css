@@ -27,6 +27,9 @@
       display: block;
       font-size: 13px;
       margin: 8px 0 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     img {
