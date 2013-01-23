@@ -11,6 +11,17 @@
     </ul>
     {/?}
     <h2>{title}</h2>
+    <div class="-involved">
+      {=author}
+        <a href="{url}">
+          {?pico}<img src="{this}"/>{/?}
+          {name}
+        </a>
+      {/=}
+      {#groups}
+        &middot; <span>{name}</span>
+      {/#}
+    </div>
     <div class="-details">
       {page|verbatim}
     </div>
@@ -35,7 +46,24 @@
   .-head .actions { float: right }
 
   h2 {
-    margin-top: 0px;
+    margin: 0 0 8px;
+  }
+
+  .-involved {
+    border-bottom: 1px solid #CCC;
+    border-top: 1px solid #CCC;
+    line-height: 29px;
+    font-size: 13px;
+    background-color: #EEE;
+    overflow: hidden; 
+    white-space: no-wrap; 
+    text-overflow: ellipsis;
+    img {
+      float: left;
+      width: 23px;
+      height: 23px;
+      margin: 3px 5px 3px 3px;
+    }
   }
 
   .-details {

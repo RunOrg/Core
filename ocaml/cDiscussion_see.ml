@@ -28,12 +28,28 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
 
     let! () = ohm $ MInboxLine.View.mark (access # actor) (`Discussion did) in
 
-    (* Top and side details ------------------------------------------------------------------------------ *)
+    (* Body details -------------------------------------------------------------------------------------- *)
 
     let! now  = ohmctx (#time) in
 
     let  title = MDiscussion.Get.title discn in
     let  body  = MDiscussion.Get.body discn in
+
+    (* Top details --------------------------------------------------------------------------------------- *)
+
+    let! author = ohm $ CAvatar.mini_profile (MDiscussion.Get.creator discn) in
+    
+    let! groups = ohm $ Run.list_filter begin fun gid -> 
+      let! group = ohm_req_or (return None) $ MGroup.naked_get gid in 
+      match MGroup.Get.owner group with 
+	| `Event  eid -> return None
+	| `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get (access # actor) eid in
+			 let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
+			 let! name   = ohm (CEntityUtil.name entity) in
+			 return $ Some (object
+			   method name = name
+			 end)  
+    end (MDiscussion.Get.groups discn) in 
 
     (* Administrator URLs -------------------------------------------------------------------------------- *)
 
@@ -55,6 +71,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
       method page       = MRich.OrText.to_html body
       method files      = O.Box.render filebox
       method wall       = O.Box.render wallbox
+      method author     = author
+      method groups     = groups
     end)
   end
 end
