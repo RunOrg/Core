@@ -89,8 +89,8 @@ let get_filter = function
 		       let! discn = ohm_req_or (return []) $ MDiscussion.get did in 
 		       let  gids = MDiscussion.Get.groups discn in
 		       let! eids = ohm $ Run.list_filter begin fun gid -> 
-			 let! group = ohm_req_or (return None) $ MGroup.naked_get gid in 
-			 match MGroup.Get.owner group with 
+			 let! group = ohm_req_or (return None) $ MAvatarSet.naked_get gid in 
+			 match MAvatarSet.Get.owner group with 
 			   | `Entity eid -> return (Some eid) 
 			   | `Event   _  -> return None
 		       end  gids in 

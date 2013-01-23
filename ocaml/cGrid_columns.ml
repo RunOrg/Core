@@ -60,10 +60,10 @@ let box access gid render =
 
   (* Extract the AvatarGrid identifier *)
 
-  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
-  let! group = ohm_req_or fail $ O.decay (Run.opt_bind MGroup.Can.list group) in
+  let! group = ohm $ O.decay (MAvatarSet.try_get actor gid) in
+  let! group = ohm_req_or fail $ O.decay (Run.opt_bind MAvatarSet.Can.list group) in
 
-  let  grid  = MGroup.Get.list group in 
+  let  grid  = MAvatarSet.Get.list group in 
   let  lid   = Grid.list_id grid in
   
   let! columns = ohm $ O.decay (
@@ -126,8 +126,8 @@ let box access gid render =
 
       let group gid = 
 	let  none   = AdLib.get `Grid_Source_Group_Unknown in
-	let! group  = ohm_req_or none $ O.decay (MGroup.try_get actor gid) in 
-	match MGroup.Get.owner group with 
+	let! group  = ohm_req_or none $ O.decay (MAvatarSet.try_get actor gid) in 
+	match MAvatarSet.Get.owner group with 
 	  | `Entity eid -> let! entity = ohm_req_or none $ O.decay (MEntity.try_get actor eid) in
 			   let! entity = ohm_req_or none $ O.decay (MEntity.Can.view entity) in
 			   CEntityUtil.name entity 
@@ -159,7 +159,7 @@ let box access gid render =
 	| `Group (gid,`Date)   -> g gid `Date
 	| `Group (gid,`InList) -> g gid `Status
 	| `Group (gid,`Field f) -> 
-	  let! fields = ohm $ O.decay (MGroup.Fields.local gid) in
+	  let! fields = ohm $ O.decay (MAvatarSet.Fields.local gid) in
 	  let  name =
 	    try BatList.find_map (fun field -> 
 	      if field # name = f then Some (field # label) else None) fields
@@ -197,7 +197,7 @@ let box access gid render =
     let! eval = req_or fail (EvalFmt.of_json_safe json) in 
 
     let with_field f def op = 
-      let fields = MGroup.Fields.get group in 
+      let fields = MAvatarSet.Fields.get group in 
       try 
 	BatList.find_map (function
 	  | `Local field when field # name = f -> Some (op field)
@@ -271,7 +271,7 @@ let box access gid render =
   end in 
 
   let body = 
-    let! local = ohm (MGroup.Fields.local gid)in
+    let! local = ohm (MAvatarSet.Fields.local gid)in
     let! local = ohm (local_fields local) in
     Asset_Grid_Edit.render (object
       method columns = 

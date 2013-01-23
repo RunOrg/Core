@@ -30,8 +30,8 @@ let () = UrlClient.def_join begin fun req res ->
 
     let! fields = ohm begin
       let  gid = MEntity.Get.group entity in 
-      let! group = ohm_req_or (return []) $ MGroup.naked_get gid in 
-      MGroup.Fields.flatten gid
+      let! group = ohm_req_or (return []) $ MAvatarSet.naked_get gid in 
+      MAvatarSet.Fields.flatten gid
     end in 
 
     let! token, status = ohm begin
@@ -112,9 +112,9 @@ let () = UrlClient.def_doJoin begin fun req res ->
   let! entity = ohm_req_or panic $ MEntity.get_if_public eid in 
   let! () = true_or panic (MEntity.Get.kind entity = `Group) in 
   let  gid = MEntity.Get.group entity in
-  let! group = ohm_req_or panic $ MGroup.naked_get gid in 
+  let! group = ohm_req_or panic $ MAvatarSet.naked_get gid in 
 
-  let! fields = ohm $ MGroup.Fields.flatten gid in
+  let! fields = ohm $ MAvatarSet.Fields.flatten gid in
 
   if fields = [] then 
 

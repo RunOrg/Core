@@ -29,8 +29,8 @@ let () = define UrlClient.Members.def_invite begin fun parents entity access ->
   in
 
   let  gid = MEntity.Get.group entity in
-  let! group = ohm $ O.decay (MGroup.try_get (access # actor) gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.admin group) in
+  let! group = ohm $ O.decay (MAvatarSet.try_get (access # actor) gid) in
+  let! group = ohm $ O.decay (Run.opt_bind MAvatarSet.Can.admin group) in
   let! group = req_or fail group in 
 
   let url s = 
@@ -43,6 +43,6 @@ let () = define UrlClient.Members.def_invite begin fun parents entity access ->
       [ IEntity.to_string (MEntity.Get.id entity) ]
   in
 
-  CInvite.box `Group url back access (MGroup.Get.id group) wrapper
+  CInvite.box `Group url back access (MAvatarSet.Get.id group) wrapper
 
 end

@@ -44,10 +44,10 @@ let body access aid me render =
 	  
       else
 	
-	let! group = ohm_req_or (return None) $ MGroup.try_get actor gid in 
-	let! group = ohm_req_or (return None) $ MGroup.Can.list group in 
+	let! group = ohm_req_or (return None) $ MAvatarSet.try_get actor gid in 
+	let! group = ohm_req_or (return None) $ MAvatarSet.Can.list group in 
 	
-	let! mid = ohm $ MMembership.as_viewer (MGroup.Get.id group) aid in
+	let! mid = ohm $ MMembership.as_viewer (MAvatarSet.Get.id group) aid in
 	let! mbr = ohm_req_or (return None) $ MMembership.get mid in 
 	
 	let! status = req_or (return None) 

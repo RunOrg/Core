@@ -173,9 +173,9 @@ let push_invite_task inviter_aid invited_aid gid =
 
   if inviter_aid = invited_aid then return () else
 
-    let! group = ohm_req_or (return ()) $ MGroup.naked_get gid in 
+    let! group = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
     let! eid   = req_or (return ()) begin 
-      match MGroup.Get.owner group with
+      match MAvatarSet.Get.owner group with
 	| `Event eid -> Some eid
 	| `Entity _ -> None	  
     end in 
@@ -226,13 +226,13 @@ let () =
       (* This certainly looks like a join request, but does the group enforce
 	 manual validation ? We do this check last because it costs an additional
 	 database query. *)
-      let! group = ohm_req_or (return ()) $ MGroup.naked_get 
+      let! group = ohm_req_or (return ()) $ MAvatarSet.naked_get 
 	((change # after).MMembership.Details.where) in
       
-      if MGroup.Get.manual group then 
+      if MAvatarSet.Get.manual group then 
 
-	let  owner  = MGroup.Get.owner group in 
-	let! access = ohm $ MGroup.Get.write_access group in 
+	let  owner  = MAvatarSet.Get.owner group in 
+	let! access = ohm $ MAvatarSet.Get.write_access group in 
 
 	(* Manual validation is on ! *)
 	push_request_task

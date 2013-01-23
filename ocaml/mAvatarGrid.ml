@@ -53,5 +53,5 @@ let _ =
       ~source:(`Group gid)
       ~filter:(Some (`Group (gid, `InList)))
   in
-  Sig.listen MGroup.Signals.on_create_list create_list
+  Sig.listen MAvatarSet.Signals.on_create_list create_list
 

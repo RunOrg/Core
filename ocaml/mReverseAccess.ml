@@ -9,10 +9,10 @@ let reverse iid access =
   let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
   
   let by_group gid state = 
-    let! group = ohm_req_or (return []) $ MGroup.naked_get gid in
+    let! group = ohm_req_or (return []) $ MAvatarSet.naked_get gid in
 
     (* We need to make sure that we're accessing the right instance *)
-    if MGroup.Get.instance group <> IInstance.decay iid then return [] else
+    if MAvatarSet.Get.instance group <> IInstance.decay iid then return [] else
       (* We are allowed to access anything the entity needs to get accessors *)
       let gid = IAvatarSet.Assert.list gid in 
       let! list = ohm $ MMembership.InGroup.all gid state in
@@ -44,10 +44,10 @@ let reverse_async iid ?start ~count access =
   let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
   
   let by_group gid state = 
-    let! group = ohm_req_or (return []) $ MGroup.naked_get gid in
+    let! group = ohm_req_or (return []) $ MAvatarSet.naked_get gid in
     
     (* We need to make sure that we're accessing the right instance *)
-    if MGroup.Get.instance group <> IInstance.decay iid then return [] else
+    if MAvatarSet.Get.instance group <> IInstance.decay iid then return [] else
       (* We are allowed to access anything the entity needs to get accessors *)
       let gid = IAvatarSet.Assert.list gid in 
       (* TODO: only filter the avatars we need *)

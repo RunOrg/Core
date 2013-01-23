@@ -36,7 +36,7 @@ let _ =
 	  
       in
       
-      let! list = ohm $ MGroup.Propagate.get_direct gid in
+      let! list = ohm $ MAvatarSet.Propagate.get_direct gid in
       let! _    = ohm $ Run.list_iter propagate_to_gid list in
       
       return () 

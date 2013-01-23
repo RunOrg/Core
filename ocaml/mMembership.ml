@@ -164,8 +164,8 @@ let admin ~from gid aid what =
     let! () = ohm begin 
       let  uid = IUser.Deduce.is_anyone (MActor.user from) in
       let  iid = IInstance.decay (MActor.instance from) in
-      let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-      let  own = MGroup.Get.owner g in
+      let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+      let  own = MAvatarSet.Get.owner g in
       let  p   = 
 	if List.mem `Invite what then `Invite else 
 	  if List.mem (`Accept true) what then
@@ -187,8 +187,8 @@ let user gid actor accept =
   let! () = ohm begin 
     let  uid = IUser.Deduce.is_anyone (MActor.user actor) in
     let  iid = IInstance.decay (MActor.instance actor) in 
-    let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-    let  own = MGroup.Get.owner g in
+    let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+    let  own = MAvatarSet.Get.owner g in
     MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipUser (accept,own))
   end in 
   
@@ -262,7 +262,7 @@ let () =
     task (gid,None) 
   in
 
-  Sig.listen MGroup.Signals.on_update refresh
+  Sig.listen MAvatarSet.Signals.on_update refresh
     
 (* Propagate avatar obliteration ------------------------------------------------ *)
 

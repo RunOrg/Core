@@ -31,8 +31,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
   let  folder = if draft then None else folder in 
 
   let  gid = MEvent.Get.group event in
-  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
+  let! group = ohm $ O.decay (MAvatarSet.try_get actor gid) in
+  let! group = ohm $ O.decay (Run.opt_bind MAvatarSet.Can.list group) in
   let  group = if draft then None else group in   
 
   let! sidebar = O.Box.add begin 
@@ -108,7 +108,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 
     let! join = ohm begin match group with None -> return None | Some group ->      
       let! status = ohm $ MMembership.status actor gid in
-      let  fields = MGroup.Fields.get group <> [] in
+      let  fields = MAvatarSet.Fields.get group <> [] in
       return $ Some (CJoin.Self.render (`Event eid) (access # instance # key) 
 		       ~gender:None ~kind:`Event ~status ~fields)
     end in 

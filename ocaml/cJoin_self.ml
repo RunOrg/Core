@@ -5,10 +5,10 @@ open Ohm.Universal
 open BatPervasives
 
 let do_join self group =   
-  let! admin = ohm $ MGroup.Can.write group in   
+  let! admin = ohm $ MAvatarSet.Can.write group in   
   match admin with
-    | None -> MMembership.user (MGroup.Get.id group) self true 
-    | Some group -> MMembership.admin ~from:self (MGroup.Get.id group) 
+    | None -> MMembership.user (MAvatarSet.Get.id group) self true 
+    | Some group -> MMembership.admin ~from:self (MAvatarSet.Get.id group) 
       (MActor.avatar self) [ `Accept true ; `Default true ]
 
 let save_data self result = 
@@ -208,8 +208,8 @@ let () = UrlClient.Join.def_post $ CClient.action begin fun access req res ->
 			return $ Some (MEvent.Get.group event) 
   end in 
 
-  let! group  = ohm_req_or panic $ MGroup.try_get actor gid in
-  let! fields = ohm $ MGroup.Fields.flatten gid in 
+  let! group  = ohm_req_or panic $ MAvatarSet.try_get actor gid in
+  let! fields = ohm $ MAvatarSet.Fields.flatten gid in 
 
   (* Extract form data *)
 
@@ -266,8 +266,8 @@ let () = UrlClient.Join.def_ajax $ CClient.action begin fun access req res ->
 		      return $ Some (MEvent.Get.group event, `Event) 
   end in 
 
-  let! group  = ohm_req_or panic $ MGroup.try_get actor gid in 
-  let! fields = ohm $ MGroup.Fields.flatten gid in
+  let! group  = ohm_req_or panic $ MAvatarSet.try_get actor gid in 
+  let! fields = ohm $ MAvatarSet.Fields.flatten gid in
 
   let gender = None in 
 

@@ -40,8 +40,8 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
     let! author = ohm $ CAvatar.mini_profile (MDiscussion.Get.creator discn) in
     
     let! groups = ohm $ Run.list_filter begin fun gid -> 
-      let! group = ohm_req_or (return None) $ MGroup.naked_get gid in 
-      match MGroup.Get.owner group with 
+      let! group = ohm_req_or (return None) $ MAvatarSet.naked_get gid in 
+      match MAvatarSet.Get.owner group with 
 	| `Event  eid -> return None
 	| `Entity eid -> let! entity = ohm_req_or (return None) $ MEntity.try_get (access # actor) eid in
 			 let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 

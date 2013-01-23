@@ -44,8 +44,8 @@ let admin ~from gid aids what =
       let! () = ohm begin 
 	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
 	let  iid = IInstance.decay (MActor.instance from) in
-	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let  own = MGroup.Get.owner g in 
+	let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+	let  own = MAvatarSet.Get.owner g in 
 	let  p   = 
 	  if List.mem `Invite what then `Invite else 
 	    if List.mem (`Accept true) what then
@@ -130,8 +130,8 @@ let create ~from iid gid list what =
       let! () = ohm begin 
 	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
 	let  iid = IInstance.decay (MActor.instance from) in
-	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let  own = MGroup.Get.owner g in
+	let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+	let  own = MAvatarSet.Get.owner g in
 	let  p   = `Create in 
 	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,own,List.length list))
       end in 

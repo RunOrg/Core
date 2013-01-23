@@ -48,8 +48,8 @@ let start gid =
     (* Grab all the columns for export, replacing the "full" column with 
        firstname, lastname and email for better rendering. *)
 
-    let! group = ohm_req_or (return ([],[])) $ MGroup.naked_get gid in
-    let  lid = MGroup.Get.list group in 
+    let! group = ohm_req_or (return ([],[])) $ MAvatarSet.naked_get gid in
+    let  lid = MAvatarSet.Get.list group in 
     let! columns, _, _ = ohm_req_or (return ([],[])) $ MAvatarGrid.MyGrid.get_list 
       (MAvatarGrid.list_id lid) in 
     let  from_columns = List.concat (List.map (fun column -> 
@@ -64,7 +64,7 @@ let start gid =
     (* Grab all the *local* group fields and turn them into columns as well
        (but avoid duplicate columns) *)
     
-    let! fields = ohm $ MGroup.Fields.local gid in 
+    let! fields = ohm $ MAvatarSet.Fields.local gid in 
     let  from_fields = BatList.filter_map (fun field -> 
       let eval = `Group (IAvatarSet.decay gid, `Field (field # name)) in
       if List.exists (snd |- (=) eval) from_columns then None else

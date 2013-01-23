@@ -33,13 +33,13 @@ let contents access =
       let! entity = ohm_req_or none $ MEntity.Can.view entity in 
       let  gid    = MEntity.Get.group entity in 
 
-      let! group  = ohm_req_or none $ MGroup.try_get actor gid in
+      let! group  = ohm_req_or none $ MAvatarSet.try_get actor gid in
 
       (* My own status in this group ------------------------------------------------------- *)
 
       let! join = ohm begin
 	let! status = ohm $ MMembership.status actor gid in
-	let  fields = MGroup.Fields.get group <> [] in
+	let  fields = MAvatarSet.Fields.get group <> [] in
 	return $ 
 	  CJoin.Self.render (`Entity eid) (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
       end in 
@@ -58,8 +58,8 @@ let contents access =
 
       (* List group members ---------------------------------------------------------------- *)
 
-      let! group  = ohm_req_or none $ MGroup.Can.list group in
-      let  gid    = MGroup.Get.id group in 
+      let! group  = ohm_req_or none $ MAvatarSet.Can.list group in
+      let  gid    = MAvatarSet.Get.id group in 
 
       let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
 
@@ -121,9 +121,9 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 	let! status = ohm $ MMembership.status actor gid in
 	let  mbr    = status = `Member in
  
-	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.try_get actor gid in
-	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.Can.list group in
-	let  gid    = MGroup.Get.id group in 
+	let! group  = ohm_req_or (return (None,mbr)) $ MAvatarSet.try_get actor gid in
+	let! group  = ohm_req_or (return (None,mbr)) $ MAvatarSet.Can.list group in
+	let  gid    = MAvatarSet.Get.id group in 
 	let! count  = ohm $ MMembership.InGroup.count gid in
 
 	return (Some count # count,mbr) 

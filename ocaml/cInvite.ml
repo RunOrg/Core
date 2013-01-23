@@ -61,9 +61,9 @@ let by_group kind back access gid render =
     let  list = BatOption.default [] (ByGroupArgs.of_json_safe json) in
     
     let! aids = ohm $ O.decay (Run.list_map begin fun gid -> 
-      let! group = ohm_req_or (return []) $ MGroup.try_get (access # actor) gid in 
-      let! group = ohm_req_or (return []) $ MGroup.Can.list group in 
-      let! all   = ohm $ MMembership.InGroup.all (MGroup.Get.id group) `Validated in
+      let! group = ohm_req_or (return []) $ MAvatarSet.try_get (access # actor) gid in 
+      let! group = ohm_req_or (return []) $ MAvatarSet.Can.list group in 
+      let! all   = ohm $ MMembership.InGroup.all (MAvatarSet.Get.id group) `Validated in
       return (List.map snd all) 
     end list) in
     
@@ -93,9 +93,9 @@ let by_group kind back access gid render =
       let! ()     = true_or (return None) (not (MEntity.Get.draft entity)) in
       let  gid'   = MEntity.Get.group entity in 
       
-      let! group  = ohm_req_or (return None) $ MGroup.try_get (access # actor) gid' in
-      let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
-      let  gid'   = MGroup.Get.id group in 
+      let! group  = ohm_req_or (return None) $ MAvatarSet.try_get (access # actor) gid' in
+      let! group  = ohm_req_or (return None) $ MAvatarSet.Can.list group in
+      let  gid'   = MAvatarSet.Get.id group in 
       
       let! ()     = true_or (return None) (IAvatarSet.decay gid <> IAvatarSet.decay gid') in
       
