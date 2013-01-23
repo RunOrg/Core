@@ -61,7 +61,7 @@ let contents access =
       let! group  = ohm_req_or none $ MAvatarSet.Can.list group in
       let  gid    = MAvatarSet.Get.id group in 
 
-      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
+      let! avatars, _ = ohm $ MMembership.InSet.list_members ~count:100 gid in
 
       (* Determine if administrator or not ------------------------------------------------- *)
       
@@ -124,7 +124,7 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 	let! group  = ohm_req_or (return (None,mbr)) $ MAvatarSet.try_get actor gid in
 	let! group  = ohm_req_or (return (None,mbr)) $ MAvatarSet.Can.list group in
 	let  gid    = MAvatarSet.Get.id group in 
-	let! count  = ohm $ MMembership.InGroup.count gid in
+	let! count  = ohm $ MMembership.InSet.count gid in
 
 	return (Some count # count,mbr) 
 

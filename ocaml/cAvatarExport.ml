@@ -21,7 +21,7 @@ let () = define begin fun (start,exid,gid,evals) ->
 
   (* Acting as bot to list group contents. *)
   let  bgid  = IAvatarSet.Assert.bot gid in  
-  let! aids, next = ohm $ MMembership.InGroup.avatars bgid ~start ~count in
+  let! aids, next = ohm $ MMembership.InSet.avatars bgid ~start ~count in
   
   (* A function that processes one cell. *)
   let cell aid eval = 
@@ -42,7 +42,7 @@ let () = define begin fun (start,exid,gid,evals) ->
 end
 
 let start gid =   
-  let! size = ohm (Run.map (#any) (MMembership.InGroup.count gid)) in
+  let! size = ohm (Run.map (#any) (MMembership.InSet.count gid)) in
   let! names, evals = ohm begin
 
     (* Grab all the columns for export, replacing the "full" column with 

@@ -138,5 +138,5 @@ let all_lines source ~from ~count =
     | `Group gid -> 
       (* We can view any memberships *)
       let gid = IAvatarSet.Assert.bot gid in 
-      MMembership.InGroup.avatars gid ~start:from ~count
+      MMembership.InSet.avatars gid ~start:from ~count
   

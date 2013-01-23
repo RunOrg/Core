@@ -15,7 +15,7 @@ let reverse iid access =
     if MAvatarSet.Get.instance group <> IInstance.decay iid then return [] else
       (* We are allowed to access anything the entity needs to get accessors *)
       let gid = IAvatarSet.Assert.list gid in 
-      let! list = ohm $ MMembership.InGroup.all gid state in
+      let! list = ohm $ MMembership.InSet.all gid state in
       return $ List.map snd list
   in
 
@@ -51,7 +51,7 @@ let reverse_async iid ?start ~count access =
       (* We are allowed to access anything the entity needs to get accessors *)
       let gid = IAvatarSet.Assert.list gid in 
       (* TODO: only filter the avatars we need *)
-      let! list = ohm $ MMembership.InGroup.all gid state in
+      let! list = ohm $ MMembership.InSet.all gid state in
       return $ List.map snd list
   in
   

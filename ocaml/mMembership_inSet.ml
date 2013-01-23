@@ -198,6 +198,6 @@ let zero_count = object
   method any     = 0
 end
 
-let count group = 
-  let! result = ohm_req_or (return zero_count) $ CountView.reduce (IAvatarSet.decay group) in
+let count asid = 
+  let! result = ohm_req_or (return zero_count) $ CountView.reduce (IAvatarSet.decay asid) in
   return result

@@ -90,7 +90,7 @@ val user :
   -> bool
   -> unit O.run
 
-module InGroup : sig
+module InSet : sig
 
   val all :
        [<`Admin|`Write|`List|`Bot] IAvatarSet.id

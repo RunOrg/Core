@@ -13,7 +13,7 @@ module Diff      = MMembership_diff
 module Data      = MMembership_data
 module Versioned = MMembership_versioned
 module Unique    = MMembership_unique
-module InGroup   = MMembership_inGroup 
+module InSet     = MMembership_inSet 
 module Backdoor  = MMembership_backdoor
 module Field     = MMembership_field
 module Grant     = MMembership_grant
@@ -244,7 +244,7 @@ let () =
 
     let bot_gid = IAvatarSet.Assert.bot gid in 
     
-    let! list, next = ohm $ InGroup.list_everyone ?start ~count:20 bot_gid in 
+    let! list, next = ohm $ InSet.list_everyone ?start ~count:20 bot_gid in 
     
     let! _ = ohm $ Run.list_map begin fun aid ->
       let! mid = ohm_req_or (return ()) $ Unique.find_if_exists gid aid in

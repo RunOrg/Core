@@ -63,7 +63,7 @@ let by_group kind back access gid render =
     let! aids = ohm $ O.decay (Run.list_map begin fun gid -> 
       let! group = ohm_req_or (return []) $ MAvatarSet.try_get (access # actor) gid in 
       let! group = ohm_req_or (return []) $ MAvatarSet.Can.list group in 
-      let! all   = ohm $ MMembership.InGroup.all (MAvatarSet.Get.id group) `Validated in
+      let! all   = ohm $ MMembership.InSet.all (MAvatarSet.Get.id group) `Validated in
       return (List.map snd all) 
     end list) in
     
@@ -99,7 +99,7 @@ let by_group kind back access gid render =
       
       let! ()     = true_or (return None) (IAvatarSet.decay gid <> IAvatarSet.decay gid') in
       
-      let! count  = ohm $ MMembership.InGroup.count gid' in
+      let! count  = ohm $ MMembership.InSet.count gid' in
       
       if count # count = 0 then return None else 
 	

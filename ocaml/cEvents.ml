@@ -22,7 +22,7 @@ let render_event access event =
     let! group = ohm_req_or (return None) $ MAvatarSet.try_get (access # actor) gid in
     let! group = ohm_req_or (return None) $ MAvatarSet.Can.list group in
     let  gid   = MAvatarSet.Get.id group in 
-    let! count = ohm $ MMembership.InGroup.count gid in
+    let! count = ohm $ MMembership.InSet.count gid in
     return $ Some (count # count) 
   end in            
   let status = BatOption.map (fun s -> (s :> VStatus.t)) (MEvent.Get.status event) in
