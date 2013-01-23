@@ -23,7 +23,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
 
     let iid = IInstance.decay iid in 
     let eid = IEvent.gen () in
-    let gid  = IGroup.gen () in
+    let gid  = IAvatarSet.gen () in
     
     let init = E.({
       iid    ;

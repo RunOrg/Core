@@ -31,7 +31,7 @@ module Cfg = struct
       type json t = {
 	iid    : IInstance.t ;
 	tid    : ITemplate.Event.t ;
-	gid    : IGroup.t ;
+	gid    : IAvatarSet.t ;
 	name   : string option ;
 	date   : Date.t option ;
 	pic    : IFile.t option ;
@@ -65,7 +65,7 @@ end
 type data_t = Cfg.Data.t = {
   iid    : IInstance.t ;
   tid    : ITemplate.Event.t ;
-  gid    : IGroup.t ;
+  gid    : IAvatarSet.t ;
   name   : string option ;
   date   : Date.t option ;
   pic    : IFile.t option ;

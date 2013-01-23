@@ -1,11 +1,8 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 include Ohm.Id.PHANTOM
-  
-type membership = t -> [`In] id option
     
 module Assert : sig
-  val is_in : 'any id -> [`In]    id
   val write : 'any id -> [`Write] id
   val admin : 'any id -> [`Admin] id
   val list  : 'any id -> [`List]  id 

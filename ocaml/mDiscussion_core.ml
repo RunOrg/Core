@@ -14,7 +14,7 @@ module Cfg = struct
     type json t = 
       [ `SetTitle  of string
       | `SetBody   of MRich.OrText.t
-      | `AddGroups of IGroup.t list 
+      | `AddGroups of IAvatarSet.t list 
       | `Delete    of IAvatar.t
       ]
   end) 
@@ -23,7 +23,7 @@ module Cfg = struct
     module T = struct
       type json t = {
 	iid   : IInstance.t ;
-	gids  : IGroup.t list ; 
+	gids  : IAvatarSet.t list ; 
 	title : string ; 
 	body  : MRich.OrText.t ;
 	time  : float ;
@@ -50,7 +50,7 @@ end
 type diff_t = Cfg.Diff.t 
 type data_t = Cfg.Data.t = {
   iid   : IInstance.t ;
-  gids  : IGroup.t list ; 
+  gids  : IAvatarSet.t list ; 
   title : string ; 
   body  : MRich.OrText.t ;
   time  : float ;

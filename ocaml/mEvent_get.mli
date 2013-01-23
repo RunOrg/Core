@@ -7,7 +7,7 @@ val vision   : [<`Admin|`View] MEvent_can.t -> MEvent_vision.t
 val name     : [<`Admin|`View] MEvent_can.t -> string option 
 val picture  : [<`Admin|`View] MEvent_can.t -> [`GetPic] IFile.id option 
 val date     : [<`Admin|`View] MEvent_can.t -> Date.t option
-val group    :            'any MEvent_can.t -> IGroup.t 
+val group    :            'any MEvent_can.t -> IAvatarSet.t 
 val iid      :            'any MEvent_can.t -> IInstance.t 
 val template : [<`Admin|`View] MEvent_can.t -> ITemplate.Event.t
 val admins   : [<`Admin|`View] MEvent_can.t -> IAvatar.t list 

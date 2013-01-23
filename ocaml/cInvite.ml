@@ -51,7 +51,7 @@ let by_name kind back access gid render =
 (* Handling by-group invitations ------------------------------------------------------------------- *)
 
 module ByGroupArgs = Fmt.Make(struct
-  type json t = ( IGroup.t list )
+  type json t = ( IAvatarSet.t list )
 end)
 
 let by_group kind back access gid render = 
@@ -97,14 +97,14 @@ let by_group kind back access gid render =
       let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
       let  gid'   = MGroup.Get.id group in 
       
-      let! ()     = true_or (return None) (IGroup.decay gid <> IGroup.decay gid') in
+      let! ()     = true_or (return None) (IAvatarSet.decay gid <> IAvatarSet.decay gid') in
       
       let! count  = ohm $ MMembership.InGroup.count gid' in
       
       if count # count = 0 then return None else 
 	
 	return $ Some (object
-	  method id     = IGroup.to_string gid'
+	  method id     = IAvatarSet.to_string gid'
 	  method count  = count # count
 	  method name   = name
 	end)

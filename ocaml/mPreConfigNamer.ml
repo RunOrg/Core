@@ -5,11 +5,11 @@ open BatPervasives
 open Ohm.Universal
 
 module Data = Fmt.Make(struct
-  module IGroup = IGroup
+  module IAvatarSet = IAvatarSet
   module IEntity = IEntity
   type json t = <
     t : MType.t ;
-    groups   "g" : (!string, IGroup.t) ListAssoc.t ;
+    groups   "g" : (!string, IAvatarSet.t) ListAssoc.t ;
     entities "e" : (!string, IEntity.t) ListAssoc.t
   >
 end)
@@ -49,7 +49,7 @@ let group name iid =
     let! data = ohm $ get iid in
     match find (data # groups) name with 
       | Some id -> return (id, `keep)
-      | None -> let id = IGroup.gen () in 
+      | None -> let id = IAvatarSet.gen () in 
 		let data = object
 		  method t        = data # t
 		  method groups   = (name,id) :: (data # groups)

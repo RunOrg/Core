@@ -5,6 +5,6 @@ val box :
   -> (string -> string) 
   -> string
   -> 'any CAccess.t 
-  -> [`Admin] IGroup.id
+  -> [`Admin] IAvatarSet.id
   -> (Ohm.Html.writer O.boxrun -> Ohm.Html.writer O.boxrun)
   -> O.Box.result O.boxrun

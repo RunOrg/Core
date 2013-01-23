@@ -29,7 +29,7 @@ module Get : sig
   val update   : [<`Admin|`View] t -> float
   val creator  : [<`Admin|`View] t -> IAvatar.t
   val iid      :            'any t -> IInstance.t 
-  val groups   : [<`Admin|`View] t -> IGroup.t list
+  val groups   : [<`Admin|`View] t -> IAvatarSet.t list
   val body     : [<`Admin|`View] t -> MRich.OrText.t
 end
 
@@ -37,7 +37,7 @@ val create :
      'any MActor.t
   -> title:string
   -> body:MRich.OrText.t
-  -> groups:IGroup.t list
+  -> groups:IAvatarSet.t list
   -> (#O.ctx,IDiscussion.t) Ohm.Run.t
 
 module Set : sig

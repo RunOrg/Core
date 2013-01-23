@@ -115,7 +115,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
 
   let! id, gid = ohm (
     match pcname with 
-      | None        -> return (IEntity.gen (), IGroup.gen ()) 
+      | None        -> return (IEntity.gen (), IAvatarSet.gen ()) 
       | Some pcname -> let namer = MPreConfigNamer.load iid in 
 		       let! eid = ohm $ MPreConfigNamer.entity pcname namer in
 		       let! gid = ohm $ MPreConfigNamer.group  pcname namer in
@@ -126,7 +126,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
   let eid = IEntity.Assert.created id in
 
   (* And the matching group *)
-  let gid = IGroup.Assert.bot gid in  
+  let gid = IAvatarSet.Assert.bot gid in  
 
   let who = `user (Id.gen (), IAvatar.decay creator) in
 
@@ -156,7 +156,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
     public   = false ;
     admin    = if kind = `Group then `Nobody else `List [ IAvatar.decay creator ] ;
     view     = `Token ;
-    group    = IGroup.decay gid ;
+    group    = IAvatarSet.decay gid ;
     config   = MEntityConfig.default ;
     kind     ;
     template = ITemplate.decay template ;

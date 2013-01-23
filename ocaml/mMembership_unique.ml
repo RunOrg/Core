@@ -8,7 +8,7 @@ module Unique = OhmCouchUnique.Make(UniqueDB)
 
 let key group avatar = 
   OhmCouchUnique.pair
-    (IGroup.to_id (IGroup.decay group))
+    (IAvatarSet.to_id (IAvatarSet.decay group))
     (IAvatar.to_id (IAvatar.decay avatar)) 
 
 let find group avatar = 

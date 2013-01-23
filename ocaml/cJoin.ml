@@ -73,7 +73,7 @@ let status_edit aid mid access kind group profile = fun edit _ self res ->
   
   let! mbr = ohm $ O.decay (MMembership.get mid) in 
   let  mbr = BatOption.default 
-    (MMembership.default ~mustpay:false ~group:(IGroup.decay gid) ~avatar:aid) mbr in
+    (MMembership.default ~mustpay:false ~group:(IAvatarSet.decay gid) ~avatar:aid) mbr in
 
   let! html = ohm $ Top.render kind profile mbr.MMembership.status self in   
   return $ Action.json [ "top", Html.to_json html ] res

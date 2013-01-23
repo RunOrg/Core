@@ -25,7 +25,7 @@ module Data = Fmt.Make(struct
       entity : IEntity.t option ;
       list   : IAvatarGrid.t ;
      ?fields : Field.t list = [] ;
-     ?propg  : IGroup.t list = []
+     ?propg  : IAvatarSet.t list = []
     > 
   end)
 
@@ -38,7 +38,7 @@ module Data = Fmt.Make(struct
     owner  : [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] ;
     list   : IAvatarGrid.t ;
     fields : Field.t list ;
-    propg  : IGroup.t list 
+    propg  : IAvatarSet.t list 
   >
 
   let t_of_json json = 
@@ -62,7 +62,7 @@ module Data = Fmt.Make(struct
 	  
 end)
 
-module Tbl = CouchDB.Table(MyDB)(IGroup)(Data)
+module Tbl = CouchDB.Table(MyDB)(IAvatarSet)(Data)
 
 type data = Data.t
 
@@ -77,7 +77,7 @@ module Signals = struct
 end
 
 type 'relation t = {
-  id       : 'relation IGroup.id ;
+  id       : 'relation IAvatarSet.id ;
   data     : data ;
   view     : bool O.run ;
   edit     : bool O.run ;
@@ -115,7 +115,7 @@ let create gid iid owner =
   let namer = MPreConfigNamer.load iid in 
 
   let iid = IInstance.decay iid in
-  let gid = IGroup.decay    gid in    
+  let gid = IAvatarSet.decay    gid in    
 
   let list = IAvatarGrid.gen () in 
 
@@ -159,7 +159,7 @@ let create gid iid owner =
   Tbl.set gid o
 
 let _get id = 
-  Tbl.get (IGroup.decay id)
+  Tbl.get (IAvatarSet.decay id)
 
 let try_get actor id =
   let! group = ohm_req_or (return None) $ _get id in
@@ -200,7 +200,7 @@ let refresh gid ~grants ~manual =
     method propg  = d # propg
   end in
   
-  let! () = ohm $ Tbl.update (IGroup.decay gid) update in 
+  let! () = ohm $ Tbl.update (IAvatarSet.decay gid) update in 
   
   Signals.on_update_call gid
 
@@ -234,7 +234,7 @@ module Can = struct
     let! allow = ohm $ t.view in
     if allow then
       return $ Some {
-	id    = IGroup.Assert.list t.id ;
+	id    = IAvatarSet.Assert.list t.id ;
 	data  = t.data ;
 	view  = return true ;
 	edit  = t.edit ;
@@ -247,7 +247,7 @@ module Can = struct
     let! allow = ohm $ t.edit in
     if allow then
       return $ Some {
-	id    = IGroup.Assert.write t.id ;
+	id    = IAvatarSet.Assert.write t.id ;
 	data  = t.data ;
 	view  = return true ;
 	edit  = return true ;
@@ -260,7 +260,7 @@ module Can = struct
     let! allow = ohm $ t.admin in
     if allow then 
       return $ Some {
-	id    = IGroup.Assert.admin t.id ;
+	id    = IAvatarSet.Assert.admin t.id ;
 	data  = t.data ;
 	view  = return true ;
 	edit  = return true ;
@@ -287,12 +287,12 @@ module Propagate = struct
       method propg  = propg
     end in
 
-    Tbl.update (IGroup.decay id) update 
+    Tbl.update (IAvatarSet.decay id) update 
 
   (* Members in 'to_what' are added to 'what' automatically *)
   let add to_what what actor = 
-    let      what = IGroup.decay    what in 
-    let   to_what = IGroup.decay to_what in 
+    let      what = IAvatarSet.decay    what in 
+    let   to_what = IAvatarSet.decay to_what in 
     let! to_group = ohm_req_or (return ()) $ try_get actor to_what in
     let! to_group = ohm_req_or (return ()) $ Can.admin to_group  in
 
@@ -301,8 +301,8 @@ module Propagate = struct
    
   (* Members in 'from_what' are not added to 'what' anymore *)
   let rem from_what what = 
-    let        what = IGroup.decay      what in 
-    let   from_what = IGroup.decay from_what in      
+    let        what = IAvatarSet.decay      what in 
+    let   from_what = IAvatarSet.decay from_what in      
     let! from_group = ohm_req_or (return ()) $ _get from_what in
 
     if List.mem what (from_group # propg) then  
@@ -311,8 +311,8 @@ module Propagate = struct
 
   let upgrade ~src ~dest action = 
 
-    let src  = IGroup.decay src in
-    let dest = IGroup.decay dest in 
+    let src  = IAvatarSet.decay src in
+    let dest = IAvatarSet.decay dest in 
 
     let! group = ohm_req_or (return ()) $ _get src in
     
@@ -328,7 +328,7 @@ module Propagate = struct
 	return ()
 
   module InverseView = CouchDB.DocView(struct
-    module Key = IGroup
+    module Key = IAvatarSet
     module Value = Fmt.Unit
     module Doc = Data
     module Design = Design
@@ -339,11 +339,11 @@ module Propagate = struct
   end)
 
   let get gid actor = 
-    let  id    = IGroup.decay gid in 
+    let  id    = IAvatarSet.decay gid in 
     let! items = ohm $ InverseView.doc id in
     
     return $ List.map begin fun item -> 
-      let id = IGroup.of_id (item # id) in 
+      let id = IAvatarSet.of_id (item # id) in 
       _relation_of_data actor id (item # doc)
     end items
 
@@ -375,7 +375,7 @@ module Fields = struct
       method propg  = d # propg
     end in
     
-    Tbl.update (IGroup.decay t.id) update
+    Tbl.update (IAvatarSet.decay t.id) update
 
   let of_group id = 
     let! group = ohm_req_or (return []) $ _get id in
@@ -390,7 +390,7 @@ module Fields = struct
     end fields
 
   let flat gid = function 
-    | `Local   simple  -> return (Some (MJoinFields.Flat.group false (IGroup.decay gid) simple))
+    | `Local   simple  -> return (Some (MJoinFields.Flat.group false (IAvatarSet.decay gid) simple))
     | `Profile (r,p)   -> return (Some (MJoinFields.Flat.profile r p))
     | `Import  (r,g,s) -> let! fields = ohm $ of_group g in   
 			  try return $ Some (BatList.find_map (function 
@@ -402,7 +402,7 @@ module Fields = struct
 
   let flatten gid = 
 
-    let gid = IGroup.decay gid in 
+    let gid = IAvatarSet.decay gid in 
     let! fields = ohm $ of_group gid in 
     
     Run.list_filter (flat gid) fields
@@ -431,7 +431,7 @@ let _refresh_token_grant =
 	  | `None   -> false)
       in
       
-      let! () = ohm $ refresh (IGroup.Assert.bot gid) ~grants ~manual in
+      let! () = ohm $ refresh (IAvatarSet.Assert.bot gid) ~grants ~manual in
       
       finish
 	

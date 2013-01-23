@@ -29,7 +29,7 @@ module Signals : sig
 
   val on_bind_group : (   IInstance.t
                         * [`Created] IEntity.id
-		        * [`Bot] IGroup.id
+		        * [`Bot] IAvatarSet.id
                         * ITemplate.t 
 			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     
@@ -51,7 +51,7 @@ module Get : sig
   val draft         :            'any t -> bool
   val public        :            'any t -> bool
   val grants        :            'any t -> bool
-  val group         : [<`Admin|`View|`Bot] t -> IGroup.t
+  val group         : [<`Admin|`View|`Bot] t -> IAvatarSet.t
   val name          : [<`Admin|`View] t -> TextOrAdlib.t option
   val picture       : [<`Admin|`View] t -> [`GetPic] IFile.id option
   val summary       : [<`Admin|`View] t -> TextOrAdlib.t
@@ -193,7 +193,7 @@ end
 
 (* {{MIGRATION}} *)
 
-val on_migrate : (IEntity.t * IInstance.t * IGroup.t * [`IsSelf] IAvatar.id * MEntityKind.t * string, 
+val on_migrate : (IEntity.t * IInstance.t * IAvatarSet.t * [`IsSelf] IAvatar.id * MEntityKind.t * string, 
 		  bool O.run) Ohm.Sig.channel
 
 

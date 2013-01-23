@@ -26,7 +26,7 @@ let () =
 
 module AllView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = (IGroup.t * bool)
+    type json t = (IAvatarSet.t * bool)
   end)
   module Value  = IAvatar
   module Design = Versioned.Design
@@ -35,7 +35,7 @@ module AllView = CouchDB.MapView(struct
 end)
 
 let all group access = 
-  let group = IGroup.decay group in 
+  let group = IAvatarSet.decay group in 
   let first, last = match access with 
     | `Pending   -> false, false
     | `Validated -> true,  true
@@ -52,7 +52,7 @@ let all group access =
   return $ List.map (fun i -> snd (i # key), i # value) list
 
 let list_members ?start ~count group = 
-  let group = IGroup.decay group in 
+  let group = IAvatarSet.decay group in 
 
   let startid  = start in
   let limit    = count + 1 in
@@ -84,7 +84,7 @@ let list_members ?start ~count group =
   return (rest, last)
 
 module EveryoneView = CouchDB.MapView(struct
-  module Key    = IGroup
+  module Key    = IAvatarSet
   module Value  = IAvatar
   module Design = Versioned.Design
   let name = "everyone"
@@ -92,7 +92,7 @@ module EveryoneView = CouchDB.MapView(struct
 end)
 
 let list_everyone ?start ~count group = 
-  let group = IGroup.decay group in 
+  let group = IAvatarSet.decay group in 
 
   let startid  = start in
   let limit    = count + 1 in
@@ -127,7 +127,7 @@ let list_everyone ?start ~count group =
 
 module AvatarView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = (IGroup.t * IAvatar.t)
+    type json t = (IAvatarSet.t * IAvatar.t)
   end)
   module Value  = Fmt.Unit
   module Design = Versioned.Design
@@ -136,7 +136,7 @@ module AvatarView = CouchDB.MapView(struct
 end)
 
 let avatars gid ~start ~count = 
-  let gid      = IGroup.decay gid in 
+  let gid      = IAvatarSet.decay gid in 
   let limit    = count + 1 in
   let startkey = (gid,BatOption.default IAvatar.smallest start) in
   let endkey   = (gid,IAvatar.largest) in
@@ -172,7 +172,7 @@ module Count = Fmt.Make(struct
 end) 
 
 module CountView = CouchDB.ReduceView(struct
-  module Key     = IGroup
+  module Key     = IAvatarSet
   module Value   = Count
   module Reduced = Count
   module Design  = Versioned.Design
@@ -199,5 +199,5 @@ let zero_count = object
 end
 
 let count group = 
-  let! result = ohm_req_or (return zero_count) $ CountView.reduce (IGroup.decay group) in
+  let! result = ohm_req_or (return zero_count) $ CountView.reduce (IAvatarSet.decay group) in
   return result

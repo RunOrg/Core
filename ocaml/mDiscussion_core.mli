@@ -2,7 +2,7 @@
 
 type data_t = {
   iid   : IInstance.t ;
-  gids  : IGroup.t list ; 
+  gids  : IAvatarSet.t list ; 
   title : string ; 
   body  : MRich.OrText.t ;
   time  : float ;
@@ -13,7 +13,7 @@ type data_t = {
 type diff_t = 
   [ `SetTitle  of string
   | `SetBody   of MRich.OrText.t
-  | `AddGroups of IGroup.t list 
+  | `AddGroups of IAvatarSet.t list 
   | `Delete    of IAvatar.t
   ]
 

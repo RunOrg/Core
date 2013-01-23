@@ -25,7 +25,7 @@ module Signals : sig
 
   val on_bind_group : (   IInstance.t
                         * IEvent.t
-		        * IGroup.t
+		        * IAvatarSet.t
                         * ITemplate.Event.t 
 			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     
@@ -57,7 +57,7 @@ module Get : sig
   val name     : [<`Admin|`View] t -> string option 
   val picture  : [<`Admin|`View] t -> [`GetPic] IFile.id option 
   val date     : [<`Admin|`View] t -> Date.t option
-  val group    :            'any t -> IGroup.t 
+  val group    :            'any t -> IAvatarSet.t 
   val iid      :            'any t -> IInstance.t 
   val template : [<`Admin|`View] t -> ITemplate.Event.t
   val admins   : [<`Admin|`View] t -> IAvatar.t list 

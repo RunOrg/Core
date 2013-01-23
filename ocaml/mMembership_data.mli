@@ -3,13 +3,13 @@
 val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Ohm.Json.t) list O.run
 
 val restore_update : 
-     IGroup.t
+     IAvatarSet.t
   -> IAvatar.t
   -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val self_update :
-     'any IGroup.id
+     'any IAvatarSet.id
   -> 'b MActor.t
   -> MUpdateInfo.t
   -> ?irreversible:string list
@@ -18,14 +18,14 @@ val self_update :
 
 val admin_update :
      'a MActor.t
-  -> [<`Write|`Admin|`Bot] IGroup.id
+  -> [<`Write|`Admin|`Bot] IAvatarSet.id
   -> 'any IAvatar.id
   -> MUpdateInfo.t
   -> (string * Ohm.Json.t) list
   -> unit O.run
 
 val count :
-     [<`Admin|`Write|`List] IGroup.id
+     [<`Admin|`Write|`List] IAvatarSet.id
   -> string
   -> (Ohm.Json.t * int) list O.run
 

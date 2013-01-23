@@ -38,7 +38,7 @@ include Make(struct
 
     let namer = MPreConfigNamer.load iid in     
     let! gid  = ohm $ MPreConfigNamer.group "admin" namer in
-    let  gid  = IGroup.Assert.admin gid in 
+    let  gid  = IAvatarSet.Assert.admin gid in 
 
     let! () = ohm $ MMembership.admin ~from gid aid [ `Accept true ; `Default true ] in
     ok "Admin status granted"

@@ -9,7 +9,7 @@ module Export = MCsvExport
 module Render = CAvatarExport_render
 
 module TaskFmt = Fmt.Make(struct
-  type json t = (IAvatar.t option * IExport.t * IGroup.t * (MAvatarGridEval.t list))
+  type json t = (IAvatar.t option * IExport.t * IAvatarSet.t * (MAvatarGridEval.t list))
 end)
 
 let cells_by_step = 50
@@ -20,7 +20,7 @@ let () = define begin fun (start,exid,gid,evals) ->
   let  count = max 1 (cells_by_step / List.length evals) in 
 
   (* Acting as bot to list group contents. *)
-  let  bgid  = IGroup.Assert.bot gid in  
+  let  bgid  = IAvatarSet.Assert.bot gid in  
   let! aids, next = ohm $ MMembership.InGroup.avatars bgid ~start ~count in
   
   (* A function that processes one cell. *)
@@ -66,7 +66,7 @@ let start gid =
     
     let! fields = ohm $ MGroup.Fields.local gid in 
     let  from_fields = BatList.filter_map (fun field -> 
-      let eval = `Group (IGroup.decay gid, `Field (field # name)) in
+      let eval = `Group (IAvatarSet.decay gid, `Field (field # name)) in
       if List.exists (snd |- (=) eval) from_columns then None else
 	Some (field # label, eval)
     ) fields in 
@@ -82,6 +82,6 @@ let start gid =
 
   let! exid = ohm $ Export.create ~size ~heading () in
 
-  let! () = ohm $ task (None,IExport.decay exid,IGroup.decay gid, evals) in
+  let! () = ohm $ task (None,IExport.decay exid,IAvatarSet.decay gid, evals) in
 
   return exid

@@ -24,7 +24,7 @@ module FieldType = MJoinFields.FieldType
 (* Full type returned for more clarity ----------------------------------------------------- *)
 
 type t = {
-  where     : IGroup.t  ;
+  where     : IAvatarSet.t  ;
   who       : IAvatar.t ;
   admin     : (bool * float * IAvatar.t) option ;
   user      : (bool * float * IAvatar.t) option ;
@@ -234,7 +234,7 @@ let () =
 (* Propagate group refresh --------------------------------------------------------------- *)
 
 module GroupIter = Fmt.Make(struct
-  type json t = (IGroup.t * Id.t option)
+  type json t = (IAvatarSet.t * Id.t option)
 end)
 
 let () = 
@@ -242,7 +242,7 @@ let () =
   let task, define = O.async # declare "after-group-update" GroupIter.fmt in
   let () = define begin fun (gid,start) -> 
 
-    let bot_gid = IGroup.Assert.bot gid in 
+    let bot_gid = IAvatarSet.Assert.bot gid in 
     
     let! list, next = ohm $ InGroup.list_everyone ?start ~count:20 bot_gid in 
     
@@ -258,7 +258,7 @@ let () =
   end in
   
   let refresh gid =
-    let gid = IGroup.decay gid in 
+    let gid = IAvatarSet.decay gid in 
     task (gid,None) 
   in
 
