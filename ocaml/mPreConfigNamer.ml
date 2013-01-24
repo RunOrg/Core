@@ -1,16 +1,14 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open BatPervasives
 open Ohm.Universal
 
 module Data = Fmt.Make(struct
-  module IAvatarSet = IAvatarSet
-  module IEntity = IEntity
   type json t = <
     t : MType.t ;
-    groups   "g" : (!string, IAvatarSet.t) ListAssoc.t ;
-    entities "e" : (!string, IEntity.t) ListAssoc.t
+    avatarSets "g" : (!string, IAvatarSet.t) ListAssoc.t ;
+    groups     "e" : (!string, IGroup.t) ListAssoc.t
   >
 end)
 
@@ -28,8 +26,8 @@ let load id = IInstance.decay id
 
 let default = object
   method t = `PreConfigNamer
-  method groups   = []
-  method entities = []
+  method groups     = []
+  method avatarSets = []
 end
 
 let get iid = 
@@ -43,49 +41,49 @@ let rec find list name =
     | Some id -> Some id 
     | None -> if name = "members" then find list "entity.sample.group-simple.allmembers.name" else None
 
-let group name iid = 
-	  
+let avatarSet name iid = 
+
   let update iid = 
     let! data = ohm $ get iid in
-    match find (data # groups) name with 
+    match find (data # avatarSets) name with 
       | Some id -> return (id, `keep)
       | None -> let id = IAvatarSet.gen () in 
 		let data = object
-		  method t        = data # t
-		  method groups   = (name,id) :: (data # groups)
-		  method entities = data # entities
+		  method t          = data # t
+		  method avatarSets = (name,id) :: (data # avatarSets)
+		  method groups     = data # groups
 		end in 
 		return (id, `put data)
   in
 
   Tbl.Raw.transaction iid update
 
-let entity name iid = 
+let group name iid = 
 
   let update iid = 
     let! data = ohm $ get iid in
-    match find (data # entities) name with 
+    match find (data # groups) name with 
       | Some id -> return (id, `keep )
-      | None    -> let id = IEntity.gen () in 
+      | None    -> let id = IGroup.gen () in 
 		   let data = object
-		     method t        = data # t
-		     method groups   = data # groups
-		     method entities = (name,id) :: (data # entities)
+		     method t          = data # t
+		     method avatarSets = data # avatarSets
+		     method groups     = (name,id) :: (data # groups)
 		   end in 
 		   return (id, `put data)
   in
 
   Tbl.Raw.transaction iid update
 
-let set_admin iid eid gid = 
+let set_admin iid gid asid = 
 
   let update iid = 
     let! data = ohm $ get iid in
     
     let data = object
       method t = data # t
-      method groups   = ListAssoc.replace "admin" gid  (data # groups)
-      method entities = ListAssoc.replace "admin" eid  (data # entities)
+      method avatarSets = ListAssoc.replace IGroup.admin asid  (data # avatarSets)
+      method groups     = ListAssoc.replace IGroup.admin gid   (data # groups)
     end in 
 
     return ((), `put data)

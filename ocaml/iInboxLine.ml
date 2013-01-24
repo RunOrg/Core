@@ -26,7 +26,7 @@ module Filter = struct
 	   | `HasPics
 	   | `Events 
 	   | `Groups 
-	   | `Group of IEntity.t ]
+	   | `Group of IGroup.t ]
 
   let of_string = function
     | "" 
@@ -35,7 +35,7 @@ module Filter = struct
     | "hf" -> `HasFiles
     | "hp" -> `HasPics
     | "g"  -> `Groups 
-    | s when s.[0] = 'g' -> `Group (IEntity.of_string (BatString.lchop s))
+    | s when s.[0] = 'g' -> `Group (IGroup.of_string (BatString.lchop s))
     |  _ -> `All 
 
   let to_string = function
@@ -44,7 +44,7 @@ module Filter = struct
     | `HasPics   -> "hp"
     | `Events    -> "e"
     | `Groups    -> "g"
-    | `Group eid -> "g" ^ IEntity.to_string eid  
+    | `Group eid -> "g" ^ IGroup.to_string eid  
 
   include Fmt.Make(struct
     type t = f

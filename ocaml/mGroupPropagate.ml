@@ -17,10 +17,10 @@ end)
 let names _ = []
 
 let apply upgrade namer diff = 
-  let! src = ohm $ MPreConfigNamer.group (diff # src) namer in
+  let! src = ohm $ MPreConfigNamer.avatarSet (diff # src) namer in
   let src = IAvatarSet.Assert.bot src in 
 
-  let! dest = ohm $ MPreConfigNamer.group (diff # dest) namer in
+  let! dest = ohm $ MPreConfigNamer.avatarSet (diff # dest) namer in
   let dest = IAvatarSet.Assert.bot dest in
 
   upgrade ~src ~dest (diff # action)

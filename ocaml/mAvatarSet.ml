@@ -35,7 +35,7 @@ module Data = Fmt.Make(struct
     admins : bool ;
     grants : bool ;
     manual : bool ;
-    owner  : [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] ;
+    owner  : [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t | `Group "g" of IGroup.t ] ;
     list   : IAvatarGrid.t ;
     fields : Field.t list ;
     propg  : IAvatarSet.t list 
@@ -91,6 +91,8 @@ let owner ( data : data ) =
     match data # owner with 
       | `Entity eid -> let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
 		       return (fun what -> MEntity.Satellite.access entity (`Group what))
+      | `Group  gid -> let! group = ohm_req_or (return nil) $ MGroup.get gid in 
+		       return (fun what -> MGroup.Satellite.access group (`Group what))
       | `Event  eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
 		       return (fun what -> MEvent.Satellite.access event (`Group what))
   end
@@ -110,45 +112,48 @@ let managers_of_data (data:data) =
   let! f = ohm $ owner data in 
   return (`Union [ f `Write ; f `Manage ])  
 
-let create gid iid owner = 
+let create asid iid owner = 
 
   let namer = MPreConfigNamer.load iid in 
 
-  let iid = IInstance.decay iid in
-  let gid = IAvatarSet.decay    gid in    
+  let iid  = IInstance.decay  iid in
+  let asid = IAvatarSet.decay asid in    
+
+  let! admin_asid = ohm $ MPreConfigNamer.avatarSet IGroup.admin namer in 
 
   let list = IAvatarGrid.gen () in 
 
-  let owner, admin, columns, propagate, join = match owner with 
-    | `Entity (eid, tmpl) -> 
+  let owner, columns, propagate, join, grants = match owner with 
 
-      `Entity eid, 
-      (tmpl = ITemplate.admin),
-      PreConfig_Template.columns iid gid tmpl,
-      PreConfig_Template.propagate tmpl,
-      PreConfig_Template.join tmpl
+    | `Group (gid, gtmpl) ->  
+
+      `Group gid, 
+      PreConfig_Template.Groups.columns iid asid gtmpl,
+      PreConfig_Template.Groups.propagate gtmpl,
+      PreConfig_Template.Groups.join gtmpl,
+      true
 
     | `Event (eid, evtmpl) ->  
 
       `Event eid, 
-      false,
-      PreConfig_Template.Events.columns iid gid evtmpl,
+      PreConfig_Template.Events.columns iid asid evtmpl,
       [],
-      PreConfig_Template.Events.join evtmpl	
+      PreConfig_Template.Events.join evtmpl,
+      false
   in
  
-  let! ()  = ohm $ Signals.on_create_list_call (list,gid,iid,columns) in
+  let! ()  = ohm $ Signals.on_create_list_call (list,asid,iid,columns) in
 
   let! propg = ohm $ Run.list_map 
-    (fun name -> MPreConfigNamer.group name namer) 
+    (fun name -> MPreConfigNamer.avatarSet name namer) 
     (propagate)
   in
   
   let o = object
     method t      = `Group
     method iid    = iid
-    method admins = admin
-    method grants = false
+    method admins = IAvatarSet.decay asid = admin_asid
+    method grants = grants
     method manual = true
     method owner  = owner
     method list   = list
@@ -156,7 +161,7 @@ let create gid iid owner =
     method propg  = propg
   end in
   
-  Tbl.set gid o
+  Tbl.set asid o
 
 let _get id = 
   Tbl.get (IAvatarSet.decay id)
@@ -410,44 +415,12 @@ module Fields = struct
 end
 
 (* Reacting to entity refreshes ------------------------------------------------------------- *)
-
-let _refresh_token_grant = 
-
-  let task = O.async # define "entity.refresh-group" IEntity.fmt 
-    begin fun eid -> 
-      
-      let  finish = return () in 
-      let! t      = ohm_req_or finish $ MEntity.bot_get eid in
-      
-      let  config       = MEntity.Get.config t in
-      let! group_config = req_or finish (MEntityConfig.group (MEntity.Get.template t) config) in
-      let  gid          = MEntity.Get.group  t in
-      
-      let  grants       = MEntity.Get.kind t = `Group in 
-      
-      let manual = 
-	(match group_config # validation with 
-	  | `Manual -> true
-	  | `None   -> false)
-      in
-      
-      let! () = ohm $ refresh (IAvatarSet.Assert.bot gid) ~grants ~manual in
-      
-      finish
-	
-    end in
-  
-  fun (id : [`Bot] IEntity.id) -> task id
-
-let () = 
-  let! eid = Sig.listen MEntity.Signals.on_update in 
-  _refresh_token_grant eid
   
 let () = 
-  let! iid, eid, gid, template, _ = Sig.listen MEntity.Signals.on_bind_group in 
-  create gid iid (`Entity (IEntity.decay eid,template))
+  let! iid, gid, asid, template, _ = Sig.listen MGroup.Signals.on_bind_group in 
+  create asid iid (`Group (IGroup.decay gid,template))
 
 let () = 
-  let! iid, eid, gid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
-  create gid iid (`Event (IEvent.decay eid,template)) 
+  let! iid, eid, asid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
+  create asid iid (`Event (IEvent.decay eid,template)) 
 

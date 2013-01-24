@@ -16,20 +16,18 @@ let body access aid me render =
   O.Box.fill $ O.decay begin 
 
     let  actor = access # actor in 
-    let! list = ohm $ MEntity.All.get_by_kind actor `Group in
+    let! list = ohm $ MGroup.All.visible ~actor (access # iid) in
     
-    let! groups = ohm $ Run.list_filter begin fun entity -> 
+    let! groups = ohm $ Run.list_filter begin fun group -> 
+            
+      let! name   = ohm $ MGroup.Get.fullname group in 
       
-      let! () = true_or (return None) (not (MEntity.Get.draft entity)) in
-      
-      let! name   = ohm $ CEntityUtil.name entity in
-      
-      let  gid    = MEntity.Get.group entity in 
+      let  asid    = MGroup.Get.group group in 
       
       if me then 
 	
 	let! status = ohm_req_or (return None) begin 	
-	  let! status = ohm $ MMembership.status actor gid in
+	  let! status = ohm $ MMembership.status actor asid in
 	  return (if status <> `NotMember && status <> `Declined then Some status else None) 
 	end in            
 	
@@ -37,17 +35,17 @@ let body access aid me render =
 	
 	return $ Some (object
 	  method url    = Action.url UrlClient.Members.home (access # instance # key) 
-	    [ IEntity.to_string (MEntity.Get.id entity) ]
+	    [ IGroup.to_string (MGroup.Get.id group) ]
 	  method name   = name
 	  method status = status_tag gender status
 	end)
 	  
       else
 	
-	let! group = ohm_req_or (return None) $ MAvatarSet.try_get actor gid in 
-	let! group = ohm_req_or (return None) $ MAvatarSet.Can.list group in 
+	let! avset = ohm_req_or (return None) $ MAvatarSet.try_get actor asid in 
+	let! avset = ohm_req_or (return None) $ MAvatarSet.Can.list avset in 
 	
-	let! mid = ohm $ MMembership.as_viewer (MAvatarSet.Get.id group) aid in
+	let! mid = ohm $ MMembership.as_viewer (MAvatarSet.Get.id avset) aid in
 	let! mbr = ohm_req_or (return None) $ MMembership.get mid in 
 	
 	let! status = req_or (return None) 
@@ -57,12 +55,12 @@ let body access aid me render =
 	let gender = None in
 	
 	let! url = ohm begin 
-	  let eid = IEntity.to_string (MEntity.Get.id entity) in
-	  let! admin = ohm $ MEntity.Can.admin entity in 
+	  let  gid = IGroup.to_string (MGroup.Get.id group) in
+	  let! admin = ohm $ MGroup.Can.admin group in 
 	  if admin = None then 
-	    return (Action.url UrlClient.Members.home (access # instance # key) [ eid ])
+	    return (Action.url UrlClient.Members.home (access # instance # key) [ gid ])
 	  else
-	    return (Action.url UrlClient.Members.join (access # instance # key) [ eid ; IAvatar.to_string aid ])
+	    return (Action.url UrlClient.Members.join (access # instance # key) [ gid ; IAvatar.to_string aid ])
 	end in
 	
 	return $ Some (object

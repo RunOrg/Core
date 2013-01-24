@@ -51,7 +51,7 @@ let list kind pick access deleg wrap =
   
   wrap begin 
 
-    let! admin = ohm $ MEntity.admin_group_name (access # iid) in     
+    let! admin = ohm $ MGroup.admin_name (access # iid) in     
 
     let  admins = match kind with 
       | `ProfileView -> None

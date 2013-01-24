@@ -301,8 +301,8 @@ let () =
 (* Propagate admin group binding ----------------------------------------------- *)
 
 let () = 
-  let! _, _, gid, tmpl, creator = Sig.listen MEntity.Signals.on_bind_group in 
-  if tmpl = ITemplate.admin || tmpl = ITemplate.members then  
+  let! _, _, gid, tmpl, creator = Sig.listen MGroup.Signals.on_bind_group in 
+  if tmpl = ITemplate.Group.admin || tmpl = ITemplate.Group.members then  
     let! from = ohm_req_or (return ()) $ MAvatar.actor creator in 
     admin ~from gid creator [ `Accept true ; `Default true ]   
   else return ()

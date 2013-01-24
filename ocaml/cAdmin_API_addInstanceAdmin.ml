@@ -37,7 +37,7 @@ include Make(struct
     let! from = ohm_req_or (fail "Avatar RUNORG introuvable") $ MAvatar.actor raid in  
 
     let namer = MPreConfigNamer.load iid in     
-    let! gid  = ohm $ MPreConfigNamer.group "admin" namer in
+    let! gid  = ohm $ MPreConfigNamer.avatarSet IGroup.admin namer in
     let  gid  = IAvatarSet.Assert.admin gid in 
 
     let! () = ohm $ MMembership.admin ~from gid aid [ `Accept true ; `Default true ] in

@@ -17,8 +17,8 @@ let unsubscribe, def_unsubscribe = O.declare O.client "unsubscribe" A.none
 
 (* Join ===================================================================================== *)
 
-let join,   def_join   = O.declare O.client "join" (A.o IEntity.arg)
-let doJoin, def_doJoin = O.declare O.client "join/public" (A.r IEntity.arg) 
+let join,   def_join   = O.declare O.client "join" (A.o IGroup.arg)
+let doJoin, def_doJoin = O.declare O.client "join/public" (A.r IGroup.arg) 
 
 (* Exports ================================================================================== *)
 

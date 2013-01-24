@@ -88,13 +88,14 @@ let get_filter = function
   | `Discussion did -> let  did = IDiscussion.Assert.view did in 
 		       let! discn = ohm_req_or (return []) $ MDiscussion.get did in 
 		       let  gids = MDiscussion.Get.groups discn in
-		       let! eids = ohm $ Run.list_filter begin fun gid -> 
-			 let! group = ohm_req_or (return None) $ MAvatarSet.naked_get gid in 
-			 match MAvatarSet.Get.owner group with 
-			   | `Entity eid -> return (Some eid) 
+		       let! eids = ohm $ Run.list_filter begin fun asid -> 
+			 let! avset = ohm_req_or (return None) $ MAvatarSet.naked_get asid in 
+			 match MAvatarSet.Get.owner avset with 
+			   | `Entity  _  -> return None 
+			   | `Group  gid -> return (Some gid) 
 			   | `Event   _  -> return None
 		       end  gids in 
-		       return (`All :: `Groups :: List.map (fun eid -> `Group eid) eids) 
+		       return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
   
 let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
   begin fun ilid -> 

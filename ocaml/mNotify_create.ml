@@ -99,19 +99,11 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
     (* Make sure item has an author *)
     let! aid = ohm_req_or (return ()) $ MItem.author itid in 
     
-    (* Entity members receive posts written on entity walls *)
     let! interested = ohm begin
       let! feed = ohm_req_or (return []) $ MFeed.bot_get fid in 
       match MFeed.Get.owner feed with 
-	| `Instance iid ->
-	  let  iid = IInstance.Assert.bot iid in
-	  MAvatar.List.all_members iid 
-	| `Entity eid -> 
-	  let  eid    = IEntity.Assert.bot eid in 
-	  let! entity = ohm_req_or (return []) $ MEntity.bot_get eid in 
-	  let  gid    = IAvatarSet.Assert.bot $ MEntity.Get.group entity in 
-	  let! list   = ohm $ MMembership.InSet.all gid `Any in
-	  return $ List.map snd list	
+	| `Instance iid -> return []
+	| `Entity eid -> return []
 	| `Event eid -> 
 	  let! event  = ohm_req_or (return []) $ MEvent.get eid in 
 	  let  gid    = IAvatarSet.Assert.bot $ MEvent.Get.group event in
@@ -176,8 +168,9 @@ let push_invite_task inviter_aid invited_aid gid =
     let! group = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
     let! eid   = req_or (return ()) begin 
       match MAvatarSet.Get.owner group with
-	| `Event eid -> Some eid
-	| `Entity _ -> None	  
+	| `Event  eid -> Some eid 
+	| `Group   _  -> None
+	| `Entity  _  -> None	  
     end in 
     
     let payload = `EventInvite (eid, inviter_aid) in
@@ -187,6 +180,7 @@ let push_request_task aid owner admins =
 
   let! iid = ohm_req_or (return ()) begin match owner with 
     | `Entity eid -> MEntity.instance eid 
+    | `Group  gid -> MGroup.instance gid 
     | `Event  eid -> MEvent.instance eid
   end in 
 
@@ -197,7 +191,8 @@ let push_request_task aid owner admins =
 
   let payload = match owner with 
     | `Event eid -> `EventRequest (eid, aid) 
-    | `Entity eid -> `GroupRequest (eid, aid) 
+    | `Group gid -> `GroupRequest (gid, aid)
+    | `Entity _ -> assert false  
   in
 
   to_avatars (INotifyStats.gen ()) (List.map (fun aid -> payload, aid) admins)

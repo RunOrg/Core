@@ -36,7 +36,7 @@ let () =
     end in
 
     let  pcnamer = MPreConfigNamer.load iid in 
-    let! gid = ohm (MPreConfigNamer.group "members" pcnamer) in
+    let! gid = ohm (MPreConfigNamer.avatarSet IGroup.members pcnamer) in
 
     let! () = ohm $ Run.edit_context (fun ctx -> (object
       method time       = last

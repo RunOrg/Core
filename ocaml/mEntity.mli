@@ -143,11 +143,6 @@ val create :
 
 val get_last_real_event_date : [`IsAdmin] IInstance.id -> string option option O.run
 
-val admin_group_name : 'any IInstance.id -> TextOrAdlib.t O.run 
-
-val is_admin : 'any t -> bool O.run
-val is_all_members : 'any t -> bool O.run
-
 module All : sig
 
   val get_by_kind : 

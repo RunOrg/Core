@@ -1,6 +1,9 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 include Ohm.Id.PHANTOM
+
+val admin : string
+val members : string
   
 module Assert : sig
   val admin         : 'any id -> [`Admin] id

@@ -16,7 +16,7 @@ let template groups =
 	(VEliteForm.picker
 	   ~left:true
 	   ~label:(AdLib.get `Discussion_Field_To)
-	   ~format:IEntity.fmt
+	   ~format:IGroup.fmt
 	   ~static:groups
 	   (fun _ -> return []) 
 	   (fun f gids -> return (Ok gids)))
@@ -63,12 +63,9 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
     let title = result # title in
     let body = `Rich (MRich.parse (result # body)) in
 
-    let () = Util.log "%s" (String.concat " " (List.map IEntity.to_string gids)) in
-
     let! groups = ohm $ Run.list_filter begin fun gid -> 
-      let! group = ohm_req_or (return None) $ O.decay (MEntity.try_get (access # actor) gid) in 
-      let! group = ohm_req_or (return None) $ O.decay (MEntity.Can.view group) in
-      return $ Some (MEntity.Get.group group)
+      let! group = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in 
+      return $ Some (MGroup.Get.group group)
     end gids in 
 
     let! () = true_or (return res) (groups <> []) in
@@ -93,10 +90,10 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
       end)
     in
 
-    let! list = ohm $ MEntity.All.get_by_kind (access # actor) `Group in
+    let! list = ohm $ MGroup.All.visible ~actor:(access # actor) (access # iid) in
     let! groups = ohm $ Run.list_map (fun group -> 
-      let! name = ohm $ CEntityUtil.name group in 
-      let  eid  = IEntity.decay (MEntity.Get.id group) in
+      let! name = ohm $ MGroup.Get.fullname group in 
+      let  eid  = IGroup.decay (MGroup.Get.id group) in
       return (eid, name, return (Html.esc name)) 
     ) list in 
 
