@@ -424,3 +424,29 @@ let () =
   let! iid, eid, asid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
   create asid iid (`Event (IEvent.decay eid,template)) 
 
+(* {{MIGRATION}} *)
+
+let () = 
+  let! eid, _, asid, _, kind, _, _, _, _ = Sig.listen MEntity.on_migrate in 
+
+  let  gid = IGroup.of_id (IEntity.to_id eid) in
+
+  if kind <> `Group then return false else 
+    
+    let! () = ohm $ Tbl.update asid begin fun avset ->
+      (object
+	method t = avset # t
+	method iid = avset # iid
+	method admins = avset # admins
+	method grants = avset # grants
+	method manual = avset # manual
+	method owner  = `Group gid
+	method list = avset # list
+	method fields = avset # fields
+	method propg = avset # propg
+       end)
+    end in 
+
+    return true
+      
+    

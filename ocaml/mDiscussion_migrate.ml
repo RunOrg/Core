@@ -63,7 +63,9 @@ let () =
     return true
 
 let () = 
-  let! eid, iid, gid, self, kind, name = Sig.listen MEntity.on_migrate in 
+  let! eid, iid, gid, self, kind, name, _, _, _ = Sig.listen MEntity.on_migrate in 
+
+  let! name = ohm_req_or (return false) $ Run.opt_map TextOrAdlib.to_string name in
 
   let owner = `Entity eid in 
 

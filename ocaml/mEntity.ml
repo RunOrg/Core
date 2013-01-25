@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Util
@@ -253,23 +253,52 @@ end
 
 (* {{MIGRATION}} *)
 
-let on_migrate_call, on_migrate = Sig.make (Run.list_exists identity)
+let on_migrate_call, on_migrate = 
+  Sig.make (fun list -> Run.map (List.exists identity) (Run.list_map identity list))
 
 let migrate_all = Async.Convenience.foreach O.async "migrate-discussion-entities"
-  IEntity.fmt (Tbl.all_ids ~count:10)
+  IEntity.fmt (Tbl.all_ids ~count:20)
   (fun eid ->
-    let! entity = ohm_req_or (return ()) $ Tbl.get eid in
+    let  () = Util.log "<migrate> %s : start" (IEntity.to_string eid) in
+    let! entity = ohm_req_or (let! () = ohm (return ()) in
+			      let  () = Util.log "<migrate> %s : no entity" (IEntity.to_string eid) in
+			      return ()) $ Tbl.get eid in
     if entity.E.kind = `Event || entity.E.deleted <> None then return () else begin
       
-      (* Migrate groups and forums to discussions *)
-      let time = Unix.gettimeofday () in
-      let! self = req_or (return ()) $ BatOption.map IAvatar.Assert.is_self entity.E.creator in
+      (* Migrate groups and forums to discussions and MGroups *)
+      let  time = Unix.gettimeofday () in
       let  iid  = entity.E.instance in
+      let! self = ohm_req_or (let! () = ohm (return ()) in
+			      let  () = Util.log "<migrate> %s : no creator" (IEntity.to_string eid) in
+			      return ()) begin match entity.E.creator with 
+	| Some aid -> return (Some aid)
+	| None -> let! instance = ohm_req_or (return None) $ MInstance.get iid in 
+		  (* Assume that instance creator is entity creator *)
+		  let  uid = instance # usr in
+		  MAvatar.find iid uid 
+      end in 
+      let  self = IAvatar.Assert.is_self self in 
       let  gid  = entity.E.group in
       let  kind = entity.E.kind in 
-      let! name = ohm_req_or (return ()) $ Run.opt_map TextOrAdlib.to_string entity.E.name in
-      
-      let! ok = ohm $ on_migrate_call (eid, iid, gid, self, kind, name) in
+      let  name = entity.E.name in
+      let  tid  = entity.E.template in
+      let  admins = entity.E.admin in
+      let  vision = 
+	if entity.E.public then `Public else
+	  let access = MAccess.summarize entity.E.view in
+	  if MEntityConfig.group entity.E.template entity.E.config <> None then 
+	    match access with 
+	      | `Admin -> `Private
+	      | any    -> `Normal
+	  else
+	    `Normal
+      in
+
+      let! ok = ohm $ on_migrate_call (eid, iid, gid, self, kind, name, admins, vision, tid) in
+
+      let! name = ohm $ Run.opt_map TextOrAdlib.to_string entity.E.name in
+      let  name = BatOption.default "Sans Titre" name in 
+
       let  () = if ok then Util.log "Migrate group - %.3fs - %s %S" (Unix.gettimeofday () -. time)
 	(IEntity.to_string eid) name in
       return ()

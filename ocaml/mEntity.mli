@@ -188,7 +188,9 @@ end
 
 (* {{MIGRATION}} *)
 
-val on_migrate : (IEntity.t * IInstance.t * IAvatarSet.t * [`IsSelf] IAvatar.id * MEntityKind.t * string, 
+val on_migrate : (IEntity.t * IInstance.t * IAvatarSet.t * [`IsSelf] IAvatar.id 
+		  * MEntityKind.t * TextOrAdlib.t option * MAccess.t 
+		  * [ `Public | `Normal | `Private ] * ITemplate.t, 
 		  bool O.run) Ohm.Sig.channel
 
 
