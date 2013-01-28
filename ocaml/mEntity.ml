@@ -114,88 +114,9 @@ let set_admins self t access =
 
 let _create ?pcname ?name ?pic ?access template iid creator = 
   assert false
-
-(*
-  let! id, gid = ohm (
-    match pcname with 
-      | None        -> return (IEntity.gen (), IAvatarSet.gen ()) 
-      | Some pcname -> let namer = MPreConfigNamer.load iid in 
-		       let! eid = ohm $ MPreConfigNamer.entity pcname namer in
-		       let! gid = ohm $ MPreConfigNamer.group  pcname namer in
-		       return (eid,gid)
-  ) in
-
-  (* We are creating this entity *)
-  let eid = IEntity.Assert.created id in
-
-  (* And the matching group *)
-  let gid = IAvatarSet.Assert.bot gid in  
-
-  let who = `user (Id.gen (), IAvatar.decay creator) in
-
-  let! instance = ohm $ MInstance.get iid in 
-
-  let! () = ohm $ Signals.on_bind_group_call (iid,eid,gid,template,creator) in
-
-  let data = match pic with None -> None | Some pic -> 
-    match PreConfig_Template.Meaning.picture template with None -> None | Some key -> 
-      Some [ key, pic ]    
-  in
-
-  let draft = PreConfig_Template.kind template = `Event in
-
-  let diffs = match access with 
-    | None   -> []
-    | Some a -> [ `Access a ]
-  in
-
-  let! data = ohm $ MEntity_data.create ~id:eid ~who ?name ?data () in
-
-  let kind = PreConfig_Template.kind template in  
-
-  let init = E.Init.({
-    archive  = false ;
-    draft    ;
-    public   = false ;
-    admin    = if kind = `Group then `Nobody else `List [ IAvatar.decay creator ] ;
-    view     = `Token ;
-    group    = IAvatarSet.decay gid ;
-    config   = MEntityConfig.default ;
-    kind     ;
-    template = ITemplate.decay template ;
-    instance = IInstance.decay iid ;
-    deleted  = None ;
-    creator  = Some (IAvatar.decay creator) 
-  }) in
-      
-  let! _ = ohm $ E.Store.create
-    ~id:(IEntity.decay eid) ~info:(MUpdateInfo.info ~who) ~init 
-    ~diffs ()
-  in
-	
-  return eid
-*)
  
 let create self ~name ?pic ~iid ?access template =
   assert false
-
-(*
-  let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
-  let iid = IInstance.decay iid in 
-
-  (* Perform the actual creation *)
-  let! eid = ohm $ _create template ~name ?pic ?access iid self in
-
-  (* Log that we've created this *)
-  let! () = ohm begin 
-    let! uid = ohm_req_or (return ()) $ MAvatar.get_user self in 
-    let  kind = match PreConfig_Template.kind template with 
-      | `Event -> `Event | `Forum -> `Forum | _ -> `Group in 
-    MAdminLog.log ~uid ~iid (MAdminLog.Payload.EntityCreate (kind,IEntity.decay eid))
-  end in 
-
-  return eid 
-*)
 
 (* Attempt to grab a public entity if it is public. ---------------------------------------- *)
 
@@ -259,18 +180,13 @@ let on_migrate_call, on_migrate =
 let migrate_all = Async.Convenience.foreach O.async "migrate-discussion-entities"
   IEntity.fmt (Tbl.all_ids ~count:20)
   (fun eid ->
-    let  () = Util.log "<migrate> %s : start" (IEntity.to_string eid) in
-    let! entity = ohm_req_or (let! () = ohm (return ()) in
-			      let  () = Util.log "<migrate> %s : no entity" (IEntity.to_string eid) in
-			      return ()) $ Tbl.get eid in
+    let! entity = ohm_req_or (return ()) $ Tbl.get eid in
     if entity.E.kind = `Event || entity.E.deleted <> None then return () else begin
       
       (* Migrate groups and forums to discussions and MGroups *)
       let  time = Unix.gettimeofday () in
       let  iid  = entity.E.instance in
-      let! self = ohm_req_or (let! () = ohm (return ()) in
-			      let  () = Util.log "<migrate> %s : no creator" (IEntity.to_string eid) in
-			      return ()) begin match entity.E.creator with 
+      let! self = ohm_req_or (return ()) begin match entity.E.creator with 
 	| Some aid -> return (Some aid)
 	| None -> let! instance = ohm_req_or (return None) $ MInstance.get iid in 
 		  (* Assume that instance creator is entity creator *)

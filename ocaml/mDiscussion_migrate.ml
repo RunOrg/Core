@@ -95,6 +95,12 @@ let () =
   (* Don't re-create discussions that have already been copied over. *)
   if exists <> None then return false else
 
+    let! gid = ohm begin 
+      if kind = `Group then return gid else
+	let pcnamer = MPreConfigNamer.load iid in
+	MPreConfigNamer.avatarSet IGroup.members pcnamer
+    end in 
+    
     let! () = ohm begin
       let! fid = req_or (return ()) fid_opt in
       MFeed.migrate_owner (IFeed.Assert.bot fid) (`Discussion did) 
