@@ -13,3 +13,6 @@
 		   | `HasFiles
 		   | `HasPics
 		   ]
+
+| `Inbox_IsAdmin of Ohm.AdLib.gender
+| `Inbox_IsAdmin_More  

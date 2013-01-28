@@ -14,3 +14,8 @@
     | `HasFiles -> "Avec pièces jointes"
     | `HasPics -> "Avec photos"
 end 
+
+| `Inbox_IsAdmin g -> 
+  !! "En tant qu'%s, vous pouvez voir tous les messages de cet espace." 
+    (macho "administrateur" "administratrice" g)
+| `Inbox_IsAdmin_More -> "En savoir plus..."

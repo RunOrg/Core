@@ -30,6 +30,11 @@
     {/#}
   </div>
   <div class="-list">
+    {?admin}
+     <div class="-admin">
+       {`Inbox_IsAdmin gender} <a href="http://runorg.com/aide/asso/vision-inbox">{`Inbox_IsAdmin_More}</a>
+     </div>
+    {/?}
     {inner|ohm}
     {@!inner}
       {#items}
@@ -71,6 +76,17 @@
     .empty-list {
       border-top: 1px dashed #CCC;
     }
+  }
+
+  .-admin {
+    background-color: #333;
+    color: white;
+    font-size: 13px;
+    margin-bottom: 16px;
+    padding: 5px;
+    text-align: center;
+    a { color: #8BF }
+    a:hover { color: #ADF }
   }
 
   .-filters {

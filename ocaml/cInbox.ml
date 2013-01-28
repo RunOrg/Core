@@ -136,12 +136,19 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
     (* Sort groups by name *)
     let filters = List.sort (fun a b -> compare (a # sort) (b # sort)) filters in
+
+    (* Determine if an admin *)
+    let admin = match CAccess.admin access with 
+      | None -> None
+      | Some _ -> Some (object method gender = None end)
+    in
 					 
     Asset_Inbox_List.render (object     
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
       end 
+      method admin = admin
       method filters = filters
       method inner = render_list ~count:0 filter access more
     end) 
