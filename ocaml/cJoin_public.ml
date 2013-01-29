@@ -26,12 +26,12 @@ let () = UrlClient.def_join begin fun req res ->
     return $ Action.redirect (Action.url UrlLogin.login (snd key) (UrlLogin.save_url ~iid [])) res
   in
 
-  let displayEntity cuid entity =
+  let displayGroup cuid group =
 
     let! fields = ohm begin
-      let  gid = MEntity.Get.group entity in 
-      let! group = ohm_req_or (return []) $ MGroup.naked_get gid in 
-      MGroup.Fields.flatten gid
+      let  asid = MGroup.Get.group group in 
+      let! avset = ohm_req_or (return []) $ MAvatarSet.naked_get asid in 
+      MAvatarSet.Fields.flatten asid
     end in 
 
     let! token, status = ohm begin
@@ -40,10 +40,10 @@ let () = UrlClient.def_join begin fun req res ->
       let  self  = IUser.Assert.is_self (IUser.Deduce.is_anyone cuid) in 
       let! aid   = ohm_req_or (return (false,`NotMember)) $ MAvatar.find iid self in 
       let! actor = ohm_req_or (return (false,`NotMember)) $ MAvatar.actor (IAvatar.Assert.is_self aid) in
-      let! ()   = true_or (return (true,`Member)) (MActor.member actor = None) in
+      let! ()    = true_or (return (true,`Member)) (MActor.member actor = None) in
 
-      let  gid  = MEntity.Get.group entity in
-      let! mid  = ohm $ MMembership.as_user gid actor in
+      let  asid = MGroup.Get.group group in
+      let! mid  = ohm $ MMembership.as_user asid actor in
       let! membership = ohm_req_or (return (false,`NotMember)) $ MMembership.get mid in
       return (false,membership.MMembership.status)
     end in 
@@ -53,7 +53,7 @@ let () = UrlClient.def_join begin fun req res ->
 			      display $ Asset_Join_PublicConfirmed.render url
       | `Member -> display $ Asset_PageLayout_Reload.render (object method time = 10.0 end)
       | `Pending -> display $ Asset_Join_PublicRequested.render ()
-      | _ -> let url = Action.url UrlClient.doJoin key (IEntity.decay $ MEntity.Get.id entity) in
+      | _ -> let url = Action.url UrlClient.doJoin key (IGroup.decay $ MGroup.Get.id group) in
 	     if fields = [] then 
 	       display $ Asset_Join_PublicNoFields.render (object method url = url end)
 	     else
@@ -67,9 +67,9 @@ let () = UrlClient.def_join begin fun req res ->
   in
 
   let pickPublic cuid list = 
-    let! list = ohm $ Run.list_map (fun entity ->
-      let! name = ohm $ CEntityUtil.name entity in 
-      let  url  = Action.url UrlClient.join key (Some (IEntity.decay (MEntity.Get.id entity))) in
+    let! list = ohm $ Run.list_map (fun group ->
+      let! name = ohm $ MGroup.Get.fullname group in
+      let  url  = Action.url UrlClient.join key (Some (IGroup.decay (MGroup.Get.id group))) in
       return (object
 	method name = name
 	method url  = url
@@ -78,18 +78,17 @@ let () = UrlClient.def_join begin fun req res ->
     display $ Asset_Join_PublicPick.render list
   in
 
-  let  eid = req # args in 
-  let! entity = ohm $ Run.opt_bind MEntity.get_if_public eid in 
-  let  entity = BatOption.bind (fun entity -> if MEntity.Get.grants entity then Some entity else None) entity in
+  let  eid    = req # args in 
+  let! entity = ohm $ Run.opt_bind MGroup.get eid in 
 
   match entity with 
     | Some entity -> let! cuid = req_or (login ()) cuid in 		     
-		     displayEntity cuid entity
-    | None -> let! entities = ohm $ MEntity.All.get_public iid `Group in
+		     displayGroup cuid entity
+    | None -> let! entities = ohm $ MGroup.All.visible iid in
 	      match entities with 
 		| [] -> nonePublic () 
-		| [entity] -> let eid = MEntity.Get.id entity in 
-			      return $ Action.redirect (Action.url UrlClient.join key (Some (IEntity.decay eid))) res
+		| [entity] -> let eid = MGroup.Get.id entity in 
+			      return $ Action.redirect (Action.url UrlClient.join key (Some (IGroup.decay eid))) res
 		| list -> let! cuid = req_or (login ()) cuid in 		
 			  pickPublic cuid list
 
@@ -109,12 +108,11 @@ let () = UrlClient.def_doJoin begin fun req res ->
   let! actor = ohm_req_or panic $ MAvatar.actor (IAvatar.Assert.is_self aid) in 
 
   let  eid = req # args in
-  let! entity = ohm_req_or panic $ MEntity.get_if_public eid in 
-  let! () = true_or panic (MEntity.Get.kind entity = `Group) in 
-  let  gid = MEntity.Get.group entity in
-  let! group = ohm_req_or panic $ MGroup.naked_get gid in 
+  let! entity = ohm_req_or panic $ MGroup.view eid in 
+  let  gid = MGroup.Get.group entity in
+  let! group = ohm_req_or panic $ MAvatarSet.naked_get gid in 
 
-  let! fields = ohm $ MGroup.Fields.flatten gid in
+  let! fields = ohm $ MAvatarSet.Fields.flatten gid in
 
   if fields = [] then 
 

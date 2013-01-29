@@ -1,76 +1,103 @@
-(* © 2012 RunOrg *)
-
-module Signals : sig
-
-  val on_join_admin   : 
-    ([`IsSelf] IAvatar.id option * IInstance.t * IAvatar.t, unit O.run) Ohm.Sig.channel
-
-  val on_update : 
-    ([`Bot] IGroup.id, unit O.run) Ohm.Sig.channel
-
-  val on_token_grant  :
-    ([`IsSelf] IAvatar.id option * IAvatar.t * IGroup.t * bool, unit O.run) Ohm.Sig.channel
-
-  val on_create_list  :
-    ( IAvatarGrid.t * IGroup.t * IInstance.t * MAvatarGridColumn.t list,
-      unit O.run ) Ohm.Sig.channel
-
-end
+(* © 2013 RunOrg *)
 
 type 'relation t 
 
-val try_get   :  'any MActor.t -> IGroup.t -> [`Unknown] t option O.run
-val bot_get   : [`Bot] IGroup.id -> [`Bot] t option O.run
-val naked_get :  'any  IGroup.id ->  'any  t option O.run
+module Vision : Ohm.Fmt.FMT with type t = [ `Public | `Normal | `Private ]
 
-module Token : sig 
-  val get    :    'any  t -> [`contact | `token | `admin] 
-end
+module Satellite : sig
 
-module Get : sig 
+  type action = 
+    [ `Group  of [ `Manage | `Read | `Write ]
+    | `Send   of [ `Inbox  | `Mail ] 
+    ]
 
-  val id       :                  'any  t -> 'any IGroup.id    
-  val is_admin :                  'any  t -> bool
-  val instance :                  'any  t -> IInstance.t
-  val owner    :                  'any  t -> [ `Entity of IEntity.t | `Event of IEvent.t ]
-  val manual   :                  'any  t -> bool 
-  val list     : [<`Admin|`Write|`List] t -> [`List] IAvatarGrid.id 
-  val listedit :         [<`Admin|`Bot] t -> [`Edit] IAvatarGrid.id
-
-  val write_access : 'any t -> MAccess.t O.run
+  val access : 'any t -> action -> MAccess.t
 
 end
 
-module Fields : sig 
-
-  val max      : int
-
-  val get      : 'any     t -> MJoinFields.Field.t list 
-  val set      : [`Admin] t -> MJoinFields.Field.t list -> unit O.run
-
-  val of_group : 'any IGroup.id -> MJoinFields.Field.t list O.run
-  val local    : 'any IGroup.id -> string MJoinFields.field list O.run
-  val flatten  : 'any IGroup.id -> MJoinFields.Flat.t list O.run 
-
-  val flat     : 'any IGroup.id -> MJoinFields.Field.t -> MJoinFields.Flat.t option O.run 
-
-end
-
-module Propagate : sig
+module Signals : sig
     
-  val add : 'any IGroup.id -> [`Admin] IGroup.id -> 'ctx MActor.t -> unit O.run
-  val rem : 'any IGroup.id -> [`Admin] IGroup.id -> unit O.run
-  val get : [`Admin] IGroup.id -> 'any MActor.t -> [`Unknown] t list O.run
-  val get_direct : IGroup.t -> IGroup.t list O.run 
+  val on_update : (IGroup.t, unit O.run) Ohm.Sig.channel
 
+  val on_bind_group : (   IInstance.t
+                        * IGroup.t
+		        * IAvatarSet.t
+                        * ITemplate.Group.t 
+			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
+    
 end
+
 
 module Can : sig
-    
-  val list  : 'any t -> [`List]  t option O.run 
-  val write : 'any t -> [`Write] t option O.run 
-  val admin : 'any t -> [`Admin] t option O.run 
+
+  val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
+  val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
 
 end
 
+module Get : sig
 
+  (* Primary properties *)
+  val id       :            'any t ->'any IGroup.id
+  val vision   : [<`Admin|`View] t -> Vision.t
+  val name     : [<`Admin|`View] t -> TextOrAdlib.t option 
+  val group    :            'any t -> IAvatarSet.t 
+  val iid      :            'any t -> IInstance.t 
+  val template : [<`Admin|`View] t -> ITemplate.Group.t
+  val admins   : [<`Admin|`View] t -> IAvatar.t list 
+
+  (* Helper properties *)
+  val public   : [<`Admin|`View] t -> bool 
+  val status   : [<`Admin|`View] t -> [ `Website | `Secret ] option 
+  val fullname : [<`Admin|`View] t -> (#O.ctx,string) Ohm.Run.t
+
+  val is_admin :            'any t -> (#O.ctx,bool) Ohm.Run.t
+  val is_all_members :      'any t -> (#O.ctx,bool) Ohm.Run.t
+
+end
+
+val create : 
+     self:'any MActor.t
+  -> name:string
+  -> vision:Vision.t 
+  -> iid:[`CreateGroup] IInstance.id
+  -> ITemplate.Group.t
+  -> (#O.ctx,IGroup.t) Ohm.Run.t 
+
+module Set : sig
+    
+  val admins : 
+       IAvatar.t list
+    -> [`Admin] t
+    -> 'any MActor.t
+    -> (#O.ctx,unit) Ohm.Run.t
+
+  val info : 
+       name:TextOrAdlib.t option 
+    -> vision:Vision.t
+    -> [`Admin] t
+    -> 'any MActor.t
+    -> (#O.ctx,unit) Ohm.Run.t 
+
+end
+
+module All : sig
+
+  val visible :    
+       ?actor:'any MActor.t
+    -> 'a IInstance.id 
+    -> (#O.ctx,[`View] t list) Ohm.Run.t  
+
+end
+
+val get : ?actor:'any MActor.t -> 'rel IGroup.id -> (#O.ctx,'rel t option) Ohm.Run.t
+
+val view : ?actor:'any MActor.t -> 'rel IGroup.id -> (#O.ctx,[`View] t option) Ohm.Run.t
+
+val admin : ?actor:'any MActor.t -> 'rel IGroup.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
+ 
+val delete : [`Admin] t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t 
+
+val instance : 'any IGroup.id -> (#O.ctx,IInstance.t option) Ohm.Run.t
+
+val admin_name : ?actor:'a MActor.t -> 'any IInstance.id -> TextOrAdlib.t O.run

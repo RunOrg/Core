@@ -29,7 +29,7 @@ module Signals : sig
 
   val on_bind_group : (   IInstance.t
                         * [`Created] IEntity.id
-		        * [`Bot] IGroup.id
+		        * [`Bot] IAvatarSet.id
                         * ITemplate.t 
 			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     
@@ -51,7 +51,7 @@ module Get : sig
   val draft         :            'any t -> bool
   val public        :            'any t -> bool
   val grants        :            'any t -> bool
-  val group         : [<`Admin|`View|`Bot] t -> IGroup.t
+  val group         : [<`Admin|`View|`Bot] t -> IAvatarSet.t
   val name          : [<`Admin|`View] t -> TextOrAdlib.t option
   val picture       : [<`Admin|`View] t -> [`GetPic] IFile.id option
   val summary       : [<`Admin|`View] t -> TextOrAdlib.t
@@ -143,11 +143,6 @@ val create :
 
 val get_last_real_event_date : [`IsAdmin] IInstance.id -> string option option O.run
 
-val admin_group_name : 'any IInstance.id -> TextOrAdlib.t O.run 
-
-val is_admin : 'any t -> bool O.run
-val is_all_members : 'any t -> bool O.run
-
 module All : sig
 
   val get_by_kind : 
@@ -190,4 +185,12 @@ module Backdoor : sig
   val count : (MEntityKind.t * int) list O.run
 
 end
+
+(* {{MIGRATION}} *)
+
+val on_migrate : (IEntity.t * IInstance.t * IAvatarSet.t * [`IsSelf] IAvatar.id 
+		  * MEntityKind.t * TextOrAdlib.t option * MAccess.t 
+		  * [ `Public | `Normal | `Private ] * ITemplate.t, 
+		  bool O.run) Ohm.Sig.channel
+
 

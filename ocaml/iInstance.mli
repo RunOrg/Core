@@ -37,7 +37,7 @@ module Deduce : sig
   val admin_create_forum : [`IsAdmin] id -> [`CreateForum] id
   val admin_view_profile : [`IsAdmin] id -> [`ViewProfile] id
 
-  val see_contacts : [<`IsAdmin|`Rights] id -> [`ViewContacts] id
+  val see_contacts : [<`IsAdmin|`Rights|`Bot] id -> [`ViewContacts] id
 
   val make_canInstall_token : [`CanInstall] id -> 'any ICurrentUser.id -> string
   val from_canInstall_token : 'any id -> 'a ICurrentUser.id -> string -> [`CanInstall] id option     

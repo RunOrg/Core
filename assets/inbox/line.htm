@@ -1,0 +1,128 @@
+<a class="inbox-line{=view}{if seen}{else} -new{/if}{/=}" href="{url}">
+  <span class="-last">
+    {?time}<span class="-date">{`DateRelative this}</span>{/?}
+  </span>
+  <span class="-stats">
+    {@!statCell}
+      {?unread}<span class="-c -a">+{this|string_of_int|esc}</span>
+      {else} 
+        {?read}<span class="-c">{this|string_of_int|esc}</span>{/?}
+      {/?}      
+    {/@}
+    {=view}
+      {=wall}
+        {?unread}<span class="-c -wall -a">+{this|string_of_int|esc}</span>
+        {else} 
+          {?read}<span class="-c -wall">{this|string_of_int|esc}</span>{/?}
+        {/?}   
+      {/=}
+      {=album}
+        {?unread}<span class="-c -album -a">+{this|string_of_int|esc}</span>
+        {else} 
+          {?read}<span class="-c -album">{this|string_of_int|esc}</span>{/?}
+        {/?}
+      {/=}
+      {=folder}
+        {?unread}<span class="-c -folder -a">+{this|string_of_int|esc}</span>
+        {else} 
+          {?read}<span class="-c -folder">{this|string_of_int|esc}</span>{/?}
+        {/?}
+      {/=}
+    {/=}
+  </span>
+  <span class="-name">{name}</span>
+  <span class="-details">
+    {= details | List.hd}
+      <span>{this}</span>
+    {/=}
+    {# details | List.tl}
+      &middot; <span>{this}</span>
+    {/#}
+  </span>
+</a>
+
+<style>
+.inbox-line {
+  display: block;
+  padding: 10px;
+  overflow: hidden;
+  border-top: 1px dashed #CCC;
+  border-bottom: 1px dashed #CCC;
+  margin-bottom: -1px;
+  font-size: 16px;
+  &.-new {
+    background-color: #FEC;
+  }
+  &:hover {
+    color: #111;
+    text-shadow: 0 1px 0 white;
+    background-color: #EEE;
+    &.-new { background-color: #FDB; }
+  }
+  .-details {
+    color: #888;
+    overflow: hidden;
+    display: block;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-top: 4px; 
+    text-overflow: ellipsis;
+  }
+  .-name {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #111;
+  }
+  .-last {
+    float: right;
+    padding: 9px 0;
+    height: 17px;
+    line-height: 15px; 
+    width: 130px;
+    .-date {
+      text-align: left;
+      margin-left: 10px;
+      font-size: 12px;
+      color: #888;
+      display: inline-block;
+      overflow: hidden; 
+    }
+  }
+  .-stats {
+    width: 120px;
+    float: right;
+    padding: 9px 0;
+    height: 17px;
+    margin-left: 20px;
+    line-height: 20px; 
+    .-c {
+      vertical-align: top;
+      min-height: 1px; 
+      text-align: center; 
+      font-size: 12px;
+      color: #888;
+      margin-right: 14px;
+      padding-right: 18px;
+      display: inline-block;
+      &.-wall {
+        color: #555;
+        margin-right: 0;
+      }
+      &.-album {
+        background: url(/public/icon/image.png) right center no-repeat;
+        padding-right: 20px;
+      }
+      &.-folder {
+        background: url(/public/icon/attach.png) right center no-repeat;
+        margin-right: 0;
+      }
+      &.-a {
+        color: #E70079;
+        font-weight: bold;
+      }
+    }
+  }
+}
+</style>

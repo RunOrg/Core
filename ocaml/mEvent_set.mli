@@ -1,31 +1,18 @@
 (* © 2012 RunOrg *)
 
-val update : 
-     [`Admin] MEvent_can.t
-  -> 'a MActor.t
-  -> MEvent_core.Cfg.Diff.t list
-  -> (#O.ctx,unit) Ohm.Run.t 
+include HEntity.SET with type 'a can = 'a MEvent_can.t and type diff = MEvent_core.diff
     
-val picture :
-     [`Admin] MEvent_can.t 
-  -> 'a MActor.t
-  -> [`InsPic] IFile.id option
-  -> (#O.ctx,unit) Ohm.Run.t
+val picture : [`InsPic] IFile.id option -> ('a,#O.ctx) t
   
-val admins : 
-     [`Admin] MEvent_can.t
-  -> 'a MActor.t
-  -> IAvatar.t list
-  -> (#O.ctx,unit) Ohm.Run.t
+val admins : IAvatar.t list -> ('a,#O.ctx) t
 
 val info : 
-     [`Admin] MEvent_can.t
-  -> 'a MActor.t
-  -> draft:bool 
+     draft:bool 
   -> name:string option 
   -> page:MRich.OrText.t
   -> date:Date.t option
   -> address:string option 
   -> vision:MEvent_vision.t
-  -> (#O.ctx,unit) Ohm.Run.t 
+  -> ('a,#O.ctx) t
   
+

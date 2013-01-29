@@ -6,13 +6,12 @@ open BatPervasives
 
 open CGroups_admin_common
 
-let delegator entity access = object (self)
-  method get = MAccess.delegates (MEntity.Get.admin entity)
-  method set aids = MEntity.set_admins (access # self) entity 
-    (MAccess.set_delegates aids (MEntity.Get.admin entity))
+let delegator group access = object (self)
+  method get = MGroup.Get.admins group
+  method set aids = MGroup.Set.admins (aids @ self # get) group (access # actor) 
 end
 
-let () = define UrlClient.Members.def_delpick begin fun parents entity access ->
+let () = define UrlClient.Members.def_delpick begin fun parents group access ->
 
   let back = parents # delegate # url in
 
@@ -26,13 +25,13 @@ let () = define UrlClient.Members.def_delpick begin fun parents entity access ->
     end
   in
 
-  CDelegate.picker `Group back access (delegator entity access) wrap 
+  CDelegate.picker `Group back access (delegator group access) wrap 
 
 end
 
-let () = define UrlClient.Members.def_delegate begin fun parents entity access -> 
+let () = define UrlClient.Members.def_delegate begin fun parents group access -> 
 
-  let! is_admin = ohm (O.decay (MEntity.is_admin entity)) in
+  let! is_admin = ohm $ MGroup.Get.is_admin group in
 
   let pick = if is_admin then None else Some (parents # delpick # url) in 
 
@@ -46,6 +45,6 @@ let () = define UrlClient.Members.def_delegate begin fun parents entity access -
     end
   in
 
-  CDelegate.list `Group pick access (delegator entity access) wrap
+  CDelegate.list `Group pick access (delegator group access) wrap
 
 end

@@ -5,9 +5,9 @@ open Ohm.Universal
 open BatPervasives
 
 let box_content ?url access group = 
-  let  gid = MGroup.Get.id group in 
+  let  gid = MAvatarSet.Get.id group in 
   O.Box.fill $ O.decay begin 
-    let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
+    let! avatars, _ = ohm $ MMembership.InSet.list_members ~count:100 gid in
     CAvatar.directory ?url avatars
   end
     

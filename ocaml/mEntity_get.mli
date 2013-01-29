@@ -14,7 +14,7 @@ val id            : 'any t -> 'any IEntity.id
 val draft         : 'any t -> bool
 val public        : 'any t -> bool
 val grants        : 'any t -> bool
-val group         : 'any t -> IGroup.t 
+val group         : 'any t -> IAvatarSet.t 
 val name          : 'any t -> TextOrAdlib.t option
 val picture       : 'any t -> [`GetPic] IFile.id option
 val summary       : 'any t -> TextOrAdlib.t

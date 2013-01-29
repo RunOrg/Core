@@ -29,7 +29,7 @@ let render_instance user (status,iid) =
     method pic    = pic
     method name   = ins # name
     method status = status
-    method url    = Action.url UrlClient.Home.home (ins # key) [] 
+    method url    = Action.url UrlClient.Inbox.home (ins # key) [] 
   end)
   
 let long_user_instances user cuid = 

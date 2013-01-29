@@ -66,7 +66,6 @@ let athle = vertical "Athle"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     courseSimple ;
     eventSimple ;
     eventMeeting ;
@@ -82,15 +81,15 @@ let badminton = vertical "Badminton"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.group-collaborative.badminton-players.name" groupBadminton
       ~name:(adlib "EntitySampleGroupCollaborativeBadmintonPlayersName" "Joueurs de Badminton") ;
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
-    initial "entity.sample.group-collaborative.badminton-competition.name" groupCollaborative
+    initial "entity.sample.group-collaborative.badminton-competition.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeBadmintonCompetitorsName" "Compétition") ;
-    initial "entity.sample.group-collaborative.badminton-fun.name" groupCollaborative
+    initial "entity.sample.group-collaborative.badminton-fun.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeBadmintonFunName" "Loisir") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -99,7 +98,6 @@ let badminton = vertical "Badminton"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     groupBadminton ;
     eventBadmintonCompetition ;
     pollSimple ;
@@ -119,11 +117,11 @@ let campaigns = vertical "Campaigns"
   ~name:"Campagnes électorales"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.group-collaborative.campaign-comity.sample" groupCollaborative
+    initial "entity.sample.group-collaborative.campaign-comity.sample" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCampaignComitySample" ~old:"entity.sample.group-collaborative.campaign-comity.sample" "Comité de campagne") ;
-    initial "entity.sample.group-collaborative.campaign-members.sample" groupCollaborative
+    initial "entity.sample.group-collaborative.campaign-members.sample" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCampaignMembersSample" ~old:"entity.sample.group-collaborative.campaign-members.sample" "Militants") ;
-    initial "entity.sample.group-collaborative.campaign-sympathisers.sample" groupCollaborative
+    initial "entity.sample.group-collaborative.campaign-sympathisers.sample" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCampaignSympathisersSample" ~old:"entity.sample.group-collaborative.campaign-sympathisers.sample" "Sympathisants") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -132,7 +130,6 @@ let campaigns = vertical "Campaigns"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -154,7 +151,6 @@ let citizenPortal = vertical "CitizenPortal"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -176,22 +172,22 @@ let collectivites = vertical "Collectivites"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces")  ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.collectivites-agent.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-agent.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesAgentName" ~old:"entity.sample.group-collaborative.collectivites-agent.name" "Agents") ;
-    initial "entity.sample.group-collaborative.collectivites-manager.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-manager.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesManagerName" ~old:"entity.sample.group-collaborative.collectivites-manager.name" "Responsables de service") ;
-    initial "entity.sample.group-collaborative.collectivites-mayor.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-mayor.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesMayorName" ~old:"entity.sample.group-collaborative.collectivites-mayor.name" "Cabinet du maire") ;
-    initial "entity.sample.group-collaborative.collectivites-dep-sport.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-dep-sport.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesDepSportName" ~old:"entity.sample.group-collaborative.collectivites-dep-sport.name" "Service des sports") ;
-    initial "entity.sample.group-collaborative.collectivites-dep-culture.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-dep-culture.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesDepCultureName" ~old:"entity.sample.group-collaborative.collectivites-dep-culture.name" "Service culturel") ;
-    initial "entity.sample.group-collaborative.collectivites-conseillers-municipaux.name" groupCollaborative
+    initial "entity.sample.group-collaborative.collectivites-conseillers-municipaux.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesConseillersMunicipauxName" ~old:"entity.sample.group-collaborative.collectivites-conseillers-municipaux.name" "Conseillers municipaux") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
+    groupSimple ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -211,14 +207,13 @@ let comiteEnt = vertical "ComiteEnt"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.comite-ent-employees.name" groupCollaborative
+    initial "entity.sample.group-collaborative.comite-ent-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeComiteEntEmployeesName" ~old:"entity.sample.group-collaborative.comite-ent-employees.name" "Salariés") ;
-    initial "entity.sample.group-collaborative.comite-ent-managers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.comite-ent-managers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeComiteEntManagersName" ~old:"entity.sample.group-collaborative.comite-ent-managers.name" "Elus du CE")  ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -239,14 +234,14 @@ let company = vertical "Company"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.company-employees.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
-    initial "entity.sample.group-collaborative.company-management.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-management.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
+    groupSimple ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -259,20 +254,19 @@ let company = vertical "Company"
 let companyCRM = vertical "CompanyCRM"
    ~name:"CRM - Portail client"
   Template.([
-    initial "entity.sample.group-collaborative.company-employees.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
-    initial "entity.sample.group-collaborative.company-management.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-management.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") ;
-    initial "entity.sample.group-collaborative.companycrm-customers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companycrm-customers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyCRMCustomersName" "Clients") ;
-    initial "entity.sample.group-collaborative.companycrm-customersvip.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companycrm-customersvip.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyCRMCustomersVipName" "Clients VIP") ;
-    initial "entity.sample.group-collaborative.companycrm-partners.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companycrm-partners.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyCRMParnersName" "Partenaires") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -293,16 +287,15 @@ let companyTraining = vertical "CompanyTraining"
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
-    initial "entity.sample.group-collaborative.company-management.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-management.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") ;
-    initial "entity.sample.group-collaborative.company-trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyTrainersName" ~old:"entity.sample.group-collaborative.company-trainers.name" "Formateurs") ;
-    initial "entity.sample.group-collaborative.company-trainees.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-trainees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyTraineesName" ~old:"entity.sample.group-collaborative.company-trainees.name" "Stagiaires") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -319,22 +312,21 @@ let companyTraining = vertical "CompanyTraining"
 let companyPress = vertical "CompanyPress"
    ~name:"Presse"
   Template.([
-    initial "entity.sample.group-collaborative.company-employees.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
-    initial "entity.sample.group-collaborative.company-management.name" groupCollaborative
+    initial "entity.sample.group-collaborative.company-management.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") ;
-    initial "entity.sample.group-collaborative.companypress-subscribers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companypress-subscribers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyPressSubscribersName" "Abonnés") ;
-    initial "entity.sample.group-collaborative.companypress-readers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companypress-readers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyPressReadersName" "Lecteurs") ;
-    initial "entity.sample.group-collaborative.companypress-newsletter.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companypress-newsletter.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyPressNewsletterName" "Abonnés NewsLetter") ;
-    initial "entity.sample.group-collaborative.companypress-advertisers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.companypress-advertisers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyPressAdvertiserName" "Annonceurs") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -349,7 +341,7 @@ let copro = vertical "Copro"
   ~name:"Copropriété avec syndic professionnel"
   ~forms:ProfileForm.([ simple ])
   Template.([
-   initial "entity.sample.group-collaborative.copro.name" groupCollaborative
+   initial "entity.sample.group-collaborative.copro.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCoproName" ~old:"entity.sample.group-collaborative.copro.name" "Membres du syndic") ; 
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -367,7 +359,6 @@ let copro = vertical "Copro"
   Template.([
     groupCorproOwner ;
     groupSimple ;
-    groupCollaborative ;
     groupCoproLodger ;
     groupCoproEmployes ;
     groupCoproManager ;
@@ -388,7 +379,7 @@ let coproVolunteer = vertical "CoproVolunteer"
   ~name:"Copropriété avec syndic bénévole"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.group-collaborative.copro.name" groupCollaborative
+    initial "entity.sample.group-collaborative.copro.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCoproName" ~old:"entity.sample.group-collaborative.copro.name" "Membres du syndic") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -404,7 +395,6 @@ let coproVolunteer = vertical "CoproVolunteer"
  Template.([
     groupCorproOwner ;
     groupSimple ;
-    groupCollaborative ;
     groupCoproLodger ;
     groupCoproEmployes ;
     groupCoproManager ;
@@ -428,24 +418,23 @@ let elementarySchool = vertical "ElementarySchool"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.school-teachers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-teachers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolTeachersName" "Enseignants et équipe éducative") ;
     initial "entity.sample.group-collaborative.school-parents.name" groupSchoolParents
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolParentsName" "Parents d'élèves") ;
-    initial "entity.sample.group-collaborative.school-grade-cp.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-grade-cp.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCpName" "Classe de CP") ;
-    initial "entity.sample.group-collaborative.school-grade-ce1.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-grade-ce1.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe1Name" "Classe de CE1") ;
-    initial "entity.sample.group-collaborative.school-grade-ce2.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-grade-ce2.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCe2Name" "Classe de CE2") ;
-    initial "entity.sample.group-collaborative.school-grade-cm1.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-grade-cm1.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm1Name" "Classe de CM1") ;
-    initial "entity.sample.group-collaborative.school-grade-cm2.name" groupCollaborative
+    initial "entity.sample.group-collaborative.school-grade-cm2.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolGradeCm2Name" "Classe de CM2") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -463,7 +452,7 @@ let ess = vertical "Ess"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -472,7 +461,6 @@ let ess = vertical "Ess"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -493,14 +481,13 @@ let events = vertical "Events"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.staff.name" groupCollaborative
+    initial "entity.sample.group-collaborative.staff.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeStaffName" ~old:"entity.sample.group-collaborative.staff.name" "Staff") ;
     initial "entity.sample.contact.name" groupSimple
       ~name:(adlib "EntitySampleContactName" ~old:"entity.sample.contact.name" "Contacts") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -522,20 +509,19 @@ let federations = vertical "Federations"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.federation-structure.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-structure.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationStructureName" ~old:"entity.sample.group-collaborative.federation-structure.name" "Structure fédérale") ;
-    initial "entity.sample.group-collaborative.federation-dtn.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-dtn.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationDtnName" ~old:"entity.sample.group-collaborative.federation-dtn.name" "Direction Technique Nationale") ;
-    initial "entity.sample.group-collaborative.federation-comite.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-comite.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationComiteName" ~old:"entity.sample.group-collaborative.federation-comite.name" "Comité directeur") ;
-    initial "entity.sample.group-collaborative.federation-clubs-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-clubs-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationClubsAssoName" ~old:"entity.sample.group-collaborative.federation-clubs-asso.name" "Clubs & associations affiliés") ;
-    initial "entity.sample.group-collaborative.federation-presidents.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-presidents.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationPresidentsName" ~old:"entity.sample.group-collaborative.federation-presidents.name" "Présidents de clubs et d'asso affiliés") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -568,13 +554,13 @@ let footus = vertical "Footus"
   ~name:"Football américain et cheerleading"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraîneurs et formateurs");
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-footus.name" groupFootus
       ~name:(adlib "EntitySampleGroupFootusName" ~old:"entity.sample.group-footus.name" "Joueurs football américain") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.group-cheerleading.name" groupCheerleading
       ~name:(adlib "EntitySampleGroupCheerleadingName" ~old:"entity.sample.group-cheerleading.name" "Cheerleaders") ;
@@ -595,7 +581,6 @@ let footus = vertical "Footus"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     groupCheerleading ;
     groupFootus ;
     pollSimple ;
@@ -616,7 +601,7 @@ let impro = vertical "Impro"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -625,7 +610,6 @@ let impro = vertical "Impro"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -644,13 +628,13 @@ let judo = vertical "Judo"
   ~name:"Club de judo et jujitsu"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-judo-members.name" groupJudoMembers
       ~name:(adlib "EntitySampleGroupJudoMembersName" ~old:"entity.sample.group-judo-members.name" "Sportifs judo et jujitsu") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -682,7 +666,6 @@ let judo = vertical "Judo"
   Template.([
     groupJudoMembers ;
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -703,7 +686,6 @@ let light = vertical "Light"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -723,8 +705,6 @@ let localDemocracy = vertical "LocalDemocracy"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
-    forum ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -744,16 +724,15 @@ let localNpPortal = vertical "LocalNpPortal"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.mda-resp-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-resp-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespAssoName" ~old:"entity.sample.group-collaborative.mda-resp-asso.name" "Responsables d'associations") ;
-    initial "entity.sample.group-collaborative.mda-resp-commune.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-resp-commune.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespCommuneName" ~old:"entity.sample.group-collaborative.mda-resp-commune.name" "Responsables municipaux") ;
-    initial "entity.sample.group-collaborative.mda-member-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-member-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaMemberAssoName" ~old:"entity.sample.group-collaborative.mda-member-asso.name" "Membres d'associations") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -774,16 +753,15 @@ let maisonAsso = vertical "MaisonAsso"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.mda-resp-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-resp-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespAssoName" ~old:"entity.sample.group-collaborative.mda-resp-asso.name" "Responsables d'associations") ;
-    initial "entity.sample.group-collaborative.mda-resp-commune.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-resp-commune.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespCommuneName" ~old:"entity.sample.group-collaborative.mda-resp-commune.name" "Responsables municipaux") ;
-    initial "entity.sample.group-collaborative.mda-member-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.mda-member-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaMemberAssoName" ~old:"entity.sample.group-collaborative.mda-member-asso.name" "Membres d'associations") ;
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -800,7 +778,7 @@ let health = vertical "Health"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -809,7 +787,7 @@ let health = vertical "Health"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
+    groupSimple ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -827,11 +805,11 @@ let multiSports = vertical "MultiSports"
   ~old:"v:multi-sports"
   ~name:"Club multi-sports"
   Template.([
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.jobs-sport.name" forum
       ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
@@ -855,7 +833,6 @@ let multiSports = vertical "MultiSports"
       ~name:Adlib.OldEntity.group_veterans ;
   ])
   Template.([
-    groupCollaborative ;
     groupSimple ;
     groupJudoMembers ;
     groupFitnessMembers ;
@@ -899,7 +876,7 @@ let runorg = vertical "Runorg"
   Template.([
     groupSimple ;
     groupRespo ;
-    groupCollaborative ;
+    groupSimple ;
     groupCollaborativeAuto ;
     pollSimple ;
     courseSimple ;
@@ -915,7 +892,7 @@ let salleSport = vertical "SalleSport"
   ~old:"v:salle-sport"
   ~name:"Salle de sport et Coaching sportif"
   Template.([
-      initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+      initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -925,13 +902,12 @@ let salleSport = vertical "SalleSport"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-fitness-members.name" groupFitnessMembers
       ~name:(adlib "EntitySampleGroupFitnessMembersName" ~old:"entity.sample.group-fitness-members.name" "Sportifs Fitness") ;
-    initial "entity.sample.group-collaborative.staff.name" groupCollaborative
+    initial "entity.sample.group-collaborative.staff.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeStaffName" ~old:"entity.sample.group-collaborative.staff.name" "Staff") ;
   ])
   Template.([
     groupSimple ;
     groupFitnessMembers ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -955,17 +931,17 @@ let sectionSportEtudes = vertical "SectionSportEtudes"
 		sectionSportEtudesAcademic ;
 		simple	])
   Template.([
-    initial "entity.sample.group-collaborative.sectionsportetudes.sportifs.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.sportifs.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesSportifsName" "Elèves et sportifs") ;
-    initial "entity.sample.group-collaborative.sectionsportetudes.management-team.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.management-team.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesManagementTeamName" "Equipe encadrante") ;
-    initial "entity.sample.group-collaborative.sectionsportetudes.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesTrainersName" "Entraîneurs") ;
-    initial "entity.sample.group-collaborative.sectionsportetudes.teachers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.teachers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesTeachersName" "Professeurs") ;
-    initial "entity.sample.group-collaborative.sectionsportetudes.medical-team.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.medical-team.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesMedicalTeamName" "Equipe médicale") ;
-    initial "entity.sample.group-collaborative.sectionsportetudes.parents.name" groupCollaborative
+    initial "entity.sample.group-collaborative.sectionsportetudes.parents.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesParentsName" "Parents des sportifs") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -974,7 +950,6 @@ let sectionSportEtudes = vertical "SectionSportEtudes"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -994,7 +969,7 @@ let simple = vertical "Simple"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -1003,7 +978,6 @@ let simple = vertical "Simple"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -1025,19 +999,19 @@ let spUsep = vertical "SpUsep"
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
     initial "entity.sample.forum-public.user-support.name" forum
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.group-collaborative.federation-structure.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-structure.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationStructureName" ~old:"entity.sample.group-collaborative.federation-structure.name" "Structure fédérale") ;
-    initial "entity.sample.group-collaborative.federation-dtn.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-dtn.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationDtnName" ~old:"entity.sample.group-collaborative.federation-dtn.name" "Direction Technique Nationale") ;
-    initial "entity.sample.group-collaborative.federation-comite.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-comite.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationComiteName" ~old:"entity.sample.group-collaborative.federation-comite.name" "Comité directeur") ;
-    initial "entity.sample.group-collaborative.federation-clubs-asso.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-clubs-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationClubsAssoName" ~old:"entity.sample.group-collaborative.federation-clubs-asso.name" "Clubs & associations affiliés") ;
-    initial "entity.sample.group-collaborative.federation-presidents.name" groupCollaborative
+    initial "entity.sample.group-collaborative.federation-presidents.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationPresidentsName" ~old:"entity.sample.group-collaborative.federation-presidents.name" "Présidents de clubs et d'asso affiliés") ;
   ])
   Template.([
-    groupCollaborative ;
+    groupSimple ;
     groupSimple ;
     pollSimple ;
     pollYearly ;
@@ -1058,9 +1032,9 @@ let sports = vertical "Sports"
   Template.([
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
     initial "entity.sample.forum-public.jobs-sport.name" forum
       ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
@@ -1085,7 +1059,6 @@ let sports = vertical "Sports"
   ])
   Template.([
     groupSimple ;
-    groupCollaborative ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -1150,7 +1123,7 @@ let students = vertical "Students"
   Template.([
       initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-    initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.forum-public.classified.name" forum
       ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
@@ -1158,7 +1131,6 @@ let students = vertical "Students"
       ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
-    groupCollaborative ;
     groupSimple ;
     pollSimple ;
     pollYearly ;

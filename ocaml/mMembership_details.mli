@@ -2,7 +2,7 @@
 
 type data = 
     {
-      where   : IGroup.t  ;
+      where   : IAvatarSet.t  ;
       who     : IAvatar.t ;
       admin   : (bool * float * IAvatar.t) option ; 
       user    : (bool * float * IAvatar.t) option ;
@@ -17,6 +17,6 @@ val admin_decision : IAvatar.t -> float -> bool -> data -> data
 val user_decision  : IAvatar.t -> float -> bool -> data -> data
 val payment        : IAvatar.t -> float -> bool -> data -> data
 
-val default : 'g IGroup.id -> 'a IAvatar.id -> data
+val default : 'g IAvatarSet.id -> 'a IAvatar.id -> data
 val last    : data -> float
 val status  : manual:bool -> data -> MMembership_status.t

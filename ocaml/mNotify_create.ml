@@ -99,24 +99,21 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
     (* Make sure item has an author *)
     let! aid = ohm_req_or (return ()) $ MItem.author itid in 
     
-    (* Entity members receive posts written on entity walls *)
     let! interested = ohm begin
       let! feed = ohm_req_or (return []) $ MFeed.bot_get fid in 
       match MFeed.Get.owner feed with 
-	| `Instance iid ->
-	  let  iid = IInstance.Assert.bot iid in
-	  MAvatar.List.all_members iid 
-	| `Entity eid -> 
-	  let  eid    = IEntity.Assert.bot eid in 
-	  let! entity = ohm_req_or (return []) $ MEntity.bot_get eid in 
-	  let  gid    = IGroup.Assert.bot $ MEntity.Get.group entity in 
-	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
-	  return $ List.map snd list	
+	| `Instance iid -> return []
+	| `Entity eid -> return []
 	| `Event eid -> 
-	  let! event = ohm_req_or (return []) $ MEvent.get eid in 
-	  let  gid    = IGroup.Assert.bot $ MEvent.Get.group event in
-	  let! list   = ohm $ MMembership.InGroup.all gid `Any in
+	  let! event  = ohm_req_or (return []) $ MEvent.get eid in 
+	  let  gid    = IAvatarSet.Assert.bot $ MEvent.Get.group event in
+	  let! list   = ohm $ MMembership.InSet.all gid `Any in
 	  return $ List.map snd list	
+	| `Discussion did ->
+	  let! discn  = ohm_req_or (return []) $ MDiscussion.get did in 
+	  let  access = MDiscussion.Satellite.access discn (`Wall `Read) in
+	  let  iid    = IInstance.Assert.bot (MDiscussion.Get.iid discn) in
+	  MReverseAccess.reverse iid [access] 
     end in 
     
     (* Preferences further determine who does or does not receive posts. *)
@@ -168,11 +165,12 @@ let push_invite_task inviter_aid invited_aid gid =
 
   if inviter_aid = invited_aid then return () else
 
-    let! group = ohm_req_or (return ()) $ MGroup.naked_get gid in 
+    let! group = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
     let! eid   = req_or (return ()) begin 
-      match MGroup.Get.owner group with
-	| `Event eid -> Some eid
-	| `Entity _ -> None	  
+      match MAvatarSet.Get.owner group with
+	| `Event  eid -> Some eid 
+	| `Group   _  -> None
+	| `Entity  _  -> None	  
     end in 
     
     let payload = `EventInvite (eid, inviter_aid) in
@@ -182,6 +180,7 @@ let push_request_task aid owner admins =
 
   let! iid = ohm_req_or (return ()) begin match owner with 
     | `Entity eid -> MEntity.instance eid 
+    | `Group  gid -> MGroup.instance gid 
     | `Event  eid -> MEvent.instance eid
   end in 
 
@@ -192,7 +191,8 @@ let push_request_task aid owner admins =
 
   let payload = match owner with 
     | `Event eid -> `EventRequest (eid, aid) 
-    | `Entity eid -> `GroupRequest (eid, aid) 
+    | `Group gid -> `GroupRequest (gid, aid)
+    | `Entity _ -> assert false  
   in
 
   to_avatars (INotifyStats.gen ()) (List.map (fun aid -> payload, aid) admins)
@@ -221,13 +221,13 @@ let () =
       (* This certainly looks like a join request, but does the group enforce
 	 manual validation ? We do this check last because it costs an additional
 	 database query. *)
-      let! group = ohm_req_or (return ()) $ MGroup.naked_get 
+      let! group = ohm_req_or (return ()) $ MAvatarSet.naked_get 
 	((change # after).MMembership.Details.where) in
       
-      if MGroup.Get.manual group then 
+      if MAvatarSet.Get.manual group then 
 
-	let  owner  = MGroup.Get.owner group in 
-	let! access = ohm $ MGroup.Get.write_access group in 
+	let  owner  = MAvatarSet.Get.owner group in 
+	let! access = ohm $ MAvatarSet.Get.write_access group in 
 
 	(* Manual validation is on ! *)
 	push_request_task

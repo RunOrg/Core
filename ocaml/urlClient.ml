@@ -17,8 +17,8 @@ let unsubscribe, def_unsubscribe = O.declare O.client "unsubscribe" A.none
 
 (* Join ===================================================================================== *)
 
-let join,   def_join   = O.declare O.client "join" (A.o IEntity.arg)
-let doJoin, def_doJoin = O.declare O.client "join/public" (A.r IEntity.arg) 
+let join,   def_join   = O.declare O.client "join" (A.o IGroup.arg)
+let doJoin, def_doJoin = O.declare O.client "join/public" (A.r IGroup.arg) 
 
 (* Exports ================================================================================== *)
 
@@ -56,22 +56,19 @@ let newhere, def_newhere   = O.declare O.client "newhere" A.none
 
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
-module Like     = UrlClient_like
-module Comment  = UrlClient_comment
-module Item     = UrlClient_item
-module MiniPoll = UrlClient_miniPoll 
-module Members  = UrlClient_members
-module Events   = UrlClient_events
-module Forums   = UrlClient_forums
-module Website  = UrlClient_website
-module Invite   = UrlClient_invite
-module Join     = UrlClient_join
-module Profile  = UrlClient_profile
-module Search   = UrlClient_search
-
-module Home = struct
-  let home, def_home = root "home"
-end
+module Like       = UrlClient_like
+module Comment    = UrlClient_comment
+module Item       = UrlClient_item
+module MiniPoll   = UrlClient_miniPoll 
+module Members    = UrlClient_members
+module Events     = UrlClient_events
+module Website    = UrlClient_website
+module Invite     = UrlClient_invite
+module Join       = UrlClient_join
+module Profile    = UrlClient_profile
+module Search     = UrlClient_search
+module Inbox      = UrlClient_inbox
+module Discussion = UrlClient_discussion
   
 
 

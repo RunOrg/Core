@@ -5,14 +5,14 @@ open BatPervasives
 
 module Actions = struct
   open MDo
-  open MInboxLine
   open MErrorAudit
-  open MActor
   open MNews
   open CAvatarExport
+  open CDiscussion
   open CExport
   open CAdmin
   open CLogin
+  open MDiscussion_migrate
   open CMe
   open CWebsite
   open CNetwork
@@ -20,8 +20,6 @@ module Actions = struct
   open CUpload
   open CEvents
   open CGroups
-  open CHome
-  open CForums
   open CNotifySend
   open CContact
   open CSplash
@@ -30,6 +28,7 @@ module Actions = struct
   open CHelp
   open CSearch
   open CVoeux
+  open CInbox
   open Splash
 end
 

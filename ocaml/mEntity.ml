@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Util
@@ -111,11 +111,14 @@ let set_admins self t access =
 
 (* Creating entities ----------------------------------------------------------------------- *)
 
-let _create ?pcname ?name ?pic ?access template iid creator = 
 
+let _create ?pcname ?name ?pic ?access template iid creator = 
+  assert false
+
+(*
   let! id, gid = ohm (
     match pcname with 
-      | None        -> return (IEntity.gen (), IGroup.gen ()) 
+      | None        -> return (IEntity.gen (), IAvatarSet.gen ()) 
       | Some pcname -> let namer = MPreConfigNamer.load iid in 
 		       let! eid = ohm $ MPreConfigNamer.entity pcname namer in
 		       let! gid = ohm $ MPreConfigNamer.group  pcname namer in
@@ -126,7 +129,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
   let eid = IEntity.Assert.created id in
 
   (* And the matching group *)
-  let gid = IGroup.Assert.bot gid in  
+  let gid = IAvatarSet.Assert.bot gid in  
 
   let who = `user (Id.gen (), IAvatar.decay creator) in
 
@@ -156,7 +159,7 @@ let _create ?pcname ?name ?pic ?access template iid creator =
     public   = false ;
     admin    = if kind = `Group then `Nobody else `List [ IAvatar.decay creator ] ;
     view     = `Token ;
-    group    = IGroup.decay gid ;
+    group    = IAvatarSet.decay gid ;
     config   = MEntityConfig.default ;
     kind     ;
     template = ITemplate.decay template ;
@@ -171,8 +174,12 @@ let _create ?pcname ?name ?pic ?access template iid creator =
   in
 	
   return eid
+*)
  
 let create self ~name ?pic ~iid ?access template =
+  assert false
+
+(*
   let pic = BatOption.map (IFile.decay |- IFile.to_json) pic in
   let iid = IInstance.decay iid in 
 
@@ -188,6 +195,7 @@ let create self ~name ?pic ~iid ?access template =
   end in 
 
   return eid 
+*)
 
 (* Attempt to grab a public entity if it is public. ---------------------------------------- *)
 
@@ -204,73 +212,7 @@ let get_if_public eid =
 
 let instance eid = 
   Tbl.using (IEntity.decay eid) (fun e -> e.E.instance) 
-
-(* Admin group entity name ------------------------------------------------------------------ *)
-
-let admin_group_name iid = 
-  let  pcnamer = MPreConfigNamer.load iid in 
-  let  default = `label `EntityAdminName in
-  let! eid     = ohm $ MPreConfigNamer.entity "admin" pcnamer in 
-  let! entity  = ohm_req_or (return default) $ naked_get eid in 
-  return (BatOption.default default (Get.name entity))   
-
-let is_admin e = 
-  if Get.kind e <> `Group then return false else
-    let  pcnamer = MPreConfigNamer.load (Get.instance e) in 
-    let! eid     = ohm $ MPreConfigNamer.entity "admin" pcnamer in 
-    return (eid = IEntity.decay (Get.id e))
-      
-let is_all_members e = 
-  if Get.kind e <> `Group then return false else
-    let  pcnamer = MPreConfigNamer.load (Get.instance e) in 
-    let! eid     = ohm $ MPreConfigNamer.entity "members" pcnamer in 
-    return (eid = IEntity.decay (Get.id e))
-      
-(* Create the initial entities. ------------------------------------------------------------- *)
-
-let create_initial = 
-  let task = O.async # define "create-initial-entities" Fmt.(IInstance.fmt * IAvatar.fmt) 
-    begin fun (iid,aid) -> 
     
-      let! instance = ohm_req_or (return ()) $ MInstance.get iid in 
-      let  created = PreConfig_Vertical.create (instance # ver) in
-      
-      Run.list_iter begin fun (tmpl,label) -> 
-	let! _ = ohm $ _create ~name:(Some (`label label)) tmpl iid aid in
-	return ()
-      end created
-	
-    end in 
-  fun iid aid -> task (IInstance.decay iid, aid)
-
-let _ = 
-
-  let! iid = Sig.listen MInstance.Signals.on_create in
-  
-  let! instance = ohm_req_or (return ()) $ MInstance.get iid in
-  
-  let! aid = ohm $ MAvatar.become_admin iid (instance # usr) in
-
-  (* Act as the creator... *)
-  let creator = IAvatar.Assert.is_self aid in
-  
-  let! () = ohm $ create_initial iid creator in 
-
-  let! _ = ohm $ _create 
-    ~pcname:"admin"  
-    ~name:(Some (`label `EntityAdminName))
-    ~access:`Private
-    ITemplate.admin (IInstance.decay iid) creator
-  in
-
-  let! _ = ohm $ _create 
-    ~pcname:"members" 
-    ~name:(Some (`label `EntityMembersName))
-    ITemplate.members (IInstance.decay iid) creator
-  in
-
-  return ()  
-
 (* List the dates of real entities *)
 
 module RealEntityDateView = CouchDB.MapView(struct
@@ -309,5 +251,60 @@ module Backdoor = struct
 
 end
 
+(* {{MIGRATION}} *)
 
+let on_migrate_call, on_migrate = 
+  Sig.make (fun list -> Run.map (List.exists identity) (Run.list_map identity list))
+
+let migrate_all = Async.Convenience.foreach O.async "migrate-discussion-entities"
+  IEntity.fmt (Tbl.all_ids ~count:20)
+  (fun eid ->
+    let  () = Util.log "<migrate> %s : start" (IEntity.to_string eid) in
+    let! entity = ohm_req_or (let! () = ohm (return ()) in
+			      let  () = Util.log "<migrate> %s : no entity" (IEntity.to_string eid) in
+			      return ()) $ Tbl.get eid in
+    if entity.E.kind = `Event || entity.E.deleted <> None then return () else begin
+      
+      (* Migrate groups and forums to discussions and MGroups *)
+      let  time = Unix.gettimeofday () in
+      let  iid  = entity.E.instance in
+      let! self = ohm_req_or (let! () = ohm (return ()) in
+			      let  () = Util.log "<migrate> %s : no creator" (IEntity.to_string eid) in
+			      return ()) begin match entity.E.creator with 
+	| Some aid -> return (Some aid)
+	| None -> let! instance = ohm_req_or (return None) $ MInstance.get iid in 
+		  (* Assume that instance creator is entity creator *)
+		  let  uid = instance # usr in
+		  MAvatar.find iid uid 
+      end in 
+      let  self = IAvatar.Assert.is_self self in 
+      let  gid  = entity.E.group in
+      let  kind = entity.E.kind in 
+      let  name = entity.E.name in
+      let  tid  = entity.E.template in
+      let  admins = entity.E.admin in
+      let  vision = 
+	if entity.E.public then `Public else
+	  let access = MAccess.summarize entity.E.view in
+	  if MEntityConfig.group entity.E.template entity.E.config <> None then 
+	    match access with 
+	      | `Admin -> `Private
+	      | any    -> `Normal
+	  else
+	    `Normal
+      in
+
+      let! ok = ohm $ on_migrate_call (eid, iid, gid, self, kind, name, admins, vision, tid) in
+
+      let! name = ohm $ Run.opt_map TextOrAdlib.to_string entity.E.name in
+      let  name = BatOption.default "Sans Titre" name in 
+
+      let  () = if ok then Util.log "Migrate group - %.3fs - %s %S" (Unix.gettimeofday () -. time)
+	(IEntity.to_string eid) name in
+      return ()
+	
+    end)
+
+(* Perform entity migration *)
+let () = O.put (migrate_all ())
 

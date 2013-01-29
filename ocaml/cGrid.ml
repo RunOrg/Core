@@ -29,11 +29,11 @@ let box access gid fail cols_url invite_url join_url wrapper =
 
   (* Extract the AvatarGrid identifier *)
 
-  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.list group) in
+  let! group = ohm $ O.decay (MAvatarSet.try_get actor gid) in
+  let! group = ohm $ O.decay (Run.opt_bind MAvatarSet.Can.list group) in
   let! group = req_or fail group in 
 
-  let  grid  = MGroup.Get.list group in 
+  let  grid  = MAvatarSet.Get.list group in 
   let  lid = Grid.list_id grid in
   
   (* Returning the rows for a given sort *)
@@ -66,7 +66,7 @@ let box access gid fail cols_url invite_url join_url wrapper =
 
   (* Starting an export *)
   let! export = O.Box.react Fmt.Unit.fmt begin fun () _ _ res ->
-    let! exid = ohm $ O.decay (CAvatarExport.start (MGroup.Get.id group)) in 
+    let! exid = ohm $ O.decay (CAvatarExport.start (MAvatarSet.Get.id group)) in 
     let  url  = CExport.status_url access exid in 
     return $ Action.json 
       [ "url", JsCode.Endpoint.to_json (JsCode.Endpoint.of_url url) ] res

@@ -6,17 +6,6 @@ open Ohm.Universal
 
 module Diff = Fmt.Make(struct
 
-(*
-  let edit = JoyA.obj [
-    JoyA.field "action" ~label:"Action" (JoyA.variant [
-      JoyA.alternative ~label:"Ajouter" "add" ;
-      JoyA.alternative ~label:"Supprimer" "remove"
-    ]) ;
-    JoyA.field "src" ~label:"Source" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;
-    JoyA.field "dest" ~label:"Destination" (JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;  
-  ]
-*)
-
   type json t = <
     action : [`add|`remove] ;
     src : string ;
@@ -28,29 +17,18 @@ end)
 let names _ = []
 
 let apply upgrade namer diff = 
-  let! src = ohm $ MPreConfigNamer.group (diff # src) namer in
-  let src = IGroup.Assert.bot src in 
+  let! src = ohm $ MPreConfigNamer.avatarSet (diff # src) namer in
+  let src = IAvatarSet.Assert.bot src in 
 
-  let! dest = ohm $ MPreConfigNamer.group (diff # dest) namer in
-  let dest = IGroup.Assert.bot dest in
+  let! dest = ohm $ MPreConfigNamer.avatarSet (diff # dest) namer in
+  let dest = IAvatarSet.Assert.bot dest in
 
   upgrade ~src ~dest (diff # action)
 
 module Entity = struct
 
   module Diff = Fmt.Make(struct
-      
-(*
-    let edit = JoyA.obj [
-      JoyA.field "action" ~label:"Action" (JoyA.variant [
-	JoyA.alternative ~label:"Ajouter" "add" ;
-	JoyA.alternative ~label:"Supprimer" "remove"
-      ]) ;
-      JoyA.field "dest" ~label:"Destination"
-	(JoyA.string ~autocomplete:MPreConfigNames.entity ()) ;  
-    ]
-*)
-      
+            
     type json t = <
       action : [`add|`remove] ;
       dest : string 

@@ -15,7 +15,7 @@ include Fmt.Make(struct
     | `NewInstance   "ni" of IInstance.t * IAvatar.t 
     | `EventInvite   "ei" of IEvent.t * IAvatar.t
     | `EventRequest  "er" of IEvent.t * IAvatar.t 
-    | `GroupRequest  "gr" of IEntity.t * IAvatar.t
+    | `GroupRequest  "gr" of IGroup.t * IAvatar.t
     | `NewUser       "nu" of IUser.t 
     | `NewJoin       "nj" of IInstance.t * IAvatar.t  
     | `CanInstall    "ci" of IInstance.t
@@ -36,7 +36,7 @@ let instance = function
     | `EventInvite (eid,_) 
     | `EventRequest (eid,_) -> MEvent.instance eid
 
-    | `GroupRequest (eid,_) -> MEntity.instance eid 
+    | `GroupRequest (gid,_) -> MGroup.instance gid 
 
     | `BecomeMember (iid,_) 
     | `BecomeAdmin (iid,_) 
@@ -84,12 +84,11 @@ let author cuid =
       let! event  = ohm_req_or (return None) $ MEvent.view ~actor eid in
       return $ Some (`Event (aid,iid,event))
 
-    | `GroupRequest (eid,aid) ->
-      let! iid    = ohm_req_or (return None) $ MEntity.instance eid in 
+    | `GroupRequest (gid,aid) ->
+      let! iid    = ohm_req_or (return None) $ MGroup.instance gid in 
       let! actor  = ohm_req_or (return None) $ actor cuid iid in 
-      let! entity = ohm_req_or (return None) $ MEntity.try_get actor eid in
-      let! entity = ohm_req_or (return None) $ MEntity.Can.view entity in 
-      return $ Some (`Entity (aid,iid,entity))
+      let! group  = ohm_req_or (return None) $ MGroup.view ~actor gid in  
+      return $ Some (`Group (aid,iid,group))
 
     | `NewInstance (iid,aid) -> 
       return $ Some (`Person (aid,iid))

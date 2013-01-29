@@ -1,0 +1,92 @@
+<div class="discussion-page">
+  
+  <div class="-head">
+    {?admin}
+    <ul class="actions">
+      <li class="-r">
+	<a class="action-button -admin" href="{url}">
+	  {`Discussion_Admin}
+	</a>
+      </li>
+    </ul>
+    {/?}
+    <h2>{title}</h2>
+    <div class="-involved">
+      {=author}
+        <a href="{url}">
+          {?pico}<img src="{this}"/>{/?}
+          {name}
+        </a>
+      {/=}
+      {#groups}
+        &middot; <span>{name}</span>
+      {/#}
+    </div>
+    <div class="-details">
+      {page|verbatim}
+    </div>
+  </div>
+  
+  <div class="-body -files">
+    {files|verbatim}      
+  </div>
+  
+  <div class="-body -wall">
+    {wall|verbatim}
+  </div>
+  
+</div>
+  
+<style>  
+.discussion-page {
+
+  width: 710px;
+  margin: auto; 
+
+  .-head .actions { float: right; margin: 0 }
+
+  h2 {
+    margin: 0 0 8px;
+  }
+
+  .-involved {
+    border-bottom: 1px solid #CCC;
+    border-top: 1px solid #CCC;
+    line-height: 29px;
+    font-size: 13px;
+    background-color: #EEE;
+    overflow: hidden; 
+    white-space: no-wrap; 
+    text-overflow: ellipsis;
+    img {
+      float: left;
+      width: 23px;
+      height: 23px;
+      margin: 3px 5px 3px 3px;
+    }
+  }
+
+  .-details {
+    color: #333;
+    font-size: 16px;
+    padding: 0 8px;
+    line-height: 1.5em;
+  }
+  
+  > .-body {
+    width: 708px;
+    border: 1px solid #BBB;
+    overflow: hidden;
+  }
+
+  .-wall {
+    border-radius: 0 0 5px 5px;
+  }
+
+  .-files {
+    border-bottom: medium none;
+    border-radius: 5px 5px 0 0;
+  }
+
+}
+</style>

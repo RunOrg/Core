@@ -2711,24 +2711,6 @@ let zoom_in = _icon "zoom_in"
 let zoom_out = _icon "zoom_out"
 let zoom = _icon "zoom"
 
-let of_entity_kind : MEntityKind.t -> string = function
-  | `Event        -> date
-  | `Group        -> folder_user
-  | `Subscription -> user_go
-  | `Forum        -> comments
-  | `Poll         -> chart_bar
-  | `Album        -> images
-  | `Course       -> book_open
-
-let empty_of_entity_kind : MEntityKind.t -> string = function
-  | `Event        -> Large.calendar
-  | `Group        -> Large.folder_user
-  | `Subscription -> Large.user_go
-  | `Forum        -> Large.comments
-  | `Poll         -> Large.chart_bar
-  | `Album        -> Large.images
-  | `Course       -> Large.book_open
-
 let of_extension : MFile.Extension.t -> string = function
   | `File       -> page_white
   | `Text       -> page_white_text
@@ -2739,11 +2721,3 @@ let of_extension : MFile.Extension.t -> string = function
   | `Web        -> page_white_world
   | `Archive    -> page_white_zip
   | `PDF        -> page_white_acrobat
-
-let smileys = [
-  "&lt;3", heart ;
-  ":-)", emoticon_smile ;
-  ":-(", emoticon_unhappy ;
-  ":-[pP]", emoticon_tongue ;
-  ":cake:", cake ;
-]

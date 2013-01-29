@@ -11,7 +11,7 @@ module Get = MEvent_get
 module DatedView = CouchDB.DocView(struct
   module Key    = Fmt.Make(struct type json t = (IInstance.t * Date.t) end)
   module Value  = Fmt.Unit
-  module Doc    = E.Store.Raw
+  module Doc    = E.Raw
   module Design = E.Design
   let name = "dated"
   let map  = "if (!doc.c.del && doc.c.date) emit([doc.c.iid,doc.c.date])"
@@ -20,7 +20,7 @@ end)
 module UndatedView = CouchDB.DocView(struct
   module Key    = IInstance
   module Value  = Fmt.Unit
-  module Doc    = E.Store.Raw 
+  module Doc    = E.Raw 
   module Design = E.Design
   let name = "undated"
   let map  = "if (!doc.c.del && !doc.c.date) emit(doc.c.iid)"
@@ -28,7 +28,7 @@ end)
 
 let viewable ?actor item = 
   let eid  = IEvent.of_id (item # id) in
-  let data = item # doc # current in 
+  let data = item # doc in 
   match Can.make eid ?actor data with
     | None   -> return None
     | Some t -> Can.view t 

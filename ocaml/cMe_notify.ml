@@ -37,22 +37,22 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
 	end
 	| `Person (aid,_) 
 	| `Event  (aid,_,_)
-	| `Entity (aid,_,_) -> let! profile = ohm $ CAvatar.mini_profile aid in 
+	| `Group  (aid,_,_) -> let! profile = ohm $ CAvatar.mini_profile aid in 
 			       return (profile # pico, Some profile # name) 
     end in
 
-    let! entity_name = ohm begin
+    let! group_name = ohm begin
       match who with 
 	| `RunOrg _ 
 	| `Event  _ 
 	| `Person _ -> return "-"
-	| `Entity (_,_,e) -> CEntityUtil.name e
+	| `Group (_,_,g) -> MGroup.Get.fullname g
     end in 
 
     let! event_name = ohm begin
       match who with 
 	| `RunOrg _ 
-	| `Entity _ 
+	| `Group _ 
 	| `Person _ -> return "-"
 	| `Event (_,_,e) -> MEvent.Get.fullname e
     end in  
@@ -65,7 +65,7 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
       | `BecomeMember  _ -> return (`BecomeMember1, [])
       | `EventInvite   _ -> return (`EventInvite1, [ event_name, `EventInvite2 ])
       | `EventRequest  _ -> return (`EntityRequest1, [ event_name, `EntityRequest2 ])
-      | `GroupRequest  _ -> return (`EntityRequest1, [ entity_name, `EntityRequest2 ])
+      | `GroupRequest  _ -> return (`EntityRequest1, [ group_name, `EntityRequest2 ])
       | `NewFavorite   _ -> return (`NewFavorite1, [])
       | `NewComment (`ItemAuthor,_) -> return (`NewCommentSelf1, [])
       | `NewComment (`ItemFollower,cid) -> begin
@@ -104,7 +104,7 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
       match author with 
 	| Some (`RunOrg iid) -> return (Some (iid, (`RunOrg iid, t)))
 	| Some (`Person (aid,iid)) -> return (Some (Some iid, (`Person (aid,iid), t)))
-	| Some (`Entity (aid,iid,e)) -> return (Some (Some iid, (`Entity (aid,iid,e), t)))
+	| Some (`Group (aid,iid,g)) -> return (Some (Some iid, (`Group (aid,iid,g), t)))
 	| Some (`Event (aid,iid,e)) -> return (Some (Some iid, (`Event (aid,iid,e), t)))
 	| None -> let! () = ohm $ MNotify.Store.rotten (t # id) in
 		  return None

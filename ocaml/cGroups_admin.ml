@@ -15,10 +15,10 @@ module Cols     = CGroups_admin_cols
 module Delete   = CGroups_admin_delete
 module Delegate = CGroups_admin_delegate
 
-let () = define UrlClient.Members.def_admin begin fun parents entity access -> 
+let () = define UrlClient.Members.def_admin begin fun parents group access -> 
 
-  let! is_admin = ohm $ O.decay (MEntity.is_admin entity) in
-  let! is_all_members = ohm $ O.decay (MEntity.is_all_members entity) in
+  let! is_admin       = ohm $ MGroup.Get.is_admin group in
+  let! is_all_members = ohm $ MGroup.Get.is_all_members group in
 
   O.Box.fill begin 
     let choices = Asset_Admin_Choice.render (BatList.filter_map identity [
