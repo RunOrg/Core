@@ -6,66 +6,30 @@ open BatPervasives
 
 module E = MEvent_core
 
-type 'relation t = {
-  eid   : 'relation IEvent.id ;
-  data  : E.t ;
-  actor : [`IsToken] MActor.t option ;
-}
+include HEntity.Can(struct
 
-let valid ?actor data = 
-  data.E.del = None && begin
-    match actor with 
-      | None -> true
-      | Some actor -> IInstance.decay (MActor.instance actor) = data.E.iid 
-  end
+  type core = E.t
+  type 'a id = 'a IEvent.id
 
-let make eid ?actor data = if valid ?actor data then Some {
-  eid ;
-  data ;
-  actor = BatOption.bind MActor.member actor ;
-} else None
-  
-let admin_access t = 
-  [ `Admin ; t.data.E.admins ]
+  let deleted e = e.E.del <> None
+  let iid     e = e.E.iid
+  let admin   e = [ `Admin ; e.E.admins ]
+
+  let view e = 
+    if e.E.draft then admin e else 
+      match e.E.vision with 
+	| `Public  -> [ `Contact ]
+	| `Normal  -> [ `Token   ]
+	| `Private -> `Groups (`Any,[ e.E.gid ]) :: admin e
+
+  let id_view  id = IEvent.Assert.view id
+  let id_admin id = IEvent.Assert.admin id 
+  let decay    id = IEvent.decay id 
+
+  let public e = not (deleted e) && e.E.vision = `Public 
+
+end)
 
 let member_access t = 
-  if t.data.E.draft then admin_access t else
-    `Groups (`Validated,[ t.data.E.gid ]) :: admin_access t
-
-let view_access t = 
-  if t.data.E.draft then admin_access t else
-    match t.data.E.vision with 
-      | `Public  -> [ `Contact ]
-      | `Normal  -> [ `Token ]
-      | `Private -> member_access t
-
-let id t = t.eid
-
-let data t = t.data
-
-let view t = 
-  O.decay begin 
-    let t' = { eid = IEvent.Assert.view t.eid ; data = t.data ; actor = t.actor } in   
-    if t.data.E.draft then 
-      match t.actor with
-	| None       -> return None
-	| Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
-			if ok then return (Some t') else return None
-    else
-      match t.data.E.vision with 
-	| `Public  -> return (Some t')
-	| `Normal  -> if t.actor <> None then return (Some t') else return None
-	| `Private -> match t.actor with 
-	    | None       -> return None
-	    | Some actor -> let! ok = ohm $ MAccess.test actor (member_access t) in
-			    if ok then return (Some t') else return None
-  end
-    
-let admin t = 
-  O.decay begin
-    let t' = { eid = IEvent.Assert.admin t.eid ; data = t.data ; actor = t.actor } in
-    match t.actor with 
-      | None       -> return None
-      | Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
-		      if ok then return (Some t') else return None
-  end
+  if (data t).E.draft then admin_access t else
+    `Groups (`Validated,[ (data t).E.gid ]) :: admin_access t

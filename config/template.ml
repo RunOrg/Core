@@ -1678,7 +1678,8 @@ let groupSchoolParents = template "GroupSchoolParents"
 let groupSimple = template "GroupSimple"
   ~old:"group-simple"
   ~kind:`Group
-  ~name:"Groupe sans Forum"
+  ~name:"Groupe Standard"
+  ~desc:"Un sous-ensemble des membres de votre espace"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([ status ; date ])

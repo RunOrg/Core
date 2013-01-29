@@ -32,8 +32,8 @@ let () = define UrlClient.Events.def_invite begin fun parents event access ->
   let  draft = MEvent.Get.draft event in 
 
   let  gid = MEvent.Get.group event in
-  let! group = ohm $ O.decay (MGroup.try_get actor gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.admin group) in
+  let! group = ohm $ O.decay (MAvatarSet.try_get actor gid) in
+  let! group = ohm $ O.decay (Run.opt_bind MAvatarSet.Can.admin group) in
   let  group = if draft then None else group in   
   let! group = req_or fail group in 
 
@@ -47,6 +47,6 @@ let () = define UrlClient.Events.def_invite begin fun parents event access ->
       [ IEvent.to_string (MEvent.Get.id event) ]
   in
 
-  CInvite.box `Event url back access (MGroup.Get.id group) wrapper
+  CInvite.box `Event url back access (MAvatarSet.Get.id group) wrapper
 
 end

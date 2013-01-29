@@ -109,7 +109,7 @@ module Field = Fmt.Make(struct
 			     | `City      "y"
 			     | `Country   "n"
 			     | `Gender    "g" ]
-    | `Import "i" of bool * IGroup.t * string
+    | `Import "i" of bool * IAvatarSet.t * string
     ]
 
   let t_of_json json = 
@@ -122,7 +122,7 @@ end)
 module Flat = struct
 
   type t = 
-    [ `Group   of (IGroup.t * string) field
+    [ `Group   of (IAvatarSet.t * string) field
     | `Profile of profile field
     ]
 

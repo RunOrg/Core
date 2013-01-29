@@ -1,29 +1,25 @@
 (* © 2012 RunOrg *)
 
 open Ohm
-  
-module IGroup  = IGroup
-module IAvatar = IAvatar
-module Float   = Fmt.Float
-  
+    
 module T = struct
 
   type json t = {
-    where   : IGroup.t  ;
+    where   : IAvatarSet.t  ;
     who     : IAvatar.t ;
-    admin   : (bool * Float.t * IAvatar.t) option ; 
-    user    : (bool * Float.t * IAvatar.t) option ;
-    invited : (bool * Float.t * IAvatar.t) option ;
-    paid    : (bool * Float.t * IAvatar.t) option 
+    admin   : (bool * float * IAvatar.t) option ; 
+    user    : (bool * float * IAvatar.t) option ;
+    invited : (bool * float * IAvatar.t) option ;
+    paid    : (bool * float * IAvatar.t) option 
   }
 
   type data = t = {
-    where   : IGroup.t  ;
+    where   : IAvatarSet.t  ;
     who     : IAvatar.t ;
-    admin   : (bool * Float.t * IAvatar.t) option ; 
-    user    : (bool * Float.t * IAvatar.t) option ;
-    invited : (bool * Float.t * IAvatar.t) option ;
-    paid    : (bool * Float.t * IAvatar.t) option 
+    admin   : (bool * float * IAvatar.t) option ; 
+    user    : (bool * float * IAvatar.t) option ;
+    invited : (bool * float * IAvatar.t) option ;
+    paid    : (bool * float * IAvatar.t) option 
   }
 
 end 
@@ -31,7 +27,7 @@ include T
 include Fmt.Extend(T)
 
 let default group avatar = {
-  where   = IGroup.decay  group ;
+  where   = IAvatarSet.decay  group ;
   who     = IAvatar.decay avatar ;
   admin   = None ;
   user    = None ;

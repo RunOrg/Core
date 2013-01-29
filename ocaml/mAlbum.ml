@@ -55,6 +55,16 @@ let try_get actor id =
   let! album_opt = ohm (Tbl.get (IAlbum.decay id)) in
   return (BatOption.map (_make actor id) album_opt)
 
+let bot_get id = 
+  let! data = ohm_req_or (return None) $ Tbl.get (IAlbum.decay id) in
+  return $ Some {
+    id    = id ;
+    data  = data ;
+    read  = return false ;
+    write = return false ;
+    admin = return false
+  }
+
 module Get = struct
 
   let id t = t.id
@@ -120,7 +130,7 @@ module ByOwnerView = CouchDB.DocView(struct
   module Doc = Data
   module Design = Design
   let name = "by_owner"
-  let map = "if (doc.t == 'albm' && doc.owner) emit(doc.owner[1]);"
+  let map = "emit(doc.owner[1]);"
 end)
 
 let get_or_create iid owner = 
@@ -150,3 +160,7 @@ let get_for_owner actor owner =
   let! id, doc = ohm $ get_or_create iid owner in
   return (_make actor id doc)
 
+let try_by_owner owner = 
+  let id = IAlbumOwner.to_id owner in 
+  let! found = ohm_req_or (return None) (ByOwnerView.doc id |> Run.map Util.first) in
+  return $ Some (IAlbum.of_id (found # id))

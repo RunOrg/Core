@@ -32,26 +32,26 @@ type profile =
 module Field : Ohm.Fmt.FMT with type t = 
   [ `Local   of string field 
   | `Profile of bool * profile
-  | `Import  of bool * IGroup.t * string
+  | `Import  of bool * IAvatarSet.t * string
   ]
 
 module Flat : sig
 
   type t = 
-    [ `Group   of (IGroup.t * string) field
+    [ `Group   of (IAvatarSet.t * string) field
     | `Profile of profile field
     ]
 
-  val group : bool -> IGroup.t -> string field -> t
+  val group : bool -> IAvatarSet.t -> string field -> t
   val profile : bool -> profile -> t
 
   val collapse : t -> unit field
 
   val dispatch : 
-       ([ `Group of (IGroup.t * string) | `Profile of profile ] * Ohm.Json.t) list
+       ([ `Group of (IAvatarSet.t * string) | `Profile of profile ] * Ohm.Json.t) list
     -> < 
       profile : (profile * Ohm.Json.t) list ;
-      groups : (IGroup.t * (string * Ohm.Json.t) list) list
+      groups : (IAvatarSet.t * (string * Ohm.Json.t) list) list
     >
 
 end

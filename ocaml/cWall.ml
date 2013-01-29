@@ -25,10 +25,11 @@ let feed_rw where more access feed wfeed =
   end in
 
   let sending = match where with 
-    | None -> `Everyone
-    | Some `Event -> `Event
-    | Some `Group -> `Group
-    | Some `Forum -> `Forum
+    | None             -> `Everyone
+    | Some `Event      -> `Event
+    | Some `Group      -> `Group
+    | Some `Forum      -> `Forum
+    | Some `Discussion -> `Discussion
   in
 
   let! mail = ohm begin 

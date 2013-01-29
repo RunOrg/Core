@@ -6,7 +6,7 @@ type entity = {
   public   : bool ;
   admin    : MAccess.t ;
   view     : MAccess.t ;
-  group    : IGroup.t ;
+  group    : IAvatarSet.t ;
   creator  : IAvatar.t option ;
   kind     : MEntityKind.t ;
   template : ITemplate.t ;
@@ -28,7 +28,7 @@ module Init : sig
 	public   : bool ;
 	admin    : MAccess.t ;
 	view     : MAccess.t ;
-	group    : IGroup.t ;
+	group    : IAvatarSet.t ;
 	creator  : IAvatar.t option ;
 	kind     : MEntityKind.t ;
 	template : ITemplate.t ;

@@ -5,7 +5,7 @@ open BatPervasives
 open Ohm.Universal
 
 module PropagateArgs = Fmt.Make(struct
-  type json t = (IAvatar.t * IAvatar.t * IGroup.t) 
+  type json t = (IAvatar.t * IAvatar.t * IAvatarSet.t) 
 end)
 
 let _ = 
@@ -16,7 +16,7 @@ let _ =
       let propagate_to_gid gid =
 	
 	(* Can write to group during propagation *)
-	let  wgid = IGroup.Assert.write gid in
+	let  wgid = IAvatarSet.Assert.write gid in
 	let  from = IAvatar.Assert.is_self from in 
 	
 	let! from    = ohm_req_or (return ()) $ MAvatar.actor from in 
@@ -36,7 +36,7 @@ let _ =
 	  
       in
       
-      let! list = ohm $ MGroup.Propagate.get_direct gid in
+      let! list = ohm $ MAvatarSet.Propagate.get_direct gid in
       let! _    = ohm $ Run.list_iter propagate_to_gid list in
       
       return () 

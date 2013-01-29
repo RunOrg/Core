@@ -30,7 +30,7 @@ let make_admin aid iid =
   
   let namer = MPreConfigNamer.load iid in 
   
-  let!  gid = ohm $ MPreConfigNamer.group "admin" namer in
+  let!  gid = ohm $ MPreConfigNamer.avatarSet IGroup.admin namer in
   
   let!    _ = ohm $ Versioned.apply gid aid
     [ Diff.admin aid true ; Diff.user aid true ]

@@ -51,7 +51,7 @@ module Format = struct
 end    
 
 let get_field gid name = 
-  let! fields = ohm $ MGroup.Fields.local gid in
+  let! fields = ohm $ MAvatarSet.Fields.local gid in
   return 
     (try Some (List.find ((#name) |- (=) name) fields)
      with _ -> None)

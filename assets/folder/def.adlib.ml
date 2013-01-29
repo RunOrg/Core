@@ -8,3 +8,5 @@
 | `Folder_Upload_Fail
 
 | `Folder_File_Delete
+
+| `Folder_Upload

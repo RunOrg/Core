@@ -18,7 +18,9 @@ module Data = Fmt.Make(struct
   module IInstance = IInstance
   type json t = <
     iid "ins" : IInstance.t ;
-    owner : [ `Entity "e" of IEntity.t | `Event "ev" of IEvent.t ]
+    owner : [ `Entity "e" of IEntity.t 
+	    | `Event "ev" of IEvent.t 
+	    | `Discussion "d" of IDiscussion.t ]
   >
 end)
 
@@ -33,15 +35,17 @@ type 'relation t =
       admin : bool O.run ;
     }
 
+let nil _ = `Nobody 
+
 let _make actor id data = 
   let owner = Run.memo begin
     match data # owner with 
-      | `Entity eid -> let nil = (fun _ -> `Nobody) in
-		       let! entity = ohm_req_or (return nil) $ MEntity.try_get actor eid in
-		       return (fun what -> MEntity.Satellite.access entity (`Album what))
-      | `Event eid ->  let nil = (fun _ -> `Nobody) in
-		       let! event = ohm_req_or (return nil) $ MEvent.get ~actor eid in
-		       return (fun what -> MEvent.Satellite.access event (`Album what))
+      | `Entity eid -> let! entity = ohm_req_or (return nil) $ MEntity.try_get actor eid in
+		       return (fun what -> MEntity.Satellite.access entity (`Folder what))
+      | `Event eid ->  let! event = ohm_req_or (return nil) $ MEvent.get ~actor eid in
+		       return (fun what -> MEvent.Satellite.access event (`Folder what))
+      | `Discussion did ->  let! discn = ohm_req_or (return nil) $ MDiscussion.get ~actor did in
+			    return (fun what -> MDiscussion.Satellite.access discn (`Folder what))
   end in
   {
     id    = id ;
@@ -56,6 +60,16 @@ let _make actor id data =
 let try_get actor id = 
   let! album_opt = ohm $ Tbl.get (IFolder.decay id) in
   return $ BatOption.map (_make actor id) album_opt
+
+let bot_get id = 
+  let! data = ohm_req_or (return None) $ Tbl.get (IFolder.decay id) in
+  return $ Some {
+    id    = id ;
+    data  = data ;
+    read  = return false ;
+    write = return false ;
+    admin = return false
+  }
 
 module Get = struct
 
@@ -152,3 +166,18 @@ let get_for_owner actor owner =
   let! id, doc = ohm $ get_or_create iid owner in
   return (_make actor id doc)
 
+let try_by_owner owner = 
+  let id = IFolderOwner.to_id owner in 
+  let! found = ohm_req_or (return None) (ByOwnerView.doc id |> Run.map Util.first) in
+  return $ Some (IFolder.of_id (found # id))
+
+(* Owner migration ------------------------------------------------------------------------ *)
+
+let migrate_owner flid floid = 
+  let! _ = ohm $ Tbl.update (IFolder.decay flid) (fun folder ->
+    (object
+      method iid   = folder # iid
+      method owner = IFolderOwner.decay floid
+     end) 
+  ) in
+  return () 

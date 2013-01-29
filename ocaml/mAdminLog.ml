@@ -36,11 +36,11 @@ module Payload = struct
     type json t = 
         MembershipMass          "mm"  of 
 	    [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" | `Create "c" ] * 
-	      [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] * int
+	      [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t | `Group "g" of IGroup.t ] * int
       | MembershipAdmin         "ma"  of 
 	  [ `Invite "i" | `Add "a" | `Remove "r" | `Validate "v" ] * 
-	    [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] * IAvatar.t
-      | MembershipUser          "mu"  of bool * [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t ] 
+	    [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t | `Group "g" of IGroup.t ] * IAvatar.t
+      | MembershipUser          "mu"  of bool * [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t | `Group "g" of IGroup.t ] 
       | InstanceCreate          "ic"
       | LoginManual             "lm"
       | LoginSignup             "ls"

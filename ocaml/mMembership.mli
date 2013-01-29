@@ -18,7 +18,7 @@ module Diff : Ohm.Fmt.FMT with type t =
 module Details : sig
 
   type data = {
-    where   : IGroup.t  ;
+    where   : IAvatarSet.t  ;
     who     : IAvatar.t ;
     admin   : (bool * float * IAvatar.t) option ; 
     user    : (bool * float * IAvatar.t) option ;
@@ -29,7 +29,7 @@ module Details : sig
 end
 
 type t = {
-  where   : IGroup.t  ;
+  where   : IAvatarSet.t  ;
   who     : IAvatar.t ;
   admin   : (bool * float * IAvatar.t) option ;
   user    : (bool * float * IAvatar.t) option ;
@@ -56,60 +56,60 @@ end
 
 val relevant_change : Details.data -> Diff.t -> bool 
 
-val status : 'any MActor.t -> 'b IGroup.id -> Status.t O.run
+val status : 'any MActor.t -> 'b IAvatarSet.id -> Status.t O.run
 
-val default : mustpay:bool -> group:IGroup.t -> avatar:IAvatar.t -> t
+val default : mustpay:bool -> group:IAvatarSet.t -> avatar:IAvatar.t -> t
 
 val get : [<`View|`IsSelf|`IsAdmin] IMembership.id -> t option O.run 
 
 val as_admin :
-     [<`Admin|`Write|`Bot] IGroup.id
+     [<`Admin|`Write|`Bot] IAvatarSet.id
   -> 'a IAvatar.id
   -> [`IsAdmin] IMembership.id O.run
 
 val as_user : 
-     'a IGroup.id
+     'a IAvatarSet.id
   -> 'b MActor.t
   -> [`IsSelf] IMembership.id O.run
 
 val as_viewer :
-     [<`List|`Admin|`Write|`Bot] IGroup.id
+     [<`List|`Admin|`Write|`Bot] IAvatarSet.id
   -> 'a IAvatar.id 
   -> [`View] IMembership.id O.run
 
 val admin :
      from:'any MActor.t
-  -> [<`Admin|`Write|`Bot] IGroup.id
+  -> [<`Admin|`Write|`Bot] IAvatarSet.id
   -> 'a IAvatar.id
   -> [ `Accept of bool | `Invite | `Default of bool ] list
   -> unit O.run
 
 val user : 
-     'a IGroup.id
+     'a IAvatarSet.id
   -> 'b MActor.t
   -> bool
   -> unit O.run
 
-module InGroup : sig
+module InSet : sig
 
   val all :
-       [<`Admin|`Write|`List|`Bot] IGroup.id
+       [<`Admin|`Write|`List|`Bot] IAvatarSet.id
     -> MAccess.State.t 
     -> (bool * IAvatar.t) list O.run  
     
   val list_members :
        ?start:Ohm.Id.t
     -> count:int
-    -> [<`Admin|`Write|`List|`Bot] IGroup.id 
+    -> [<`Admin|`Write|`List|`Bot] IAvatarSet.id 
     -> (IAvatar.t list * Ohm.Id.t option) O.run
 
   val avatars : 
-       [<`Admin|`Write|`List|`Bot] IGroup.id
+       [<`Admin|`Write|`List|`Bot] IAvatarSet.id
     -> start:IAvatar.t option
     -> count:int
     -> (IAvatar.t list * IAvatar.t option) O.run
     
-  val count : 'any IGroup.id -> < count : int ; pending : int ; any : int > O.run
+  val count : 'any IAvatarSet.id -> < count : int ; pending : int ; any : int > O.run
 
 end
 
@@ -117,7 +117,7 @@ module Mass : sig
 
   val admin : 
        from:'any MActor.t
-    -> [<`Admin|`Write|`Bot] IGroup.id
+    -> [<`Admin|`Write|`Bot] IAvatarSet.id
     -> 'a IAvatar.id list
     -> [ `Accept of bool | `Invite | `Default of bool ] list
     -> unit O.run
@@ -125,7 +125,7 @@ module Mass : sig
   val create : 
        from:'any MActor.t
     -> 'a IInstance.id 
-    -> [<`Admin|`Write|`Bot] IGroup.id
+    -> [<`Admin|`Write|`Bot] IAvatarSet.id
     -> ( string * string * string ) list
     -> [ `Accept of bool | `Invite | `Default of bool ] list
     -> unit O.run
@@ -137,7 +137,7 @@ module Data : sig
   val get : [<`IsSelf|`IsAdmin] IMembership.id -> (string * Ohm.Json.t) list O.run
 
   val self_update :
-       'any IGroup.id
+       'any IAvatarSet.id
     -> 'b MActor.t
     -> MUpdateInfo.t
     -> ?irreversible:string list
@@ -146,14 +146,14 @@ module Data : sig
 
   val admin_update :
        'a MActor.t
-    -> [<`Write|`Admin|`Bot] IGroup.id
+    -> [<`Write|`Admin|`Bot] IAvatarSet.id
     -> 'any IAvatar.id
     -> MUpdateInfo.t
     -> (string * Ohm.Json.t) list
     -> unit O.run
 
   val count :
-       [<`Admin|`Write|`List] IGroup.id
+       [<`Admin|`Write|`List] IAvatarSet.id
     -> string
     -> (Ohm.Json.t * int) list O.run
 

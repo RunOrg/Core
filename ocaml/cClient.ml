@@ -38,7 +38,7 @@ let () = UrlClient.def_root begin fun req res ->
   let if_old () =
 
     let url = Action.url UrlClient.ajax key [] in
-    let default = "/home" in
+    let default = "/inbox" in
     
     let html = Asset_Client_Page.render (object
       method navbar = (snd key,cuid,Some iid)

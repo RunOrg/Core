@@ -6,7 +6,7 @@ open BatPervasives
 
 let rec get_field = function
   | `Group (gid,`Field name) ->
-    let! fields = ohm $ MGroup.Fields.of_group gid in 
+    let! fields = ohm $ MAvatarSet.Fields.of_group gid in 
     return (
       try Some (BatList.find_map (function 
 	| `Local field when field # name = name -> Some field

@@ -2,6 +2,7 @@
 
 val text : 
       label:('c,string) Ohm.Run.t
+  -> ?left:bool
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
   ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
@@ -26,6 +27,16 @@ val date :
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
   ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  ('c,'s,'r) OhmForm.template
+
+val picker : 
+      label:('c,string) Ohm.Run.t
+  -> ?left:bool
+  -> ?detail:('c,string) Ohm.Run.t
+  ->  format:'data Ohm.Fmt.fmt 
+  -> ?static:('data * string * ('c,Ohm.Html.writer) Ohm.Run.t) list 
+  ->  ('s -> ('c,'data list) Ohm.Run.t)
+  ->  (OhmForm.field -> 'data list -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 val radio : 

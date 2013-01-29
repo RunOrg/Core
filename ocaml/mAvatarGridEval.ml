@@ -19,7 +19,7 @@ include Ohm.Fmt.Make(struct
 	| `Gender 
 	| `Full 
 	]
-    | `Group   of IGroup.t * 
+    | `Group   of IAvatarSet.t * 
 	[ `Status 
 	| `Date
 	| `InList

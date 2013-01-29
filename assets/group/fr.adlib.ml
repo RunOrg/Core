@@ -3,6 +3,7 @@
 | `Groups_IsNotMember -> "Autres Groupes"
 
 | `Group_NotFound -> "Vous n'êtes pas autorisé à voir les membres de ce groupe."
+| `Group_Unnamed  -> "Sans titre"
 
 | `Group_Action_Admin -> "Administration"
 | `Group_Action_Send -> "Envoyer un message"

@@ -6,6 +6,7 @@ module Assert : sig
   val read  : 'any id -> [`Read] id
   val write : 'any id -> [`Write] id
   val admin : 'any id -> [`Admin] id
+  val bot   : 'any id -> [`Bot] id
 end
 
 module Deduce : sig

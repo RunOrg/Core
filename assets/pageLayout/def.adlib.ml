@@ -2,7 +2,6 @@
 | `PageLayout_Navbar_Home
 | `PageLayout_Navbar_Members
 | `PageLayout_Navbar_Events
-| `PageLayout_Navbar_Forums
 | `PageLayout_Navbar_Website
 | `PageLayout_Navbar_Admin 
 | `PageLayout_Navbar_Intranet

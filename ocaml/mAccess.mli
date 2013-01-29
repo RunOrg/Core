@@ -16,7 +16,7 @@ type t =
   | `TokOnly of t                              (* "t" *)
   | `Contact                                   (* "c" *)
   | `List    of IAvatar.t list                 (* ["l",[a,b,c,d]] *)
-  | `Groups  of State.t * (IGroup.t list)      (* ["g",s,[a,b,c,d]] *)
+  | `Groups  of State.t * (IAvatarSet.t list)  (* ["g",s,[a,b,c,d]] *)
   | `Union   of t list                         (* ["u",[a,b,c,d]] *)
   ]
 
@@ -24,11 +24,11 @@ val of_json : Ohm.Json.t -> t
 val to_json : t -> Ohm.Json.t
 val fmt : t Ohm.Fmt.t
 
-val in_group : IAvatar.t -> IGroup.t -> State.t -> bool O.run
+val in_group : IAvatar.t -> IAvatarSet.t -> State.t -> bool O.run
 
 module Signals : sig
 
-  val in_group  : (IAvatar.t * IGroup.t * State.t, bool O.run) Ohm.Sig.channel
+  val in_group  : (IAvatar.t * IAvatarSet.t * State.t, bool O.run) Ohm.Sig.channel
 
 end
 

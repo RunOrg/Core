@@ -8,3 +8,4 @@
 | `Folder_Upload_Ok -> "Votre fichier sera disponible d'ici quelques instants"
 | `Folder_Upload_Fail -> "Une erreur s'est produite, le fichier n'a pas été mis en ligne"
 | `Folder_File_Delete -> "Supprimer"
+| `Folder_Upload -> "Ajouter une pièce jointe"

@@ -3,6 +3,7 @@
 | `Groups_IsNotMember 
 
 | `Group_NotFound
+| `Group_Unnamed
 
 | `Group_Action_Admin
 | `Group_Action_Send 

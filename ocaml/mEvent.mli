@@ -25,7 +25,7 @@ module Signals : sig
 
   val on_bind_group : (   IInstance.t
                         * IEvent.t
-		        * IGroup.t
+		        * IAvatarSet.t
                         * ITemplate.Event.t 
 			* [`IsSelf] IAvatar.id, unit O.run) Ohm.Sig.channel
     
@@ -33,8 +33,10 @@ end
 
 
 module Can : sig
+
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
+
 end
 
 module Data : sig
@@ -55,7 +57,7 @@ module Get : sig
   val name     : [<`Admin|`View] t -> string option 
   val picture  : [<`Admin|`View] t -> [`GetPic] IFile.id option 
   val date     : [<`Admin|`View] t -> Date.t option
-  val group    :            'any t -> IGroup.t 
+  val group    :            'any t -> IAvatarSet.t 
   val iid      :            'any t -> IInstance.t 
   val template : [<`Admin|`View] t -> ITemplate.Event.t
   val admins   : [<`Admin|`View] t -> IAvatar.t list 
@@ -80,26 +82,27 @@ val create :
 module Set : sig
     
   val picture :
-       [`Admin] t 
+       [`InsPic] IFile.id option
+    -> [`Admin] t 
     -> 'any MActor.t
-    -> [`InsPic] IFile.id option
     -> (#O.ctx,unit) Ohm.Run.t
 
   val admins : 
-       [`Admin] t
+       IAvatar.t list
+    -> [`Admin] t
     -> 'any MActor.t
-    -> IAvatar.t list
+
     -> (#O.ctx,unit) Ohm.Run.t
 
   val info : 
-       [`Admin] t
-    -> 'any MActor.t
-    -> draft:bool 
+       draft:bool 
     -> name:string option 
     -> page:MRich.OrText.t
     -> date:Date.t option
     -> address:string option 
     -> vision:Vision.t
+    -> [`Admin] t
+    -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t 
 
 end
