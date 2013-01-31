@@ -1,9 +1,14 @@
+<div {if compact}class="-folder-compact"{/if}>
 <div class="folder-upload">
 {?upload}
+  <a class="action-button -upload" {$a} href="javascript:void(0)">{`Folder_Upload}</a>
   <iframe {$f} style="border:none;width:655px;height:28px" src="{this}"></iframe>
   <div {$ok} class="-ok">{`Folder_Upload_Ok}</div>
   <div {$fail} class="-fail">{`Folder_Upload_Fail}</div>
   <script>
+here.$a.click ->
+  $(@).closest(".-folder-compact").removeClass("-folder-compact")
+
 url = here.$f.attr("src")
 
 reset = () ->
@@ -33,23 +38,36 @@ here.$f.load () ->
   <center>{`Folder_ReadOnly}</center>
 {/?}
 </div>
-<div class="shadow" style="position:relative"><div class="-inner"></div></div>
-<div class="folder">
-
-  {if files | OhmAsset.notEmpty}
-    { this | Asset_Folder_More.render | ohm }
-  {else}
-    <div class="empty-list">{`Folder_List_Empty}</div>
-  {/if}
-
+<div class="-list {if files | OhmAsset.notEmpty}{else}-empty{/if}">
+  <div class="shadow" style="position:relative"><div class="-inner"></div></div>
+  <div class="folder">
+    {if files | OhmAsset.notEmpty}
+      { this | Asset_Folder_More.render | ohm }
+    {else}
+      <div class="empty-list">{`Folder_List_Empty}</div>
+    {/if}
+  </div>
+</div>
 </div>
 
 <style>
+
+.-folder-compact { 
+  .folder-upload {
+    text-align: right; 
+    background-color: #DDD;
+    .-upload { display: inline-block }
+  }
+  iframe, .-list.-empty { display: none; }
+}
+
 .folder-upload {
   background-color: #E4E4E4;
   padding: 7px 20px;
   text-shadow: 0 1px 0 white;
   height: 28px;
+
+  .-upload { display: none }
 
   div {
     border-radius: 5px 5px 5px 5px;

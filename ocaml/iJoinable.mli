@@ -1,6 +1,6 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
-type t = [ `Entity of IEntity.t
-	 | `Event  of IEvent.t ]
+type t = [ `Group of IGroup.t
+	 | `Event of IEvent.t ]
 
 val arg : t Ohm.Action.Args.cell

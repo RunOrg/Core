@@ -6,7 +6,7 @@ open BatPervasives
 
 open CGroups_admin_common
 
-let () = define UrlClient.Members.def_people begin fun parents entity access -> 
+let () = define UrlClient.Members.def_people begin fun parents group access -> 
   
   (* What to do if the group is not available ? *)
 
@@ -25,18 +25,18 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
 
   let join_url aid = 
     Action.url UrlClient.Members.join (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ;
+      [ IGroup.to_string (MGroup.Get.id group) ;
 	IAvatar.to_string aid ] 
   in
 
   let cols_url = 
     Action.url UrlClient.Members.cols (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ]
+      [ IGroup.to_string (MGroup.Get.id group) ]
   in
   
   let invite_url = 
     Action.url UrlClient.Members.invite (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ]
+      [ IGroup.to_string (MGroup.Get.id group) ]
   in
 
   (* Return the box containing the grid. *)
@@ -49,6 +49,6 @@ let () = define UrlClient.Members.def_people begin fun parents entity access ->
     end)
   in
 
-  CGrid.box access (MEntity.Get.group entity) fail cols_url invite_url join_url wrapper
+  CGrid.box access (MGroup.Get.group group) fail cols_url invite_url join_url wrapper
 
 end

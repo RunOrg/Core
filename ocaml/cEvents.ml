@@ -19,10 +19,10 @@ let render_event access event =
   let! coming = ohm begin 	
     let! ()    = true_or (return None) (not (MEvent.Get.draft event)) in
     let  gid   = MEvent.Get.group event in 
-    let! group = ohm_req_or (return None) $ MGroup.try_get (access # actor) gid in
-    let! group = ohm_req_or (return None) $ MGroup.Can.list group in
-    let  gid   = MGroup.Get.id group in 
-    let! count = ohm $ MMembership.InGroup.count gid in
+    let! group = ohm_req_or (return None) $ MAvatarSet.try_get (access # actor) gid in
+    let! group = ohm_req_or (return None) $ MAvatarSet.Can.list group in
+    let  gid   = MAvatarSet.Get.id group in 
+    let! count = ohm $ MMembership.InSet.count gid in
     return $ Some (count # count) 
   end in            
   let status = BatOption.map (fun s -> (s :> VStatus.t)) (MEvent.Get.status event) in

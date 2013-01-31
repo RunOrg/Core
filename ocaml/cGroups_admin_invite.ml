@@ -6,7 +6,7 @@ open BatPervasives
 
 open CGroups_admin_common
 
-let () = define UrlClient.Members.def_invite begin fun parents entity access -> 
+let () = define UrlClient.Members.def_invite begin fun parents group access -> 
   
   let fail = O.Box.fill begin
 
@@ -28,21 +28,21 @@ let () = define UrlClient.Members.def_invite begin fun parents entity access ->
     end)
   in
 
-  let  gid = MEntity.Get.group entity in
-  let! group = ohm $ O.decay (MGroup.try_get (access # actor) gid) in
-  let! group = ohm $ O.decay (Run.opt_bind MGroup.Can.admin group) in
-  let! group = req_or fail group in 
+  let  asid = MGroup.Get.group group in
+  let! avset = ohm $ O.decay (MAvatarSet.try_get (access # actor) asid) in
+  let! avset = ohm $ O.decay (Run.opt_bind MAvatarSet.Can.admin avset) in
+  let! avset = req_or fail avset in 
 
   let url s = 
     Action.url UrlClient.Members.invite (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ; s ]
+      [ IGroup.to_string (MGroup.Get.id group) ; s ]
   in
 
   let back = 
     Action.url UrlClient.Members.people (access # instance # key) 
-      [ IEntity.to_string (MEntity.Get.id entity) ]
+      [ IGroup.to_string (MGroup.Get.id group) ]
   in
 
-  CInvite.box `Group url back access (MGroup.Get.id group) wrapper
+  CInvite.box `Group url back access (MAvatarSet.Get.id avset) wrapper
 
 end

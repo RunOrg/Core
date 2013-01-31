@@ -27,4 +27,5 @@
     | `Group -> "Tous les membres de ce groupe"
     | `Forum -> "Tous les participants à ce forum"
     | `Event -> "Tous les inscrits et invités à cette activité"
+    | `Discussion -> "Tous les participants à cette conversation"
 end 

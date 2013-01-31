@@ -2,7 +2,6 @@
 | `PageLayout_Navbar_Home -> "Accueil"
 | `PageLayout_Navbar_Members -> "Membres"
 | `PageLayout_Navbar_Events -> "Activités"
-| `PageLayout_Navbar_Forums -> "Discussions"
 | `PageLayout_Navbar_Website -> "Site Web"
 | `PageLayout_Navbar_Admin -> "Admin"
 | `PageLayout_Navbar_Intranet -> "Espace Membres"

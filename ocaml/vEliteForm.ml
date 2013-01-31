@@ -4,12 +4,13 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let text ~label ?detail seed parse = 
+let text ~label ?(left=false) ?detail seed parse = 
   OhmForm.wrap ".joy-fields"
     (Asset_EliteForm_Input.render (object 
       method kind   = "text" 
       method css    = "" 
       method detail = detail
+      method left   = left
     end))
     (OhmForm.string
        ~field:"input" 
@@ -49,6 +50,32 @@ let date ~label ?detail seed parse =
        ~label:(".elite-field-label label",label)
        ~error:(".elite-field-error label")
        seed parse)
+
+let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse = 
+  let render = 
+    let! static = ohm $ Run.list_map (fun (value,key,html) ->
+      let! html = ohm html in
+      return (format.Fmt.to_json value, key, Html.to_html_string html)
+    ) static in
+    Asset_EliteForm_Picker.render (object 
+      method detail = detail
+      method left   = left
+      method stat   = static 
+    end)
+  in
+  OhmForm.wrap ".joy-fields" render
+    (OhmForm.json
+       ~field:"input[type='hidden']" 
+       ~label:(".elite-field-label label",label)
+       ~error:(".elite-field-error label")
+       (fun s -> let! list = ohm $ seed s in 
+		 return $ Json.of_list format.Fmt.to_json list)
+       (fun f json ->
+	 Util.log "Parse: %s" (Json.serialize json) ;
+	 let list = 
+	   try BatList.filter_map format.Fmt.of_json (Json.to_array json) 
+	   with _ -> []
+	 in parse f list))
 
 let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"

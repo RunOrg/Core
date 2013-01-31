@@ -9,7 +9,7 @@ module Data = struct
   module T = struct
     type json t = {
       data   "d" : (!string, Json.t) ListAssoc.t ;
-      group  "g" : IGroup.t ;
+      group  "g" : IAvatarSet.t ;
       avatar "a" : IAvatar.t
     } 
   end
@@ -19,7 +19,7 @@ end
 
 let init gid aid = Data.({
   data   = [] ;
-  group  = IGroup.decay gid ;
+  group  = IAvatarSet.decay gid ;
   avatar = IAvatar.decay aid
 })
 
@@ -111,7 +111,7 @@ module Design = struct
 end
 
 module ByField = Fmt.Make(struct
-  type json t = (IGroup.t * string * Json.t)
+  type json t = (IAvatarSet.t * string * Json.t)
 end)
 
 module ByFieldView = CouchDB.ReduceView(struct
@@ -134,7 +134,7 @@ module ByFieldView = CouchDB.ReduceView(struct
   end)
 
 let count gid name =
-  let  gid  = IGroup.decay gid in 
+  let  gid  = IAvatarSet.decay gid in 
   let! list = ohm $ ByFieldView.reduce_query
     ~startkey:(gid,name,Json_type.Int min_int)
     ~endkey:(gid,name,Json_type.String "~~~~")

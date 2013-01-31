@@ -145,3 +145,8 @@ module Backdoor : sig
   val list : count:int -> IInstance.t option -> ((IInstance.t * t) list * IInstance.t option) O.run
 
 end
+
+(* {{MIGRATION}} *)
+
+val on_migrate : (IInstance.t * IUser.t * string, 
+		  bool O.run) Ohm.Sig.channel

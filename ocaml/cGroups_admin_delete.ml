@@ -6,13 +6,13 @@ open BatPervasives
 
 open CGroups_admin_common
 
-let () = define UrlClient.Members.def_delete begin fun parents entity access -> 
+let () = define UrlClient.Members.def_delete begin fun parents group access -> 
   
   let! submit = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res -> 
 
     (* Save the changes to the database *)
 
-    let! () = ohm $ O.decay (MEntity.delete (access # self) entity) in
+    let! () = ohm $ MGroup.delete group (access # actor) in
 
     (* Redirect to entity home *)
 

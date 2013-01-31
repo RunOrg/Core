@@ -48,17 +48,17 @@ let box access gid inner =
 
   let  error = inner (return ignore) in
 
-  let! group = ohm_req_or error $ O.decay (MGroup.try_get (access # actor) gid) in 
-  let! group = ohm_req_or error $ O.decay (MGroup.Can.admin group) in
+  let! group = ohm_req_or error $ O.decay (MAvatarSet.try_get (access # actor) gid) in 
+  let! group = ohm_req_or error $ O.decay (MAvatarSet.Can.admin group) in
 
   (* Extract fields in (idx, (Field.t, Flat.t)) format. References to 
      fields in destroyed groups are automatically hidden. *)
 
-  let  fields = MGroup.Fields.get group in 
+  let  fields = MAvatarSet.Fields.get group in 
   let  fields = BatList.mapi (fun i f -> (i,f)) fields in 
   let! fields = ohm (Run.list_filter (fun (i,f) ->
     let! flat = ohm_req_or (return None)
-      (O.decay (MGroup.Fields.flat (MGroup.Get.id group) f)) in
+      (O.decay (MAvatarSet.Fields.flat (MAvatarSet.Get.id group) f)) in
     return (Some (i,(f,flat))) 
   ) fields) in
 
@@ -146,7 +146,7 @@ let box access gid inner =
 	  if i = idx then None else Some f
 	) fields in 
 	
-	let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+	let! () = ohm (O.decay (MAvatarSet.Fields.set group fields)) in      
 	return res
 
       | `Edit (idx,data) -> 
@@ -165,10 +165,10 @@ let box access gid inner =
 	in
 	let fields = List.map (fun (i,(f,_)) -> if i = idx then field else f) fields in 
 	
-	let! flat' = ohm $ O.decay (MGroup.Fields.flat (MGroup.Get.id group) field) in
+	let! flat' = ohm $ O.decay (MAvatarSet.Fields.flat (MAvatarSet.Get.id group) field) in
 	let  flat  = BatOption.default flat flat' in
 	
-	let! () = ohm (O.decay (MGroup.Fields.set group fields)) in      
+	let! () = ohm (O.decay (MAvatarSet.Fields.set group fields)) in      
 	let! html = ohm $ render_field edit (idx,(field,flat)) in 
 	return $ Action.json [ "field", Html.to_json html ] res 
 	  
@@ -205,11 +205,11 @@ let box access gid inner =
 
     let fields = (List.map (snd |- fst) fields) @ [field] in
     
-    let! () = ohm (O.decay (MGroup.Fields.set group fields)) in
+    let! () = ohm (O.decay (MAvatarSet.Fields.set group fields)) in
 
     let   idx = List.length fields - 1 in
     let! flat = ohm_req_or (return res) $
-      O.decay (MGroup.Fields.flat (MGroup.Get.id group) field) in
+      O.decay (MAvatarSet.Fields.flat (MAvatarSet.Get.id group) field) in
       
     let! html = ohm $ render_field edit (idx,(field,flat)) in 
 
@@ -226,7 +226,7 @@ let box access gid inner =
 
     Asset_JoinForm_List.render (object
       method list = Html.concat list 
-      method form = if List.length fields < MGroup.Fields.max then 
+      method form = if List.length fields < MAvatarSet.Fields.max then 
 	  Some (object
 	    method profile = List.map (fun (v,l) -> (object
 	      method value = v

@@ -10,7 +10,7 @@ module Source = Fmt.Make(struct
   type json t = 
     [ `Avatars  of IInstance.t
     | `Profiles of IInstance.t
-    | `Group    of IGroup.t
+    | `Group    of IAvatarSet.t
     ]
 end)
   
@@ -115,7 +115,7 @@ let apply_group_data mid name =
     
 let apply_group aid gid what = 
   (* We can view any memberships. *)
-  let  gid = IGroup.Assert.bot gid in
+  let  gid = IAvatarSet.Assert.bot gid in
   let! exists = ohm $ MAvatar.exists aid in 
   if not exists then return Json.Null else 
     let! mid = ohm $ MMembership.as_admin gid aid in  
@@ -137,6 +137,6 @@ let all_lines source ~from ~count =
     | `Avatars _ | `Profiles _ -> return ([],None)
     | `Group gid -> 
       (* We can view any memberships *)
-      let gid = IGroup.Assert.bot gid in 
-      MMembership.InGroup.avatars gid ~start:from ~count
+      let gid = IAvatarSet.Assert.bot gid in 
+      MMembership.InSet.avatars gid ~start:from ~count
   

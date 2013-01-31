@@ -19,11 +19,12 @@ let item_url cuid itid =
     | `feed fid -> begin
       let! feed = ohm_req_or none $ MFeed.try_get actor fid in 
       match MFeed.Get.owner feed with 
-	| `Instance _ -> return $ Some (Action.url UrlClient.Home.home (instance # key) [])
-	| `Entity eid -> return $ Some (Action.url UrlClient.Forums.see 
-					  (instance # key) [ IEntity.to_string eid ])
+	| `Instance _ -> return None
+	| `Entity eid -> return None
 	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
 					 (instance # key) [ IEvent.to_string eid ])
+	| `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see
+					      (instance # key) [ IDiscussion.to_string did ])
     end
     | `album  aid -> return None
     | `folder fid -> return None		
@@ -43,7 +44,7 @@ let url cuid (notify:MNotify.Store.t) =
 
     | `BecomeMember (iid,_)
     | `BecomeAdmin (iid,_) -> let! instance = ohm_req_or none $ MInstance.get iid in 
-			      return $ Some (Action.url UrlClient.Home.home (instance # key) [])
+			      return $ Some (Action.url UrlClient.Inbox.home (instance # key) [])
 
     | `EventInvite (eid,_) -> let! iid = ohm_req_or none $ MEvent.instance eid in 
 			      let! instance = ohm_req_or none $ MInstance.get iid in 
@@ -56,17 +57,12 @@ let url cuid (notify:MNotify.Store.t) =
 				   (Action.url UrlClient.Events.join (instance # key) [ IEvent.to_string eid ;
 											IAvatar.to_string aid ])
 
-    | `GroupRequest (eid,aid) -> let! iid = ohm_req_or none $ MEntity.instance eid in 
+    | `GroupRequest (gid,aid) -> let! iid = ohm_req_or none $ MGroup.instance gid in 
 				 let! instance = ohm_req_or none $ MInstance.get iid in 
-				 let! entity = ohm_req_or none $ MEntity.naked_get eid in 
-				 let  res url = return $ Some 
-				   (Action.url url (instance # key) [ IEntity.to_string eid ;
-								      IAvatar.to_string aid ])
-				 in
-				 res (match MEntity.Get.kind entity with 
-				   | `Forum -> UrlClient.Forums.join
-				   | `Event -> UrlClient.Events.join
-				   | _      -> UrlClient.Members.join)
+				 let! group = ohm_req_or none $ MGroup.get gid in 
+				 return $ Some 
+				   (Action.url UrlClient.Members.join (instance # key) 
+				      [ IGroup.to_string gid ; IAvatar.to_string aid ])
 				   
     | `CanInstall iid -> let! ins  = ohm_req_or none $ MInstance.Profile.get iid in 
 			 let  owid = snd (ins # key) in
