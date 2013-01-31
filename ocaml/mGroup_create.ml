@@ -39,7 +39,6 @@ let implementation ?pcname ?(vision=`Normal) ~self ?name ~iid tid =
     
     let! _ = ohm $ E.create gid self init [] in
     let! _ = ohm $ Signals.on_bind_group_call (iid,gid,asid,tid,MActor.avatar self) in
-    let! _ = ohm $ Signals.on_bind_inboxLine_call gid in
     
     return gid
 

@@ -1,8 +1,7 @@
 (* © 2013 RunOrg *)
 
-val on_bind_inboxLine_call : (IGroup.t, unit O.run) Ohm.Sig.listener
-val on_bind_inboxLine      : (IGroup.t, unit O.run) Ohm.Sig.channel
-
+val on_delete_call : (IGroup.t * IAvatarSet.t, unit O.run) Ohm.Sig.listener 
+val on_delete      : (IGroup.t * IAvatarSet.t, unit O.run) Ohm.Sig.channel     
 
 val on_update_call : (IGroup.t, unit O.run) Ohm.Sig.listener
 val on_update      : (IGroup.t, unit O.run) Ohm.Sig.channel
