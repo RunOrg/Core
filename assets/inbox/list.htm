@@ -1,0 +1,130 @@
+<div class="inbox">
+
+  {=actions}
+  <ul class="actions">
+    <li class="-r">
+      <a href="{new_event}" class="action-button">
+	{ `Inbox_New_Event}
+      </a>
+    </li>
+    <li class="-r">
+      <a href="{new_discussion}" class="action-button -green">
+        { `Inbox_New_Discussion }
+      </a>
+    </li>
+  </ul>
+  {/=}
+
+  <h2>{ `Inbox_Title }</h2>
+
+  <div class="-filters">
+    {#filters}
+      {if sel}
+        <a class="-f -d{depth|string_of_int|esc} -s" href="javascript:location.reload()">
+      {else} 
+        <a class="-f -d{depth|string_of_int|esc}" href="{url}">
+      {/if}
+	  <span class="-c">{count|string_of_int|esc}</span>
+	  <span class="-n">{name}</span>
+	</a>
+    {/#}
+  </div>
+  <div class="-list">
+    {?admin}
+     <div class="-admin">
+       {`Inbox_IsAdmin gender} <a href="http://runorg.com/aide/asso/vision-inbox">{`Inbox_IsAdmin_More}</a>
+     </div>
+    {/?}
+    {inner|ohm}
+    {@!inner}
+      {#items}
+        <div>{this|verbatim}</div>
+      {else}
+        {?more}{else}
+          <div class="empty-list">
+  	  { `Inbox_Empty }
+          </div>
+        {/?}
+      {/#}
+      {?more}     
+        { this | VMore.div | ohm }
+      {/?}
+    {/@}
+  </div>
+</div>
+
+<style>
+.inbox {
+
+  h2 {
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 20px;
+  }
+
+  >.actions { float: right }
+  .-top {
+    position:relative;
+    height: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #DDD;
+    padding-top: 5px;
+  }
+  .-list {
+    padding: 0 0 1px 0; 
+    margin: 0 0 0 300px;
+    .empty-list {
+      border-top: 1px dashed #CCC;
+    }
+  }
+
+  .-admin {
+    background-color: #333;
+    color: white;
+    font-size: 13px;
+    margin-bottom: 16px;
+    padding: 5px;
+    text-align: center;
+    a { color: #8BF }
+    a:hover { color: #ADF }
+  }
+
+  .-filters {
+    float: left;
+    background-color: #EEE;
+    border-right: 1px solid #DDD;
+    padding: 5px 15px;
+    width: 250px;
+    .-f {
+      display: block;
+      padding: 4px 2px;
+      color: #333; 
+      line-height: 20px;
+      font-size: 13px; 
+      height: 20px;
+      overflow: hidden;
+      &.-d1 { padding-left: 12px; }
+      &.-d2 { padding-left: 22px; }
+      .-c {
+        float: right; 
+        color: #888;
+        font-weight: normal !important;
+        margin-left: 5px;
+      }
+      .-n {
+        display: block;
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+      }
+    }
+    .-f + .-f {
+      border-top: 1px dashed #DDD;
+    }
+    .-s.-f {
+      font-weight: bold;
+      color: #111;
+    }
+  }
+}
+</style>

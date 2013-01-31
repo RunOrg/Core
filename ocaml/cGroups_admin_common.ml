@@ -9,17 +9,16 @@ module Parents = CGroups_admin_parents
 let define d box = CClient.define d begin fun access -> 
   let forbidden = O.Box.fill (Asset_Group_Forbidden.render ()) in
 
-  let! eid = O.Box.parse IEntity.seg in
+  let! gid = O.Box.parse IGroup.seg in
 
-  let! entity = ohm_req_or forbidden $ O.decay (MEntity.try_get (access # actor) eid) in
-  let! entity = ohm_req_or forbidden $ O.decay (MEntity.Can.admin entity) in
+  let! group = ohm_req_or forbidden $ MGroup.admin ~actor:(access # actor) gid in
 
-  let  eid = MEntity.Get.id entity in 
+  let  gid = MGroup.Get.id group in
   let  key = access # instance # key in
-  let! title = ohm $ CEntityUtil.name entity in 
+  let! title = ohm $ MGroup.Get.fullname group in 
   
-  let parents = Parents.parents title key eid in 
+  let parents = Parents.parents title key gid in 
 
-  box parents entity access
+  box parents group access
 
 end

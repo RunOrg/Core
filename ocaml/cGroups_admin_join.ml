@@ -6,7 +6,7 @@ open BatPervasives
 
 open CGroups_admin_common
     
-let () = define UrlClient.Members.def_join begin fun parents entity access -> 
+let () = define UrlClient.Members.def_join begin fun parents group access -> 
 
   let fail = O.Box.fill begin
 
@@ -28,6 +28,6 @@ let () = define UrlClient.Members.def_join begin fun parents entity access ->
     end)
   in 
 
-  CJoin.box `Group (MEntity.Get.group entity) access fail wrapper
+  CJoin.box `Group (MGroup.Get.group group) access fail wrapper
 
 end 

@@ -1,10 +1,10 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type t 
 
-val group : string -> t -> IGroup.t O.run
-val entity : string -> t -> IEntity.t O.run
+val avatarSet : string -> t -> (#O.ctx, IAvatarSet.t) Ohm.Run.t
+val group : string -> t -> (#O.ctx,IGroup.t) Ohm.Run.t
 
-val set_admin : t -> IEntity.t -> IGroup.t -> unit O.run
+val set_admin : t -> IGroup.t -> IAvatarSet.t -> (#O.ctx,unit) Ohm.Run.t
 
 val load : 'any IInstance.id -> t

@@ -7,7 +7,7 @@ open BatPervasives
 module FormFmt = Fmt.Make(struct
   type json t = <
     name : string ;
-    template : ITemplate.t ;
+    template : ITemplate.Group.t ;
    ?access : [ `Public | `Normal | `Private ] = `Normal
   >
 end)
@@ -20,15 +20,12 @@ let () = CClient.define_admin UrlClient.Members.def_create begin fun access ->
 
     let! post = req_or (return res) $ FormFmt.of_json_safe json in 
 
-    let name = match BatString.strip (post # name) with 
-      | "" -> None
-      | str -> Some (`text str)
-    in
+    let name = BatString.strip (post # name) in
 
-    let! eid = ohm $ O.decay 
-      (MEntity.create (access # self) ~name ~iid ~access:(post # access) (post # template)) in
+    let! gid = ohm $ MGroup.create 
+      ~self:(access # actor) ~name ~iid ~vision:(post # access) (post # template) in
 
-    let  url = Action.url UrlClient.Members.invite (access # instance # key) [ IEntity.to_string eid ] in
+    let  url = Action.url UrlClient.Members.invite (access # instance # key) [ IGroup.to_string gid ] in
 
     return $ Action.javascript (Js.redirect url ()) res
 
@@ -38,9 +35,9 @@ let () = CClient.define_admin UrlClient.Members.def_create begin fun access ->
 
     let templates = 
       List.map (fun tid -> (object
-	method name  = PreConfig_Template.name tid
-	method desc  = PreConfig_Template.desc tid 
-	method value = ITemplate.to_string tid 
+	method name  = PreConfig_Template.Groups.name tid
+	method desc  = PreConfig_Template.Groups.desc tid 
+	method value = ITemplate.Group.to_string tid 
       end))
 	(PreConfig_Vertical.groups (access # instance # ver)) 
     in

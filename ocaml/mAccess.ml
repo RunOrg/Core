@@ -28,7 +28,7 @@ include Fmt.Make(struct
     | `Contact "c"                          
     | `TokOnly "t" of t
     | `List    "l" of IAvatar.t list    
-    | `Groups  "g" of State.t * (IGroup.t list)
+    | `Groups  "g" of State.t * (IAvatarSet.t list)
     | `Union   "u" of t list       
     ]
 

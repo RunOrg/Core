@@ -10,7 +10,7 @@ module Diff : Ohm.Fmt.FMT with type t =
 val names : Diff.t -> (string * string) list 
 
 val apply :
-     (src:[`Bot] IGroup.id -> dest:[`Bot] IGroup.id -> [`add|`remove] -> unit O.run)
+     (src:[`Bot] IAvatarSet.id -> dest:[`Bot] IAvatarSet.id -> [`add|`remove] -> unit O.run)
   -> MPreConfigNamer.t
   -> Diff.t
   -> unit O.run
@@ -26,9 +26,9 @@ module Entity : sig
   val names : Diff.t -> (string * string) list 
     
   val apply_diffs :
-       IGroup.t list
+       IAvatarSet.t list
     -> MPreConfigNamer.t
     -> Diff.t list
-    -> IGroup.t list O.run
+    -> IAvatarSet.t list O.run
 
 end

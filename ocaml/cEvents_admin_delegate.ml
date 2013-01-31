@@ -8,7 +8,7 @@ open CEvents_admin_common
 
 let delegator event access = object
   method get = MEvent.Get.admins event
-  method set = MEvent.Set.admins event (access # actor) 
+  method set aids = MEvent.Set.admins aids event (access # actor) 
 end
 
 let () = define UrlClient.Events.def_delpick begin fun parents event access ->

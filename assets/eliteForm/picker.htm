@@ -1,0 +1,259 @@
+<div class="elite-field -picker {if left}-left{/if}">
+  <div class="elite-field-label"><label></label>{?detail}<span>{this | ohm | esc }</span>{/?}</div>
+  <div class="elite-field-picker">
+    <input type="hidden"/>
+    <div class="-f">
+      <input type="text" class="-s"/>  
+    </div>
+    <div class="-l">
+    </div>
+  </div>
+  <div class="elite-field-error error-root"><label></label></div>
+</div>
+
+<script type="stat: (Json.t * string * string) list">
+$s = @$.find "input.-s"
+$f = @$.find ".-f"
+$l = @$.find ".-l"
+
+mfoc = false # is the next focus event manually sent ?
+
+search = null # the (normalized) search query being displayed
+inlist = [] # currently displayed list of pickable elements
+sel = 0 # currently selected pickable element
+
+picked = [] # all picked values
+
+matches = (patt,name) ->
+  patts = patt.split(" ")
+  names = foldAccents(name).split(" ")
+  for patt in patts
+    continue if !patt
+    m = false 
+    for name in names
+      continue if name.length < patt.length 
+      if name.substr(0,patt.length) == patt
+        m = true
+        break
+    return false if !m
+  return true      
+
+fill = (src, list) ->
+
+  # this is the result of an outdated search, don't display
+  return if src is not search
+
+  inlist = []
+  html = []
+
+  fsrc = foldAccents(src)
+  
+  for it in list 
+
+    break if inlist.length >= 5
+
+    # do not display elements that don't have the source as
+    # a prefix
+    continue if !(matches fsrc, it[1])
+
+    # do not display elements that have been picked
+    exists = false
+    for it2 in picked 
+      if it2[0] == it[0]
+        exists = true
+        break
+    continue if exists    
+
+    inlist.push it
+    html.push "<div class=-i>", it[2], "</div>"
+
+  $l.html(html.join(""))
+
+  if inlist.length > 0
+    mvsel 0 
+    $l.addClass "-full"
+
+refill = (force) ->
+  force = force || false
+  txt = $s.val().trim()
+
+  # don't repeat searches
+  return if txt == search
+  
+  # blast the current contents
+  search = null
+  $l.removeClass("-full") 
+  inlist = []
+
+  # don't search if at least one suggestion and no text
+  return if picked.length > 0 && $s.val() == "" && !force
+  search = txt    
+
+  # fill up the suggestion list
+  fill txt, stat
+
+save = () ->
+  $f.prev().val($.toJSON(x[0] for x in picked))
+
+mvsel = (d) ->
+  sel = sel + d 
+  if sel < 0 
+    sel = 0
+  if sel >= inlist.length    
+    sel = inlist.length - 1
+  $l.find(".-s").removeClass("-s")
+  $l.children(":eq(" + sel + ")").addClass("-s")  
+
+pick = () ->
+  return if sel >= inlist.length
+  search = null # cause list to be re-filtered
+  picked.push inlist[sel]
+  save() 
+  $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
+  mfoc = true
+  $s.val("").before($h).focus() 
+
+unpick = (pos) ->
+  pos = pos || picked.length - 1 if !(pos is 0) 
+  picked.splice(pos,1) 
+  $f.children(":eq(" + pos + ")").remove() 
+  save() 
+  refill() 
+
+$l.mousedown (e) -> 
+  $e = $ e.target
+  return if $e.is($l)
+  sel = $e.closest(".-i").prevAll().length
+  pick()   
+
+$f.mousedown (e) -> 
+  $e = $ e.target 
+  if $e.is("a.-d") && $e.parent().parent().is($f)
+    unpick $e.parent().prevAll().length 
+    e.stopPropagation() 
+
+$f.click () ->
+  $s.focus() 
+
+$s.focus -> 
+  refill(!mfoc)
+  mfoc = false 
+  $l.addClass("-show")
+
+$s.keydown (e) ->
+  console.log(e.which)
+  if e.which == 13 
+    e.stopPropagation()
+    return false   
+  if e.which == 8 && $s.val() == ""
+    unpick() 
+    return false
+
+$s.keyup (e) ->
+  console.log(e.which)
+  if e.which == 40
+    mvsel(1) 
+    return false
+  if e.which == 38
+    mvsel(-1)
+    return false
+  if e.which == 13
+    pick() 
+    e.stopPropagation()
+    return false
+  if e.which == 39 
+    refill(true)
+    return false
+  refill() 
+
+$s.blur ->
+  $s.val "" 
+  $l.removeClass("-show")
+
+</script>
+
+<style>
+.elite-field.-picker {
+  overflow: visible;
+  .elite-field-label { 
+    margin-top: 4px; 
+  }
+}
+
+.elite-field-picker {
+
+  .-f {
+    background-color: white; 
+    padding: 3px 3px 1px;
+    border: 1px solid #AAA;
+    width: 394px;
+    min-height: 22px;
+    overflow: hidden;
+    cursor: text;
+
+    > div {
+      cursor: default;
+      background: none repeat scroll 0 0 #DDD;
+      border: 1px solid #CCC;
+      border-radius: 3px 3px 3px 3px;
+      color: #333;
+      float: left;
+      font-size: 13px;
+      margin: 0 2px 2px 0;
+      padding: 1px 4px;
+      > a {
+        color: #888;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 18px;
+        height: 13px;
+        line-height: 13px;
+        margin-left: 5px;
+        &:hover {
+          color: black;
+        }
+      }
+    }
+  }
+
+  .-l {
+    position: absolute; 
+    min-height: 12px;
+    width: 400px;
+    border: 1px solid #AAA;
+    border-top: none; 
+    background-color: white; 
+    display: none;
+
+    .-i {
+      display: block;
+      padding: 3px 5px;
+      color: #333;
+      font-size: 13px;
+      cursor: pointer; 
+    }
+
+    .-i.-s {
+      background-color: #555;
+      color: white;
+    }
+  }
+
+  .-l.-show.-full {
+    display: block;
+  }
+
+  input {
+    .asap();
+    font-size: 13px;
+    padding: 3px;
+    margin-bottom: 1px; 
+    width: 100px;
+    border: none;
+    float: left;
+    height: 14px;
+    outline: none;
+  }
+
+}
+</style>

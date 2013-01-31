@@ -9,6 +9,7 @@ module Assert = struct
   let write = identity
   let read  = identity
   let admin = identity
+  let bot   = identity
 end
 
 module Deduce = struct

@@ -4,10 +4,10 @@ module Payload : sig
 
   type t = 
       MembershipMass of [ `Invite | `Add | `Remove | `Validate | `Create ] * 
-	  [ `Entity of IEntity.t | `Event of IEvent.t ] * int
+	  [ `Entity of IEntity.t | `Event of IEvent.t | `Group of IGroup.t ] * int
     | MembershipAdmin of [ `Invite | `Add | `Remove | `Validate ] * 
-	[ `Entity of IEntity.t | `Event of IEvent.t ] * IAvatar.t
-    | MembershipUser of bool * [ `Entity of IEntity.t | `Event of IEvent.t ] 
+	[ `Entity of IEntity.t | `Event of IEvent.t | `Group of IGroup.t ] * IAvatar.t
+    | MembershipUser of bool * [ `Entity of IEntity.t | `Event of IEvent.t | `Group of IGroup.t ] 
     | InstanceCreate 
     | LoginManual 
     | LoginSignup

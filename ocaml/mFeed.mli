@@ -7,7 +7,7 @@ val get_for_owner : 'any MActor.t -> 'a IFeedOwner.id  -> [`Unknown] t O.run
 
 val bot_get : [`Bot] IFeed.id -> [`Bot] t option O.run
 
-val by_owner : IInstance.t -> 'a IFeedOwner.id -> IFeed.t O.run
+val try_by_owner : 'a IFeedOwner.id -> (#O.ctx,IFeed.t option) Ohm.Run.t 
 
 module Get : sig
 
@@ -27,3 +27,4 @@ module Can : sig
   val read  : 'any t -> [`Read] t option O.run
 end
   
+val migrate_owner : [`Bot] IFeed.id -> 'a IFeedOwner.id -> (#O.ctx,unit) Ohm.Run.t

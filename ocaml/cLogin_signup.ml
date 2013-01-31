@@ -156,7 +156,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
 	  | None, []   -> Action.url UrlMe.News.home (req # server) ()
 	  | None, "me" :: path -> UrlMe.url (req # server) path 
 	  | None, path -> Action.url UrlSplash.index (req # server) path
-	  | Some ins, [] -> Action.url UrlClient.Home.home (ins # key) [] 
+	  | Some ins, [] -> Action.url UrlClient.Inbox.home (ins # key) [] 
 	  | Some ins, path -> Action.url UrlClient.intranet (ins # key) path 
 	in
 

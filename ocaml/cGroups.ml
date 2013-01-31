@@ -9,15 +9,12 @@ module Create = CGroups_create
 
 let contents access = 
 
-  let! eid = O.Box.parse IEntity.seg in
+  let! gid = O.Box.parse IGroup.seg in
   let  actor = access # actor in 
 
-  let! members_eid = ohm begin 
-    let  namer = MPreConfigNamer.load (access # iid) in
-    O.decay $ MPreConfigNamer.entity IEntity.members namer
-  end in 
+  let! members_gid = ohm $ MPreConfigNamer.group IGroup.members (MPreConfigNamer.load (access # iid)) in 
 
-  let eid = if IEntity.to_string eid = "" then members_eid else eid in
+  let gid = if IGroup.to_string gid = "" then members_gid else gid in
   
   O.Box.fill $ O.decay begin
 
@@ -29,69 +26,55 @@ let contents access =
 
       let none = return (false, None, None, None) in
 
-      let! entity = ohm_req_or none $ MEntity.try_get actor eid in 
-      let! entity = ohm_req_or none $ MEntity.Can.view entity in 
-      let  gid    = MEntity.Get.group entity in 
+      let! group  = ohm_req_or none $ MGroup.view ~actor gid in 
+      let  asid   = MGroup.Get.group group in 
 
-      let! group  = ohm_req_or none $ MGroup.try_get actor gid in
+      let! avset  = ohm_req_or none $ MAvatarSet.try_get actor asid in
 
       (* My own status in this group ------------------------------------------------------- *)
 
       let! join = ohm begin
-	let! status = ohm $ MMembership.status actor gid in
-	let  fields = MGroup.Fields.get group <> [] in
+	let! status = ohm $ MMembership.status actor asid in
+	let  fields = MAvatarSet.Fields.get avset <> [] in
 	return $ 
-	  CJoin.Self.render (`Entity eid) (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
+	  CJoin.Self.render (`Group gid) (access # instance # key) ~gender:None ~kind:`Group ~status ~fields
       end in 
 
       (* Url for sending messages ---------------------------------------------------------- *)
 
-      let! send_url = ohm begin 
-
-	if eid = members_eid then 
-
-	  return $ Some (Action.url UrlClient.Home.home (access # instance # key) [])
-
-	else 
-	  
-	  let! feed   = ohm $ MFeed.get_for_owner actor (`Entity eid) in
-	  let! feed   = ohm $ MFeed.Can.read feed in
-	  let! feed   = req_or (return None) feed in 
-	  
-	  return $ Some 
-	    (Action.url UrlClient.Forums.see (access # instance # key)
-	       [ IEntity.to_string eid ])
-
-      end in 
+      let send_url = 
+	Action.url UrlClient.Discussion.create (access # instance # key)
+	  [ IGroup.to_string gid ]
+      in
 
       let none = return (false, None, Some (object
 	method admin = None
-	method send  = send_url 
+	method send  = Some send_url 
       end), Some join) in
 
       (* List group members ---------------------------------------------------------------- *)
 
-      let! group  = ohm_req_or none $ MGroup.Can.list group in
-      let  gid    = MGroup.Get.id group in 
+      let! avset  = ohm_req_or none $ MAvatarSet.Can.list avset in
+      let  asid   = MAvatarSet.Get.id avset in 
 
-      let! avatars, _ = ohm $ MMembership.InGroup.list_members ~count:100 gid in
+      let! avatars, _ = ohm $ MMembership.InSet.list_members ~count:100 asid in
 
       (* Determine if administrator or not ------------------------------------------------- *)
       
       let not_admin = return (false, Some avatars, (if avatars = [] then None else Some (object
 	method admin = None
-	method send  = send_url
+	method send  = Some send_url
       end)), Some join) in
 
-      let! admin = ohm_req_or not_admin $ MEntity.Can.admin entity in 
+      let! admin = ohm_req_or not_admin $ MGroup.Can.admin group in 
       
       return (true, Some avatars, Some (object
-	method send = if avatars = [] then None else send_url
+	method send = if avatars = [] then None else Some send_url
 	method admin = Some (object
 	  method invite = Action.url UrlClient.Members.invite (access # instance # key) 
-	    [ IEntity.to_string eid ; fst UrlClient.Invite.seg `ByEmail ]
+	    [ IGroup.to_string gid ; fst UrlClient.Invite.seg `ByEmail ]
 	  method admin  = Action.url UrlClient.Members.admin (access # instance # key)
-	    [ IEntity.to_string eid ] 
+	    [ IGroup.to_string gid ] 
 	end)
       end), Some join)
 
@@ -102,13 +85,13 @@ let contents access =
     let url =
       if admin then 
 	Some (fun aid -> Action.url UrlClient.Members.join (access # instance # key) 
-	  [ IEntity.to_string eid ; IAvatar.to_string aid ])
+	  [ IGroup.to_string gid ; IAvatar.to_string aid ])
       else
 	None
     in
 
     Asset_Group_Page.render (object
-      method id        = eid
+      method id        = gid
       method actions   = actions
       method directory = BatOption.map (CAvatar.directory ?url) avatars
       method join      = join 
@@ -122,35 +105,33 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 
   O.Box.fill $ O.decay begin 
 
-    let! list = ohm $ MEntity.All.get_by_kind actor `Group in
+    let! list = ohm $ MGroup.All.visible ~actor (access # iid) in
 
-    let! list = ohm $ Run.list_filter begin fun entity -> 
-      let! name = ohm $ CEntityUtil.name entity in
+    let! list = ohm $ Run.list_filter begin fun group -> 
+      let! name = ohm $ MGroup.Get.fullname group in 
       let! count, isMember = ohm begin 	
 
-	let! ()     = true_or (return (None,false)) (not (MEntity.Get.draft entity)) in
-	let  gid    = MEntity.Get.group entity in 
+	let  asid    = MGroup.Get.group group in 
 
-	let! status = ohm $ MMembership.status actor gid in
+	let! status = ohm $ MMembership.status actor asid in
 	let  mbr    = status = `Member in
  
-	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.try_get actor gid in
-	let! group  = ohm_req_or (return (None,mbr)) $ MGroup.Can.list group in
-	let  gid    = MGroup.Get.id group in 
-	let! count  = ohm $ MMembership.InGroup.count gid in
+	let! avset  = ohm_req_or (return (None,mbr)) $ MAvatarSet.try_get actor asid in
+	let! avset  = ohm_req_or (return (None,mbr)) $ MAvatarSet.Can.list avset in
+	let  asid   = MAvatarSet.Get.id avset in 
+	let! count  = ohm $ MMembership.InSet.count asid in
 
 	return (Some count # count,mbr) 
 
       end in            
-      let status = MEntity.Get.status entity in
-      if status = Some `Draft then return None else 
+      let status = MGroup.Get.status group in
       return $ Some (isMember, object
-	method id     = IEntity.to_string (MEntity.Get.id entity) 
+	method id     = IGroup.to_string (MGroup.Get.id group) 
 	method count  = count
-	method status = status 
+	method status = (status :> VStatus.t option)  
 	method name   = name
 	method url    = Action.url UrlClient.Members.home (access # instance # key) 
-	  [ IEntity.to_string (MEntity.Get.id entity) ]  
+	  [ IGroup.to_string (MGroup.Get.id group) ]  
       end)
     end list in 
 

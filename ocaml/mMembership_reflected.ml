@@ -45,11 +45,11 @@ let reflect id data =
   
   let mustpay = false in (* No payment management yet *)
   
-  let! group_opt = ohm $ MGroup.naked_get data.Details.where in
+  let! group_opt = ohm $ MAvatarSet.naked_get data.Details.where in
 
   let! manual = ohm begin 
     let! group = req_or (return true) group_opt in 
-    return $ MGroup.Get.manual group 
+    return $ MAvatarSet.Get.manual group 
   end in
 
   let status = Details.status ~manual data in 
@@ -60,7 +60,7 @@ let reflect id data =
     if status = `Member then begin
       
       let grant = match group_opt with None -> None | Some group ->
-	match MGroup.Token.get group with 
+	match MAvatarSet.Token.get group with 
 	  | `token   -> Some `Token
 	  | `contact -> None
 	  | `admin   -> Some `Admin

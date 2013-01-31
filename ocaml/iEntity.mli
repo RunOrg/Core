@@ -1,8 +1,6 @@
 (* © 2012 RunOrg *)
 
 include Ohm.Id.PHANTOM
-
-val members : string
   
 module Assert : sig
   val created       : 'any id -> [`Created] id

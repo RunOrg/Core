@@ -13,7 +13,7 @@ module Diff      = MMembership_diff
 module Data      = MMembership_data
 module Versioned = MMembership_versioned
 module Unique    = MMembership_unique
-module InGroup   = MMembership_inGroup 
+module InSet     = MMembership_inSet 
 module Backdoor  = MMembership_backdoor
 module Field     = MMembership_field
 module Grant     = MMembership_grant
@@ -24,7 +24,7 @@ module FieldType = MJoinFields.FieldType
 (* Full type returned for more clarity ----------------------------------------------------- *)
 
 type t = {
-  where     : IGroup.t  ;
+  where     : IAvatarSet.t  ;
   who       : IAvatar.t ;
   admin     : (bool * float * IAvatar.t) option ;
   user      : (bool * float * IAvatar.t) option ;
@@ -164,8 +164,8 @@ let admin ~from gid aid what =
     let! () = ohm begin 
       let  uid = IUser.Deduce.is_anyone (MActor.user from) in
       let  iid = IInstance.decay (MActor.instance from) in
-      let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-      let  own = MGroup.Get.owner g in
+      let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+      let  own = MAvatarSet.Get.owner g in
       let  p   = 
 	if List.mem `Invite what then `Invite else 
 	  if List.mem (`Accept true) what then
@@ -187,8 +187,8 @@ let user gid actor accept =
   let! () = ohm begin 
     let  uid = IUser.Deduce.is_anyone (MActor.user actor) in
     let  iid = IInstance.decay (MActor.instance actor) in 
-    let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-    let  own = MGroup.Get.owner g in
+    let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+    let  own = MAvatarSet.Get.owner g in
     MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipUser (accept,own))
   end in 
   
@@ -234,7 +234,7 @@ let () =
 (* Propagate group refresh --------------------------------------------------------------- *)
 
 module GroupIter = Fmt.Make(struct
-  type json t = (IGroup.t * Id.t option)
+  type json t = (IAvatarSet.t * Id.t option)
 end)
 
 let () = 
@@ -242,9 +242,9 @@ let () =
   let task, define = O.async # declare "after-group-update" GroupIter.fmt in
   let () = define begin fun (gid,start) -> 
 
-    let bot_gid = IGroup.Assert.bot gid in 
+    let bot_gid = IAvatarSet.Assert.bot gid in 
     
-    let! list, next = ohm $ InGroup.list_everyone ?start ~count:20 bot_gid in 
+    let! list, next = ohm $ InSet.list_everyone ?start ~count:20 bot_gid in 
     
     let! _ = ohm $ Run.list_map begin fun aid ->
       let! mid = ohm_req_or (return ()) $ Unique.find_if_exists gid aid in
@@ -258,11 +258,11 @@ let () =
   end in
   
   let refresh gid =
-    let gid = IGroup.decay gid in 
+    let gid = IAvatarSet.decay gid in 
     task (gid,None) 
   in
 
-  Sig.listen MGroup.Signals.on_update refresh
+  Sig.listen MAvatarSet.Signals.on_update refresh
     
 (* Propagate avatar obliteration ------------------------------------------------ *)
 
@@ -301,8 +301,8 @@ let () =
 (* Propagate admin group binding ----------------------------------------------- *)
 
 let () = 
-  let! _, _, gid, tmpl, creator = Sig.listen MEntity.Signals.on_bind_group in 
-  if tmpl = ITemplate.admin || tmpl = ITemplate.members then  
+  let! _, _, gid, tmpl, creator = Sig.listen MGroup.Signals.on_bind_group in 
+  if tmpl = ITemplate.Group.admin || tmpl = ITemplate.Group.members then  
     let! from = ohm_req_or (return ()) $ MAvatar.actor creator in 
     admin ~from gid creator [ `Accept true ; `Default true ]   
   else return ()

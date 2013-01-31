@@ -14,7 +14,7 @@ let admin_one gid diffs aid =
   return ()
 
 module AdminFmt = Fmt.Make(struct
-  type json t = (Diff.t list * IAvatar.t list * IGroup.t)
+  type json t = (Diff.t list * IAvatar.t list * IAvatarSet.t)
 end)
 
 let admin_slice = 10
@@ -35,7 +35,7 @@ end
     
 let admin ~from gid aids what = 
   if aids = [] then return () else    
-    let gid   = IGroup.decay gid in 
+    let gid   = IAvatarSet.decay gid in 
     let aids  = List.map IAvatar.decay aids in
     let diffs = List.map (Diff.make from) what in
     if diffs = [] then return () else 
@@ -44,8 +44,8 @@ let admin ~from gid aids what =
       let! () = ohm begin 
 	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
 	let  iid = IInstance.decay (MActor.instance from) in
-	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let  own = MGroup.Get.owner g in 
+	let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+	let  own = MAvatarSet.Get.owner g in 
 	let  p   = 
 	  if List.mem `Invite what then `Invite else 
 	    if List.mem (`Accept true) what then
@@ -89,7 +89,7 @@ module CreateArgs = Fmt.Make(struct
   type json t = < 
     iid    : IInstance.t ; 
     input  : (string * string * string) list ;
-    gid    : IGroup.t ;
+    gid    : IAvatarSet.t ;
     diffs  : Diff.t list 
   > 
 end)
@@ -122,7 +122,7 @@ end
 let create ~from iid gid list what = 
   if list = [] then return () else
     let iid   = IInstance.decay iid in     
-    let gid   = IGroup.decay gid in 
+    let gid   = IAvatarSet.decay gid in 
     let diffs = List.map (Diff.make from) what in
     if diffs = [] then return () else 
 
@@ -130,8 +130,8 @@ let create ~from iid gid list what =
       let! () = ohm begin 
 	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
 	let  iid = IInstance.decay (MActor.instance from) in
-	let! g   = ohm_req_or (return ()) $ MGroup.naked_get gid in 
-	let  own = MGroup.Get.owner g in
+	let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
+	let  own = MAvatarSet.Get.owner g in
 	let  p   = `Create in 
 	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,own,List.length list))
       end in 

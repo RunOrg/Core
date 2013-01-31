@@ -1,8 +1,9 @@
 (* © 2012 RunOrg *)
 
 type 'a id = 
-  [ `Event  of 'a IEvent.id 
-  | `Entity of 'a IEntity.id 
+  [ `Event      of 'a IEvent.id 
+  | `Entity     of 'a IEntity.id 
+  | `Discussion of 'a IDiscussion.id 
   ]
 
 include Ohm.Fmt.FMT with type t = [`Unknown] id 

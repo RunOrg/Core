@@ -51,26 +51,26 @@ let by_name kind back access gid render =
 (* Handling by-group invitations ------------------------------------------------------------------- *)
 
 module ByGroupArgs = Fmt.Make(struct
-  type json t = ( IGroup.t list )
+  type json t = ( IAvatarSet.t list )
 end)
 
-let by_group kind back access gid render = 
+let by_group kind back access asid render = 
 
   let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     
     let  list = BatOption.default [] (ByGroupArgs.of_json_safe json) in
     
     let! aids = ohm $ O.decay (Run.list_map begin fun gid -> 
-      let! group = ohm_req_or (return []) $ MGroup.try_get (access # actor) gid in 
-      let! group = ohm_req_or (return []) $ MGroup.Can.list group in 
-      let! all   = ohm $ MMembership.InGroup.all (MGroup.Get.id group) `Validated in
+      let! group = ohm_req_or (return []) $ MAvatarSet.try_get (access # actor) gid in 
+      let! group = ohm_req_or (return []) $ MAvatarSet.Can.list group in 
+      let! all   = ohm $ MMembership.InSet.all (MAvatarSet.Get.id group) `Validated in
       return (List.map snd all) 
     end list) in
     
     let aids = BatList.sort_unique compare (List.concat aids) in
     
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # actor) gid aids 
+	~from:(access # actor) asid aids 
 	(match kind with 
 	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
@@ -84,27 +84,26 @@ let by_group kind back access gid render =
 
   render begin 
 
-    let! list = ohm $ O.decay (MEntity.All.get_by_kind (access # actor) `Group) in
+    let! list = ohm $ MGroup.All.visible ~actor:(access # actor) (access # iid) in
     
-    let! list = ohm $ O.decay (Run.list_filter begin fun entity -> 
+    let! list = ohm $ O.decay (Run.list_filter begin fun group -> 
       
-      let! name = ohm $ CEntityUtil.name entity in
+      let! name = ohm $ MGroup.Get.fullname group in 
       
-      let! ()     = true_or (return None) (not (MEntity.Get.draft entity)) in
-      let  gid'   = MEntity.Get.group entity in 
+      let  asid'  = MGroup.Get.group group in 
       
-      let! group  = ohm_req_or (return None) $ MGroup.try_get (access # actor) gid' in
-      let! group  = ohm_req_or (return None) $ MGroup.Can.list group in
-      let  gid'   = MGroup.Get.id group in 
+      let! avset  = ohm_req_or (return None) $ MAvatarSet.try_get (access # actor) asid' in
+      let! avset  = ohm_req_or (return None) $ MAvatarSet.Can.list avset in
+      let  asid'   = MAvatarSet.Get.id avset in 
       
-      let! ()     = true_or (return None) (IGroup.decay gid <> IGroup.decay gid') in
+      let! ()     = true_or (return None) (IAvatarSet.decay asid <> IAvatarSet.decay asid') in
       
-      let! count  = ohm $ MMembership.InGroup.count gid' in
+      let! count  = ohm $ MMembership.InSet.count asid' in
       
       if count # count = 0 then return None else 
 	
 	return $ Some (object
-	  method id     = IGroup.to_string gid'
+	  method id     = IAvatarSet.to_string asid'
 	  method count  = count # count
 	  method name   = name
 	end)
@@ -126,14 +125,14 @@ module CreateArgs = Fmt.Make(struct
   type json t = ( (string * string * string) list )
 end)
 
-let by_email back access gid render = 
+let by_email back access asid render = 
 
   let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     
     let list = BatOption.default [] (CreateArgs.of_json_safe json) in
     
     let! () = ohm $ O.decay begin MMembership.Mass.create
-	~from:(access # actor) (access # iid) gid list [ `Accept true ; `Default true ] 
+	~from:(access # actor) (access # iid) asid list [ `Accept true ; `Default true ] 
     end in 
     
     let delay = if List.length list < 3 then 3000 else 6000 in
@@ -148,7 +147,7 @@ let by_email back access gid render =
 
 (* Root box -------------------------------------------------------------------------------------- *)
 
-let box kind url back access gid wrapper = 
+let box kind url back access asid wrapper = 
 
   let! tab = O.Box.parse UrlClient.Invite.seg in 
   let  tab = if tab = `ByEmail && kind <> `Group then `ByGroup else tab in 
@@ -176,7 +175,7 @@ let box kind url back access gid wrapper =
   in
   
   match tab with 
-    | `ByName  -> by_name  kind back access gid render
-    | `ByGroup -> by_group kind back access gid render
-    | `ByEmail -> by_email      back access gid render
+    | `ByName  -> by_name  kind back access asid render
+    | `ByGroup -> by_group kind back access asid render
+    | `ByEmail -> by_email      back access asid render
   
