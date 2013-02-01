@@ -1,7 +1,7 @@
 (* © 2013 RunOrg *)
 
 val box :
-     [ `Group | `Event | `Forum ]
+     [ `Group | `Event ]
   -> (string -> string) 
   -> string
   -> 'any CAccess.t 

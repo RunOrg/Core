@@ -26,7 +26,7 @@ let loop =
   def begin fun (ilid, start, iid, access) ->
     let  biid = IInstance.Assert.bot iid in 
     let! line = ohm_req_or (return ()) $ Tbl.get ilid in 
-    let! aids, next = ohm $ MReverseAccess.reverse_async biid ?start ~count [access] in
+    let! aids, next = ohm $ MReverseAccess.reverse biid ?start ~count [access] in
     let! () = ohm $ Run.list_iter (fun aid -> View.update ilid aid line) aids in 
     if next = None then return () else 
       loop (ilid, next, iid, access) 

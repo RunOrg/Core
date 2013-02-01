@@ -14,49 +14,36 @@ let admin_one gid diffs aid =
   return ()
 
 module AdminFmt = Fmt.Make(struct
-  type json t = (Diff.t list * IAvatar.t list * IAvatarSet.t)
+  type json t = (IInstance.t * Diff.t list * MAccess.t * IAvatar.t option * IAvatarSet.t)
 end)
 
 let admin_slice = 10
 let admin_task, define_admin_task = 
-  let task, define = O.async # declare "membership-mass-admin" AdminFmt.fmt in
-  begin fun gid aids diffs -> 
-    match aids with 
-      | []    -> return ()
-      | [aid] -> admin_one gid diffs aid
-      | aids  -> task (diffs,aids,gid) 
-  end, define 
+  O.async # declare "membership-mass-admin" AdminFmt.fmt 
 
-let () = define_admin_task begin fun (diffs,aids,gid) -> 
-  let list, rest = try BatList.split_at admin_slice aids with _ -> aids, [] in
-  let! () = ohm $ Run.list_iter (admin_one gid diffs) list in
-  admin_task gid rest diffs
+let () = define_admin_task begin fun (iid,diffs,access,start,gid) -> 
+  let  biid = IInstance.Assert.bot iid in 
+  let! aids, next = ohm $ MReverseAccess.reverse biid ?start ~count:admin_slice [access] in 
+  let! () = ohm $ Run.list_iter (admin_one gid diffs) aids in
+  if next <> None then 
+    admin_task (iid,diffs,access,next,gid) 
+  else
+    return () 
 end 
+
+let admin_task iid gid access diffs =
+  match access with 
+    | `Nobody -> return ()
+    | `List [aid] -> admin_one gid diffs aid
+    | _   -> admin_task (iid,diffs,access,None,gid) 
     
-let admin ~from gid aids what = 
-  if aids = [] then return () else    
-    let gid   = IAvatarSet.decay gid in 
-    let aids  = List.map IAvatar.decay aids in
-    let diffs = List.map (Diff.make from) what in
-    if diffs = [] then return () else 
-
-      (* Log that we're doing this. *)
-      let! () = ohm begin 
-	let  uid = IUser.Deduce.is_anyone (MActor.user from) in
-	let  iid = IInstance.decay (MActor.instance from) in
-	let! g   = ohm_req_or (return ()) $ MAvatarSet.naked_get gid in 
-	let  own = MAvatarSet.Get.owner g in 
-	let  p   = 
-	  if List.mem `Invite what then `Invite else 
-	    if List.mem (`Accept true) what then
-	      if List.mem (`Default true) what then `Add else `Validate
-	    else `Remove
-	in
-	MAdminLog.log ~uid ~iid (MAdminLog.Payload.MembershipMass (p,own,List.length aids))
-      end in 
-
-      (* Start the insertion task *)
-      admin_task gid aids diffs
+let admin ~from iid gid access what = 
+  let gid   = IAvatarSet.decay gid in 
+  let iid   = IInstance.decay iid in 
+  let diffs = List.map (Diff.make from) what in
+  if diffs = [] then return () else 
+    (* Start the insertion task *)
+    admin_task iid gid access diffs
 	
 (* Creating avatars and adding them to a group -------------------------------------------------------------- *)
 
