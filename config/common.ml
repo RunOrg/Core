@@ -122,8 +122,6 @@ let adlib key ?(old:string option) (fr:string) =
 
 let groupConfig ~validation ~read = validation, read
 let wallConfig ~read ~post = read, post
-let folderConfig = wallConfig
-let albumConfig = wallConfig
 
 let profileForm id ~name ?subtitle ?(comment=false) fields = 
   profileForms := {
@@ -154,6 +152,16 @@ let template id ?old ~kind ~name ?desc ?propagate
     t_propg  = propagate ;
   } :: !templates ;
   id 
+
+let group id ~name ?desc ?columns ?fields ?join () = 
+  template id ~kind:`Group ~name ?desc ~propagate:"members" ?columns ?fields ?join 
+    ~group:(groupConfig ~validation:`Manual ~read:`Viewers) () 
+
+let event id ~name ?group ?desc ?columns ?fields ?collab ?join () = 
+  let group = match group with Some g -> g | None -> groupConfig ~validation:`Manual ~read:`Viewers in 
+  let collab = match collab with Some g -> g | None -> wallConfig ~read:`Registered ~post:`Viewers in
+  template id ~kind:`Event ~name ?desc ?columns ?fields ~group ?join 
+    ~wall:collab ~folder:collab ~album:collab () 
 
 let vertical id ?old ?(archive=false) ~name ?(forms=[]) init tmpl = 
   verticals := {
@@ -197,24 +205,6 @@ module Build = struct
   let templateId_ml () = 
     "module Events = PreConfig_TemplateId_Events\n"
     ^ "module Groups = PreConfig_TemplateId_Groups\n\n"
-    ^ "include Ohm.Fmt.Make(struct \n  type t =\n    [ "
-    ^ String.concat "\n    | " (List.map (fun t -> "`" ^ t.t_id) (!templates))
-    ^ " ]\n\n  let json_of_t = function\n    | "
-    ^ String.concat "\n    | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> Ohm.Json.String %S" t.t_id t.t_id) (!templates))
-    ^ "\n\n  let t_of_json = function\n    | "
-    ^ String.concat "\n    | " (List.map (fun t -> 
-      let old = match t.t_old with None -> "" | Some old -> Printf.sprintf " | Ohm.Json.String %S" old in
-      Printf.sprintf " Ohm.Json.String %S%s -> `%s" t.t_id old t.t_id) (!templates))
-    ^ "\n    | json -> Ohm.Json.parse_error \"template-id\" json"
-    ^ "\nend)\n\nlet to_string = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> %S" t.t_id t.t_id) (!templates))
-    ^ "\n\nlet of_string = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      let old = match t.t_old with None -> "" | Some old -> Printf.sprintf " | %S" old in
-      Printf.sprintf "%S%s -> Some `%s" t.t_id old t.t_id) (!templates))
-    ^ "\n  | _ -> None\n" 
 
   let templateIdEvents_ml () = 
     let templates = List.filter (fun t -> t.t_kind = `Event) ! templates in
@@ -340,245 +330,6 @@ module Build = struct
     "module Events = PreConfig_Template_Events\n"
     ^ "module Groups = PreConfig_Template_Groups\n\n"
       
-    (* Basic configuration data ============================================================================= *)
-    ^ "let group = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id (match t.t_group with 
-	| None -> "None"
-	| Some (valid,read) -> Printf.sprintf 
-	  "Some (object method validation = %s method read = %s end)"
-	  (match valid with `Manual -> "`Manual" | `None -> "`None")
-	  (access read))) (!templates))
-    ^ "\n\nlet wall = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id (match t.t_wall with 
-	| None -> "None"
-	| Some (read,post) -> Printf.sprintf 
-	  "Some (object method read = %s method post = %s end)"
-	  (access read) (access post))) (!templates))
-    ^ "\n\nlet folder = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id (match t.t_folder with 
-	| None -> "None"
-	| Some (read,post) -> Printf.sprintf 
-	  "Some (object method read = %s method post = %s end)"
-	  (access read) (access post))) (!templates))
-    ^ "\n\nlet album = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id (match t.t_album with 
-	| None -> "None"
-	| Some (read,post) -> Printf.sprintf 
-	  "Some (object method read = %s method post = %s end)"
-	  (access read) (access post))) (!templates))
-
-      (* Join form fields =================================================================================== *)
-    ^ "\n\nlet join = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> [\n    %s ]" t.t_id 
-	(String.concat ";\n    " 
-	   (List.map (fun j -> Printf.sprintf 
-	     "(object\n      method name = %S\n      method label = `label `%s\n      method required = %s\n      method edit = %s\n    end)"
-	     j.j_name j.j_label (if j.j_req then "true" else "false") 
-	     (match j.j_type with 
-	       | `Textarea -> "`Textarea"
-	       | `Checkbox -> "`Checkbox"
-	       | `LongText -> "`LongText"
-	       | `Date     -> "`Date"
-	       | `PickOne  l -> Printf.sprintf "`PickOne [%s]"
-		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l))
-	       | `PickMany l -> Printf.sprintf "`PickMany [%s]"
-		 (String.concat ";" (List.map (fun l -> "`label `" ^ l) l)))
-	    ) t.t_join)
-	)) (!templates))
-
-      (* The kind of a template ============================================================================= *)
-    ^ "\n\nlet kind = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> `%s" t.t_id (match t.t_kind with 
-	| `Group -> "Group"
-	| `Event -> "Event"
-	| `Forum -> "Forum")) (!templates))
-
-      (* The name (adlib) of the template =================================================================== *)
-    ^ "\n\nlet name = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> `%s" t.t_id t.t_name) (!templates))
-
-      (* The name (adlib) of the template =================================================================== *)
-    ^ "\n\nlet desc = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> %s" t.t_id 
-      (match t.t_desc with Some s -> "Some `"^s | None -> "None")) (!templates))
-
-      (* The propagation ruless of the template ============================================================= *)
-    ^ "\n\nlet propagate = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> Printf.sprintf "`%s -> [%s]" t.t_id 
-      (match t.t_propg with None -> "" | Some g -> Printf.sprintf "%S" g)) (!templates))
-
-      (* Initial grid columns =============================================================================== *)
-    ^ "\n\nlet columns iid gid = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> [\n   %s ]" t.t_id
-	(String.concat ";\n    "
-	   (List.map (fun c -> Printf.sprintf 
-	     "MAvatarGridColumn.({ label = `label `%s ; view = `%s ; eval = %s })"
-	     c.c_label
-	     (match c.c_view with 
-	       | `Text -> "Text"
-	       | `Date -> "Date"
-	       | `DateTime -> "DateTime"
-	       | `Status -> "Status"
-	       | `PickOne -> "PickOne"
-	       | `Checkbox -> "Checkbox")
-	     (match c.c_eval with 
-	       | `Profile sub -> Printf.sprintf "`Profile (iid,%s)"
-		 (match sub with 
-		   | `Firstname -> "`Firstname"
-		   | `Lastname  -> "`Lastname"
-		   | `Zipcode   -> "`Zipcode"
-		   | `Birthdate -> "`Birthdate"
-		   | `Email     -> "`Email")
-	       | `Self sub -> Printf.sprintf "`Group (gid,%s)"
-		 (match sub with 
-		   | `Status  -> "`Status"
-		   | `Date    -> "`Date"
-		   | `Field s -> Printf.sprintf "`Field %S" s))) t.t_cols))
-    ) (!templates))
-
-      (* The information display ============================================================================ *)
-    ^ "\n\nmodule Info = struct"
-    ^ "\n\n  let eventWhen = function\n    | "
-    ^ String.concat "\n    | " begin List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id 
-	(try let field = List.find 
-	       (fun f -> f.f_mean = Some `Date) t.t_fields in
-	     let fieldname = field.f_key in	     
-	     let _, section = List.find 
-	       (fun (_,items) -> List.exists 
-		 (fun (_,fields) -> List.exists (fun (name,_) -> name = fieldname) fields)
-		 items) t.t_page in
-	     Printf.sprintf "[%s]"
-	       (String.concat ";" (List.map (fun (_,fields) -> 
-		 Printf.sprintf "[%s]" 
-		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
-		     src (match kind with 
-		       | `LongText -> "LongText"
-		       | `Text     -> "Text"
-		       | `Url      -> "Url"
-		       | `Date     -> "Date"
-		       | `Address  -> "Address")) fields
-		    ))) section
-		) )
-	 with Not_found -> "[]")					 
-    ) (!templates) end 
-    ^ "\n\n  let eventWhere = function\n    | "
-    ^ String.concat "\n    | " begin List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id 
-	(try let field = List.find 
-	       (fun f -> f.f_mean = Some `Location) t.t_fields in
-	     let fieldname = field.f_key in	     
-	     let _, section = List.find 
-	       (fun (_,items) -> List.exists 
-		 (fun (_,fields) -> List.exists (fun (name,_) -> name = fieldname) fields)
-		 items) t.t_page in
-	     Printf.sprintf "[%s]"
-	       (String.concat ";" (List.map (fun (_,fields) -> 
-		 Printf.sprintf "[%s]" 
-		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
-		     src (match kind with 
-		       | `LongText -> "LongText"
-		       | `Text     -> "Text"
-		       | `Url      -> "Url"
-		       | `Date     -> "Date"
-		       | `Address  -> "Address")) fields
-		    ))) section
-		) )
-	 with Not_found -> "[]")					 
-    ) (!templates) end 
-    ^ "\n\n  let rest = function\n    | "
-    ^ String.concat "\n    | " begin List.map (fun t -> 
-      Printf.sprintf "`%s -> %s" t.t_id 
-	(let date_fieldname = 
-	   try let f = List.find 
-		 (fun f -> f.f_mean = Some `Date) t.t_fields in
-	       f.f_key
-	   with _ -> "*"
-	 in	     
-	 let loc_fieldname = 
-	   try let f = List.find 
-		 (fun f -> f.f_mean = Some `Location) t.t_fields in
-	       f.f_key 
-	   with _ -> "-" 
-	 in	    
-	 let sections = List.filter 
-	   (fun (_,items) -> List.for_all
-	     (fun (_,fields) -> List.for_all 
-	       (fun (name,_) -> name <> date_fieldname && name <> loc_fieldname) 
-	       fields)
-	     items) t.t_page 
-	 in
-	 Printf.sprintf "[%s]"
-	   (String.concat ";" (List.map (fun (label,items) -> 
-	     Printf.sprintf "`%s,[%s]" label 
-	       (String.concat ";" (List.map (fun (label,fields) -> 
-		 Printf.sprintf "%s,[%s]"
-		   (match label with Some s -> "Some `"^s | None -> "None")
-		   (String.concat ";" (List.map (fun (src,kind) -> Printf.sprintf "%S,`%s"
-		     src (match kind with 
-		       | `LongText -> "LongText"
-		       | `Text     -> "Text"
-		       | `Url      -> "Url"
-		       | `Date     -> "Date"
-		       | `Address  -> "Address")) fields
-		    ))) items
-		))) sections))	
-	)) (!templates) end 
-
-    ^ "\n\nend"
-
-    (* Entity fields.  ==================================================================================== *)
-      
-    ^ "\n\nlet fields = function\n  | "
-    ^ String.concat "\n  | " (List.map (fun t -> 
-      Printf.sprintf "`%s -> [\n    %s ]" (t.t_id) 
-	(String.concat " ;\n    " (BatList.filter_map (fun f ->
-	  let edit = match f.f_edit with 
-	    | `Textarea -> Some "Textarea"
-	    | `LongText -> Some "Input"
-	    | `Picture  -> None
-	    | `Date     -> Some "Date"
-	  in
-	  match edit with None -> None | Some edit -> 
-	    Some begin 
-	      Printf.sprintf "(object\n      method label = `%s\n      method detail = %s\n      method edit = `%s\n      method key = %S\n      method required = %s\n    end)"
-		f.f_label 
-		(match f.f_help with None -> "None" | Some s -> "Some `" ^ s) 
-		edit
-		f.f_key
-		(if f.f_req then "true" else "false")
-	    end
-	 ) (t.t_fields)))
-    ) (!templates))
-      
-    (* The field name, by meaning ========================================================================= *)
-    ^ "\n\nmodule Meaning = struct\n\n"
-    ^ String.concat "\n\n" begin
-      List.map (fun (mean,meanstr) -> 
-	Printf.sprintf "  let %s = function\n    | %s" meanstr 
-	  (String.concat "\n    | " (List.map (fun t -> 
-	    "`" ^ t.t_id ^ " -> " ^ begin 
-	      try let f = List.find (fun f -> f.f_mean = Some mean) t.t_fields in
-		  Printf.sprintf "Some %S" f.f_key
-	      with Not_found -> "None"
-	    end
-	   ) (!templates)))
-      ) [ `Description, "description" ;
-	  `Date,        "date" ;
-	  `Summary,     "summary" ;
-	  `Enddate,     "endDate" ;
-	  `Location,    "location" ;
-	  `Picture,     "picture" ] 
-    end
-    ^ "\n\nend"
-
   let templateGroups_ml () = 
 
     let templates = List.filter (fun t -> t.t_kind = `Group) !templates in 
