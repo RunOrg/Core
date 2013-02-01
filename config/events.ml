@@ -6,8 +6,6 @@ open Common
 let course12sessions = event "Course12sessions"
   ~name:"Cours 12 séances"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances. Peut être renseigné par l'élève ou le prof"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; date ;
     column ~view:`Date
@@ -116,8 +114,6 @@ let course12sessions = event "Course12sessions"
 let course12sessionsFitness = event "Course12sessionsFitness"
   ~name:"Cours 12 séances fitness"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances et de réccupérer les retours des élèves. Peut être renseigné par l'élève et/ou le prof"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; date ;
     column ~view:`Date
@@ -369,8 +365,6 @@ let course12sessionsFitness = event "Course12sessionsFitness"
 
 let courseSimple = event "CourseSimple"
   ~name:"Séance de cours"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -378,8 +372,6 @@ let courseSimple = event "CourseSimple"
 
 let courseStage = event "CourseStage"
   ~name:"Stage"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -387,8 +379,6 @@ let courseStage = event "CourseStage"
 
 let courseTraining = event "CourseTraining"
   ~name:"Formation"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -396,8 +386,6 @@ let courseTraining = event "CourseTraining"
 
 let eventAfterwork = event "EventAfterwork"
   ~name:"Afterwork"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -406,7 +394,6 @@ let eventAfterwork = event "EventAfterwork"
 let _ = event "EventAfterworkAuto"
   ~name:"Aferwork inscriptions automatiques"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ date ; status ])
   ()
 
@@ -414,8 +401,6 @@ let _ = event "EventAfterworkAuto"
 
 let eventAg = event "EventAg"
   ~name:"Assemblée Générale"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     column ~view:`Text
       ~label:(adlib "JoinFieldAgOthervoiceShort" ~old:"join.field.ag.othervoice.short" "Pouvoir")
@@ -442,8 +427,6 @@ let eventAg = event "EventAg"
 
 let eventBadmintonCompetition = event "EventBadmintonCompetition"
   ~name:"Tournoi de Badminton"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; 
     date ; 
@@ -475,8 +458,6 @@ let eventBadmintonCompetition = event "EventBadmintonCompetition"
 let eventCampaignAction = event "EventCampaignAction"
   ~name:"Opération militante"
   ~desc:"Organisez une opération militante et recueillez les CR de cette action"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -500,8 +481,6 @@ let eventCampaignAction = event "EventCampaignAction"
 let eventCampaignMeeting = event "EventCampaignMeeting"
   ~name:"Réunion électorale publique"
   ~desc:"Organisez une réunion électorale et reccueillez les thèmes attendus par les participants"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -524,8 +503,6 @@ let eventCampaignMeeting = event "EventCampaignMeeting"
 
 let eventClubbing = event "EventClubbing"
   ~name:"Soirée"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -534,7 +511,6 @@ let eventClubbing = event "EventClubbing"
 let _ = event "EventClubbingAuto"
   ~name:"Soirée inscriptions automatiques"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -542,8 +518,6 @@ let _ = event "EventClubbingAuto"
 
 let eventComiteEnt = event "EventComiteEnt"
   ~name:"Comité d'entreprise"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; 
     date ;
@@ -561,8 +535,6 @@ let eventComiteEnt = event "EventComiteEnt"
 
 let eventCoproMeeting = event "EventCoproMeeting"
   ~name:"Conseil syndical"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ;
@@ -581,8 +553,6 @@ let eventCoproMeeting = event "EventCoproMeeting"
 let eventImproSimple = event "EventImproSimple"
   ~name:"Match d'improvisation"
   ~desc:"Organisation interne d'un match contre une autre équipe"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ;
     date ;
@@ -615,8 +585,6 @@ let eventImproSimple = event "EventImproSimple"
 let eventImproSpectacle = event "EventImproSpectacle"
   ~name:"Spectacle d'improvisation"
   ~desc:"Organisation interne du spectacle"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ;
@@ -667,8 +635,6 @@ let eventJudoCompetition = event "EventJudoCompetition"
 
 let eventMeeting = event "EventMeeting"
   ~name:"Réunion"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ;
     date ;
@@ -687,8 +653,6 @@ let eventMeeting = event "EventMeeting"
 let eventPetition = event "EventPetition"
   ~name:"Pétition"
   ~desc:"Vous pouvez personnaliser les informations demandées aux signataires."
-  ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ;
     date ; 
@@ -711,8 +675,6 @@ let eventPetition = event "EventPetition"
 
 let eventPublicCommittee = event "EventPublicCommittee"
   ~name:"Conseil municipal"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -731,8 +693,6 @@ let eventPublicCommittee = event "EventPublicCommittee"
 let eventSimple = event "EventSimple"
   ~name:"Evènement Simple"
   ~desc:"Une date, un lieu, une liste d'invités."
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -741,7 +701,6 @@ let eventSimple = event "EventSimple"
 let _ = event "EventSimpleAuto"
   ~name:"Evènement Simple"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
