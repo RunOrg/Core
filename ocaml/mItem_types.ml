@@ -33,21 +33,10 @@ type doc     = <
   size   : float
 >
 
-type chat    = <
-  room   : [`View] IChat.Room.id
->
-
-type chat_request = <
-  author : IAvatar.t ;
-  topic  : string
->
-
 type payload = [ `Message  of message 
 	       | `MiniPoll of miniPoll
 	       | `Image    of image
 	       | `Doc      of doc
-	       | `Chat     of chat 
-	       | `ChatReq  of chat_request 
 	       | `Mail     of mail 
 	       ] 
 
@@ -56,8 +45,6 @@ let author_by_payload = function
   | `MiniPoll p -> Some (p # author) 
   | `Image    i -> Some (i # author) 
   | `Doc      d -> Some (d # author) 
-  | `Chat     c -> None
-  | `ChatReq  c -> Some (c # author)
   | `Mail     m -> Some (m # author) 
 
 type item = < 
@@ -115,11 +102,6 @@ let payload  t = match t # payload with
 		     method size   = d # size
 		     method file   = id
 		   end )
-  | `Chat     c -> let id = IChat.Room.Assert.view (c # room) in
-		   `Chat ( object
-		     method room   = id
-		   end ) 
-  | `ChatReq  r -> `ChatReq r
 		    
 let item_of_data itid ?self (t:Data.t) = 
 

@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 val user_is_admin : 'any ICurrentUser.id -> [`Admin] ICurrentUser.id option
 

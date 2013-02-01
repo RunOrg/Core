@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 include HEntity.SET with type 'a can = 'a MDiscussion_can.t and type diff = MDiscussion_core.diff
 

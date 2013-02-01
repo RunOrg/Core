@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
   
 val all :
      [<`Admin|`Write|`List|`Bot] IAvatarSet.id
