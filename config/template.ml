@@ -59,26 +59,7 @@ let admin = template "Admin"
   ~name:"Groupe des Administrateurs RunOrg"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~fields:[]
-  ~join:[]
-  ~page:[]
-  ()
-
-(* ========================================================================== *)
-
-let _ = template "AlbumSimple"
-  ~old:"album-simple"
-  ~kind:`Forum
-  ~name:"Album Photo Simple"
-  ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~columns:Col.([ status ; date ])
-  ~fields:[]
-  ~join:[]
-  ~page:[]
   ()
 
 (* ========================================================================== *)
@@ -464,7 +445,6 @@ let courseSimple = template "CourseSimple"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -478,7 +458,6 @@ let courseStage = template "CourseStage"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -492,7 +471,6 @@ let courseTraining = template "CourseTraining"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -506,7 +484,6 @@ let eventAfterwork = template "EventAfterwork"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -520,7 +497,6 @@ let _ = template "EventAfterworkAuto"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ date ; status ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -659,8 +635,6 @@ let eventClubbing = template "EventClubbing"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
-  
   ()
 
 (* ========================================================================== *)
@@ -674,7 +648,6 @@ let _ = template "EventClubbingAuto"
   ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
   ~album:(albumConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
@@ -928,29 +901,12 @@ let _ = template "EventSimpleAuto"
 
 (* ========================================================================== *)
 
-let forum = template "ForumPublic"
-  ~old:"forum-public"
-  ~kind:`Forum
-  ~name:"Forum"
-  ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Viewers ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Viewers ~post:`Viewers)
-  ~album:(albumConfig ~read:`Viewers ~post:`Viewers)
-  ~columns:Col.([ status ; date ])
-  ~join:[]
-  ()
-
-(* ========================================================================== *)
-
 let groupBadminton = template "GroupBadminton"
   ~kind:`Group
   ~name:"Sportifs Badminton"
   ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du badminton"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ; 
@@ -1032,9 +988,6 @@ let groupCheerleading = template "GroupCheerleading"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du cheerleading"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1116,29 +1069,12 @@ let groupCheerleading = template "GroupCheerleading"
 
 (* ========================================================================== *)
 
-let groupCollaborative = template "GroupCollaborative"
-  ~old:"group-collaborative"
-  ~kind:`Group
-  ~name:"Groupe avec Forum"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
-  ~columns:Col.([ status ; date ])
-  ()
-
-(* ========================================================================== *)
-
 let groupCollaborativeAuto = template "GroupCollaborativeAuto"
   ~old:"group-collaborative-auto"
   ~kind:`Group
   ~name:"Groupe avec Forum"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -1150,9 +1086,6 @@ let _ = template "GroupContact"
   ~name:"Contacts"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -1165,9 +1098,6 @@ let groupCoproEmployes = template "GroupCoproEmployes"
   ~desc:"Groupe avec forum, dédié aux gardiens et salariés"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ 
     status ;
     date ; 
@@ -1205,9 +1135,6 @@ let groupCoproLodger = template "GroupCoproLodger"
   ~desc:"Groupe avec forum, dédié aux locataires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ; 
@@ -1237,9 +1164,6 @@ let groupCoproManager = template "GroupCoproManager"
   ~desc:"Groupe avec forum, dédié aux gestionnaires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1269,9 +1193,6 @@ let groupCorproOwner = template "GroupCorproOwner"
   ~desc:"Groupe avec forum, dédié aux propriétaires"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ; 
     date ; 
@@ -1312,9 +1233,6 @@ let groupFitnessMembers = template "GroupFitnessMembers"
   ~desc:"Regroupe les informations demandées à vos sportifs."
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1436,9 +1354,6 @@ let groupFootus = template "GroupFootus"
   ~desc:"Regroupe les informations demandées aux joueurs de football américain"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1624,9 +1539,6 @@ let groupRespo = template "GroupRespo"
   ~name:"Responsables"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
@@ -1638,9 +1550,6 @@ let groupSchoolParents = template "GroupSchoolParents"
   ~desc:"Groupe avec forum, dédié aux parents d'élèves"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     column ~view:`Text
       ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
@@ -1693,9 +1602,6 @@ let _ = template "GroupTest"
   ~name:"Groupe Test"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ()
 
 (* ========================================================================== *)
@@ -1778,6 +1684,7 @@ let _ = template "SubscriptionAuto"
   ~old:"subscription-auto"
   ~kind:`Group
   ~name:"Adhésion"
+  ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
@@ -1814,9 +1721,6 @@ let subscriptionForever = template "SubscriptionForever"
   ~name:"Adhésion Permanente"
   ~propagate:"members"
   ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 

@@ -39,15 +39,11 @@ let athle = vertical "Athle"
   ~name:"Club d'athlétisme"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.group-collaborative.trainers.name" groupCollaborative
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
-	initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces")  ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
- initial "entity.sample.group-collaborative.office.name" groupCollaborative
+    initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
       ~name:Adlib.OldEntity.group_poussins ;
@@ -91,10 +87,6 @@ let badminton = vertical "Badminton"
       ~name:(adlib "EntitySampleGroupCollaborativeBadmintonCompetitorsName" "Compétition") ;
     initial "entity.sample.group-collaborative.badminton-fun.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeBadmintonFunName" "Loisir") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
     groupSimple ;
@@ -123,10 +115,6 @@ let campaigns = vertical "Campaigns"
       ~name:(adlib "EntitySampleGroupCollaborativeCampaignMembersSample" ~old:"entity.sample.group-collaborative.campaign-members.sample" "Militants") ;
     initial "entity.sample.group-collaborative.campaign-sympathisers.sample" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCampaignSympathisersSample" ~old:"entity.sample.group-collaborative.campaign-sympathisers.sample" "Sympathisants") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
     groupSimple ;
@@ -168,10 +156,6 @@ let collectivites = vertical "Collectivites"
   ~old:"v:collectivites"
   ~name:"Mairies & collectivités"
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces")  ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.collectivites-agent.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCollectivitesAgentName" ~old:"entity.sample.group-collaborative.collectivites-agent.name" "Agents") ;
     initial "entity.sample.group-collaborative.collectivites-manager.name" groupSimple
@@ -203,10 +187,6 @@ let comiteEnt = vertical "ComiteEnt"
   ~name:"Comités d'entreprise"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.comite-ent-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeComiteEntEmployeesName" ~old:"entity.sample.group-collaborative.comite-ent-employees.name" "Salariés") ;
     initial "entity.sample.group-collaborative.comite-ent-managers.name" groupSimple
@@ -230,10 +210,6 @@ let company = vertical "Company"
   ~old:"v:company"
   ~name:"Entreprises"
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.company-employees.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
     initial "entity.sample.group-collaborative.company-management.name" groupSimple
@@ -281,10 +257,6 @@ let companyTraining = vertical "CompanyTraining"
   ~name:"Sociétés de formation"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyEmployeesName" ~old:"entity.sample.group-collaborative.company-employees.name" "Salariés") ;
     initial "entity.sample.group-collaborative.company-management.name" groupSimple
@@ -343,10 +315,6 @@ let copro = vertical "Copro"
   Template.([
    initial "entity.sample.group-collaborative.copro.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCoproName" ~old:"entity.sample.group-collaborative.copro.name" "Membres du syndic") ; 
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-copro-owner.name" groupCorproOwner
       ~name:Adlib.OldEntity.group_copro_owner ;
     initial "entity.sample.group-copro-manager.name" groupCoproManager
@@ -381,10 +349,6 @@ let coproVolunteer = vertical "CoproVolunteer"
   Template.([
     initial "entity.sample.group-collaborative.copro.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeCoproName" ~old:"entity.sample.group-collaborative.copro.name" "Membres du syndic") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-copro-owner.name" groupCorproOwner
       ~name:Adlib.OldEntity.group_copro_owner ;
     initial "entity.sample.group-copro-lodger.name" groupCoproLodger
@@ -414,10 +378,6 @@ let elementarySchool = vertical "ElementarySchool"
   ~name:"Ecoles primaires"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.school-teachers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSchoolTeachersName" "Enseignants et équipe éducative") ;
     initial "entity.sample.group-collaborative.school-parents.name" groupSchoolParents
@@ -454,10 +414,6 @@ let ess = vertical "Ess"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
     groupSimple ;
@@ -477,10 +433,6 @@ let events = vertical "Events"
   ~name:"Organisation d'évènements"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.staff.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeStaffName" ~old:"entity.sample.group-collaborative.staff.name" "Staff") ;
     initial "entity.sample.contact.name" groupSimple
@@ -505,10 +457,6 @@ let federations = vertical "Federations"
   ~name:"Fédérations"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.federation-structure.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationStructureName" ~old:"entity.sample.group-collaborative.federation-structure.name" "Structure fédérale") ;
     initial "entity.sample.group-collaborative.federation-dtn.name" groupSimple
@@ -564,12 +512,6 @@ let footus = vertical "Footus"
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.group-cheerleading.name" groupCheerleading
       ~name:(adlib "EntitySampleGroupCheerleadingName" ~old:"entity.sample.group-cheerleading.name" "Cheerleaders") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.forum-public.jobs-sport.name" forum
-      ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
     initial "entity.sample.sport.group-seniors.name" groupSimple
       ~name:Adlib.OldEntity.group_seniors  ;
     initial "entity.sample.sport.group-minimes.name" groupSimple
@@ -603,10 +545,6 @@ let impro = vertical "Impro"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
     groupSimple ;
@@ -636,12 +574,6 @@ let judo = vertical "Judo"
       ~name:(adlib "EntitySampleGroupJudoMembersName" ~old:"entity.sample.group-judo-members.name" "Sportifs judo et jujitsu") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
-    initial "entity.sample.forum-public.jobs-sport.name" forum
-      ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
     initial "entity.sample.sport.group-petitssamourais.name" groupSimple
       ~name:Adlib.OldEntity.group_petitssamourais ;
     initial "entity.sample.sport.group-poussinnets.name" groupSimple
@@ -720,10 +652,6 @@ let localNpPortal = vertical "LocalNpPortal"
   ~old:"v:local-np-portal"
   ~name:"Portail associatif communal"
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.mda-resp-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespAssoName" ~old:"entity.sample.group-collaborative.mda-resp-asso.name" "Responsables d'associations") ;
     initial "entity.sample.group-collaborative.mda-resp-commune.name" groupSimple
@@ -749,10 +677,6 @@ let maisonAsso = vertical "MaisonAsso"
   ~name:"Maison des associations"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.mda-resp-asso.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeMdaRespAssoName" ~old:"entity.sample.group-collaborative.mda-resp-asso.name" "Responsables d'associations") ;
     initial "entity.sample.group-collaborative.mda-resp-commune.name" groupSimple
@@ -780,10 +704,6 @@ let health = vertical "Health"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg")
   ])
   Template.([
     groupSimple ;
@@ -811,12 +731,6 @@ let multiSports = vertical "MultiSports"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.jobs-sport.name" forum
-      ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
       ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
@@ -894,10 +808,6 @@ let salleSport = vertical "SalleSport"
   Template.([
       initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-fitness-members.name" groupFitnessMembers
@@ -943,10 +853,6 @@ let sectionSportEtudes = vertical "SectionSportEtudes"
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesMedicalTeamName" "Equipe médicale") ;
     initial "entity.sample.group-collaborative.sectionsportetudes.parents.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeSectionSportEtudesParentsName" "Parents des sportifs") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg")
   ])
   Template.([
     groupSimple ;
@@ -971,10 +877,6 @@ let simple = vertical "Simple"
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg")
   ])
   Template.([
     groupSimple ;
@@ -995,10 +897,6 @@ let spUsep = vertical "SpUsep"
   ~name:"Fédération - USEP"
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-collaborative.federation-structure.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeFederationStructureName" ~old:"entity.sample.group-collaborative.federation-structure.name" "Structure fédérale") ;
     initial "entity.sample.group-collaborative.federation-dtn.name" groupSimple
@@ -1036,12 +934,6 @@ let sports = vertical "Sports"
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
     initial "entity.sample.group-collaborative.trainers.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
-    initial "entity.sample.forum-public.jobs-sport.name" forum
-      ~name:(adlib "EntitySampleForumPublicJobsSportName" ~old:"entity.sample.forum-public.jobs-sport.name" "Offres et demandes d'emplois") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.sport.group-poussins.name" groupSimple
       ~name:Adlib.OldEntity.group_poussins ;
     initial "entity.sample.sport.group-benjamins.name" groupSimple
@@ -1103,10 +995,6 @@ let stub = vertical "Stub"
   ~archive:true
   ~forms:ProfileForm.([ simple ])
   Template.([
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
     initial "entity.sample.group-simple.allmembers.name" groupSimple
       ~name:(adlib "EntitySampleGroupSimpleAllmembersName" ~old:"entity.sample.group-simple.allmembers.name" "Tous les membres") ;
   ])
@@ -1121,14 +1009,10 @@ let students = vertical "Students"
   ~name:"Associations étudiantes"
   ~forms:ProfileForm.([ simple ])
   Template.([
-      initial "entity.sample.sub-runorg.name" subscriptionForever
+    initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
     initial "entity.sample.group-collaborative.office.name" groupSimple
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
-    initial "entity.sample.forum-public.classified.name" forum
-      ~name:(adlib "EntitySampleForumPublicClassifiedName" ~old:"entity.sample.forum-public.classified.name" "Petites annonces") ;
-    initial "entity.sample.forum-public.user-support.name" forum
-      ~name:(adlib "EntitySampleForumPublicUserSupportName" ~old:"entity.sample.forum-public.user-support.name" "Utilisation de RunOrg") ;
   ])
   Template.([
     groupSimple ;
@@ -1195,9 +1079,6 @@ let () = catalog [
     inCatalog campaigns
               (adlib "VerticalCampaignsName" "Campagnes électorales")
               None ;
-    (* inCatalog localDemocracy
-              (adlib "VerticalLocalDemocracyName" "Conseils de quartiers")
-              None ; *)
     inCatalog maisonAsso
               (adlib "VerticalMaisonAssoName" "Maison des associations")
               None ;
@@ -1254,9 +1135,6 @@ let () = catalog [
     inCatalog events
               (adlib "VerticalEventsName" "Organisation d'évènements")
               None ;
-    (* inCatalog citizenPortal
-              (adlib "VerticalCitizenPortalName" "Portail citoyens")
-              None ; *)
     inCatalog simple
               (adlib "VerticalCatalogOtherName" "Autres")
               None ;
