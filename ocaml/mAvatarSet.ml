@@ -424,6 +424,10 @@ let () =
   let! iid, eid, asid, template, _ = Sig.listen MEvent.Signals.on_bind_group in 
   create asid iid (`Event (IEvent.decay eid,template)) 
 
+let () = 
+  let! _, asid = Sig.listen MGroup.Signals.on_delete in
+  refresh (IAvatarSet.Assert.bot asid) ~grants:false ~manual:true
+    
 (* {{MIGRATION}} *)
 
 let () = 

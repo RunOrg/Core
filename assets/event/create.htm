@@ -76,13 +76,20 @@ refresh = ->
   [id,proof] = $p.val().split("/")
   return if !id || !proof 
   $i = $p.next().addClass("-loading")
-  $.getJSON pics, {id:id,proof:proof}, (data) -> 
+  success = (data) -> 
     return if id != $p.val().split("/")[0] 
     return setTimeout refresh, 1000 if !data.large
     $i.find(".-l").attr("src",data.large)
     $i.find(".-s").attr("src",data.small)
     $i.removeClass("-loading")
-        
+  $.ajax {
+    dataType: 'json', 
+    url: pics,
+    data: {id:id,proof:proof}, 
+    cache: false,
+    success: success
+  }
+         
 here.$upload.click -> 
   $iframe = $ "<iframe/>", {src : upload}  
   close = -> 

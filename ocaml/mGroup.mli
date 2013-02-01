@@ -16,6 +16,8 @@ module Satellite : sig
 end
 
 module Signals : sig
+
+  val on_delete : (IGroup.t * IAvatarSet.t, unit O.run) Ohm.Sig.channel 
     
   val on_update : (IGroup.t, unit O.run) Ohm.Sig.channel
 
