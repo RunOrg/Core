@@ -2,8 +2,9 @@
 
 val admin : 
      from:'any MActor.t
+  -> 'a IInstance.id
   -> [<`Admin|`Write|`Bot] IAvatarSet.id
-  -> 'a IAvatar.id list
+  -> MAccess.t
   -> [ `Accept of bool | `Invite | `Default of bool ] list
   -> unit O.run
     

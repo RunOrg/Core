@@ -91,17 +91,12 @@ val user :
   -> unit O.run
 
 module InSet : sig
-
-  val all :
-       [<`Admin|`Write|`List|`Bot] IAvatarSet.id
-    -> MAccess.State.t 
-    -> (bool * IAvatar.t) list O.run  
     
   val list_members :
-       ?start:Ohm.Id.t
+       ?start:IAvatar.t
     -> count:int
     -> [<`Admin|`Write|`List|`Bot] IAvatarSet.id 
-    -> (IAvatar.t list * Ohm.Id.t option) O.run
+    -> (IAvatar.t list * IAvatar.t option) O.run
 
   val avatars : 
        [<`Admin|`Write|`List|`Bot] IAvatarSet.id
@@ -117,8 +112,9 @@ module Mass : sig
 
   val admin : 
        from:'any MActor.t
+    -> 'a IInstance.id
     -> [<`Admin|`Write|`Bot] IAvatarSet.id
-    -> 'a IAvatar.id list
+    -> MAccess.t
     -> [ `Accept of bool | `Invite | `Default of bool ] list
     -> unit O.run
 

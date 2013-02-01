@@ -1,15 +1,10 @@
 (* © 2013 RunOrg *)
-  
-val all :
-     [<`Admin|`Write|`List|`Bot] IAvatarSet.id
-  -> MAccess.State.t 
-  -> (bool * IAvatar.t) list O.run
-    
+      
 val list_members :
-     ?start:Ohm.Id.t
+     ?start:IAvatar.t
   -> count:int
   -> [<`Admin|`Write|`List|`Bot] IAvatarSet.id 
-  -> (IAvatar.t list * Ohm.Id.t option) O.run
+  -> (IAvatar.t list * IAvatar.t option) O.run
 
 val list_everyone :
      ?start:Ohm.Id.t

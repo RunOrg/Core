@@ -4,44 +4,14 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let reverse iid access = 
+let inSet_call, inSet = Sig.make (fun list -> Run.map List.concat (Run.list_map identity list)) 
 
-  let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
-  
-  let by_group gid state = 
-    let! group = ohm_req_or (return []) $ MAvatarSet.naked_get gid in
+let reverse iid ?start ~count access = 
 
-    (* We need to make sure that we're accessing the right instance *)
-    if MAvatarSet.Get.instance group <> IInstance.decay iid then return [] else
-      (* We are allowed to access anything the entity needs to get accessors *)
-      let gid = IAvatarSet.Assert.list gid in 
-      let! list = ohm $ MMembership.InSet.all gid state in
-      return $ List.map snd list
+  let by_status status = 
+    let! list, next = ohm $ MAvatar.by_status (IInstance.Deduce.see_contacts iid) ?start ~count status in
+    return (match next with None -> list | Some aid -> aid :: list) 
   in
-
-  let rec aux = function 
-    | `Nobody -> return []
-    | `List l -> return l 
-    | `Groups (s,l) -> let! lists = ohm $ Run.list_map (fun gid -> by_group gid s) l in
-		       return $ List.concat lists
-    | `Union l -> let! lists = ohm $ Run.list_map aux l in
-		  return $ List.concat lists
-    | `Admin -> by_status `Admin
-    | `Token -> by_status `Token
-    | `Contact -> by_status `Contact
-    | `TokOnly t -> let! inner  = ohm $ aux t in
-		    let! tokens = ohm $ by_status `Token in
-		    return $ List.filter (flip List.mem tokens) inner
-  in
-
-  let! list = ohm $ Run.list_map aux access in
-  
-  return $ BatList.sort_unique compare (List.concat list)
-
-let reverse_async iid ?start ~count access = 
-
-  (* TODO: only filter the avatars we need *)
-  let by_status = MAvatar.by_status (IInstance.Deduce.see_contacts iid) in
   
   let by_group gid state = 
     let! group = ohm_req_or (return []) $ MAvatarSet.naked_get gid in
@@ -49,10 +19,8 @@ let reverse_async iid ?start ~count access =
     (* We need to make sure that we're accessing the right instance *)
     if MAvatarSet.Get.instance group <> IInstance.decay iid then return [] else
       (* We are allowed to access anything the entity needs to get accessors *)
-      let gid = IAvatarSet.Assert.list gid in 
-      (* TODO: only filter the avatars we need *)
-      let! list = ohm $ MMembership.InSet.all gid state in
-      return $ List.map snd list
+      let  gid = IAvatarSet.Assert.list gid in 
+      O.decay (inSet_call (gid,start,count))
   in
   
   let rec aux = function 
@@ -81,6 +49,6 @@ let reverse_async iid ?start ~count access =
     | None -> list
     | Some minaid -> BatList.filter (fun aid -> aid >= minaid) list
   in
-  
+
   return (OhmPaging.slice ~count list)
   

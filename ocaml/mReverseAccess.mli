@@ -1,8 +1,8 @@
 (* © 2013 RunOrg *)
 
-val reverse : [<`Rights|`Bot] IInstance.id -> MAccess.t list -> IAvatar.t list O.run 
+val inSet : ([`List] IAvatarSet.id * IAvatar.t option * int, (O.ctx, IAvatar.t list) Ohm.Run.t) Ohm.Sig.channel
 
-val reverse_async :
+val reverse :
      [<`Bot] IInstance.id
   -> ?start:IAvatar.t
   -> count:int
