@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type content = 
   [ `Post of < title : string ; body : MRich.OrText.t > 

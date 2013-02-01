@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 val get : 
      [<`PutImg|`GetImg|`PutPic|`GetPic|`OwnPic|`InsPic|`GetDoc|`PutDoc] IFile.id

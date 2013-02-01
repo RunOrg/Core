@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 include HEntity.CAN with type core = MEvent_core.t and type 'a id = 'a IEvent.id
 

@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *) 
+(* © 2013 RunOrg *) 
 
 include OhmCouchExport.EXPORT with type piece = string list
 			      and  type whole = string

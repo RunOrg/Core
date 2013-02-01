@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *) 
+(* © 2013 RunOrg *) 
 
 val post : MChat_line.Payload.t -> 'room IChat.Room.id -> MChat_line.t O.run
 
