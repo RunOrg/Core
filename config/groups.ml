@@ -172,6 +172,13 @@ let groupCheerleading = group "GroupCheerleading"
 
 (* ========================================================================== *)
 
+let _ = group "GroupCollaborative"
+  ~name:"Groupe"
+  ~columns:Col.([ status ; date ])
+  ()
+
+(* ========================================================================== *)
+
 let _ = group "GroupCollaborativeAuto"
   ~name:"Groupe"
   ~columns:Col.([ status ; date ])
