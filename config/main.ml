@@ -1,7 +1,8 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 module A  = Adlib
-module T  = Template
+module E  = Events
+module G  = Groups
 module V  = Vertical 
 module PF = ProfileForm 
 
