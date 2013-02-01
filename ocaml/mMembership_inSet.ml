@@ -24,64 +24,32 @@ let () =
 
 (* List elements in a group --------------------------------------------------------------- *)
 
-module AllView = CouchDB.MapView(struct
+module MembersView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = (IAvatarSet.t * bool)
+    type json t = (IAvatarSet.t * IAvatar.t)
   end)
-  module Value  = IAvatar
+  module Value  = Fmt.Unit
   module Design = Versioned.Design
-  let name = "all"
-  let map  = "emit ([doc.c.where,doc.r.status === 'Member'], doc.c.who);"
+  let name = "members"
+  let map  = "if (doc.r.status == 'Member') emit ([doc.c.where,doc.c.who]);"
 end)
-
-let all group access = 
-  let group = IAvatarSet.decay group in 
-  let first, last = match access with 
-    | `Pending   -> false, false
-    | `Validated -> true,  true
-    | `Any       -> false, true
-  in
-
-  let! list = ohm $ AllView.query
-    ~startkey:(group,first) 
-    ~endkey:(group,last)
-    ~endinclusive:true
-    ()
-  in
-
-  return $ List.map (fun i -> snd (i # key), i # value) list
 
 let list_members ?start ~count group = 
   let group = IAvatarSet.decay group in 
 
-  let startid  = start in
   let limit    = count + 1 in
-  let startkey = (group,true) in
-  let endkey   = (group,true) in
+  let startkey = (group,BatOption.default IAvatar.smallest start) in
+  let endkey   = (group,IAvatar.largest) in
   
-  let !list = ohm $ AllView.query 
+  let !list = ohm $ MembersView.query 
     ~startkey 
     ~endkey
-    ?startid
     ~limit
     ~endinclusive:true
     ()
   in
 
-  let rec extract n = function
-    | [] -> None, []
-    | h :: t -> 
-      if n = 0 then Some h, [] else 
-	let last, rest = extract (n-1) t in 
-	last, h :: rest 
-  in
-  
-  let last, rest = extract count list in 
-  
-  let last = BatOption.map (#id) last in
-  let rest = List.map (#value) rest in 
-    
-  return (rest, last)
+  return (OhmPaging.slice ~count (List.map (#key |- snd) list))
 
 module EveryoneView = CouchDB.MapView(struct
   module Key    = IAvatarSet
@@ -122,6 +90,13 @@ let list_everyone ?start ~count group =
   let rest = List.map (#value) rest in 
   
   return (rest, last)
+
+(* Return avatars for access reversal ---------------------------------------------------- *)
+
+let () = 
+  let! asid, start, count = Sig.listen MReverseAccess.inSet in 
+  let! list, next = ohm $ list_members ?start ~count asid in
+  return (match next with Some aid -> aid :: list | None -> list) 
 
 (* List avatars in a group --------------------------------------------------------------- *)
 

@@ -30,6 +30,26 @@ let to_avatars =
       | [payload, aid] -> to_avatar payload aid nsid
       | list -> task (list,nsid)
  
+module ToAccess = Fmt.Make(struct
+  type json t = (IInstance.t * Payload.t * MAccess.t * IAvatar.t option * INotifyStats.t * IAvatar.t option) 
+end)
+
+let to_access = 
+  let access_step = 10 in
+  let task, define = O.async # declare "notify-to-access" ToAccess.fmt in
+  let () = define begin fun (iid, payload, access, start, nsid, except) ->
+    let  biid = IInstance.Assert.bot iid in 
+    let! list, next = ohm $ MReverseAccess.reverse biid ?start ~count:access_step [access] in
+
+    let! () = ohm $ Run.list_iter (fun aid -> 
+      if Some aid = except then return () else to_avatar payload aid nsid
+    ) list in
+
+    if next = None then return () else task (iid,payload,access,next,nsid,except) 
+  end in 
+  fun iid payload nsid ?except access -> 
+    task (iid, payload, access, None, nsid, except) 
+
 (* Create a notification when a new instance is created ------------------------------------- *)
 
 let () = 
@@ -99,39 +119,24 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
     (* Make sure item has an author *)
     let! aid = ohm_req_or (return ()) $ MItem.author itid in 
     
-    let! interested = ohm begin
-      let! feed = ohm_req_or (return []) $ MFeed.bot_get fid in 
+    let! iid, access = ohm_req_or (return ()) $ begin
+      let! feed = ohm_req_or (return None) $ MFeed.bot_get fid in 
       match MFeed.Get.owner feed with 
 	| `Event eid -> 
-	  let! event  = ohm_req_or (return []) $ MEvent.get eid in 
-	  let  gid    = IAvatarSet.Assert.bot $ MEvent.Get.group event in
-	  let! list   = ohm $ MMembership.InSet.all gid `Any in
-	  return $ List.map snd list	
+	  let! event  = ohm_req_or (return None) $ MEvent.get eid in 
+	  let  access = MEvent.Satellite.access event (`Wall `Read) in
+	  let  iid    = MEvent.Get.iid event in 
+	  return $ Some (iid, access) 
 	| `Discussion did ->
-	  let! discn  = ohm_req_or (return []) $ MDiscussion.get did in 
+	  let! discn  = ohm_req_or (return None) $ MDiscussion.get did in 
 	  let  access = MDiscussion.Satellite.access discn (`Wall `Read) in
-	  let  iid    = IInstance.Assert.bot (MDiscussion.Get.iid discn) in
-	  MReverseAccess.reverse iid [access] 
+	  let  iid    = MDiscussion.Get.iid discn in
+	  return $ Some (iid, access) 
     end in 
-    
-    (* Preferences further determine who does or does not receive posts. *)
-    let! preferences = ohm $ MBlock.all_special (`Feed (IFeed.decay fid)) in
-    
-    let block = 
-      List.fold_left (fun acc aid -> BatPSet.add aid acc) (BatPSet.add aid BatPSet.empty)
-	(preferences # block)
-    in
-    
-    let aids = 
-      BatList.sort_unique compare
-	(List.filter (fun aid -> not (BatPSet.mem aid block)) (interested @ preferences # send))
-    in
     
     let payload = `NewWallItem (`WallReader, IItem.decay itid) in
     
-    let list = List.map (fun aid -> payload, aid) aids in
-    
-    to_avatars (INotifyStats.of_id (IItem.to_id itid)) list
+    to_access iid payload (INotifyStats.of_id (IItem.to_id itid)) ~except:aid access
       
   end
   
@@ -150,9 +155,7 @@ let () =
     | `Message _ 
     | `MiniPoll _ 
     | `Image _ 
-    | `Doc _ 
-    | `Chat _ 
-    | `ChatReq _ -> false
+    | `Doc _ -> false
   end in 
 
   push_item_task (item # id, IFeed.Assert.bot fid) 
@@ -173,24 +176,19 @@ let push_invite_task inviter_aid invited_aid gid =
      let payload = `EventInvite (eid, inviter_aid) in
      to_avatar payload invited_aid (INotifyStats.gen ()) 
 
- let push_request_task aid owner admins = 
+let push_request_task aid owner admins = 
 
    let! iid = ohm_req_or (return ()) begin match owner with 
     | `Group  gid -> MGroup.instance gid 
     | `Event  eid -> MEvent.instance eid
   end in 
 
-  (* We're sending a notification, so we can reverse the rights ! *)
-  let  iid = IInstance.Assert.rights iid in 
-
-  let! admins = ohm $ MReverseAccess.reverse iid [admins] in
-
   let payload = match owner with 
     | `Event eid -> `EventRequest (eid, aid) 
     | `Group gid -> `GroupRequest (gid, aid)
   in
 
-  to_avatars (INotifyStats.gen ()) (List.map (fun aid -> payload, aid) admins)
+  to_access iid payload (INotifyStats.gen ()) admins
 
 let () = 
   let! change = Ohm.Sig.listen MMembership.Signals.after_version in 

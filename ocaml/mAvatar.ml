@@ -524,25 +524,31 @@ let count_user_instances uid =
 (* MAccess by status ----------------------------------------------------------------------- *)
 
 module ByStatusView = CouchDB.MapView(struct
-
   module Key    = InsSta
   module Value  = Fmt.Unit
-  module Doc    = Common.Data
   module Design = Design
   let name = "by_status" 
   let map  = "if (doc.t == 'avtr') {
                 switch (doc.sta) {
-                  case 'own': emit([doc.ins,'own'],null); 
-                  case 'mbr': emit([doc.ins,'mbr'],null);
-                  case 'ctc': emit([doc.ins,'ctc'],null);
+                  case 'own': emit([doc.ins,'own']); 
+                  case 'mbr': emit([doc.ins,'mbr']);
+                  case 'ctc': emit([doc.ins,'ctc']);
                   default: return;
                 }
               }" 
 end)
 
-let by_status iid status = 
-  let! list = ohm $ ByStatusView.by_key (IInstance.decay iid, status) in
-  return $ List.map (fun item -> IAvatar.of_id item # id) list
+let by_status iid ?start ~count status = 
+  let key = (IInstance.decay iid, status) in
+  let! list = ohm $ ByStatusView.query
+    ~startkey:key
+    ~endkey:key 
+    ?startid:(BatOption.map IAvatar.to_id start)  
+    ~limit:(count + 1) 
+    ~endinclusive:true
+    ()
+  in 
+  return $ OhmPaging.slice ~count (List.map (fun item -> IAvatar.of_id item # id) list)
 
 (* Refreshing profile. -------------------------------------------------------------------- *)
 

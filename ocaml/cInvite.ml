@@ -11,7 +11,7 @@ end)
 let by_name kind back access gid render = 
 
   let  how = match kind with 
-    | `Group | `Forum -> `Add
+    | `Group -> `Add
     | `Event -> `Invite
   in
 
@@ -22,9 +22,9 @@ let by_name kind back access gid render =
     let aids = BatList.sort_unique compare aids in
     
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # actor) gid aids 
+	~from:(access # actor) (access # iid) gid (`List aids) 
 	(match kind with 
-	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
+	  | `Group -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
     end in 
 
@@ -60,19 +60,17 @@ let by_group kind back access asid render =
     
     let  list = BatOption.default [] (ByGroupArgs.of_json_safe json) in
     
-    let! aids = ohm $ O.decay (Run.list_map begin fun gid -> 
-      let! group = ohm_req_or (return []) $ MAvatarSet.try_get (access # actor) gid in 
-      let! group = ohm_req_or (return []) $ MAvatarSet.Can.list group in 
-      let! all   = ohm $ MMembership.InSet.all (MAvatarSet.Get.id group) `Validated in
-      return (List.map snd all) 
+    (* Only keep groups to which user has read access *) 
+    let! asids = ohm $ O.decay (Run.list_filter begin fun asid -> 
+      let! avset = ohm_req_or (return None) $ MAvatarSet.try_get (access # actor) asid in 
+      let! avset = ohm_req_or (return None) $ MAvatarSet.Can.list avset in 
+      return (Some asid) 
     end list) in
-    
-    let aids = BatList.sort_unique compare (List.concat aids) in
-    
+
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # actor) asid aids 
+	~from:(access # actor) (access # iid) asid (`Groups (`Validated,asids))
 	(match kind with 
-	  | `Group | `Forum -> [ `Accept true ; `Default true ] 
+	  | `Group -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
     end in 
     
@@ -112,7 +110,7 @@ let by_group kind back access asid render =
     Asset_Invite_ByGroup.render (object
       method groups = list
       method how    = (match kind with 
-	| `Group | `Forum -> `Add
+	| `Group -> `Add
 	| `Event -> `Invite) 
       method url    = OhmBox.reaction_json post () 
     end)  

@@ -116,7 +116,12 @@ val list_administrators :
   -> 'any IInstance.id 
   -> (IAvatar.t list * string option) O.run
 
-val by_status : [`ViewContacts] IInstance.id -> Status.t -> IAvatar.t list O.run
+val by_status : 
+     [`ViewContacts] IInstance.id 
+  -> ?start:IAvatar.t 
+  -> count:int
+  -> Status.t 
+  -> (IAvatar.t list * IAvatar.t option) O.run
 
 val is_admin : ?other_than:IInstance.t -> 'any IUser.id -> bool O.run
 
