@@ -791,7 +791,6 @@ let runorg = vertical "Runorg"
     groupSimple ;
     groupRespo ;
     groupSimple ;
-    groupCollaborativeAuto ;
     pollSimple ;
     courseSimple ;
     eventSimple ;

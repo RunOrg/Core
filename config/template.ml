@@ -53,26 +53,18 @@ end
 
 (* ========================================================================== *)
 
-let admin = template "Admin"
-  ~old:"admin"
-  ~kind:`Group
+let admin = group "Admin"
   ~name:"Groupe des Administrateurs RunOrg"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let course12sessions = template "Course12sessions"
-  ~old:"course-12sessions"
-  ~kind:`Event
+let course12sessions = event "Course12sessions"
   ~name:"Cours 12 séances"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances. Peut être renseigné par l'élève ou le prof"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; date ;
     column ~view:`Date
@@ -178,15 +170,11 @@ let course12sessions = template "Course12sessions"
 
 (* ========================================================================== *)
 
-let course12sessionsFitness = template "Course12sessionsFitness"
-  ~old:"course-12sessions-fitness"
-  ~kind:`Event
+let course12sessionsFitness = event "Course12sessionsFitness"
   ~name:"Cours 12 séances fitness"
   ~desc:"Ce cours permet de suivre par date les activités réalisées lors de 12 séances et de réccupérer les retours des élèves. Peut être renseigné par l'élève et/ou le prof"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; date ;
     column ~view:`Date
@@ -436,79 +424,55 @@ let course12sessionsFitness = template "Course12sessionsFitness"
 
 (* ========================================================================== *)
 
-let courseSimple = template "CourseSimple"
-  ~old:"course-simple"
-  ~kind:`Event
+let courseSimple = event "CourseSimple"
   ~name:"Séance de cours"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let courseStage = template "CourseStage"
-  ~old:"course-stage"
-  ~kind:`Event
+let courseStage = event "CourseStage"
   ~name:"Stage"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let courseTraining = template "CourseTraining"
-  ~old:"course-training"
-  ~kind:`Event
+let courseTraining = event "CourseTraining"
   ~name:"Formation"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let eventAfterwork = template "EventAfterwork"
-  ~old:"event-afterwork"
-  ~kind:`Event
+let eventAfterwork = event "EventAfterwork"
   ~name:"Afterwork"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "EventAfterworkAuto"
-  ~old:"event-afterwork-auto"
-  ~kind:`Event
+let _ = event "EventAfterworkAuto"
   ~name:"Aferwork inscriptions automatiques"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ date ; status ])
   ()
 
 (* ========================================================================== *)
 
-let eventAg = template "EventAg"
-  ~old:"event-ag"
-  ~kind:`Event
+let eventAg = event "EventAg"
   ~name:"Assemblée Générale"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     column ~view:`Text
       ~label:(adlib "JoinFieldAgOthervoiceShort" ~old:"join.field.ag.othervoice.short" "Pouvoir")
@@ -533,13 +497,10 @@ let eventAg = template "EventAg"
 
 (* ========================================================================== *)
 
-let eventBadmintonCompetition = template "EventBadmintonCompetition"
-  ~kind:`Event
+let eventBadmintonCompetition = event "EventBadmintonCompetition"
   ~name:"Tournoi de Badminton"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; 
     date ; 
@@ -568,15 +529,11 @@ let eventBadmintonCompetition = template "EventBadmintonCompetition"
   
 (* ========================================================================== *)
 
-let eventCampaignAction = template "EventCampaignAction"
-  ~old:"event-campaign-action"
-  ~kind:`Event
+let eventCampaignAction = event "EventCampaignAction"
   ~name:"Opération militante"
   ~desc:"Organisez une opération militante et recueillez les CR de cette action"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -597,15 +554,11 @@ let eventCampaignAction = template "EventCampaignAction"
 
 (* ========================================================================== *)
 
-let eventCampaignMeeting = template "EventCampaignMeeting"
-  ~old:"event-campaign-meeting"
-  ~kind:`Event
+let eventCampaignMeeting = event "EventCampaignMeeting"
   ~name:"Réunion électorale publique"
   ~desc:"Organisez une réunion électorale et reccueillez les thèmes attendus par les participants"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -626,40 +579,28 @@ let eventCampaignMeeting = template "EventCampaignMeeting"
 
 (* ========================================================================== *)
 
-let eventClubbing = template "EventClubbing"
-  ~old:"event-clubbing"
-  ~kind:`Event
+let eventClubbing = event "EventClubbing"
   ~name:"Soirée"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "EventClubbingAuto"
-  ~old:"event-clubbing-auto"
-  ~kind:`Event
+let _ = event "EventClubbingAuto"
   ~name:"Soirée inscriptions automatiques"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let eventComiteEnt = template "EventComiteEnt"
-  ~old:"event-comite-ent"
-  ~kind:`Event
+let eventComiteEnt = event "EventComiteEnt"
   ~name:"Comité d'entreprise"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; 
     date ;
@@ -675,14 +616,10 @@ let eventComiteEnt = template "EventComiteEnt"
 
 (* ========================================================================== *)
 
-let eventCoproMeeting = template "EventCoproMeeting"
-  ~old:"event-copro-meeting"
-  ~kind:`Event
+let eventCoproMeeting = event "EventCoproMeeting"
   ~name:"Conseil syndical"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ;
@@ -698,15 +635,11 @@ let eventCoproMeeting = template "EventCoproMeeting"
 
 (* ========================================================================== *)
 
-let eventImproSimple = template "EventImproSimple"
-  ~old:"event-impro-simple"
-  ~kind:`Event
+let eventImproSimple = event "EventImproSimple"
   ~name:"Match d'improvisation"
   ~desc:"Organisation interne d'un match contre une autre équipe"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ;
     date ;
@@ -736,15 +669,11 @@ let eventImproSimple = template "EventImproSimple"
 
 (* ========================================================================== *)
 
-let eventImproSpectacle = template "EventImproSpectacle"
-  ~old:"event-impro-spectacle"
-  ~kind:`Event
+let eventImproSpectacle = event "EventImproSpectacle"
   ~name:"Spectacle d'improvisation"
   ~desc:"Organisation interne du spectacle"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ;
@@ -774,13 +703,10 @@ let eventImproSpectacle = template "EventImproSpectacle"
 
 (* ========================================================================== *)
 
-let eventJudoCompetition = template "EventJudoCompetition"
-  ~kind:`Event
+let eventJudoCompetition = event "EventJudoCompetition"
   ~name:"Compétition de Judo"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ; 
     date ; 
@@ -796,14 +722,10 @@ let eventJudoCompetition = template "EventJudoCompetition"
 
 (* ========================================================================== *)
 
-let eventMeeting = template "EventMeeting"
-  ~old:"event-meeting"
-  ~kind:`Event
+let eventMeeting = event "EventMeeting"
   ~name:"Réunion"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ;
     date ;
@@ -815,20 +737,15 @@ let eventMeeting = template "EventMeeting"
     join ~name:"subject" ~label:(adlib "JoinFieldSubject" ~old:"join.field.subject" 
 				   "Sujets que vous désirez aborder") `Textarea ;
   ]
-   ()
+  ()
 
 (* ========================================================================== *)
 
-let eventPetition = template "EventPetition"
-  ~old:"event-petition"
-  ~kind:`Event
+let eventPetition = event "EventPetition"
   ~name:"Pétition"
   ~desc:"Vous pouvez personnaliser les informations demandées aux signataires."
-  ~propagate:"members"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([
     status ;
     date ; 
@@ -849,14 +766,10 @@ let eventPetition = template "EventPetition"
 
 (* ========================================================================== *)
 
-let eventPublicCommittee = template "EventPublicCommittee"
-  ~old:"event-public-comity"
-  ~kind:`Event
+let eventPublicCommittee = event "EventPublicCommittee"
   ~name:"Conseil municipal"
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ 
     status ; 
     date ; 
@@ -872,41 +785,28 @@ let eventPublicCommittee = template "EventPublicCommittee"
 
 (* ========================================================================== *)
 
-let eventSimple = template "EventSimple"
-  ~old:"event-simple"
-  ~kind:`Event
+let eventSimple = event "EventSimple"
   ~name:"Evènement Simple"
   ~desc:"Une date, un lieu, une liste d'invités."
   ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
 
-let _ = template "EventSimpleAuto"
-  ~old:"event-simple-auto"
-  ~kind:`Event
+let _ = event "EventSimpleAuto"
   ~name:"Evènement Simple"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
-  ~wall:(wallConfig ~read:`Registered ~post:`Viewers)
-  ~folder:(folderConfig ~read:`Registered ~post:`Viewers)
-  ~album:(albumConfig ~read:`Registered ~post:`Viewers)
+  ~collab:(wallConfig ~read:`Registered ~post:`Viewers)
   ~columns:Col.([ status ; date ])
-  ~join:[]
   ()
 
 (* ========================================================================== *)
 
-let groupBadminton = template "GroupBadminton"
-  ~kind:`Group
+let groupBadminton = group "GroupBadminton"
   ~name:"Sportifs Badminton"
   ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du badminton"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     status ;
     date ; 
@@ -981,13 +881,9 @@ let groupBadminton = template "GroupBadminton"
   
 (* ========================================================================== *)
 
-let groupCheerleading = template "GroupCheerleading"
-  ~old:"group-cheerleading"
-  ~kind:`Group
+let groupCheerleading = group "GroupCheerleading"
   ~name:"Sportifs cheerleaders"
   ~desc:"Grâce à ce groupe vous disposez de toutes les informations demandées à des sportifs dans le cadre du cheerleading"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1069,35 +965,23 @@ let groupCheerleading = template "GroupCheerleading"
 
 (* ========================================================================== *)
 
-let groupCollaborativeAuto = template "GroupCollaborativeAuto"
-  ~old:"group-collaborative-auto"
-  ~kind:`Group
-  ~name:"Groupe avec Forum"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`None ~read:`Registered)
+let _ = group "GroupCollaborativeAuto"
+  ~name:"Groupe"
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "GroupContact"
-  ~old:"group-contact"
-  ~kind:`Group
+let _ = group "GroupContact"
   ~name:"Contacts"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`None ~read:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let groupCoproEmployes = template "GroupCoproEmployes"
-  ~old:"group-copro-employes"
-  ~kind:`Group
+let groupCoproEmployes = group "GroupCoproEmployes"
   ~name:"Gardiens / employés"
   ~desc:"Groupe avec forum, dédié aux gardiens et salariés"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([ 
     status ;
     date ; 
@@ -1128,13 +1012,9 @@ let groupCoproEmployes = template "GroupCoproEmployes"
 
 (* ========================================================================== *)
 
-let groupCoproLodger = template "GroupCoproLodger"
-  ~old:"group-copro-lodger"
-  ~kind:`Group
+let groupCoproLodger = group "GroupCoproLodger"
   ~name:"Locataires"
-  ~desc:"Groupe avec forum, dédié aux locataires"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
+  ~desc:"Groupe dédié aux locataires"
   ~columns:Col.([
     status ;
     date ; 
@@ -1157,13 +1037,9 @@ let groupCoproLodger = template "GroupCoproLodger"
 
 (* ========================================================================== *)
 
-let groupCoproManager = template "GroupCoproManager"
-  ~old:"group-copro-manager"
-  ~kind:`Group
+let groupCoproManager = group "GroupCoproManager"
   ~name:"Gestionnaires"
-  ~desc:"Groupe avec forum, dédié aux gestionnaires"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
+  ~desc:"Groupe dédié aux gestionnaires"
   ~columns:Col.([
     status ;
     date ;
@@ -1186,13 +1062,9 @@ let groupCoproManager = template "GroupCoproManager"
 
 (* ========================================================================== *)
 
-let groupCorproOwner = template "GroupCorproOwner"
-  ~old:"group-corpro-owner"
-  ~kind:`Group
+let groupCorproOwner = group "GroupCorproOwner"
   ~name:"Propriétaires"
   ~desc:"Groupe avec forum, dédié aux propriétaires"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     status ; 
     date ; 
@@ -1226,13 +1098,9 @@ let groupCorproOwner = template "GroupCorproOwner"
 
 (* ========================================================================== *)
 
-let groupFitnessMembers = template "GroupFitnessMembers"
-  ~old:"group-fitness-members"
-  ~kind:`Group
+let groupFitnessMembers = group "GroupFitnessMembers"
   ~name:"Sportifs fitness"
   ~desc:"Regroupe les informations demandées à vos sportifs."
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1347,13 +1215,9 @@ let groupFitnessMembers = template "GroupFitnessMembers"
 
 (* ========================================================================== *)
 
-let groupFootus = template "GroupFootus"
-  ~old:"group-footus"
-  ~kind:`Group
+let groupFootus = group "GroupFootus"
   ~name:"Sportifs football américain"
   ~desc:"Regroupe les informations demandées aux joueurs de football américain"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1436,16 +1300,9 @@ let groupFootus = template "GroupFootus"
 
 (* ========================================================================== *)
 
-let groupJudoMembers = template "GroupJudoMembers"
-  ~old:"group-judo-members"
-  ~kind:`Group
+let groupJudoMembers = group "GroupJudoMembers"
   ~name:"Sportifs judo et jujitsu"
   ~desc:"Regroupe les informations demandées aux pratiquants de judo et de jujitsu"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
-  ~wall:(wallConfig ~read:`Registered ~post:`Registered)
-  ~folder:(folderConfig ~read:`Registered ~post:`Registered)
-  ~album:(albumConfig ~read:`Registered ~post:`Registered)
   ~columns:Col.([
     status ;
     date ;
@@ -1533,23 +1390,16 @@ let groupJudoMembers = template "GroupJudoMembers"
 
 (* ========================================================================== *)
 
-let groupRespo = template "GroupRespo"
-  ~old:"group-respo"
-  ~kind:`Group
+let groupRespo = group "GroupRespo"
   ~name:"Responsables"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
-  (* ========================================================================== *)
+(* ========================================================================== *)
 
-let groupSchoolParents = template "GroupSchoolParents"
-  ~kind:`Group
+let groupSchoolParents = group "GroupSchoolParents"
   ~name:"Parents d'élèves"
   ~desc:"Groupe avec forum, dédié aux parents d'élèves"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([
     column ~view:`Text
       ~label:(adlib "JoinFormChildrenNames" "Prénom et Nom des enfants scolarisés")
@@ -1584,31 +1434,21 @@ let groupSchoolParents = template "GroupSchoolParents"
   
 (* ========================================================================== *)
 
-let groupSimple = template "GroupSimple"
-  ~old:"group-simple"
-  ~kind:`Group
+let groupSimple = group "GroupSimple"
   ~name:"Groupe Standard"
   ~desc:"Un sous-ensemble des membres de votre espace"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "GroupTest"
-  ~old:"group-test"
-  ~kind:`Group
+let _ = group "GroupTest"
   ~name:"Groupe Test"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`None ~read:`Registered)
   ()
 
 (* ========================================================================== *)
 
-let pollSimple = template "PollSimple"
-  ~old:"poll-simple"
-  ~kind:`Event
+let pollSimple = event "PollSimple"
   ~name:"Sondage Simple"
   ~desc:"Participation libre"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
@@ -1618,9 +1458,7 @@ let pollSimple = template "PollSimple"
 
 (* ========================================================================== *)
 
-let pollYearly = template "PollYearly"
-  ~old:"poll-yearly"
-  ~kind:`Event
+let pollYearly = event "PollYearly"
   ~name:"Bilan de l'année écoulée"
   ~desc:"Questions que vous pouvez poser en fin d'année à vos adhérents pour avoir leurs retours"
   ~group:(groupConfig ~validation:`None ~read:`Viewers)
@@ -1680,78 +1518,52 @@ let pollYearly = template "PollYearly"
 
 (* ========================================================================== *)
 
-let _ = template "SubscriptionAuto"
-  ~old:"subscription-auto"
-  ~kind:`Group
+let _ = group "SubscriptionAuto"
   ~name:"Adhésion"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`None ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionDatetodate = template "SubscriptionDatetodate"
-  ~old:"subscription-datetodate"
-  ~kind:`Group
+let subscriptionDatetodate = group "SubscriptionDatetodate"
   ~name:"Adhésion"
   ~desc:"Date à date : annuelle, semestrielle, etc"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "SubscriptionDatetodateAuto"
-  ~old:"subscription-datetodate-auto"
-  ~kind:`Group
+let _ = group "SubscriptionDatetodateAuto"
   ~name:"Adhésion date à date automatique"
   ~desc:"Aucune validation par un responsable n’est nécessaire pour qu’un membre adhère. Adhésion avec une date de début et de fin de validité"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let subscriptionForever = template "SubscriptionForever"
-  ~old:"subscription-forever"
-  ~kind:`Group
+let subscriptionForever = group "SubscriptionForever"
   ~name:"Adhésion Permanente"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`Manual ~read:`Registered)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "SubscriptionForeverAuto"
-  ~old:"subscription-forever-auto"
-  ~kind:`Group
+let _ = group "SubscriptionForeverAuto"
   ~name:"Adhésion permanente automatique"
-  ~propagate:"members"
-  ~group:(groupConfig ~validation:`None ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "SubscriptionSemester"
-  ~old:"subscription-semester"
-  ~kind:`Group
+let _ = group "SubscriptionSemester"
   ~name:"Adhésion Semestrielle"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 
 (* ========================================================================== *)
 
-let _ = template "SubscriptionYear"
-  ~old:"subscription-year"
-  ~kind:`Group
+let _ = group "SubscriptionYear"
   ~name:"Adhésion Annuelle"
-  ~group:(groupConfig ~validation:`Manual ~read:`Viewers)
   ~columns:Col.([ status ; date ])
   ()
 

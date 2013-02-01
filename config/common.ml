@@ -122,8 +122,6 @@ let adlib key ?(old:string option) (fr:string) =
 
 let groupConfig ~validation ~read = validation, read
 let wallConfig ~read ~post = read, post
-let folderConfig = wallConfig
-let albumConfig = wallConfig
 
 let profileForm id ~name ?subtitle ?(comment=false) fields = 
   profileForms := {
@@ -154,6 +152,14 @@ let template id ?old ~kind ~name ?desc ?propagate
     t_propg  = propagate ;
   } :: !templates ;
   id 
+
+let group id ~name ?desc ?columns ?fields ?join () = 
+  template id ~kind:`Group ~name ?desc ~propagate:"members" ?columns ?fields ?join 
+    ~group:(groupConfig ~validation:`Manual ~read:`Viewers) () 
+
+let event id ~name ?group ?desc ?columns ?fields ?collab ?join () = 
+  template id ~kind:`Event ~name ?desc ?columns ?fields ?group ?join 
+    ?wall:collab ?folder:collab ?album:collab () 
 
 let vertical id ?old ?(archive=false) ~name ?(forms=[]) init tmpl = 
   verticals := {
