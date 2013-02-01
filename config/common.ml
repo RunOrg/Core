@@ -158,8 +158,10 @@ let group id ~name ?desc ?columns ?fields ?join () =
     ~group:(groupConfig ~validation:`Manual ~read:`Viewers) () 
 
 let event id ~name ?group ?desc ?columns ?fields ?collab ?join () = 
-  template id ~kind:`Event ~name ?desc ?columns ?fields ?group ?join 
-    ?wall:collab ?folder:collab ?album:collab () 
+  let group = match group with Some g -> g | None -> groupConfig ~validation:`Manual ~read:`Viewers in 
+  let collab = match collab with Some g -> g | None -> wallConfig ~read:`Registered ~post:`Viewers in
+  template id ~kind:`Event ~name ?desc ?columns ?fields ~group ?join 
+    ~wall:collab ~folder:collab ~album:collab () 
 
 let vertical id ?old ?(archive=false) ~name ?(forms=[]) init tmpl = 
   verticals := {
