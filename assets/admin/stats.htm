@@ -13,7 +13,6 @@
   <div {$c}></div>
   <div {$p}></div>
   <div {$m}></div>
-  <div {$e}></div>
 
 </div>
 
@@ -140,12 +139,6 @@ init here.$m, 2, [
   { css : { backgroundColor : "#DDD", borderColor : "#AAA" }, name : "Mails Envoyés" },
 ]
 
-init here.$e, 5, [
-  { css : { backgroundColor : "#6E6", borderColor : "#4B4" }, name : "Activités" },
-  { css : { backgroundColor : "#E66", borderColor : "#B44" }, name : "Groupes" },
-  { css : { backgroundColor : "#66E", borderColor : "#44B" }, name : "Forums" }
-]
-
 draw = ($w,y) ->
   y.reverse() 
   c = $w.data 'chart'
@@ -174,7 +167,6 @@ receive = (s) ->
   draw here.$c, [ s.confirm ]
   draw here.$p, [ s.post.comment, s.post.item, s.post.broadcast ]
   draw here.$m, [ s.mail ]
-  draw here.$e, [ s.entity.event, s.entity.group, s.entity.forum ]
 
 read = ->
   return if !urls.length
