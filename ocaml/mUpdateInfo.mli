@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type who = [ `user of (Ohm.Id.t * IAvatar.t) | `preconfig ]
 

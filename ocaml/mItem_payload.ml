@@ -23,26 +23,13 @@ module Mail = Fmt.Make(struct
 end)
 
 module Doc = Fmt.Make(struct
-  module Float     = Fmt.Float
-  module Extension = MFile.Extension
   type json t = <
     author "a" : IAvatar.t ;
     file   "f" : IFile.t ;
     title  "t" : string ;
-    ext    "e" : Extension.t ; 
-    size   "s" : Float.t 
+    ext    "e" : MFile.Extension.t ; 
+    size   "s" : float 
   >
-end)
-
-module Chat = Fmt.Make(struct
-  open IChat
-  type json t = <
-    room   "r" : Room.t
-  >
-end)
-
-module ChatRequest = Fmt.Make(struct
-  type json t = < author "a" : IAvatar.t ; topic "t" : string >
 end)
 
 include Fmt.Make(struct
@@ -51,8 +38,6 @@ include Fmt.Make(struct
     | `MiniPoll "p" of MiniPoll.t
     | `Image    "i" of Image.t
     | `Doc      "d" of Doc.t 
-    | `Chat     "c" of Chat.t 
-    | `ChatReq  "r" of ChatRequest.t 
     | `Mail     "a" of Mail.t 
     ]
 end)

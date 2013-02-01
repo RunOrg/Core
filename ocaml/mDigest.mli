@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *) 
+(* © 2013 RunOrg *) 
 
 module OfUser : sig 
   val get           : 'any IUser.id -> IDigest.t O.run

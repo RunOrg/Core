@@ -326,26 +326,3 @@ module Backdoor = struct
 
 end
 
-(* {{MIGRATION}} *)
-
-let on_migrate_call, on_migrate = Sig.make (Run.list_exists identity)
-
-let migrate_all = Async.Convenience.foreach O.async "migrate-discussion-instances"
-  IInstance.fmt (Tbl.all_ids ~count:10)
-  (fun iid ->
-    let! instance = ohm_req_or (return ()) $ Tbl.get iid in
-    
-    (* Migrate instances to discussions *)
-    let  time = Unix.gettimeofday () in
-    let  user = instance.Data.usr in
-    let  name = instance.Data.name in
-    
-    let! ok = ohm $ on_migrate_call (iid, user, name) in
-    let  () = if ok then Util.log "Migrate instance - %.3fs - %s %S" (Unix.gettimeofday () -. time)
-	(IInstance.to_string iid) name in
-
-    return ())
-      
-
-(* Perform instance migration *)
-let () = O.put (migrate_all ())

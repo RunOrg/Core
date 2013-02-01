@@ -43,7 +43,6 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
       let! group = ohm_req_or (return None) $ MAvatarSet.naked_get gid in 
       match MAvatarSet.Get.owner group with 
 	| `Event  eid -> return None
-	| `Entity eid -> return None
 	| `Group  gid -> let! group  = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in
 			 let! name   = ohm (MGroup.Get.fullname group) in
 			 return $ Some (object

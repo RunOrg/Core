@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type status_event = [`IsSelf] IAvatar.id option * IAvatar.t * IInstance.t
 

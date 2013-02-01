@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 val large : [`GetPic] IFile.id option -> (#Ohm.CouchDB.ctx,string) Ohm.Run.t
 val small : [`GetPic] IFile.id option -> (#Ohm.CouchDB.ctx,string) Ohm.Run.t

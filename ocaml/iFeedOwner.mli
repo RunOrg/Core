@@ -1,9 +1,7 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type 'a id = 
   [ `Event      of 'a IEvent.id 
-  | `Entity     of 'a IEntity.id 
-  | `Instance   of 'a IInstance.id 
   | `Discussion of 'a IDiscussion.id
   ]
 
