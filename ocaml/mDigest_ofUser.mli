@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *) 
+(* © 2013 RunOrg *) 
 
 val get           : 'any IUser.id -> IDigest.t O.run
 val get_if_exists : 'any IUser.id -> IDigest.t option O.run

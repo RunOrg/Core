@@ -125,22 +125,6 @@ let mail actor ~subject text iid where =
 
   return itid
 
-let chat_request actor topic iid where = 
-  
-  let payload = `ChatReq (object
-    method author = IAvatar.decay (MActor.avatar actor)
-    method topic  = if String.length topic > 150 then String.sub topic 0 150 else topic
-  end) in
-
-  let where = `feed where in 
-
-  let iid  = IInstance.decay iid in 
-  let itid = IItem.Assert.created (IItem.gen ()) in
-
-  let! () = ohm $ create ~where ~payload ~delayed:false ~iid itid in
-
-  return itid
-
 
 let poll actor text poll iid where = 
   
@@ -157,20 +141,3 @@ let poll actor text poll iid where =
   let! () = ohm $ create ~where ~payload ~delayed:false ~iid itid in
 
   return itid
-
-(* Automated creation in reaction to events ----------------------------------------------- *)
-
-let () = 
-  let! crid, feed = Sig.listen MChat.Room.Signals.on_create in 
-  let  iid  = MFeed.Get.instance feed in 
-  let  itid = IItem.Assert.created (IItem.gen ()) in
-  
-  (* Prepare item contents *)
-  let payload = `Chat (object
-    method room   = IChat.Room.decay crid
-  end) in
-  
-  let where = `feed (IFeed.decay (MFeed.Get.id feed)) in
-  
-  (* Create the item with the contents. *)
-  create ~where ~payload ~delayed:true ~iid itid

@@ -19,12 +19,10 @@ let schedule_deletion =
       (* Can delete contents because we are deleting item *)
       match item # payload with
 	| `Message  _ -> return ()
-	| `ChatReq  _ -> return ()
 	| `Mail     _ -> return () 
 	| `MiniPoll p -> MPoll.delete_now (IPoll.Assert.bot (p # poll)) 
 	| `Image    i -> MFile.delete_now (IFile.Assert.bot (i # file))
 	| `Doc      d -> MFile.delete_now (IFile.Assert.bot (d # file))
-	| `Chat     c -> MChat.delete_now (IChat.Room.Assert.bot (c # room))
     end in
 
     Tbl.delete itid

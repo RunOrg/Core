@@ -25,6 +25,11 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
     let eid = IEvent.gen () in
     let gid  = IAvatarSet.gen () in
     
+    let admins = 
+      if None = MActor.admin self then `List [IAvatar.decay (MActor.avatar self)] 
+      else `Nobody
+    in
+
     let init = E.({
       iid    ;
       tid    ;
@@ -33,7 +38,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
       pic    = BatOption.map IFile.decay pic ;
       vision ;
       date   = None ;
-      admins = `Nobody ;
+      admins ;
       draft  = true ;
       config = Config.default ;
       del    = None ;

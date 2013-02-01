@@ -59,7 +59,7 @@ module Async = Ohm.Async.Make(AsyncDB)
 let async : ctx Async.manager = new Async.manager
 
 let run_async () = 
-  async # run (fun () -> ctx `FR) 
+  async # run ~timeout:10.0 (fun () -> ctx `FR) 
 
 let page = Ohm.Html.print_page
 

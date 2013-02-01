@@ -2,20 +2,6 @@
 
 open Ohm
 
-include PreConfig_TemplateId
-
-type 'rel id = t
-
-let decay id = id
-
-let forum   = `ForumPublic
-
-module Assert = struct 
-end
-  
-module Deduce = struct
-end
-
 module Event = struct
 
   include PreConfig_TemplateId.Events

@@ -29,22 +29,18 @@ let () =
 		     let  owner = MFeed.Get.owner feed in 
 		     return (match owner with 
 		       | `Event eid -> Some (`Event eid)
-		       | `Discussion did -> Some (`Discussion did) 
-		       | `Entity _ -> None
-		       | `Instance _ -> None) 
+		       | `Discussion did -> Some (`Discussion did))
       | `album aid -> let aid = IAlbum.Assert.bot aid in
 		      let! album = ohm_req_or (return None) $ MAlbum.bot_get aid in 
 		      let  owner = MAlbum.Get.owner album in
 		      return (match owner with 
-			| `Event eid -> Some (`Event eid) 
-			| `Entity _ -> None)
+			| `Event eid -> Some (`Event eid))
       | `folder fid -> let fid = IFolder.Assert.bot fid in
 		       let! folder = ohm_req_or (return None) $ MFolder.bot_get fid in 
 		       let  owner = MFolder.Get.owner folder in
 		       return (match owner with 
 			 | `Event eid -> Some (`Event eid) 
-			 | `Discussion did -> Some (`Discussion did) 
-			 | `Entity _ -> None)
+			 | `Discussion did -> Some (`Discussion did)) 
   end in
   let! ilid = ohm $ ByOwner.get_or_create iloid in
   Refresh.schedule ilid
