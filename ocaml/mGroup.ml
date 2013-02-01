@@ -24,7 +24,8 @@ let create = Create.public
 include HEntity.Get(Can)(E)
 
 let delete t self = 
-  Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self 
+  let! () = ohm $ Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self in
+  O.decay (Signals.on_delete_call (IGroup.decay (Get.id t), Get.group t))
 
 let instance eid = 
   let! event = ohm_req_or (return None) (get eid) in
