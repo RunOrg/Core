@@ -16,10 +16,9 @@ module Data = Fmt.Make(struct
   type json t = <
     t         : MType.t ;
     iid "ins" : IInstance.t ;
-    own       : [ `Entity "of_entity" of IEntity.t 
-		| `Event of IEvent.t 
+    own       : [ `Event of IEvent.t 
 		| `Discussion of IDiscussion.t 
-		] option 
+		]
   > 
 end)
   
@@ -38,17 +37,10 @@ type 'relation t =
 let nil _ = `Nobody
 			  
 let _access iid = function 
-  | Some (`Entity eid) -> let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
-			  return (fun what -> MEntity.Satellite.access entity (`Wall what))
-  | Some (`Event eid) -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
-			 return (fun what -> MEvent.Satellite.access event (`Wall what))
-  | Some (`Discussion did) -> let! discussion = ohm_req_or (return nil) $ MDiscussion.get did in 
-			      return (fun what -> MDiscussion.Satellite.access discussion (`Wall what)) 
-  | None -> let! wall_post = ohm $ MInstanceAccess.wall_post iid in  
-	    return (function
-	      | `Read   -> `Token
-	      | `Write  -> (match wall_post with `Admin -> `Admin | `Member -> `Token)
-	      | `Manage -> `Admin)
+  | `Event eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
+		  return (fun what -> MEvent.Satellite.access event (`Wall what))
+  | `Discussion did -> let! discussion = ohm_req_or (return nil) $ MDiscussion.get did in 
+		       return (fun what -> MDiscussion.Satellite.access discussion (`Wall what)) 
     
 let _make actor id (data:Data.t) = 
   let owner = Run.memo (_access (data # iid) (data # own)) in
@@ -71,20 +63,18 @@ module Get = struct
 
   let id t = t.id
 
-  let owner_of_data feed = 	
-    match feed # own with
-      | None                   -> `Instance (feed # iid)
-      | Some (`Entity     eid) -> `Entity eid      
-      | Some (`Event      eid) -> `Event  eid
-      | Some (`Discussion did) -> `Discussion did 
+  let owner_of_data feed = 
+    feed # own
 
-  let owner feed = owner_of_data feed.data
+  let owner feed = 
+    owner_of_data feed.data
 
   let owner_by_id fid = 
     let id = IFeed.decay fid in 
     Tbl.get id |> Run.map (BatOption.map owner_of_data) 
 	
-  let instance t = t.data # iid
+  let instance t = 
+    t.data # iid
 
   let notified t = 
     let! reader = ohm t.access in
@@ -164,11 +154,7 @@ let get_or_create iid owner =
       
       let doc = object
 	method t     = `Feed
-	method own   = match IFeedOwner.decay owner with 
-	  | `Event      eid -> Some (`Event eid)
-	  | `Entity     eid -> Some (`Entity eid)
-	  | `Discussion did -> Some (`Discussion did) 
-	  | `Instance   iid -> None 
+	method own   = IFeedOwner.decay owner 
 	method iid   = IInstance.decay iid
       end in 
       
@@ -201,20 +187,3 @@ let bot_get fid =
     admin  = return false
   } 
 
-(* Owner migration -------------------------------------------------------------- *)
-
-let migrate_owner fid foid = 
-  let! _ = ohm $ Tbl.update (IFeed.decay fid) (fun feed -> 
-    let iid, own = match IFeedOwner.decay foid with 
-      | `Instance iid -> iid, None
-      | `Entity eid -> feed # iid, Some (`Entity eid) 
-      | `Event eid -> feed # iid, Some (`Event eid) 
-      | `Discussion did -> feed # iid, Some (`Discussion did)
-    in
-    (object
-      method t   = feed # t
-      method iid = iid
-      method own = own
-     end)
-  ) in
-  return () 

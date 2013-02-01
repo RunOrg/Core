@@ -16,7 +16,7 @@ end
 module Data = Fmt.Make(struct
   type json t = <
     iid   "ins" : IInstance.t ;
-    owner       : [ `Entity "e" of IEntity.t | `Event "ev" of IEvent.t ]
+    owner       : [ `Event "ev" of IEvent.t ]
   >
 end)
 
@@ -34,9 +34,6 @@ type 'relation t =
 let _make actor id data = 
   let owner = Run.memo begin
     match data # owner with 
-      | `Entity eid -> let nil = (fun _ -> `Nobody) in
-		       let! entity = ohm_req_or (return nil) $ MEntity.try_get actor eid in
-		       return (fun what -> MEntity.Satellite.access entity (`Album what))
       | `Event  eid -> let nil = (fun _ -> `Nobody) in
 		       let! event = ohm_req_or (return nil) $ MEvent.get ~actor eid in
 		       return (fun what -> MEvent.Satellite.access event (`Album what))

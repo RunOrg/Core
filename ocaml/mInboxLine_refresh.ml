@@ -91,7 +91,6 @@ let get_filter = function
 		       let! eids = ohm $ Run.list_filter begin fun asid -> 
 			 let! avset = ohm_req_or (return None) $ MAvatarSet.naked_get asid in 
 			 match MAvatarSet.Get.owner avset with 
-			   | `Entity  _  -> return None 
 			   | `Group  gid -> return (Some gid) 
 			   | `Event   _  -> return None
 		       end  gids in 

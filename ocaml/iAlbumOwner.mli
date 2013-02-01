@@ -2,7 +2,6 @@
 
 type 'a id = 
   [ `Event  of 'a IEvent.id 
-  | `Entity of 'a IEntity.id 
   ]
 
 include Ohm.Fmt.FMT with type t = [`Unknown] id 

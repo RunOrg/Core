@@ -128,7 +128,6 @@ let box access gid render =
 	let  none   = AdLib.get `Grid_Source_Group_Unknown in
 	let! group  = ohm_req_or none $ O.decay (MAvatarSet.try_get actor gid) in 
 	match MAvatarSet.Get.owner group with 
-	  | `Entity  _ -> return ""
 	  | `Group gid -> let! group  = ohm_req_or none $ MGroup.view ~actor gid in 
 			  MGroup.Get.fullname group			  
 	  | `Event eid -> let! event = ohm_req_or none $ MEvent.view ~actor eid in

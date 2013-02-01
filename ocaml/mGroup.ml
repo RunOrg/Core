@@ -17,7 +17,6 @@ module All       = MGroup_all
 module Initial   = MGroup_initial
 module E         = MGroup_core
 module Create    = MGroup_create
-module Migrate   = MGroup_migrate
 
 let create = Create.public
 

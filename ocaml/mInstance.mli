@@ -146,7 +146,3 @@ module Backdoor : sig
 
 end
 
-(* {{MIGRATION}} *)
-
-val on_migrate : (IInstance.t * IUser.t * string, 
-		  bool O.run) Ohm.Sig.channel

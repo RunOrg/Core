@@ -15,50 +15,17 @@ end
 
 module Data = Fmt.Make(struct
     
-  module Data = Fmt.Make(struct
-    type json t = <
-      t      : MType.t ;
-      ins    : IInstance.t ;
-     ?admins : bool = false ;
-     ?grants : bool = false ;
-     ?manual : bool = true ;
-      entity : IEntity.t option ;
-      list   : IAvatarGrid.t ;
-     ?fields : Field.t list = [] ;
-     ?propg  : IAvatarSet.t list = []
-    > 
-  end)
-
   type json t = <
     t      : MType.t ;
     iid    : IInstance.t ;
     admins : bool ;
     grants : bool ;
     manual : bool ;
-    owner  : [ `Entity "t" of IEntity.t | `Event "e" of IEvent.t | `Group "g" of IGroup.t ] ;
+    owner  : [ `Event "e" of IEvent.t | `Group "g" of IGroup.t ] ;
     list   : IAvatarGrid.t ;
     fields : Field.t list ;
     propg  : IAvatarSet.t list 
   >
-
-  let t_of_json json = 
-    try t_of_json json with exn ->
-      match Data.of_json_safe json with 
-	| Some t -> begin
-	  match t # entity with None -> raise exn | Some eid -> 
-	    (object
-	      method t = t # t
-	      method iid = t # ins
-	      method admins = t # admins
-	      method grants = t # grants
-	      method manual = t # manual
-	      method owner  = `Entity eid
-	      method list   = t # list 
-	      method fields = t # fields
-	      method propg  = t # propg
-	     end) 
-	end
-	| None -> raise exn
 	  
 end)
 
@@ -89,8 +56,6 @@ let owner ( data : data ) =
   Run.memo begin
     let  nil    = (fun _ -> `Nobody) in
     match data # owner with 
-      | `Entity eid -> let! entity = ohm_req_or (return nil) $ MEntity.naked_get eid in
-		       return (fun what -> MEntity.Satellite.access entity (`Group what))
       | `Group  gid -> let! group = ohm_req_or (return nil) $ MGroup.get gid in 
 		       return (fun what -> MGroup.Satellite.access group (`Group what))
       | `Event  eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
@@ -427,30 +392,5 @@ let () =
 let () = 
   let! _, asid = Sig.listen MGroup.Signals.on_delete in
   refresh (IAvatarSet.Assert.bot asid) ~grants:false ~manual:true
-    
-(* {{MIGRATION}} *)
-
-let () = 
-  let! eid, _, asid, _, kind, _, _, _, _ = Sig.listen MEntity.on_migrate in 
-
-  let  gid = IGroup.of_id (IEntity.to_id eid) in
-
-  if kind <> `Group then return false else 
-    
-    let! () = ohm $ Tbl.update asid begin fun avset ->
-      (object
-	method t = avset # t
-	method iid = avset # iid
-	method admins = avset # admins
-	method grants = avset # grants
-	method manual = avset # manual
-	method owner  = `Group gid
-	method list = avset # list
-	method fields = avset # fields
-	method propg = avset # propg
-       end)
-    end in 
-
-    return true
-      
+          
     

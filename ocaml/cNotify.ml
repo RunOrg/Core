@@ -19,8 +19,6 @@ let item_url cuid itid =
     | `feed fid -> begin
       let! feed = ohm_req_or none $ MFeed.try_get actor fid in 
       match MFeed.Get.owner feed with 
-	| `Instance _ -> return None
-	| `Entity eid -> return None
 	| `Event eid -> return $ Some (Action.url UrlClient.Events.see
 					 (instance # key) [ IEvent.to_string eid ])
 	| `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see
