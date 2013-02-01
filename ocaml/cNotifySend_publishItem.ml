@@ -25,9 +25,7 @@ let send url uid itid =
 	| `Message  _
 	| `MiniPoll _
 	| `Image _
-	| `Doc _ 
-	| `Chat _ 
-	| `ChatReq _ -> None
+	| `Doc _  -> None
     end in 
 
     let! author = ohm $ CAvatar.mini_profile aid in 

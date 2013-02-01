@@ -146,40 +146,6 @@ let () =
 
   Sig.listen MFile.Upload.Signals.on_item_doc_upload upload
 
-(* When a chat room starts existing for real. *)
-
-let () = 
-  let appear crid = 
-
-    let! items = ohm $ ByChatRoom.doc (IChat.Room.decay crid) in 
-
-    let! _ = ohm $ Run.list_iter begin fun doc -> 
-
-      let id = IItem.of_id (doc # id) in
-
-      let update item = object
-	method del     = item # del
-	method time    = item # time
-	method clike   = item # clike
-	method nlike   = item # nlike
-	method ccomm   = item # ccomm
-	method ncomm   = item # ncomm
-	method delayed = false
-	method where   = item # where
-	method iid     = item # iid 
-	method payload = item # payload
-      end in 
-      
-      Tbl.update id update
-
-    end items in 
-    
-    return () 
-
-  in
-
-  Sig.listen MChat.Room.Signals.on_appear appear
-
 (* Obliterate item *)
 
 let () = 

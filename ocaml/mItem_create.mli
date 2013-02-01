@@ -23,13 +23,6 @@ val mail :
   -> [`Admin] IFeed.id
   -> [`Created] IItem.id O.run
 
-val chat_request : 
-     'any MActor.t
-  -> string
-  -> 'any IInstance.id
-  -> [`Write] IFeed.id
-  -> [`Created] IItem.id O.run
-
 val image :
      'any MActor.t
   -> [`Write] MAlbum.t
