@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 val poll : 
      'any MActor.t
@@ -21,13 +21,6 @@ val mail :
   -> string
   -> IInstance.t
   -> [`Admin] IFeed.id
-  -> [`Created] IItem.id O.run
-
-val chat_request : 
-     'any MActor.t
-  -> string
-  -> 'any IInstance.id
-  -> [`Write] IFeed.id
   -> [`Created] IItem.id O.run
 
 val image :

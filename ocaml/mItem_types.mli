@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 type message  = <
   author : IAvatar.t ;
@@ -30,21 +30,10 @@ type doc     = <
   size   : float
 >
 
-type chat    = <
-  room   : [`View] IChat.Room.id
->
-
-type chat_request = <
-  author : IAvatar.t ;
-  topic  : string
->
-
 type payload = [ `Message  of message 
 	       | `MiniPoll of miniPoll
 	       | `Image    of image
 	       | `Doc      of doc 
-	       | `Chat     of chat
-	       | `ChatReq  of chat_request 
 	       | `Mail     of mail
 	       ] 
 
