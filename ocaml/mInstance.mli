@@ -10,6 +10,7 @@ type t = <
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
+  plugins : IPlugin.t list ; 
 > ;;
 
 module Profile : sig

@@ -23,6 +23,7 @@ type t = <
   usr     : IUser.t ; 
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
+  plugins : IPlugin.t list ; 
 > ;; 
 
 let extract id i = Data.(object
@@ -35,6 +36,7 @@ let extract id i = Data.(object
   method usr = i.usr
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
+  method plugins = i.plugins
 end)
 
 (* Signals --------------------------------------------------------------------------------- *)
@@ -64,6 +66,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     ver     = vertical ;
     pic     = BatOption.map IFile.decay pic ;
     white   ;
+    plugins = [] ;
   }) in 
 
   let info old = Profile.Info.({ 
@@ -259,6 +262,7 @@ let install iid ~pic ~who ~key ~name ~desc =
     ver     = ConfigWhite.default_vertical owid ;
     pic     = BatOption.map IFile.decay pic ;
     white   = owid ;
+    plugins = [] ;
   }) in 
 
   let info old = Profile.Info.({ 
