@@ -335,5 +335,10 @@ module Backdoor = struct
 
     return (insts, next)
 
+  let set_plugins plugins src = 
+    let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
+    let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with plugins })) in
+    return `OK 
+
 end
 
