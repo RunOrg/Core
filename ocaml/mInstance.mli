@@ -128,6 +128,8 @@ val set_pic :
 
 val by_key : ?fresh:bool -> IWhite.key -> IInstance.t option O.run
 
+val has_plugin : t -> IPlugin.t -> bool 
+
 val get : 'any IInstance.id -> (#Ohm.CouchDB.ctx, t option) Ohm.Run.t
 
 val get_free_space : [`SeeUsage] IInstance.id -> float O.run

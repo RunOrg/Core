@@ -133,6 +133,13 @@ let set_pic id pic =
 
   let! () = ohm $ Profile.update id info in 
   Tbl.update (IInstance.decay id) update
+
+(* Plugins ----------------------------------------------------------------------------- *)
+
+let has_plugin t plugin = 
+  List.mem plugin (t # plugins) 
+
+(* Fetch by key ------------------------------------------------------------------------ *)
     
 module ViewByKey = CouchDB.DocView(struct
   module Key    = Fmt.Make(struct type json t = (string * IWhite.t option) end)
