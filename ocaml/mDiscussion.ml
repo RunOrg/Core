@@ -59,9 +59,3 @@ include HEntity.Get(Can)(Core)
 let delete t self = 
   Set.update [`Delete (IAvatar.decay (MActor.avatar self))] t self 
 
-(* {{InboxLine}} *)
-
-let migrate_all = Async.Convenience.foreach O.async "create-discussion-inboxLines"
-  IDiscussion.fmt (Core.Tbl.all_ids ~count:100) Signals.on_bind_inboxLine_call 
-
-let () = O.put (migrate_all ()) 

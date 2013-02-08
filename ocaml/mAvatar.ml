@@ -697,6 +697,14 @@ module Backdoor = struct
 
     return (avatars, next)
 
+  let migrate_all = Async.Convenience.foreach O.async "refresh-grants"
+    IAvatar.fmt (Tbl.all_ids ~count:50) Signals.refresh_grant_call
+
+  let refresh_grants () = 
+    migrate_all () 
+    
+    
+
 end
 
 module List    = MAvatar_list

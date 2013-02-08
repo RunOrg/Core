@@ -228,8 +228,13 @@ let () =
     Grant.react aid 
   in
 
+  let refresh_avatar aid = 
+    Grant.react aid
+  in
+
   Sig.listen Signals.after_version version_react ;
-  Sig.listen Signals.after_reflect reflect_react 
+  Sig.listen Signals.after_reflect reflect_react ;
+  Sig.listen MAvatar.Signals.refresh_grant refresh_avatar
 
 (* Propagate group refresh --------------------------------------------------------------- *)
 
