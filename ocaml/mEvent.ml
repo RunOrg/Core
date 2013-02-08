@@ -62,9 +62,3 @@ let instance eid =
   let! event = ohm_req_or (return None) (get eid) in
   return $ Some (Get.iid event)
 
-(* {{InboxLine}} *)
-
-let migrate_all = Async.Convenience.foreach O.async "create-event-inboxLines"
-  IEvent.fmt (E.Tbl.all_ids ~count:100) Signals.on_bind_inboxLine_call 
-
-let () = O.put (migrate_all ()) 
