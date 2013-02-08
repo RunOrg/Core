@@ -10,6 +10,7 @@ type t = <
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
+  plugins : IPlugin.t list ; 
 > ;;
 
 module Profile : sig
@@ -127,6 +128,8 @@ val set_pic :
 
 val by_key : ?fresh:bool -> IWhite.key -> IInstance.t option O.run
 
+val has_plugin : t -> IPlugin.t -> bool 
+
 val get : 'any IInstance.id -> (#Ohm.CouchDB.ctx, t option) Ohm.Run.t
 
 val get_free_space : [`SeeUsage] IInstance.id -> float O.run
@@ -143,6 +146,8 @@ module Backdoor : sig
   val relocate : src:IWhite.key -> dest:IWhite.key -> [ `OK | `NOT_FOUND | `EXISTS ] O.run
 
   val list : count:int -> IInstance.t option -> ((IInstance.t * t) list * IInstance.t option) O.run
+
+  val set_plugins : IPlugin.t list -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
 
 end
 

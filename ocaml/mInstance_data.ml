@@ -14,7 +14,8 @@ module T = struct
     usr     : IUser.t ; 
     ver     : IVertical.t ;
     pic     : IFile.t option ;
-   ?white   : IWhite.t option 
+   ?white   : IWhite.t option ;
+   ?plugins : IPlugin.t list = [] 
   } ;; 
 end
 

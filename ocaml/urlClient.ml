@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal 
 open BatPervasives
 
+module Common = UrlClient_common
+
 include UrlClient_common
 
 let website,  def_website  = O.declare O.client "" A.none
