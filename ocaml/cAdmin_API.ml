@@ -13,6 +13,8 @@ module EditInstanceProfile = CAdmin_API_editInstanceProfile
 module Reboot              = CAdmin_API_reboot
 module RenameInstance      = CAdmin_API_renameInstance
 module ConfirmUser         = CAdmin_API_confirmUser
+module SetPlugins          = CAdmin_API_setPlugins
+module RefreshGrants       = CAdmin_API_refreshGrants
 
 let () = UrlAdmin.def_api $ admin_only begin fun cuid req res -> 
 

@@ -23,6 +23,7 @@ type t = <
   usr     : IUser.t ; 
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
+  plugins : IPlugin.t list ; 
 > ;; 
 
 let extract id i = Data.(object
@@ -35,6 +36,7 @@ let extract id i = Data.(object
   method usr = i.usr
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
+  method plugins = i.plugins
 end)
 
 (* Signals --------------------------------------------------------------------------------- *)
@@ -64,6 +66,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     ver     = vertical ;
     pic     = BatOption.map IFile.decay pic ;
     white   ;
+    plugins = [] ;
   }) in 
 
   let info old = Profile.Info.({ 
@@ -130,6 +133,13 @@ let set_pic id pic =
 
   let! () = ohm $ Profile.update id info in 
   Tbl.update (IInstance.decay id) update
+
+(* Plugins ----------------------------------------------------------------------------- *)
+
+let has_plugin t plugin = 
+  List.mem plugin (t # plugins) 
+
+(* Fetch by key ------------------------------------------------------------------------ *)
     
 module ViewByKey = CouchDB.DocView(struct
   module Key    = Fmt.Make(struct type json t = (string * IWhite.t option) end)
@@ -259,6 +269,7 @@ let install iid ~pic ~who ~key ~name ~desc =
     ver     = ConfigWhite.default_vertical owid ;
     pic     = BatOption.map IFile.decay pic ;
     white   = owid ;
+    plugins = [] ;
   }) in 
 
   let info old = Profile.Info.({ 
@@ -323,6 +334,11 @@ module Backdoor = struct
     end ids in
 
     return (insts, next)
+
+  let set_plugins plugins src = 
+    let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
+    let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with plugins })) in
+    return `OK 
 
 end
 

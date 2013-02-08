@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -55,7 +55,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
       method url = url
     end)) pic in
 
-    let menu = if not public && user = None then [] else menu key in
+    let menu = if not public && user = None then [] else menu (MInstance.has_plugin instance) key in
 
     let! desc = ohm begin 
       if public || user <> None then return None else
@@ -109,21 +109,24 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 
 let intranet (owid,cuid,iid) = 
 
-  let menu key = 
+  let menu hasPlugin key = 
     List.map (fun (url,label) -> (object
       method url = url
       method sel = false 
       method label = AdLib.write label
-    end)) [
-      Action.url UrlClient.Inbox.home    key [], `PageLayout_Navbar_Home ;
-      Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members ;
-      Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events ;
-    ]
+    end)) (BatList.filter_map identity [
+      Some (Action.url UrlClient.Inbox.home    key [], `PageLayout_Navbar_Home) ;
+      Some (Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members) ;
+      Some (Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events) ;
+      ( if hasPlugin `DMS then 
+	  Some (Action.url DMS.Url.home key [], `DMS_Navbar) 
+	else None ) ;
+    ])
   in
   
   render ~public:false ~menu (owid,cuid,iid) 
 
-let public_menu menu key = 
+let public_menu menu hasPlugin key = 
   List.map (fun (url,label,id) -> (object
     method url = url 
     method sel = id = menu

@@ -17,6 +17,9 @@ module Signals : sig
 
   val on_obliterate : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel
 
+  (* Used when performing a global refresh on all avatars *)
+  val refresh_grant : (IAvatar.t, unit O.run) Ohm.Sig.channel
+
 end
 
 module Pending : sig
@@ -149,5 +152,7 @@ module Backdoor : sig
   val count : int O.run
 
   val list : count:int -> IAvatar.t option -> ((IUser.t * IInstance.t * Status.t) list * IAvatar.t option) O.run
+
+  val refresh_grants : unit -> unit O.run
 	
 end
