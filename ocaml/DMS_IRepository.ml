@@ -6,6 +6,7 @@ open BatPervasives
 include Id.Phantom
 
 module Assert = struct 
-  let admin = identity
-  let view  = identity
+  let admin  = identity
+  let view   = identity
+  let upload = identity  
 end

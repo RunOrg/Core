@@ -28,3 +28,11 @@ include HEntity.Can(struct
 
 end)
 
+let upload t = 
+  let! allowed = ohm begin match (data t).E.upload with 
+    | `Viewers   -> return true
+    | `List aids -> test t (`List aids :: admin_access t)
+  end in 
+  if allowed then return (Some (DMS_IRepository.Assert.upload (id t)))
+  else return None
+		    

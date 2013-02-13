@@ -14,4 +14,11 @@ let vision t = (Can.data t).E.vision
 let name t = (Can.data t).E.name
 let iid t = (Can.data t).E.iid
 let admins t = MAccess.delegates (Can.data t).E.admins
+let upload t = (Can.data t).E.upload
+
+(* Helper properties *)
+
+let uploaders t = match upload t with 
+  | `List aids -> aids
+  | `Viewers -> []
 

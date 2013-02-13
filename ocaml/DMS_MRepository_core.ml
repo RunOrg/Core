@@ -5,6 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 module Vision = DMS_MRepository_vision
+module Upload = DMS_MRepository_upload
 
 module Cfg = struct
 
@@ -16,6 +17,7 @@ module Cfg = struct
     type json t = 
       [ `SetName    of string
       | `SetVision  of Vision.t
+      | `SetUpload  of Upload.t 
       | `SetAdmins  of MAccess.t	  
       | `Delete     of IAvatar.t
       ]
@@ -27,6 +29,7 @@ module Cfg = struct
 	iid    : IInstance.t ;
 	name   : string ;
 	vision : Vision.t ;
+	upload : Upload.t ;
 	admins : MAccess.t ;
 	del    : IAvatar.t option ;
       }
@@ -38,6 +41,7 @@ module Cfg = struct
   let do_apply t = Data.(function 
     | `SetName    name   -> { t with name }
     | `SetVision  vision -> { t with vision }
+    | `SetUpload  upload -> { t with upload }
     | `SetAdmins  admins -> { t with admins }
     | `Delete     aid    -> { t with del = Some (BatOption.default aid t.del) } 
   )
@@ -51,6 +55,7 @@ type data_t = Cfg.Data.t = {
   iid    : IInstance.t ;
   name   : string ;
   vision : Vision.t ;
+  upload : Upload.t ; 
   admins : MAccess.t ;
   del    : IAvatar.t option ;
 }

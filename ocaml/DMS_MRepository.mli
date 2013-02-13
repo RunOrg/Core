@@ -4,9 +4,12 @@ type 'relation t
 
 module Vision : Ohm.Fmt.FMT with type t = [ `Normal | `Private of IAvatarSet.t list ]
 
+  module Upload : Ohm.Fmt.FMT with type t = [ `Viewers | `List of IAvatar.t list ]
+
 module Can : sig
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t
+  val upload : [<`View|`Admin] t -> (#O.ctx,[`Upload] DMS_IRepository.id option) Ohm.Run.t
 end
 
 module Get : sig
@@ -16,6 +19,9 @@ module Get : sig
   val vision : [<`Admin|`View] t -> Vision.t
   val name   : [<`Admin|`View] t -> string 
   val admins : [<`Admin|`View] t -> IAvatar.t list 
+  val upload : [<`Admin|`View] t -> Upload.t 
+  (* Helper properties *)
+  val uploaders : [<`Admin|`View] t -> IAvatar.t list   
 end
 
 module All : sig
@@ -33,9 +39,15 @@ module Set : sig
     -> [`Admin] t
     -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t
+  val uploaders : 
+       IAvatar.t list
+    -> [`Admin] t 
+    -> 'any MActor.t
+    -> (#O.ctx,unit) Ohm.Run.t
   val info : 
        name:string
     -> vision:Vision.t
+    -> upload:[`Viewers|`List]
     -> [`Admin] t
     -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t 
@@ -45,6 +57,7 @@ val create :
      self:'any MActor.t
   -> name:string
   -> vision:Vision.t
+  -> upload:[`Viewers|`List]
   -> iid:'a IInstance.id
   -> (#O.ctx,DMS_IRepository.t) Ohm.Run.t
 

@@ -39,6 +39,8 @@ module type CAN = sig
   val id   : 'any t -> 'any id
   val data : 'any t -> core
 
+  val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t 
+
   val view_access   : 'any t -> MAccess.t list
   val admin_access  : 'any t -> MAccess.t list 
     

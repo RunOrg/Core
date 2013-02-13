@@ -17,11 +17,20 @@ let admins aids t self =
   else
     return ()
     
-let info ~name ~vision t self = 
+let uploaders aids t self = 
+  let e = Can.data t in   
+  let aids = BatList.sort_unique compare aids in 
+  if e.E.upload = `List aids then return () else
+    update [`SetUpload (`List aids)] t self
+
+let info ~name ~vision ~upload t self = 
   let e = Can.data t in 
   let diffs = BatList.filter_map identity [
     (if name   = e.E.name   then None else Some (`SetName name)) ;
     (if vision = e.E.vision then None else Some (`SetVision vision)) ;
+    (if upload = `List && e.E.upload = `Viewers then Some (`SetUpload (`List [])) else
+	if upload = `Viewers && e.E.upload <> `Viewers then Some (`SetUpload `Viewers) else
+	  None) ;
   ] in
   let! () = ohm (if diffs = [] then return () else update diffs t self) in
   return ()

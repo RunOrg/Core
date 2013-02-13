@@ -108,6 +108,8 @@ module type CAN = sig
 
   val id   : 'any t -> 'any id
   val data : 'any t -> core  
+
+  val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t
   
   val view_access   : 'any t -> MAccess.t list
   val admin_access  : 'any t -> MAccess.t list 
@@ -162,7 +164,11 @@ module Can = functor (C:CAN_ARG) -> struct
     C.admin t.data 
 
   let view_access t = 
-    C.view t.data  
+    C.view t.data 
+
+  let test t access = 
+    match t.actor with None -> return false | Some actor -> 
+      O.decay (MAccess.test actor access)
 
   let id t = t.id
     

@@ -4,6 +4,7 @@ type data_t = {
   iid    : IInstance.t ;
   name   : string ;
   vision : DMS_MRepository_vision.t ;
+  upload : DMS_MRepository_upload.t ; 
   admins : MAccess.t ;
   del    : IAvatar.t option ;
 }
@@ -11,6 +12,7 @@ type data_t = {
 type diff_t = 
   [ `SetName    of string
   | `SetVision  of DMS_MRepository_vision.t
+  | `SetUpload  of DMS_MRepository_upload.t 
   | `SetAdmins  of MAccess.t	  
   | `Delete     of IAvatar.t
   ]
