@@ -1,5 +1,6 @@
 | `DMS_Navbar -> "Documents"
 
+| `DMS_Repos_Title -> "Bibliothèques de documents"
 | `DMS_Repos_Empty -> "Aucune bibliothèque disponible"
 
 | `DMS_NewRepo_Link -> "Nouvelle Bibliothèque"
