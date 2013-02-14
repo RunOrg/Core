@@ -1,5 +1,7 @@
 | `DMS_Navbar
 
+| `DMS_Repos_Empty
+
 | `DMS_NewRepo_Link
 
 | `DMS_NewRepo_Title 
