@@ -7,6 +7,8 @@ open BatPervasives
 module Url = DMS_Url
 module MRepository = DMS_MRepository
 
+module Create = DMS_CRepository_create
+
 let () = CClient.define Url.def_home begin fun access -> 
   O.Box.fill $ O.decay begin
 
