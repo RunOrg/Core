@@ -28,13 +28,13 @@ type 'relation t =
     {
       id     : 'relation IFeed.id ;
       data   : Data.t ;
-      access : ([`Read|`Write|`Manage] -> MAccess.t) O.run ;
+      access : ([`Read|`Write|`Manage] -> MAccess.t O.run) O.run ;
       read   : bool O.run ;
       write  : bool O.run ;
       admin  : bool O.run ;
     }
 
-let nil _ = `Nobody
+let nil _ = return `Nobody
 			  
 let _access iid = function 
   | `Event eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
@@ -48,9 +48,18 @@ let _make actor id (data:Data.t) =
     id     = id ;
     data   = data ;
     access = owner ;
-    read   = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
-    write  = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
-    admin  = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
+    read   = ( let! f = ohm owner in 
+	       let! read = ohm (f `Read) in
+	       let! write = ohm (f `Write) in
+	       let! manage = ohm (f `Manage) in
+	       MAccess.test actor [ read ; write ; manage ] ) ;
+    write  = ( let! f = ohm owner in 
+	       let! write = ohm (f `Write) in
+	       let! manage = ohm (f `Manage) in
+	       MAccess.test actor [ write ; manage ] ) ;
+    admin  = ( let! f = ohm owner in 
+	       let! manage = ohm (f `Manage) in
+	       MAccess.test actor [ manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
@@ -77,12 +86,14 @@ module Get = struct
     t.data # iid
 
   let notified t = 
-    let! reader = ohm t.access in
-    return [ reader `Read ; reader `Write ; reader `Manage ] 
+    let! f = ohm t.access in
+    let! read = ohm (f `Read) in
+    let! write = ohm (f `Write) in
+    let! manage = ohm (f `Manage) in
+    return [ read ; write ; manage ]
 
   let read_access t = 
-    let! reader = ohm t.access in
-    return [ reader `Read ; reader `Write ; reader `Manage ] 
+    notified t
 
 end
 

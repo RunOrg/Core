@@ -20,9 +20,10 @@ module Satellite = struct
 
   let access t = function
     | `Wall   `Manage
-    | `Folder `Manage  -> `Admin
+    | `Folder `Manage  -> return `Admin
     | `Wall   (`Read | `Write)  
-    | `Folder (`Read | `Write) -> `Union (Can.view_access t)
+    | `Folder (`Read | `Write) -> let! access = ohm (Can.view_access t) in
+				  return (`Union access) 
 
 end
 

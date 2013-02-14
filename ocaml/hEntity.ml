@@ -111,8 +111,8 @@ module type CAN = sig
 
   val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t
   
-  val view_access   : 'any t -> MAccess.t list
-  val admin_access  : 'any t -> MAccess.t list 
+  val view_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val admin_access  : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t 
     
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
@@ -126,8 +126,8 @@ module type CAN_ARG = sig
   type 'a id
   val deleted : core -> bool
   val iid : core -> IInstance.t
-  val admin : core -> MAccess.t list 
-  val view : core -> MAccess.t list
+  val admin : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val view : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
   val id_view  : 'a id -> [`View] id
   val id_admin : 'a id -> [`Admin] id  
   val decay : 'a id -> [`Unknown] id 
@@ -179,7 +179,8 @@ module Can = functor (C:CAN_ARG) -> struct
       let t' = { id = C.id_view t.id ; data = t.data ; actor = t.actor } in   
       match t.actor with 
 	| None -> if C.public t.data then return (Some t') else return None
-	| Some actor -> let! ok = ohm $ MAccess.test actor (view_access t) in
+	| Some actor -> let! view = ohm $ view_access t in
+			let! ok = ohm $ MAccess.test actor view in
 			if ok then return (Some t') else return None
     end
       
@@ -188,7 +189,8 @@ module Can = functor (C:CAN_ARG) -> struct
       let t' = { id = C.id_admin t.id ; data = t.data ; actor = t.actor } in
       match t.actor with 
 	| None       -> return None
-	| Some actor -> let! ok = ohm $ MAccess.test actor (admin_access t) in
+	| Some actor -> let! admin = ohm $ admin_access t in
+			let! ok = ohm $ MAccess.test actor admin in
 			if ok then return (Some t') else return None
     end
 

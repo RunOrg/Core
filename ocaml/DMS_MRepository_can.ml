@@ -13,12 +13,12 @@ include HEntity.Can(struct
 
   let deleted e = e.E.del <> None
   let iid     e = e.E.iid
-  let admin   e = [ `Admin ; e.E.admins ]
+  let admin   e = return [ `Admin ; e.E.admins ]
 
   let view e = 
     match e.E.vision with 
-      | `Normal        -> [ `Token ]
-      | `Private asids -> `Groups (`Any,asids) :: admin e
+      | `Normal        -> return [ `Token ]
+      | `Private asids -> let! admin = ohm (admin e) in return (`Groups (`Any,asids) :: admin)
 	
   let id_view  id = DMS_IRepository.Assert.view id
   let id_admin id = DMS_IRepository.Assert.admin id 
@@ -31,7 +31,7 @@ end)
 let upload t = 
   let! allowed = ohm begin match (data t).E.upload with 
     | `Viewers   -> return true
-    | `List aids -> test t (`List aids :: admin_access t)
+    | `List aids -> let! admin = ohm (admin_access t) in test t (`List aids :: admin)
   end in 
   if allowed then return (Some (DMS_IRepository.Assert.upload (id t)))
   else return None
@@ -39,12 +39,12 @@ let upload t =
 let remove t = 
   let! allowed = ohm begin match (data t).E.remove with 
     | `Free -> return true
-    | `Restricted -> test t (admin_access t)
+    | `Restricted -> let! admin = ohm (admin_access t) in test t admin
   end in 
   if allowed then return (Some (DMS_IRepository.Assert.remove (id t)))
   else return None
 
-let view_details t = 
+let details_access t = 
   match (data t).E.detail with 
     | `Public  -> view_access t
     | `Private -> admin_access t 

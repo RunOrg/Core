@@ -5,4 +5,7 @@ include HEntity.CAN with type core = DMS_MRepository_core.t and type 'a id = 'a 
 val upload : 'any t -> (#O.ctx,[`Upload] id option) Ohm.Run.t
 val remove : 'any t -> (#O.ctx,[`Remove] id option) Ohm.Run.t
 
-val view_details : 'any t -> MAccess.t list 
+val view_access    : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
+val admin_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
+val details_access : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
+ 
