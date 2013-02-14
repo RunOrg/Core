@@ -7,6 +7,9 @@ val name      : [<`Admin|`View] DMS_MRepository_can.t -> string
 val iid       :            'any DMS_MRepository_can.t -> IInstance.t 
 val admins    : [<`Admin|`View] DMS_MRepository_can.t -> IAvatar.t list 
 val upload    : [<`Admin|`View] DMS_MRepository_can.t -> DMS_MRepository_upload.t 
+val remove    : [<`Admin|`View] DMS_MRepository_can.t -> DMS_MRepository_remove.t 
+val detail    : [<`Admin|`View] DMS_MRepository_can.t -> DMS_MRepository_detail.t
+
 (* Helper properties *)
 val uploaders : [<`Admin|`View] DMS_MRepository_can.t -> IAvatar.t list   
 

@@ -6,6 +6,8 @@ open BatPervasives
 
 module Vision = DMS_MRepository_vision
 module Upload = DMS_MRepository_upload
+module Remove = DMS_MRepository_remove
+module Detail = DMS_MRepository_detail
 
 module Cfg = struct
 
@@ -18,6 +20,8 @@ module Cfg = struct
       [ `SetName    of string
       | `SetVision  of Vision.t
       | `SetUpload  of Upload.t 
+      | `SetRemove  of Remove.t 
+      | `SetDetail  of Detail.t 
       | `SetAdmins  of MAccess.t	  
       | `Delete     of IAvatar.t
       ]
@@ -30,6 +34,8 @@ module Cfg = struct
 	name   : string ;
 	vision : Vision.t ;
 	upload : Upload.t ;
+       ?remove : Remove.t = `Free ;
+       ?detail : Detail.t = `Public ; 
 	admins : MAccess.t ;
 	del    : IAvatar.t option ;
       }
@@ -42,6 +48,8 @@ module Cfg = struct
     | `SetName    name   -> { t with name }
     | `SetVision  vision -> { t with vision }
     | `SetUpload  upload -> { t with upload }
+    | `SetRemove  remove -> { t with remove }
+    | `SetDetail  detail -> { t with detail }
     | `SetAdmins  admins -> { t with admins }
     | `Delete     aid    -> { t with del = Some (BatOption.default aid t.del) } 
   )
@@ -56,6 +64,8 @@ type data_t = Cfg.Data.t = {
   name   : string ;
   vision : Vision.t ;
   upload : Upload.t ; 
+  remove : Remove.t ;
+  detail : Detail.t ;
   admins : MAccess.t ;
   del    : IAvatar.t option ;
 }

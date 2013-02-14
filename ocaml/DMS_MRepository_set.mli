@@ -11,4 +11,7 @@ val info :
   -> upload:[`Viewers|`List]
   -> ('a,#O.ctx) t
   
-
+val advanced : 
+     detail:DMS_MRepository_detail.t
+  -> remove:DMS_MRepository_remove.t
+  -> ('a,#O.ctx) t

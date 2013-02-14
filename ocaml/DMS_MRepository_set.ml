@@ -32,5 +32,12 @@ let info ~name ~vision ~upload t self =
 	if upload = `Viewers && e.E.upload <> `Viewers then Some (`SetUpload `Viewers) else
 	  None) ;
   ] in
-  let! () = ohm (if diffs = [] then return () else update diffs t self) in
-  return ()
+  if diffs = [] then return () else update diffs t self 
+
+let advanced ~detail ~remove t self = 
+  let e = Can.data t in
+  let diffs = BatList.filter_map identity [
+    (if detail = e.E.detail then None else Some (`SetDetail detail)) ;
+    (if remove = e.E.remove then None else Some (`SetRemove remove)) ;
+  ] in
+  if diffs = [] then return () else update diffs t self

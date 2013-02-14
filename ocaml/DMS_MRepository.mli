@@ -3,13 +3,19 @@
 type 'relation t 
 
 module Vision : Ohm.Fmt.FMT with type t = [ `Normal | `Private of IAvatarSet.t list ]
-
-  module Upload : Ohm.Fmt.FMT with type t = [ `Viewers | `List of IAvatar.t list ]
+module Upload : Ohm.Fmt.FMT with type t = [ `Viewers | `List of IAvatar.t list ]
+module Remove : Ohm.Fmt.FMT with type t = [ `Free | `Restricted ]
+module Detail : Ohm.Fmt.FMT with type t = [ `Public | `Private ]
 
 module Can : sig
+
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t
   val upload : [<`View|`Admin] t -> (#O.ctx,[`Upload] DMS_IRepository.id option) Ohm.Run.t
+  val remove : [<`View|`Admin] t -> (#O.ctx,[`Remove] DMS_IRepository.id option) Ohm.Run.t
+
+  val view_details : 'any t -> MAccess.t list 
+
 end
 
 module Get : sig
@@ -20,6 +26,8 @@ module Get : sig
   val name   : [<`Admin|`View] t -> string 
   val admins : [<`Admin|`View] t -> IAvatar.t list 
   val upload : [<`Admin|`View] t -> Upload.t 
+  val remove : [<`Admin|`View] t -> Remove.t 
+  val detail : [<`Admin|`View] t -> Detail.t
   (* Helper properties *)
   val uploaders : [<`Admin|`View] t -> IAvatar.t list   
 end
@@ -51,6 +59,12 @@ module Set : sig
     -> [`Admin] t
     -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t 
+  val advanced : 
+       detail:Detail.t
+    -> remove:Remove.t
+    -> [`Admin] t
+    -> 'any MActor.t
+    -> (#O.ctx,unit) Ohm.Run.t
 end
 
 val create : 

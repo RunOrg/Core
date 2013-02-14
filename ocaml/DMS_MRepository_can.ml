@@ -36,3 +36,16 @@ let upload t =
   if allowed then return (Some (DMS_IRepository.Assert.upload (id t)))
   else return None
 		    
+let remove t = 
+  let! allowed = ohm begin match (data t).E.remove with 
+    | `Free -> return true
+    | `Restricted -> test t (admin_access t)
+  end in 
+  if allowed then return (Some (DMS_IRepository.Assert.remove (id t)))
+  else return None
+
+let view_details t = 
+  match (data t).E.detail with 
+    | `Public  -> view_access t
+    | `Private -> admin_access t 
+

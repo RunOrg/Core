@@ -15,6 +15,8 @@ let name t = (Can.data t).E.name
 let iid t = (Can.data t).E.iid
 let admins t = MAccess.delegates (Can.data t).E.admins
 let upload t = (Can.data t).E.upload
+let remove t = (Can.data t).E.remove
+let detail t = (Can.data t).E.detail
 
 (* Helper properties *)
 

@@ -6,6 +6,8 @@ open BatPervasives
 
 type 'relation t = 'relation DMS_MRepository_can.t
 
+module Remove    = DMS_MRepository_remove
+module Detail    = DMS_MRepository_detail
 module Upload    = DMS_MRepository_upload
 module Vision    = DMS_MRepository_vision 
 module Can       = DMS_MRepository_can 
@@ -45,6 +47,8 @@ let create ~self ~name ~vision ~upload ~iid =
       name   ;
       vision ;
       upload ; 
+      detail = `Public ;
+      remove = `Free ; 
       admins ;
       del    = None ;
     }) in

@@ -6,4 +6,5 @@ module Assert : sig
   val admin  : 'any id -> [`Admin] id
   val view   : 'any id -> [`View]  id 
   val upload : 'any id -> [`Upload] id 
+  val remove : 'any id -> [`Remove] id 
 end
