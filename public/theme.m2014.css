@@ -1,0 +1,56 @@
+#topbar {
+  background: #EEE;
+  margin: auto; 
+  width: 966px;
+  padding-bottom: 1px; 
+  box-shadow: none;
+  border-color: #CCC;
+}
+
+#navbar {
+  background: white;
+  box-shadow: none;
+  border-color: #CCC;
+  height: 67px;
+}
+
+#navbar a {
+  margin-top: 17px;
+  color: #333;
+}
+
+#navbar a:hover {
+  background-color: transparent;
+  color: #555;
+}
+
+#navbar #logo {
+  font-size: 24px; 
+  padding-right: 40px;
+}
+
+#notifications span {
+  border-color: #888;
+}
+
+#notifications .-on {
+  color: white;
+}
+
+#public .-left .-pic-wrap .-pic, #topbar .-pic {
+  border-color: #AAA;
+}
+
+#topbar .-asso ul li.-root a {
+  border-color: #AAA;
+}
+
+#topbar .-asso ul li.-selected a {
+  background: #BBB;
+  box-shadow: none;
+}
+
+#topbar .-asso ul li.-root a:hover {
+  background: #CCC;
+  box-shadow: none;
+}
