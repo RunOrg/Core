@@ -13,7 +13,7 @@ module IRepository = DMS_IRepository
 type entry = < 
   doc     : [`Unknown] Can.t ; 
   name    : string ; 
-  version : int option ; 
+  version : int ; 
   update  : float * IAvatar.t ;
 >
 

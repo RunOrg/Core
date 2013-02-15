@@ -16,9 +16,6 @@ let name name t self =
   if name = e.E.name then return () else 
     update [ `SetName name ] t self
 
-let add_version fid t self = 
-  return () 
-
 let share rid t self = 
   let rid = IRepository.decay rid in 
   let e = Can.data t in 

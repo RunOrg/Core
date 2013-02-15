@@ -27,7 +27,7 @@ module Cfg = struct
 	iid     : IInstance.t ;
 	name    : string ; 
 	repos   : DMS_IRepository.t list ;
-	version : Version.t option ;
+	version : Version.t ;
 	creator : IAvatar.t ; 
 	last    : float * IAvatar.t ;
       }
@@ -40,15 +40,13 @@ module Cfg = struct
     | `SetName    name   -> { t with name }
     | `Share      rid    -> if List.mem rid t.repos then t else { t with repos = rid :: t.repos }
     | `Unshare    rid    -> { t with repos = BatList.remove t.repos rid }
-    | `AddVersion v      -> begin
-      (* Add a version only if it recent or there was no previous version. Also, 
-	 the version number needs to be set here. *)
-      match t.version with 
-	| None -> { t with version = Some (Version.number 1 v) ; last = (v # time, v # author) }
-	| Some v' -> if v' # time < v # time 
-	  then { t with version = Some (Version.number (1 + v' # number) v) ; last = (v # time, v # author) }
-	  else t
-    end 
+    | `AddVersion v      -> let v' = t.version in 
+			    (* Add a version only if it recent. 
+			       Also, the version number needs to be set here. *)
+			    if v' # time > v # time then t else  
+			      { t with 
+				version = Version.number (1 + v' # number) v ; 
+				last = (v # time, v # author) }
   )
     
   let apply diff = 
@@ -60,7 +58,7 @@ type data_t = Cfg.Data.t = {
   iid     : IInstance.t ;
   name    : string ; 
   repos   : DMS_IRepository.t list ;
-  version : Version.t option ;
+  version : Version.t ;
   creator : IAvatar.t ; 
   last    : float * IAvatar.t ;
 }
