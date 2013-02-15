@@ -12,6 +12,7 @@ server:
 	ohm plugins.ohmStatic portals/FSCF FSCF
 	ohm plugins.ohmStatic portals/MyInnovation MyInnovation
 	ohm plugins.ohmStatic portals/AssoHelp AssoHelp
+	ohm plugins.ohmStatic portals/M2014 M2014
 	make -C ocaml
 	ohm publish
 	cp $(EXE) $(REAL)

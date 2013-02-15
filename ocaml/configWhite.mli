@@ -4,12 +4,18 @@ val test : IWhite.t
 val ffbad : IWhite.t
 val fscf : IWhite.t
 val innov : IWhite.t
+val m2014 : IWhite.t
+val clichy : IWhite.t
+val alfort : IWhite.t
 
 type t = 
   [ `RunOrg
   | `Test
   | `FFBAD
   | `FSCF
+  | `M2014
+  | `Clichy
+  | `Alfort
   | `Innov
   ]
 
