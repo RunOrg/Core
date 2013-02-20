@@ -51,7 +51,7 @@ let domain id = match represent (Some id) with
   | `M2014 -> "m2014.fr"
   | `Innov -> "my-innovation.org" 
   | `Clichy -> "clichy.fr"
-  | `Alfort -> "alfort.fr"
+  | `Alfort -> "alfortville-asso.fr"
 
 let white = function 
   | "test.local" -> Some test
@@ -60,7 +60,7 @@ let white = function
   | "m2014.fr" -> Some m2014
   | "my-innovation.org" -> Some innov
   | "clichy.fr" -> Some clichy
-  | "alfort.fr" -> Some alfort 
+  | "alfortville-asso.fr" -> Some alfort 
   | _ -> None
 
 let slice_domain domain = 
