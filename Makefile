@@ -13,6 +13,7 @@ server:
 	ohm plugins.ohmStatic portals/MyInnovation MyInnovation
 	ohm plugins.ohmStatic portals/AssoHelp AssoHelp
 	ohm plugins.ohmStatic portals/M2014 M2014
+	ohm plugins.ohmStatic portals/Alfortville Alfortville
 	make -C ocaml
 	ohm publish
 	cp $(EXE) $(REAL)
