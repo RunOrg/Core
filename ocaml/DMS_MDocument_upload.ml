@@ -5,6 +5,8 @@ open Ohm.Universal
 open BatPervasives
 
 module Get = DMS_MDocument_get
+module Set = DMS_MDocument_set
+module E   = DMS_MDocument_core
 
 (* Store a "pending" note in a side database. The pending note contains 
    all information to create whatever should be created post-upload. 
@@ -118,3 +120,56 @@ let ok pending =
 let ready fid = 
   let! pending = ohm_req_or (return None) $ Tbl.get (IFile.decay fid) in
   return (ok pending) 
+
+(* React to an upload being completed successfully. *)
+
+let finish_doc name ext size fid doc = 
+
+  let! time = ohmctx (#time) in
+  let  aid  = doc.NewDoc.aid in
+  let! self = ohm_req_or (return ()) $ MAvatar.actor (IAvatar.Assert.is_self aid) in 
+  let  init = E.({
+    iid     = doc.NewDoc.iid ;
+    name    ;
+    repos   = [ doc.NewDoc.rid ] ;
+    version = (object
+      method number   = 1 
+      method filename = name
+      method size     = size
+      method ext      = ext
+      method file     = fid 
+      method time     = time
+      method author   = aid 
+    end) ;
+    creator = aid ;
+    last    = (time, aid) ;
+  }) in
+  
+  let! () = ohm $ E.create doc.NewDoc.did self init [] in
+  Tbl.set fid (object method what = `Doc NewDoc.({ doc with ok = true }) end)
+	
+let finish_version name ext size fid version = 
+
+  let! time = ohmctx (#time) in
+  let  aid  = version.NewVersion.aid in
+  let  did  = version.NewVersion.did in 
+  let! self = ohm_req_or (return ()) $ MAvatar.actor (IAvatar.Assert.is_self aid) in 
+  let  diff = [ `AddVersion (object
+      method number   = 1 
+      method filename = name
+      method size     = size
+      method ext      = ext
+      method file     = fid 
+      method time     = time
+      method author   = aid 
+  end) ] in
+
+  let! () = ohm $ Set.raw diff did self in
+  Tbl.set fid (object method what = `Version NewVersion.({ version with ok = true }) end)
+  
+let () = 
+  let! _, name, ext, size, fid = Sig.listen MFile.Upload.Signals.on_item_doc_upload in
+  let! pending = ohm_req_or (return ()) $ Tbl.get fid in 
+  match pending # what with 
+    | `Doc     d -> finish_doc name ext size fid d
+    | `Version v -> finish_version name ext size fid v 
