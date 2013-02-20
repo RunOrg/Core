@@ -1,0 +1,18 @@
+/* Primary : #964594, Alternate : #6eb4cd */
+
+#navbar {
+  background: #964594;
+}
+
+#navbar a:hover {
+  background: white; 
+  color: #964594;
+}
+
+#navbar #notifications:hover span {
+  border-color: #964594;
+}
+
+#navbar #notifications:hover span.-on {
+  color: white;
+}
