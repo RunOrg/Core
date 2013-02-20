@@ -201,16 +201,21 @@ end
 module type SET = sig
   type 'a can  
   type diff 
+  type 'a id 
   type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
   val update : diff list -> ('any,#O.ctx) t
+  val raw : diff list -> 'a id -> 'b MActor.t -> (#O.ctx,unit) Ohm.Run.t 
 end
 
 module Set = functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id) -> struct
   type 'a can = 'a C.t
   type diff = S.diff
+  type 'a id = 'a C.id
   type ('a,'b) t = [`Admin] can -> 'a MActor.t -> ('b,unit) Ohm.Run.t
   let update diffs t self =
     O.decay (S.update (C.decay (C.id t)) self diffs) 
+  let raw diffs id self = 
+    O.decay (S.update (C.decay id) self diffs) 
 end
 
 (* Load ("get") module -------------------------------------------------------------------------------------- *)

@@ -71,12 +71,14 @@ module Can : functor(C:CAN_ARG) -> CAN with type core = C.core and type 'a id = 
 module type SET = sig
   type 'a can  
   type diff 
+  type 'a id 
   type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
   val update : diff list -> ('any,#O.ctx) t
+  val raw : diff list -> 'a id -> 'b MActor.t -> (#O.ctx,unit) Ohm.Run.t 
 end
 
 module Set : functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id) ->
-  SET with type 'a can = 'a C.t and type diff = S.diff
+  SET with type 'a can = 'a C.t and type diff = S.diff and type 'a id = 'a C.id
 
 (* Load ("get") module -------------------------------------------------------------------------------------- *)
 
