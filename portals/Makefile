@@ -1,4 +1,4 @@
-all: FFBAD FSCF AssoHelp MyInnovation M2014
+all: FFBAD FSCF AssoHelp MyInnovation M2014 Alfortville
 
 FFBAD:
 	git clone 'git://github.com/RunOrg/PortalFFBAD.git' FFBAD
