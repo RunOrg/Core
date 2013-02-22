@@ -47,9 +47,16 @@ let () = CClient.define Url.def_see begin fun access ->
     return $ Action.json [ "more", Html.to_json html ] res
   end in 
 
+  let! upload = ohm begin 
+    let! rid = ohm_req_or (return None) (MRepository.Can.upload repo) in
+    return (Some (Action.url Url.upload (access # instance # key) 
+		    [ IRepository.to_string rid ]))
+  end in
+
   O.Box.fill begin 
     Asset_DMS_Repository.render (object
       method name   = MRepository.Get.name repo 
+      method upload = upload
       method list   = render_files ~count:0 access repo more 
     end)
   end 

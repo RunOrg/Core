@@ -15,4 +15,6 @@
 
 | `DMS_Field_Required -> "Champ obligatoire"
 
-| `DMS_Repo_Empty -> "Aucun document dans cette bibliothèque"
+| `DMS_Repo_Empty  -> "Aucun document dans cette bibliothèque"
+| `DMS_Repo_Upload -> "Nouveau document"
+

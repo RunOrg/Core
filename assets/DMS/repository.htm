@@ -1,4 +1,13 @@
 <div class="DMS-repository">
+  {?upload}
+    <ul class="actions">
+      <li class="-r">
+	<a href="{this}" class="action-button -green">
+	  { `DMS_Repo_Upload }
+	</a>
+      </li>
+    </ul>
+  {/?}
   <h2>{name}</h2>
   <div class="-files">
     {@!inner}
