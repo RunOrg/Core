@@ -9,9 +9,9 @@
 | `MeAccount_Button_Edit -> "Paramètres"
 | `MeAccount_Page_Title -> "Mon Compte"
 | `MeAccount_Button_Picture -> "Changer la photo"
-| `MeAccount_Explain -> "Ceci est votre profil privé. Vous pouvez choisir de partager tout ou partie de ces informations avec les associations dont vous devenez membre."
+| `MeAccount_Explain -> "Ceci est votre profil privé. Vous pouvez choisir de partager tout ou partie de ces informations avec les communautés dont vous êtes membre."
 
-| `MeAccount_Instances -> "Mes associations"
+| `MeAccount_Instances -> "Mes communautés"
 | `MeAccount_Instances_More -> "Afficher le reste"
 
 | `MeAccount_Admin_Title -> "Paramètres"
