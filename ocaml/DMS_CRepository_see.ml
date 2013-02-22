@@ -18,7 +18,9 @@ let () = CClient.define Url.def_see begin fun access ->
   let! repo = ohm_req_or e404 $ MRepository.view ~actor rid in
 
   O.Box.fill begin 
-    return (Html.esc (MRepository.Get.name repo))
+    Asset_DMS_Repository.render (object
+      method name   = MRepository.Get.name repo 
+    end)
   end 
 
 end 
