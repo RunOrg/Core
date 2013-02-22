@@ -4,12 +4,11 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Url = DMS_Url
-module MRepository = DMS_MRepository
-module IRepository = DMS_IRepository
+open DMS_CRepository_common
 
 module Create = DMS_CRepository_create
 module See    = DMS_CRepository_see
+module Upload = DMS_CRepository_upload
 
 let render_repos ?start ~count access self = 
 
