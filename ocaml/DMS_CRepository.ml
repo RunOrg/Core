@@ -9,6 +9,7 @@ module MRepository = DMS_MRepository
 module IRepository = DMS_IRepository
 
 module Create = DMS_CRepository_create
+module See    = DMS_CRepository_see
 
 let render_repos ?start ~count access self = 
 
