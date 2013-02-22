@@ -35,13 +35,7 @@
 <style>
 .DMS-home {
 
-  h2 {
-    color: #555;
-    margin-top: 4px;
-    margin-bottom: 20px;
-  }
-
-  > .actions { float: right }
+  .hastitle();
 
   .-list {
     min-height: 50px;
@@ -60,9 +54,7 @@
     .-name { 
       float: left; 
       width: 500px;
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      white-space: nowrap;
+      .ellipsis();
     }    
     .status { 
       float: right; 
