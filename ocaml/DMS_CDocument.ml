@@ -6,6 +6,8 @@ open BatPervasives
 
 open DMS_CDocument_common 
 
+module Version = DMS_CDocument_version
+
 let () = CClient.define Url.def_file begin fun access ->
   
   let  e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in
