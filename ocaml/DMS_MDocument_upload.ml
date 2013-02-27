@@ -119,7 +119,9 @@ let ok pending =
 
 let ready fid = 
   let! pending = ohm_req_or (return None) $ Tbl.get (IFile.decay fid) in
-  return (ok pending) 
+  let! did     = req_or (return None) $ ok pending in
+  let! found   = ohm $ MFile.check fid `File in
+  return (if found then Some did else None)
 
 (* React to an upload being completed successfully. *)
 
