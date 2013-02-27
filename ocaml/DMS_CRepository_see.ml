@@ -20,7 +20,7 @@ let render_files ?start ~count access repo self =
     return (object
       method name    = file # name
       method version = file # version 
-      method time    = (time, fst (file # update))
+      method time    = (fst (file # update), time)
       method author  = author
       method url     = Action.url Url.file (access # instance # key)
 	[ IRepository.to_string rid ;
