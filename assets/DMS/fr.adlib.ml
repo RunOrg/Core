@@ -21,3 +21,6 @@
 | `DMS_NoUpload_Error -> "Impossible de créer un document."
 | `DMS_NoUpload_Explain -> "Vérifiez que vous disposez des droits requis et d'espace disque libre."
 | `DMS_NoUpload_Back -> "Retour"
+
+| `DMS_Document_Edit -> "Modifier"
+| `DMS_Document_AddVersion -> "Nouvelle Version"

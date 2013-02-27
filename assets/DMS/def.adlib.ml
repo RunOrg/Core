@@ -21,3 +21,6 @@
 | `DMS_NoUpload_Error 
 | `DMS_NoUpload_Explain 
 | `DMS_NoUpload_Back 
+
+| `DMS_Document_Edit
+| `DMS_Document_AddVersion 
