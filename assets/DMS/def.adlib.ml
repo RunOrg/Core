@@ -17,3 +17,7 @@
 
 | `DMS_Repo_Empty
 | `DMS_Repo_Upload 
+
+| `DMS_NoUpload_Error 
+| `DMS_NoUpload_Explain 
+| `DMS_NoUpload_Back 

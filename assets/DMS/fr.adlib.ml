@@ -18,3 +18,6 @@
 | `DMS_Repo_Empty  -> "Aucun document dans cette bibliothèque"
 | `DMS_Repo_Upload -> "Nouveau document"
 
+| `DMS_NoUpload_Error -> "Impossible de créer un document."
+| `DMS_NoUpload_Explain -> "Vérifiez que vous disposez des droits requis et d'espace disque libre."
+| `DMS_NoUpload_Back -> "Retour"
