@@ -25,3 +25,7 @@
 | `DMS_Document_Edit -> "Modifier"
 | `DMS_Document_AddVersion -> "Nouvelle Version"
 | `DMS_Document_Download -> "Télécharger"
+
+| `DMS_Document_Forbidden_Title -> "Page inaccessible"
+| `DMS_Document_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
+| `DMS_Document_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer un nouveau document"

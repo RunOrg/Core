@@ -25,3 +25,7 @@
 | `DMS_Document_Edit
 | `DMS_Document_AddVersion 
 | `DMS_Document_Download 
+
+| `DMS_Document_Forbidden_Title
+| `DMS_Document_Forbidden_Problem 
+| `DMS_Document_Forbidden_Solution
