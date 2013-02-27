@@ -17,6 +17,21 @@ let () = CClient.define Url.def_file begin fun access ->
   let! doc = ohm_req_or e404 $ MDocument.view ~actor did in
   let! adoc = ohm $ MDocument.Can.admin doc in 
 
+  let! current = ohm begin 
+    let  v = MDocument.Get.current doc in 
+    let! url = ohm_req_or (return None) $ MFile.Url.get (v # file) `File in 
+    let! now = ohmctx (#time) in
+    let! author = ohm $ O.decay (CAvatar.mini_profile (v # author)) in
+    return $ Some (object
+      method version  = v # number
+      method filename = v # filename
+      method icon     = VIcon.of_extension (v # ext)
+      method url      = url
+      method time     = (v # time, now)
+      method author   = author
+    end)
+  end in 
+
   O.Box.fill begin 
     Asset_DMS_Document.render (object
       method admin = match adoc with None -> None | Some _ ->  
@@ -27,6 +42,7 @@ let () = CClient.define Url.def_file begin fun access ->
 	    [ IRepository.to_string rid ; IDocument.to_string did ]
 	end)	
       method name  = MDocument.Get.name doc 
+      method current = current
     end)
   end 
 

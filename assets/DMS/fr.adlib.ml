@@ -24,3 +24,4 @@
 
 | `DMS_Document_Edit -> "Modifier"
 | `DMS_Document_AddVersion -> "Nouvelle Version"
+| `DMS_Document_Download -> "Télécharger"
