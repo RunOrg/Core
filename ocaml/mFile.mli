@@ -81,3 +81,5 @@ val instance_pic : 'a IInstance.id -> 'b IFile.id -> [`InsPic] IFile.id option O
 val delete_now : [`Bot] IFile.id -> unit O.run
 
 val item : [<`GetImg|`GetDoc] IFile.id -> IItem.t option O.run
+
+val check : 'a IFile.id -> version -> (#O.ctx,bool) Ohm.Run.t
