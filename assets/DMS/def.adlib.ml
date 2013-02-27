@@ -35,3 +35,7 @@
 | `DMS_Document_Edit_Title
 | `DMS_Document_Edit_Link
 | `DMS_Document_Edit_Sub
+
+| `DMS_Document_Edit_Name 
+| `DMS_Document_Edit_Required
+| `DMS_Document_Edit_Submit

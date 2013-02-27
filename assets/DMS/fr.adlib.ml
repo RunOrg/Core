@@ -35,3 +35,7 @@
 | `DMS_Document_Edit_Title -> "Modifier"
 | `DMS_Document_Edit_Link -> "Modifier"
 | `DMS_Document_Edit_Sub -> "Changer le nom et les méta-données de ce document"
+
+| `DMS_Document_Edit_Name -> "Nom"
+| `DMS_Document_Edit_Required -> "Champ obligatoire"
+| `DMS_Document_Edit_Submit -> "Enregistrer"
