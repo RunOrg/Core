@@ -31,3 +31,7 @@
 | `DMS_Document_Forbidden_Solution -> "Vous pouvez demander à un administrateur de vous confier ces droits, ou essayer de créer un nouveau document"
 
 | `DMS_Document_Admin_Title -> "Administration"
+
+| `DMS_Document_Edit_Title -> "Modifier"
+| `DMS_Document_Edit_Link -> "Modifier"
+| `DMS_Document_Edit_Sub -> "Changer le nom et les méta-données de ce document"

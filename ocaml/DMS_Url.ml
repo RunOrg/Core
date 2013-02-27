@@ -12,8 +12,9 @@ let file,   def_file   = child def_upload "dms/doc/view"
 
 module Doc = struct
 
+  let version, def_version = child def_file  "dms/doc/add-version"
   let admin,   def_admin   = child def_file  "dms/doc/admin"
-  let version, def_version = child def_admin "dms/doc/add-version"
+  let edit,    def_edit    = child def_admin "dms/doc/edit"
 
 end
 

@@ -22,5 +22,6 @@ let parents title key rid did = object
 					     IDocument.to_string did ]
   end
   method admin    = make `DMS_Document_Admin_Title    admin    key rid did 
+  method edit     = make `DMS_Document_Edit_Title     edit     key rid did 
 end
 

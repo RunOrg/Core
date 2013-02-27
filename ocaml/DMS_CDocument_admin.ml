@@ -7,10 +7,20 @@ open BatPervasives
 open DMS_CDocument_common 
 open DMS_CDocument_admin_common
 
+module Edit = DMS_CDocument_admin_edit
+
 let () = define Url.Doc.def_admin begin fun parents rid doc access ->
   O.Box.fill begin 
 
     let choices = Asset_Admin_Choice.render [
+
+      (object
+	method img = VIcon.Large.page_edit
+	method url = parents # edit # url
+	method title = AdLib.get `DMS_Document_Edit_Link
+	method subtitle = Some (AdLib.get `DMS_Document_Edit_Sub)
+       end) ;
+
     ] in
 
     Asset_Admin_Page.render (object

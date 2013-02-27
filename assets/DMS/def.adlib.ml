@@ -31,3 +31,7 @@
 | `DMS_Document_Forbidden_Solution
 
 | `DMS_Document_Admin_Title
+
+| `DMS_Document_Edit_Title
+| `DMS_Document_Edit_Link
+| `DMS_Document_Edit_Sub
