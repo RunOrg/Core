@@ -23,7 +23,8 @@ let render_files ?start ~count access repo self =
       method time    = (time, fst (file # update))
       method author  = author
       method url     = Action.url Url.file (access # instance # key)
-	[ IDocument.to_string (MDocument.Get.id (file # doc)) ]
+	[ IRepository.to_string rid ;
+	  IDocument.to_string (MDocument.Get.id (file # doc)) ]
      end)
   end files in
 
