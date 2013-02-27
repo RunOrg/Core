@@ -29,3 +29,5 @@
 | `DMS_Document_Forbidden_Title
 | `DMS_Document_Forbidden_Problem 
 | `DMS_Document_Forbidden_Solution
+
+| `DMS_Document_Admin_Title

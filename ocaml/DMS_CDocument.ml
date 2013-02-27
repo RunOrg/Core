@@ -7,6 +7,7 @@ open BatPervasives
 open DMS_CDocument_common 
 
 module Version = DMS_CDocument_version
+module Admin   = DMS_CDocument_admin
 
 let () = CClient.define Url.def_file begin fun access ->
   
