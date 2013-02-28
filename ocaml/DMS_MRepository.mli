@@ -2,10 +2,10 @@
 
 type 'relation t 
 
-module Vision : Ohm.Fmt.FMT with type t = [ `Normal | `Private of IAvatarSet.t list ]
-module Upload : Ohm.Fmt.FMT with type t = [ `Viewers | `List of IAvatar.t list ]
-module Remove : Ohm.Fmt.FMT with type t = [ `Free | `Restricted ]
-module Detail : Ohm.Fmt.FMT with type t = [ `Public | `Private ]
+module Vision : Ohm.Fmt.FMT with type t = [ `Normal  | `Private    of IAvatarSet.t list ]
+module Upload : Ohm.Fmt.FMT with type t = [ `Viewers | `List       of IAvatar.t list    ]
+module Remove : Ohm.Fmt.FMT with type t = [ `Free    | `Restricted                      ]
+module Detail : Ohm.Fmt.FMT with type t = [ `Public  | `Private                         ]
 
 module Can : sig
 

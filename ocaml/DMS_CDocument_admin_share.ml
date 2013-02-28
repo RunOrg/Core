@@ -87,7 +87,6 @@ let () = define Url.Doc.def_share begin fun parents rid doc access ->
   end in 
   
   O.Box.fill begin     
-    
     Asset_Admin_Page.render (object
       method parents = [ parents # home ; parents # admin ]
       method here = parents # share # title
