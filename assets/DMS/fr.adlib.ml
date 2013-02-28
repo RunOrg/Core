@@ -38,7 +38,7 @@
 
 | `DMS_Document_Share_Title -> "Partage"
 | `DMS_Document_Share_Link -> "Partage"
-| `DMS_Document_Share_Sub -> "Déterminer dans quelles autres bibliothèques apparaît ce document"
+| `DMS_Document_Share_Sub -> "Faire apparaître ce document dans d'autres bibliothèques"
 
 | `DMS_Document_Delete_Title -> "Supprimer"
 | `DMS_Document_Delete_Link -> "Supprimer"

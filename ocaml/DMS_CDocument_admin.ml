@@ -7,7 +7,9 @@ open BatPervasives
 open DMS_CDocument_common 
 open DMS_CDocument_admin_common
 
-module Edit = DMS_CDocument_admin_edit
+module Edit   = DMS_CDocument_admin_edit
+module Delete = DMS_CDocument_admin_delete
+module Share  = DMS_CDocument_admin_share
 
 let () = define Url.Doc.def_admin begin fun parents rid doc access ->
   O.Box.fill begin 
