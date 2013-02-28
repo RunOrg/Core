@@ -54,10 +54,25 @@ let () = CClient.define Url.def_see begin fun access ->
 		    [ IRepository.to_string rid ]))
   end in
 
+  let! admin = ohm begin 
+    let! _ = ohm_req_or (return None) (MRepository.Can.admin repo) in
+    return (Some (Action.url Url.Repo.admin (access # instance # key) 
+		    [ IRepository.to_string rid ]))
+  end in 
+
+  let tools = 
+    match upload, admin with
+      | None, None -> None 
+      | _ -> Some (object 
+	method admin = admin
+	method upload = upload
+      end) 
+  in
+
   O.Box.fill begin 
     Asset_DMS_Repository.render (object
       method name   = MRepository.Get.name repo 
-      method upload = upload
+      method tools  = tools
       method list   = render_files ~count:0 access repo more 
     end)
   end 
