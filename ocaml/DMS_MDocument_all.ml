@@ -51,3 +51,21 @@ let in_repository ?actor ?start ~count rid =
     return (list, next)
   end
 
+module CountByRepoView = CouchDB.ReduceView(struct
+  module Key    = IRepository
+  module Value  = Fmt.Int
+  module Design = E.Design
+  let name = "count_by_repo"
+  let map  = "for (var k = 0; k < doc.c.repos.length; ++k) 
+                emit(doc.c.repos[k],1)"
+  let reduce = "return sum(values);"
+  let level = None
+  let group = true
+end) 
+
+let count_in_repository rid = 
+  let rid = IRepository.decay rid in 
+  O.decay begin 
+    let! count = ohm_req_or (return 0) $ CountByRepoView.reduce rid in
+    return count
+  end

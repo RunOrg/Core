@@ -13,3 +13,8 @@ val in_repository :
   -> count:int
   -> [<`View|`Admin] DMS_IRepository.id 
   -> (#O.ctx, entry list * float option ) Ohm.Run.t
+
+val count_in_repository : 
+     [<`View|`Admin] DMS_IRepository.id
+  -> (#O.ctx, int) Ohm.Run.t
+
