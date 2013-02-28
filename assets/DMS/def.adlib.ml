@@ -15,6 +15,21 @@
 | `DMS_Repo_Upload_Viewers
 | `DMS_Repo_Upload_List 
 
+| `DMS_Repo_Admin_Link 
+| `DMS_Repo_Admin_Title
+
+| `DMS_Repo_Edit_Title
+| `DMS_Repo_Edit_Link
+| `DMS_Repo_Edit_Sub
+
+| `DMS_Repo_Uploaders_Title
+| `DMS_Repo_Uploaders_Link
+| `DMS_Repo_Uploaders_Sub
+
+| `DMS_Repo_Delete_Title
+| `DMS_Repo_Delete_Link
+| `DMS_Repo_Delete_Sub
+
 | `DMS_Field_Required
 
 | `DMS_Repo_Empty

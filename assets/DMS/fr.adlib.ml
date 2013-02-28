@@ -20,6 +20,21 @@
 | `DMS_Repo_Empty  -> "Aucun document dans cette bibliothèque"
 | `DMS_Repo_Upload -> "Nouveau document"
 
+| `DMS_Repo_Admin_Link -> "Administration"
+| `DMS_Repo_Admin_Title -> "Administration"
+
+| `DMS_Repo_Edit_Title -> "Modifier"
+| `DMS_Repo_Edit_Link -> "Modifier"
+| `DMS_Repo_Edit_Sub -> "Changer le nom de cette bibliothèque"
+
+| `DMS_Repo_Uploaders_Title -> "Contributeurs"
+| `DMS_Repo_Uploaders_Link -> "Contributeurs"
+| `DMS_Repo_Uploaders_Sub -> "Déterminer qui peut ajouter des documents à cette bibliothèque"
+
+| `DMS_Repo_Delete_Title -> "Supprimer"
+| `DMS_Repo_Delete_Link -> "Supprimer"
+| `DMS_Repo_Delete_Sub -> "Détruire cette bibliothèque et ses documents"
+
 | `DMS_NoUpload_Error -> "Impossible de créer un document."
 | `DMS_NoUpload_Explain -> "Vérifiez que vous disposez des droits requis et d'espace disque libre."
 | `DMS_NoUpload_Back -> "Retour"

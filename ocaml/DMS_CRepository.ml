@@ -9,6 +9,7 @@ open DMS_CRepository_common
 module Create = DMS_CRepository_create
 module See    = DMS_CRepository_see
 module Upload = DMS_CRepository_upload
+module Admin  = DMS_CRepository_admin
 
 let render_repos ?start ~count access self = 
 
