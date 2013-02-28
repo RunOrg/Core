@@ -7,6 +7,8 @@ open BatPervasives
 open DMS_CRepository_common 
 open DMS_CRepository_admin_common
 
+module Delete = DMS_CRepository_admin_delete
+
 let () = define Url.Repo.def_admin begin fun parents repo access ->
   O.Box.fill begin 
 

@@ -16,7 +16,7 @@ open Url.Repo
 let parents title key rid = object
   method home    = object
     method title = return title 
-    method url   = Action.url Url.file key [ IRepository.to_string rid ]	
+    method url   = Action.url Url.see key [ IRepository.to_string rid ]	
   end
   method admin     = make `DMS_Repo_Admin_Title     admin    key rid
   method edit      = make `DMS_Repo_Edit_Title      edit     key rid

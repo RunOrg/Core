@@ -30,6 +30,11 @@
 | `DMS_Repo_Delete_Link
 | `DMS_Repo_Delete_Sub
 
+| `DMS_Repo_Delete_Forbidden
+| `DMS_Repo_Delete_Warning
+| `DMS_Repo_Delete_Submit
+| `DMS_Repo_Delete_Cancel
+
 | `DMS_Field_Required
 
 | `DMS_Repo_Empty

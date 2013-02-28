@@ -35,6 +35,11 @@
 | `DMS_Repo_Delete_Link -> "Supprimer"
 | `DMS_Repo_Delete_Sub -> "Détruire cette bibliothèque et ses documents"
 
+| `DMS_Repo_Delete_Forbidden -> "Cette bibliothèque contient des documents, vous ne pouvez pas la supprimer."
+| `DMS_Repo_Delete_Warning -> "La suppression d'une bibliothèque est définitive."
+| `DMS_Repo_Delete_Submit -> "Supprimer"
+| `DMS_Repo_Delete_Cancel -> "Ne pas supprimer"
+
 | `DMS_NoUpload_Error -> "Impossible de créer un document."
 | `DMS_NoUpload_Explain -> "Vérifiez que vous disposez des droits requis et d'espace disque libre."
 | `DMS_NoUpload_Back -> "Retour"
