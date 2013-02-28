@@ -39,3 +39,11 @@
 | `DMS_Document_Edit_Name 
 | `DMS_Document_Edit_Required
 | `DMS_Document_Edit_Submit
+
+| `DMS_Document_Share_Title
+| `DMS_Document_Share_Link
+| `DMS_Document_Share_Sub
+
+| `DMS_Document_Delete_Title
+| `DMS_Document_Delete_Link
+| `DMS_Document_Delete_Sub

@@ -36,6 +36,14 @@
 | `DMS_Document_Edit_Link -> "Modifier"
 | `DMS_Document_Edit_Sub -> "Changer le nom et les méta-données de ce document"
 
+| `DMS_Document_Share_Title -> "Partage"
+| `DMS_Document_Share_Link -> "Partage"
+| `DMS_Document_Share_Sub -> "Déterminer dans quelles autres bibliothèques apparaît ce document"
+
+| `DMS_Document_Delete_Title -> "Supprimer"
+| `DMS_Document_Delete_Link -> "Supprimer"
+| `DMS_Document_Delete_Sub -> "Retirer le document de cette bibliothèque"
+
 | `DMS_Document_Edit_Name -> "Nom"
 | `DMS_Document_Edit_Required -> "Champ obligatoire"
 | `DMS_Document_Edit_Submit -> "Enregistrer"

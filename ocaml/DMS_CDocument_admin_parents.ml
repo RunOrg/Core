@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -23,5 +23,7 @@ let parents title key rid did = object
   end
   method admin    = make `DMS_Document_Admin_Title    admin    key rid did 
   method edit     = make `DMS_Document_Edit_Title     edit     key rid did 
+  method share    = make `DMS_Document_Share_Title    share    key rid did 
+  method delete   = make `DMS_Document_Delete_Title   delete   key rid did
 end
 

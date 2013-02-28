@@ -15,6 +15,8 @@ module Doc = struct
   let version, def_version = child def_file  "dms/doc/add-version"
   let admin,   def_admin   = child def_file  "dms/doc/admin"
   let edit,    def_edit    = child def_admin "dms/doc/edit"
+  let share,   def_share   = child def_admin "dms/doc/share"
+  let delete,  def_delete  = child def_admin "dms/doc/delete"
 
 end
 

@@ -21,6 +21,20 @@ let () = define Url.Doc.def_admin begin fun parents rid doc access ->
 	method subtitle = Some (AdLib.get `DMS_Document_Edit_Sub)
        end) ;
 
+      (object
+	method img = VIcon.Large.arrow_branch
+	method url = parents # share # url
+	method title = AdLib.get `DMS_Document_Share_Link
+	method subtitle = Some (AdLib.get `DMS_Document_Share_Sub)
+       end) ;
+
+      (object
+	method img = VIcon.Large.cross
+	method url = parents # delete # url
+	method title = AdLib.get `DMS_Document_Delete_Link
+	method subtitle = Some (AdLib.get `DMS_Document_Delete_Sub)
+       end) ;
+
     ] in
 
     Asset_Admin_Page.render (object
