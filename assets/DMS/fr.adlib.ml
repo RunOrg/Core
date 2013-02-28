@@ -49,3 +49,7 @@
 | `DMS_Document_Edit_Name -> "Nom"
 | `DMS_Document_Edit_Required -> "Champ obligatoire"
 | `DMS_Document_Edit_Submit -> "Enregistrer"
+
+| `DMS_Document_Delete_Warning -> "Ce document n'apparaîtra plus dans cette bibliothèque."
+| `DMS_Document_Delete_Submit -> "Supprimer"
+| `DMS_Document_Delete_Cancel -> "Ne pas supprimer"

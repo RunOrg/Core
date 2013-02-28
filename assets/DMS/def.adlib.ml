@@ -49,3 +49,7 @@
 | `DMS_Document_Delete_Title
 | `DMS_Document_Delete_Link
 | `DMS_Document_Delete_Sub
+
+| `DMS_Document_Delete_Warning
+| `DMS_Document_Delete_Submit
+| `DMS_Document_Delete_Cancel
