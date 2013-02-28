@@ -1,5 +1,7 @@
 | `DMS_Navbar -> "Documents"
 
+| `DMS_AJAX_Feedback -> "Enregistré !"
+
 | `DMS_Repos_Title -> "Bibliothèques de documents"
 | `DMS_Repos_Empty -> "Aucune bibliothèque disponible"
 

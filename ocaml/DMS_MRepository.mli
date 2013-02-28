@@ -9,10 +9,10 @@ module Detail : Ohm.Fmt.FMT with type t = [ `Public | `Private ]
 
 module Can : sig
 
-  val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t
-  val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t
-  val upload : [<`View|`Admin] t -> (#O.ctx,[`Upload] DMS_IRepository.id option) Ohm.Run.t
-  val remove : [<`View|`Admin] t -> (#O.ctx,[`Remove] DMS_IRepository.id option) Ohm.Run.t
+  val view   : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t
+  val admin  : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t
+  val upload : 'any t -> (#O.ctx,[`Upload] DMS_IRepository.id option) Ohm.Run.t
+  val remove : 'any t -> (#O.ctx,[`Remove] DMS_IRepository.id option) Ohm.Run.t
 
   val view_access    : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
   val admin_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t

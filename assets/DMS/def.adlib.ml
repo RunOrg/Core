@@ -1,5 +1,7 @@
 | `DMS_Navbar
 
+| `DMS_AJAX_Feedback
+
 | `DMS_Repos_Title 
 | `DMS_Repos_Empty
 
