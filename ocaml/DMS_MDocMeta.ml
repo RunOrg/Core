@@ -25,6 +25,7 @@ end
 let instance_field_model = MInstance.Registry.property PreConfig_DMS.Metadata.fmt "dms-metadata"
 
 let fields iid =
+  let  iid = IInstance.decay iid in 
   let! model = ohm $ MInstance.Registry.get iid instance_field_model in
   let  model = BatOption.default `Default model in
   return (PreConfig_DMS.metadata model)

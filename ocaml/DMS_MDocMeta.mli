@@ -19,7 +19,7 @@ module FieldType : sig
 end 
 
 val fields : 
-     IInstance.t
+     'any IInstance.id
   -> (#O.ctx, (Field.t * < label : O.i18n ; kind : FieldType.t >) list) Ohm.Run.t
 
 module Data : sig
