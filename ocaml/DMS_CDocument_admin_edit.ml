@@ -31,12 +31,12 @@ let show_metafield ~fieldkey ~fieldinfo =
 
   let seed_date s = 
     match Date.of_json_safe (seed s) with 
-      | Some d -> return (Date.to_iso8601 d)
+      | Some d -> return (Date.to_compact d)
       | None -> return ""
   in
   
   let parse_date _ s = 
-    match Date.of_iso8601 s with 
+    match Date.of_compact s with 
       | Some d -> return (Ok (Date.to_json d))
       | None -> return (Ok (Json.Null))
   in

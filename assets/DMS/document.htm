@@ -30,11 +30,22 @@
       </span>
     </div>
   {/?}
+
+  <dl class="-meta">
+    {#meta}
+      <dt>{label|ohm}</dt>
+      <dd>{value|ohm|esc}</dd>
+    {/#}
+  </dl>
+
 </div>
 
 <style>
 .DMS-document {
+
   .hastitle();
+
+  overflow: hidden;
 
   .-current {
 
@@ -73,6 +84,28 @@
       float: right;
     }
 
+  }
+
+  .-meta {
+    width : 450px;
+    float: right;
+
+    dt {
+      font-weight: bold;
+      color: #333;
+      font-size: 13px;
+    }
+
+    dd + dt {
+      margin-top: 8px;
+      border-top: 1px solid #DDD;
+      padding-top: 8px;
+    }
+
+    dd {
+      margin: 4px 0px 0 0;
+      font-size: 13px;
+    }
   }
 }
 </style>
