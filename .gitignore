@@ -1,0 +1,10 @@
+*~
+_build
+.ohm
+*.byte
+bot/supervise
+ocaml/gen
+ocaml/ohm
+ocaml/plugins
+portals/*
+www/*
