@@ -8,6 +8,14 @@ module Field : sig
   val of_string : string -> t
 end
 
+module FieldType : Ohm.Fmt.FMT with type t = 
+  [ `TextShort
+  | `TextLong
+  | `PickOne  of (string * TextOrAdlib.t) list
+  | `PickMany of (string * TextOrAdlib.t) list
+  | `Date
+  ]
+
 module Data : sig
   type t = (Field.t,Ohm.Json.t) BatPMap.t
 end

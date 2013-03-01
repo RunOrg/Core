@@ -10,6 +10,16 @@ module Field = struct
   let of_string = identity
 end
 
+module FieldType = Fmt.Make(struct
+  type json t = 
+    [ `TextShort
+    | `TextLong
+    | `PickOne  of (!string,TextOrAdlib.t) ListAssoc.t
+    | `PickMany of (!string,TextOrAdlib.t) ListAssoc.t 
+    | `Date
+    ]
+end)
+
 module Data = Fmt.Make(struct
   type t = (Field.t,Json.t) BatPMap.t
   let json_of_t t = 
