@@ -4,21 +4,32 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+(* Field management ----------------------------------------------------------------------------------------- *)
+
 module Field = struct
   type t = string
   let to_string = identity
   let of_string = identity
 end
 
-module FieldType = Fmt.Make(struct
-  type json t = 
+module FieldType = struct
+  type t = 
     [ `TextShort
     | `TextLong
-    | `PickOne  of (!string,TextOrAdlib.t) ListAssoc.t
-    | `PickMany of (!string,TextOrAdlib.t) ListAssoc.t 
+    | `PickOne  of (string * O.i18n) list
+    | `PickMany of (string * O.i18n) list
     | `Date
     ]
-end)
+end
+
+let instance_field_model = MInstance.Registry.property PreConfig_DMS.Metadata.fmt "dms-metadata"
+
+let fields iid =
+  let! model = ohm $ MInstance.Registry.get iid instance_field_model in
+  let  model = BatOption.default `Default model in
+  return (PreConfig_DMS.metadata model)
+  
+(* Metadata management -------------------------------------------------------------------------------------- *)
 
 module Data = Fmt.Make(struct
   type t = (Field.t,Json.t) BatPMap.t

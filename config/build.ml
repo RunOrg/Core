@@ -174,7 +174,6 @@ module Build = struct
     | `Viewers    -> "`Viewers"
     | `Managers   -> "`Managers"
 
-
   module ProfileForm = struct
 
     let name () = 
@@ -220,7 +219,7 @@ module Build = struct
 
     let fields () = 
       "let fields = function\n  | "
-      ^ String.concat "\n  | " (List.map form_fields (!profileForms))
+      ^ String.concat "\n  | " (List.map form_fields  (!profileForms))
 	
     let ml () = 
       name () 
@@ -518,26 +517,29 @@ module Build = struct
 	
   end
 
+  module DMS = DMS.Build
+
 end
 
 let build dir = 
-  let list = [
-    "preConfig_Adlibs.mli", Build.Adlibs.mli () ;
-    "preConfig_Adlibs.ml" , Build.Adlibs.ml  () ;
-    "preConfig_TemplateId_Events.ml", Build.TemplateId.Events.ml () ;
-    "preConfig_TemplateId_Groups.ml", Build.TemplateId.Groups.ml () ;
-    "preConfig_TemplateId.ml", Build.TemplateId.ml () ;
-    "preConfig_VerticalId.ml", Build.VerticalId.ml () ;
-    "preConfig_Template_Events.ml", Build.Template.Events.ml () ;  
-    "preConfig_Template_Groups.ml", Build.Template.Groups.ml () ;  
-    "preConfig_Template.ml", Build.Template.ml () ;
-    "preConfig_Vertical.ml", Build.Vertical.ml () ;
-    "preConfig_ProfileFormId.ml", Build.ProfileFormId.ml () ;
-    "preConfig_ProfileForm.ml", Build.ProfileForm.ml () ;
-  ] in
+  let list = Build.([
+    "Adlibs.mli", Adlibs.mli ;
+    "Adlibs.ml" , Adlibs.ml  ;
+    "TemplateId_Events.ml", TemplateId.Events.ml ;
+    "TemplateId_Groups.ml", TemplateId.Groups.ml ;
+    "TemplateId.ml", TemplateId.ml ;
+    "VerticalId.ml", VerticalId.ml ;
+    "Template_Events.ml", Template.Events.ml ;  
+    "Template_Groups.ml", Template.Groups.ml ;  
+    "Template.ml", Template.ml ;
+    "Vertical.ml", Vertical.ml ;
+    "ProfileFormId.ml", ProfileFormId.ml ;
+    "ProfileForm.ml", ProfileForm.ml ;
+    "DMS.ml", DMS.ml ; 
+  ]) in
   
   List.iter (fun (file,code) ->
-    let out = open_out_bin (Filename.concat dir file) in
-    output_string out code ;
+    let out = open_out_bin (Filename.concat dir ("preConfig_" ^ file)) in
+    output_string out (code ()) ;
     close_out out 
   ) list
