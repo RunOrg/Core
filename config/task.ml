@@ -44,7 +44,7 @@ module Process = struct
     [
     ]
 
-  let () = process "DMS_Respond" Context.dms States.short 
+  let () = process "DMS_Respond" Context.dms States.long 
     "Répondre à ce document"
     [ 
       Field.modeEnvoi ;
