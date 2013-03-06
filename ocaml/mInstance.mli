@@ -13,6 +13,8 @@ type t = <
   plugins : IPlugin.t list ; 
 > ;;
 
+module Registry : OhmCouchRegistry.REGISTRY with type id = IInstance.t
+
 module Profile : sig
 
   type t = <

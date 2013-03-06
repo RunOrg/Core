@@ -107,3 +107,13 @@ let delete_now fid =
 let item fid = 
   let   fid = IFile.decay fid in 
   Run.map (BatOption.bind (#item)) (Tbl.get fid) 
+
+(* Check that a file version is currently available for download *)
+
+let check fid version = 
+  let! file = ohm_req_or (return false) (Tbl.get (IFile.decay fid)) in
+  let  v    = MFile_common.string_of_version version in 
+  return (
+    try ignore (List.assoc v (file # versions)) ; true 
+    with Not_found -> false
+  ) 

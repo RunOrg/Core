@@ -6,3 +6,23 @@
 .asap() {
   font-family: "Asap", "Arial", sans-serif;
 }
+
+.ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.hastitle() {
+  h2 {
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    .ellipsis();
+  }
+  > .actions { 
+    float: right;
+    margin-left: 40px; 
+  }
+}

@@ -13,3 +13,5 @@ val public :
   -> cuid:ICurrentUser.t option
   -> MInstance.t
   -> Ohm.Html.writer O.run
+
+val registerPlugin : IPlugin.t -> (IWhite.key,string list) Ohm.Action.endpoint -> O.i18n -> unit

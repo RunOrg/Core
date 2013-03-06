@@ -118,6 +118,8 @@ let () =
 let () = 
   let upload (id,name,ext,size,fid) = 
 
+    let! id = req_or (return ()) id in
+
     let doc doc = object
       method author = doc # author
       method file   = fid

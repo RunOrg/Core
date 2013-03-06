@@ -1,0 +1,102 @@
+<div class="DMS-repository">
+  {?tools}
+    <ul class="actions">
+      {?admin}
+        <li class="-r">
+	  <a href="{this}" class="action-button -admin">
+	    { `DMS_Repo_Admin_Link }
+	  </a>
+        </li>
+      {/?}
+      {?upload}
+        <li class="-r">
+	  <a href="{this}" class="action-button -green">
+	    { `DMS_Repo_Upload }
+	  </a>
+        </li>
+      {/?}
+    </ul>
+  {/?}
+  <h2>{name}</h2>
+  <div class="-files">
+    {@!inner}
+      {#items}
+        <a class="-file" href="{url}">
+          <span class="-name">{name}</span>
+	  <span class="-version">v.{version|string_of_int|esc}</span>
+	  <span class="-date">{`DateRelative time}</span>
+	  {=author}
+  	    <span class="-author">
+  	      {?pico}<img src="{this}"/>{/?}
+	      {name}
+	    </span>
+	  {/=}
+	</a>
+      {else}
+        {?more}{else}
+          <div class="empty-list">
+  	  { `DMS_Repo_Empty }
+          </div>
+        {/?}
+      {/#}
+      {?more}     
+        { this | VMore.div | ohm }
+      {/?}
+    {/@}
+    {list|ohm}
+  </div>
+</div>
+
+<style>
+.DMS-repository {
+  .hastitle();
+
+  .-files {
+    border: 1px solid #BBB;
+  } 
+
+  .-file {
+
+    color: #111;
+    display: block;
+    overflow: hidden;
+    line-height: 32px;
+
+    > * {
+      float: left;
+    }
+    .-name {
+      .ellipsis();
+      width: 400px;
+      margin: 0 8px;
+    }
+    .-date, .-version {
+      width: 80px;
+      font-size: 12px;
+      color: #888;
+    }
+    .-date {
+      width: 150px;
+    }
+    .-author {
+      color: #555;
+      width: 200px;
+      .ellipsis();
+      font-size: 12px;
+      img {
+        margin-right: 8px;
+        height: 22px;
+        width: 22px;
+        vertical-align: middle;        
+      }
+    }
+    &:hover {
+      background-color: #EEE;
+    }
+  }
+
+  .-file + .-file {
+    border-top: 1px solid #CCC;
+  }
+}
+</style>

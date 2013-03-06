@@ -3,7 +3,7 @@
 module Signals : sig
   val on_item_img_upload : (IItem.t, unit O.run) Ohm.Sig.channel
   val on_item_doc_upload :
-    (IItem.t * string * MFile_extension.t * float * IFile.t, unit O.run) Ohm.Sig.channel
+    (IItem.t option * string * MFile_extension.t * float * IFile.t, unit O.run) Ohm.Sig.channel
 end
 
 val prepare_pic : 
@@ -24,7 +24,8 @@ val prepare_img :
 val prepare_doc :
      ins:[ `Upload ] IInstance.id
   -> usr:'a IUser.id
-  -> item:[`Created] IItem.id
+  -> ?item:[`Created] IItem.id
+  -> unit 
   -> [ `PutDoc ] IFile.id option O.run
 
 val configure :

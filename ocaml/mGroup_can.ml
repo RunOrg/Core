@@ -13,13 +13,14 @@ include HEntity.Can(struct
 
   let deleted e = e.E.del <> None
   let iid     e = e.E.iid
-  let admin   e = [ `Admin ; e.E.admins ]
+  let admin   e = return [ `Admin ; e.E.admins ]
 
   let view e = 
     match e.E.vision with 
-      | `Public  -> [ `Contact ]
-      | `Normal  -> [ `Token   ]
-      | `Private -> `Groups (`Any,[ e.E.gid ]) :: admin e
+      | `Public  -> return [ `Contact ]
+      | `Normal  -> return [ `Token   ]
+      | `Private -> let! admin = ohm (admin e) in
+		    return (`Groups (`Any,[ e.E.gid ]) :: admin)
 	
   let id_view  id = IGroup.Assert.view id
   let id_admin id = IGroup.Assert.admin id 
@@ -30,4 +31,5 @@ include HEntity.Can(struct
 end)
 
 let member_access t = 
-  `Groups (`Validated,[ (data t).E.gid ]) :: admin_access t
+  let! admin = ohm (admin_access t) in
+  return (`Groups (`Validated,[ (data t).E.gid ]) :: admin)

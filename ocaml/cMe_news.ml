@@ -27,9 +27,7 @@ let render_item access itid =
       | `MiniPoll p -> Some (p # text)
       | `Message m -> Some (m # text)
       | `Image _ 
-      | `Doc _
-      | `Chat _
-      | `ChatReq _ -> None 
+      | `Doc _ -> None 
   end in 
 
   let! url = ohm_req_or none begin 
