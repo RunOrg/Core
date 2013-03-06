@@ -136,7 +136,7 @@ refresh = ->
   [id,proof] = $p.val().split("/")
   return if !id || !proof 
   $i = $p.next().addClass("-loading")
-  success (data) -> 
+  success = (data) -> 
     return if id != $p.val().split("/")[0] 
     return setTimeout refresh, 1000 if !data.large
     $i.find(".-l").attr("src",data.large)

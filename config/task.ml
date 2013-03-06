@@ -35,6 +35,10 @@ module Field = struct
     (adlib "Task_Field_DocSendDate" "Date d'envoi")
     `Date
 
+  let replyDocRef = field "ReplyDocRef"
+    (adlib "Task_Field_ReplyDocRef" "Référence de la réponse")
+    `TextShort
+
 end
 
 module Process = struct
@@ -49,6 +53,7 @@ module Process = struct
     [ 
       Field.modeEnvoi ;
       Field.dateExpedition ;
+      Field.replyDocRef ;
     ]
 
 end
