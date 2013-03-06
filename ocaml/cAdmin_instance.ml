@@ -29,7 +29,6 @@ let () = UrlAdmin.def_mksearch $ admin_only begin fun cuid req res ->
       ~twitter:(p # twitter)
       ~tags:(p # tags)
       ~visible:true
-      ~rss:(List.map fst (p # pub_rss))
       ~owners:(BatOption.default [] (p # unbound))
     in
 
