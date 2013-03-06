@@ -113,12 +113,15 @@ let the_catalog  = ref []
 let profileForms = ref []
 let verticals    = ref []
 let templates    = ref []
-let adlibs       = ref [] 
+let adlibs       = Hashtbl.create 100  
 
 let adlib key ?(old:string option) (fr:string) = 
   let key = match key.[0] with '0' .. '9' -> "_" ^ key | _ -> key in
-  try ignore (List.assoc key !adlibs) ; key
-  with Not_found ->  adlibs := (key, (old,fr)) :: !adlibs ; key
+  try let _, prevfr = Hashtbl.find adlibs key in 
+      if prevfr > fr then raise 
+	(Failure (Printf.sprintf "%s : collision %S <> %S" key fr prevfr))
+      else key 
+  with Not_found -> Hashtbl.add adlibs key (old,fr) ; key
 
 let groupConfig ~validation ~read = validation, read
 let wallConfig ~read ~post = read, post
