@@ -6,26 +6,29 @@ module Build = struct
 
   module Adlibs = struct
 
+    let adlib_map f = 
+      Hashtbl.fold (fun k v l -> f k v :: l) adlibs []
+
     let mli () =
       "include Ohm.Fmt.FMT with type t = \n  [ "
-      ^ String.concat "\n  | " (List.map (fun (key,_) -> "`" ^ key) (!adlibs))
+      ^ String.concat "\n  | " (adlib_map (fun key _ -> "`" ^ key))
       ^ " ]\n\nval fr : t -> string\n\nval recover: string -> t option\n"
 	
     let format () = 
       "include Ohm.Fmt.Make(struct \n  type json t =\n    [ "
-      ^ String.concat "\n    | " (List.map (fun (key,_) -> "`" ^ key) (!adlibs))
+      ^ String.concat "\n    | " (adlib_map (fun key _ -> "`" ^ key))
       ^ " ]\nend)"
 
     let fr () = 
       "let fr = function "
-      ^ String.concat "" (List.map (fun (key,(_,value)) -> 
-	Printf.sprintf "\n  | `%s -> %S" key value) (!adlibs))      
+      ^ String.concat "" (adlib_map (fun key (_,value) -> 
+	Printf.sprintf "\n  | `%s -> %S" key value))
 
     let recover () = 
       "let recover = function"
-      ^ String.concat "" (List.map (fun (key,(old,_)) -> 
+      ^ String.concat "" (adlib_map (fun key (old,_) -> 
 	match old with None -> "" | Some old -> 
-	  Printf.sprintf "\n  | %S -> Some `%s" old key) (!adlibs))
+	  Printf.sprintf "\n  | %S -> Some `%s" old key))
       ^ "\n  | _ -> None\n"
 	
     let ml () = 
