@@ -13,8 +13,8 @@ include HEntity.Can(struct
 
   let deleted e = e.D.del <> None
   let iid     e = e.D.iid
-  let admin   e = [ `Admin ; `List [ e.D.crea ] ] 
-  let view    e = `Groups (`Validated,e.D.gids) :: admin e
+  let admin   e = return [ `Admin ; `List [ e.D.crea ] ] 
+  let view    e = let! admin = ohm (admin e) in return (`Groups (`Validated,e.D.gids) :: admin)
   let public  e = false
 
   let id_view  id = IDiscussion.Assert.view id

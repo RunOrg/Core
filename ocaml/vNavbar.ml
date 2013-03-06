@@ -107,6 +107,10 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
     method asso      = asso
   end)
 
+let plugins = ref []
+let registerPlugin id url label = 
+  plugins := (id, url, label) :: !plugins
+
 let intranet (owid,cuid,iid) = 
 
   let menu hasPlugin key = 
@@ -114,14 +118,14 @@ let intranet (owid,cuid,iid) =
       method url = url
       method sel = false 
       method label = AdLib.write label
-    end)) (BatList.filter_map identity [
-      Some (Action.url UrlClient.Inbox.home    key [], `PageLayout_Navbar_Home) ;
-      Some (Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members) ;
-      Some (Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events) ;
-      ( if hasPlugin `DMS then 
-	  Some (Action.url DMS.Url.home key [], `DMS_Navbar) 
-	else None ) ;
-    ])
+    end)) begin
+         (Action.url UrlClient.Inbox.home   key [], `PageLayout_Navbar_Home) 
+      :: (Action.url UrlClient.Members.home key [], `PageLayout_Navbar_Members)
+      :: (Action.url UrlClient.Events.home  key [], `PageLayout_Navbar_Events) 
+      :: BatList.filter_map 
+	(fun (id, url, label) -> if hasPlugin id then Some (Action.url url key [], label) else None) 
+	!plugins
+    end
   in
   
   render ~public:false ~menu (owid,cuid,iid) 

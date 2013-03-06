@@ -72,9 +72,9 @@ let prepare_img ~ins ~usr ~item =
   prepare_if_allowed ~iid:ins
     ~prepare:(_do_prepare ~lift:IFile.Assert.put_img ~usr ~iid:ins ~item ())
 
-let prepare_doc ~ins ~usr ~item = 
+let prepare_doc ~ins ~usr ?item () = 
   prepare_if_allowed ~iid:ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_doc ~usr ~iid:ins ~item ())
+    ~prepare:(_do_prepare ~lift:IFile.Assert.put_doc ~usr ~iid:ins ?item ())
 
 let configure id ?filename ~redirect = 
   ConfigS3.upload 
@@ -419,31 +419,24 @@ let define_async_confirmer ~kind ~name ~process =
     let! () = ohm $ process id in
 
     let! file = ohm_req_or fail $ Tbl.get id in
-    let! item = req_or success (file # item) in
 
-    let! () = ohm begin
-      match file # k with 
-
-	| `Image -> 
-	  Signals.on_item_img_upload_call item
-
-	| `Doc -> 
-	  
-	  let! name = req_or (return ()) (file # name) in
-	  let ext = MFile_extension.extension_of_file name in
-	 
-	  let size =
-	    match file # versions with 
-	      | []            -> 0.
-	      | (_,info) :: _ -> info # size
-	  in
-
-	  Signals.on_item_doc_upload_call (item, name, ext, size, id) 
-
-	| _ -> return ()
-    end in 
-
-    success
+    match file # k with 
+	
+      | `Image -> let! item = req_or success (file # item) in
+		  Signals.on_item_img_upload_call item
+		    
+      | `Doc -> let! name = req_or success (file # name) in
+		let ext = MFile_extension.extension_of_file name in
+		
+		let size =
+		  match file # versions with 
+		    | []            -> 0.
+		    | (_,info) :: _ -> info # size
+		in
+		
+		Signals.on_item_doc_upload_call (file # item, name, ext, size, id) 
+		  
+      | _ -> success
 
   end in
   fun id -> task (IFile.decay id) 

@@ -32,7 +32,7 @@ type 'relation t =
       admin : bool O.run ;
     }
 
-let nil _ = `Nobody 
+let nil _ = return `Nobody 
 
 let _make actor id data = 
   let owner = Run.memo begin
@@ -45,9 +45,18 @@ let _make actor id data =
   {
     id    = id ;
     data  = data ;
-    read  = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
-    write = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
+    read  = ( let! f = ohm owner in 
+	      let! read = ohm (f `Read) in
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ read ; write ; manage ] ) ;
+    write = ( let! f = ohm owner in 
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ write ; manage ] ) ;
+    admin = ( let! f = ohm owner in 
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)

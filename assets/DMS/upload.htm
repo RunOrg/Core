@@ -1,0 +1,44 @@
+<div class="overlaid-box DMS-upload">
+  <div class="-inner">
+    <iframe {$i} src="{upload}">
+    </iframe>
+    <div {$l} style="display:none" class="loading">
+    </div>
+  </div>
+</div>
+
+<style>
+.DMS-upload {
+  width: 410px;
+  iframe, div.loading {
+    width: 406px;
+    height: 121px;
+    border: none;
+    margin: -16px;
+  }
+}
+</style>
+
+<script type="back:string,peek:json">
+
+cancel = ->
+  document.location = back
+
+refresh = ->
+  to_endpoint peek, null, (data) ->
+    if "url" of data   
+      document.location = data.url
+    else
+      setTimeout refresh, 1000
+
+$i = here.$i
+$i.load ->
+  location = $i.contents().get(0).location.href
+  if /cancel/.test location
+    document.location = back
+  if /confirm/.test location
+    $i.hide()
+    here.$l.show() 
+    do refresh
+
+</script>

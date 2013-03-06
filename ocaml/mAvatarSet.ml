@@ -54,7 +54,7 @@ type 'relation t = {
 
 let owner ( data : data ) = 
   Run.memo begin
-    let  nil    = (fun _ -> `Nobody) in
+    let  nil    = (fun _ -> return `Nobody) in
     match data # owner with 
       | `Group  gid -> let! group = ohm_req_or (return nil) $ MGroup.get gid in 
 		       return (fun what -> MGroup.Satellite.access group (`Group what))
@@ -67,15 +67,29 @@ let _relation_of_data actor id (data : data) =
   {
     id    = id ;
     data  = data ;
-    view  = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
-    edit  = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
-    managers = ( let! f = ohm owner in return (`Union [ f `Write ; f `Manage ]) )
+    view  = ( let! f = ohm owner in 
+	      let! read = ohm (f `Read) in
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ read ; write ; manage ] ) ;
+    edit  = ( let! f = ohm owner in 
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ write ; manage ] ) ;
+    admin = ( let! f = ohm owner in 
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ manage ] ) ;
+    managers = ( let! f = ohm owner in 
+		 let! write = ohm (f `Write) in
+		 let! manage = ohm (f `Manage) in
+		 return (`Union [ write ; manage ]) )
   }
 
 let managers_of_data (data:data) = 
   let! f = ohm $ owner data in 
-  return (`Union [ f `Write ; f `Manage ])  
+  let! write = ohm (f `Write) in
+  let! manage = ohm (f `Manage) in
+  return (`Union [ write ; manage ]) 
 
 let create asid iid owner = 
 

@@ -39,8 +39,10 @@ module type CAN = sig
   val id   : 'any t -> 'any id
   val data : 'any t -> core
 
-  val view_access   : 'any t -> MAccess.t list
-  val admin_access  : 'any t -> MAccess.t list 
+  val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t 
+
+  val view_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val admin_access  : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t 
     
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
@@ -54,8 +56,8 @@ module type CAN_ARG = sig
   type 'a id
   val deleted : core -> bool
   val iid : core -> IInstance.t
-  val admin : core -> MAccess.t list 
-  val view : core -> MAccess.t list 
+  val admin : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val view : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
   val id_view  : 'a id -> [`View] id
   val id_admin : 'a id -> [`Admin] id 
   val decay : 'a id -> [`Unknown] id 
@@ -69,12 +71,14 @@ module Can : functor(C:CAN_ARG) -> CAN with type core = C.core and type 'a id = 
 module type SET = sig
   type 'a can  
   type diff 
+  type 'a id 
   type ('a,'ctx) t = [`Admin] can -> 'a MActor.t -> ('ctx,unit) Ohm.Run.t
   val update : diff list -> ('any,#O.ctx) t
+  val raw : diff list -> 'a id -> 'b MActor.t -> (#O.ctx,unit) Ohm.Run.t 
 end
 
 module Set : functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id) ->
-  SET with type 'a can = 'a C.t and type diff = S.diff
+  SET with type 'a can = 'a C.t and type diff = S.diff and type 'a id = 'a C.id
 
 (* Load ("get") module -------------------------------------------------------------------------------------- *)
 

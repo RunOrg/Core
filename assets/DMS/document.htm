@@ -1,0 +1,111 @@
+<div class="DMS-document">
+  {?admin}
+    <ul class="actions">
+      <li class="-r">
+	<a href="{edit}" class="action-button -admin">
+	  { `DMS_Document_Edit }
+	</a>
+      </li>
+      <li class="-r">
+	<a href="{add}" class="action-button -green">
+	  { `DMS_Document_AddVersion }
+	</a>
+      </li>
+    </ul>
+  {/?}
+  <h2>{name}</h2>
+  {?current}
+    <div class="-current" style="background-image:url({icon})">
+      <a href="{url}" class="-name">{filename}</a>
+      <span class="-version">v.{version|string_of_int|esc}</span>
+      <span class="-date">{`DateRelative time}</span>
+      <a href="{url}" class="action-button">
+	{ `DMS_Document_Download }
+      </a>
+      <span class="-author">
+	{=author}
+  	  {?pico}<img src="{this}"/>{/?}
+	  {name}
+	{/=}
+      </span>
+    </div>
+  {/?}
+
+  <dl class="-meta">
+    {#meta}
+      <dt>{label|ohm}</dt>
+      <dd>{value|ohm|esc}</dd>
+    {/#}
+  </dl>
+
+</div>
+
+<style>
+.DMS-document {
+
+  .hastitle();
+
+  overflow: hidden;
+
+  .-current {
+
+    background: url("/") 20px center no-repeat #EEE;
+    padding: 10px 30px 10px 50px;
+    line-height: 36px;
+    height: 36px;
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+
+    > span, .-name {
+      float: left;
+      .ellipsis();
+    }
+
+    > span {
+      font-size: 12px;
+      color: #666;
+    }
+ 
+    .-name { width: 300px; }
+    .-version { width: 80px; }
+    .-date { width: 120px; }
+    .-author { float: none; }
+    
+    img { 
+      vertical-align: middle;
+      width: 22px; 
+      height: 22px; 
+      margin-right: 8px; 
+    }
+
+    .action-button {
+      line-height: 22px;
+      height: 22px;
+      float: right;
+    }
+
+  }
+
+  .-meta {
+    width : 450px;
+    float: right;
+
+    dt {
+      font-weight: bold;
+      color: #333;
+      font-size: 13px;
+    }
+
+    dd + dt {
+      margin-top: 8px;
+      border-top: 1px solid #DDD;
+      padding-top: 8px;
+    }
+
+    dd {
+      margin: 4px 0px 0 0;
+      font-size: 13px;
+    }
+  }
+}
+</style>

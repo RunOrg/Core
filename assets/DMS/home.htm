@@ -1,0 +1,68 @@
+<div class="DMS-home">
+  {?create}
+  <ul class="actions">
+    <li class="-r">
+      <a href="{this}" class="action-button -admin">
+	{`DMS_NewRepo_Link}
+      </a>
+    </li>
+  </ul>
+  {/?}
+
+  <h2>{ `DMS_Repos_Title }</h2>
+
+  <div class="-list">
+    {@!inner}
+      {#items}
+        <a class="-repo" href="{url}">
+          <span class="-name">{name}</span>
+	  {if secret}<span class="status -secret">{`Status_Secret}</span>{/if}
+      {else}
+        {?more}{else}
+          <div class="empty-list">
+  	  { `DMS_Repos_Empty }
+          </div>
+        {/?}
+      {/#}
+      {?more}     
+        { this | VMore.div | ohm }
+      {/?}
+    {/@}
+    {list|ohm}
+  </div>
+</div>
+
+<style>
+.DMS-home {
+
+  .hastitle();
+
+  .-list {
+    min-height: 50px;
+    margin-bottom: 30px;
+  }
+
+  .-repo {
+    display: block;
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    margin-bottom: -1px;
+    color: #111;
+    padding: 4px 8px;
+    height: 30px;
+    line-height: 30px;
+    .-name { 
+      float: left; 
+      width: 500px;
+      .ellipsis();
+    }    
+    .status { 
+      float: right; 
+      margin-top: 7px;
+    }
+    &:hover {
+      background-color: #EEE;
+    }
+  } 
+}
+</style>
