@@ -94,10 +94,10 @@ let kind = function
 
 let fields () =
   String.concat "" (List.map begin fun f ->
-    "  let " ^ String.uncapitalize f.f_name ^ " = object\n"
+    Printf.sprintf "  let %s = %S, (object\n" (String.uncapitalize f.f_name) f.f_name
     ^ "    method label = `PreConfig `" ^ f.f_label ^ "\n"
     ^ "    method kind  = " ^ (kind f.f_type) ^ "\n"
-    ^ "  end\n"
+    ^ "  end)\n"
   end (!fields))
       
 let ml () = 
