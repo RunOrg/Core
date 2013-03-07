@@ -2,6 +2,7 @@
 
 module IRepository = DMS_IRepository
 module IDocument = DMS_IDocument
+module IDocTask = DMS_IDocTask
 module MRepository = DMS_MRepository
 module MDocument = DMS_MDocument
 module MDocMeta = DMS_MDocMeta
