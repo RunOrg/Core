@@ -1,17 +1,28 @@
 (* © 2013 RunOrg *)
 
+open Ohm
+open Ohm.Universal
+open BatPervasives
+
 type 'relation t = unit
 
 type state = Ohm.Json.t
 
-type fieldinfo = <
-  label : O.i18n ;
-  kind  : [ `TextShort  
-	  | `TextLong
-	  | `Date
-	  | `PickOne of (string * O.i18n) list
-	  | `PickMany of (string * O.i18n) list ]
-> ;;
+module Field = struct
+  type t = string
+  let to_string = identity
+  let of_string = identity
+end
+
+module FieldType = struct
+  type t = 
+    [ `TextShort
+    | `TextLong
+    | `PickOne  of (string * O.i18n) list
+    | `PickMany of (string * O.i18n) list
+    | `Date
+    ]
+end
 
 module All = struct
   let by_document _ = assert false

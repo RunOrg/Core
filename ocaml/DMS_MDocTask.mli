@@ -4,14 +4,21 @@ type 'relation t
 
 type state = Ohm.Json.t
 
-type fieldinfo = <
-  label : O.i18n ;
-  kind  : [ `TextShort  
-	  | `TextLong
-	  | `Date
-	  | `PickOne of (string * O.i18n) list
-	  | `PickMany of (string * O.i18n) list ]
-> ;;
+module Field : sig
+  type t 
+  val to_string : t -> string
+  val of_string : string -> t
+end
+
+module FieldType : sig 
+  type t = 
+    [ `TextShort
+    | `TextLong
+    | `PickOne  of (string * O.i18n) list
+    | `PickMany of (string * O.i18n) list
+    | `Date
+    ]
+end 
 
 module All : sig
   val by_document : [`View] DMS_IDocument.id -> (#O.ctx,[`View] DMS_IDocTask.id list) Ohm.Run.t
@@ -32,13 +39,13 @@ module Get : sig
   (* Helper functions *)
   val theState : [`View] t -> state * IAvatar.t * float
   val finished : [`View] t -> bool 
-  val fields   :    'any t -> (string * fieldinfo) list
+  val fields   :    'any t -> (Field.t * < label : O.i18n ; kind : FieldType.t >) list
   val states   :    'any t -> (state * O.i18n) list 
 end
 
 module Set : sig
   val state    : [`View] t -> state                         -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
-  val data     : [`View] t -> (string,Ohm.Json.t) BatPMap.t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
+  val data     : [`View] t -> (Field.t,Ohm.Json.t) BatPMap.t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
   val assignee : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
   val addCC    : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
   val delCC    : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
