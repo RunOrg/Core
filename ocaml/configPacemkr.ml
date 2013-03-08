@@ -39,22 +39,26 @@ let send ~nature ?alert id format =
 
 let every duration f = 
   let last = ref 0. in
+  let count = ref 0 in
   fun arg ->
+    incr count ; 
     let now = Unix.gettimeofday () in
     let diff = now -. !last in 
-    if diff > duration then ( last := now ; f arg diff ) 
+    if diff > duration then ( 
+      last := now ; 
+      f arg (float_of_int !count *. 60. /. diff) ; 
+      count := 0
+    ) 
 
 (* The web site heartbeat *)
 
 let () = 
-  let count = ref 0 in
-  let render = every 60. begin fun (mode,url) duration -> 
-    let () = send ~nature:"Web Server Instances" ~alert:10 "#$pid"
-      "%s %s (%.2f / minute)" mode url (float_of_int !count *. 60. /. duration) in
-    count := 0 ; 
+  let render = every 60. begin fun (mode,url) freq -> 
+    send ~nature:"Web Server Instances" ~alert:10 "#$pid"
+      "%s %s (%.2f / minute)" mode url freq 
   end in  
   let! info = Sig.listen O.on_action in
-  return (incr count ; render info) 
+  return (render info) 
 
 (* The actual bot heartbeat *)
 
