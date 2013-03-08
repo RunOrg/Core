@@ -7,4 +7,4 @@ type action =
   | `Folder of [ `Manage | `Read | `Write ]
   ]
     
-val access : 'any MEvent_can.t -> action -> MAccess.t
+val access : 'any MEvent_can.t -> action -> (#O.ctx,MAccess.t) Ohm.Run.t

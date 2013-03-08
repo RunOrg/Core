@@ -13,6 +13,8 @@ type t = <
   plugins : IPlugin.t list ; 
 > ;;
 
+module Registry : OhmCouchRegistry.REGISTRY with type id = IInstance.t
+
 module Profile : sig
 
   type t = <
@@ -30,7 +32,6 @@ module Profile : sig
     pic      : [`GetPic] IFile.id option ;
     search   : bool ;
     unbound  : IUser.t list option ;
-    pub_rss  : ( string * IPolling.RSS.t ) list 
   > ;;
 
   type search = [`WORD of string | `TAG of string]
@@ -49,9 +50,7 @@ module Profile : sig
   val tag_stats : IWhite.t option -> (string * int) list O.run
 
   val can_install : t -> [`Old] ICurrentUser.id -> [`CanInstall] IInstance.id option
-
-  val by_rss : IPolling.RSS.t -> IInstance.t list O.run
-
+    
   module Backdoor : sig
 
     val count : unit -> int O.run
@@ -70,7 +69,6 @@ module Profile : sig
       -> twitter:string option
       -> tags:string list
       -> visible:bool
-      -> rss:string list
       -> owners:IUser.t list
       -> unit O.run
 

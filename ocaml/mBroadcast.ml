@@ -94,43 +94,6 @@ let generic_post iid aid time content =
 let post iid aid content = 
   generic_post iid (Some aid) (Unix.gettimeofday ()) content
 
-(* Post a brand new RSS broadcast ----------------------------------------------------------- *)
-
-module RssUniqueDB = CouchDB.Convenience.Database(struct let db = O.db "broadcast-rss-u" end)
-module RssUnique = OhmCouchUnique.Make(RssUniqueDB)
-
-let rss_unique_key iid link = 
-  IInstance.to_string iid ^ Netencoding.Url.encode link
-
-let rss_not_seen_yet iid link = 
-  let  id  = Id.gen () in
-  let! id' = ohm $ RssUnique.lock (rss_unique_key iid link) id in
-  return (id = id')
-
-let _ = 
-  Sig.listen MPolling.RSS.Signals.update begin fun (rss_id,content) -> 
-    let! list = ohm $ MInstance.Profile.by_rss rss_id in
-    if list = [] then return false else 
-      let! _ = ohm $ Run.list_map begin fun iid -> 
-	Run.list_map begin fun item -> 
-	  let link = item.MPolling.RSS.link in
-	  Util.log "Processing item [%s]" link ;
-	  let! can_post = ohm $ rss_not_seen_yet iid link in 
-	  if can_post then 
-	    let content = `RSS MPolling.RSS.(object
-	      method body  = item.body
-	      method title = item.title
-	      method link  = link
-	    end) in
-	    let! _ = ohm $ generic_post iid None item.MPolling.RSS.time content in
-	    return () 
-	  else
-	    return ()
-	end content
-      end list in 
-      return true
-  end
-
 (* Keeping track of forwards. -------------------------------------------------------------- *)
 
 module ForwardsCountView = CouchDB.ReduceView(struct

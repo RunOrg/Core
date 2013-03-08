@@ -74,6 +74,7 @@ let doc actor folder =
     ~ins:instance
     ~usr:(IUser.Deduce.is_anyone user)
     ~item:itid
+    ()
   in
 
   (* Prepare item contents *)

@@ -4,9 +4,11 @@ open Ohm
 open BatPervasives
 
 module Actions = struct
+
+  (* High-level action tasks *)
   open MDo
-  open MErrorAudit
-  open MNews
+
+  (* Active controllers *)
   open CAvatarExport
   open CDiscussion
   open CExport
@@ -27,7 +29,16 @@ module Actions = struct
   open CHelp
   open CSearch
   open CInbox
+
+  (* Standalone splash page *)
   open Splash
+
+  (* Plugins *)
+  open DMS
+
+  (* Pacemaker *)
+  open ConfigPacemkr
+
 end
 
 module Main = Ohm.Main.Make(O.Reset)

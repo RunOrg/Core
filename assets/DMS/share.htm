@@ -1,0 +1,83 @@
+<div {$l} class="DMS-share">
+  {@!inner}
+    <div {$i}>
+      {#items}
+        <label class="-new {if share}-share{/if}{if allowed} -allowed{/if}" href="javascript:void(0)">
+	  <input type="checkbox" 
+		 {if allowed}{else}disabled="disabled"{/if}
+		 {if share}{else}checked="checked"{/if}
+		 name="{id}"/>
+          <span class="-name">{name}</span>	
+	  <span class="-ok">{`DMS_AJAX_Feedback}</span>
+        </label>
+      {/#}
+      {?more}     
+        { this | VMore.div | ohm }
+      {/?}
+    </div>
+    <script>
+post = here.$i.closest(".DMS-share").data("post")
+here.$i.find("input").change -> 
+  $t = $ @
+  $l = $t.closest "label"
+  $t.attr "readonly", true 
+  $l.css {opacity:0.5}
+  share = $t.is ":checked"
+  id    = $t.attr "name"   
+  to_endpoint post, {id:id,share:share}, (data) ->
+    $t.attr {readonly:false,disabled:!data.allowed,checked:!data.share }
+    $l.css({opacity:1}).toggleClass("-share", data.share).toggleClass("-allowed", data.allowed)
+    $l.find(".-ok").show().fadeOut(2000)
+    </script>
+  {/@}
+  {list|ohm}
+</div>
+
+<script type="post:json">
+here.$l.data("post", post) 
+</script>
+
+<style>
+.DMS-share {
+
+  margin: 20px;
+  border: 1px solid #BBB;
+  background-color: #FFF;
+  color: #333;
+
+  label {
+    display: block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 20px;
+    input {   
+      margin: 0 4px 2px;
+      vertical-align: middle; 
+    }
+    background-color: #DFD;
+    &.-share {
+      background-color: #FFF;  
+    }
+  }
+
+  .-ok { 
+    float: right;
+    display: none; 
+    background-color: #2A2;
+    background: -webkit-linear-gradient(top, #4C4 0%, #2A2 100%);
+    background: -moz-linear-gradient(top, #4C4 0%, #2A2 100%);
+    color: white;
+    text-shadow: 0 -1px 0 #080;
+    border: 1px solid #080;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  label + label {
+    border-top: 1px solid #DDD;
+  }
+
+}
+</style>
