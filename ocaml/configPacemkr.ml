@@ -63,13 +63,16 @@ let () =
 
 (* The actual bot heartbeat *)
 
-let () = 
+let () =
+  let render = every 300. begin fun stats _ -> 
+    send ~nature:"Async Bot" ~alert:10 "#$pid" 
+      "Running: %d ; pending : %d ; failed : %d"
+      (stats # running) (stats # pending) (stats # failed) 
+  end in
   O.async # periodic 1 begin 
     let! () = ohm $ return () in
     let! stats = ohm $ O.async # stats in 
-    let () = send ~nature:"Async Bot" ~alert:10 "#$pid" 
-      "Running: %d ; pending : %d ; failed : %d"
-      (stats # running) (stats # pending) (stats # failed) in
+    let  () = render stats in 
     return (Some 300.)
   end
 
