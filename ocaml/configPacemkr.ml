@@ -8,7 +8,7 @@ let url =
   "http://pacemkr.com/beat/5BlLq0012Kc/11115e777259e9a6f5ff142ed8041d46"
 
 let active = 
-  true (* O.env = `Prod *)
+  O.environment = `Prod
 
 let replace str pat repl = 
   String.concat repl (BatString.nsplit str pat)
@@ -33,8 +33,9 @@ let send ~nature ?alert id format =
       "minimum", Json.Int 1 ;
     ] in
     let payload = Json.serialize (Json.Array [json]) in 
-    let _ = Http_client.Convenience.http_post url ["json", payload] in
-    () 
+    if active then 
+      let _ = Http_client.Convenience.http_post url ["json", payload] in
+      () 
   end format
 
 let every duration f = 
@@ -63,13 +64,12 @@ let () =
 (* The actual bot heartbeat *)
 
 let () = 
-  if active then 
-    O.async # periodic 1 begin 
-      let! () = ohm $ return () in
-      let! stats = ohm $ O.async # stats in 
-      let () = send ~nature:"Async Bot" ~alert:10 "#$pid" 
-	"Running: %d ; pending : %d ; failed : %d"
-	(stats # running) (stats # pending) (stats # failed) in
-      return (Some 300.)
-    end
+  O.async # periodic 1 begin 
+    let! () = ohm $ return () in
+    let! stats = ohm $ O.async # stats in 
+    let () = send ~nature:"Async Bot" ~alert:10 "#$pid" 
+      "Running: %d ; pending : %d ; failed : %d"
+      (stats # running) (stats # pending) (stats # failed) in
+    return (Some 300.)
+  end
 
