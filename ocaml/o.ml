@@ -80,6 +80,8 @@ let core   = Server.core domain
 let client = Server.client domain
 let secure = Server.secure domain
 
+let on_action_call, on_action = Ohm.Sig.make (Run.list_iter identity) 
+
 let action f req res = 
   let existed, session, res = OhmTrackLogs.get_session req res in 
   Run.with_context (ctx ~session `FR) begin 
@@ -94,6 +96,9 @@ let action f req res =
 
     (* Log the request anyway *)
     let! () = ohm $ OhmTrackLogs.log (Json.Array [ Json.String "R" ; Json.String mode ; Json.String url ]) in
+
+    (* Then, trigger the action *)
+    let! () = ohm $ on_action_call (mode,url) in 
 
     f req res
 
