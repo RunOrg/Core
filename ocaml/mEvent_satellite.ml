@@ -35,7 +35,10 @@ let access t action =
       | `Folder `Manage -> `Managers
   in
   
-  match level with 
-    | `Viewers    -> `Union (Can.view_access t)
-    | `Registered -> `Union (Can.member_access t)
-    | `Managers   -> `Union (Can.admin_access t)
+  let! access = ohm begin match level with 
+    | `Viewers    -> Can.view_access t
+    | `Registered -> Can.member_access t
+    | `Managers   -> Can.admin_access t
+  end in 
+  
+  return (`Union access) 

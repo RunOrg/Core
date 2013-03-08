@@ -13,14 +13,15 @@ include HEntity.Can(struct
 
   let deleted e = e.E.del <> None
   let iid     e = e.E.iid
-  let admin   e = [ `Admin ; e.E.admins ]
+  let admin   e = return [ `Admin ; e.E.admins ]
 
   let view e = 
     if e.E.draft then admin e else 
       match e.E.vision with 
-	| `Public  -> [ `Contact ]
-	| `Normal  -> [ `Token   ]
-	| `Private -> `Groups (`Any,[ e.E.gid ]) :: admin e
+	| `Public  -> return [ `Contact ]
+	| `Normal  -> return [ `Token   ]
+	| `Private -> let! admin = ohm (admin e) in 
+		      return (`Groups (`Any,[ e.E.gid ]) :: admin)
 
   let id_view  id = IEvent.Assert.view id
   let id_admin id = IEvent.Assert.admin id 
@@ -32,4 +33,5 @@ end)
 
 let member_access t = 
   if (data t).E.draft then admin_access t else
-    `Groups (`Validated,[ (data t).E.gid ]) :: admin_access t
+    let! admin = ohm (admin_access t) in
+    return (`Groups (`Validated,[ (data t).E.gid ]) :: admin) 

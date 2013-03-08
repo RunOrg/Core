@@ -83,7 +83,6 @@ include Make(struct
       ~twitter:(profile # twitter)
       ~tags:(json # tags)
       ~visible:(json # visible) 
-      ~rss:[]
       ~owners
     in
 

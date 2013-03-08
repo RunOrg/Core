@@ -126,13 +126,13 @@ let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.
 	  (* For events, don't send to all readers (because event could be public), 
 	     send to any people in the event and to event moderators. *)
 	  let! event  = ohm_req_or (return None) $ MEvent.get eid in 
-	  let  access = MEvent.Satellite.access event (`Wall `Manage) in
+	  let! access = ohm $ MEvent.Satellite.access event (`Wall `Manage) in
 	  let  iid    = MEvent.Get.iid event in 
 	  let  gid    = MEvent.Get.group event in 
 	  return $ Some (iid, `Union [ access ; `Groups (`Any,[gid])]) 
 	| `Discussion did ->
 	  let! discn  = ohm_req_or (return None) $ MDiscussion.get did in 
-	  let  access = MDiscussion.Satellite.access discn (`Wall `Read) in
+	  let! access = ohm $ MDiscussion.Satellite.access discn (`Wall `Read) in
 	  let  iid    = MDiscussion.Get.iid discn in
 	  return $ Some (iid, access) 
     end in 

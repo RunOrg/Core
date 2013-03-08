@@ -34,16 +34,25 @@ type 'relation t =
 let _make actor id data = 
   let owner = Run.memo begin
     match data # owner with 
-      | `Event  eid -> let nil = (fun _ -> `Nobody) in
+      | `Event  eid -> let nil = (fun _ -> return `Nobody) in
 		       let! event = ohm_req_or (return nil) $ MEvent.get ~actor eid in
 		       return (fun what -> MEvent.Satellite.access event (`Album what))
   end in
   {
     id    = id ;
     data  = data ;
-    read  = ( let! f = ohm owner in MAccess.test actor [ f `Read ; f `Write ; f `Manage ] ) ;
-    write = ( let! f = ohm owner in MAccess.test actor [           f `Write ; f `Manage ] ) ;
-    admin = ( let! f = ohm owner in MAccess.test actor [                      f `Manage ] ) ;
+    read  = ( let! f = ohm owner in 
+	      let! read = ohm (f `Read) in
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ read ; write ; manage ] ) ;
+    write = ( let! f = ohm owner in 
+	      let! write = ohm (f `Write) in
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ write ; manage ] ) ;
+    admin = ( let! f = ohm owner in 
+	      let! manage = ohm (f `Manage) in
+	      MAccess.test actor [ manage ] ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)

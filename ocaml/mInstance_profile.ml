@@ -23,7 +23,6 @@ let split_name name =
 
 module Info = struct
   module T = struct
-    module RSS = IPolling.RSS 
     type json t = {
       name     : string ;
       key      : string ;
@@ -39,7 +38,6 @@ module Info = struct
      ?search   : bool = false ;
      ?owners   : IUser.t list = [] ;
      ?unbound  : bool = false ;
-     ?pub_rss  : (! string, RSS.t ) Ohm.ListAssoc.t = [] ;
      ?white    : IWhite.t option ;
      ?vtag "v" : string list = [] ;
     }
@@ -75,7 +73,6 @@ type t = <
   pic      : [`GetPic] IFile.id option ;
   search   : bool ;
   unbound  : IUser.t list option ;
-  pub_rss  : ( string * IPolling.RSS.t ) list
 > ;;
 
 let extract iid i = Info.(object
@@ -93,7 +90,6 @@ let extract iid i = Info.(object
   method pic      = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
   method search   = i.search 
   method unbound  = if i.unbound then Some i.owners else None
-  method pub_rss  = i.pub_rss
 end)
 
 module Tbl = CouchDB.Table(MyDB)(IInstance)(Info)
@@ -103,7 +99,7 @@ let refresh_all = Async.Convenience.foreach O.async "refresh-instance-profiles"
   (fun iid -> 
     let! profile = ohm_req_or (return ()) $ Tbl.get iid in
     let  search  = Info.(profile.search && not (profile.unbound && profile.owners = [])) in
-    let  profile = Info.({ profile with search ; pub_rss = if search then profile.pub_rss else [] }) in
+    let  profile = Info.({ profile with search }) in
     Tbl.set iid profile)
     
 (* Uncomment the line below if the vtag generation function changes *)
@@ -125,7 +121,6 @@ let empty_info = Info.({
   search   = false ;
   unbound  = true ;
   owners   = [] ;
-  pub_rss  = [] ;
   vtag     = [] 
 })
 
@@ -259,42 +254,14 @@ let can_install t cuid =
   match t # unbound with None -> None | Some uids ->
     if List.mem uid uids then Some (IInstance.Assert.canInstall (t # id)) else None
 
-(* Find the instance bound to an RSS feed ================================================================== *)
-
-module ByRSSView = CouchDB.MapView(struct
-  module Key    = IPolling.RSS
-  module Value  = Fmt.Unit
-  module Design = Design
-  let name = "by-rss"
-  let map  = "for (var i in doc.pub_rss) emit(doc.pub_rss[i])"
-end)
-
-let by_rss rss_id = 
-  let! list = ohm $ ByRSSView.by_key rss_id in
-  return $ List.map (#id |- IInstance.of_id) list
-
 (* Backdoor manipulation =================================================================================== *)
 
 module Backdoor = struct
 
   let update iid ~name ~key ~pic ~phone ~desc ~site ~address 
-      ~contact ~facebook ~twitter ~tags ~visible ~rss ~owners =     
+      ~contact ~facebook ~twitter ~tags ~visible ~owners =     
 
     let tags = BatList.sort_unique compare (List.map Util.fold_all tags) in
-
-    let rss = BatList.filter_map (fun url -> 
-      let url = BatString.strip url in 
-      if url = "" then None else
-	let _, url = BatString.replace url "https://" "http://" in
-	if BatString.starts_with url "http://" then Some url else
-	  Some ("http://" ^ url)
-    ) rss in
-
-    let rss = BatList.sort_unique compare rss in
-
-    let! pub_rss = ohm $ Run.list_map (fun url -> 
-      let! id = ohm $ MPolling.RSS.poll url in return (url, id) 
-    ) rss in
 
     let getinfo obj = Info.({ obj with 
       name ;
@@ -309,7 +276,6 @@ module Backdoor = struct
       twitter ; 
       tags ; 
       search = visible ;
-      pub_rss ; 
       white = snd key ;
       owners ;
     }) in

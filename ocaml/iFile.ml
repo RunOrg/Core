@@ -44,6 +44,13 @@ module Deduce = struct
     if ICurrentUser.is_proof proof "file_getDoc" user [ Id.str file ] 
     then Some file else None
 
+  let make_putDoc_token user file = 
+    ICurrentUser.prove "file_putDoc" user [ Id.str file ]
+      
+  let from_putDoc_token user file proof =
+    if ICurrentUser.is_proof proof "file_putDoc" user [ Id.str file ] 
+    then Some file else None
+
 end
   
 

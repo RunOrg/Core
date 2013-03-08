@@ -6,4 +6,4 @@ module G  = Groups
 module V  = Vertical 
 module PF = ProfileForm 
 
-let () = Common.build "../_build" 
+let () = Build.build "../_build" 

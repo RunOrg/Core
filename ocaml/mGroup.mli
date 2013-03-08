@@ -11,7 +11,7 @@ module Satellite : sig
     | `Send   of [ `Inbox  | `Mail ] 
     ]
 
-  val access : 'any t -> action -> MAccess.t
+  val access : 'any t -> action -> (#O.ctx,MAccess.t) Ohm.Run.t
 
 end
 

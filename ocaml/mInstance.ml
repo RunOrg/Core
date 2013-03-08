@@ -11,6 +11,17 @@ module Profile = MInstance_profile
 
 include Common 
 
+(* Registry ---------------------------------------------------------------------------- *)
+
+module Registry = OhmCouchRegistry.Make(struct
+  module Id = IInstance
+  module Store = struct
+    let host = "localhost"
+    let port = 5984
+    let database = O.db "instance-r"
+  end
+end)
+
 (* Extraction -------------------------------------------------------------------------- *)
 
 type t = <
