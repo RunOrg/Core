@@ -31,7 +31,7 @@ module Get : sig
   val iid      :    'any t -> IInstance.t
   val process  :    'any t -> PreConfig_Task.ProcessId.DMS.t
   val state    : [`View] t -> state
-  val data     : [`View] t -> (string, Ohm.Json.t) BatPMap.t
+  val data     : [`View] t -> (Field.t, Ohm.Json.t) BatPMap.t
   val assignee : [`View] t -> IAvatar.t option 
   val notified : [`View] t -> IAvatar.t list
   val created  : [`View] t -> IAvatar.t * float
@@ -41,14 +41,18 @@ module Get : sig
   val finished : [`View] t -> bool 
   val fields   :    'any t -> (Field.t * < label : O.i18n ; kind : FieldType.t >) list
   val states   :    'any t -> (state * O.i18n) list 
+  val label    :    'any t -> O.i18n
 end
 
 module Set : sig
-  val state    : [`View] t -> state                         -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
-  val data     : [`View] t -> (Field.t,Ohm.Json.t) BatPMap.t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
-  val assignee : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
-  val addCC    : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
-  val delCC    : [`View] t -> IAvatar.t                     -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t
+  val info : 
+       ?state:state
+    -> ?assignee:IAvatar.t option
+    -> ?notified:IAvatar.t list
+    -> ?data:(Field.t,Ohm.Json.t) BatPMap.t
+    -> [`View] t
+    -> 'any MActor.t 
+    -> (#O.ctx,unit) Ohm.Run.t
 end
 
 val createIfMissing : 

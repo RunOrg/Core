@@ -4,7 +4,10 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-type 'relation t = unit
+module E = DMS_MDocTask_core
+module Can = DMS_MDocTask_can
+
+type 'relation t = 'relation Can.t
 
 type state = Ohm.Json.t
 
@@ -29,30 +32,20 @@ module All = struct
   let active _ _ = assert false
 end
 
-module Get = struct
-  let id _ = assert false
-  let iid _ = assert false
-  let process _ = assert false
-  let state _ = assert false
-  let data _ = assert false
-  let assignee _ = assert false
-  let notified _ = assert false
-  let created _ = assert false
-  let updated _ = assert false
-  let theState _ = assert false
-  let finished _ = assert false
-  let fields _ = assert false 
-  let states _ = assert false
-end
+module Get = DMS_MDocTask_get
 
 module Set = struct
-  let state _ _ _ = assert false
-  let data _ _ _ = assert false
-  let assignee _ _ _ = assert false
-  let addCC _ _ _ = assert false
-  let delCC _ _ _ = assert false
+  let info ?state ?assignee ?notified ?data t actor = 
+    return () 
 end
 
 let createIfMissing ~process ~actor _ = assert false
-let get _ = assert false
+
+let get dtid = 
+  O.decay begin
+    let! found = ohm_req_or (return None) (E.Store.get (DMS_IDocTask.decay dtid)) in
+    let  t = E.Store.current found in
+    return (Some (Can.make dtid t))
+  end
+    
 
