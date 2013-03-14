@@ -1,10 +1,20 @@
-<ul {$ul}>
-  {#processes}
-    <li>
-      <a href="javascript:void(0)">{label|Ohm.AdLib.write|ohm}</a>
-    </li>
-  {/#}
-</ul>
+<div style="width:600px;margin:30px auto">
+
+  <p>
+    { `DMS_DocTask_CreatePrelude }
+  </p>
+
+  <ul {$ul} class="fullpage-option-pick">
+    {#processes}
+      <li>
+        <a href="javascript:void(0)">
+  	  <span class="-name">{label|Ohm.AdLib.write|ohm}</span>
+        </a>
+      </li>
+    {/#}
+  </ul>
+
+</div>
 
 <script type="url:json">
 wait = false
