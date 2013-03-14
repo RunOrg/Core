@@ -12,16 +12,21 @@ let info ?state ?assignee ?notified ?data t actor =
   let aid = IAvatar.decay (MActor.avatar actor) in
   let id = DMS_IDocTask.decay t.Can.id in 
   let diffs = BatList.filter_map identity [
-    BatOption.map (fun s -> `SetState (s, aid)) state ;
-    BatOption.map (fun aidopt -> `SetAssignee aidopt) assignee ;
-    BatOption.map (fun aids -> `SetNotified aids) notified ;
-    BatOption.map (fun data ->	
+    BatOption.bind (fun s -> 
+      let (s',_,_) = t.Can.data.E.state in
+      if s = s' then None else Some (`SetState (s, aid))) state ;
+    BatOption.bind (fun aidopt -> 
+      if aidopt = t.Can.data.E.assignee then None else Some (`SetAssignee aidopt)) assignee ;
+    BatOption.bind (fun aids -> 
+      let aids = List.sort compare aids in 
+      if aids = t.Can.data.E.notified then None else Some (`SetNotified aids)) notified ;
+    BatOption.bind (fun data ->	
       let data = 
 	BatPMap.filteri 
 	  (fun k v -> v <> (try BatPMap.find k t.Can.data.E.data with Not_found -> Json.Null)) 
 	  data 
       in
-      `SetData data) data
+      if BatPMap.is_empty data then None else Some (`SetData data)) data
   ] in
   if diffs <> [] then 
     O.decay begin
