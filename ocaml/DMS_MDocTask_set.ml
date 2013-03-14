@@ -31,6 +31,6 @@ let info ?state ?assignee ?notified ?data t actor =
   else
     return () 
       
-let createIfMissing ~process ~actor did = 
+let create ~process ~actor did = 
   assert false
     

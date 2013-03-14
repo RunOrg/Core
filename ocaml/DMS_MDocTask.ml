@@ -22,9 +22,6 @@ module Field = struct
   let of_string = identity
 end
 
-let createIfMissing ~process ~actor did = 
-  Set.createIfMissing ~process ~actor did 
-
 let get dtid = 
   O.decay begin
     let! found = ohm_req_or (return None) (E.Store.get (DMS_IDocTask.decay dtid)) in
@@ -32,4 +29,8 @@ let get dtid =
     return (Some (Can.make dtid t))
   end
     
-
+let createIfMissing ~process ~actor did = 
+  let  create = Set.create ~process ~actor did in
+  let! dtid = ohm_req_or create $ All.last did process in
+  let! last = ohm_req_or create $ get dtid in
+  if last.Can.data.E.active then return dtid else create
