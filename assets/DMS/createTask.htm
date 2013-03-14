@@ -21,8 +21,9 @@ wait = false
 here.$ul.find("a").click ->
   return if wait
   wait = true
-  pos = @($).prevAll().length 
-  to_endpoint url, {n:pos}, (data) ->
+  pos = $(@).prevAll().length 
+  to_endpoint url, pos, (data) ->
     wait = false
-    document.location = data.url
+    if "url" of data 
+      document.location = data.url
 </script> 
