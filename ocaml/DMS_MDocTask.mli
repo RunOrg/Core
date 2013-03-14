@@ -23,7 +23,6 @@ end
 
 module All : sig
   val by_document : [`View] DMS_IDocument.id -> (#O.ctx,[`View] DMS_IDocTask.id list) Ohm.Run.t
-  val active : [`View] DMS_IDocument.id -> state -> (#O.ctx,[`View] DMS_IDocTask.id option) Ohm.Run.t
   val last : [`View] DMS_IDocument.id -> process -> (#O.ctx,[`View] DMS_IDocTask.id option) Ohm.Run.t
 end
 

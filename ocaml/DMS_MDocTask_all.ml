@@ -4,6 +4,41 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let by_document _ = assert false
-let active _ _ = assert false
-let last _ _ = assert false
+module E = DMS_MDocTask_core
+
+module Default = struct
+  module Value = Fmt.Unit
+  module Doc = E.Store.Raw
+  module Design = struct
+    module Database = E.Store.DataDB
+    let name = "tasks"
+  end
+end
+
+module ByDocumentView = CouchDB.DocView(struct
+  include Default
+  module Key = DMS_IDocument
+  let name = "by_document"
+  let map = "emit(doc.c.did)"
+end)
+
+let by_document did = 
+  let! list = ohm $ ByDocumentView.doc (DMS_IDocument.decay did) in 
+  return (List.map DMS_IDocTask.(#id |- of_id |- Assert.view) list) 
+
+module LastView = CouchDB.DocView(struct
+  include Default
+  module Key = Fmt.Make(struct type json t = (DMS_IDocument.t * PreConfig_Task.ProcessId.DMS.t * float) end)
+  let name = "last"
+  let map = "emit([doc.c.did, doc.c.process, doc.c.state[2]])"
+end)
+
+let last did prid =
+  let! now = ohmctx (#time) in
+  let  did = DMS_IDocument.decay did in 
+  let  startkey = did, prid, now in
+  let  endkey = did, prid, 0.0 in
+  let! list = ohm $ LastView.doc_query ~startkey ~endkey ~descending:true ~limit:1 () in
+  match list with 
+    | x :: _ -> return (Some (DMS_IDocTask.Assert.view (DMS_IDocTask.of_id (x # id))))
+    | [] -> return None
