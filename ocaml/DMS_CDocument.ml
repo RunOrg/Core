@@ -93,17 +93,19 @@ let () = CClient.define Url.def_file begin fun access ->
 
   (* Render the task list for the file *)
   
-  let! tasks = ohm $ DMS_MDocTask.All.by_document (MDocument.Get.id doc) in
+  let! tasks = ohm $ MDocTask.All.by_document (MDocument.Get.id doc) in
   let! tasks = ohm $ Run.list_filter begin fun dtid -> 
-    let! task = ohm_req_or (return None) (DMS_MDocTask.get dtid) in
-    let  state, author, time = DMS_MDocTask.Get.theState task in
+    let! task = ohm_req_or (return None) (MDocTask.get dtid) in
+    let  state, author, time = MDocTask.Get.theState task in
     let! author = ohm $ O.decay (CAvatar.mini_profile author) in 
-    return (Some DMS_MDocTask.(object
-      method process  = AdLib.get (Get.label task)
+    return (Some MDocTask.(object
+      method process  = Get.label task
       method finished = Get.finished task 
       method time     = (time, now) 
-      method state    = AdLib.get ((PreConfig_Task.DMS.states (Get.process task)) # label state)
+      method state    = (PreConfig_Task.DMS.states (Get.process task)) # label state
       method author   = author
+      method edit     = Action.url Url.Task.edit (access # instance # key)
+	[ IRepository.to_string rid ; IDocument.to_string did ; IDocTask.to_string dtid ]
     end))
   end tasks in 
 

@@ -49,6 +49,7 @@
 | `DMS_Document_Download -> "Télécharger"
 | `DMS_Document_NoTask -> "Aucune tâche associée"
 | `DMS_Document_NewTask -> "Nouvelle Tâche"
+| `DMS_Document_EditTask -> "Modifier"
 
 | `DMS_Document_Forbidden_Title -> "Page inaccessible"
 | `DMS_Document_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
