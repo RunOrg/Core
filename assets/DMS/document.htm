@@ -38,6 +38,19 @@
     {/#}
   </dl>
 
+  <div class="-task">   
+    {#tasks}             
+    {else}    
+    <div class="empty-list">
+      {`DMS_Document_NoTask}
+    </div>
+    {/#}
+    <div class="-action">
+      <a style="display: inline-block" class="action-button -green"
+	 href="{newTask}">{`DMS_Document_NewTask}</a>
+    </div>
+  </div>
+
 </div>
 
 <style>
@@ -105,6 +118,18 @@
     dd {
       margin: 4px 0px 0 0;
       font-size: 13px;
+    }
+  }
+
+  .-task {
+    width: 480px;
+    margin-top: 20px;
+    .-action {
+      margin-top: 20px;
+      border-top: 1px #BBB solid; 
+      background-color: #EEE;
+      padding: 2px;
+      test-align: center;
     }
   }
 }

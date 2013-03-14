@@ -20,12 +20,13 @@ let () = CClient.define Url.def_file begin fun access ->
   let! doc = ohm_req_or e404 $ MDocument.view ~actor did in
   let! adoc = ohm $ MDocument.Can.admin doc in 
 
+  let! now = ohmctx (#time) in
+
   (* Render the download link for the latest version *)
 
   let! current = ohm begin 
     let  v = MDocument.Get.current doc in 
     let! url = ohm_req_or (return None) $ MFile.Url.get (v # file) `File in 
-    let! now = ohmctx (#time) in
     let! author = ohm $ O.decay (CAvatar.mini_profile (v # author)) in
     return $ Some (object
       method version  = v # number
@@ -90,6 +91,22 @@ let () = CClient.define Url.def_file begin fun access ->
       end metafields
   end in
 
+  (* Render the task list for the file *)
+  
+  let! tasks = ohm $ DMS_MDocTask.All.by_document (MDocument.Get.id doc) in
+  let! tasks = ohm $ Run.list_filter begin fun dtid -> 
+    let! task = ohm_req_or (return None) (DMS_MDocTask.get dtid) in
+    let  state, author, time = DMS_MDocTask.Get.theState task in
+    let! author = ohm $ O.decay (CAvatar.mini_profile author) in 
+    return (Some DMS_MDocTask.(object
+      method process  = AdLib.get (Get.label task)
+      method finished = Get.finished task 
+      method time     = (time, now) 
+      method state    = AdLib.get ((PreConfig_Task.DMS.states (Get.process task)) # label state)
+      method author   = author
+    end))
+  end tasks in 
+
   (* Combine everything together *)
 
   O.Box.fill begin 
@@ -104,6 +121,8 @@ let () = CClient.define Url.def_file begin fun access ->
       method name  = MDocument.Get.name doc 
       method current = current
       method meta = meta
+      method tasks = tasks
+      method newTask = ""
     end)
   end 
 
