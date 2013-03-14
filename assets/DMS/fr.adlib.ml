@@ -79,3 +79,4 @@
 
 | `DMS_DocTask_Create -> "Nouvelle Tâche"
 | `DMS_DocTask_CreatePrelude -> "Quel type de tâche souhaitez-vous créer sur ce document ?"
+| `DMS_DocTask_Edit -> "Modifier une tâche"

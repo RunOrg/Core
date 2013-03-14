@@ -63,3 +63,5 @@ val createIfMissing :
   -> (#O.ctx, [`View] DMS_IDocTask.id) Ohm.Run.t
 
 val get : 'relation DMS_IDocTask.id -> (#O.ctx,'relation t option) Ohm.Run.t
+
+val getFromDocument : 'any DMS_IDocTask.id -> [`View] DMS_IDocument.id -> (#O.ctx,[`View] t option) Ohm.Run.t

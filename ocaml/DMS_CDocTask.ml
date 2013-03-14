@@ -6,6 +6,8 @@ open BatPervasives
 
 open DMS_CDocTask_common
 
+module Edit = DMS_CDocTask_edit
+
 let () = CClient.define Url.Task.def_create begin fun access ->
 
   let  e404 = O.Box.fill (Asset_Client_PageNotFound.render ()) in

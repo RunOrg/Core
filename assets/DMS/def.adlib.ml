@@ -79,3 +79,4 @@
 
 | `DMS_DocTask_Create 
 | `DMS_DocTask_CreatePrelude 
+| `DMS_DocTask_Edit

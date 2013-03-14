@@ -34,3 +34,10 @@ let createIfMissing ~process ~actor did =
   let! dtid = ohm_req_or create $ All.last did process in
   let! last = ohm_req_or create $ get dtid in
   if last.Can.data.E.active then return dtid else create
+
+let getFromDocument dtid did = 
+  let! item = ohm_req_or (return None) (get dtid) in
+  if item.Can.data.E.did = DMS_IDocument.decay did then
+    return (Some Can.({ id = DMS_IDocTask.Assert.view dtid ; data = item.data }))
+  else
+    return None
