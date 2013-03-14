@@ -75,3 +75,5 @@
 | `DMS_Document_Delete_Warning
 | `DMS_Document_Delete_Submit
 | `DMS_Document_Delete_Cancel
+
+| `DMS_DocTask_Create 

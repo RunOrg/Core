@@ -32,6 +32,11 @@ let pfields procs =
     "\n      | `" ^ p.p_key ^ " -> Fields.([ " ^ fields ^ "])"
   end procs) 
 
+let allprocesses procs = 
+  String.concat " ; " (List.map begin fun p ->
+    "`" ^ p.p_key
+  end procs)
+
 let processes () = 
   String.concat "" (List.map begin fun ctx ->
     let procs = List.filter (fun p -> p.p_context = ctx) (!processes) in
@@ -39,6 +44,7 @@ let processes () =
     ^ "  let label  = function " ^ label  procs ^ "\n"
     ^ "  let states = function " ^ pstates procs ^ "\n"
     ^ "  let fields = function " ^ pfields procs ^ "\n"
+    ^ "  let all = [ " ^ allprocesses procs ^ " ] \n"
     ^ "end\n"
   end (contexts ())) 
 

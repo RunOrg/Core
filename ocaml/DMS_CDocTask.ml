@@ -16,11 +16,23 @@ let () = CClient.define Url.Task.def_create begin fun access ->
 
   let! doc = ohm_req_or e404 $ MDocument.view ~actor did in
 
+  let processes = PreConfig_Task.DMS.all in
+
   O.Box.fill begin 
-    Asset_DMS_CreateTask.render (object
-      method processes = []
-      method url = Json.Null
+
+    let processes = List.map begin fun pid -> (object
+      method label = PreConfig_Task.DMS.label pid 
+    end) end processes in
+
+    Asset_Admin_Page.render (object
+      method parents = [ parent (access # instance # key) rid doc ]
+      method here = AdLib.get `DMS_DocTask_Create
+      method body = Asset_DMS_CreateTask.render (object
+	method processes = processes
+	method url = Json.Null
+      end)
     end)
+
   end 
 
 end

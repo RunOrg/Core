@@ -75,3 +75,5 @@
 | `DMS_Document_Delete_Warning -> "Ce document n'apparaîtra plus dans cette bibliothèque."
 | `DMS_Document_Delete_Submit -> "Supprimer"
 | `DMS_Document_Delete_Cancel -> "Ne pas supprimer"
+
+| `DMS_DocTask_Create -> "Nouvelle Tâche"
