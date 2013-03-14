@@ -122,7 +122,8 @@ let () = CClient.define Url.def_file begin fun access ->
       method current = current
       method meta = meta
       method tasks = tasks
-      method newTask = ""
+      method newTask = Action.url Url.Task.create (access # instance # key) 
+	[ IRepository.to_string rid ; IDocument.to_string did ]
     end)
   end 
 
