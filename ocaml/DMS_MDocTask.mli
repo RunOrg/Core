@@ -3,6 +3,7 @@
 type 'relation t
 
 type state = Ohm.Json.t
+type process = PreConfig_Task.ProcessId.DMS.t  
 
 module Field : sig
   type t 
@@ -23,13 +24,14 @@ end
 module All : sig
   val by_document : [`View] DMS_IDocument.id -> (#O.ctx,[`View] DMS_IDocTask.id list) Ohm.Run.t
   val active : [`View] DMS_IDocument.id -> state -> (#O.ctx,[`View] DMS_IDocTask.id option) Ohm.Run.t
+  val last : [`View] DMS_IDocument.id -> process -> (#O.ctx,[`View] DMS_IDocTask.id option) Ohm.Run.t
 end
 
 module Get : sig
   (* Basic information *)
   val id       :    'any t -> 'any DMS_IDocTask.id
   val iid      :    'any t -> IInstance.t
-  val process  :    'any t -> PreConfig_Task.ProcessId.DMS.t
+  val process  :    'any t -> process
   val state    : [`View] t -> state
   val data     : [`View] t -> (Field.t, Ohm.Json.t) BatPMap.t
   val assignee : [`View] t -> IAvatar.t option 
