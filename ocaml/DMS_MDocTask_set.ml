@@ -32,5 +32,25 @@ let info ?state ?assignee ?notified ?data t actor =
     return () 
       
 let create ~process ~actor did = 
-  assert false
+  let! now = ohmctx (#time) in
+  let id = DMS_IDocTask.gen () in
+  let info = MUpdateInfo.self (MActor.avatar actor) in
+  let iid = IInstance.decay (MActor.instance actor) in
+  let aid = IAvatar.decay (MActor.avatar actor) in
+  let diffs = [] in
+  let state = (PreConfig_Task.DMS.states process) # initial in
+  let active = not ((PreConfig_Task.DMS.states process) # final state) in
+  let init = E.({
+    iid ;
+    did = DMS_IDocument.decay did ;
+    state = (state, aid, now) ; 
+    active ;
+    process ;
+    data = BatPMap.empty ;
+    assignee = None ;
+    notified = [] ;
+    created = (aid, now) ;    
+  }) in
+  let! _ = ohm $ O.decay (E.Store.create ~id ~diffs ~init ~info ()) in
+  return (DMS_IDocTask.Assert.view id)
     
