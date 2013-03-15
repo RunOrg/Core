@@ -12,9 +12,9 @@ let template process =
   let states = (PreConfig_Task.DMS.states process) # all in
 
   let inner = 
-    OhmForm.begin_object (fun ~state ~assigned ~notified ~data -> (object
+    OhmForm.begin_object (fun ~state ~assignee ~notified ~data -> (object
       method state    = state
-      method assigned = assigned
+      method assignee = assignee
       method notified = notified
       method data     = data
     end))
@@ -27,7 +27,7 @@ let template process =
 	   (fun task -> return $ Some (MDocTask.Get.state task))
 	   OhmForm.keep)
 
-    |> OhmForm.append (fun f assigned -> return $ f ~assigned) 
+    |> OhmForm.append (fun f assignee -> return $ f ~assignee) 
 	(VEliteForm.picker
 	   ~label:(AdLib.get `DMS_DocTask_Edit_Assigned)
 	   ~format:IAvatar.fmt
@@ -104,6 +104,14 @@ let () = CClient.define Url.Task.def_edit begin fun access ->
     let! result = ohm_ok_or fail $ OhmForm.result form in  
 
     (* Save the changes to the database *)
+
+    let! () = ohm $ MDocTask.Set.info 
+      ?state:(result # state) 
+      ~assignee:(result # assignee)
+      ~notified:(result # notified)
+      ~data:(result # data) 
+      task actor
+    in
 
     (* Redirect to main page *)
 
