@@ -47,9 +47,9 @@ let render ~fieldkey ~fieldinfo =
   in
 
   let seed_pickone s = 
-    match try Json.to_list (Json.to_string) (seed s) with _ -> [] with
-      | h :: _ -> return (Some h)
-      | [] -> return None
+    match seed s with
+      | Json.String s -> return (Some s)
+      | _ -> return None
   in
 
   let seed_pickmany s = 
