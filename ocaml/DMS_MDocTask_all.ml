@@ -17,13 +17,17 @@ end
 
 module ByDocumentView = CouchDB.DocView(struct
   include Default
-  module Key = DMS_IDocument
+  module Key = Fmt.Make(struct type json t = (DMS_IDocument.t * float) end)
   let name = "by_document"
-  let map = "emit(doc.c.did)"
+  let map = "emit([doc.c.did,doc.c.state[2]])"
 end)
 
 let by_document did = 
-  let! list = ohm $ ByDocumentView.doc (DMS_IDocument.decay did) in 
+  let! now = ohmctx (#time) in
+  let  did = DMS_IDocument.decay did in 
+  let  startkey = did, now in
+  let  endkey = did, 0.0 in
+  let! list = ohm $ ByDocumentView.doc_query ~startkey ~endkey ~descending:true ~limit:20 () in
   return (List.map DMS_IDocTask.(#id |- of_id |- Assert.view) list) 
 
 module LastView = CouchDB.DocView(struct

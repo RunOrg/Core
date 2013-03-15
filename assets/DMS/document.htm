@@ -137,9 +137,11 @@
     width: 480px;
     margin-top: 20px;
     .-task {
-      border: 1px solid #CCC;
+      box-shadow: 0 0 3px #AAA;
+      border: 1px solid #BBB;
       border-radius: 4px;
-      margin-bottom: 20px;
+      margin: 3px 3px 20px 3px;
+      overflow: hidden;
       h3 {
         margin: 0;
         padding: 7px 10px;
@@ -159,11 +161,23 @@
           color: #A44;
         }
       }
-      &.-finished h3 span {
-        background: #DFD;
-        border-color: #8E8;
-        color: #4A4;
-      }
+      &.-finished {
+        box-shadow: none;
+        border-color: #DDD;
+        h3 {
+          background-color: #FFF;
+          color: #888;
+          span {
+            background: #DFD;
+            border-color: #8E8;
+            color: #4A4;
+          }
+        }
+        .-foot { 
+          background-color: #FFF;
+          border-color: #DDD;
+        }
+      } 
       .-foot {
         img {
           width: 22px;
