@@ -138,13 +138,14 @@ let () = CClient.define Url.def_file begin fun access ->
 
   O.Box.fill begin 
     Asset_DMS_Document.render (object
-      method admin = match adoc with None -> None | Some _ ->  
-	Some (object
-	  method edit = Action.url Url.Doc.admin (access # instance # key)
-	    [ IRepository.to_string rid ; IDocument.to_string did ]
-	  method add = Action.url Url.Doc.version (access # instance # key) 
-	    [ IRepository.to_string rid ; IDocument.to_string did ]
-	end)	
+      method back = Action.url Url.see (access # instance # key) [ IRepository.to_string rid ]
+      method edit = if adoc = None then None else 
+	  Some (Action.url Url.Doc.admin (access # instance # key)
+		  [ IRepository.to_string rid ; IDocument.to_string did ])
+
+      method add = if adoc = None then None else 
+	  Some (Action.url Url.Doc.version (access # instance # key) 
+		  [ IRepository.to_string rid ; IDocument.to_string did ])
       method name  = MDocument.Get.name doc 
       method current = current
       method meta = meta

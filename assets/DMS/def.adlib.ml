@@ -45,6 +45,7 @@
 | `DMS_NoUpload_Back 
 
 | `DMS_Document_Edit
+| `DMS_Document_Back
 | `DMS_Document_AddVersion 
 | `DMS_Document_Download 
 | `DMS_Document_NoTask

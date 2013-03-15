@@ -1,18 +1,25 @@
 <div class="DMS-document">
-  {?admin}
-    <ul class="actions">
-      <li class="-r">
-	<a href="{edit}" class="action-button -admin">
-	  { `DMS_Document_Edit }
-	</a>
-      </li>
-      <li class="-r">
-	<a href="{add}" class="action-button -green">
-	  { `DMS_Document_AddVersion }
-	</a>
-      </li>
-    </ul>
-  {/?}
+  <ul class="actions">
+    <li class="-r">
+      <a href="{back}" class="action-button">
+	{ `DMS_Document_Back }
+      </a>
+    </li>
+    {?edit}
+    <li class="-r">
+      <a href="{this}" class="action-button -admin">
+	{ `DMS_Document_Edit }
+      </a>
+    </li>
+    {/?}
+    {?add}
+    <li class="-r">
+      <a href="{this}" class="action-button -green">
+	{ `DMS_Document_AddVersion }
+      </a>
+    </li>
+    {/?}
+  </ul>  
   <h2>{name}</h2>
   {?current}
     <div class="-current" style="background-image:url({icon})">

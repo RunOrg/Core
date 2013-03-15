@@ -45,6 +45,7 @@
 | `DMS_NoUpload_Back -> "Retour"
 
 | `DMS_Document_Edit -> "Modifier"
+| `DMS_Document_Back -> "Retour"
 | `DMS_Document_AddVersion -> "Nouvelle Version"
 | `DMS_Document_Download -> "Télécharger"
 | `DMS_Document_NoTask -> "Aucune tâche associée"
