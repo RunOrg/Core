@@ -22,10 +22,9 @@ let name aid =
 
   return name 
 
-let mini_profile aid = 
-  
-  let! details = ohm $ MAvatar.details aid in 
-  
+
+let mini_profile_from_details aid details = 
+
   let! name = ohm begin match details # name with 
     | None -> AdLib.get `Anonymous
     | Some name -> return name
@@ -49,6 +48,10 @@ let mini_profile aid =
     method name = name
     method nameo = details # name
   end)
+
+let mini_profile aid = 
+  let! details = ohm $ MAvatar.details aid in 
+  mini_profile_from_details aid details
 
 let directory ?url aids = 
   
@@ -111,8 +114,20 @@ let () = UrlClient.def_pickAvatars $ CClient.action begin fun access req res ->
   let! json = req_or (result []) (Action.Convenience.get_json req) in
   let! mode = req_or (result []) (VEliteForm.Picker.QueryFmt.of_json_safe json) in
   
+  let  iid  = IInstance.Deduce.token_see_contacts (access # iid) in
+
+  let by_prefix prefix =
+    let  count = 10 in
+    let! list  = ohm $ MAvatar.search iid prefix count in
+    let  render aid details = 
+      let! profile = ohm $ mini_profile_from_details aid details in 
+      Asset_Avatar_PickerLine.render profile
+    in
+    result (List.map (fun (aid, _, details) -> (aid, render aid details)) list)
+  in
+
   match mode with 
     | `ByJson   list   -> result [] 
-    | `ByPrefix prefix -> result []
+    | `ByPrefix prefix -> by_prefix prefix
   
 end 
