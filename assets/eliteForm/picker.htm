@@ -74,6 +74,25 @@ query = (fs) ->
 
       # Push all the items to the result list 
       for item in items 
+
+        # Stop if 5 items are displayed
+        break if inlist.length >= 5
+
+        # do not display elements that have been picked
+        exists = false
+        for it2 in picked 
+          if it2.json == item.json
+            exists = true
+            break
+        continue if exists    
+
+        # do not display elements that are already in the result list
+        for it2 in inlist
+          if it2.json == item.json
+            exists = true
+            break
+        continue if exists        
+
         inlist.push(item) 
         html.push "<div class=-i>", item.html, "</div>"        
 
@@ -90,24 +109,10 @@ fromStatic = (src) ->
     fsrc = foldAccents(src)
   
     for it in stat 
-
-      break if results.length >= 5
-
-      # do not display elements that don't have the source as
-      # a prefix
-      continue if !(matches fsrc, it[1])
-
-      # do not display elements that have been picked
-      exists = false
-      for it2 in picked 
-        if it2.json == it[0]
-          exists = true
-          break
-      continue if exists    
-
-      results.push 
-        json : it[0], 
-        html : it[2] 
+      if matches fsrc, it[1]
+        results.push 
+          json : it[0], 
+          html : it[2] 
     
     next results
 
