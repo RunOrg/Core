@@ -121,7 +121,9 @@ let () = CClient.define Url.Task.def_edit begin fun access ->
 
   O.Box.fill begin 
 
-    let template = template process in
+    let avatars = JsCode.Endpoint.of_url 
+      (Action.url UrlClient.pickAvatars (access # instance # key) ()) in
+    let template = template ~avatars process in
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed task) in
     let url  = OhmBox.reaction_endpoint save () in
 
