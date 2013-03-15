@@ -80,3 +80,8 @@
 | `DMS_DocTask_Create 
 | `DMS_DocTask_CreatePrelude 
 | `DMS_DocTask_Edit
+| `DMS_DocTask_Save 
+
+| `DMS_DocTask_Edit_State 
+| `DMS_DocTask_Edit_Assigned 
+| `DMS_DocTask_Edit_Notified 

@@ -6,9 +6,7 @@ type state = Ohm.Json.t
 type process = PreConfig_Task.ProcessId.DMS.t  
 
 module Field : sig
-  type t 
-  val to_string : t -> string
-  val of_string : string -> t
+  type t = string
 end
 
 module FieldType : sig 

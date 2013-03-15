@@ -80,3 +80,8 @@
 | `DMS_DocTask_Create -> "Nouvelle Tâche"
 | `DMS_DocTask_CreatePrelude -> "Quel type de tâche souhaitez-vous créer sur ce document ?"
 | `DMS_DocTask_Edit -> "Modifier une tâche"
+| `DMS_DocTask_Save -> "Enregistrer"
+
+| `DMS_DocTask_Edit_State -> "Statut"
+| `DMS_DocTask_Edit_Assigned -> "Affecté à" 
+| `DMS_DocTask_Edit_Notified -> "En copie"
