@@ -148,6 +148,56 @@ refill = (force) ->
 save = () ->
   $f.prev().val($.toJSON(x.json for x in picked))
 
+# Load initial data from the underlying form field
+$f.prev().data 'onSet', (init) ->
+
+  # Ensure the source data is valid
+  return if !init
+  init = eval('(' + init + ')')
+  return if !init.length 
+
+  # Things are missing, so let's load them...
+  $f.addClass("-init")
+  list = ({ json : json } for json in init)
+
+  # Look for items in the static source
+  missing = []
+  for item in list
+    for it2 in stat 
+      if it2[0] == item.json 
+        item.html = it2[2]
+        break
+    continue if "html" of item 
+    missing.push item.json
+
+  # Call this function on the data from the dynamic source  
+  next = (list2) -> 
+
+    # Display all items that have some HTML 
+    html = []
+    for item in list 
+      if !("html" of item) 
+        for it2 in list2 
+          if it2.json == item.json
+            item = it2
+            break
+      continue if (!"html" of item)
+      picked.push item
+      html.push("<div><a class=-d>&times</a><span>" + item.html + "</span></div>")      
+    $s.before(html.join(""))
+
+    # Great, we're good to go : restore valid component state
+    save()
+    $f.removeClass("-init")
+    checkMax()
+
+  # Determine if we could and/or should load dynamic data
+  if missing.length > 0 && dyn 
+    to_endpoint dyn, missing, (data) ->
+      next(if "list" of data then data.list else []) 
+  else
+    next [] 
+ 
 # Move the selection line through the result set
 mvsel = (d) ->
   sel = sel + d 
@@ -161,6 +211,9 @@ mvsel = (d) ->
 checkMax = () ->
   return if !max 
   $f.toggleClass("-maxed", max <= picked.length) 
+
+# Render a picked element
+
 
 # Pick the currently selected element
 pick = () ->
@@ -311,7 +364,7 @@ $s.blur ->
     .asap();
     font-size: 13px;
     padding: 3px;
-    margin-bottom: 1px; 
+    margin: 2px; 
     width: 100px;
     border: none;
     float: left;
@@ -321,10 +374,13 @@ $s.blur ->
 
   .-maxed {
     border-bottom: 0;
+    input { display: none; }
   }
  
-  .-maxed input {
-    display: none;
+  .-init {
+    height: 26px;
+    background: url(/public/icon/load-16x16.gif) center center no-repeat #FFF; 
+    > * { display: none; }
   }
 
 }

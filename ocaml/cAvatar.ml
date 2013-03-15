@@ -126,8 +126,17 @@ let () = UrlClient.def_pickAvatars $ CClient.action begin fun access req res ->
     result (List.map (fun (aid, _, details) -> (aid, render aid details)) list)
   in
 
+  let by_json aids = 
+    let  aids = BatList.filter_map IAvatar.of_json_safe aids in 
+    let! list = ohm $ Run.list_map begin fun aid ->
+      let! profile = ohm $ mini_profile aid in
+      return (aid, Asset_Avatar_PickerLine.render profile)
+    end aids in
+    result list
+  in
+
   match mode with 
-    | `ByJson   list   -> result [] 
+    | `ByJson   aids   -> by_json aids
     | `ByPrefix prefix -> by_prefix prefix
   
 end 
