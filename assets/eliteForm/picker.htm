@@ -137,7 +137,7 @@ refill = (force) ->
   search = txt
 
   # fill up the suggestion list
-  query [ fromStatic txt ]
+  query [ fromStatic(txt), fromDynamic(txt) ]
 
 # Save the picked items to the underlying form field
 save = () ->
