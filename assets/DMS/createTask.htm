@@ -21,7 +21,7 @@ wait = false
 here.$ul.find("a").click ->
   return if wait
   wait = true
-  pos = $(@).prevAll().length 
+  pos = $(@).closest("li").prevAll().length 
   to_endpoint url, pos, (data) ->
     wait = false
     if "url" of data 
