@@ -72,5 +72,5 @@ module Search     = UrlClient_search
 module Inbox      = UrlClient_inbox
 module Discussion = UrlClient_discussion
   
-
+let pickAvatars, def_pickAvatars = O.declare O.client "search/people" A.none
 
