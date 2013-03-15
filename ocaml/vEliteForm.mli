@@ -35,6 +35,7 @@ val picker :
   -> ?detail:('c,string) Ohm.Run.t
   ->  format:'data Ohm.Fmt.fmt 
   -> ?static:('data * string * ('c,Ohm.Html.writer) Ohm.Run.t) list 
+  -> ?dynamic:Ohm.JsCode.Endpoint.t
   ->  ('s -> ('c,'data list) Ohm.Run.t)
   ->  (OhmForm.field -> 'data list -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template

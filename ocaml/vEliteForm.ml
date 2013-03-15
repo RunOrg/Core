@@ -51,7 +51,7 @@ let date ~label ?detail seed parse =
        ~error:(".elite-field-error label")
        seed parse)
 
-let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse = 
+let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic seed parse = 
   let render = 
     let! static = ohm $ Run.list_map (fun (value,key,html) ->
       let! html = ohm html in
@@ -61,7 +61,7 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
       method detail = detail
       method left   = left
       method stat   = static 
-      method dyn    = None 
+      method dyn    = Json.of_opt JsCode.Endpoint.to_json dynamic
     end)
   in
   OhmForm.wrap ".joy-fields" render

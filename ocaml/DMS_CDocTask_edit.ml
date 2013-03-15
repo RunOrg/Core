@@ -6,7 +6,7 @@ open BatPervasives
 
 open DMS_CDocTask_common
 
-let template process = 
+let template ?avatars process = 
 
   let fields = PreConfig_Task.DMS.fields process in
   let states = (PreConfig_Task.DMS.states process) # all in
@@ -31,7 +31,7 @@ let template process =
 	(VEliteForm.picker
 	   ~label:(AdLib.get `DMS_DocTask_Edit_Assigned)
 	   ~format:IAvatar.fmt
-	   ~static:[]
+	   ?dynamic:avatars
 	   (fun task -> match MDocTask.Get.assignee task with
 	     | None -> return []
 	     | Some aid -> return [aid]) 
@@ -43,7 +43,7 @@ let template process =
 	(VEliteForm.picker
 	   ~label:(AdLib.get `DMS_DocTask_Edit_Notified)
 	   ~format:IAvatar.fmt
-	   ~static:[]
+	   ?dynamic:avatars
 	   (fun task -> return (MDocTask.Get.notified task))
 	   (fun f aids -> return (Ok aids)))
       
