@@ -92,10 +92,14 @@ module Picker = struct
   end) 
 
   let formatResults fmt list = 
-    Run.list_map begin fun (key, writer) ->
+    let! list = ohm $ Run.list_map begin fun (key, writer) ->
       let! writer = ohm writer in 
-      return (fmt.Fmt.to_json key, Html.to_html_string writer)
-    end list 
+      return (Json.Object [
+	"json", fmt.Fmt.to_json key ;
+	"html", Json.String (Html.to_html_string writer)
+      ])
+    end list in
+    return [ "list", Json.Array list ]
 
 end
 

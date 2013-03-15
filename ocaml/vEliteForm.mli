@@ -46,7 +46,7 @@ module Picker : sig
   val formatResults : 
         'data Ohm.Fmt.fmt
     -> ('data * ('c, Ohm.Html.writer) Ohm.Run.t) list  
-    -> ('c, (Ohm.Json.t * string) list) Ohm.Run.t
+    -> ('c, (string * Ohm.Json.t) list) Ohm.Run.t
 
 end
 

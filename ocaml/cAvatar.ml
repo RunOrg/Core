@@ -100,3 +100,19 @@ let directory ?url aids =
   Asset_Avatar_Directory.render (object
     method letters = letters
   end)
+
+let () = UrlClient.def_pickAvatars $ CClient.action begin fun access req res ->
+
+  let result list =   
+    let! json = ohm $ VEliteForm.Picker.formatResults IAvatar.fmt list in
+    return (Action.json json res)
+  in
+
+  let! json = req_or (result []) (Action.Convenience.get_json req) in
+  let! mode = req_or (result []) (VEliteForm.Picker.QueryFmt.of_json_safe json) in
+  
+  match mode with 
+    | `ByJson   list   -> result [] 
+    | `ByPrefix prefix -> result []
+  
+end 
