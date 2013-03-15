@@ -31,6 +31,7 @@ let template ?avatars process =
 	(VEliteForm.picker
 	   ~label:(AdLib.get `DMS_DocTask_Edit_Assigned)
 	   ~format:IAvatar.fmt
+	   ~max:1
 	   ?dynamic:avatars
 	   (fun task -> match MDocTask.Get.assignee task with
 	     | None -> return []
@@ -43,6 +44,7 @@ let template ?avatars process =
 	(VEliteForm.picker
 	   ~label:(AdLib.get `DMS_DocTask_Edit_Notified)
 	   ~format:IAvatar.fmt
+	   ~max:30
 	   ?dynamic:avatars
 	   (fun task -> return (MDocTask.Get.notified task))
 	   (fun f aids -> return (Ok aids)))

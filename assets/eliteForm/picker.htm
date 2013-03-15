@@ -11,7 +11,7 @@
   <div class="elite-field-error error-root"><label></label></div>
 </div>
 
-<script type="stat: (Json.t * string * string) list, dyn: json">
+<script type="stat: (Json.t * string * string) list, dyn: json, max: int">
 $s = @$.find "input.-s"
 $f = @$.find ".-f"
 $l = @$.find ".-l"
@@ -158,6 +158,10 @@ mvsel = (d) ->
   $l.find(".-s").removeClass("-s")
   $l.children(":eq(" + sel + ")").addClass("-s")  
 
+checkMax = () ->
+  return if !max 
+  $f.toggleClass("-maxed", max <= picked.length) 
+
 # Pick the currently selected element
 pick = () ->
   return if sel >= inlist.length
@@ -167,6 +171,7 @@ pick = () ->
   $h = $("<div><a class=-d>&times</a><span>" + inlist[sel].html + "</span></div>")
   mfoc = true
   $s.val("").before($h).focus() 
+  checkMax()
 
 # Remove an element from the "picked element" list
 unpick = (pos) ->
@@ -174,6 +179,7 @@ unpick = (pos) ->
   picked.splice(pos,1) 
   $f.children(":eq(" + pos + ")").remove() 
   save() 
+  checkMax()
   refill() 
 
 # Event handling happens below -------------------------------------------
@@ -253,7 +259,7 @@ $s.blur ->
       cursor: default;
       height: 26px;
       background: none repeat scroll 0 0 #DDD;
-      border-bottom: 1px solid #CCC;
+      border-bottom: 1px solid #AAA;
       color: #333;
       font-size: 13px;
       padding: 2px 8px;
@@ -311,6 +317,14 @@ $s.blur ->
     float: left;
     height: 14px;
     outline: none;
+  }
+
+  .-maxed {
+    border-bottom: 0;
+  }
+ 
+  .-maxed input {
+    display: none;
   }
 
 }

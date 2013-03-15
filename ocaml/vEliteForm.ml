@@ -51,7 +51,7 @@ let date ~label ?detail seed parse =
        ~error:(".elite-field-error label")
        seed parse)
 
-let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic seed parse = 
+let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic ?(max=0) seed parse = 
   let render = 
     let! static = ohm $ Run.list_map (fun (value,key,html) ->
       let! html = ohm html in
@@ -61,6 +61,7 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic seed parse
       method detail = detail
       method left   = left
       method stat   = static 
+      method max    = max
       method dyn    = Json.of_opt JsCode.Endpoint.to_json dynamic
     end)
   in
@@ -76,7 +77,9 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic seed parse
 	 let list = 
 	   try BatList.filter_map format.Fmt.of_json (Json.to_array json) 
 	   with _ -> []
-	 in parse f list))
+	 in 
+	 let list = if max = 0 then list else BatList.take max list in 
+	 parse f list))
 
 module Picker = struct
 
