@@ -61,6 +61,7 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
       method detail = detail
       method left   = left
       method stat   = static 
+      method dyn    = None 
     end)
   in
   OhmForm.wrap ".joy-fields" render

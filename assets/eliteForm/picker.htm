@@ -11,10 +11,22 @@
   <div class="elite-field-error error-root"><label></label></div>
 </div>
 
-<script type="stat: (Json.t * string * string) list">
+<script type="stat: (Json.t * string * string) list, dyn: string option">
 $s = @$.find "input.-s"
 $f = @$.find ".-f"
 $l = @$.find ".-l"
+
+# All static data is made up of three parts
+#  - A JSON key which is the actual data handled by the server
+#  - A search key (made of space-separated words), used for local search
+#  - A piece of HTML to be displayed
+
+# Dynamic data is fetched from the server in two different ways : 
+#  - By JSON key (give me the objects with keys [a, b, c, d])
+#  - By prefix (give me N objects with names starting with XYZ)
+# Returned objects contain two parts : 
+#  - The JSON key
+#  - A piece of HTML to be displayed
 
 mfoc = false # is the next focus event manually sent ?
 
@@ -23,6 +35,8 @@ inlist = [] # currently displayed list of pickable elements
 sel = 0 # currently selected pickable element
 
 picked = [] # all picked values
+
+searchID = 0 # A search identifier, incremented every time a new search starts
 
 matches = (patt,name) ->
   patts = patt.split(" ")
@@ -38,40 +52,64 @@ matches = (patt,name) ->
     return false if !m
   return true      
 
-fill = (src, list) ->
+query = (fs) ->
 
-  # this is the result of an outdated search, don't display
-  return if src is not search
-
+  # Used to abort a search after it is cancelled
+  sID = ++searchID
+  
+  # Reset the current result list 
   inlist = []
+  $l.html ""  
+
+  # Temporary buffer, until all queries have succeeded
+  loaded = 0
   html = []
 
-  fsrc = foldAccents(src)
+  # Query all sources...
+  for f in fs 
+    f (items) -> 
+
+      # Abort if the search is cancelled
+      return if sID != searchID
+
+      # Push all the items to the result list 
+      for item in items 
+        inlist.push(item) 
+        html.push "<div class=-i>", item.html, "</div>"        
+
+      # All queries returned and there are items...
+      if ++loaded == fs.length && inlist.length > 0   
+        $l.append(html.join("")).addClass("-full")
+        mvsel 0
+       
+
+# Querying the static data store...
+fromStatic = (src) ->
+  (next) -> 
+
+    results = []
+    fsrc = foldAccents(src)
   
-  for it in list 
+    for it in stat 
 
-    break if inlist.length >= 5
+      break if results.length >= 5
 
-    # do not display elements that don't have the source as
-    # a prefix
-    continue if !(matches fsrc, it[1])
+      # do not display elements that don't have the source as
+      # a prefix
+      continue if !(matches fsrc, it[1])
 
-    # do not display elements that have been picked
-    exists = false
-    for it2 in picked 
-      if it2[0] == it[0]
-        exists = true
-        break
-    continue if exists    
+      # do not display elements that have been picked
+      exists = false
+      for it2 in picked 
+        if it2.json == it[0]
+          exists = true
+          break
+      continue if exists    
 
-    inlist.push it
-    html.push "<div class=-i>", it[2], "</div>"
-
-  $l.html(html.join(""))
-
-  if inlist.length > 0
-    mvsel 0 
-    $l.addClass "-full"
+      results.push { json : it[0], html : it[2] }
+    
+    next results
+  
 
 refill = (force) ->
   force = force || false
@@ -87,13 +125,13 @@ refill = (force) ->
 
   # don't search if at least one suggestion and no text
   return if picked.length > 0 && $s.val() == "" && !force
-  search = txt    
+  search = txt
 
   # fill up the suggestion list
-  fill txt, stat
+  query [ fromStatic txt ]
 
 save = () ->
-  $f.prev().val($.toJSON(x[0] for x in picked))
+  $f.prev().val($.toJSON(x.json for x in picked))
 
 mvsel = (d) ->
   sel = sel + d 
@@ -109,7 +147,7 @@ pick = () ->
   search = null # cause list to be re-filtered
   picked.push inlist[sel]
   save() 
-  $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
+  $h = $("<div><span>" + inlist[sel].html + "</span><a class=-d>&times</a></div>")
   mfoc = true
   $s.val("").before($h).focus() 
 
