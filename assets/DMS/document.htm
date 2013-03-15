@@ -42,6 +42,16 @@
     {#tasks}             
     <div class="-task {if finished}-finished{/if}">
       <h3>{process|Ohm.AdLib.write|ohm} {?state}<span>{this|Ohm.AdLib.write|ohm}</span>{/?}</h2>     
+      {if fields | OhmAsset.notEmpty}
+        <div class="-fields">
+  	  <dl>
+            {#fields}
+              <dt>{label|ohm}</dt>
+              <dd>{value|ohm|esc}</dd>
+            {/#}
+          </dl>
+	</div>
+      {/if}
       <div class="-foot">
 	{=author}
   	  <a href="{url}">
@@ -140,12 +150,40 @@
       box-shadow: 0 0 3px #AAA;
       border: 1px solid #BBB;
       border-radius: 4px;
+      background-color: #EEE;
       margin: 3px 3px 20px 3px;
       overflow: hidden;
+      .-fields {
+        dl { margin: 0; overflow: hidden; }
+        margin: 7px 7px 0;
+        border: 1px solid #CCC;
+        background-color: white; 
+        dt {
+          font-size: 12px;
+          line-height: 16px;
+          .ellipsis();
+          font-weight: bold;
+          float: left;
+          width: 128px;
+          padding: 10px;
+          clear: both;
+        }
+        dd {
+          font-size: 14px;
+          float: right;
+          width: 288px;
+          padding: 10px;
+          margin: 0;
+        }
+        dd + dt, dd + dt + dd {
+          border-top: 1px solid #CCC;
+        }
+      }
       h3 {
         margin: 0;
         padding: 7px 10px;
         background-color: #DDD;
+        border-bottom: 1px solid #CCC;
         color: #333;
         text-shadow: 0 1px 0 white;
         font-weight: normal;
@@ -164,18 +202,17 @@
       &.-finished {
         box-shadow: none;
         border-color: #DDD;
+        background-color: #FFF;
+        color: #888;
         h3 {
           background-color: #FFF;
           color: #888;
+          border-color: #DDD;
           span {
             background: #DFD;
             border-color: #8E8;
             color: #4A4;
           }
-        }
-        .-foot { 
-          background-color: #FFF;
-          border-color: #DDD;
         }
       } 
       .-foot {
@@ -186,8 +223,6 @@
           margin: 3px 13px 3px 3px;
         }
         .-date { display: inline-block; padding-left: 13px; }
-        background-color: #EEE;
-        border-top: 1px solid #CCC;
         padding: 4px;
         height: 28px;
         line-height: 28px;

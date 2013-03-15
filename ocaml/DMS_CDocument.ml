@@ -95,15 +95,40 @@ let () = CClient.define Url.def_file begin fun access ->
   
   let! tasks = ohm $ MDocTask.All.by_document (MDocument.Get.id doc) in
   let! tasks = ohm $ Run.list_filter begin fun dtid -> 
+
     let! task = ohm_req_or (return None) (MDocTask.get dtid) in
+
     let  state, author, time = MDocTask.Get.theState task in
     let! author = ohm $ O.decay (CAvatar.mini_profile author) in 
+
+    let  data = MDocTask.Get.data task in
+    let  data = 
+      let fields = MDocTask.Get.fields task in
+      BatList.filter_map begin fun (fieldkey, fieldinfo) -> 
+	try let value = BatPMap.find fieldkey data in
+	    let label = AdLib.write (fieldinfo # label) in
+	    let value = match fieldinfo # kind with 
+	      | `TextShort
+	      | `TextLong -> as_text value 
+	      | `Date -> as_date value
+	      | `PickOne l 
+	      | `PickMany l -> as_pick l value
+	    in
+	    BatOption.map (fun value -> (object
+		method label = label
+		method value = value
+	    end)) value 
+	with Not_found -> None
+      end fields
+    in
+
     return (Some MDocTask.(object
       method process  = Get.label task
       method finished = Get.finished task 
       method time     = (time, now) 
       method state    = (PreConfig_Task.DMS.states (Get.process task)) # label state
       method author   = author
+      method fields   = data
       method edit     = Action.url Url.Task.edit (access # instance # key)
 	[ IRepository.to_string rid ; IDocument.to_string did ; IDocTask.to_string dtid ]
     end))
