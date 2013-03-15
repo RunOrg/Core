@@ -78,6 +78,27 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
 	   with _ -> []
 	 in parse f list))
 
+module Picker = struct
+
+  module QueryFmt = Fmt.Make(struct
+    type t = [ `ByJson of Ohm.Json.t list | `ByPrefix of string ]
+    let json_of_t = function
+      | `ByJson   j -> Json.Array j 
+      | `ByPrefix p -> Json.String p 
+    let t_of_json = function 
+      | Json.Array  j -> `ByJson j 
+      | Json.String p -> `ByPrefix p 
+      | json -> Json.parse_error "Expected array or string" json
+  end) 
+
+  let formatResults fmt list = 
+    Run.list_map begin fun (key, writer) ->
+      let! writer = ohm writer in 
+      return (fmt.Fmt.to_json key, Html.to_html_string writer)
+    end list 
+
+end
+
 let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"
     (Asset_EliteForm_Radio.render (object 

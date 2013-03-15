@@ -39,6 +39,17 @@ val picker :
   ->  (OhmForm.field -> 'data list -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
+module Picker : sig 
+  
+  module QueryFmt : Ohm.Fmt.FMT with type t = [ `ByJson of Ohm.Json.t list | `ByPrefix of string ] 
+
+  val formatResults : 
+        'data Ohm.Fmt.fmt
+    -> ('data * ('c, Ohm.Html.writer) Ohm.Run.t) list  
+    -> ('c, (Ohm.Json.t * string) list) Ohm.Run.t
+
+end
+
 val radio : 
       label:('ctx,string) Ohm.Run.t
   -> ?detail:('ctx,string) Ohm.Run.t
