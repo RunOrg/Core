@@ -20,6 +20,13 @@ module Doc = struct
 
 end
 
+module Task = struct
+
+  let create,   def_create = child def_file   "dms/task/create"
+  let edit,     def_edit   = child def_create "dms/task/edit"
+
+end
+
 module Repo = struct
 
   let admin,  def_admin  = child def_see   "dms/repo/admin"

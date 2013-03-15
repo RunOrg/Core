@@ -1,0 +1,29 @@
+<div style="width:600px;margin:30px auto">
+
+  <p>
+    { `DMS_DocTask_CreatePrelude }
+  </p>
+
+  <ul {$ul} class="fullpage-option-pick">
+    {#processes}
+      <li>
+        <a href="javascript:void(0)">
+  	  <span class="-name">{label|Ohm.AdLib.write|ohm}</span>
+        </a>
+      </li>
+    {/#}
+  </ul>
+
+</div>
+
+<script type="url:json">
+wait = false
+here.$ul.find("a").click ->
+  return if wait
+  wait = true
+  pos = $(@).closest("li").prevAll().length 
+  to_endpoint url, pos, (data) ->
+    wait = false
+    if "url" of data 
+      document.location = data.url
+</script> 
