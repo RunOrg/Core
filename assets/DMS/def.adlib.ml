@@ -45,8 +45,12 @@
 | `DMS_NoUpload_Back 
 
 | `DMS_Document_Edit
+| `DMS_Document_Back
 | `DMS_Document_AddVersion 
 | `DMS_Document_Download 
+| `DMS_Document_NoTask
+| `DMS_Document_NewTask 
+| `DMS_Document_EditTask
 
 | `DMS_Document_Forbidden_Title
 | `DMS_Document_Forbidden_Problem 
@@ -73,3 +77,12 @@
 | `DMS_Document_Delete_Warning
 | `DMS_Document_Delete_Submit
 | `DMS_Document_Delete_Cancel
+
+| `DMS_DocTask_Create 
+| `DMS_DocTask_CreatePrelude 
+| `DMS_DocTask_Edit
+| `DMS_DocTask_Save 
+
+| `DMS_DocTask_Edit_State 
+| `DMS_DocTask_Edit_Assigned 
+| `DMS_DocTask_Edit_Notified 

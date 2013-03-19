@@ -20,12 +20,13 @@ let () = CClient.define Url.def_file begin fun access ->
   let! doc = ohm_req_or e404 $ MDocument.view ~actor did in
   let! adoc = ohm $ MDocument.Can.admin doc in 
 
+  let! now = ohmctx (#time) in
+
   (* Render the download link for the latest version *)
 
   let! current = ohm begin 
     let  v = MDocument.Get.current doc in 
     let! url = ohm_req_or (return None) $ MFile.Url.get (v # file) `File in 
-    let! now = ohmctx (#time) in
     let! author = ohm $ O.decay (CAvatar.mini_profile (v # author)) in
     return $ Some (object
       method version  = v # number
@@ -90,20 +91,67 @@ let () = CClient.define Url.def_file begin fun access ->
       end metafields
   end in
 
+  (* Render the task list for the file *)
+  
+  let! tasks = ohm $ MDocTask.All.by_document (MDocument.Get.id doc) in
+  let! tasks = ohm $ Run.list_filter begin fun dtid -> 
+
+    let! task = ohm_req_or (return None) (MDocTask.get dtid) in
+
+    let  state, author, time = MDocTask.Get.theState task in
+    let! author = ohm $ O.decay (CAvatar.mini_profile author) in 
+
+    let  data = MDocTask.Get.data task in
+    let  data = 
+      let fields = MDocTask.Get.fields task in
+      BatList.filter_map begin fun (fieldkey, fieldinfo) -> 
+	try let value = BatPMap.find fieldkey data in
+	    let label = AdLib.write (fieldinfo # label) in
+	    let value = match fieldinfo # kind with 
+	      | `TextShort
+	      | `TextLong -> as_text value 
+	      | `Date -> as_date value
+	      | `PickOne l 
+	      | `PickMany l -> as_pick l value
+	    in
+	    BatOption.map (fun value -> (object
+		method label = label
+		method value = value
+	    end)) value 
+	with Not_found -> None
+      end fields
+    in
+
+    return (Some MDocTask.(object
+      method process  = Get.label task
+      method finished = Get.finished task 
+      method time     = (time, now) 
+      method state    = (PreConfig_Task.DMS.states (Get.process task)) # label state
+      method author   = author
+      method fields   = data
+      method edit     = Action.url Url.Task.edit (access # instance # key)
+	[ IRepository.to_string rid ; IDocument.to_string did ; IDocTask.to_string dtid ]
+    end))
+  end tasks in 
+
   (* Combine everything together *)
 
   O.Box.fill begin 
     Asset_DMS_Document.render (object
-      method admin = match adoc with None -> None | Some _ ->  
-	Some (object
-	  method edit = Action.url Url.Doc.admin (access # instance # key)
-	    [ IRepository.to_string rid ; IDocument.to_string did ]
-	  method add = Action.url Url.Doc.version (access # instance # key) 
-	    [ IRepository.to_string rid ; IDocument.to_string did ]
-	end)	
+      method back = Action.url Url.see (access # instance # key) [ IRepository.to_string rid ]
+      method edit = if adoc = None then None else 
+	  Some (Action.url Url.Doc.admin (access # instance # key)
+		  [ IRepository.to_string rid ; IDocument.to_string did ])
+
+      method add = if adoc = None then None else 
+	  Some (Action.url Url.Doc.version (access # instance # key) 
+		  [ IRepository.to_string rid ; IDocument.to_string did ])
       method name  = MDocument.Get.name doc 
       method current = current
       method meta = meta
+      method tasks = tasks
+      method newTask = Action.url Url.Task.create (access # instance # key) 
+	[ IRepository.to_string rid ; IDocument.to_string did ]
     end)
   end 
 

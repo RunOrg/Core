@@ -4,7 +4,7 @@
     {`Profile_Form_Create_Question}
   </p>
   
-  <ul class="profile-form-pick">
+  <ul class="fullpage-option-pick">
     {#list}
       <li>
 	<a href="{url}">
@@ -17,28 +17,3 @@
 
 </div>
 
-<style>
-.profile-form-pick {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  
-  a {
-    border-top: 1px solid #888;
-    display: block;
-    padding: 8px;
-    height: 20px;
-    overflow: hidden;
-  }
-
-  .-name {
-    font-weight: bold;
-    color: black;
-  }
-
-  .-sub {
-    color: #555;
-    font-size: 13px;
-  }
-}
-</style>
