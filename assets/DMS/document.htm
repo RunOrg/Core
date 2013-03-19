@@ -1,18 +1,25 @@
 <div class="DMS-document">
-  {?admin}
-    <ul class="actions">
-      <li class="-r">
-	<a href="{edit}" class="action-button -admin">
-	  { `DMS_Document_Edit }
-	</a>
-      </li>
-      <li class="-r">
-	<a href="{add}" class="action-button -green">
-	  { `DMS_Document_AddVersion }
-	</a>
-      </li>
-    </ul>
-  {/?}
+  <ul class="actions">
+    <li class="-r">
+      <a href="{back}" class="action-button">
+	{ `DMS_Document_Back }
+      </a>
+    </li>
+    {?edit}
+    <li class="-r">
+      <a href="{this}" class="action-button -admin">
+	{ `DMS_Document_Edit }
+      </a>
+    </li>
+    {/?}
+    {?add}
+    <li class="-r">
+      <a href="{this}" class="action-button -green">
+	{ `DMS_Document_AddVersion }
+      </a>
+    </li>
+    {/?}
+  </ul>  
   <h2>{name}</h2>
   {?current}
     <div class="-current" style="background-image:url({icon})">
@@ -37,6 +44,41 @@
       <dd>{value|ohm|esc}</dd>
     {/#}
   </dl>
+
+  <div class="-tasks">   
+    {#tasks}             
+    <div class="-task {if finished}-finished{/if}">
+      <h3>{process|Ohm.AdLib.write|ohm} {?state}<span>{this|Ohm.AdLib.write|ohm}</span>{/?}</h2>     
+      {if fields | OhmAsset.notEmpty}
+        <div class="-fields">
+  	  <dl>
+            {#fields}
+              <dt>{label|ohm}</dt>
+              <dd>{value|ohm|esc}</dd>
+            {/#}
+          </dl>
+	</div>
+      {/if}
+      <div class="-foot">
+	{=author}
+  	  <a href="{url}">
+            {?pico}<img src="{this}"/>{/?} {name}
+	  </a> 
+	{/=}
+	<span class="-date">{`DateRelative time}</span>
+	<a style="float:right" class="action-button" href="{edit}">{`DMS_Document_EditTask}</a>
+      </div>
+    </div>
+    {else}    
+    <div class="empty-list">
+      {`DMS_Document_NoTask}
+    </div>
+    {/#}
+    <div class="-action">
+      <a style="display: inline-block" class="action-button -green"
+	 href="{newTask}">{`DMS_Document_NewTask}</a>
+    </div>
+  </div>
 
 </div>
 
@@ -105,6 +147,102 @@
     dd {
       margin: 4px 0px 0 0;
       font-size: 13px;
+    }
+  }
+
+  .-tasks {
+    width: 480px;
+    margin-top: 20px;
+    .-task {
+      box-shadow: 0 0 3px #AAA;
+      border: 1px solid #BBB;
+      border-radius: 4px;
+      background-color: #EEE;
+      margin: 3px 3px 20px 3px;
+      overflow: hidden;
+      .-fields {
+        dl { margin: 0; overflow: hidden; }
+        margin: 7px 7px 0;
+        border: 1px solid #CCC;
+        background-color: white; 
+        dt {
+          font-size: 12px;
+          line-height: 16px;
+          .ellipsis();
+          font-weight: bold;
+          float: left;
+          width: 128px;
+          padding: 10px;
+          clear: both;
+        }
+        dd {
+          font-size: 14px;
+          float: right;
+          width: 288px;
+          padding: 10px;
+          margin: 0;
+        }
+        dd + dt, dd + dt + dd {
+          border-top: 1px solid #CCC;
+        }
+      }
+      h3 {
+        margin: 0;
+        padding: 7px 10px;
+        background-color: #DDD;
+        border-bottom: 1px solid #CCC;
+        color: #333;
+        text-shadow: 0 1px 0 white;
+        font-weight: normal;
+        font-size: 16px;
+        span {
+          float: right;
+          background: #FDD;
+          padding: 3px 4px;
+          font-size: 12px;
+          margin: -2px;
+          border: 1px solid #E88;
+          border-radius: 4px;
+          color: #A44;
+        }
+      }
+      &.-finished {
+        box-shadow: none;
+        border-color: #DDD;
+        background-color: #FFF;
+        color: #888;
+        h3 {
+          background-color: #FFF;
+          color: #888;
+          border-color: #DDD;
+          span {
+            background: #DFD;
+            border-color: #8E8;
+            color: #4A4;
+          }
+        }
+      } 
+      .-foot {
+        img {
+          width: 22px;
+          height: 22px;
+          float: left;
+          margin: 3px 13px 3px 3px;
+        }
+        .-date { display: inline-block; padding-left: 13px; }
+        padding: 4px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 12px;
+        color: #666;
+      }
+    }
+    .-action {
+      margin-top: 20px;
+      border-top: 1px #BBB solid; 
+      background-color: #EEE;
+      padding: 2px;
+      text-align: center;
     }
   }
 }

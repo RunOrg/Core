@@ -51,7 +51,7 @@ let date ~label ?detail seed parse =
        ~error:(".elite-field-error label")
        seed parse)
 
-let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse = 
+let picker ~label ?(left=false) ?detail ~format ?(static=[]) ?dynamic ?(max=0) seed parse = 
   let render = 
     let! static = ohm $ Run.list_map (fun (value,key,html) ->
       let! html = ohm html in
@@ -61,6 +61,8 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
       method detail = detail
       method left   = left
       method stat   = static 
+      method max    = max
+      method dyn    = Json.of_opt JsCode.Endpoint.to_json dynamic
     end)
   in
   OhmForm.wrap ".joy-fields" render
@@ -75,7 +77,34 @@ let picker ~label ?(left=false) ?detail ~format ?(static=[]) seed parse =
 	 let list = 
 	   try BatList.filter_map format.Fmt.of_json (Json.to_array json) 
 	   with _ -> []
-	 in parse f list))
+	 in 
+	 let list = if max = 0 then list else BatList.take max list in 
+	 parse f list))
+
+module Picker = struct
+
+  module QueryFmt = Fmt.Make(struct
+    type t = [ `ByJson of Ohm.Json.t list | `ByPrefix of string ]
+    let json_of_t = function
+      | `ByJson   j -> Json.Array j 
+      | `ByPrefix p -> Json.String p 
+    let t_of_json = function 
+      | Json.Array  j -> `ByJson j 
+      | Json.String p -> `ByPrefix p 
+      | json -> Json.parse_error "Expected array or string" json
+  end) 
+
+  let formatResults fmt list = 
+    let! list = ohm $ Run.list_map begin fun (key, writer) ->
+      let! writer = ohm writer in 
+      return (Json.Object [
+	"json", fmt.Fmt.to_json key ;
+	"html", Json.String (Html.to_html_string writer)
+      ])
+    end list in
+    return [ "list", Json.Array list ]
+
+end
 
 let radio ~label ?detail ~format ~source seed parse = 
   OhmForm.wrap ".joy-fields"
