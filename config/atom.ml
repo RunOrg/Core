@@ -10,4 +10,4 @@ let address = nature "Adress"
   ~create:"Nouvelle adresse"
   
 let topic = nature "Topic" 
-  ~create:"Nouveau Thème"
+  ~create:"Nouveau thème"

@@ -70,7 +70,7 @@ module Cfg = struct
   module Diff = Data 
 
   let apply diff = return begin fun _ _ data ->
-    return (clean (BatPMap.foldi BatPMap.add data diff))
+    return (clean (BatPMap.foldi BatPMap.add diff data))
   end
 
   module VersionData = MUpdateInfo
