@@ -18,6 +18,7 @@ let template groups =
 	   ~label:(AdLib.get `Discussion_Field_To)
 	   ~format:IGroup.fmt
 	   ~static:groups
+	   ~max:30
 	   (fun _ -> return []) 
 	   (fun f gids -> return (Ok gids)))
       
