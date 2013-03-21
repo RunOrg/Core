@@ -39,7 +39,7 @@ let to_sort label =
 	" +$"             , ""  ]
     |> String.lowercase
   in
-  BatList.sort_unique compare (BatString.nsplit " " clean) 
+  BatList.sort_unique compare (BatString.nsplit clean " ") 
 
 module All = struct
 
