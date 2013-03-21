@@ -38,6 +38,12 @@ picked = [] # all picked values
 
 searchID = 0 # A search identifier, incremented every time a new search starts
 
+eq = (a,b) ->
+  if typeof a == "string"
+    return a == b
+  else
+    return a.toString() == b.toString()
+
 matches = (patt,name) ->
   patts = patt.split(" ")
   names = foldAccents(name).split(" ")
@@ -81,14 +87,14 @@ query = (fs) ->
         # do not display elements that have been picked
         exists = false
         for it2 in picked 
-          if it2.json == item.json
+          if eq it2.json, item.json
             exists = true
             break
         continue if exists    
 
         # do not display elements that are already in the result list
         for it2 in inlist
-          if it2.json == item.json
+          if eq it2.json, item.json
             exists = true
             break
         continue if exists        
@@ -164,7 +170,7 @@ $f.prev().data 'onSet', (init) ->
   missing = []
   for item in list
     for it2 in stat 
-      if it2[0] == item.json 
+      if eq it2[0], item.json 
         item.html = it2[2]
         break
     continue if "html" of item 
@@ -178,7 +184,7 @@ $f.prev().data 'onSet', (init) ->
     for item in list 
       if !("html" of item) 
         for it2 in list2 
-          if it2.json == item.json
+          if eq it2.json, item.json
             item = it2
             break
       continue if (!"html" of item)

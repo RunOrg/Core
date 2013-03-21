@@ -68,7 +68,7 @@ let render actor key ~fieldkey ~fieldinfo =
   (* Atom pickers *)
 
   let atom = MAtom.PublicFormat.fmt in
-  let dyn n = JsCode.Endpoint.of_url (Action.url UrlClient.atom key n) in
+  let dyn n = JsCode.Endpoint.of_url (Action.url UrlClient.atom key (Some n)) in
 
   let seed_atone s = 
     let! atid = req_or (return []) (IAtom.of_json_safe (seed s)) in
