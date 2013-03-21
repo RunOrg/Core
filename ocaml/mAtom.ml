@@ -159,3 +159,15 @@ let create actor nature label =
   }) in
   Tbl.create data
   
+let of_json ~actor json = 
+  let! atid = req_or (return None) (IAtom.of_json_safe json) in
+  let! atom = ohm_req_or (return None) (get ~actor atid) in
+  return (Some (atom # label))
+
+module PublicFormat = Fmt.Make(struct
+  type json t = 
+    [ `Saved   "s" of IAtom.t 
+    | `Unsaved "u" of IAtom.Nature.t * string
+    ]
+end)
+

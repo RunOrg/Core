@@ -12,6 +12,8 @@ module FieldType : sig
   type t = 
     [ `TextShort
     | `TextLong
+    | `AtomOne  of IAtom.Nature.t
+    | `AtomMany of IAtom.Nature.t
     | `PickOne  of (string * O.i18n) list
     | `PickMany of (string * O.i18n) list
     | `Date

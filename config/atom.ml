@@ -4,6 +4,10 @@ open Common
 open Atom_common
 module Build = Atom_build
 
-let location = nature "Location" 
-  ~create:"Créer lieu"
+type nature = string
+
+let address = nature "Adress" 
+  ~create:"Nouvelle adresse"
   
+let topic = nature "Topic" 
+  ~create:"Nouveau Thème"

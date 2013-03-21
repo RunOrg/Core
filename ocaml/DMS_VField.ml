@@ -5,7 +5,7 @@ open Ohm.Universal
 open BatPervasives
 
 (* Render an individual metafield *)
-let render ~fieldkey ~fieldinfo = 
+let render actor key ~fieldkey ~fieldinfo = 
 
   let label = AdLib.get (fieldinfo # label) in
 
@@ -65,9 +65,45 @@ let render ~fieldkey ~fieldinfo =
     return (Ok (Json.of_list Json.of_string l))
   in
 
+  (* Atom pickers *)
+
+  let atom = MAtom.PublicFormat.fmt in
+  let dyn n = JsCode.Endpoint.of_url (Action.url UrlClient.atom key n) in
+
+  let seed_atone s = 
+    let! atid = req_or (return []) (IAtom.of_json_safe (seed s)) in
+    return [`Saved atid]
+  in
+
+  let seed_atmany s = 
+    try let list = Json.to_list IAtom.of_json (seed s) in
+	let list = List.map (fun x -> `Saved x) list in 
+	return list
+    with _ -> return []
+  in
+
+  let parse_atone _ = function
+    | [`Saved   atid]     -> return (Ok (IAtom.to_json atid)) 
+    | [`Unsaved (n,text)] -> let! atid = ohm (MAtom.create actor n text) in
+			     return (Ok (IAtom.to_json atid)) 
+    | _ -> return (Ok Json.Null)
+  in
+
+  let parse_atmany _ l = 
+    let  l = BatList.sort_unique compare l in 
+    let! l = ohm (Run.list_map begin function 
+      | `Saved atid -> return atid
+      | `Unsaved (n,text) -> let! atid = ohm (MAtom.create actor n text) in
+			     return atid
+    end l) in
+    return (Ok (Json.of_list IAtom.to_json l))
+  in
+
   match fieldinfo # kind with 
     | `Date       -> VEliteForm.date ~label seed_date parse_date
     | `TextShort  -> VEliteForm.text ~label seed_string parse_string
     | `TextLong   -> VEliteForm.textarea ~label seed_string parse_string
     | `PickOne  l -> VEliteForm.radio ~label ~format ~source:(source l) seed_pickone parse_pickone
     | `PickMany l -> VEliteForm.checkboxes ~label ~format ~source:(source l) seed_pickmany parse_pickmany
+    | `AtomOne  n -> VEliteForm.picker ~label ~format:atom ~dynamic:(dyn n) ~max:1 seed_atone parse_atone
+    | `AtomMany n -> VEliteForm.picker ~label ~format:atom ~dynamic:(dyn n) ~max:30 seed_atmany parse_atmany 

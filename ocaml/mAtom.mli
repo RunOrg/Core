@@ -6,6 +6,11 @@ type t = <
   label  : string ;
 > ;;
 
+module PublicFormat : Ohm.Fmt.FMT with type t = 
+  [ `Saved   of IAtom.t 
+  | `Unsaved of IAtom.Nature.t * string
+  ] 
+
 val create : 'any MActor.t -> IAtom.Nature.t -> string -> (#O.ctx,IAtom.t) Ohm.Run.t
 
 module All : sig
@@ -21,3 +26,4 @@ end
 
 val get : actor:'any MActor.t -> IAtom.t -> (#O.ctx,t option) Ohm.Run.t
 
+val of_json : actor:'any MActor.t -> Ohm.Json.t -> (#O.ctx, string option) Ohm.Run.t
