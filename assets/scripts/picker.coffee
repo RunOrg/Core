@@ -91,6 +91,8 @@ class Picker
         when 8 
           if @$field.val() == ""
             @unpick()
+          else
+            return true
 
         # "Up" key moves selection up
         when 40 then @select 1
@@ -324,7 +326,7 @@ class Picker
   # ==========================================================================================================
   # Remove an element from the picked element list
   unpick: (pos) ->
-    pos = pos || @picked.length - 1 if (!pos is 0) 
+    pos = pos || @picked.length - 1 if !(pos is 0) 
     @picked.splice(pos,1)
     @$picked.children(":eq(" + pos + ")").remove()
     @checkMax() 
