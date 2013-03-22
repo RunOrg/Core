@@ -76,4 +76,5 @@ let get_format = function
 
 let cell json eval = 
   let! f = ohm (get_format eval) in 
-  f json 
+  let! string = ohm (f json) in
+  return (String.concat " " (BatString.nsplit string "\n")) 
