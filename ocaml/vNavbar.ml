@@ -82,6 +82,8 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 	Some (object
 	  method dyn = JsCode.Endpoint.to_json 
 	    (JsCode.Endpoint.of_url (Action.url UrlClient.atom key None))
+	  method view = JsCode.Endpoint.to_json 
+	    (JsCode.Endpoint.of_url (Action.url UrlClient.viewAtom key ()))
 	end)
     in
 

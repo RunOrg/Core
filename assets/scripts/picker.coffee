@@ -244,7 +244,7 @@ class Picker
       @picked = []
       @$picked.children("div").remove() 
 
-    return if !init.length
+    return @checkMax() if !init.length
    
     # This might take some time, so display a nice loading animation
     @$picked.addClass "-init"

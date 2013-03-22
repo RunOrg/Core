@@ -75,3 +75,4 @@ module Discussion = UrlClient_discussion
 let pickAvatars, def_pickAvatars = O.declare O.client "search/people" A.none
 
 let atom, def_atom = O.declare O.client "search/atom" (A.o IAtom.Nature.arg)
+let viewAtom, def_viewAtom = O.declare O.client "view/atom" A.none

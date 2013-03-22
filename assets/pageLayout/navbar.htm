@@ -83,10 +83,17 @@ setTimeout check, 1000
 	      <div class="-l">
 	      </div>
 	    </li>
-	    <script type="dyn:json">
+	    <script type="dyn:json,view:json">
 picker = new Picker($("#gsearch"))
 picker.dynamic = dyn
 picker.maximumPicked = 1
+picker.onSave = () ->
+  return if picker.picked.length == 0
+  atom = picker.picked[0]
+  to_endpoint dyn, atom.json, (data) ->
+    picker.set []
+    picker.$field.blur()
+    call data.code 
 	    </script>
           {/?}
 	  <li class="-website">
