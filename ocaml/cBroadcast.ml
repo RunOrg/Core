@@ -11,10 +11,18 @@ let render_list list =
     let  server = instance # key in
     let! pic = ohm $ CPicture.small (instance # pic) in     
     let! now = ohmctx (#time) in
+
+    let  title = match b # content with 
+      | `Post p -> p # title
+      | `RSS  r -> r # title
+    in
+    let! title = ohm begin 
+      if BatString.strip title <> "" then return title else
+	AdLib.get `Broadcast_Untitled
+    end in 
+
     return $ Some (object
-      method title = match b # content with 
-	| `Post p -> p # title
-	| `RSS  r -> r # title
+      method title = title
       method html  = match b # content with 
 	| `Post p -> MRich.OrText.to_html (p # body)
 	| `RSS  r -> Html.str (OhmSanitizeHtml.html (r # body))

@@ -72,8 +72,12 @@ let () = UrlClient.def_article begin fun req res ->
 
   let canonical_url = (UrlClient.article_url key broadcast)  in
 
-  let! () = true_or (return (Action.redirect canonical_url res))
-    (str = Some (UrlClient.article_url_key broadcast)) in
+  let is_canonical = match str with 
+    | Some str -> str = UrlClient.article_url_key broadcast
+    | None -> "" = UrlClient.article_url_key broadcast
+  in
+
+  let! () = true_or (return (Action.redirect canonical_url res)) is_canonical in
 
   let main = page actions (CBroadcast.render_list [broadcast]) in
   let left = Left.render cuid key iid in 
