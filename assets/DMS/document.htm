@@ -49,6 +49,20 @@
     {#tasks}             
     <div class="-task {if finished}-finished{/if}">
       <h3>{process|Ohm.AdLib.write|ohm} {?state}<span>{this|Ohm.AdLib.write|ohm}</span>{/?}</h2>     
+      {?assignee}
+      <div class="-assignee">
+	<span>{`DMS_Document_TaskAssignee}</span>
+	<a href="{url}">{?pico}<img src="{this}"/>{/?}<span>{name}</span></a>
+      </div>
+      {/?}
+      {if notified | OhmAsset.notEmpty}
+      <div class="-assignee">
+	<span>{`DMS_Document_TaskNotified}</span>
+	{#notified}
+  	  <a href="{url}">{?pico}<img src="{this}"/>{/?}<span>{name}</span></a>
+	{/#}
+      </div>
+      {/if}
       {if fields | OhmAsset.notEmpty}
         <div class="-fields">
   	  <dl>
@@ -160,6 +174,39 @@
       background-color: #EEE;
       margin: 3px 3px 20px 3px;
       overflow: hidden;
+      .-assignee {
+        margin: 7px 7px 0;
+        & + .-assignee {
+          border-top: 1px solid #DDD;
+          padding-top: 7px;
+        }
+        > span {
+          float: left;
+          width: 80px;
+          font-size: 13px;
+          line-height: 22px;          
+          text-align: right;
+          color: #888;
+        }
+        a {
+          margin-left: 100px;
+          display: block;
+          height: 22px;
+          line-height: 22px;
+          margin-bottom: 2px;
+          span {
+            display: block;
+            margin-left: 28px;
+            font-size: 13px;
+            color: #333;
+          }
+        }
+        img {
+          float: left;
+          width: 22px;
+          height: 22px;
+        }
+      }
       .-fields {
         dl { margin: 0; overflow: hidden; }
         margin: 7px 7px 0;
@@ -208,7 +255,7 @@
       }
       &.-finished {
         box-shadow: none;
-        border-color: #DDD;
+        border-color: #CCC;
         background-color: #FFF;
         color: #888;
         h3 {
@@ -220,6 +267,9 @@
             border-color: #8E8;
             color: #4A4;
           }
+        }
+        .-foot {
+          border-color: #DDD;
         }
       } 
       .-foot {
@@ -235,7 +285,10 @@
         line-height: 28px;
         font-size: 12px;
         color: #666;
+        border-top: 1px solid #CCC;
+        margin-top: 7px;
       }
+      h3 + .-foot { margin-top: 0; border: none; }
     }
     .-action {
       margin-top: 20px;

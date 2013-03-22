@@ -132,10 +132,15 @@ let () = CClient.define Url.def_file begin fun access ->
       end fields
     end in
 
+    let! assignee = ohm $ O.decay (Run.opt_map CAvatar.mini_profile (MDocTask.Get.assignee task)) in
+    let! notified = ohm $ O.decay (Run.list_map CAvatar.mini_profile (MDocTask.Get.notified task)) in
+
     return (Some MDocTask.(object
       method process  = Get.label task
       method finished = Get.finished task 
       method time     = (time, now) 
+      method assignee = assignee
+      method notified = notified
       method state    = (PreConfig_Task.DMS.states (Get.process task)) # label state
       method author   = author
       method fields   = data
