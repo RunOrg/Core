@@ -4,6 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module View = CAtom_view
+
 let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
 
   let result list =   
