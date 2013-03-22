@@ -11,10 +11,22 @@
   <div class="elite-field-error error-root"><label></label></div>
 </div>
 
-<script type="stat: (Json.t * string * string) list">
+<script type="stat: (Json.t * string * string) list, dyn: json, max: int">
 $s = @$.find "input.-s"
 $f = @$.find ".-f"
 $l = @$.find ".-l"
+
+# All static data is made up of three parts
+#  - A JSON key which is the actual data handled by the server
+#  - A search key (made of space-separated words), used for local search
+#  - A piece of HTML to be displayed
+
+# Dynamic data is fetched from the server in two different ways : 
+#  - By JSON key (give me the objects with keys [a, b, c, d])
+#  - By prefix (give me N objects with names starting with XYZ)
+# Returned objects contain two parts : 
+#  - The JSON key
+#  - A piece of HTML to be displayed
 
 mfoc = false # is the next focus event manually sent ?
 
@@ -23,6 +35,8 @@ inlist = [] # currently displayed list of pickable elements
 sel = 0 # currently selected pickable element
 
 picked = [] # all picked values
+
+searchID = 0 # A search identifier, incremented every time a new search starts
 
 matches = (patt,name) ->
   patts = patt.split(" ")
@@ -38,41 +52,79 @@ matches = (patt,name) ->
     return false if !m
   return true      
 
-fill = (src, list) ->
+query = (fs) ->
 
-  # this is the result of an outdated search, don't display
-  return if src is not search
-
+  # Used to abort a search after it is cancelled
+  sID = ++searchID
+  
+  # Reset the current result list 
   inlist = []
+  $l.html ""  
+
+  # Temporary buffer, until all queries have succeeded
+  loaded = 0
   html = []
 
-  fsrc = foldAccents(src)
+  # Query all sources...
+  for f in fs 
+    f (items) -> 
+
+      # Abort if the search is cancelled
+      return if sID != searchID
+
+      # Push all the items to the result list 
+      for item in items 
+
+        # Stop if 5 items are displayed
+        break if inlist.length >= 5
+
+        # do not display elements that have been picked
+        exists = false
+        for it2 in picked 
+          if it2.json == item.json
+            exists = true
+            break
+        continue if exists    
+
+        # do not display elements that are already in the result list
+        for it2 in inlist
+          if it2.json == item.json
+            exists = true
+            break
+        continue if exists        
+
+        inlist.push(item) 
+        html.push "<div class=-i>", item.html, "</div>"        
+
+      # All queries returned and there are items...
+      if ++loaded == fs.length && inlist.length > 0   
+        $l.append(html.join("")).addClass("-full")
+        mvsel 0
+       
+# Querying the static data store...
+fromStatic = (src) ->
+  (next) -> 
+
+    results = []
+    fsrc = foldAccents(src)
   
-  for it in list 
+    for it in stat 
+      if matches fsrc, it[1]
+        results.push 
+          json : it[0], 
+          html : it[2] 
+    
+    next results
 
-    break if inlist.length >= 5
+# Querying the dynamic data store...
+fromDynamic = (src) -> 
+  if !dyn 
+    return (next) -> next []
+  (next) -> 
+    to_endpoint dyn, src, (data) ->
+      next (if "list" of data then data.list else [])
 
-    # do not display elements that don't have the source as
-    # a prefix
-    continue if !(matches fsrc, it[1])
-
-    # do not display elements that have been picked
-    exists = false
-    for it2 in picked 
-      if it2[0] == it[0]
-        exists = true
-        break
-    continue if exists    
-
-    inlist.push it
-    html.push "<div class=-i>", it[2], "</div>"
-
-  $l.html(html.join(""))
-
-  if inlist.length > 0
-    mvsel 0 
-    $l.addClass "-full"
-
+# Regenerate the result list based on the current search field
 refill = (force) ->
   force = force || false
   txt = $s.val().trim()
@@ -87,14 +139,66 @@ refill = (force) ->
 
   # don't search if at least one suggestion and no text
   return if picked.length > 0 && $s.val() == "" && !force
-  search = txt    
+  search = txt
 
   # fill up the suggestion list
-  fill txt, stat
+  query [ fromStatic(txt), fromDynamic(txt) ]
 
+# Save the picked items to the underlying form field
 save = () ->
-  $f.prev().val($.toJSON(x[0] for x in picked))
+  $f.prev().val($.toJSON(x.json for x in picked))
 
+# Load initial data from the underlying form field
+$f.prev().data 'onSet', (init) ->
+
+  # Ensure the source data is valid
+  return if !init
+  init = eval('(' + init + ')')
+  return if !init.length 
+
+  # Things are missing, so let's load them...
+  $f.addClass("-init")
+  list = ({ json : json } for json in init)
+
+  # Look for items in the static source
+  missing = []
+  for item in list
+    for it2 in stat 
+      if it2[0] == item.json 
+        item.html = it2[2]
+        break
+    continue if "html" of item 
+    missing.push item.json
+
+  # Call this function on the data from the dynamic source  
+  next = (list2) -> 
+
+    # Display all items that have some HTML 
+    html = []
+    for item in list 
+      if !("html" of item) 
+        for it2 in list2 
+          if it2.json == item.json
+            item = it2
+            break
+      continue if (!"html" of item)
+      picked.push item
+      html.push("<div><a class=-d>&times</a><span>" + item.html + "</span></div>")      
+    $s.before(html.join(""))
+
+    # Great, we're good to go : restore valid component state
+    save()
+    $f.removeClass("-init")
+    checkMax()
+
+  # Determine if we could and/or should load dynamic data
+  if missing.length > 0 && dyn 
+    to_endpoint dyn, missing, (data) ->
+      next(if "list" of data then data.list else []) 
+  else
+    next [] 
+ 
+# Move the selection line through the result set
 mvsel = (d) ->
   sel = sel + d 
   if sel < 0 
@@ -104,25 +208,39 @@ mvsel = (d) ->
   $l.find(".-s").removeClass("-s")
   $l.children(":eq(" + sel + ")").addClass("-s")  
 
+checkMax = () ->
+  return if !max 
+  $f.toggleClass("-maxed", max <= picked.length) 
+
+# Render a picked element
+
+
+# Pick the currently selected element
 pick = () ->
   return if sel >= inlist.length
   search = null # cause list to be re-filtered
   picked.push inlist[sel]
   save() 
-  $h = $("<div><span>" + inlist[sel][2] + "</span><a class=-d>&times</a></div>")
+  $h = $("<div><a class=-d>&times</a><span>" + inlist[sel].html + "</span></div>")
   mfoc = true
   $s.val("").before($h).focus() 
+  checkMax()
 
+# Remove an element from the "picked element" list
 unpick = (pos) ->
   pos = pos || picked.length - 1 if !(pos is 0) 
   picked.splice(pos,1) 
   $f.children(":eq(" + pos + ")").remove() 
   save() 
+  checkMax()
   refill() 
+
+# Event handling happens below -------------------------------------------
 
 $l.mousedown (e) -> 
   $e = $ e.target
   return if $e.is($l)
+  # Simulate a selection change, then pick() 
   sel = $e.closest(".-i").prevAll().length
   pick()   
 
@@ -184,30 +302,29 @@ $s.blur ->
 
   .-f {
     background-color: white; 
-    padding: 3px 3px 1px;
     border: 1px solid #AAA;
-    width: 394px;
-    min-height: 22px;
+    width: 400px;
+    min-height: 2px;
     overflow: hidden;
     cursor: text;
 
     > div {
       cursor: default;
+      height: 26px;
       background: none repeat scroll 0 0 #DDD;
-      border: 1px solid #CCC;
-      border-radius: 3px 3px 3px 3px;
+      border-bottom: 1px solid #AAA;
       color: #333;
-      float: left;
       font-size: 13px;
-      margin: 0 2px 2px 0;
-      padding: 1px 4px;
+      padding: 2px 8px;
+      overflow: hidden;
+      line-height: 27px;
       > a {
+        float: right; 
         color: #888;
         cursor: pointer;
-        display: inline-block;
         font-size: 18px;
-        height: 13px;
-        line-height: 13px;
+        height: 26px;
+        line-height: 24px;
         margin-left: 5px;
         &:hover {
           color: black;
@@ -247,12 +364,23 @@ $s.blur ->
     .asap();
     font-size: 13px;
     padding: 3px;
-    margin-bottom: 1px; 
+    margin: 2px; 
     width: 100px;
     border: none;
     float: left;
     height: 14px;
     outline: none;
+  }
+
+  .-maxed {
+    border-bottom: 0;
+    input { display: none; }
+  }
+ 
+  .-init {
+    height: 26px;
+    background: url(/public/icon/load-16x16.gif) center center no-repeat #FFF; 
+    > * { display: none; }
   }
 
 }

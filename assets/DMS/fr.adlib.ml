@@ -45,8 +45,12 @@
 | `DMS_NoUpload_Back -> "Retour"
 
 | `DMS_Document_Edit -> "Modifier"
+| `DMS_Document_Back -> "Retour"
 | `DMS_Document_AddVersion -> "Nouvelle Version"
 | `DMS_Document_Download -> "Télécharger"
+| `DMS_Document_NoTask -> "Aucune tâche associée"
+| `DMS_Document_NewTask -> "Nouvelle Tâche"
+| `DMS_Document_EditTask -> "Modifier"
 
 | `DMS_Document_Forbidden_Title -> "Page inaccessible"
 | `DMS_Document_Forbidden_Problem -> "Vous ne pouvez pas afficher cette page parce qu'elle a été supprimée ou que vous ne disposez pas des droits suffisants."
@@ -73,3 +77,12 @@
 | `DMS_Document_Delete_Warning -> "Ce document n'apparaîtra plus dans cette bibliothèque."
 | `DMS_Document_Delete_Submit -> "Supprimer"
 | `DMS_Document_Delete_Cancel -> "Ne pas supprimer"
+
+| `DMS_DocTask_Create -> "Nouvelle Tâche"
+| `DMS_DocTask_CreatePrelude -> "Quel type de tâche souhaitez-vous créer sur ce document ?"
+| `DMS_DocTask_Edit -> "Modifier une tâche"
+| `DMS_DocTask_Save -> "Enregistrer"
+
+| `DMS_DocTask_Edit_State -> "Statut"
+| `DMS_DocTask_Edit_Assigned -> "Affecté à" 
+| `DMS_DocTask_Edit_Notified -> "En copie"
