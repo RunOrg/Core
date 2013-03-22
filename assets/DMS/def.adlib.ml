@@ -51,6 +51,8 @@
 | `DMS_Document_NoTask
 | `DMS_Document_NewTask 
 | `DMS_Document_EditTask
+| `DMS_Document_TaskAssignee
+| `DMS_Document_TaskNotified
 
 | `DMS_Document_Forbidden_Title
 | `DMS_Document_Forbidden_Problem 
