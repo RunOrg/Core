@@ -52,3 +52,18 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
     | `ByPrefix prefix -> by_prefix prefix
   
 end 
+
+let () = UrlClient.def_viewAtom $ CClient.action begin fun access req res ->
+
+  let! json = req_or (return res) (Action.Convenience.get_json req) in
+  let! atid = req_or (return res) (MAtom.PublicFormat.of_json_safe json) in 
+
+  let! atid = req_or (return res) (match atid with 
+    | `Saved atid -> Some atid
+    | `Unsaved _ -> None) in
+
+  let url = Action.url UrlClient.Atom.view (access # instance # key) [ IAtom.to_string atid ] in
+
+  return (Action.javascript (Js.redirect url ()) res)
+
+end

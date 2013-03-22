@@ -90,7 +90,7 @@ picker.maximumPicked = 1
 picker.onSave = () ->
   return if picker.picked.length == 0
   atom = picker.picked[0]
-  to_endpoint dyn, atom.json, (data) ->
+  to_endpoint view, atom.json, (data) ->
     picker.set []
     picker.$field.blur()
     call data.code 

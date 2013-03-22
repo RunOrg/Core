@@ -59,6 +59,7 @@ let newhere, def_newhere   = O.declare O.client "newhere" A.none
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
 module Like       = UrlClient_like
+module Atom       = UrlClient_atom 
 module Comment    = UrlClient_comment
 module Item       = UrlClient_item
 module MiniPoll   = UrlClient_miniPoll 
