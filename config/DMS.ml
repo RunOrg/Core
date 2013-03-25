@@ -26,7 +26,7 @@ let creator = field "DC.Creator"
   (adlib "DC_Creator" "Créateur ou origine")
   `TextShort
 
-(* Les modèles de champs génériques ------------------------------------------------------------------------- *)
+(* Les modèles de champs génériques -------------------------------------------------------------------------- *)
 
 let () = fieldset "Default" [
   description ;
