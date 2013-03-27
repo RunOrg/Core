@@ -156,12 +156,19 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
     let! html = ohm $ render_list self (Some time) in
     return $ Action.json [ "more", Html.to_json html ] res
   end in
+
+  let! zap = O.Box.react Fmt.Unit.fmt begin fun _ _ _ res ->
+    let! () = ohm (O.decay (MNotify.zap_unread cuid)) in
+    return res
+  end in
     
   O.Box.fill begin
     Asset_Notify_List.render (object
       method inner = render_list more None
+      method zap = JsCode.Endpoint.to_json (OhmBox.reaction_endpoint zap ())
       method options = Action.url UrlMe.Notify.settings owid () 
     end) 
+
   end 
 end
 

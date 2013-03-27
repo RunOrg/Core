@@ -2,6 +2,14 @@
   <li class="-r">
     <a class="action-button -admin" href="{options}">{`Notify_Link_Settings}</a>
   </li>
+  <li>
+    <a {$zap} class="action-button" href="javascript:void(0)">{`Notify_Link_Zap}</a>
+    <script type="zap:json">
+here.$zap.click () -> 
+  to_endpoint zap
+  $(".-unseen").removeClass("-unseen")
+    </script>
+  </li>
 </ul>
 
 <div class="notify-list">

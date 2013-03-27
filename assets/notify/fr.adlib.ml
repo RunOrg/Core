@@ -24,6 +24,7 @@ end
 | `Notify_Expired_Body -> "Pour des raisons de sécurité, le lien que vous avez suivi a dépassé sa date limite d'utilisation. Nous vous avons envoyé un nouveau lien par mail."
 
 | `Notify_Link_Settings -> "Paramètres"
+| `Notify_Link_Zap -> "Tout marquer comme lu"
 
 | `Notify_Title -> "Notifications"
 
