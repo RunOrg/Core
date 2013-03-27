@@ -19,7 +19,8 @@ let zap_unread uid =
 
 let () = def_zap_unread_task zap_unread
 
-let zap_unread cuid = zap_unread (ICurrentUser.decay cuid) 
+let zap_unread cuid = 
+  zap_unread (ICurrentUser.decay cuid) 
 
 let get_token nid = 
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 

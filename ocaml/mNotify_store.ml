@@ -134,17 +134,16 @@ let all_mine ~count ?start cuid =
 
 module UnseenByUser = CouchDB.DocView(struct
   module Key    = IUser
-  module Value  = Fmt.Int
+  module Value  = Fmt.Unit
   module Doc    = Data
   module Design = Design
-  (* Same as CountByUser view below *)
-  let name = "count_by_user"
-  let map = "if (!doc.r && !doc.sn) emit(doc.u,1);"
+  let name = "unseen_by_user"
+  let map = "if (!doc.r && !doc.sn) emit(doc.u);"
 end)
 
 let get_unread ~count cuid = 
   let  uid  = IUser.Deduce.is_anyone cuid in 
-  let! list = ohm $ UnseenByUser.doc_query ~startkey:uid ~endkey:uid ~limit:count () in 
+  let! list = ohm $ UnseenByUser.doc_query ~startkey:uid ~endkey:uid ~endinclusive:true ~limit:count () in 
   return (List.map (#id |- INotify.of_id) list) 
 
 (* Count unseen notifications for an user --------------------------------------------------- *)
