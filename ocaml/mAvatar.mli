@@ -154,5 +154,10 @@ module Backdoor : sig
   val list : count:int -> IAvatar.t option -> ((IUser.t * IInstance.t * Status.t) list * IAvatar.t option) O.run
 
   val refresh_grants : unit -> unit O.run
+
+  val refresh_avatar_atoms : unit -> unit O.run
 	
 end
+
+
+
