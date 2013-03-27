@@ -21,12 +21,16 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
 
   let  display atom = (`Saved (atom # id), return (Html.esc (atom # label))) in
 
-  let  create n label = 
-    `Unsaved (n,label), 
-    Asset_Atom_Create.render (object
-      method nature = n
-      method name   = label
-    end)
+  let  create n label =
+    match n with None -> None | Some n -> 
+      if label = "" then None else 
+	match PreConfig_Atom.create_label n with None -> None | Some create ->	  
+	  Some (
+	    `Unsaved (n,label), 
+	    Asset_Atom_Create.render (object
+	      method create = AdLib.write create
+	      method name   = label
+	    end))
   in
 
   let by_prefix prefix =
@@ -34,9 +38,9 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
     let  count  = 10 in
     let! list   = ohm $ MAtom.All.suggest iid ?nature ~count prefix in 
     let  list   = List.map display list in 
-    result (match nature with 
-      | Some n when prefix <> "" -> list @ [create n prefix] 
-      | _ -> list) 
+    result (match create nature prefix with 
+      | Some create -> list @ [create]
+      | None        -> list) 
   in
 
   let by_json atids = 
@@ -44,7 +48,7 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
     let! list = ohm $ Run.list_filter begin function 
       | `Saved atid -> let! atom = ohm_req_or (return None) (MAtom.get (access # actor) atid) in 
 		       return (Some (display atom))
-      | `Unsaved (n,label) -> return (Some (create n label))
+      | `Unsaved (n,label) -> return (create (Some n) label)
     end atids in 
     result list
   in
