@@ -6,6 +6,23 @@ open BatPervasives
 
 module View = CAtom_view
 
+(* Plug-in registration ------------------------------------------------------------------------------------- *)
+
+let plugins = ref BatPMap.empty 
+
+let register ~nature ~render ~search = 
+  plugins := BatPMap.add nature (render, search) !plugins
+
+let render nature default = 
+  try BatPMap.find nature !plugins |> fst 
+  with Not_found -> default
+
+let search nature default = 
+  try BatPMap.find nature !plugins |> snd
+  with Not_found -> default
+
+(* Listing atoms in search fields --------------------------------------------------------------------------- *)
+
 let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
 
   let result list =   
@@ -19,7 +36,10 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   let  iid    = IInstance.decay (access # iid) in
   let  nature = req # args in
 
-  let  display atom = (`Saved (atom # id), return (Html.esc (atom # label))) in
+  let  display atom = 
+    let render = render (atom # nature) (fun atom -> return (Html.esc (atom # label))) atom in
+    (`Saved (atom # id), render) 
+  in
 
   let  create n label =
     match n with None -> None | Some n -> 
@@ -59,6 +79,8 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   
 end 
 
+(* Redirect to appropriate atom viewing page ---------------------------------------------------------------- *)
+
 let () = UrlClient.def_viewAtom $ CClient.action begin fun access req res ->
 
   let! json = req_or (return res) (Action.Convenience.get_json req) in
@@ -68,8 +90,13 @@ let () = UrlClient.def_viewAtom $ CClient.action begin fun access req res ->
     | `Saved atid -> Some atid
     | `Unsaved _ -> None) in
 
-  let url = Action.url UrlClient.Atom.view (access # instance # key) [ IAtom.to_string atid ] in
+  let key = access # instance # key in
 
-  return (Action.javascript (Js.redirect url ()) res)
+  let default key atid = Action.url UrlClient.Atom.view key [ IAtom.to_string atid ] in
+  let result  url  = return (Action.javascript (Js.redirect url ()) res) in
+
+  let! atom = ohm_req_or (result (default key atid)) (MAtom.get ~actor:(access # actor) atid) in
+  
+  result (search (atom # nature) default key atid)
 
 end
