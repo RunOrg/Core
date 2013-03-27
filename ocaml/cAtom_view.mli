@@ -3,6 +3,11 @@
 val addFilter : 
      key:string 
   -> label:O.i18n
-  -> body:([`IsToken] CAccess.t -> IAtom.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t)
+  -> query:(
+        count:int
+     -> ?start:Ohm.Json.t 
+     -> [`Token] CAccess.t
+     -> IAtom.t 
+     -> (Ohm.Html.writer list * Ohm.Json.t option) O.run)
   -> unit
 

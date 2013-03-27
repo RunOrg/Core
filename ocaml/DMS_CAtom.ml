@@ -4,9 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let count = 8
-
-let search more ?start access atid = 
+let query ~count ?start access atid = 
+  let start = BatOption.bind DMS_IDocument.of_json_safe start in
   let! list, next = ohm (DMS_MDocument.Search.by_atom ~actor:(access # actor) ?start ~count atid) in
   let! htmls = ohm $ Run.list_map (fun doc -> 
     let did = DMS_IDocument.decay (DMS_MDocument.Get.id doc) in
@@ -15,9 +14,6 @@ let search more ?start access atid =
       method name = DMS_MDocument.Get.name doc 
     end)
   ) list in
-  return (Html.concat htmls)
+  return (htmls, BatOption.map DMS_IDocument.to_json next)
 
-let body access atid = 
-  O.Box.fill (search () access atid)
-
-let () = CAtom.View.addFilter ~key:"dms-docs" ~label:`DMS_Atom_Filter ~body
+let () = CAtom.View.addFilter ~key:"dms-docs" ~label:`DMS_Atom_Filter ~query

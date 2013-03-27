@@ -4,21 +4,28 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let empty access atid = 
-  O.Box.fill (Asset_Client_PageNotFound.render ()) 
+let empty ~count ?start access atid = 
+  return ([], None)
 
 (* Filter management *)
 
-let filters = ref ([])
+type query = 
+    count:int
+ -> ?start:Ohm.Json.t 
+ -> [`Token] CAccess.t
+ -> IAtom.t 
+ -> (Ohm.Html.writer list * Ohm.Json.t option) O.run
 
-let addFilter ~key ~label ~body = 
-  filters := (key, (label, body)) :: !filters
+let filters = ref ([] : (string * (O.i18n * query)) list)
+
+let addFilter ~key ~label ~query = 
+  filters := (key, (label, query)) :: !filters
 
 let () = 
-  addFilter ~key:"avatars"     ~label:`Atom_Filter_Avatars     ~body:empty ;
-  addFilter ~key:"groups"      ~label:`Atom_Filter_Groups      ~body:empty ;
-  addFilter ~key:"events"      ~label:`Atom_Filter_Events      ~body:empty ;
-  addFilter ~key:"discussions" ~label:`Atom_Filter_Discussions ~body:empty 
+  addFilter ~key:"avatars"     ~label:`Atom_Filter_Avatars     ~query:empty ;
+  addFilter ~key:"groups"      ~label:`Atom_Filter_Groups      ~query:empty ;
+  addFilter ~key:"events"      ~label:`Atom_Filter_Events      ~query:empty ;
+  addFilter ~key:"discussions" ~label:`Atom_Filter_Discussions ~query:empty 
 
 let filters = lazy (List.rev !filters) 
 
@@ -30,9 +37,6 @@ let () = CClient.define UrlClient.Atom.def_view begin fun access ->
 
   let! atid = O.Box.parse IAtom.seg in 
   let! filter = O.Box.parse OhmBox.Seg.string in 
-
-  let  filter, (_,box) = try List.find (fst |- (=) filter) filters with Not_found -> List.hd filters in 
-  let! box = O.Box.add (box access atid) in 
 
   O.Box.fill begin 
 
@@ -53,7 +57,7 @@ let () = CClient.define UrlClient.Atom.def_view begin fun access ->
     Asset_Atom_Wrap.render (object
       method title = atom # label 
       method filters = filters
-      method body = return (O.Box.render box)
+      method body = return (Html.str "")
     end)
     
   end 
