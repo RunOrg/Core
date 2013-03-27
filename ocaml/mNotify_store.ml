@@ -25,6 +25,7 @@ module Data = struct
       sent        "st" : float option ;
       mail_clicks "mc" : int ;
       site_clicks "sc" : int ;
+     ?zap_clicks  "zc" : int = 0 ;
       rotten      "r"  : bool ;
       delayed     "d"  : bool ;
       stats       "s"  : INotifyStats.t option 
@@ -42,6 +43,7 @@ type data = Data.t = {
   sent        : float option ;
   mail_clicks : int ;
   site_clicks : int ;
+  zap_clicks  : int ; 
   rotten      : bool ;
   delayed     : bool ;
   stats       : INotifyStats.t option 
@@ -63,6 +65,7 @@ let create ?stats payload user =
     sent    = None ;
     mail_clicks = 0 ;
     site_clicks = 0 ;
+    zap_clicks  = 0 ;
     rotten  = false ;
     delayed = false ;
     stats   ;

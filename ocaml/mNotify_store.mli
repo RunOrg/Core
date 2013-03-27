@@ -8,6 +8,7 @@ type data = {
   sent        : float option ;
   mail_clicks : int ;
   site_clicks : int ;
+  zap_clicks  : int ;
   rotten      : bool ;
   delayed     : bool ;
   stats       : INotifyStats.t option 
