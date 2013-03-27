@@ -11,6 +11,8 @@ module PublicFormat : Ohm.Fmt.FMT with type t =
   | `Unsaved of IAtom.Nature.t * string
   ] 
 
+val reflect : IInstance.t -> IAtom.Nature.t -> Ohm.Id.t -> string -> (#O.ctx,unit) Ohm.Run.t
+
 val create : 'any MActor.t -> IAtom.Nature.t -> string -> (#O.ctx,IAtom.t option) Ohm.Run.t
 
 module All : sig

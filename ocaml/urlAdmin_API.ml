@@ -31,3 +31,5 @@ let confirm_user = declare "Confirmer un compte utilisateur" "confirm-user"
 let set_plugins = declare "Modifier les plugins" "set-plugins"
 
 let refresh_grants = declare "Recalculer les jetons" "refresh-grants"
+
+let migrate = declare "Migration de données" "migrate"
