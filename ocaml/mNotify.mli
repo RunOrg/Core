@@ -84,6 +84,8 @@ module Send : sig
 
 end
 
+val zap_unread : 'any ICurrentUser.id -> unit O.run
+
 val get_token  : INotify.t -> string 
 
 val from_token : 
