@@ -147,18 +147,23 @@ let get ~actor atid =
   end))
 
 let create actor nature label = 
-  let iid    = IInstance.decay (MActor.instance actor) in
-  let label  = BatString.head label max_label_size in
-  let sort   = to_sort label in
-  let data   = Data.({ 
-    nature ;
-    more = [] ;
-    label ;
-    sort ;
-    iid
-  }) in
-  Tbl.create data
-  
+  if not (IAtom.Nature.can_create nature) then return None else
+    let label = BatString.head (BatString.strip label) max_label_size in
+    if label = "" then return None else 
+      let sort = to_sort label in
+      if sort = [] then return None else
+	let iid  = IInstance.decay (MActor.instance actor) in 
+	let more = IAtom.Nature.parents nature in 
+	let data = Data.({ 
+	  nature ;
+	  more ;
+	  label ;
+	  sort ;
+	  iid
+	}) in
+	let! atid = ohm (Tbl.create data) in
+	return (Some atid) 
+	
 let of_json ~actor json = 
   let! atid = req_or (return None) (IAtom.of_json_safe json) in
   let! atom = ohm_req_or (return None) (get ~actor atid) in

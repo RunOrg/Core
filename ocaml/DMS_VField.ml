@@ -84,17 +84,16 @@ let render actor key ~fieldkey ~fieldinfo =
 
   let parse_atone _ = function
     | [`Saved   atid]     -> return (Ok (IAtom.to_json atid)) 
-    | [`Unsaved (n,text)] -> let! atid = ohm (MAtom.create actor n text) in
-			     return (Ok (IAtom.to_json atid)) 
+    | [`Unsaved (n,text)] -> let! atid = ohm_req_or (return (Ok Json.Null)) (MAtom.create actor n text) in
+			     return (Ok (IAtom.to_json atid))
     | _ -> return (Ok Json.Null)
   in
 
   let parse_atmany _ l = 
     let  l = BatList.sort_unique compare l in 
-    let! l = ohm (Run.list_map begin function 
-      | `Saved atid -> return atid
-      | `Unsaved (n,text) -> let! atid = ohm (MAtom.create actor n text) in
-			     return atid
+    let! l = ohm (Run.list_filter begin function 
+      | `Saved atid -> return (Some atid)
+      | `Unsaved (n,text) -> MAtom.create actor n text
     end l) in
     return (Ok (Json.of_list IAtom.to_json l))
   in
