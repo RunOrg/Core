@@ -3,3 +3,5 @@
 | `Atom_Filter_Discussions
 | `Atom_Filter_Avatars
 | `Atom_Filter_All 
+
+| `Atom_EmptySearch

@@ -73,13 +73,22 @@ let () = CClient.define UrlClient.Atom.def_view begin fun access ->
     in
     match search # start with 
       | key :: xs -> let! htmls, next = ohm (O.decay (query key ~count access atid)) in
-		   result htmls (object
-		     method start = xs
-		     method next = match next with 
-		       | None -> search # next
-		       | Some json -> search # next @ [key, json] 
-		   end) 
-      | [] -> return res
+		     result htmls (object
+		       method start = xs
+		       method next = match next with 
+			 | None -> search # next
+			 | Some json -> search # next @ [key, json] 
+		     end) 
+      | [] -> match search # next with 
+	  | (key, start) :: xs -> let! htmls, next = ohm (O.decay (query key ~count ~start access atid)) in
+				  result htmls (object
+				    method start = []
+				    method next = match next with 
+				      | None -> xs
+				      | Some json -> xs @ [key, json]
+				  end) 
+	  | [] -> let! html = ohm (Asset_Atom_SearchEmpty.render ()) in
+		  return (Action.json ["more", Html.to_json html] res)
   end in
 
   O.Box.fill begin 
