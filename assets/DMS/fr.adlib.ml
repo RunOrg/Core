@@ -90,3 +90,4 @@
 | `DMS_DocTask_Edit_Notified -> "En copie"
 
 | `DMS_Atom_Filter -> "Documents"
+| `DMS_SearchResult_Nature -> "Document"
