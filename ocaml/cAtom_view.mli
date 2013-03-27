@@ -1,2 +1,8 @@
 (* © 2013 RunOrg *) 
 
+val addFilter : 
+     key:string 
+  -> label:O.i18n
+  -> body:([`IsToken] CAccess.t -> IAtom.t -> (O.BoxCtx.t, O.Box.result) Ohm.Run.t)
+  -> unit
+
