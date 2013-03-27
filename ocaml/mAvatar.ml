@@ -571,18 +571,19 @@ let _ =
 
 let _ = 
 
-  let! _, user, instance, data = Sig.listen MProfile.Signals.on_update in 
-  let! id = ohm_req_or (return ()) $ Unique.get_if_exists instance user in
+  let! _, uid, iid, data = Sig.listen MProfile.Signals.on_update in 
+  let! aid = ohm_req_or (return ()) $ Unique.get_if_exists iid uid in
   
+  let data = collect_profile data in
+
   let update avatar = 
-    let data = collect_profile data in
     if 
       data # name <> avatar # name 
       || data # picture <> avatar # picture
       || data # sort <> avatar # sort
       || data # role <> avatar # role
     then 	
-      (), `put (object
+      true, `put (object
 	  (* Definition *)
 	method t       = `Avatar
 	method who     = avatar # who 
@@ -596,15 +597,23 @@ let _ =
 	method role    = data # role
       end) 
     else
-      (), `keep
+      false, `keep
   in
   
-  let! _ = ohm $ Tbl.transact id 
+  let! changed = ohm $ Tbl.transact aid 
     (function 
-      | None -> return ((),`keep)
+      | None -> return (false,`keep)
       | Some data -> return (update data))
   in
-  Signals.on_update_call (id,instance)
+  
+  let! () = ohm begin 
+    if changed then match data # name with 
+      | None -> return () 
+      | Some name -> MAtom.reflect iid `Avatar (IAvatar.to_id aid) name
+    else return () 
+  end in 
+
+  Signals.on_update_call (aid,iid)
 
 (* Obliterate all avatars for an user ----------------------------------------------------- *)
 
@@ -697,14 +706,25 @@ module Backdoor = struct
 
     return (avatars, next)
 
-  let migrate_all = Async.Convenience.foreach O.async "refresh-grants"
+  let refresh_grants = Async.Convenience.foreach O.async "refresh-grants"
     IAvatar.fmt (Tbl.all_ids ~count:50) Signals.refresh_grant_call
 
   let refresh_grants () = 
-    migrate_all () 
-    
-    
+    refresh_grants () 
 
+  let refresh_avatar_atoms = Async.Convenience.foreach O.async "refresh-avatar-atoms"
+    IAvatar.fmt (Tbl.all_ids ~count:10) 
+    (fun aid -> 
+      let! avatar = ohm_req_or (return ()) $ Tbl.get aid in
+      let! name   = req_or (return ()) (avatar # name) in
+      let  iid    = avatar # ins in
+      let  ()     = Util.log "Reflect avatar %s [%s > %s]" name 
+	(IInstance.to_string iid) (IAvatar.to_string aid) in
+      MAtom.reflect iid `Avatar (IAvatar.to_id aid) name)
+   
+  let refresh_avatar_atoms () = 
+    refresh_avatar_atoms () 
+ 
 end
 
 module List    = MAvatar_list

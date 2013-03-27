@@ -164,6 +164,22 @@ let create actor nature label =
 	let! atid = ohm (Tbl.create data) in
 	return (Some atid) 
 	
+let reflect iid nature id label = 
+  let atid = IAtom.of_id id in 
+  let label = BatString.head (BatString.strip label) max_label_size in 
+  if label = "" then return () else
+    let sort = to_sort label in 
+    if sort = [] then return () else
+      let more = IAtom.Nature.parents nature in 
+      let data = Data.({
+	nature ;
+	more ;
+	sort ;
+	label ;
+	iid
+      }) in
+      Tbl.set atid data
+
 let of_json ~actor json = 
   let! atid = req_or (return None) (IAtom.of_json_safe json) in
   let! atom = ohm_req_or (return None) (get ~actor atid) in

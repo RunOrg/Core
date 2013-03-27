@@ -22,7 +22,6 @@ let name aid =
 
   return name 
 
-
 let mini_profile_from_details aid details = 
 
   let! name = ohm begin match details # name with 
@@ -140,3 +139,18 @@ let () = UrlClient.def_pickAvatars $ CClient.action begin fun access req res ->
     | `ByPrefix prefix -> by_prefix prefix
   
 end 
+
+module ForAtom = struct
+
+  let render atom = 
+    let  aid = IAvatar.of_id (IAtom.to_id (atom # id)) in
+    let! details = ohm (mini_profile aid) in 
+    Asset_Avatar_PickerLine.render details
+
+  let search key atid = 
+    let  aid = IAvatar.of_id (IAtom.to_id atid) in
+    Action.url UrlClient.Profile.home key [ IAvatar.to_string aid ]
+
+  let () = CAtom.register ~nature:`Avatar ~render ~search
+
+end
