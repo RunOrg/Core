@@ -20,7 +20,7 @@ let description = field "DC.Description"
 
 let subject = field "DC.Subject"
   (adlib "DC_Subject" "Sujet et mots-clés")
-  `TextShort
+  (`AtomMany Atom.topic)
 
 let creator = field "DC.Creator"
   (adlib "DC_Creator" "Créateur ou origine")

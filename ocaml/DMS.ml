@@ -10,4 +10,5 @@ module MDocTask = DMS_MDocTask
 module CRepository = DMS_CRepository
 module CDocument = DMS_CDocument
 module CDocTask = DMS_CDocTask
+module CAtom = DMS_CAtom
 module Url = DMS_Url

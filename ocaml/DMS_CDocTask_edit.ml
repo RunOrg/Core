@@ -6,7 +6,7 @@ open BatPervasives
 
 open DMS_CDocTask_common
 
-let template ?avatars process = 
+let template actor key ?avatars process = 
 
   let fields = PreConfig_Task.DMS.fields process in
   let states = (PreConfig_Task.DMS.states process) # all in
@@ -58,7 +58,7 @@ let template ?avatars process =
 
 	  (* For each field, append the result to the complete meta-map *)
 	  OhmForm.append (fun map json -> return (BatPMap.add fieldkey json map)) 
-	    (VField.render ~fieldkey ~fieldinfo) form
+	    (VField.render actor key ~fieldkey ~fieldinfo) form
 
 	end (OhmForm.begin_object BatPMap.empty) fields
 
@@ -91,7 +91,7 @@ let () = CClient.define Url.Task.def_edit begin fun access ->
 
   let! save = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     
-    let  template = template process in
+    let  template = template actor (access # instance # key) process in
     let  src  = OhmForm.from_post_json json in 
     let  form = OhmForm.create ~template ~source:src in
         
@@ -125,7 +125,7 @@ let () = CClient.define Url.Task.def_edit begin fun access ->
 
     let avatars = JsCode.Endpoint.of_url 
       (Action.url UrlClient.pickAvatars (access # instance # key) ()) in
-    let template = template ~avatars process in
+    let template = template actor (access # instance # key) ~avatars process in
     let form = OhmForm.create ~template ~source:(OhmForm.from_seed task) in
     let url  = OhmBox.reaction_endpoint save () in
 

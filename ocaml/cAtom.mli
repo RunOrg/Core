@@ -1,0 +1,15 @@
+(* © 2013 RunOrg *) 
+
+module View : sig
+  val addFilter : 
+       key:string 
+    -> label:O.i18n
+    -> query:(
+          count:int
+       -> ?start:Ohm.Json.t 
+       -> [`IsToken] CAccess.t
+       -> IAtom.t 
+       -> (Ohm.Html.writer list * Ohm.Json.t option) O.run)
+    -> unit
+end
+

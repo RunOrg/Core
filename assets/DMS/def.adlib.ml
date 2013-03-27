@@ -88,3 +88,6 @@
 | `DMS_DocTask_Edit_State 
 | `DMS_DocTask_Edit_Assigned 
 | `DMS_DocTask_Edit_Notified 
+
+| `DMS_Atom_Filter
+| `DMS_SearchResult_Nature 

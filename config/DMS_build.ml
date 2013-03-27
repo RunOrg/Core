@@ -15,6 +15,8 @@ let kind = function
   | `TextShort  -> "`TextShort"
   | `TextLong   -> "`TextLong"
   | `Date       -> "`Date"
+  | `AtomOne  n -> "(`AtomOne `" ^ n ^ ")"
+  | `AtomMany n -> "(`AtomMany `" ^ n ^ ")"
   | `PickOne  l -> "(`PickOne (" ^ pickable l ^ "))"
   | `PickMany l -> "(`PickMany (" ^ pickable l ^ "))"
 
@@ -60,6 +62,8 @@ let fstype () =
   "type fs = (string * < kind : [ `Date
                                 | `PickOne  of (string * O.i18n) list
                                 | `PickMany of (string * O.i18n) list
+                                | `AtomOne  of IAtom.Nature.t
+                                | `AtomMany of IAtom.Nature.t
                                 | `TextLong
                                 | `TextShort ];
               label : O.i18n >) list "

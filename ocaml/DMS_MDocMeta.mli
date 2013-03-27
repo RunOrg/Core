@@ -12,6 +12,8 @@ module FieldType : sig
   type t = 
     [ `TextShort
     | `TextLong
+    | `AtomOne  of IAtom.Nature.t
+    | `AtomMany of IAtom.Nature.t
     | `PickOne  of (string * O.i18n) list
     | `PickMany of (string * O.i18n) list
     | `Date
@@ -24,6 +26,14 @@ val fields :
 
 module Data : sig
   type t = (Field.t,Ohm.Json.t) BatPMap.t
+end
+
+module Search : sig
+  val by_atom : 
+       ?start:DMS_IDocument.t 
+    -> count:int 
+    -> IAtom.t 
+    -> (#O.ctx, DMS_IDocument.t list * DMS_IDocument.t option) Ohm.Run.t
 end
 
 module Get : sig

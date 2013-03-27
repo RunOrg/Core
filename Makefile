@@ -7,7 +7,7 @@ server:
 	make -C portals
 	./plugins.sh
 	splash/gen.sh
-	config/gen.sh
+	make -C config
 	ohm plugins.ohmStatic portals/FFBAD FFBAD
 	ohm plugins.ohmStatic portals/FSCF FSCF
 	ohm plugins.ohmStatic portals/MyInnovation MyInnovation

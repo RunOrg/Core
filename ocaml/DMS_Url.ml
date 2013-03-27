@@ -17,6 +17,7 @@ module Doc = struct
   let edit,    def_edit    = child def_admin "dms/doc/edit"
   let share,   def_share   = child def_admin "dms/doc/share"
   let delete,  def_delete  = child def_admin "dms/doc/delete"
+  let inrepo,  def_inrepo  = O.declare O.client "dms/doc/inrepo" (A.r DMS_IDocument.arg) 
 
 end
 

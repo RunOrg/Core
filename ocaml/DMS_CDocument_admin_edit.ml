@@ -7,7 +7,7 @@ open BatPervasives
 open DMS_CDocument_common 
 open DMS_CDocument_admin_common
 
-let template metafields = 
+let template actor key metafields = 
 
   let inner = 
     OhmForm.begin_object (fun ~name ~meta -> (object
@@ -30,7 +30,7 @@ let template metafields =
 
 	  (* For each field, append the result to the complete meta-map *)
 	  OhmForm.append (fun map json -> return (BatPMap.add fieldkey json map)) 
-	    (VField.render ~fieldkey ~fieldinfo) form
+	    (VField.render actor key ~fieldkey ~fieldinfo) form
 	    
 	end (OhmForm.begin_object BatPMap.empty) metafields
       
@@ -50,7 +50,7 @@ let () = define Url.Doc.def_edit begin fun parents rid doc access ->
 
   let! save = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     
-    let  template = template metafields in
+    let  template = template (access # actor) (access # instance # key) metafields in
     let  src  = OhmForm.from_post_json json in 
     let  form = OhmForm.create ~template ~source:src in
         
@@ -81,7 +81,7 @@ let () = define Url.Doc.def_edit begin fun parents rid doc access ->
   
   O.Box.fill begin 
       
-    let template = template metafields in
+    let template = template (access # actor) (access # instance # key) metafields in
     let form = OhmForm.create ~template 
       ~source:(OhmForm.from_seed (doc,MDocMeta.Get.data meta)) in
     let url  = OhmBox.reaction_endpoint save () in
