@@ -16,6 +16,13 @@ module E         = DMS_MDocument_core
 
 include HEntity.Get(Can)(E)
 
+module Search = struct
+  let by_atom ~actor ?start ~count atom = 
+    let! list, next = ohm (DMS_MDocMeta.Search.by_atom ?start ~count atom) in
+    let! list = ohm $ Run.list_filter (view ~actor) list in 
+    return (list, next) 
+end
+
 let instance did = 
   let! doc = ohm_req_or (return None) (get did) in
   return $ Some (Get.iid doc)

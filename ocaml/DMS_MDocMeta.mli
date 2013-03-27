@@ -28,6 +28,14 @@ module Data : sig
   type t = (Field.t,Ohm.Json.t) BatPMap.t
 end
 
+module Search : sig
+  val by_atom : 
+       ?start:DMS_IDocument.t 
+    -> count:int 
+    -> IAtom.t 
+    -> (#O.ctx, DMS_IDocument.t list * DMS_IDocument.t option) Ohm.Run.t
+end
+
 module Get : sig
   val id   : 'any t -> 'any DMS_IDocument.id 
   val data : [<`View|`Admin] t -> Data.t 

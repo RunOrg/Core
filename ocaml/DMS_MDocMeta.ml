@@ -120,3 +120,49 @@ let get id =
     let  data = Store.current found in 
     return { id ; exists = true ; data }
   end 
+
+module Search = struct
+
+  module Design = struct
+    module Database = Store.DataDB
+    let name = "search"
+  end
+    
+  let id_length = string_of_int Id.length
+
+  (* Using a trick : assuming all IDs have the same length to extract
+     atoms from the data set. *)
+  module ByAtom = CouchDB.MapView(struct
+    module Key = IAtom
+    module Value = Fmt.Unit
+    module Design = Design
+    let name = "by_atom"
+    let map = "for (var k in doc.c)
+                 handle(doc.c[k]);
+               
+               var emitted = {};
+               function e(v) {
+                 if (v in emitted) return;
+                 emitted[v] = true;
+                 emit(v);
+               }
+
+               function handle(v) {
+                 if (typeof v == 'string') {
+                   if (v.length == "^id_length^") e(v);
+                 } else if ('length' in v) {
+                   for (var i = 0; i < v.length; ++i) handle(v[i]);  
+                 }
+               }"                                    
+  end)
+    
+  let by_atom ?start ~count atid = 
+    let  startkey = atid and endkey = atid in 
+    let  startid  = BatOption.map DMS_IDocument.to_id start in
+    let  limit = count + 1 in
+    let! list = ohm $ ByAtom.query ~startkey ?startid ~endkey ~endinclusive:true ~limit () in
+    let  list = List.map (#id |- DMS_IDocument.of_id) list in
+    let  list, next = OhmPaging.slice ~count list in 
+    return (list, next)
+
+end
