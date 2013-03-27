@@ -1,0 +1,63 @@
+<div class="atom-wrap">
+
+  <h2>{title}</h2>
+
+  <div class="-filters">
+    {#filters}
+      {if sel}
+        <a class="-f -s" href="javascript:location.reload()">
+      {else} 
+        <a class="-f" href="{url}">
+      {/if}
+	  <span class="-n">{name}</span>
+	</a>
+    {/#}
+  </div>
+
+  <div class="-list">
+    {body|ohm}
+  </div>
+
+</div>
+
+<style>
+.atom-wrap {
+
+  .hastitle();
+
+  .-list {
+    padding: 0 0 1px 0; 
+    margin: 0 0 0 300px;
+    .empty-list {
+      border-top: 1px dashed #CCC;
+    }
+  }
+
+  .-filters {
+    float: left;
+    background-color: #EEE;
+    border-right: 1px solid #DDD;
+    padding: 5px 15px;
+    width: 250px;
+    .-f {
+      display: block;
+      padding: 4px 2px;
+      color: #333; 
+      line-height: 20px;
+      font-size: 13px; 
+      height: 20px;
+      overflow: hidden;
+      .-n {
+        .ellipsis();
+      }
+    }
+    .-f + .-f {
+      border-top: 1px dashed #DDD;
+    }
+    .-s.-f {
+      font-weight: bold;
+      color: #111;
+    }
+  }
+}
+</style>

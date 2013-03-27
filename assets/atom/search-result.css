@@ -1,0 +1,21 @@
+.search-result {
+  border-top: 1px solid #CCC;
+  padding: 4px;
+  height: 40px;
+  .-name { 
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 2px;
+    display: block;
+    .ellipsis();
+  }
+  .-details {
+    .ellipsis();
+    height: 18px;
+    line-height: 18px;
+    color: #888;
+    font-size: 12px;
+    padding-left: 20px;
+    background: url(/public/icon/shader.png) 2px center no-repeat;
+  }
+}

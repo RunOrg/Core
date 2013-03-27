@@ -77,7 +77,7 @@ module Cfg = struct
     return Data.({ data with notified = aids })
 
   let apply_data assoc _ _ data = 
-    return Data.({ data with data = clean (BatPMap.foldi BatPMap.add data.data assoc) })
+    return Data.({ data with data = clean (BatPMap.foldi BatPMap.add assoc data.data) })
 
   let apply = function
     | `SetState state -> return (apply_state state) 

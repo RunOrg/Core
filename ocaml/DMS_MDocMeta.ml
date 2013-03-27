@@ -16,6 +16,8 @@ module FieldType = struct
   type t = 
     [ `TextShort
     | `TextLong
+    | `AtomOne  of IAtom.Nature.t
+    | `AtomMany of IAtom.Nature.t
     | `PickOne  of (string * O.i18n) list
     | `PickMany of (string * O.i18n) list
     | `Date
@@ -68,7 +70,7 @@ module Cfg = struct
   module Diff = Data 
 
   let apply diff = return begin fun _ _ data ->
-    return (clean (BatPMap.foldi BatPMap.add data diff))
+    return (clean (BatPMap.foldi BatPMap.add diff data))
   end
 
   module VersionData = MUpdateInfo
@@ -118,3 +120,49 @@ let get id =
     let  data = Store.current found in 
     return { id ; exists = true ; data }
   end 
+
+module Search = struct
+
+  module Design = struct
+    module Database = Store.DataDB
+    let name = "search"
+  end
+    
+  let id_length = string_of_int Id.length
+
+  (* Using a trick : assuming all IDs have the same length to extract
+     atoms from the data set. *)
+  module ByAtom = CouchDB.MapView(struct
+    module Key = IAtom
+    module Value = Fmt.Unit
+    module Design = Design
+    let name = "by_atom"
+    let map = "var emitted = {};
+               function e(v) {
+                 if (v in emitted) return;
+                 emitted[v] = true;
+                 emit(v);
+               }
+
+               function handle(v) {
+                 if (typeof v == 'string') {
+                   if (v.length == "^id_length^") e(v);
+                 } else if ('length' in v) {
+                   for (var i = 0; i < v.length; ++i) handle(v[i]);  
+                 }
+               }
+
+               for (var k in doc.c)
+                 handle(doc.c[k]);"                                    
+  end)
+    
+  let by_atom ?start ~count atid = 
+    let  startkey = atid and endkey = atid in 
+    let  startid  = BatOption.map DMS_IDocument.to_id start in
+    let  limit = count + 1 in
+    let! list = ohm $ ByAtom.query ~startkey ?startid ~endkey ~endinclusive:true ~limit () in
+    let  list = List.map (#id |- DMS_IDocument.of_id) list in
+    let  list, next = OhmPaging.slice ~count list in 
+    return (list, next)
+
+end
