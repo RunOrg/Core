@@ -1,6 +1,11 @@
 <div class="search-result">
   <a class="-name" href="{url}">{name}</a>
-  <div class="-details -DMS-document">{`DMS_SearchResult_Nature}</div>
+  <div class="-details -DMS-document">
+    {`DMS_SearchResult_Nature}
+    {#repos}
+      &middot; {this}
+    {/#}
+  </div>
 </div>
 
 <style>
