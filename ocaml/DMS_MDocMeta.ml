@@ -137,10 +137,7 @@ module Search = struct
     module Value = Fmt.Unit
     module Design = Design
     let name = "by_atom"
-    let map = "for (var k in doc.c)
-                 handle(doc.c[k]);
-               
-               var emitted = {};
+    let map = "var emitted = {};
                function e(v) {
                  if (v in emitted) return;
                  emitted[v] = true;
@@ -153,7 +150,10 @@ module Search = struct
                  } else if ('length' in v) {
                    for (var i = 0; i < v.length; ++i) handle(v[i]);  
                  }
-               }"                                    
+               }
+
+               for (var k in doc.c)
+                 handle(doc.c[k]);"                                    
   end)
     
   let by_atom ?start ~count atid = 

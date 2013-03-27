@@ -88,3 +88,5 @@
 | `DMS_DocTask_Edit_State -> "Statut"
 | `DMS_DocTask_Edit_Assigned -> "Affecté à" 
 | `DMS_DocTask_Edit_Notified -> "En copie"
+
+| `DMS_Atom_Filter -> "Documents"
