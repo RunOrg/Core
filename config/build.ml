@@ -520,9 +520,9 @@ module Build = struct
 	
   end
 
-  module DMS = DMS.Build
-
+  module DMS  = DMS.Build
   module Task = Task.Build
+  module Atom = Atom.Build
 
 end
 
@@ -541,7 +541,8 @@ let build dir =
     "ProfileFormId.ml", ProfileFormId.ml ;
     "ProfileForm.ml", ProfileForm.ml ;
     "DMS.ml", DMS.ml ; 
-    "Task.ml", Task.ml
+    "Task.ml", Task.ml ;
+    "Atom.ml", Atom.ml ;
   ]) in
   
   List.iter (fun (file,code) ->

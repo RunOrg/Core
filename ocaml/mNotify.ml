@@ -11,6 +11,17 @@ module Create  = MNotify_create
 module ToUser  = MNotify_toUser
 module Send    = MNotify_send
 
+let zap_unread_task, def_zap_unread_task = O.async # declare "notify-zap-unread" ICurrentUser.fmt 
+let zap_unread uid =
+  let! list = ohm $ Store.get_unread ~count:10 uid in
+  let! () = ohm $ Run.list_iter Stats.from_zap list in 
+  if list <> [] then zap_unread_task uid else return () 
+
+let () = def_zap_unread_task zap_unread
+
+let zap_unread cuid = 
+  zap_unread (ICurrentUser.decay cuid) 
+
 let get_token nid = 
   ConfigKey.prove [ "notify" ; INotify.to_string nid ] 
 

@@ -36,3 +36,4 @@
 | `Notify_Settings_Default
 
 | `Notify_Link_Settings
+| `Notify_Link_Zap 

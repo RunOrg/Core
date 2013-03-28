@@ -75,12 +75,25 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
       Action.url UrlClient.newhere key () 
     in
 
+    let search = 
+      if public then
+	None
+      else
+	Some (object
+	  method dyn = JsCode.Endpoint.to_json 
+	    (JsCode.Endpoint.of_url (Action.url UrlClient.atom key None))
+	  method view = JsCode.Endpoint.to_json 
+	    (JsCode.Endpoint.of_url (Action.url UrlClient.viewAtom key ()))
+	end)
+    in
+
     return $ Some (object
       method hidepic = hidepic
       method picture = pic
       method public  = public
       method url     = url
       method menu    = menu
+      method search  = search
       method desc    = None
       method name    = instance # name
       method website = website

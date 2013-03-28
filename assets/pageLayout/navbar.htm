@@ -75,6 +75,27 @@ setTimeout check, 1000
           {else}
   	    {?desc}<li class="-desc">{this}</li>{/?}            
           {/#}
+	  {?search}
+	    <li id="gsearch">
+	      <div class="-f">
+		<input type="text" class="-s"/>  
+	      </div>
+	      <div class="-l">
+	      </div>
+	    </li>
+	    <script type="dyn:json,view:json">
+picker = new Picker($("#gsearch"))
+picker.dynamic = dyn
+picker.maximumPicked = 1
+picker.onSave = () ->
+  return if picker.picked.length == 0
+  atom = picker.picked[0]
+  to_endpoint view, atom.json, (data) ->
+    picker.set []
+    picker.$field.blur()
+    call data.code 
+	    </script>
+          {/?}
 	  <li class="-website">
 	    <a href="{website}" class="action-button">
 	      {if public}
@@ -92,6 +113,70 @@ setTimeout check, 1000
 </div>
 
 <style>
+
+#gsearch {
+  margin-left: 20px;
+  input { 
+    border: none; 
+    width: 274px;
+    display: block;
+    outline: none;
+    padding: 2px 8px;
+    height: 18px;
+    line-height: 19px;
+    .ellipsis();
+    font-size: 13px;
+  }
+  .-f {
+    width: 290px;
+    background: #FFF;
+    border: 1px solid #888;
+    overflow: hidden;
+    height: 22px;
+    border-radius: 6px;
+    > div {
+      background-color: #EEE;
+      font-size: 13px;
+      height: 22px;
+      line-height: 23px;
+      padding: 0 6px;
+      a.-d { 
+        float: right;
+        color: #888;
+        line-height: 20px;
+        cursor: pointer;
+      }
+    }
+    &.-maxed input { display: none }
+  }
+  .-l {
+    position: absolute;
+    margin-top: 3px;
+    background: #FFF;
+    width: 290px;
+    border: 1px solid #888;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #888;
+    display: none; 
+    z-index: 10;
+  }
+  .-l.-show.-full {
+    display: block;
+  }
+  .-l .-i {
+    color: #333;
+    padding: 4px;    
+    font-size: 13px;
+    .ellipsis();
+    &.-s {
+      background-color: #EEE;
+      color: #666;
+    }
+  }
+  .-l .-i + .-i {
+    border-top: 1px solid #BBB;
+  }
+}
 
 #superadmin {
   position: absolute;
@@ -174,7 +259,6 @@ setTimeout check, 1000
   border-bottom: 1px solid #555;
   box-shadow: 0 1px 3px #CCC;
   margin-bottom: 10px;
-  overflow: hidden;
 
   &.-public { 
     #navbar { 
@@ -195,7 +279,6 @@ setTimeout check, 1000
     position: relative; 
  
     .-main {
-      overflow: hidden;
       padding: 8px 0;
     }
 
