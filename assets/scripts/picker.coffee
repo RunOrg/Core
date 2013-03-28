@@ -58,7 +58,7 @@ class Picker
     @$pickable.mousedown (e) =>
       $e = $ e.target
       return if $e.is(@$pickable)
-      sel = $e.closest(".-i").prevAll().length
+      @selectedPickable = $e.closest(".-i").prevAll().length
       @pick()
     
     # Clicking on the "x" of a picked element unpicks it
@@ -133,7 +133,7 @@ class Picker
       m = false
       for name in names
         continue if name.length < patt.length
-        if patt = name.substr 0, patt.length
+        if patt == name.substr 0, patt.length
           m = true
           break
       return false if !m
