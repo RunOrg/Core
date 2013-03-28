@@ -89,11 +89,17 @@ $hidden.data 'onSet', (init) ->
       color: #333;
       font-size: 13px;
       cursor: pointer; 
+      .ellipsis();
     }
 
-    .-i.-s {
+    .-i.-s, &:hover .-i:hover {
       background-color: #555;
       color: white;
+    }
+
+    &:hover .-s {
+      background-color: transparent;
+      color: #333;
     }
   }
 
