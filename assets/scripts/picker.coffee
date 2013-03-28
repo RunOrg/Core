@@ -133,7 +133,7 @@ class Picker
       m = false
       for name in names
         continue if name.length < patt.length
-        if patt = name.substr 0, patt.length
+        if patt == name.substr 0, patt.length
           m = true
           break
       return false if !m
