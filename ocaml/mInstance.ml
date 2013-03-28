@@ -117,7 +117,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
 
   let info old = Profile.Info.({    
     old with 
-      name     = current.Data.name ;
+      name     = clip 80 name ;
       key      = current.Data.key ;
       white    = current.Data.white ; 
       address  = BatOption.map (clip 300)  address ;
