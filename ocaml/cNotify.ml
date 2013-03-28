@@ -133,7 +133,7 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 				   (MNotify.Payload.channel notify # payload))
 			      in
 			      let! () = ohm $ MNews.Cache.prepare uid in
-			      let! () = ohm $ MNotify.Stats.from_site nid in 
+			      let! () = ohm $ MNotify.Stats.from_mail nid in 
 			      let! url = ohm (url cuid notify) in 
 			      let  url = BatOption.default home url in
 			      let! () = ohm $ TrackLog.(log (IsUser uid)) in 
