@@ -41,14 +41,15 @@ let () = CClient.define Url.def_file begin fun access ->
   (* Render the metadata for the file *) 
 
   let as_text = function 
-    | Json.String value -> Some (return value) 
-    | _ -> None
+    | Json.String value -> return (Some value) 
+    | _                 -> return None
   in
 
   let as_date json = 
     match Date.of_json_safe json with 
-      | Some d -> Some (AdLib.get (`WeekDate (Date.to_timestamp d)))
-      | None -> None
+      | Some d -> let! txt = ohm (AdLib.get (`WeekDate (Date.to_timestamp d))) in
+		  return (Some txt) 
+      | None   -> return None
   in
 
   let as_pick l json = 
@@ -60,11 +61,18 @@ let () = CClient.define Url.def_file begin fun access ->
 	    try Some (List.assoc s l) 
 	    with _ -> None
 	end values in
-	if values = [] then None else Some begin
+	if values = [] then return None else 
 	  let! list = ohm $ Run.list_map AdLib.get values in
-	  return (String.concat " ; " list)
-	end
-    with _ -> None
+	  return (Some (String.concat " ; " list))	    
+    with _ -> return None
+  in
+
+  let as_atom json = 
+    match json with 
+      | Json.String _ -> MAtom.of_json ~actor:(access # actor) json
+      | Json.Array  l -> let! list = ohm (Run.list_filter (MAtom.of_json ~actor:(access # actor)) l) in
+			 return (Some (String.concat " ; " list))
+      | _ -> return None
   in
 
   let! meta = ohm begin 
@@ -75,13 +83,15 @@ let () = CClient.define Url.def_file begin fun access ->
       Run.list_filter begin fun (fieldkey, fieldinfo) -> 
 	try let value = BatPMap.find fieldkey data in
 	    let label = AdLib.write (fieldinfo # label) in
-	    let value = match fieldinfo # kind with 
+	    let! value = ohm begin match fieldinfo # kind with 
 	      | `TextShort
-	      | `TextLong -> as_text value 
-	      | `Date -> as_date value
-	      | `PickOne l 
+	      | `TextLong   -> as_text value
+	      | `Date       -> as_date value
+	      | `PickOne  l 
 	      | `PickMany l -> as_pick l value
-	    in
+	      | `AtomOne  _ 
+	      | `AtomMany _ -> as_atom value
+	    end in
 	    match value with None -> return None | Some value -> 
   	      return (Some (object
 		method label = label
@@ -102,25 +112,25 @@ let () = CClient.define Url.def_file begin fun access ->
     let! author = ohm $ O.decay (CAvatar.mini_profile author) in 
 
     let  data = MDocTask.Get.data task in
-    let  data = 
-      let fields = MDocTask.Get.fields task in
-      BatList.filter_map begin fun (fieldkey, fieldinfo) -> 
+    let! data = ohm begin 
+      let fields = MDocTask.Get.fields task in      
+      Run.list_filter begin fun (fieldkey, fieldinfo) -> 
 	try let value = BatPMap.find fieldkey data in
 	    let label = AdLib.write (fieldinfo # label) in
-	    let value = match fieldinfo # kind with 
+	    let! value = ohm begin match fieldinfo # kind with 
 	      | `TextShort
 	      | `TextLong -> as_text value 
 	      | `Date -> as_date value
 	      | `PickOne l 
 	      | `PickMany l -> as_pick l value
-	    in
-	    BatOption.map (fun value -> (object
-		method label = label
-		method value = value
-	    end)) value 
-	with Not_found -> None
+	    end in
+	    return (BatOption.map (fun value -> (object
+	      method label = label
+	      method value = value
+	    end)) value) 
+	with Not_found -> return None
       end fields
-    in
+    end in
 
     let! assignee = ohm $ O.decay (Run.opt_map CAvatar.mini_profile (MDocTask.Get.assignee task)) in
     let! notified = ohm $ O.decay (Run.list_map CAvatar.mini_profile (MDocTask.Get.notified task)) in

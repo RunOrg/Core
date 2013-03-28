@@ -5,6 +5,8 @@ open Common
 type fieldtype = 
   [ `TextShort
   | `TextLong
+  | `AtomOne  of Atom.nature
+  | `AtomMany of Atom.nature
   | `PickOne  of (string * adlib) list
   | `PickMany of (string * adlib) list
   | `Date

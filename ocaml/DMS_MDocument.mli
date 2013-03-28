@@ -72,6 +72,17 @@ module All : sig
 
 end
 
+module Search : sig
+
+  val by_atom : 
+       actor:'any MActor.t
+    -> ?start:DMS_IDocument.t
+    -> count:int
+    -> IAtom.t
+    -> (#O.ctx, [`View] t list * DMS_IDocument.t option) Ohm.Run.t
+
+end
+
 val create : 
      self:'any MActor.t
   -> iid:[`Upload] IInstance.id

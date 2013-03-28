@@ -8,6 +8,7 @@ type data = {
   sent        : float option ;
   mail_clicks : int ;
   site_clicks : int ;
+  zap_clicks  : int ;
   rotten      : bool ;
   delayed     : bool ;
   stats       : INotifyStats.t option 
@@ -36,3 +37,5 @@ val all_mine : count:int -> ?start:float -> 'any ICurrentUser.id -> (t list * fl
 val count_mine : 'any ICurrentUser.id -> int O.run 
 
 val rotten : INotify.t -> unit O.run 
+
+val get_unread : count:int -> 'any ICurrentUser.id -> (#O.ctx, INotify.t list) Ohm.Run.t 

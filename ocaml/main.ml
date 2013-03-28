@@ -9,6 +9,7 @@ module Actions = struct
   open MDo
 
   (* Active controllers *)
+  open CAtom
   open CAvatarExport
   open CDiscussion
   open CExport

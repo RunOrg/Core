@@ -20,6 +20,11 @@ let from_site nid =
   Store.Tbl.update nid 
     (fun d -> Store.({ see now d with site_clicks = d.site_clicks + 1 }))
 
+let from_zap nid = 
+  let! now = ohmctx (#time) in
+  Store.Tbl.update nid
+    (fun d -> Store.({ see now d with zap_clicks = d.zap_clicks + 1 }))
+
 module NotifyStats = CouchDB.ReduceView(struct
   module Key = INotifyStats
   module Value = Fmt.Make(struct

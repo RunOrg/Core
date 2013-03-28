@@ -59,6 +59,7 @@ let newhere, def_newhere   = O.declare O.client "newhere" A.none
 let intranet = Action.rewrite ajax "intranet/ajax" "intranet/#"
 
 module Like       = UrlClient_like
+module Atom       = UrlClient_atom 
 module Comment    = UrlClient_comment
 module Item       = UrlClient_item
 module MiniPoll   = UrlClient_miniPoll 
@@ -74,3 +75,5 @@ module Discussion = UrlClient_discussion
   
 let pickAvatars, def_pickAvatars = O.declare O.client "search/people" A.none
 
+let atom, def_atom = O.declare O.client "search/atom" (A.o IAtom.Nature.arg)
+let viewAtom, def_viewAtom = O.declare O.client "view/atom" A.none
