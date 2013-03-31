@@ -2,6 +2,58 @@
 open Common
 
 (* ========================================================================== *)
+let healthAntecedents = profileForm "HealthAntecedents" 
+  ~name:"Antécédents"
+  [ 
+     join ~name:"medicaux"
+         ~label:(adlib "ProfileForm_HealthAntecedents_Field_Medicaux" "Médicaux")
+         `LongText ;
+     join ~name:"chirurgicaux"
+         ~label:(adlib "ProfileForm_HealthAntecedents_Field_Chirurgicaux" "Chirurgicaux")
+         `LongText ;
+     join ~name:"obstetriques"
+         ~label:(adlib "ProfileForm_HealthAntecedents_Field_Obstetriques" "Obstétriques")
+         `LongText ;
+     join ~name:"familiaux"
+         ~label:(adlib "ProfileForm_HealthAntecedents_Field_Familiaux" "Familiaux")
+         `LongText ;
+    join ~name:"risks"
+         ~label:(adlib "ProfileForm_HealthAntecedents_Field_Risks" "Facteurs de risques")
+		 (`PickMany [
+			adlib "ProfileFormValuesSectionHealthAntecedentsRisksHTA" "HTA" ;
+			adlib "ProfileFormValuesSectionHealthAntecedentsRisksDiabete" "Diabète" ;
+			adlib "ProfileFormValuesSectionHealthAntecedentsRisksObesite" "Obésité" ;
+			adlib "ProfileFormValuesSectionHealthAntecedentsRisksHypercholesterolemie" "Hypercholestérolémie" ;
+			adlib "ProfileFormValuesSectionHealthAntecedentsRisksTabagisme" "Tabagisme" ] ) ;
+  ]	
+
+(* ========================================================================== *)
+let healthExamen = profileForm "HealthExamen" 
+  ~name:"Examen"
+  [ 
+     join ~name:"date"
+         ~label:(adlib "ProfileForm_HealthExamen_Field_date" "Date")
+         `Date ;
+     join ~name:"type"
+         ~label:(adlib "ProfileForm_HealthExamen_Field_type" "Type d'examen")
+         `Textarea ;
+     join ~name:"soignant"
+         ~label:(adlib "ProfileForm_HealthExamen_Field_soignant" "Nom du soignant")
+         `Textarea ;
+    join ~name:"paresthesies"
+         ~label:(adlib "ProfileForm_HealthExamen_Field_Paresthesies" "Paresthésies")
+		 (`PickMany [
+			adlib "ProfileFormValuesHealthExamenParesthesiesBrulure" "Brulure" ;
+			adlib "ProfileFormValuesHealthExamenParesthesiesFourmillement" "Fourmillement" ;
+			adlib "ProfileFormValuesHealthExamenParesthesiesAutre" "Autre" ] ) ;
+    join ~name:"crampes"
+         ~label:(adlib "ProfileForm_HealthExamen_Field_Crampes" "Crampes")
+		 (`PickMany [
+			adlib "ProfileFormValuesHealthExamenCrampesEffort" "A l'effort" ;
+			adlib "ProfileFormValuesHealthExamenCrampesRepos" "Au repos" ] ) ;
+  ]
+
+(* ========================================================================== *)
 let sectionSportEtudesAcademic = profileForm "SectionSportEtudesAcademic" 
   ~name:"Scolaire"
   [ 

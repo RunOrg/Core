@@ -703,7 +703,10 @@ let maisonAsso = vertical "MaisonAsso"
 
 let health = vertical "Health"
   ~name:"Santé & médical "
-  ~forms:ProfileForm.([ simple ; test ])
+  ~forms:ProfileForm.([ 
+		simple ; 
+		healthAntecedents ;
+		healthExamen ])
   [
     initial "entity.sample.sub-runorg.name" subscriptionForever
       ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
