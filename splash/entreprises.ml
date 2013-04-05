@@ -216,7 +216,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	) ;
 
 	prices [
-	  ("25",  "HT par mois",[ "500 personnes"   ; "2 Go"  ],[ "Assistance+ en ligne"]) ;
+	  ("50",  "HT par mois",[ "500 personnes"   ; "2 Go"  ],[ "Assistance+ en ligne"]) ;
 	  ("225", "HT par mois",[ "5000 personnes"  ; "10 Go" ],[ "Assistance téléphonique" ]) ;
 	  ("400", "HT par mois",[ "10000 personnes" ; "20 Go" ],[ "Assistance téléphonique" ; "Personnalisation+" ])	  
 	] 
