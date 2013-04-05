@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -33,12 +33,14 @@ let () = UrlClient.def_about begin fun req res ->
       method enlarge = "http://maps.google.fr/maps?f=q&hl=fr&q="^akey
       method iframe  = self # enlarge ^ "&hnear="^akey^"&iwloc=N&t=m&output=embed&ie=UTF8"
     end)
-  end in 
+  end in
+
+  let as_link url = if BatString.starts_with url "http" then url else "http://" ^ url in 
 
   let main = Asset_Website_About.render (object
     method html     = BatOption.map MRich.OrText.to_html profile # desc 
     method tags     = tags
-    method site     = profile # site
+    method site     = BatOption.map as_link profile # site
     method twitter  = profile # twitter
     method facebook = profile # facebook
     method map      = map

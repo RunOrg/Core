@@ -139,6 +139,11 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
 	None
     in
 
+    let desc = 
+      if MRich.OrText.length page = 0 then None else 
+	Some (MRich.OrText.to_html page) 
+    in
+
     (* Render the page ----------------------------------------------------------------------------------- *)
 
     Asset_Event_Page.render (object
@@ -150,7 +155,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       method pic_change = pic_change 
       method date       = BatOption.map (fun t -> (t,now)) date
       method status     = BatOption.map (fun s -> (s :> VStatus.t)) (MEvent.Get.status event)
-      method desc       = Some (MRich.OrText.to_text page |> OhmText.cut ~ellipsis:"…" 180)
+      method desc       = desc
       method time       = date
       method location   = location
       method details    = "/"
