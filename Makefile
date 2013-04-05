@@ -4,7 +4,6 @@ REAL=www/server.real
 full: server put reset
 
 server:
-	make -C portals
 	./plugins.sh
 	splash/gen.sh
 	make -C config
