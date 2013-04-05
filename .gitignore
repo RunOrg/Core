@@ -6,5 +6,4 @@ bot/supervise
 ocaml/gen
 ocaml/ohm
 ocaml/plugins
-portals/*
 www/*
