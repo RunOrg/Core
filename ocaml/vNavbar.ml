@@ -76,7 +76,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
     in
 
     let search = 
-      if public then
+      if public || user = None then
 	None
       else
 	Some (object
