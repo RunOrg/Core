@@ -1,0 +1,23 @@
+[submodule "FFBAD"]
+  path = portals/FFBAD
+  url = git://github.com/RunOrg/PortalFFBAD.git
+
+[submodule "FSCF"]
+  path = portals/FSCF
+  url = git://github.com/RunOrg/PortalFSCF.git
+
+[submodule "M2014"]
+  path = portals/M2014
+  url = git://github.com/RunOrg/PortalM2014.git
+
+[submodule "MyInnovation"]
+  path = portals/MyInnovation
+  url = git://github.com/RunOrg/PortalMyInnovation.git
+
+[submodule "Alfortville"]
+  path = portals/Alfortville
+  url = git://github.com/RunOrg/PortalAlfortville.git
+
+[submodule "AssoHelp"]
+  path = portals/AssoHelp
+  url = git://github.com/RunOrg/AssoHelp.git
