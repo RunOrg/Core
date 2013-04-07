@@ -30,14 +30,23 @@ type action = <
   pic     : string option ;
   name    : string ; 
   action  : O.i18n ; 
-  block   : Ohm.Html.writer ;
+  text    : string ; 
+  html    : Ohm.Html.writer ;
 >
 
 module Action = struct
+
   let render action = 
-    let text = "" in
-    let html = Html.str "" in
+    let! act = ohm (AdLib.get (action # action)) in
+    let  text = 
+      action # name 
+      ^ " " ^ act ^ "\n\n"
+      ^ action # text 
+      ^ "\n\n" ^ hr 
+    in
+    let! html = ohm (Asset_MailBrick_Action.render action) in
     return (object method text = text method html = html end)
+
 end
 
 type payload = 

@@ -11,7 +11,8 @@ type action = <
   pic     : string option ;
   name    : string ; 
   action  : O.i18n ; 
-  block   : Ohm.Html.writer ;
+  text    : string ; 
+  html    : Ohm.Html.writer ;
 >
 
 type footer = <

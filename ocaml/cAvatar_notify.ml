@@ -22,7 +22,8 @@ let () = MAvatar.Notify.define begin fun t ->
 			  method pic    = author # pico
 			  method name   = author # name
 			  method action = `Avatar_Notify_Mail (`Action,what) 
-			  method block  = Html.str ""					   
+			  method html   = Html.str ""
+			  method text   = ""					   
 			end) in 
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
 			let  button = object
