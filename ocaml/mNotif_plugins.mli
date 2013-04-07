@@ -20,7 +20,7 @@ module Register : functor(P:PLUGIN) -> sig
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
      list. *)
-  val define : (t -> MNotif_types.render option O.run) -> unit
+  val define : (t MNotif_types.stub -> MNotif_types.render option O.run) -> unit
 
 end 
 

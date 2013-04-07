@@ -6,10 +6,10 @@ open BatPervasives
 
 open CAvatar_common
 
-let () = MAvatar.Notify.define begin fun t -> 
+let () = MAvatar.Notify.define begin fun n -> 
 
-  let  what, uid, iid, from = match t with 
-    | `UpgradeToAdmin (uid, iid, from) -> `Admin, uid, iid, from
+  let  what, uid, iid, from = match n # inner with 
+    | `UpgradeToAdmin  (uid, iid, from) -> `Admin,  uid, iid, from
     | `UpgradeToMember (uid, iid, from) -> `Member, uid, iid, from 
   in
  
@@ -28,7 +28,7 @@ let () = MAvatar.Notify.define begin fun t ->
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
 			let  button = object
 			  method color = `Green
-			  method url   = ""
+			  method url   = CNotif.link (n # id) None (snd (instance # key))
 			  method label = `Avatar_Notify_Mail (`Button,what) 
 			end in 
 			let footer = CMail.Footer.instance uid instance in 

@@ -87,7 +87,23 @@ module Register = functor(P:PLUGIN) -> struct
   let parse nid n = 
     let! t = req_or (return None) (P.of_json_safe n.Core.Data.data) in
     let  render = match !render with None -> assert false | Some r -> r in
-    let! r = ohm_req_or (return None) (render t) in
+    let  stub = Core.Data.(object
+      method plugin = P.id
+      method id     = nid
+      method mid    = n.mid
+      method iid    = n.iid
+      method uid    = n.uid
+      method from   = P.from t 
+      method time   = n.time
+      method read   = n.read
+      method sent   = n.sent
+      method solved = if n.solve <> None then n.solved else n.read
+      method nmc    = n.nmc
+      method nsc    = n.nsc
+      method nzc    = n.nzc
+      method inner  = t
+    end) in 
+    let! r = ohm_req_or (return None) (render stub) in
     return (Some Core.Data.(object 
       method plugin = P.id
       method id     = nid
