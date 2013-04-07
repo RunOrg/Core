@@ -11,7 +11,6 @@ module Common  = MAvatar_common
 module Unique  = MAvatar_unique
 module Status  = MAvatar_status
 module Signals = MAvatar_signals
-module Pending = MAvatar_pending
 module Details = MAvatar_details
 module Notify  = MAvatar_notify
 
@@ -132,7 +131,6 @@ let update_status status ins usr =
     | None -> 
       let  newsta = status None in 
       let! data   = ohm $ self_data ins usr in
-      let! _      = ohm $ Pending.invite ~uid:usr ~iid:ins aid in
       return (true, `put (object
 	(* Definition *)
 	method t       = `Avatar
@@ -606,7 +604,6 @@ let avatars_of_user uid =
   return $ List.map (#id |- IAvatar.of_id) list
 
 let obliterate aid = 
-  let! () = ohm $ Pending.obliterate aid in 
   let! avatar = ohm_req_or (return ()) $ Tbl.get aid in 
   let! () = ohm $ Signals.on_obliterate_call (aid, avatar # ins) in 
   Tbl.delete aid 
