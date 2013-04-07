@@ -26,15 +26,31 @@ module Social = struct
 
 end
 
+type action = <
+  pic     : string option ;
+  name    : string ; 
+  action  : O.i18n ; 
+  block   : Ohm.Html.writer ;
+>
+
+module Action = struct
+  let render action = 
+    let text = "" in
+    let html = Html.str "" in
+    return (object method text = text method html = html end)
+end
+
 type payload = 
   [ `None
-  | `Social of social ]
+  | `Social of social 
+  | `Action of action ]
 
 module Payload = struct
     
   let render = function 
     | `None     -> return (object method text = "" method html = ignore end)
     | `Social s -> Social.render s 
+    | `Action a -> Action.render a 
 
 end
 

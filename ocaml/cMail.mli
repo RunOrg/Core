@@ -11,3 +11,8 @@ module Wrap : sig
 
 end
 
+module Footer : sig
+
+  val instance : [`IsSelf] IUser.id -> MInstance.t -> VMailBrick.footer
+
+end

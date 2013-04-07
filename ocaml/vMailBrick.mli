@@ -7,6 +7,13 @@ type social = <
   body    : MRich.OrText.t 
 >
 
+type action = <
+  pic     : string option ;
+  name    : string ; 
+  action  : O.i18n ; 
+  block   : Ohm.Html.writer ;
+>
+
 type footer = <
   white : IWhite.t option ;
   name  : string option ;
@@ -16,7 +23,8 @@ type footer = <
 
 type payload = 
   [ `None
-  | `Social of social ]
+  | `Social of social 
+  | `Action of action ]
 
 type result = <
   title : string ; 

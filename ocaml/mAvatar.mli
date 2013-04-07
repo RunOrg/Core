@@ -13,6 +13,17 @@ module Signals : sig
 
 end
 
+module Notify : sig
+
+  type t = 
+    [ `UpgradeToAdmin  of IUser.t * IInstance.t * IAvatar.t
+    | `UpgradeToMember of IUser.t * IInstance.t * IAvatar.t
+    ]
+
+  val define : (t -> MNotif.Types.render option O.run) -> unit  
+
+end
+
 type details = <
   name    : string option ;
   sort    : string option ;

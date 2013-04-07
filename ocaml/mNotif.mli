@@ -18,13 +18,13 @@ module Types : sig
     nsc     : int ; 
     nzc     : int ; 
     (* From render *) 
-    mail    : MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
+    mail    : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
     list    : Ohm.Html.writer O.run ; 
     act     : INotif.Action.t option -> string O.run ;
   > ;;
 
   type render = <
-    mail : MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
+    mail : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
     list : Ohm.Html.writer O.run ;
     act  : INotif.Action.t option -> string O.run ; 
   > ;;
