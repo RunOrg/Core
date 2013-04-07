@@ -19,6 +19,7 @@ type payload =
   | `Social of social ]
 
 type result = <
+  title : string ; 
   html : Ohm.Html.writer ;
   text : string
 >

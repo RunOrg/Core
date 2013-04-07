@@ -121,8 +121,9 @@ type button = <
 >
 
 type result = <
-  html : Ohm.Html.writer ;
-  text : string
+  title : string ; 
+  html  : Ohm.Html.writer ;
+  text  : string
 >
 
 module Body = struct
@@ -156,10 +157,11 @@ let render (title:O.i18n) (payload:payload) (body:body) (button:button) (footer:
   let! body = ohm (Body.render body button) in
   let! footer = ohm (Footer.render footer) in
   let  text = payload # text ^ body # text ^ footer # text in
+  let! title = ohm (AdLib.get title) in
   let! html = ohm (Asset_MailBrick_Full.render (object
     method title = title 
     method payload = payload # html
     method body = body # html
     method footer = footer # html
   end)) in
-  return (object method text = text method html = html end)
+  return (object method title = title method text = text method html = html end)
