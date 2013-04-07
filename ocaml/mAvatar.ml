@@ -104,7 +104,7 @@ let exists aid =
   let! avatar = ohm $ Tbl.get aid in 
   return (avatar <> None)
 
-let _get ins usr = 
+let get_raw ins usr = 
   let! aid    = ohm $ Unique.get ins usr in 
   let! avatar = ohm $ Tbl.get aid in 
   return (aid, avatar) 
@@ -255,16 +255,16 @@ let become_admin instance user =
 let status iid cuid = 
   let  uid = IUser.Deduce.is_anyone cuid in
   let  iid = IInstance.decay iid in 
-  let! aid, avatar = ohm $ _get iid uid in
+  let! aid, avatar = ohm $ get_raw iid uid in
   return $ BatOption.default `Contact (BatOption.map (#sta) avatar)
 
 let identify iid cuid = 
-  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.Deduce.is_anyone cuid) in
+  let! aid, avatar = ohm $ get_raw (IInstance.decay iid) (IUser.Deduce.is_anyone cuid) in
   let! avatar = req_or (return None) avatar in 
   return $ Some (actor_of_avatar aid avatar)
 
 let find iid uid = 
-  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.decay uid) in
+  let! aid, avatar = ohm $ get_raw (IInstance.decay iid) (IUser.decay uid) in
   if avatar = None then return None else return (Some aid) 
 
 let profile aid = 
@@ -277,24 +277,6 @@ let my_profile aid =
   let! pid = ohm $ profile aid in 
   (* Acting as self *)
   return (IProfile.Assert.is_self pid)
-
-(* Count members with a token ------------------------------------------------------------- *)
-
-module CountMembersView = CouchDB.ReduceView(struct
-  module Key = IInstance
-  module Value = Fmt.Int
-  module Reduced = Fmt.Int
-  module Design = Design
-  let name   = "usage" 
-  let map    = "if (doc.t == 'avtr' && (doc.sta == 'mbr' || doc.sta == 'own')) emit(doc.ins,1)" 
-  let reduce = "return sum(values)"
-  let level  = None
-  let group  = true
-end)
-
-let usage iid =
-  let iid = IInstance.decay iid in 
-  CountMembersView.reduce iid |> Run.map (BatOption.default 0)
 
 (* List all members of an instance -------------------------------------------------------- *)
 
@@ -716,4 +698,3 @@ module Backdoor = struct
  
 end
 
-module List    = MAvatar_list

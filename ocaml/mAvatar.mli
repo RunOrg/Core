@@ -76,8 +76,6 @@ val profile : 'a IAvatar.id -> IProfile.t O.run
 
 val my_profile : [`IsSelf] IAvatar.id -> [`IsSelf] IProfile.id O.run
 
-val usage : [<`ViewContacts|`SeeUsage] IInstance.id -> int O.run
-
 val search : 
      [`ViewContacts] IInstance.id
   -> string
@@ -118,17 +116,6 @@ val by_status :
   -> (IAvatar.t list * IAvatar.t option) O.run
 
 val is_admin : ?other_than:IInstance.t -> 'any IUser.id -> bool O.run
-
-module List : sig
-
-  val with_pictures : 
-      count:int
-    -> [`ViewContacts] IInstance.id
-    -> IAvatar.t list O.run
-
-  val all_members : [`Bot] IInstance.id -> IAvatar.t list O.run
-    
-end
 
 module Backdoor : sig
 
