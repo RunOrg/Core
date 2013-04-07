@@ -43,16 +43,10 @@ val get_instance : 'any IAvatar.id -> IInstance.t option O.run
 val upgrade_to_admin     :
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
-val downgrade_to_member  : 
-  ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
-
-val upgrade_to_member    :
+val change_to_member     : 
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
 val downgrade_to_contact : 
-  ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
-
-val change_to_member     : 
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
 val become_contact : 'a IInstance.id -> 'b IUser.id -> IAvatar.t O.run
@@ -114,8 +108,6 @@ val by_status :
   -> count:int
   -> Status.t 
   -> (IAvatar.t list * IAvatar.t option) O.run
-
-val is_admin : ?other_than:IInstance.t -> 'any IUser.id -> bool O.run
 
 module Backdoor : sig
 

@@ -475,12 +475,6 @@ let user_instances ?status ?count usr =
       IInstance.Assert.is_contact ins
     end avatars
 
-let is_admin ?other_than uid = 
-  let  count = if other_than = None then 2 else 1 in
-  let! list  = ohm $ user_instances ~status:`Admin ~count uid in 
-  let  iids  = List.map (snd |- IInstance.decay) list in 
-  return $ List.exists (fun iid -> other_than <> Some iid) iids
-
 let user_avatars uid = 
 
   let  uid = IUser.decay uid in 
