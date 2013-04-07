@@ -20,13 +20,14 @@ end)
    left in the queue. [true] if there might still be more. *)
 let one f = 
 
+  let! now = ohmctx (#time) in	
+
   let rec retry n = 
     if n <= 0 then return true else 
 
       let! list = ohm (UnsentView.doc_query ~limit:1 ()) in
       match list with [] -> return false | item :: _ -> 
 	let  nid = INotif.of_id (item # id) in
-	let! now = ohmctx (#time) in
 	
 	let! locked = ohm (Core.Tbl.transact nid Core.Data.(function 
 	  | None -> return (false, `keep) 
