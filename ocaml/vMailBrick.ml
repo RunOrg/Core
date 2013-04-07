@@ -181,7 +181,7 @@ let render (title:O.i18n) (payload:payload) (body:body) (button:button) (footer:
   let! payload = ohm (Payload.render payload) in
   let! body = ohm (Body.render body button) in
   let! footer = ohm (Footer.render footer) in
-  let  text = payload # text ^ body # text ^ footer # text in
+  let  text = payload # text ^ "\n\n" ^ body # text ^ "\n\n" ^ footer # text in
   let! title = ohm (AdLib.get title) in
   let! html = ohm (Asset_MailBrick_Full.render (object
     method title = title 
