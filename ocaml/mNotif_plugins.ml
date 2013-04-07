@@ -1,5 +1,9 @@
 (* © 2013 RunOrg *) 
 
+open Ohm
+open Ohm.Universal
+open BatPervasives
+
 module Core = MNotif_core
 
 module type PLUGIN = sig
@@ -31,7 +35,7 @@ let solve key =
   if nids = [] then return () else
     let! () = ohm (Run.list_iter begin fun x ->
       let nid = INotif.of_id (x # id) in
-      Tbl.update nid (fun n -> Core.Data.({ n with solve = now })) 
+      Core.Tbl.update nid (fun n -> Core.Data.({ n with solved = Some now })) 
     end nids) in
     task_solve key 
 
@@ -50,7 +54,7 @@ let add_check f =
 
 let check () = 
   if !checks <> [] then begin 
-    List.iter identity !checks ;
+    List.iter (fun f -> f ()) !checks ;
     checks := []
   end
 
@@ -65,7 +69,7 @@ let parse nid t =
 
 (* Actual plugin registration *) 
 
-module Register : functor(P:PLUGIN) -> struct
+module Register = functor(P:PLUGIN) -> struct
 
   type t = P.t
 
@@ -101,13 +105,16 @@ module Register : functor(P:PLUGIN) -> struct
       method mail u = r # mail u 
       method list   = r # list
       method act a  = r # act a 
-    end)
+    end))
 
-  let () = add_parser nid 
+  let () = add_parser P.id parse
 
   (* Sending one notification serves as base for sending many. *)
 
-  let send_one ?mid t =
+  let send_one ?time ?mid t =
+
+    let! time' = ohmctx (#time) in
+    let  time  = BatOption.default time' time in 
 
     let mid = match mid with Some mid -> mid | None -> IMailing.gen () in
     
@@ -118,19 +125,22 @@ module Register : functor(P:PLUGIN) -> struct
       uid    = P.uid t ;
       solve  = P.solve t ;
       mid    ;
+      time   ; 
       nmc    = 0 ;
       nsc    = 0 ;
+      nzc    = 0 ; 
       solved = None ;
       sent   = None ;
-      read   = None ;       
+      read   = None ; 
+      dead   = false ;       
     }) in
 
     let! nid = ohm (Core.Tbl.create n) in
     return () 
 
-  let send_many ?mid ts = 
+  let send_many ?time ?mid ts = 
     let mid = match mid with Some mid -> mid | None -> IMailing.gen () in
-    Run.list_iter (send_one ~mid) ts
+    Run.list_iter (send_one ?time ~mid) ts
 
   (* Solving forwards the right arguments *)
 

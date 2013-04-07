@@ -15,9 +15,9 @@ type full = <
   read    : float option ;
   sent    : float option ; 
   solved  : float option ; 
-  load    : full option O.run ; 
   nmc     : int ;
   nsc     : int ; 
+  nzc     : int ; 
   (* From render *) 
   mail    : MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
   list    : Ohm.Html.writer O.run ; 

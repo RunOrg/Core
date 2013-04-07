@@ -7,12 +7,6 @@ open BatPervasives
 module Core    = MNotif_core
 module Plugins = MNotif_plugins
 
-(* Rot means a "rotten" notification has been found (no "full" could be
-   extracted from it), and it therefore has to be destroyed from the 
-   database. *)
-let rot nid = 
-  Tbl.update nid (fun n -> Core.Data.({ n with dead = true })) 
-
 (* List all the notifications of a given user in reverse chronological order *) 
 
 module MineView = CouchDB.DocView(struct
@@ -38,8 +32,7 @@ let mine ?start ~count cuid =
     let  nid    = INotif.of_id (item # id) in
     let  rotten = (let! () = ohm (Core.rot nid) in return None) in  
     let  t      = item # doc in 
-    let! stub   = req_or rotten (Plugins.parse nid t) in
-    let! full   = ohm_req_or rotten (stub # full) in
+    let! full   = ohm_req_or rotten (O.decay (Plugins.parse nid t)) in
     return (Some full) 
   end list) in
 
