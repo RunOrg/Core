@@ -5,16 +5,7 @@ module Status : Ohm.Fmt.FMT with type t =
 
 module Signals : sig
 
-  type status_event = [`IsSelf] IAvatar.id option * IAvatar.t * IInstance.t
-
-  val on_update               : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel 
-  val on_upgrade_to_admin     : (status_event, unit O.run) Ohm.Sig.channel
-  val on_upgrade_to_member    : (status_event, unit O.run) Ohm.Sig.channel
-  val on_downgrade_to_member  : (status_event, unit O.run) Ohm.Sig.channel
-  val on_downgrade_to_contact : (status_event, unit O.run) Ohm.Sig.channel
-
-  val on_merge : (IAvatar.t * IAvatar.t, unit O.run) Ohm.Sig.channel 
-
+  val on_update     : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel 
   val on_obliterate : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel
 
   (* Used when performing a global refresh on all avatars *)

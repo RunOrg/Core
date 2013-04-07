@@ -286,23 +286,6 @@ let () =
   let! _   = ohm $ Run.list_iter obliterate_membership all in
   return () 
 
-(* Propagate avatar merge  ------------------------------------------------------ *)
-
-let () = 
-  let! merged_aid, into_aid = Sig.listen MAvatar.Signals.on_merge in
-
-  let merge_membership (mid,membership) = 
-    let  gid = (membership # current).Details.where in
-    (* TODO : be smarter about how the data is retrieved... *)
-    let! who = ohm_req_or (return ()) $ MAvatar.actor (IAvatar.Assert.is_self into_aid) in 
-    let!  () = ohm $ user gid who true in    
-    return ()
-  in
-
-  let! all = ohm $ Versioned.by_avatar merged_aid in 
-  let! _   = ohm $ Run.list_iter merge_membership all in
-  return () 
-
 (* Propagate admin group binding ----------------------------------------------- *)
 
 let () = 

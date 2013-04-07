@@ -646,25 +646,6 @@ let obliterate_for_user_later =
 let _ =
   Sig.listen MUser.Signals.on_obliterate obliterate_for_user
 
-(* Propagate avatar merge signal. --------------------------------------------------------- *)
-
-let avatar_instances_of_user uid = 
-  let! list = ohm $ ByUserView.query ~startkey:(uid,`Contact) ~endkey:(uid,`Admin) () in
-  return $ List.map (fun item -> IAvatar.of_id item # id, item # value) list 
-
-let _ = 
-  let on_user_merge (merged_uid, into_uid) = 
-    let! merged_avatars = ohm $ avatar_instances_of_user merged_uid in
-    let! () = ohm $ Run.list_iter begin fun (merged_aid,iid) ->
-      let! into_aid   = ohm $ become_contact iid into_uid in 
-      let! ()         = ohm $ Signals.on_merge_call (merged_aid, into_aid) in
-      return () 
-    end merged_avatars in
-    let! _ = ohm $ obliterate_for_user_later merged_uid in
-    return ()
-  in
-  Sig.listen MUser.Signals.on_merge on_user_merge
-
 (* Final submodules ----------------------------------------------------------------------- *)
 
 module Backdoor = struct

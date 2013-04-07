@@ -64,22 +64,6 @@ let () =
   let! uid, _ = Ohm.Sig.listen MUser.Signals.on_confirm in
   to_admins (`NewUser (IUser.decay uid)) 
 
-(* Notify user when they are added as a member or admin ------------------------------------- *)
-
-let () = 
-  let react how (aid, who, iid) = 
-    let! aid = req_or (return ()) aid in 
-    let! () = true_or (return ()) (IAvatar.decay aid <> IAvatar.decay who) in
-    let! details = ohm $ MAvatar.details who in
-    let! uid = req_or (return ()) details # who in 
-    let  payload = how (IAvatar.decay aid) iid in
-    Store.create payload uid 
-  in
-  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_admin 
-    (react (fun aid iid -> `BecomeAdmin (iid,aid))) ;
-  Ohm.Sig.listen MAvatar.Signals.on_upgrade_to_member
-    (react (fun aid iid -> `BecomeMember (iid,aid)))
-
 (* Notify owner when an item is liked. ------------------------------------------------------ *)
 
 let () = 
