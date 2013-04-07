@@ -121,7 +121,7 @@ let actor aid =
 
 (* Status updates ------------------------------------------------------------------------- *)
 
-let _update_status status ins usr =
+let update_status status ins usr =
 
   let ins = IInstance.decay ins in
   let usr = IUser.decay usr in
@@ -173,14 +173,14 @@ let _update_status status ins usr =
   
   return (aid, changed)
 				       
-let _update_avatar_status status ?ins avatar =
+let update_avatar_status status ?ins avatar =
 
   let avatar = IAvatar.decay avatar in
   let update obj = 
     let newsta = status (obj # sta) in
-    if obj # sta = newsta || ins <> None && Some (obj # ins) <> ins
+    if obj # sta = newsta || ins <> None && Some (obj # who, obj # ins) <> ins
     then None, `keep 
-    else Some (obj # ins), `put (object	
+    else Some (obj # who, obj # ins), `put (object	
       (* Definition *)
       method t       = `Avatar
       method who     = obj # who
@@ -202,26 +202,33 @@ let _update_avatar_status status ?ins avatar =
   in
   let! () = ohm begin 
     match result with 
-      | None     -> return ()
-      | Some iid -> Signals.on_update_call (avatar, iid)
+      | None         -> return ()
+      | Some (_,iid) -> Signals.on_update_call (avatar, iid)
   end in
   return result
 
+let upgrade how avatar = 
+  let! _ = ohm (update_avatar_status how avatar) in
+  return () 
+
 let eventful_upgrade how signal ?from avatar =
-  let! iid = ohm_req_or (return ()) $ _update_avatar_status how avatar in
-  signal (from, IAvatar.decay avatar, iid)
+  let! uid, iid = ohm_req_or (return ()) $ update_avatar_status how avatar in
+  match from with None -> return () | Some from ->
+    let from = IAvatar.decay from in 
+    if from = IAvatar.decay avatar then return () else 
+      signal ~uid ~iid ~from
 
-let upgrade_to_admin = eventful_upgrade
-  (fun _ -> `Admin) Signals.on_upgrade_to_admin_call
+let upgrade_to_admin ?from aid = 
+  eventful_upgrade (fun _ -> `Admin) Notify.upgrade_to_admin ?from aid 
+      
+let upgrade_to_member ?from aid = 
+  eventful_upgrade (function `Admin -> `Admin | _ -> `Token) Notify.upgrade_to_member ?from aid 
 
-let upgrade_to_member = eventful_upgrade 
-  (function `Admin -> `Admin | _ -> `Token) Signals.on_upgrade_to_member_call
+let downgrade_to_contact ?from aid = 
+  upgrade (fun _ -> `Contact) aid  
 
-let downgrade_to_contact = eventful_upgrade
-  (fun _ -> `Contact) Signals.on_downgrade_to_contact_call
-
-let downgrade_to_member = eventful_upgrade 
-  (function `Contact -> `Contact | _ -> `Token) Signals.on_downgrade_to_member_call
+let downgrade_to_member ?from aid = 
+  upgrade (function `Contact -> `Contact | _ -> `Token) aid
 
 let change_to_member ?from avatar = 
   let! current = ohm_req_or (return ()) $ Tbl.get (IAvatar.decay avatar) in
@@ -232,7 +239,7 @@ let change_to_member ?from avatar =
 
 let become_contact instance user = 
   let! id, _ = ohm $
-    _update_status (function 
+    update_status (function 
       | Some `Admin -> `Admin
       | Some `Token -> `Token
       | _ -> `Contact) instance user 
@@ -240,7 +247,7 @@ let become_contact instance user =
   return id
 
 let become_admin instance user =
-  let! id, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
+  let! id, _ = ohm $ update_status (fun _ -> `Admin) instance user in
   return id
 
 (* Identify an user for an instance ------------------------------------------------------- *)
