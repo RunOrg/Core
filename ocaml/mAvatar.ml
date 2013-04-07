@@ -13,6 +13,7 @@ module Status  = MAvatar_status
 module Signals = MAvatar_signals
 module Pending = MAvatar_pending
 module Details = MAvatar_details
+module Notify  = MAvatar_notify
 
 (* Data types & formats ------------------------------------------------------------------- *)
 
