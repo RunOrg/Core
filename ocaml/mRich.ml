@@ -106,7 +106,53 @@ let to_text (doc:doc) =
 
   Buffer.contents b
 
-let summary r = false, r
+let summary (doc:doc) =
+  let chars_per_line = 80 in 
+  let rec on_doc chars = 
+    if chars <= 0 then (fun _ -> 0, []) else function 
+    | `A (u,l) :: t -> let chars, l = on_doc chars l in
+		       let chars, t = on_doc chars t in 
+		       chars, `A (u,l) :: t
+    | `B l :: t -> let chars, l = on_doc chars l in 
+		   let chars, t = on_doc chars t in
+		   chars, `B l :: t
+    | `I l :: t -> let chars, l = on_doc chars l in
+		   let chars, t = on_doc chars t in
+		   chars, `I l :: t 
+    | `BR :: t -> let chars = chars - chars_per_line in 
+		  if chars < 0 then 0, [] else 
+		    let chars, t = on_doc chars t in
+		    if t = [] then 0, [] else 
+		      chars, `BR :: t
+    | `P l :: t -> let chars, l = on_doc chars l in
+		   let chars = chars - chars_per_line in 
+		   let chars, t = on_doc chars t in
+		   chars, (if l = [] then [] else `P l :: t)
+    | `INDENT l :: t -> let chars, l = on_doc chars l in
+			let chars, t = on_doc chars t in
+			chars, (if l = [] then [] else `INDENT l :: t)
+    | `TEXT s :: t -> let chars, s = on_text chars s in
+		      let chars, t = on_doc chars t in
+		      if s = "" then 0, [] else chars, `TEXT s :: t
+    | `UL l :: t -> let chars, l = on_list chars l in
+		    let chars, t = on_doc chars t in
+		    if l = [] then 0, [] else chars, `UL l :: t
+    | `OL l :: t -> let chars, l = on_list chars l in
+		    let chars, t = on_doc chars t in
+		    if l = [] then 0, [] else chars, `OL l :: t
+  and on_list chars = function 
+    | [] -> chars, []
+    | x :: xs -> let chars, x = on_doc chars x in
+		 let chars = chars - chars_per_line in 
+		 let chars, xs = on_list chars xs in 
+		 if x = [] then chars, [] else chars, x :: xs
+  and on_text chars str = 
+    if String.length str < chars then chars - String.length str, str else
+      0, OhmText.cut ~ellipsis:"…" chars str
+  in
+  
+  let chars, doc = on_doc (chars_per_line * 5) doc in
+  chars <= 0, doc 
 
 let whitespace = 
   Str.regexp "^\\([ \t\r\n]\\|\194\160\\|&nbsp;\\|&emsp;\\|&ensp;\\)*$"
