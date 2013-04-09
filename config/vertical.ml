@@ -175,7 +175,6 @@ let collectivites = vertical "Collectivites"
   ]
   [
     groupSimple ;
-    groupSimple ;
     pollSimple ;
     pollYearly ;
     eventSimple ;
@@ -220,7 +219,6 @@ let company = vertical "Company"
       ~name:(adlib "EntitySampleGroupCollaborativeCompanyManagementName" ~old:"entity.sample.group-collaborative.company-management.name" "Direction & management") ;
   ]
   [
-    groupSimple ;
     groupSimple ;
     pollSimple ;
     pollYearly ;
@@ -716,7 +714,6 @@ let health = vertical "Health"
       ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
   ]
   [
-    groupSimple ;
     groupSimple ;
     pollSimple ;
     pollYearly ;

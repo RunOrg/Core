@@ -479,7 +479,7 @@ let eventCampaignAction = event "EventCampaignAction"
 (* ========================================================================== *)
 
 let eventCampaignMeeting = event "EventCampaignMeeting"
-  ~name:"Réunion électorale publique"
+  ~name:"Réunion publique"
   ~desc:"Organisez une réunion électorale et reccueillez les thèmes attendus par les participants"
   ~columns:Col.([ 
     status ; 
