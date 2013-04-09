@@ -706,6 +706,7 @@ let health = vertical "Health"
   ~forms:ProfileForm.([ 
 		simple ; 
 		healthAntecedents ;
+		healthParcours ;
 		healthExamen ;
 		healthBilanComplications ])
   [
