@@ -763,6 +763,7 @@ let multiSports = vertical "MultiSports"
     groupCheerleading ;
     groupFootus ;
     groupBadminton ;
+    groupTennis ;
     pollSimple ;
     pollYearly ;
     courseSimple ;
@@ -1038,6 +1039,38 @@ let students = vertical "Students"
 
 (* ========================================================================== *)
 
+let tennis = vertical "Tennis"
+  ~name:"Clubs de Tennis"
+  ~forms:ProfileForm.([ simple ])
+  [
+    initial "entity.sample.sub-runorg.name" groupSimple
+      ~name:(adlib "EntitySampleSubRunorgName" ~old:"entity.sample.sub-runorg.name" "Adhérents 2012-2013") ;
+    initial "entity.sample.group-collaborative.office.name" groupSimple
+      ~name:(adlib "EntitySampleGroupCollaborativeOfficeName" ~old:"entity.sample.group-collaborative.office.name" "Bureau et administrateurs de l'association") ;
+    initial "entity.sample.group-collaborative.tennis-players.name" groupTennis
+      ~name:(adlib "EntitySampleGroupCollaborativeTennisPlayersName" "Joueurs de Tennis") ;
+    initial "entity.sample.group-collaborative.trainers.name" groupSimple
+      ~name:(adlib "EntitySampleGroupCollaborativeTrainersName" ~old:"entity.sample.group-collaborative.trainers.name" "Entraineurs et formateurs") ;
+    initial "entity.sample.group-collaborative.tennis-competition.name" groupSimple
+      ~name:(adlib "EntitySampleGroupCollaborativeTennisCompetitorsName" "Compétition") ;
+    initial "entity.sample.group-collaborative.tennis-fun.name" groupSimple
+      ~name:(adlib "EntitySampleGroupCollaborativeTennisFunName" "Loisir") ;
+  ]
+  [
+    groupSimple ;
+    groupTennis ;
+    pollSimple ;
+    pollYearly ;
+    courseSimple ;
+    course12sessions ;
+    eventSimple ;
+    eventMeeting ;
+    eventAg ;
+  ]
+;;
+
+(* ========================================================================== *)
+
 let () = catalog [
   subCatalog ~name:(adlib "Catalog_Asso" "Associations") [
     inCatalog simple
@@ -1061,6 +1094,9 @@ let () = catalog [
               None ;
     inCatalog judo
               (adlib "VerticalJudoName" "Club de judo et jujitsu")
+              None ;
+    inCatalog tennis
+              (adlib "VerticalTennis" "Club de tennis")
               None ;
     inCatalog badminton
               (adlib "VerticalBadminton" "Club de badminton")

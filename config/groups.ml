@@ -656,6 +656,84 @@ let groupSimple = group "GroupSimple"
 
 (* ========================================================================== *)
 
+let groupTennis = group "GroupTennis"
+  ~name:"Sportifs Tennis"
+  ~desc:"Disposez de toutes les informations demandées à vos sportifs dans le cadre du tennis"
+  ~columns:Col.([
+    status ;
+    date ; 
+    column ~view:`Text
+      ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)")
+      (`Self (`Field "license-number")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormCompetitor" "Compétiteur")
+      (`Self (`Field "competitor")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormRanking" "Classement")
+      (`Self (`Field "Classement")) ;
+    column ~view:`PickOne
+      ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe")
+      (`Self (`Field "sex")) ;
+    column ~view:`DateTime
+      ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)")
+      (`Self (`Field "dateofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance")
+      (`Self (`Field "placeofbirth")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile")
+      (`Self (`Field "homephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable")
+      (`Self (`Field "mobilephone")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse")
+      (`Self (`Field "address")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession")
+      (`Self (`Field "job")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père")
+      (`Self (`Field "info-father")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère")
+      (`Self (`Field "info-mother")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ")
+      (`Self (`Field "medical-data-sport")) ;
+    column ~view:`Text
+      ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques")
+      (`Self (`Field "other")) ;
+  ])
+  ~join:[
+    join ~name:"lastname" ~label:(adlib "JoinFormLastname" ~old:"join.form.lastname" "Nom") ~required:true `LongText ;
+    join ~name:"firstname" ~label:(adlib "JoinFormFirstname" ~old:"join.form.firstname" "Prénom") ~required:true `LongText ;
+    join ~name:"sex" ~label:(adlib "JoinFormSex" ~old:"join.form.sex" "Sexe") ~required:true 
+      (`PickOne [
+         adlib "JoinFormSexMale" ~old:"join.form.sex.male" "Masculin" ;
+         adlib "JoinFormSexFemale" ~old:"join.form.sex.female" "Féminin" ] ) ;
+    join ~name:"dateofbirth" ~label:(adlib "JoinFormDateofbirth" ~old:"join.form.dateofbirth" "Date de naissance (JJ / MM / AAAA)") ~required:true `Date ;
+    join ~name:"placeofbirth" ~label:(adlib "JoinFormPlaceofbirth" ~old:"join.form.placeofbirth" "Lieu de naissance") `LongText ;
+    join ~name:"homephone" ~label:(adlib "JoinFormHomephone" ~old:"join.form.homephone" "Tel domicile") `LongText ;
+    join ~name:"job" ~label:(adlib "JoinFormJob" ~old:"join.form.job" "Profession") `LongText ;
+    join ~name:"address" ~label:(adlib "JoinFormAddress" ~old:"join.form.address" "Adresse") `LongText ;
+    join ~name:"mobilephone" ~label:(adlib "JoinFormMobilephone" ~old:"join.form.mobilephone" "Tel portable") `LongText ;
+    join ~name:"license-number" ~label:(adlib "JoinFormLicenseNumber" ~old:"join.form.license-number" "Numéro de license (si vous en avez un)") `LongText ;
+    join ~name:"competitor" ~label:(adlib "JoinFormCompetitor" "Compétiteur") ~required:true 
+      (`PickOne [
+         adlib "Yes" ~old:"yes" "Oui" ;
+         adlib "No" ~old:"no" "Non" ] ) ;
+	join ~name:"ranking" ~label:(adlib "JoinFormRanking" "Classement") `LongText ;
+	join ~name:"info-mother" ~label:(adlib "JoinFormInfoMother" ~old:"join.form.info-mother" "Si mineur : téléphone, email et profession de la mère") `Textarea ;
+    join ~name:"info-father" ~label:(adlib "JoinFormInfoFather" ~old:"join.form.info-father" "Si mineur : téléphone, email et profession du père") `Textarea ;
+    join ~name:"medical-data-sport" ~label:(adlib "JoinFormMedicalDataSport" ~old:"join.form.medical-data-sport" "Données médicales concernant votre pratique sportive que vous souhaitez porter à notre connaissance ") `Textarea ;
+    join ~name:"other" ~label:(adlib "JoinFormOther" ~old:"join.form.other" "Autres remarques") `Textarea ;
+  ]
+  ()
+  
+
+(* ========================================================================== *)
+
 let _ = group "GroupTest"
   ~name:"Groupe Test"
   ()
