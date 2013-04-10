@@ -166,7 +166,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
     
       | `duplicate uid -> 
 
-	let!  ()  = ohm $ Reset.send ~iid ~uid in
+	let!  ()  = ohm $ Reset.Mail.send_one uid in
 
 	let! html = ohm $ 
 	  Asset_Dialog_Dialog.render (object

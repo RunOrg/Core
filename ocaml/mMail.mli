@@ -33,10 +33,10 @@ end
 module Types : sig
 
   type render_mail = 
-    [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run 
+    [`IsSelf] IUser.id -> MUser.t -> VMailBrick.result O.run 
       
   type act = 
-      IMail.Action.t option -> string O.run 
+    ICurrentUser.t -> IWhite.t option -> IMail.Action.t option -> string O.run 
       
   type render_item = 
       Ohm.Html.writer O.run 

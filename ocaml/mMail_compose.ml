@@ -54,9 +54,9 @@ let delay = 10.0 (* seconds *)
 let () = O.async # periodic 1 begin 
   let! result = ohm $ one begin fun full -> 
     let! _ = ohm $ Send.send (full # info # uid) begin fun self user send ->
-      let! subject, text, html = ohm (full # mail self user) in
+      let! result = ohm (full # mail self user) in
       let  owid = user # white in
-      send ~owid ~subject ~text ~html ()
+      send ~owid ~subject:(result # title) ~text:(result # text) ~html:(result # html) ()
     end in 
     return () 
   end in

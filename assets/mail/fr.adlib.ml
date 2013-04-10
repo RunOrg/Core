@@ -2,6 +2,14 @@
 | `Mail_Foot_Via -> "via"
 | `Mail_Foot_Unsubscribe -> "Ne plus rien recevoir"
 
+| `Mail_PassReset_Title -> "Changer votre mot de passe"
+| `Mail_PassReset_Intro name -> !! "Bonjour %s," name
+| `Mail_PassReset_Explanation email -> 
+  !! "Vous pouvez vous connecter directement à votre compte %s en cliquant sur le lien ci-dessous. Une fois connecté, vous pourrez changer votre mot de passe." email 
+| `Mail_PassReset_Button -> "Connexion"
+
+(* I18N below have not been used in the new system *)
+
 | `Mail_SignupConfirm_Title -> "Confirmez votre inscription !"
 | `Mail_SignupConfirm_Intro name -> !! "Bonjour %s," name
 | `Mail_SignupConfirm_Welcome -> 
@@ -11,11 +19,6 @@
 | `Mail_SignupConfirm_Thanks -> 
   "Merci, et à très bientôt !"
 
-| `Mail_PassReset_Title -> "Changer votre mot de passe"
-| `Mail_PassReset_Intro name -> !! "Bonjour %s," name
-| `Mail_PassReset_Explanation email -> 
-  !! "Vous pouvez vous connecter directement à votre compte %s en cliquant sur le lien ci-dessous :" email 
-| `Mail_PassReset_Thanks -> "Une fois connecté, vous pourrez changer votre mot de passe."
 
 | `Mail_Unsubscribe_Title -> "Confirmez la suppression de votre compte"
 | `Mail_Unsubscribe_Intro name -> !! "Bonjour %s," name
