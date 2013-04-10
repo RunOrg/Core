@@ -111,6 +111,20 @@ module Create : sig
 
 end
 
+module Notify : sig
+
+  type t = <
+    itid : IItem.t ;
+    aid  : IAvatar.t ;
+    iid  : IInstance.t ; 
+    uid  : IUser.t ;
+    kind : [ `Mail ] 
+  >
+
+  val define : (t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+
+end
+
 module Remove : sig
   val delete   : [`Remove] IItem.id -> unit O.run
   val moderate : IItem.t -> ([`Unknown] source -> [`Admin] source option O.run) -> unit O.run

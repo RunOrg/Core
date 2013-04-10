@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open BatPervasives
@@ -14,6 +14,7 @@ module React    = MItem_react
 module Remove   = MItem_remove
 module Create   = MItem_create
 module Backdoor = MItem_backdoor
+module Notify   = MItem_notify 
 
 include MItem_types
 include MItem_create
