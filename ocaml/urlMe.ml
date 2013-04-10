@@ -46,7 +46,3 @@ end
 module News = struct
   let home, def_home = root "news"
 end
-
-module Mail = struct
-  let link, def_link = O.declare O.core "mail" (A.rro IMail.arg A.string IMail.Action.arg) 
-end

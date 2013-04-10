@@ -12,3 +12,4 @@ let unsubscribe, def_unsubscribe = O.declare O.core "mail/unsubscribe"
 let post_unsubscribe, def_post_unsubscribe = O.declare O.core "mail/unsubscribe/post"
   (A.rro IUser.arg A.string IInstance.arg)
  
+let link, def_link = O.declare O.core "mail" (A.rro IMail.arg A.string IMail.Action.arg) 

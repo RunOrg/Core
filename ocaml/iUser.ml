@@ -6,13 +6,14 @@ open BatPervasives
 include Id.Phantom
 
 module Assert = struct 
-  let is_self    = identity
-  let created    = identity
-  let updated    = identity 
-  let is_new  id = ICurrentUser.Assert.is_new (ICurrentUser.of_id id)
-  let is_old  id = ICurrentUser.Assert.is_old (ICurrentUser.of_id id)
-  let bot        = identity
-  let confirm    = identity 
+  let is_self     = identity
+  let created     = identity
+  let updated     = identity 
+  let is_new   id = ICurrentUser.Assert.is_new (ICurrentUser.of_id id)
+  let is_old   id = ICurrentUser.Assert.is_old (ICurrentUser.of_id id)
+  let bot         = identity
+  let confirm     = identity 
+  let unsubscribe = identity 
 end
   
 module Deduce = struct
@@ -42,17 +43,6 @@ module Deduce = struct
 
   let old_can_confirm id = ICurrentUser.to_id id
       
-  (* -- *)
-
-  let make_unsub_token id = 
-    ConfigKey.prove ["unsubscribe" ; Id.str id]
-      
-  let from_unsub_token proof id =
-    if ConfigKey.is_proof proof  ["unsubscribe" ; Id.str id] 
-    then Some id else None
-
-  (* -- *)
-
   let can_block     id = ICurrentUser.to_id id 
   let can_edit      id = ICurrentUser.to_id id
   let can_view      id = ICurrentUser.to_id id

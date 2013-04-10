@@ -10,9 +10,9 @@ module Unsubscribe = CMail_unsubscribe
 module Footer      = CMail_footer
 
 let link mid maid owid = 
-  Action.url UrlMe.Mail.link owid ( mid, MMail.get_token mid, maid )
+  Action.url UrlMail.link owid ( mid, MMail.get_token mid, maid )
 
-let () = UrlMe.Mail.def_link begin fun req res ->
+let () = UrlMail.def_link begin fun req res ->
 
   let mid, proof, maid = req # args in
   let current = match CSession.check req with 
