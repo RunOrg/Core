@@ -74,44 +74,6 @@ let url cuid (notify:MNotify.Store.t) =
 			     item_url cuid itid
 
 
-module ResendArgs = Fmt.Make(struct
-  type json t = <
-    nid : INotify.t ;
-    uid : IUser.t 
-  >
-end)
-
-let resend_notification = 
-  let task = O.async # define "resend-notify" ResendArgs.fmt 
-    begin fun arg -> 
-
-      let! _ = ohm $ MMail.other_send_to_self (arg # uid) 
-	begin fun self user send -> 
-
-	  let  token = MNotify.get_token (arg # nid) in 
-	  let  url = Action.url UrlMe.Notify.mailed (user # white) (arg # nid,token) in
-	  
-	  let  body = Asset_Mail_NotifyResend.render (object
-	    method url   = url 
-	    method name  = user # fullname
-	  end) in
-	  
-	  let! from, html = ohm $ CMail.Wrap.render (user # white) self body in
-	  let  subject = AdLib.get `Mail_NotifyResend_Title in
- 
-	  send ~owid:(user # white) ~from ~subject ~html
-
-	end in
-
-      return () 
-
-    end in
-  fun ~nid ~uid -> task (object
-    method nid = nid
-    method uid = uid
-  end)
-
-
 let () = UrlMe.Notify.def_mailed begin fun req res -> 
 
   let nid, proof = req # args in
@@ -140,6 +102,5 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 			method title  = title 
 		      end) in
 		      let! () = ohm $ MNews.Cache.prepare uid in
-		      let! () = ohm $ resend_notification ~nid ~uid in 
 		      CPageLayout.core (req # server) `Notify_Expired_Title html res	
 end

@@ -12,7 +12,7 @@ let send url uid iid =
 
   if instance # unbound = None then return () else 
 
-    let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
+    let! _ = ohm $ MMail.Send.other_send_to_self uid begin fun self user send -> 
       
       let subject = AdLib.get (`Mail_Notify_CanInstall_Title (instance # name)) in
       

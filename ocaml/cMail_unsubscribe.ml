@@ -17,7 +17,7 @@ let send_unsubscribe_confirmation =
   let task = O.async # define "unsubscribe-confirm" ConfirmArgs.fmt 
     begin fun arg -> 
 
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
+      let! _ = ohm $ MMail.Send.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
 	  let  token = IUser.Deduce.make_unsub_token self in

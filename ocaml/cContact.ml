@@ -24,7 +24,7 @@ let () = UrlSplash.def_contact begin fun req res ->
 
   let! () = ohm $ Run.list_iter begin fun uid -> 
 
-    let! _ = ohm $ MMail.send_to_self uid begin fun uid user send -> 
+    let! _ = ohm $ MMail.Send.send_to_self uid begin fun uid user send -> 
 
       send 
 	~owid:(user # white) 

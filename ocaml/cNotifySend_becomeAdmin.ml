@@ -10,7 +10,7 @@ let send url uid iid aid =
   let! name = req_or (return ()) (author # nameo) in
   let! instance = ohm_req_or (return ()) $ MInstance.get iid in 
   
-  let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
+  let! _ = ohm $ MMail.Send.other_send_to_self uid begin fun self user send -> 
     
     let subject = AdLib.get (`Mail_Notify_BecomeAdmin_Title (instance # name)) in
     

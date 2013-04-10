@@ -11,7 +11,7 @@ let send url uid eid aid =
   let! iid  = ohm_req_or (return ()) $ MEvent.instance eid in 
   let! instance = ohm_req_or (return ()) $ MInstance.get iid in 
 
-  let! _ = ohm $ MMail.other_send_to_self uid begin fun self user send -> 
+  let! _ = ohm $ MMail.Send.other_send_to_self uid begin fun self user send -> 
   
     let! actor = ohm_req_or (return ()) $ actor iid self in 
     let! event = ohm_req_or (return ()) $ MEvent.view ~actor eid in 

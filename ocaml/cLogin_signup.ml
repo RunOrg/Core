@@ -65,7 +65,7 @@ let send_signup_confirmation =
       let cuid  = IUser.Assert.is_new (arg # user) in
       let token = IUser.Deduce.make_confirm_token cuid in
 
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
+      let! _ = ohm $ MMail.Send.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
 	  let  url = Action.url UrlMail.signupConfirm (user # white) (arg # user, token) in

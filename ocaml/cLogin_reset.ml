@@ -19,7 +19,7 @@ let send =
       let cuid  = IUser.Assert.is_old (arg # user) in
       let token = IUser.Deduce.make_old_session_token cuid in
 
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
+      let! _ = ohm $ MMail.Send.other_send_to_self (arg # user) 
 	begin fun self user send -> 
 
 	  let  url = Action.url UrlMail.passReset (user # white) (arg # user, token) in
