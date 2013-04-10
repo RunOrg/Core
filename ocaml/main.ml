@@ -22,7 +22,7 @@ module Actions = struct
   open CUpload
   open CEvents
   open CGroups
-  open CNotifySend
+  open CNotify
   open CContact
   open CSplash
   open CProfile

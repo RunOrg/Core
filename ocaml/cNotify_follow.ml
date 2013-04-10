@@ -3,14 +3,14 @@
 open Ohm
 open Ohm.Universal
 
-let () = Url.def_follow begin fun req res -> 
+let () = UrlMe.Notify.def_follow begin fun req res -> 
 
   let cuid = CSession.get req in
   let mid, act = req # args in 
 
   let fail = 
     let html = Asset_NotFound_Page.render (req # server,cuid,None) in
-    CPageLayout.core owid `Page404_Title html res
+    CPageLayout.core (req # server) `Page404_Title html res
   in
   
   let! cuid = req_or fail cuid in 

@@ -52,7 +52,7 @@ let from_token mid ?current token =
 	return (`Expired t.Core.Data.uid) 
 	
 let from_user mid cuid = 
-  let! t    = ohm_req_or (return None) (Core.Tbl.get mid) in
+  let! t = ohm_req_or (return None) (Core.Tbl.get mid) in
   if IUser.Deduce.is_anyone cuid = t.Core.Data.uid then 
     O.decay (
       let! full = ohm_req_or (return None) (parse_item mid t) in
