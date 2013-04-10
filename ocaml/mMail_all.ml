@@ -55,7 +55,7 @@ module UnreadOrUnsolvedView = CouchDB.ReduceView(struct
               else if (doc.solved[0] === 'y') return;
               emit(doc.uid,1);"
   let reduce = "return sum(values);"
-  let group = false
+  let group = true
   let level = None
 end)
 
