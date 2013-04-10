@@ -5,6 +5,7 @@ open Ohm
 module Plugin = Id.Phantom
 module Solve  = Id.Phantom
 module Action = Id.Phantom
+module Wave   = Id.Phantom
 
 include Id.Phantom
 

@@ -3,6 +3,7 @@
 module Plugin : Ohm.Id.PHANTOM
 module Solve  : Ohm.Id.PHANTOM
 module Action : Ohm.Id.PHANTOM
+module Wave   : Ohm.Id.PHANTOM
 
 include Ohm.Id.PHANTOM
   

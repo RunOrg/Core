@@ -6,7 +6,7 @@ open Ohm.Universal
 type full = <
   (* From stub *)
   id      : IMail.t ; 
-  mid     : IMailing.t ; 
+  wid     : IMail.Wave.t ; 
   plugin  : IMail.Plugin.t ; 
   iid     : IInstance.t option ;
   uid     : IUser.t ;
@@ -26,7 +26,7 @@ type full = <
 
 type 'a stub = <
   id      : IMail.t ; 
-  mid     : IMailing.t ; 
+  wid     : IMail.Wave.t ; 
   plugin  : IMail.Plugin.t ; 
   iid     : IInstance.t option ;
   uid     : IUser.t ;

@@ -13,8 +13,8 @@ module Register : functor(P:PLUGIN) -> sig
 
   type t = P.t
 
-  val send_one : ?time:float -> ?mid:IMailing.t -> t -> (#O.ctx,unit) Ohm.Run.t
-  val send_many : ?time:float -> ?mid:IMailing.t -> t list -> (#O.ctx,unit) Ohm.Run.t 
+  val send_one : ?time:float -> ?mwid:IMail.Wave.t -> t -> (#O.ctx,unit) Ohm.Run.t
+  val send_many : ?time:float -> ?mwid:IMail.Wave.t -> t list -> (#O.ctx,unit) Ohm.Run.t 
   val solve : IMail.Solve.t -> unit O.run 
 
   (* Define "rendering" function. Notifications for which this function 

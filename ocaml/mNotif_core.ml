@@ -18,7 +18,7 @@ module Data = struct
       nzc    : int ; 
       iid    : IInstance.t option ; 
       uid    : IUser.t ;
-      mid    : IMailing.t ;
+      wid    : IMail.Wave.t ;
       solve  : IMail.Solve.t option ;
       dead   : bool ; 
     }

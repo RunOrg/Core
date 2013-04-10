@@ -90,7 +90,7 @@ module Register = functor(P:PLUGIN) -> struct
     let  stub = Core.Data.(object
       method plugin = P.id
       method id     = mid
-      method mid    = m.mid
+      method wid    = m.wid
       method iid    = m.iid
       method uid    = m.uid
       method from   = P.from t 
@@ -107,7 +107,7 @@ module Register = functor(P:PLUGIN) -> struct
     return (Some Core.Data.(object 
       method plugin = P.id
       method id     = mid
-      method mid    = m.mid
+      method wid    = m.wid
       method iid    = m.iid
       method uid    = m.uid
       method from   = P.from t 
@@ -127,12 +127,12 @@ module Register = functor(P:PLUGIN) -> struct
 
   (* Sending one notification serves as base for sending many. *)
 
-  let send_one ?time ?mid t =
+  let send_one ?time ?mwid t =
 
     let! time' = ohmctx (#time) in
     let  time  = BatOption.default time' time in 
 
-    let mid = match mid with Some mid -> mid | None -> IMailing.gen () in
+    let mwid = match mwid with Some mwid -> mwid | None -> IMail.Wave.gen () in
     
     let m = Core.Data.({
       plugin = P.id ;
@@ -140,7 +140,7 @@ module Register = functor(P:PLUGIN) -> struct
       iid    = P.iid t ;
       uid    = P.uid t ;
       solve  = P.solve t ;
-      mid    ;
+      wid    = mwid ;
       time   ; 
       nmc    = 0 ;
       nsc    = 0 ;
@@ -154,9 +154,9 @@ module Register = functor(P:PLUGIN) -> struct
     let! mid = ohm (Core.Tbl.create m) in
     return () 
 
-  let send_many ?time ?mid ts = 
-    let mid = match mid with Some mid -> mid | None -> IMailing.gen () in
-    Run.list_iter (send_one ?time ~mid) ts
+  let send_many ?time ?mwid ts = 
+    let mwid = match mwid with Some mwid -> mwid | None -> IMail.Wave.gen () in
+    Run.list_iter (send_one ?time ~mwid) ts
 
   (* Solving forwards the right arguments *)
 
