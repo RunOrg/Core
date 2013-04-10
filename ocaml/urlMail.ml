@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
@@ -12,5 +12,3 @@ let unsubscribe, def_unsubscribe = O.declare O.core "mail/unsubscribe"
 let post_unsubscribe, def_post_unsubscribe = O.declare O.core "mail/unsubscribe/post"
   (A.rro IUser.arg A.string IInstance.arg)
  
-let signupConfirm, def_signupConfirm = O.declare O.core "c"
-  (A.rr IUser.arg A.string)

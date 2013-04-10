@@ -8,17 +8,13 @@
   !! "Vous pouvez vous connecter directement à votre compte %s en cliquant sur le lien ci-dessous. Une fois connecté, vous pourrez changer votre mot de passe." email 
 | `Mail_PassReset_Button -> "Connexion"
 
-(* I18N below have not been used in the new system *)
-
 | `Mail_SignupConfirm_Title -> "Confirmez votre inscription !"
 | `Mail_SignupConfirm_Intro name -> !! "Bonjour %s," name
-| `Mail_SignupConfirm_Welcome -> 
-  "Afin de pouvoir profiter pleinement de votre inscription, vous devez confirmer que vous êtes bien propriétaire de ce compte."
-| `Mail_SignupConfirm_Action email -> 
-  !! "Pour confirmer votre compte %s, cliquez sur le lien ci-dessous :" email
-| `Mail_SignupConfirm_Thanks -> 
-  "Merci, et à très bientôt !"
+| `Mail_SignupConfirm_Explanation email -> 
+  !! "Afin de pouvoir profiter pleinement de votre inscription, vous devez confirmer que vous êtes bien propriétaire de ce compte %s. Pour cela, cliquez sur le bouton ci-dessous :" email
+| `Mail_SignupConfirm_Button -> "Confirmer"
 
+(* I18N below have not been used in the new system *)
 
 | `Mail_Unsubscribe_Title -> "Confirmez la suppression de votre compte"
 | `Mail_Unsubscribe_Intro name -> !! "Bonjour %s," name
