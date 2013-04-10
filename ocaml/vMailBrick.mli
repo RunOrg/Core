@@ -7,12 +7,16 @@ type social = <
   body    : MRich.OrText.t 
 >
 
+type dual = <
+  html : Ohm.Html.writer ;
+  text : string
+>
+
 type action = <
   pic     : string option ;
   name    : string ; 
   action  : O.i18n ; 
-  text    : string ; 
-  html    : Ohm.Html.writer ;
+  detail  : dual ; 
 >
 
 type footer = <
@@ -43,3 +47,10 @@ type button = <
 >
 
 val render : O.i18n -> payload -> body -> button -> footer -> (#O.ctx,result) Ohm.Run.t
+
+val boxProfile : 
+     ?img:string
+  -> detail:MRich.OrText.t
+  -> name:string
+  -> string
+  -> (#O.ctx,dual) Ohm.Run.t

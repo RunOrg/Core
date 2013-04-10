@@ -6,6 +6,8 @@ open BatPervasives
 
 open CAvatar_common
 
+let empty = `Text "" 
+
 let () = MAvatar.Notify.define begin fun t info -> 
 
   let  what, uid, iid, from = match t with 
@@ -18,21 +20,34 @@ let () = MAvatar.Notify.define begin fun t info ->
 
   return (Some (object
     method mail uid u = let  title   = `Avatar_Notify_Mail (`Title (instance # name),what) in
+
+			let  url     = CMail.link (info # id) None (snd (instance # key)) in
+
+			let! ipic    = ohm (CPicture.small_opt (instance # pic)) in
+			let! iprf    = ohm (MInstance.Profile.get iid) in			
+			let! detail  = ohm (VMailBrick.boxProfile ?img:ipic ~name:(instance # name) 
+					      ~detail:(BatOption.default empty
+							 (BatOption.bind (#desc) iprf))
+					      url) in
+
 			let  payload = `Action (object
 			  method pic    = author # pico
 			  method name   = author # name
 			  method action = `Avatar_Notify_Mail (`Action,what) 
-			  method html   = Html.str ""
-			  method text   = ""					   
+			  method detail = detail
 			end) in 
+
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
+
 			let  button = object
 			  method color = `Green
-			  method url   = CMail.link (info # id) None (snd (instance # key))
+			  method url   = url
 			  method label = `Avatar_Notify_Mail (`Button,what) 
 			end in 
+
 			let footer = CMail.Footer.instance (info # id) uid instance in 
 			VMailBrick.render title payload body button footer
+
     method item   = None
     method act _ _ _ = return (Action.url UrlClient.website (instance # key) ()) 
   end))

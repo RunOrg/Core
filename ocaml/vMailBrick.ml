@@ -5,6 +5,11 @@ open Ohm.Universal
 
 let hr = String.make 70 '-'
 
+type dual = <
+  html : Ohm.Html.writer ;
+  text : string
+>
+
 type social = <
   pic     : string option ;
   name    : string ; 
@@ -30,8 +35,7 @@ type action = <
   pic     : string option ;
   name    : string ; 
   action  : O.i18n ; 
-  text    : string ; 
-  html    : Ohm.Html.writer ;
+  detail  : dual ; 
 >
 
 module Action = struct
@@ -41,7 +45,7 @@ module Action = struct
     let  text = 
       action # name 
       ^ " " ^ act ^ "\n\n"
-      ^ action # text 
+      ^ action # detail # text 
       ^ "\n\n" ^ hr 
     in
     let! html = ohm (Asset_MailBrick_Action.render action) in
@@ -194,3 +198,26 @@ let render (title:O.i18n) (payload:payload) (body:body) (button:button) (footer:
     method footer = footer # html
   end)) in
   return (object method title = title method text = text method html = html end)
+
+let boxProfile ?img ~detail ~name url =
+  let  _, summary = MRich.OrText.summary detail in 
+  let! html = ohm (Asset_MailBrick_BoxProfile.render (object
+    method url = url
+    method img = img
+    method name = name
+    method detail = MRich.OrText.to_html summary 
+  end)) in
+
+  let text = 
+    name ^ "\n("
+    ^ url ^ ")\n\n" 
+    ^ MRich.OrText.to_text summary
+    ^ "\n\n"
+    ^ hr
+    ^ "\n"
+  in
+
+  return (object
+    method text = text
+    method html = html 
+  end)
