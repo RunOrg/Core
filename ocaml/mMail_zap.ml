@@ -4,7 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Core = MNotif_core
+module Core = MMail_core
 
 module ZapUnreadView = CouchDB.DocView(struct
   module Key = IUser

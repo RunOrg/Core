@@ -20,7 +20,7 @@ module Notify : sig
     | `UpgradeToMember of IUser.t * IInstance.t * IAvatar.t
     ]
 
-  val define : (t MNotif.Types.stub -> MNotif.Types.render option O.run) -> unit  
+  val define : (t MMail.Types.stub -> MMail.Types.render option O.run) -> unit  
 
 end
 

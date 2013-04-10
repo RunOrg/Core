@@ -4,8 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Core    = MNotif_core
-module Plugins = MNotif_plugins
+module Core    = MMail_core
+module Plugins = MMail_plugins
 
 module UnsentView = CouchDB.DocView(struct
   module Key = Fmt.Float

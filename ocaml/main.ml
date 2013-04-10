@@ -5,8 +5,6 @@ open BatPervasives
 
 module Actions = struct
 
-  open MNotif
-
   (* High-level action tasks *)
   open MDo
 

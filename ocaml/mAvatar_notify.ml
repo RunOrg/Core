@@ -27,7 +27,7 @@ module Plugin = struct
 
 end 
 
-include MNotif.Register(Plugin) 
+include MMail.Register(Plugin) 
 
 let upgrade_to_admin ~uid ~iid ~from = 
   send_one (`UpgradeToAdmin (uid, iid, from)) 
