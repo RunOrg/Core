@@ -13,10 +13,10 @@ let ping =
 
 let send uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	      (owid:IWhite.t option ->
-	       from:string option -> 
+	       ?from:string -> 
 	       subject:string ->
-	       text:string ->
-	       html:Html.writer -> unit O.run) -> unit O.run) =
+	       ?text:string ->
+	       html:Html.writer -> unit -> unit O.run) -> unit O.run) =
 
   (* Sending e-mail to self. *)
   let uid   = IUser.Assert.is_self uid in 
@@ -27,7 +27,7 @@ let send uid (build : [`IsSelf] IUser.id -> MUser.t ->
   (* Never send anything to destroyed users *)
   let! () = true_or (return ()) (user # destroyed = None) in 
 
-  build uid user begin fun ~owid ~from ~subject ~text ~html ->
+  build uid user begin fun ~owid ?from ~subject ?text ~html () ->
 
     let! () = ohm $ MAdminLog.log ~uid:(IUser.decay uid) MAdminLog.Payload.SendMail in 
     
@@ -43,22 +43,34 @@ let send uid (build : [`IsSelf] IUser.id -> MUser.t ->
     
     return begin 
       try 
-	
-	Netsendmail.compose 
-	  ~in_charset:`Enc_utf8
-	  ~out_charset:`Enc_utf8
-	  ~from_addr:(from_name, from_email)
-	  ~to_addrs:[to_name, to_email]
-	  ~subject:subject
-	  ~content_type:("text/plain", ["charset", Mimestring.mk_param "UTF-8"])
-	  ~container_type:("multipart/alternative",[])
-	  ~attachments:[
-	    let header = new Netmime.basic_mime_header [ "Content-type", "text/html;charset=UTF-8" ] in
-	    let body   = new Netmime.memory_mime_body html in
-	    header, `Body body 
-	  ]
-	  text
-	|> Netsendmail.sendmail ;
+
+	let base = 
+	  Netsendmail.compose 
+	    ~in_charset:`Enc_utf8
+	    ~out_charset:`Enc_utf8
+	    ~from_addr:(from_name, from_email)
+	    ~to_addrs:[to_name, to_email]
+	    ~subject:subject
+	in
+
+	let () = match text with 
+	  | Some text -> Netsendmail.sendmail begin 
+	      base 
+		~content_type:("text/plain", ["charset", Mimestring.mk_param "UTF-8"])
+		~container_type:("multipart/alternative",[])
+		~attachments:[
+		  let header = new Netmime.basic_mime_header [ "Content-type", "text/html;charset=UTF-8" ] in
+		  let body   = new Netmime.memory_mime_body html in
+		  header, `Body body 
+		]
+		text
+	    end 
+	  | None -> Netsendmail.sendmail begin 
+	    base 
+	      ~content_type:("text/html", ["charset", Mimestring.mk_param "UTF-8"])
+	      html
+	  end
+	in
 	
 	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name ;
 	
@@ -136,6 +148,3 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
   end in
   
   return true
-
-let send_to_self uid build =
-  other_send_to_self uid (fun uid user send -> build uid user (send ~from:None))

@@ -56,7 +56,7 @@ let () = O.async # periodic 1 begin
     let! _ = ohm $ Send.send (full # uid) begin fun self user send ->
       let! subject, text, html = ohm (full # mail self user) in
       let  owid = user # white in
-      send ~owid ~from:None ~subject ~text ~html
+      send ~owid ~subject ~text ~html ()
     end in 
     return () 
   end in
