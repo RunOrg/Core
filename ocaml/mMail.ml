@@ -4,12 +4,13 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Send    = MMail_send
-module Types   = MMail_types
-module All     = MMail_all 
-module Compose = MMail_compose
-module Zap     = MMail_zap 
-module Core    = MMail_core 
+module Send     = MMail_send
+module Types    = MMail_types
+module All      = MMail_all 
+module Compose  = MMail_compose
+module Zap      = MMail_zap 
+module Core     = MMail_core 
+module Backdoor = MMail_backdoor
 
 include MMail_plugins
 
