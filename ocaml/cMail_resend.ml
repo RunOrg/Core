@@ -33,7 +33,7 @@ let task = O.async # define "resend-mail" ResendArgs.fmt
 	method label = `Notif_Resend_Button
       end in 
 
-      let footer = Footer.core self (user # white) in
+      let footer = Footer.core (arg # mid) self (user # white) in
 
       let! m = ohm (VMailBrick.render `Notif_Resend_Title `None body button footer) in
 

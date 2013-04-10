@@ -13,3 +13,5 @@ let post_unsubscribe, def_post_unsubscribe = O.declare O.core "mail/unsubscribe/
   (A.rro IUser.arg A.string IInstance.arg)
  
 let link, def_link = O.declare O.core "mail" (A.rro IMail.arg A.string IMail.Action.arg) 
+
+let track, def_track = O.declare O.core "white" (A.r IMail.arg) 

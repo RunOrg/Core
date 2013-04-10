@@ -68,6 +68,7 @@ type footer = <
   name  : string option ;
   url   : string option ;
   unsub : string ;
+  track : string ; 
 >
 
 module Footer = struct
@@ -130,6 +131,9 @@ module Footer = struct
 	]) in
 	return (text, html) 
     end in 
+
+    let! track = ohm (Asset_MailBrick_Track.render (footer # track)) in
+    let  html = Html.(concat [ html ; track ]) in
     
     let! html = ohm (Asset_MailBrick_Footer.render html) in
     

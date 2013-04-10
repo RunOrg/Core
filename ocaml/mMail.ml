@@ -14,6 +14,9 @@ module Backdoor = MMail_backdoor
 
 include MMail_plugins
 
+let track mid = 
+  Core.opened mid 
+
 let zap_unread cuid = 
   Zap.unread (IUser.Deduce.is_anyone cuid) 
 

@@ -8,6 +8,7 @@ module Resend      = CMail_resend
 module Wrap        = CMail_wrap
 module Unsubscribe = CMail_unsubscribe
 module Footer      = CMail_footer
+module Track       = CMail_track 
 
 let link mid maid owid = 
   Action.url UrlMail.link owid ( mid, MMail.get_token mid, maid )

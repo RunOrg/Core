@@ -28,7 +28,7 @@ let () = Mail.define begin fun uid info ->
 			  method url   = CMail.link (info # id) None (u # white) 
 			  method label = `Mail_PassReset_Button 
 			end in 
-			let footer = CMail.Footer.core uid (u # white) in
+			let footer = CMail.Footer.core (info # id) uid (u # white) in
 			VMailBrick.render title `None body button footer
   end))
 end 

@@ -40,7 +40,7 @@ let () = Mail.define begin fun t info ->
 			    (info # id, MMail.get_token info # id, None) 
 			  method label = `Mail_Unsubscribe_Button 
 			end in 
-			let footer = Footer.core uid (u # white) in
+			let footer = Footer.core (info # id) uid (u # white) in
 			VMailBrick.render title `None body button footer
   end))
 end 

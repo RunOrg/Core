@@ -20,6 +20,7 @@ type footer = <
   name  : string option ;
   url   : string option;
   unsub : string ;
+  track : string ; 
 >
 
 type payload = 
