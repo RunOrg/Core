@@ -17,7 +17,7 @@ module UnsentView = CouchDB.DocView(struct
   let map = "if (!doc.dead && doc.sent === null && doc.read === null) emit(doc.time);"
 end)
 
-(* Returns [false] if it KNOWS that there are no more unsent notifications
+(* Returns [false] if it KNOWS that there are no more unsent emails
    left in the queue. [true] if there might still be more. *)
 let one f = 
 
@@ -35,7 +35,7 @@ let one f =
 	  | Some t -> if t.sent <> None then return (false,`keep) else
 	      return (true, `put { t with sent = Some now }))) in
 	
-	(* Lock to avoid having two bots multi-send a notification... *)    
+	(* Lock to avoid having two bots multi-send an email... *)    
 	if not locked then retry (n - 1) else 
 	  
 	  let  rotten = (let! () = ohm (Core.rot mid) in retry (n - 1)) in  
@@ -45,7 +45,7 @@ let one f =
 	  return true 
   in
 
-  (* Discard up to 5 lock collisions or rotten notifications before
+  (* Discard up to 5 lock collisions or rotten emails before
      giving up, to avoid taking up too much time. *)
   retry 5
 

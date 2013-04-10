@@ -18,3 +18,5 @@ module Footer : sig
   val instance : [`IsSelf] IUser.id -> MInstance.t -> VMailBrick.footer
 
 end
+
+val link : IMail.t -> IMail.Action.t option -> IWhite.t option -> string

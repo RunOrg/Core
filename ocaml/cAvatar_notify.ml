@@ -28,7 +28,7 @@ let () = MAvatar.Notify.define begin fun n ->
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
 			let  button = object
 			  method color = `Green
-			  method url   = CNotif.link (n # id) None (snd (instance # key))
+			  method url   = CMail.link (n # id) None (snd (instance # key))
 			  method label = `Avatar_Notify_Mail (`Button,what) 
 			end in 
 			let footer = CMail.Footer.instance uid instance in 
