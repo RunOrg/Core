@@ -127,11 +127,6 @@ let () = UrlMe.Notify.def_mailed begin fun req res ->
 
   match what with 
     | `Valid (notify,cuid) -> let uid = IUser.Deduce.is_anyone cuid in 
-			      let! () = ohm $ MAdminLog.log 
-				~uid
-				(MAdminLog.Payload.LoginWithNotify 
-				   (MNotify.Payload.channel notify # payload))
-			      in
 			      let! () = ohm $ MNews.Cache.prepare uid in
 			      let! () = ohm $ MNotify.Stats.from_mail nid in 
 			      let! url = ohm (url cuid notify) in 
