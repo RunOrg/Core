@@ -10,7 +10,6 @@ module PublishItem = CNotifySend_publishItem
 module EventInvite = CNotifySend_eventInvite
 module EventRequest = CNotifySend_eventRequest
 module GroupRequest = CNotifySend_groupRequest
-module CanInstall = CNotifySend_canInstall
 
 let () = 
   let! uid, nid, payload = Sig.listen MNotify.Send.immediate in 
@@ -23,7 +22,7 @@ let () =
     | `EventInvite (eid,aid) -> EventInvite.send url uid eid aid 
     | `EventRequest (eid,aid) -> EventRequest.send url uid eid aid 
     | `GroupRequest (eid,aid) -> GroupRequest.send url uid eid aid 
-    | `CanInstall iid -> CanInstall.send url uid iid 
+    | `CanInstall _ 
     | `BecomeMember _ 
     | `BecomeAdmin _
     | `NewUser _ 

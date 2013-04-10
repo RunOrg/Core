@@ -84,12 +84,6 @@
 
 | `Mail_Notify_Welcome_Thanks -> "Bien cordialement, L'équipe RunOrg"
 
-| `Mail_Notify_CanInstall_Title asso -> !! "Installation - %s" asso
-| `Mail_Notify_CanInstall_Intro -> "Bonjour,"
-| `Mail_Notify_CanInstall_Explanation asso -> 
-  !! "Vous (ou un autre responsable) avez demandé à finir l'installation de l'espace privé en ligne pour %s." asso
-| `Mail_Notify_CanInstall_Explanation2 -> "Il ne vous reste plus qu'à vérifier l'exactitude des données de cet espace. Pour cela, cliquez sur le lien ci-dessus et suivez les instructions :"
-| `Mail_Notify_CanInstall_Thanks asso -> !! "À bientôt sur %s" asso
 
 
 

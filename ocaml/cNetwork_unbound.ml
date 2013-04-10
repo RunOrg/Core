@@ -1,8 +1,41 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
 open BatPervasives
+
+module Mail = MMail.Register(struct
+  include Fmt.Make(struct type json t = < uid : IUser.t ; iid : IInstance.t > end)
+  let id = IMail.Plugin.of_string "install-instance"
+  let uid = (#uid) 
+  let iid x = Some (x # iid) 
+  let from _ = None
+  let solve _ = None
+  let item _ = false
+end)
+
+let () = Mail.define begin fun t info ->
+  let! instance = ohm_req_or (return None) $ MInstance.Profile.get (t # iid) in   
+  let  owid = snd (instance # key) in
+  let! () = true_or (return None) (instance # unbound <> None) in
+  return (Some (object
+    method item = None
+    method act _ _ _ = return (Action.url UrlNetwork.install owid (t # iid)) 
+    method mail uid u = let  title = `Network_Notify_CanInstall_Title (instance # name) in
+
+			let  body  = [
+			  [ `Network_Notify_CanInstall_Intro ] ;
+			  [ `Network_Notify_CanInstall_Explanation (instance # name) ] ; 
+			] in
+
+			let button = [ VMailBrick.green `Network_Notify_CanInstall_Button
+				         (CMail.link (info # id) None owid) ] in
+      
+			let footer = CMail.Footer.core (info # id) uid owid in
+			VMailBrick.render title `None body button footer
+
+  end))
+end
 
 let () = UrlNetwork.def_unbound begin fun req res ->
 
@@ -68,15 +101,15 @@ let () = UrlNetwork.def_install begin fun req res ->
 
     (* This is a POST : trigger the notifications *)
     
-    let  payload = `CanInstall iid in 
-
-    let! () = ohm begin 
+    let payloads = 
       match status with 
-	| `UnconfirmedOwner uid -> MNotify.Store.create payload uid
-	| `NotOwner owners -> Run.list_iter (MNotify.Store.create payload) owners
+	| `UnconfirmedOwner uid -> [(object method uid = uid method iid = iid end)]
+	| `NotOwner uids -> List.map (fun uid -> (object method uid = uid method iid = iid end)) uids
 	| `ConfirmedOwner _
-	| `Missing -> return () 
-    end in
+	| `Missing -> [] 
+    in
+    
+    let! () = ohm (Mail.send_many payloads) in 
 
     let redirect = 
       let url = Action.url (req # self) (req # server) (req # args) in
