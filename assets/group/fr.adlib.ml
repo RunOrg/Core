@@ -24,7 +24,7 @@
 | `Group_Edit_Publish -> "Visibilité"
 | `Group_Edit_Publish_Detail -> "Détermine qui peut voir le groupe."
 | `Group_Edit_Publish_Label what -> begin match what with
-    | `Public -> "Visible depuis internet"
+    | `Public -> "Ouvert aux demandes d'inscription depuis Internet"
     | `Normal -> "Visible par tous les membres de votre communauté"
     | `Private -> "Sur invitation uniquement"
 end
