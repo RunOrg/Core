@@ -90,7 +90,7 @@ let () = define UrlMe.Notify.def_home begin fun owid cuid ->
       method text = text
       method more = more  
       method seen = what # seen
-      method url  = Action.url UrlMe.Notify.follow owid (what # id)  
+      method url  = ""
     end)
   in
 
@@ -179,23 +179,9 @@ let () = UrlMe.Notify.def_count begin fun req res ->
   in 
 
   let! cuid = req_or (respond 0) $ CSession.get req in 
-  let! count = ohm $ MNotify.Store.count_mine cuid in 
+  let! count = ohm $ MMail.All.unread cuid in 
 
   respond count
 
 end 
 
-let () = UrlMe.Notify.def_follow begin fun req res -> 
-
-  let  fail = return $ Action.redirect (Action.url UrlMe.Notify.home (req # server) ()) res in
-
-  let! cuid = req_or fail $ CSession.get req in 
-  let  nid  = req # args in 
-  let! notify = ohm_req_or fail $ MNotify.Store.get_mine cuid nid in 
-  let! () = ohm $ MNotify.Stats.from_site nid in 
-
-  let! url = ohm_req_or fail $ CNotify.url cuid notify in 
-  
-  return $ Action.redirect url res
-
-end
