@@ -7,9 +7,9 @@ module Send = CNotif_send
 module Resend = CNotif_resend
 
 let link mid maid owid = 
-  Action.url UrlMe.Notify.link owid ( mid, MMail.get_token mid, maid )
+  Action.url UrlMe.Mail.link owid ( mid, MMail.get_token mid, maid )
 
-let () = UrlMe.Notify.def_link begin fun req res ->
+let () = UrlMe.Mail.def_link begin fun req res ->
 
   let mid, proof, maid = req # args in
   let current = match CSession.check req with 

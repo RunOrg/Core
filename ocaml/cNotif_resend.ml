@@ -18,7 +18,7 @@ let task = O.async # define "resend-mail" ResendArgs.fmt
     let token = MMail.get_token (arg # mid) in 
     MMail.Send.send (arg # uid) begin fun self user send -> 
 	
-      let url = Action.url UrlMe.Notify.link (user # white) (arg # mid,token,arg # act) in
+      let url = Action.url UrlMe.Mail.link (user # white) (arg # mid,token,arg # act) in
 
       let body   = [
 	[ `Notif_Resend_Hello (user # fullname) ] ;
