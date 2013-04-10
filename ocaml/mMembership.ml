@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -18,49 +18,11 @@ module Backdoor  = MMembership_backdoor
 module Field     = MMembership_field
 module Grant     = MMembership_grant
 module Mass      = MMembership_mass
+module Signals   = MMembership_signals
+
+include MMembership_extract
 
 module FieldType = MJoinFields.FieldType
-
-(* Full type returned for more clarity ----------------------------------------------------- *)
-
-type t = {
-  where     : IAvatarSet.t  ;
-  who       : IAvatar.t ;
-  admin     : (bool * float * IAvatar.t) option ;
-  user      : (bool * float * IAvatar.t) option ;
-  invited   : (bool * float * IAvatar.t) option ;
-  paid      : (bool * float * IAvatar.t) option ;
-  mustpay   : bool ;
-  grant     : [ `Admin | `Token ] option ;
-  admin_act : bool ;
-  user_act  : bool ;
-  time      : float ;
-  status    : Status.t
-}
-
-let summary current reflected = {
-  where     = current.Details.where ; 
-  who       = current.Details.who ;
-  admin     = current.Details.admin ;
-  user      = current.Details.user ;
-  invited   = current.Details.invited ;
-  paid      = current.Details.paid ;
-  mustpay   = reflected.Reflected.mustpay ;
-  grant     = reflected.Reflected.grant ;
-  admin_act = reflected.Reflected.admin_act ;
-  user_act  = reflected.Reflected.user_act ;
-  time      = reflected.Reflected.time ;
-  status    = reflected.Reflected.status
-}
-
-let default ~mustpay ~group ~avatar = 
-  summary (Details.default group avatar) (Reflected.default mustpay)
-
-(* Extract values ------------------------------------------------------------------------ *)
-
-let get mid = 
-  let! data = ohm_req_or (return None) $ Versioned.get (IMembership.decay mid) in
-  return $ Some (summary (Versioned.current data) (Versioned.reflected data))
 
 let status actor gid = 
   let  default = return `NotMember in
@@ -68,77 +30,6 @@ let status actor gid =
   let! mid  = ohm_req_or default $ Unique.find_if_exists gid aid in 
   let! data = ohm_req_or default $ get mid in 
   return data.status  
-
-(* Signals ------------------------------------------------------------------------------- *)
-
-module Signals = struct
-
-  let allow_propagation = O.role <> `Put
-
-  let after_update_call, after_update = Sig.make (Run.list_iter identity)
-    
-  let perform_after_update = 
-    let task = O.async # define "after-membership-update" IMembership.fmt 
-      begin fun mid -> 
-	let! data = ohm_req_or (return ()) $ get mid in
-	after_update_call (mid,data)
-      end in
-    fun mid -> task mid
-
-  let _ = 
-    if allow_propagation then 
-      Sig.listen Versioned.Signals.update begin fun t ->
-	perform_after_update (Versioned.id t)
-      end
-	
-  let after_version_call, after_version = Sig.make (Run.list_iter identity)
-
-  let perform_after_version = 
-    let task = O.async # define "after-membership-version" Versioned.VersionId.fmt 
-      begin fun vid -> 
-	let! version = ohm_req_or (return ()) $ Versioned.get_version vid in
-	let  mid     = Versioned.version_object version in 
-	let! b, a    = ohm_req_or (return ()) $
-	  Versioned.version_snapshot version
-	in
-	let  time     = Versioned.version_time  version in    
-	let  diffs    = Versioned.version_diffs version in 
-	let data = object
-	  method mid = mid
-	  method before = b
-	  method time = time
-	  method diffs = diffs
-	  method after = a
-	end in 
-	
-	after_version_call data 
-
-    end in
-    fun vid -> task ~delay:5.0 vid
-
-  let _ =
-    if allow_propagation then 
-      Sig.listen Versioned.Signals.version_create begin fun t ->
-	perform_after_version (Versioned.version_id t)
-      end
-
-  let after_reflect_call, after_reflect = Sig.make (Run.list_iter identity)
-
-  let perform_after_reflect = 
-    let task = O.async # define "after-membership-reflect" IMembership.fmt
-      begin fun mid -> 
-	let! current = ohm_req_or (return ()) $ get mid in 
-	after_reflect_call current 
-    end in
-    fun mid -> task mid
-
-  let _ =
-    if allow_propagation then 
-      Sig.listen Versioned.Signals.explicit_reflect begin fun t ->
-	perform_after_reflect (Versioned.id t)
-      end
-
-end
 
 (* Identifiers from joins ---------------------------------------------------------------- *)
 
