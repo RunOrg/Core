@@ -52,3 +52,34 @@ let reverse iid ?start ~count access =
 
   return (OhmPaging.slice ~count list)
   
+module AsyncFmt = Fmt.Make(struct
+  type json t = <
+    iid : IInstance.t ;
+    aid : IAvatar.t option ; 
+    access : MAccess.t list ;
+    inner : Json.t
+  >
+end)
+
+let async name fmt onItem onEnd = 
+  let task, def = O.async # declare name AsyncFmt.fmt in
+  let () = def begin fun data -> 
+    let! inner = req_or (return ()) (fmt.Fmt.of_json (data # inner)) in
+    let  iid   = IInstance.Assert.bot (data # iid) in
+    let  start = data # aid in 
+    let! list, next = ohm (reverse iid ?start ~count:10 (data # access)) in
+    let! () = ohm (Run.list_iter (onItem inner) list) in
+    if next = None then onEnd inner else task (object
+      method iid = data # iid
+      method aid = next
+      method access = data # access
+      method inner = data # inner
+    end)
+  end in
+  fun iid access inner -> 
+    task (object
+      method iid = IInstance.decay iid
+      method aid = None
+      method access = access
+      method inner = fmt.Fmt.to_json inner
+    end)
