@@ -30,7 +30,7 @@ let () = UrlMail.def_link begin fun req res ->
 			 let! ( ) = ohm $ MAdminLog.(log ~uid (Payload.LoginWithMail (n # info # plugin))) in   
 			 let! ( ) = ohm $ MNews.Cache.prepare uid in
 			 let! ( ) = ohm $ TrackLog.(log (IsUser uid)) in 
-			 let! url = ohm (n # act (ICurrentUser.decay cuid) (req # server) maid) in 
+			 let! url = ohm (n # act maid) in 
 			 return $ CSession.start (`Old cuid) (Action.redirect url res)
     | `Missing -> return (Action.redirect home res)
     | `Expired uid -> let title = AdLib.get `Notify_Expired_Title in

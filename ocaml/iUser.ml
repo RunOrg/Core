@@ -13,7 +13,6 @@ module Assert = struct
   let is_old   id = ICurrentUser.Assert.is_old (ICurrentUser.of_id id)
   let bot         = identity
   let confirm     = identity 
-  let unsubscribe = identity 
 end
   
 module Deduce = struct
@@ -58,5 +57,6 @@ module Deduce = struct
 
   let view      = identity  
   let view_inst = identity 
+  let unsubscribe = identity 
 
 end

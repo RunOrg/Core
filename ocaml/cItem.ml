@@ -1,8 +1,10 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
 open BatPervasives
+
+module Notify = CItem_notify
 
 module Message = struct
 

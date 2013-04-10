@@ -14,25 +14,25 @@ module Mail = MMail.Register(struct
   let item _ = false
 end)
 
-let () = Mail.define begin fun t info ->
+let () = Mail.define begin fun uid u t info ->
   let! instance = ohm_req_or (return None) $ MInstance.Profile.get (t # iid) in   
   let  owid = snd (instance # key) in
   let! () = true_or (return None) (instance # unbound <> None) in
   return (Some (object
     method item = None
-    method act _ _ _ = return (Action.url UrlNetwork.install owid (t # iid)) 
-    method mail uid u = let  title = `Network_Notify_CanInstall_Title (instance # name) in
-
-			let  body  = [
-			  [ `Network_Notify_CanInstall_Intro ] ;
-			  [ `Network_Notify_CanInstall_Explanation (instance # name) ] ; 
-			] in
-
-			let button = [ VMailBrick.green `Network_Notify_CanInstall_Button
-				         (CMail.link (info # id) None owid) ] in
-      
-			let footer = CMail.Footer.core (info # id) uid owid in
-			VMailBrick.render title `None body button footer
+    method act _ = return (Action.url UrlNetwork.install owid (t # iid)) 
+    method mail = let  title = `Network_Notify_CanInstall_Title (instance # name) in
+		  
+		  let  body  = [
+		    [ `Network_Notify_CanInstall_Intro ] ;
+		    [ `Network_Notify_CanInstall_Explanation (instance # name) ] ; 
+		  ] in
+		  
+		  let button = [ VMailBrick.green `Network_Notify_CanInstall_Button
+				   (CMail.link (info # id) None owid) ] in
+		  
+		  let footer = CMail.Footer.core (info # id) uid owid in
+		  VMailBrick.render title `None body button footer
 
   end))
 end

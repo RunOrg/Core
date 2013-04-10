@@ -31,7 +31,9 @@ let from_token mid ?current token =
   let! t = ohm_req_or (return `Missing) (Core.Tbl.get mid) in
   let  extract cuid = 
     O.decay (
-      let! full = ohm_req_or (return `Missing) (parse_mail mid t) in
+      let  uid  = IUser.Deduce.current_is_self cuid in 
+      let! u    = ohm_req_or (return `Missing) (MUser.get uid) in
+      let! full = ohm_req_or (return `Missing) (parse_mail uid u mid t) in
       let! ()   = ohm (Core.clicked mid) in
       return (`Valid (full, cuid))
     )
@@ -52,10 +54,12 @@ let from_token mid ?current token =
 	return (`Expired t.Core.Data.uid) 
 	
 let from_user mid cuid = 
-  let! t = ohm_req_or (return None) (Core.Tbl.get mid) in
+  let! t   = ohm_req_or (return None) (Core.Tbl.get mid) in
   if IUser.Deduce.is_anyone cuid = t.Core.Data.uid then 
+    let  uid = IUser.Deduce.current_is_self cuid in 
+    let! u   = ohm_req_or (return None) (MUser.get uid) in
     O.decay (
-      let! full = ohm_req_or (return None) (parse_item mid t) in
+      let! full = ohm_req_or (return None) (parse_item uid u mid t) in
       let! ()   = ohm (Core.zap mid) in
       return (Some full) 
     )

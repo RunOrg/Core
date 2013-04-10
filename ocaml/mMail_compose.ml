@@ -37,26 +37,26 @@ let one f =
 	
 	(* Lock to avoid having two bots multi-send an email... *)    
 	if not locked then retry (n - 1) else 
-	  
-	  let  rotten = (let! () = ohm (Core.rot mid) in retry (n - 1)) in  
-	  let  t      = item # doc in 
-	  let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail mid t)) in
-	  let! ()     = ohm (f full) in
-	  return true 
+	  let! () = ohm (f mid (item # doc)) in
+	  return true
   in
 
-  (* Discard up to 5 lock collisions or rotten emails before
-     giving up, to avoid taking up too much time. *)
+  (* Discard up to 5 lock collisions, to avoid taking up too much time. *)
   retry 5
 
 let delay = 10.0 (* seconds *)
 
 let () = O.async # periodic 1 begin 
-  let! result = ohm $ one begin fun full -> 
-    let! _ = ohm $ Send.send (full # info # uid) begin fun self user send ->
-      let! result = ohm (full # mail self user) in
+  let! result = ohm $ one begin fun mid t ->	  
+    let! _ = ohm $ Send.send t.Core.Data.uid begin fun self user send ->
+
+      let  rotten = Core.rot mid in
+      let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail self user mid t)) in
+      let! result = ohm (full # mail) in
       let  owid = user # white in
+
       send ~owid ~subject:(result # title) ~text:(result # text) ~html:(result # html) ()
+
     end in 
     return () 
   end in

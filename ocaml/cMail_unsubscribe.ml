@@ -16,32 +16,36 @@ module Mail = MMail.Register(struct
   let item _ = false
 end) 
 
-let () = Mail.define begin fun t info -> 
+let () = Mail.define begin fun uid u t info -> 
   return (Some (object
+
     method item = None
-    method act cuid owid _ = let uid = IUser.Assert.unsubscribe (IUser.Deduce.is_anyone cuid) in
-			     let! result = ohm $ MUser.obliterate uid in
-			     let result = match result with 
-			       | `ok        -> "ok"
-			       | `destroyed -> "destroyed"
-			       | `missing   -> "missing"
-			     in
-			     return (Action.url UrlMail.post_unsubscribe owid (t # uid, result, t # iid))
-    method mail uid u = let  title = `Mail_Unsubscribe_Title in
 
-			let  body  = [
-			  [ `Mail_Unsubscribe_Intro (u # fullname) ] ; 
-			  [ `Mail_Unsubscribe_Explanation (u # email) ] ;
-			  [ `Mail_Unsubscribe_Warning ] ; 
-			  [ `Mail_Unsubscribe_Thanks ] ; 
-			] in
+    method act _ = let uuid = IUser.Deduce.unsubscribe uid in
+		   let! result = ohm $ MUser.obliterate uuid in
+		   let result = match result with 
+		     | `ok        -> "ok"
+		     | `destroyed -> "destroyed"
+		     | `missing   -> "missing"
+		   in
+		   return (Action.url UrlMail.post_unsubscribe (u # white) (t # uid, result, t # iid))
 
-			let button = [ VMailBrick.grey `Mail_Unsubscribe_Button 
-					 (Action.url UrlMail.link (u # white) 
-					    (info # id, MMail.get_token info # id, None)) ] in
+    method mail = let  title = `Mail_Unsubscribe_Title in
 
-			let footer = Footer.core (info # id) uid (u # white) in
-			VMailBrick.render title `None body button footer
+		  let  body  = [
+		    [ `Mail_Unsubscribe_Intro (u # fullname) ] ; 
+		    [ `Mail_Unsubscribe_Explanation (u # email) ] ;
+		    [ `Mail_Unsubscribe_Warning ] ; 
+		    [ `Mail_Unsubscribe_Thanks ] ; 
+		  ] in
+		  
+		  let button = [ VMailBrick.grey `Mail_Unsubscribe_Button 
+				   (Action.url UrlMail.link (u # white) 
+				      (info # id, MMail.get_token info # id, None)) ] in
+		  
+		  let footer = Footer.core (info # id) uid (u # white) in
+		  VMailBrick.render title `None body button footer
+
   end))
 end 
 

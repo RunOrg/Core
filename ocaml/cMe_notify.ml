@@ -11,14 +11,17 @@ module Settings = CMe_notify_settings
 let  count = 10
 
 let () = define UrlMe.Notify.def_home begin fun owid cuid ->   
-
-  let! user = ohm_req_or (O.Box.panic (Js.reload ())) $ MUser.get (IUser.Deduce.can_view cuid) in
   
+  (* For this page only, act as if confirmed, because notifications
+     might have to access data from instances. *)
+
+  let cuid = ICurrentUser.Assert.is_old cuid in 
+
   (* Rendering a single item *)
 
   let render_item item = (object
     method body = 
-      item # item user (fun a -> Action.url UrlMe.Notify.follow owid (item # info # id, a)) 
+      item # item owid
     method seen = 
       (item # info # clicked <> None 
        || item # info # zapped <> None) 

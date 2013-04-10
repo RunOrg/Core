@@ -21,9 +21,10 @@ module Register : functor(P:PLUGIN) -> sig
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
      list. *)
-  val define : (t -> MMail_types.info -> MMail_types.render option O.run) -> unit
+  val define : 
+    ([`IsSelf] IUser.id -> MUser.t -> t -> MMail_types.info -> MMail_types.render option O.run) -> unit
 
 end 
 
-val parse_mail : IMail.t -> MMail_core.Data.t -> MMail_types.mail option O.run 
-val parse_item : IMail.t -> MMail_core.Data.t -> MMail_types.item option O.run 
+val parse_mail : [`IsSelf] IUser.id -> MUser.t -> IMail.t -> MMail_core.Data.t -> MMail_types.mail option O.run 
+val parse_item : [`IsSelf] IUser.id -> MUser.t -> IMail.t -> MMail_core.Data.t -> MMail_types.item option O.run 

@@ -32,14 +32,9 @@ end
 
 module Types : sig
 
-  type render_mail = 
-    [`IsSelf] IUser.id -> MUser.t -> VMailBrick.result O.run 
-      
-  type act = 
-    ICurrentUser.t -> IWhite.t option -> IMail.Action.t option -> string O.run 
-      
-  type render_item = 
-      MUser.t -> (IMail.Action.t option -> string) -> Ohm.Html.writer O.run 
+  type render_mail = VMailBrick.result O.run       
+  type act         = IMail.Action.t option -> string O.run       
+  type render_item = IWhite.t option -> Ohm.Html.writer O.run 
 
   type info = <
     id      : IMail.t ; 
@@ -111,7 +106,7 @@ module Register : functor(P:PLUGIN) -> sig
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
      list. *)
-  val define : (t -> Types.info -> Types.render option O.run) -> unit
+  val define : ([`IsSelf] IUser.id -> MUser.t -> t -> Types.info -> Types.render option O.run) -> unit
 
 end 
 
@@ -120,7 +115,7 @@ module All : sig
   val mine : 
        ?start:Date.t
     -> count:int 
-    -> 'any ICurrentUser.id 
+    -> [`Old] ICurrentUser.id 
     -> (#O.ctx, Types.item list * Date.t option) Ohm.Run.t
 
   val unread : 'any ICurrentUser.id -> (#O.ctx,int) Ohm.Run.t
@@ -144,5 +139,5 @@ val from_token :
 	      ]) Ohm.Run.t
 
 (* Counts as a click on a site link *)
-val from_user : IMail.t -> 'any ICurrentUser.id -> (#O.ctx, Types.item option) Ohm.Run.t 
+val from_user : IMail.t -> [`Old] ICurrentUser.id -> (#O.ctx, Types.item option) Ohm.Run.t 
 

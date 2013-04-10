@@ -14,22 +14,22 @@ module Mail = MMail.Register(struct
   let item _ = false
 end)
 			       
-let () = Mail.define begin fun uid info -> 
+let () = Mail.define begin fun uid u _ info -> 
   return (Some (object
     method item = None
-    method act _ owid _ = return (Action.url UrlMe.Account.pass owid ())
-    method mail uid u = let  title = `Mail_PassReset_Title in
+    method act _ = return (Action.url UrlMe.Account.pass (u # white) ())
+    method mail = let title = `Mail_PassReset_Title in
 
-			let  body  = [
-			  [ `Mail_PassReset_Intro (u # fullname) ] ;
-			  [ `Mail_PassReset_Explanation (u # email) ] ; 
-			] in
-
-			let button = [ VMailBrick.green `Mail_PassReset_Button
-				         (CMail.link (info # id) None (u # white)) ] in
-
-			let footer = CMail.Footer.core (info # id) uid (u # white) in
-			VMailBrick.render title `None body button footer
+		  let body  = [
+		    [ `Mail_PassReset_Intro (u # fullname) ] ;
+		    [ `Mail_PassReset_Explanation (u # email) ] ; 
+		  ] in
+		  
+		  let button = [ VMailBrick.green `Mail_PassReset_Button
+				   (CMail.link (info # id) None (u # white)) ] in
+		  
+		  let footer = CMail.Footer.core (info # id) uid (u # white) in
+		  VMailBrick.render title `None body button footer
   end))
 end 
 

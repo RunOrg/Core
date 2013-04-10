@@ -8,5 +8,6 @@ type t = <
   kind : [ `Mail ] 
 >
 
-val define : (t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+val define : 
+  ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
 

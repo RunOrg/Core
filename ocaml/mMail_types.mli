@@ -1,13 +1,8 @@
 (* © 2013 RunOrg *) 
 
-type render_mail = 
-  [`IsSelf] IUser.id -> MUser.t -> VMailBrick.result O.run 
-    
-type act = 
-    ICurrentUser.t -> IWhite.t option -> IMail.Action.t option -> string O.run 
-    
-type render_item = 
-    MUser.t -> (IMail.Action.t option -> string) -> Ohm.Html.writer O.run 
+type render_mail = VMailBrick.result O.run       
+type act         = IMail.Action.t option -> string O.run       
+type render_item = IWhite.t option -> Ohm.Html.writer O.run 
       
 type info = <
   id      : IMail.t ; 

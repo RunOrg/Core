@@ -20,9 +20,12 @@ end)
 
 let mine ?start ~count cuid = 
 
-  let  uid = IUser.Deduce.is_anyone cuid in 
-  let  startkey = uid, BatOption.default Date.max start in
-  let  endkey   = uid, Date.min in
+  let  uid = IUser.Deduce.current_is_self cuid in 
+  let! u   = ohm_req_or (return ([],None)) (MUser.get uid) in
+
+  let  uid' = IUser.Deduce.is_anyone cuid in 
+  let  startkey = uid', BatOption.default Date.max start in
+  let  endkey   = uid', Date.min in
   let  limit = count + 1 in
   let! list = ohm (MineView.doc_query ~startkey ~endkey ~limit ~descending:true ()) in
   let  list, next = OhmPaging.slice ~count list in 
@@ -31,7 +34,7 @@ let mine ?start ~count cuid =
     let  mid    = IMail.of_id (item # id) in
     let  rotten = (let! () = ohm (Core.rot mid) in return None) in  
     let  t      = item # doc in 
-    let! full   = ohm_req_or rotten (O.decay (Plugins.parse_item mid t)) in
+    let! full   = ohm_req_or rotten (O.decay (Plugins.parse_item uid u mid t)) in
     return (Some full) 
   end list) in
 

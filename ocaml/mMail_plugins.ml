@@ -60,20 +60,20 @@ let get_parser pid =
   check () ;
   try Some (Hashtbl.find parsers pid) with Not_found -> None
 
-let parse mid t = 
+let parse uid u mid t = 
   let! parse = req_or (return None) (get_parser t.Core.Data.plugin) in
-  parse mid t 
+  parse uid u mid t 
 
-let parse_mail mid t = 
-  let! render, info = ohm_req_or (return None) (parse mid t) in
+let parse_mail uid u mid t = 
+  let! render, info = ohm_req_or (return None) (parse uid u mid t) in
   return (Some (object
-    method info       = info 
-    method act a      = render # act a
-    method mail uid u = render # mail uid u 
+    method info  = info 
+    method act a = render # act a
+    method mail  = render # mail  
   end))
 
-let parse_item mid t = 
-  let! render, info = ohm_req_or (return None) (parse mid t) in
+let parse_item uid u mid t = 
+  let! render, info = ohm_req_or (return None) (parse uid u mid t) in
   let! item = req_or (return None) (render # item) in
   return (Some (object
     method info  = info 
@@ -98,7 +98,7 @@ module Register = functor(P:PLUGIN) -> struct
 
   (* Register the parser for this plugin *)
       
-  let parse mid m = 
+  let parse uid u mid m = 
     let! t = req_or (return None) (P.of_json_safe m.Core.Data.data) in
     let  render = match !render with None -> assert false | Some r -> r in
     let  info : MMail_types.info = Core.Data.(object
@@ -117,7 +117,7 @@ module Register = functor(P:PLUGIN) -> struct
       method accept  = m.accept
       method zapped  = m.zapped
     end) in 
-    let! r = ohm_req_or (return None) (render t info) in
+    let! r = ohm_req_or (return None) (render uid u t info) in
     return (Some (r, info))
 
   let () = add_parser P.id parse
@@ -129,7 +129,7 @@ module Register = functor(P:PLUGIN) -> struct
     let! time' = ohmctx (#time) in
     let  time  = Date.of_timestamp (BatOption.default time' time) in 
 
-    let mwid = match mwid with Some mwid -> mwid | None -> IMail.Wave.gen () in
+    let  mwid  = match mwid with Some mwid -> mwid | None -> IMail.Wave.gen () in
     
     let solved = BatOption.map (fun msid -> `NotSolved msid) (P.solve t) in
 
