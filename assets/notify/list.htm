@@ -28,22 +28,9 @@ here.$zap.click () ->
         <div class="-body">
 	  <ul>
 	    {#items}
-	      <li {if seen}{else}class="-unseen"{/if}>
-	        <a href="{url}">
-		  <span class="-date">{ `DateRelative date }</span>
-		  <span class="-text">
-  		    {?pic}<img src="{this}"/>{/?}
-		    {?name}<strong>{this}</strong>{/?}		
-		    { `Notify text } 
-		    {#more} 
-		      <strong>{this | fst | esc}</strong>
-		      { `Notify this|snd } 
-		    {/#}
-                  </span>
-	        </a>
-	      </li>
+  	      <li {if seen}{else}class="-unseen"{/if}>{body|ohm}</li>
 	    {/#}
-          </ul>
+	  </ul>
 	</div>
       </div>
     {else}
