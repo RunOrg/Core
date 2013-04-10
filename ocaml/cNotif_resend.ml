@@ -6,19 +6,19 @@ open BatPervasives
 
 module ResendArgs = Fmt.Make(struct
   type json t = <
-    nid : INotif.t ;
+    mid : IMail.t ;
     uid : IUser.t ;
-    act : INotif.Action.t option ;
+    act : IMail.Action.t option ;
   >
 end)
 
-let task = O.async # define "resend-notif" ResendArgs.fmt 
+let task = O.async # define "resend-mail" ResendArgs.fmt 
   begin fun arg -> 
 
-    let token = MNotif.get_token (arg # nid) in 
+    let token = MNotif.get_token (arg # mid) in 
     MMail.send (arg # uid) begin fun self user send -> 
 	
-      let url = Action.url UrlMe.Notify.link (user # white) (arg # nid,token,arg # act) in
+      let url = Action.url UrlMe.Notify.link (user # white) (arg # mid,token,arg # act) in
 
       let body   = [
 	[ `Notif_Resend_Hello (user # fullname) ] ;
@@ -41,9 +41,9 @@ let task = O.async # define "resend-notif" ResendArgs.fmt
 
   end
 
-let schedule ~nid ~uid ~act =
+let schedule ~mid ~uid ~act =
   O.decay (task (object
-    method nid = nid
+    method mid = mid
     method uid = uid
     method act = act
   end))

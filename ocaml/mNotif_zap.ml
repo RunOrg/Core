@@ -20,7 +20,7 @@ let unread uid =
   let! now  = ohmctx (#time) in
   let! nids = ohm (ZapUnreadView.doc_query ~startkey:uid ~endkey:uid ~endinclusive:true ~limit:5 ()) in
   if nids = [] then return () else
-    let! () = ohm (Run.list_iter (#id |- INotif.of_id |- Core.zap) nids) in
+    let! () = ohm (Run.list_iter (#id |- IMail.of_id |- Core.zap) nids) in
     O.decay (task_zap uid)
 
 let () = def_zap unread

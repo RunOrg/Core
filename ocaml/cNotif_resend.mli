@@ -1,3 +1,3 @@
 (* © 2013 RunOrg *)
 
-val schedule : nid:INotif.t -> uid:IUser.t -> act:INotif.Action.t option -> (#O.ctx,unit) Ohm.Run.t
+val schedule : mid:IMail.t -> uid:IUser.t -> act:IMail.Action.t option -> (#O.ctx,unit) Ohm.Run.t

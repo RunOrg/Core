@@ -4,9 +4,9 @@ module Types : sig
 
   type full = <
     (* From stub *)
-    id      : INotif.t ; 
+    id      : IMail.t ; 
     mid     : IMailing.t ; 
-    plugin  : INotif.Plugin.t ; 
+    plugin  : IMail.Plugin.t ; 
     iid     : IInstance.t option ;
     uid     : IUser.t ;
     from    : IAvatar.t option ; 
@@ -20,13 +20,13 @@ module Types : sig
     (* From render *) 
     mail    : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
     list    : Ohm.Html.writer O.run ; 
-    act     : INotif.Action.t option -> string O.run ;
+    act     : IMail.Action.t option -> string O.run ;
   > ;;
 
   type 'a stub = <
-    id      : INotif.t ; 
+    id      : IMail.t ; 
     mid     : IMailing.t ; 
-    plugin  : INotif.Plugin.t ; 
+    plugin  : IMail.Plugin.t ; 
     iid     : IInstance.t option ;
     uid     : IUser.t ;
     from    : IAvatar.t option ; 
@@ -43,7 +43,7 @@ module Types : sig
   type render = <
     mail : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
     list : Ohm.Html.writer O.run ;
-    act  : INotif.Action.t option -> string O.run ; 
+    act  : IMail.Action.t option -> string O.run ; 
   > ;;
 
 end
@@ -52,14 +52,14 @@ module type PLUGIN = sig
     
   include Ohm.Fmt.FMT
 
-  val id : INotif.Plugin.t
+  val id : IMail.Plugin.t
 
   val iid : t -> IInstance.t option 
   val uid : t -> IUser.t 
   val from : t -> IAvatar.t option 
     
   (* Is an action expected for this action ? How to identify it ? *)
-  val solve : t -> INotif.Solve.t option 
+  val solve : t -> IMail.Solve.t option 
 
 end
 
@@ -69,7 +69,7 @@ module Register : functor(P:PLUGIN) -> sig
 
   val send_one  : ?time:float -> ?mid:IMailing.t -> t -> (#O.ctx,unit) Ohm.Run.t
   val send_many : ?time:float -> ?mid:IMailing.t -> t list -> (#O.ctx,unit) Ohm.Run.t 
-  val solve : INotif.Solve.t -> unit O.run 
+  val solve : IMail.Solve.t -> unit O.run 
 
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
@@ -94,11 +94,11 @@ val send : (Types.full -> (#O.ctx as 'ctx, unit) Ohm.Run.t) -> ('ctx,bool) Ohm.R
 
 val zap_unread : 'any ICurrentUser.id -> unit O.run 
 
-val get_token : INotif.t -> string
+val get_token : IMail.t -> string
 
 (* Counts as a click on an e-mail link *)
 val from_token : 
-     INotif.t 
+     IMail.t 
   -> ?current:[`Old] ICurrentUser.id
   -> string
   -> (#O.ctx, [ `Valid   of Types.full * [`Old] ICurrentUser.id
@@ -107,4 +107,4 @@ val from_token :
 	      ]) Ohm.Run.t
 
 (* Counts as a click on a site link *)
-val from_user : INotif.t -> 'any ICurrentUser.id -> (#O.ctx, Types.full option) Ohm.Run.t 
+val from_user : IMail.t -> 'any ICurrentUser.id -> (#O.ctx, Types.full option) Ohm.Run.t 

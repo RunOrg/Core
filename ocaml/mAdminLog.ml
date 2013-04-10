@@ -19,7 +19,7 @@ module Payload = struct
       | InstanceCreate          "ic"
       | LoginManual             "lm"
       | LoginSignup             "ls"
-      | LoginWithNotify         "ln"  of INotif.Plugin.t
+      | LoginWithMail           "le"  of IMail.Plugin.t
       | LoginWithReset          "lr"
       | UserConfirm             "uc"
       | ItemCreate              "it"  of IItem.t

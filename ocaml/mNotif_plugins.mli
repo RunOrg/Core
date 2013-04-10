@@ -2,11 +2,11 @@
 
 module type PLUGIN = sig
   include Ohm.Fmt.FMT
-  val id : INotif.Plugin.t
+  val id : IMail.Plugin.t
   val iid : t -> IInstance.t option 
   val uid : t -> IUser.t 
   val from : t -> IAvatar.t option     
-  val solve : t -> INotif.Solve.t option 
+  val solve : t -> IMail.Solve.t option 
 end
 
 module Register : functor(P:PLUGIN) -> sig
@@ -15,7 +15,7 @@ module Register : functor(P:PLUGIN) -> sig
 
   val send_one : ?time:float -> ?mid:IMailing.t -> t -> (#O.ctx,unit) Ohm.Run.t
   val send_many : ?time:float -> ?mid:IMailing.t -> t list -> (#O.ctx,unit) Ohm.Run.t 
-  val solve : INotif.Solve.t -> unit O.run 
+  val solve : IMail.Solve.t -> unit O.run 
 
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
@@ -24,4 +24,4 @@ module Register : functor(P:PLUGIN) -> sig
 
 end 
 
-val parse : INotif.t -> MNotif_core.Data.t -> MNotif_types.full option O.run 
+val parse : IMail.t -> MNotif_core.Data.t -> MNotif_types.full option O.run 

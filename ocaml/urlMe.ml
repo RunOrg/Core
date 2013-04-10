@@ -41,7 +41,7 @@ module Notify = struct
   let follow, def_follow = O.declare O.core "notify/follow" (A.r INotify.arg) 
   let mailed, def_mailed = O.declare O.core "nt" (A.rr INotify.arg A.string)
   let settings, def_settings = child def_home "nt/settings" 
-  let link, def_link = O.declare O.core "ntfy" (A.rro INotif.arg A.string INotif.Action.arg) 
+  let link, def_link = O.declare O.core "ntfy" (A.rro IMail.arg A.string IMail.Action.arg) 
 end
   
 module News = struct

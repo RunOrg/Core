@@ -11,7 +11,7 @@ module Payload : sig
     | InstanceCreate 
     | LoginManual 
     | LoginSignup
-    | LoginWithNotify of INotif.Plugin.t
+    | LoginWithMail of IMail.Plugin.t
     | LoginWithReset
     | UserConfirm
     | ItemCreate of IItem.t

@@ -18,19 +18,19 @@ let send f =
 let zap_unread cuid = 
   Zap.unread (IUser.Deduce.is_anyone cuid) 
 
-let get_token nid = 
-  ConfigKey.prove [ "notif" ; INotif.to_string nid ]
+let get_token mid = 
+  ConfigKey.prove [ "mail" ; IMail.to_string mid ]
 
-let check_token nid token = 
-  ConfigKey.is_proof token [ "notif" ; INotif.to_string nid ]
+let check_token mid token = 
+  ConfigKey.is_proof token [ "mail" ; IMail.to_string mid ]
 
-let from_token nid ?current token = 
+let from_token mid ?current token = 
 
-  let! t = ohm_req_or (return `Missing) (Core.Tbl.get nid) in
+  let! t = ohm_req_or (return `Missing) (Core.Tbl.get mid) in
   let  extract cuid = 
     O.decay (
-      let! full = ohm_req_or (return `Missing) (parse nid t) in
-      let! ()   = ohm (Core.seen_from_mail nid) in
+      let! full = ohm_req_or (return `Missing) (parse mid t) in
+      let! ()   = ohm (Core.seen_from_mail mid) in
       return (`Valid (full, cuid))
     )
   in
@@ -43,18 +43,18 @@ let from_token nid ?current token =
 
     (* The notification owner is not logged in. Attempt authentication. *)
     | _ -> 
-      if check_token nid token then 
+      if check_token mid token then 
 	let cuid = IUser.Assert.is_old t.Core.Data.uid in
 	extract cuid 
       else
 	return (`Expired t.Core.Data.uid) 
 	
-let from_user nid cuid = 
-  let! t    = ohm_req_or (return None) (Core.Tbl.get nid) in
+let from_user mid cuid = 
+  let! t    = ohm_req_or (return None) (Core.Tbl.get mid) in
   if IUser.Deduce.is_anyone cuid = t.Core.Data.uid then 
     O.decay (
-      let! full = ohm_req_or (return None) (parse nid t) in
-      let! ()   = ohm (Core.seen_from_site nid) in
+      let! full = ohm_req_or (return None) (parse mid t) in
+      let! ()   = ohm (Core.seen_from_site mid) in
       return (Some full) 
     )
   else

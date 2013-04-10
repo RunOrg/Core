@@ -7,7 +7,7 @@ open BatPervasives
 module Data = struct
   module T = struct
     type json t = {
-      plugin : INotif.Plugin.t ;
+      plugin : IMail.Plugin.t ;
       data   : Json.t ;
       time   : float ;
       read   : float option ;
@@ -19,7 +19,7 @@ module Data = struct
       iid    : IInstance.t option ; 
       uid    : IUser.t ;
       mid    : IMailing.t ;
-      solve  : INotif.Solve.t option ;
+      solve  : IMail.Solve.t option ;
       dead   : bool ; 
     }
   end
@@ -27,23 +27,23 @@ module Data = struct
   include Fmt.Extend(T)
 end 
 
-include CouchDB.Convenience.Table(struct let db = O.db "notif" end)(INotif)(Data)
+include CouchDB.Convenience.Table(struct let db = O.db "notif" end)(IMail)(Data)
 
 (* Rot means a "rotten" notification has been found (no "full" could be
    extracted from it), and it therefore has to be destroyed from the 
    database. *)
-let rot nid = 
-  Tbl.update nid Data.(fun n -> { n with dead = true })
+let rot mid = 
+  Tbl.update mid Data.(fun m -> { m with dead = true })
 
 (* Zap means that a given notification has been marked as seen. *)
-let zap nid = 
+let zap mid = 
   let! now = ohmctx (#time) in
-  Tbl.update nid Data.(fun n -> { n with read = Some (BatOption.default now n.read) ; nzc = n.nzc + 1 }) 
+  Tbl.update mid Data.(fun m -> { m with read = Some (BatOption.default now m.read) ; nzc = m.nzc + 1 }) 
 
-let seen_from_mail nid = 
+let seen_from_mail mid = 
   let! now = ohmctx (#time) in
-  Tbl.update nid Data.(fun n -> { n with read = Some (BatOption.default now n.read) ; nmc = n.nmc + 1 }) 
+  Tbl.update mid Data.(fun m -> { m with read = Some (BatOption.default now m.read) ; nmc = m.nmc + 1 }) 
 
-let seen_from_site nid = 
+let seen_from_site mid = 
   let! now = ohmctx (#time) in
-  Tbl.update nid Data.(fun n -> { n with read = Some (BatOption.default now n.read) ; nsc = n.nsc + 1 }) 
+  Tbl.update mid Data.(fun m -> { m with read = Some (BatOption.default now m.read) ; nsc = m.nsc + 1 }) 

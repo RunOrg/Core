@@ -29,10 +29,10 @@ let mine ?start ~count cuid =
   let  list, next = OhmPaging.slice ~count list in 
 
   let! list = ohm (Run.list_filter begin fun item -> 
-    let  nid    = INotif.of_id (item # id) in
-    let  rotten = (let! () = ohm (Core.rot nid) in return None) in  
+    let  mid    = IMail.of_id (item # id) in
+    let  rotten = (let! () = ohm (Core.rot mid) in return None) in  
     let  t      = item # doc in 
-    let! full   = ohm_req_or rotten (O.decay (Plugins.parse nid t)) in
+    let! full   = ohm_req_or rotten (O.decay (Plugins.parse mid t)) in
     return (Some full) 
   end list) in
 

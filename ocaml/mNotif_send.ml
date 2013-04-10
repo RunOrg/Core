@@ -27,9 +27,9 @@ let one f =
 
       let! list = ohm (UnsentView.doc_query ~limit:1 ()) in
       match list with [] -> return false | item :: _ -> 
-	let  nid = INotif.of_id (item # id) in
+	let  mid = IMail.of_id (item # id) in
 	
-	let! locked = ohm (Core.Tbl.transact nid Core.Data.(function 
+	let! locked = ohm (Core.Tbl.transact mid Core.Data.(function 
 	  | None -> return (false, `keep) 
 	  | Some t -> if t.sent <> None then return (false,`keep) else
 	      return (true, `put { t with sent = Some now }))) in
@@ -37,9 +37,9 @@ let one f =
 	(* Lock to avoid having two bots multi-send a notification... *)    
 	if not locked then retry (n - 1) else 
 	  
-	  let  rotten = (let! () = ohm (Core.rot nid) in retry (n - 1)) in  
+	  let  rotten = (let! () = ohm (Core.rot mid) in retry (n - 1)) in  
 	  let  t      = item # doc in 
-	  let! full   = ohm_req_or rotten (O.decay (Plugins.parse nid t)) in
+	  let! full   = ohm_req_or rotten (O.decay (Plugins.parse mid t)) in
 	  let! ()     = ohm (f full) in
 	  return true 
   in

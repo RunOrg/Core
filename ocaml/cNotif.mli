@@ -1,3 +1,3 @@
 (* © 2013 RunOrg *)
 
-val link : INotif.t -> INotif.Action.t option -> IWhite.t option -> string
+val link : IMail.t -> IMail.Action.t option -> IWhite.t option -> string

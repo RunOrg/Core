@@ -12,7 +12,7 @@ module Plugin = struct
       ]
   end) 
 
-  let id = INotif.Plugin.of_string "avatar"
+  let id = IMail.Plugin.of_string "avatar"
 
   let iid = function 
     | `UpgradeToAdmin (_,iid,_) | `UpgradeToMember (_,iid,_) -> Some iid
