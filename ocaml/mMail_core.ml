@@ -7,21 +7,21 @@ open BatPervasives
 module Data = struct
   module T = struct
     type json t = {      
-      plugin  "p"  : IMail.Plugin.t ;
-      data    "j"  : Json.t ;
-      time    "t"  : Date.t ;
-      zapped  "z"  : Date.t option ; 
-      clicked "c"  : Date.t option ;
-      opened  "o"  : Date.t option ;
-      sent    "s"  : Date.t option ;
-      solved  "so" : [ `Solved "y" of Date.t | `NotSolved "n" of IMail.Solve.t ] option ; 
-      iid     "i"  : IInstance.t option ; 
-      uid     "u"  : IUser.t ;
-      wid     "w"  : IMail.Wave.t ;
-      blocked "b"  : bool ;
-      accept  "a"  : bool option ;
-      dead    "d"  : bool ; 
-      item    "l"  : bool ; 
+      plugin  : IMail.Plugin.t ;
+      data    : Json.t ;
+      time    : Date.t ;
+      zapped  : Date.t option ; 
+      clicked : Date.t option ;
+      opened  : Date.t option ;
+      sent    : Date.t option ;
+      solved  : [ `Solved "y" of Date.t | `NotSolved "n" of IMail.Solve.t ] option ; 
+      iid     : IInstance.t option ; 
+      uid     : IUser.t ;
+      wid     : IMail.Wave.t ;
+      blocked : bool ;
+      accept  : bool option ;
+      dead    : bool ; 
+      item    : bool ; 
     }
   end
   include T

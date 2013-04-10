@@ -48,7 +48,7 @@ module UnreadOrUnsolvedView = CouchDB.ReduceView(struct
   let name = "unread_or_unsolved"
   let map  = "if (doc.dead) return;
               if (!doc.item) return;  
-              if (doc.solved === null)
+              if (doc.solved === null) {
                 if (doc.clicked !== null) return;
                 if (doc.zapped !== null) return;
               } 

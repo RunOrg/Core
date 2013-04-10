@@ -14,7 +14,7 @@ module UnsentView = CouchDB.DocView(struct
   module Doc = Core.Data
   module Design = Core.Design
   let name = "unsent"
-  let map = "if (!doc.dead && doc.sent === null && doc.read === null && !doc.blocked) emit(doc.time);"
+  let map = "if (!doc.dead && doc.sent === null && doc.zapped === null && !doc.blocked) emit(doc.time);"
 end)
 
 (* Returns [false] if it KNOWS that there are no more unsent emails
