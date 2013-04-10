@@ -24,13 +24,6 @@
 
 (* I18N below have not been used in the new system *)
 
-| `Mail_Notify_PublishItem_Title who -> !! "Nouveau message de %s" who
-| `Mail_Notify_PublishItem_Explanation (who,asso) -> 
-  !! "Ce message a été écrit par %s sur %s." who asso
-| `Mail_Notify_PublishItem_Explanation2 -> 
-  "Vous pouvez y répondre en cliquant sur le lien ci-dessous :"
-| `Mail_Notify_PublishItem_Thanks asso -> !! "À bientôt sur %s" asso
-
 | `Mail_Notify_LikeYourItem_Title who -> !! "%s suit votre message" who
 | `Mail_Notify_LikeYourItem_Intro name -> !! "Bonjour %s" name
 | `Mail_Notify_LikeYourItem_Explanation (who,asso) -> 
@@ -71,18 +64,6 @@
    "En tant qu'administrateur vous pouvez visualiser et traiter cette demande en suivant le lien ci-dessous :"
 | `Mail_Notify_GroupRequest_Thanks asso -> !! "À bientôt sur %s" asso
 
-| `Mail_NotifyResend_Title -> "Nouveau lien de connexion"
-| `Mail_NotifyResend_Intro name -> !! "Bonjour %s" name
-| `Mail_NotifyResend_Explain -> "Vous avez visité un lien expiré, voici un nouveau lien à jour :"
-| `Mail_NotifyResend_Thanks -> "À bientôt !"
-
-| `Mail_Notify_Welcome_Title -> "Bienvenue sur RunOrg !"
-| `Mail_Notify_Welcome_Intro name -> !! "Bonjour %s" name
-| `Mail_Notify_Welcome_Explanation_WithPassword -> "Vous venez de créer un compte sur notre plateforme et nous vous en remercions ! RunOrg vous permet de personnaliser votre profil et les informations que vous partagez avec vos organisations. Pour en savoir plus, cliquez sur le lien ci-dessous :"
-| `Mail_Notify_Welcome_Explanation_WithoutPassword -> 
-   "Vous venez de vous connecter pour la première fois sur notre plateforme et nous vous en remercions ! Pour vous y connecter à l'avenir et pour protéger votre vie privée : un mot de passe vous sera demandé. Pour le saisir, cliquez sur lien ci-dessous :"
-
-| `Mail_Notify_Welcome_Thanks -> "Bien cordialement, L'équipe RunOrg"
 
 
 

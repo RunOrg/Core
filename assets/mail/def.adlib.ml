@@ -21,11 +21,6 @@
 
 (* --- *)
 
-| `Mail_Notify_PublishItem_Title of string
-| `Mail_Notify_PublishItem_Explanation of string * string
-| `Mail_Notify_PublishItem_Explanation2
-| `Mail_Notify_PublishItem_Thanks of string
-
 | `Mail_Notify_LikeYourItem_Title of string
 | `Mail_Notify_LikeYourItem_Intro of string
 | `Mail_Notify_LikeYourItem_Explanation of string * string
@@ -57,14 +52,4 @@
 | `Mail_Notify_GroupRequest_Explanation2
 | `Mail_Notify_GroupRequest_Thanks of string
 
-| `Mail_NotifyResend_Title 
-| `Mail_NotifyResend_Intro of string
-| `Mail_NotifyResend_Explain
-| `Mail_NotifyResend_Thanks
-
-| `Mail_Notify_Welcome_Title
-| `Mail_Notify_Welcome_Intro of string
-| `Mail_Notify_Welcome_Explanation_WithPassword 
-| `Mail_Notify_Welcome_Explanation_WithoutPassword
-| `Mail_Notify_Welcome_Thanks 
 
