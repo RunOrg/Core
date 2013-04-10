@@ -7,7 +7,7 @@ type act =
     ICurrentUser.t -> IWhite.t option -> IMail.Action.t option -> string O.run 
     
 type render_item = 
-    Ohm.Html.writer O.run 
+    MUser.t -> (IMail.Action.t option -> string) -> Ohm.Html.writer O.run 
       
 type info = <
   id      : IMail.t ; 

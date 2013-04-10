@@ -19,7 +19,8 @@ let () = MAvatar.Notify.define begin fun t info ->
   let! author   = ohm (mini_profile from) in
 
   return (Some (object
-    method mail uid u = let  title   = `Avatar_Notify_Mail (`Title (instance # name),what) in
+    method mail uid u = let  gender  = u # gender in 
+			let  title   = `Avatar_Notify_Mail (`Title (instance # name),what,gender) in
 
 			let  url     = CMail.link (info # id) None (snd (instance # key)) in
 
@@ -33,18 +34,28 @@ let () = MAvatar.Notify.define begin fun t info ->
 			let  payload = `Action (object
 			  method pic    = author # pico
 			  method name   = author # name
-			  method action = `Avatar_Notify_Mail (`Action,what) 
+			  method action = `Avatar_Notify_Mail (`Action,what,gender) 
 			  method detail = detail
 			end) in 
 
-			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
+			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what,gender) ]] in
 
-			let  button = [ VMailBrick.green (`Avatar_Notify_Mail (`Button,what)) url ] in
+			let  button = [ VMailBrick.green (`Avatar_Notify_Mail (`Button,what,gender)) url ] in
 
 			let footer = CMail.Footer.instance (info # id) uid instance in 
 			VMailBrick.render title payload body button footer
 
-    method item   = None
+    method item = Some begin fun u url -> 
+      let  time = Date.to_timestamp (info # time) in
+      let! now  = ohmctx (#time) in      
+      Asset_Notify_LinkItem.render (object
+	method url  = url None 
+	method date = (time,now)
+	method pic  = author # pico
+	method name = Some author # name
+	method segs = [ AdLib.write (`Avatar_Notify_Web (what,u # gender)) ]
+      end)
+    end
     method act _ _ _ = return (Action.url UrlClient.website (instance # key) ()) 
   end))
 

@@ -12,17 +12,13 @@ let  count = 10
 
 let () = define UrlMe.Notify.def_home begin fun owid cuid ->   
 
-  let! gender = ohm begin
-    let! user = ohm_req_or (return None) $ MUser.get (IUser.Deduce.can_view cuid) in
-    return (user # gender) 
-  end in 
-
+  let! user = ohm_req_or (O.Box.panic (Js.reload ())) $ MUser.get (IUser.Deduce.can_view cuid) in
+  
   (* Rendering a single item *)
 
-  let! now = ohmctx (#time) in
-
   let render_item item = (object
-    method body = item # item 
+    method body = 
+      item # item user (fun a -> Action.url UrlMe.Notify.follow owid (item # info # id, a)) 
     method seen = 
       (item # info # clicked <> None 
        || item # info # zapped <> None) 
