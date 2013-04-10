@@ -3,7 +3,6 @@
 open Ohm
 open Ohm.Universal
 
-module Send = CNotif_send
 module Resend = CNotif_resend
 
 let link mid maid owid = 

@@ -130,8 +130,6 @@ module All : sig
 
 end 
 
-val send : (Types.full -> (#O.ctx as 'ctx, unit) Ohm.Run.t) -> ('ctx,bool) Ohm.Run.t
-
 val zap_unread : 'any ICurrentUser.id -> unit O.run 
 
 val get_token : IMail.t -> string

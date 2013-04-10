@@ -13,9 +13,6 @@ module Core    = MMail_core
 
 include MMail_plugins
 
-let send f = 
-  Compose.one f
-
 let zap_unread cuid = 
   Zap.unread (IUser.Deduce.is_anyone cuid) 
 

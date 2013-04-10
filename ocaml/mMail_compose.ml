@@ -6,6 +6,7 @@ open BatPervasives
 
 module Core    = MMail_core
 module Plugins = MMail_plugins
+module Send    = MMail_send
 
 module UnsentView = CouchDB.DocView(struct
   module Key = Fmt.Float
@@ -48,3 +49,16 @@ let one f =
      giving up, to avoid taking up too much time. *)
   retry 5
 
+let delay = 10.0 (* seconds *)
+
+let () = O.async # periodic 1 begin 
+  let! result = ohm $ one begin fun full -> 
+    let! _ = ohm $ Send.send (full # uid) begin fun self user send ->
+      let! subject, text, html = ohm (full # mail self user) in
+      let  owid = user # white in
+      send ~owid ~from:None ~subject ~text ~html
+    end in 
+    return () 
+  end in
+  return (if result then None else Some delay)
+end 
