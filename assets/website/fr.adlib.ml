@@ -14,7 +14,7 @@
 | `Website_Event_Where -> "Où ?"
 
 | `Website_About_Title website -> "À propos - " ^ website
-| `Website_About_NoDesc -> "Cette association n'a pas renseigné de description."
+| `Website_About_NoDesc -> "Cette communauté n'a pas renseigné de description."
 | `Website_About_Site -> "Site Officiel"
 | `Website_About_Twitter -> "Twitter"
 | `Website_About_Facebook -> "Facebook"
