@@ -27,8 +27,8 @@ let from_token mid ?current token =
   let! t = ohm_req_or (return `Missing) (Core.Tbl.get mid) in
   let  extract cuid = 
     O.decay (
-      let! full = ohm_req_or (return `Missing) (parse mid t) in
-      let! ()   = ohm (Core.seen_from_mail mid) in
+      let! full = ohm_req_or (return `Missing) (parse_mail mid t) in
+      let! ()   = ohm (Core.clicked mid) in
       return (`Valid (full, cuid))
     )
   in
@@ -51,8 +51,8 @@ let from_user mid cuid =
   let! t    = ohm_req_or (return None) (Core.Tbl.get mid) in
   if IUser.Deduce.is_anyone cuid = t.Core.Data.uid then 
     O.decay (
-      let! full = ohm_req_or (return None) (parse mid t) in
-      let! ()   = ohm (Core.seen_from_site mid) in
+      let! full = ohm_req_or (return None) (parse_item mid t) in
+      let! ()   = ohm (Core.zap mid) in
       return (Some full) 
     )
   else

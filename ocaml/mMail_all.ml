@@ -10,20 +10,19 @@ module Plugins = MMail_plugins
 (* List all the notifications of a given user in reverse chronological order *) 
 
 module MineView = CouchDB.DocView(struct
-  module Key = Fmt.Make(struct type json t = (IUser.t * float) end)
+  module Key = Fmt.Make(struct type json t = (IUser.t * Date.t) end)
   module Value = Fmt.Unit
   module Doc = Core.Data
   module Design = Core.Design
   let name = "mine"
-  let map = "if (!doc.dead) emit([doc.uid,doc.time]);"
+  let map = "if (!doc.dead && doc.item) emit([doc.uid,doc.time]);"
 end)
 
 let mine ?start ~count cuid = 
 
-  let! now = ohmctx (#time) in
   let  uid = IUser.Deduce.is_anyone cuid in 
-  let  startkey = uid, BatOption.default now start in
-  let  endkey   = uid, 0.0 in
+  let  startkey = uid, BatOption.default Date.max start in
+  let  endkey   = uid, Date.min in
   let  limit = count + 1 in
   let! list = ohm (MineView.doc_query ~startkey ~endkey ~limit ~descending:true ()) in
   let  list, next = OhmPaging.slice ~count list in 
@@ -32,7 +31,7 @@ let mine ?start ~count cuid =
     let  mid    = IMail.of_id (item # id) in
     let  rotten = (let! () = ohm (Core.rot mid) in return None) in  
     let  t      = item # doc in 
-    let! full   = ohm_req_or rotten (O.decay (Plugins.parse mid t)) in
+    let! full   = ohm_req_or rotten (O.decay (Plugins.parse_item mid t)) in
     return (Some full) 
   end list) in
 
@@ -40,15 +39,21 @@ let mine ?start ~count cuid =
 
   return (list, next) 
 
-(* Count the number of unread-OR-unsolved notifications for a given user *) 
+(* Count the number of unread-OR-unsolved item notifications for a given user *) 
 
 module UnreadOrUnsolvedView = CouchDB.ReduceView(struct
   module Key = IUser
   module Value = Fmt.Int
   module Design = Core.Design 
   let name = "unread_or_unsolved"
-  let map  = "if (!doc.dead && (doc.read === null || doc.solved === null && doc.solve !== null))
-                emit(doc.uid,1);"
+  let map  = "if (doc.dead) return;
+              if (!doc.item) return;  
+              if (doc.solved === null)
+                if (doc.clicked !== null) return;
+                if (doc.zapped !== null) return;
+              } 
+              else if (doc.solved[0] === 'y') return;
+              emit(doc.uid,1);"
   let reduce = "return sum(values);"
   let group = false
   let level = None

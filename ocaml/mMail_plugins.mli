@@ -7,6 +7,7 @@ module type PLUGIN = sig
   val uid : t -> IUser.t 
   val from : t -> IAvatar.t option     
   val solve : t -> IMail.Solve.t option 
+  val item : t -> bool 
 end
 
 module Register : functor(P:PLUGIN) -> sig
@@ -20,8 +21,9 @@ module Register : functor(P:PLUGIN) -> sig
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
      list. *)
-  val define : (t MMail_types.stub -> MMail_types.render option O.run) -> unit
+  val define : (t -> MMail_types.info -> MMail_types.render option O.run) -> unit
 
 end 
 
-val parse : IMail.t -> MMail_core.Data.t -> MMail_types.full option O.run 
+val parse_mail : IMail.t -> MMail_core.Data.t -> MMail_types.mail option O.run 
+val parse_item : IMail.t -> MMail_core.Data.t -> MMail_types.item option O.run 

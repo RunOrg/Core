@@ -25,6 +25,8 @@ module Plugin = struct
 
   let solve _ = None
 
+  let item _ = true
+
 end 
 
 include MMail.Register(Plugin) 

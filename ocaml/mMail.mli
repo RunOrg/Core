@@ -32,48 +32,52 @@ end
 
 module Types : sig
 
-  type full = <
-    (* From stub *)
-    id      : IMail.t ; 
-    wid     : IMail.Wave.t ; 
-    plugin  : IMail.Plugin.t ; 
-    iid     : IInstance.t option ;
-    uid     : IUser.t ;
-    from    : IAvatar.t option ; 
-    time    : float ; 
-    read    : float option ;
-    sent    : float option ; 
-    solved  : float option ; (* Equal to "read" date if does not require solving *)
-    nmc     : int ;
-    nsc     : int ; 
-    nzc     : int ; 
-    (* From render *) 
-    mail    : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
-    list    : Ohm.Html.writer O.run ; 
-    act     : IMail.Action.t option -> string O.run ;
-  > ;;
+  type render_mail = 
+    [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run 
+      
+  type act = 
+      IMail.Action.t option -> string O.run 
+      
+  type render_item = 
+      Ohm.Html.writer O.run 
 
-  type 'a stub = <
+  type info = <
     id      : IMail.t ; 
     wid     : IMail.Wave.t ; 
     plugin  : IMail.Plugin.t ; 
     iid     : IInstance.t option ;
     uid     : IUser.t ;
     from    : IAvatar.t option ; 
-    time    : float ; 
-    read    : float option ;
-    sent    : float option ; 
-    solved  : float option ; (* Equal to "read" date if does not require solving *)
-    nmc     : int ;
-    nsc     : int ; 
-    nzc     : int ; 
-    inner   : 'a ; 
+    time    : Date.t ;     
+    zapped  : Date.t option ; (* Has the e-mail been marked as "read" from the site ? *) 
+    opened  : Date.t option ; (* Has the sent e-mail been opened ? When ? *) 
+    clicked : Date.t option ; (* Has any action been performed through this mail ? *)
+    sent    : Date.t option ; (* Has this e-mail been actually sent ? *) 
+    blocked : bool ; (* Has a processing rule prevented this e-mail from being sent ? *) 
+    solved  : [ `Solved of Date.t (* This mail has been solved at the specified time. *)
+	      | `NotSolved of IMail.Solve.t (* This e-mail can be solved through this id *)
+	      ] option ;
+    accept  : bool option ; (* Has the user agreed or declined to receive more 
+			       from this particular sender as a consequence of THIS 
+			       mail ? *)
   >
 
+  type mail = <
+    info    : info ;
+    mail    : render_mail ;
+    act     : act ; 
+  > ;;
+
+  type item = <
+    info    : info ;
+    item    : render_item ;
+    act     : act ;
+  > ;;
+
   type render = <
-    mail : [`IsSelf] IUser.id -> MUser.t -> (string * string * Ohm.Html.writer) O.run ; 
-    list : Ohm.Html.writer O.run ;
-    act  : IMail.Action.t option -> string O.run ; 
+    act  : act ;
+    mail : render_mail ;
+    item : render_item option ;
   > ;;
 
 end
@@ -91,6 +95,9 @@ module type PLUGIN = sig
   (* Is an action expected for this action ? How to identify it ? *)
   val solve : t -> IMail.Solve.t option 
 
+  (* Is this mail an "item" expected to show up in the notification list ? *)
+  val item : t -> bool 
+
 end
 
 module Register : functor(P:PLUGIN) -> sig
@@ -104,17 +111,17 @@ module Register : functor(P:PLUGIN) -> sig
   (* Define "rendering" function. Notifications for which this function 
      returns [None] will be considered dead and removed from the user's
      list. *)
-  val define : (t Types.stub -> Types.render option O.run) -> unit
+  val define : (t -> Types.info -> Types.render option O.run) -> unit
 
 end 
 
 module All : sig
 
   val mine : 
-       ?start:float
+       ?start:Date.t
     -> count:int 
     -> 'any ICurrentUser.id 
-    -> (#O.ctx, Types.full list * float option) Ohm.Run.t
+    -> (#O.ctx, Types.item list * Date.t option) Ohm.Run.t
 
   val unread : 'any ICurrentUser.id -> (#O.ctx,int) Ohm.Run.t
 
@@ -129,11 +136,11 @@ val from_token :
      IMail.t 
   -> ?current:[`Old] ICurrentUser.id
   -> string
-  -> (#O.ctx, [ `Valid   of Types.full * [`Old] ICurrentUser.id
+  -> (#O.ctx, [ `Valid   of Types.mail * [`Old] ICurrentUser.id
 	      | `Expired of IUser.t
 	      | `Missing 
 	      ]) Ohm.Run.t
 
 (* Counts as a click on a site link *)
-val from_user : IMail.t -> 'any ICurrentUser.id -> (#O.ctx, Types.full option) Ohm.Run.t 
+val from_user : IMail.t -> 'any ICurrentUser.id -> (#O.ctx, Types.item option) Ohm.Run.t 
 

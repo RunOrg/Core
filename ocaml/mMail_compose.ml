@@ -9,19 +9,19 @@ module Plugins = MMail_plugins
 module Send    = MMail_send
 
 module UnsentView = CouchDB.DocView(struct
-  module Key = Fmt.Float
+  module Key = Date
   module Value = Fmt.Unit
   module Doc = Core.Data
   module Design = Core.Design
   let name = "unsent"
-  let map = "if (!doc.dead && doc.sent === null && doc.read === null) emit(doc.time);"
+  let map = "if (!doc.dead && doc.sent === null && doc.read === null && !doc.blocked) emit(doc.time);"
 end)
 
 (* Returns [false] if it KNOWS that there are no more unsent emails
    left in the queue. [true] if there might still be more. *)
 let one f = 
 
-  let! now = ohmctx (#time) in	
+  let! now = ohmctx (#date) in	
 
   let rec retry n = 
     if n <= 0 then return true else 
@@ -40,7 +40,7 @@ let one f =
 	  
 	  let  rotten = (let! () = ohm (Core.rot mid) in retry (n - 1)) in  
 	  let  t      = item # doc in 
-	  let! full   = ohm_req_or rotten (O.decay (Plugins.parse mid t)) in
+	  let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail mid t)) in
 	  let! ()     = ohm (f full) in
 	  return true 
   in
@@ -53,7 +53,7 @@ let delay = 10.0 (* seconds *)
 
 let () = O.async # periodic 1 begin 
   let! result = ohm $ one begin fun full -> 
-    let! _ = ohm $ Send.send (full # uid) begin fun self user send ->
+    let! _ = ohm $ Send.send (full # info # uid) begin fun self user send ->
       let! subject, text, html = ohm (full # mail self user) in
       let  owid = user # white in
       send ~owid ~subject ~text ~html ()

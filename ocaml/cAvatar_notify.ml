@@ -6,9 +6,9 @@ open BatPervasives
 
 open CAvatar_common
 
-let () = MAvatar.Notify.define begin fun n -> 
+let () = MAvatar.Notify.define begin fun t info -> 
 
-  let  what, uid, iid, from = match n # inner with 
+  let  what, uid, iid, from = match t with 
     | `UpgradeToAdmin  (uid, iid, from) -> `Admin,  uid, iid, from
     | `UpgradeToMember (uid, iid, from) -> `Member, uid, iid, from 
   in
@@ -28,13 +28,13 @@ let () = MAvatar.Notify.define begin fun n ->
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
 			let  button = object
 			  method color = `Green
-			  method url   = CMail.link (n # id) None (snd (instance # key))
+			  method url   = CMail.link (info # id) None (snd (instance # key))
 			  method label = `Avatar_Notify_Mail (`Button,what) 
 			end in 
 			let footer = CMail.Footer.instance uid instance in 
 			let! mail  = ohm (VMailBrick.render title payload body button footer) in
 			return (mail # title, mail # text, mail # html)
-    method list   = return ignore
+    method item   = None
     method act  _ = return (Action.url UrlClient.website (instance # key) ()) 
   end))
 

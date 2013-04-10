@@ -13,6 +13,7 @@ module type PLUGIN = sig
   val uid : t -> IUser.t 
   val from : t -> IAvatar.t option     
   val solve : t -> IMail.Solve.t option 
+  val item : t -> bool 
 end
 
 (* Marking solvable items as solved *) 
@@ -25,7 +26,7 @@ module SolvableView = CouchDB.DocView(struct
   module Doc = Core.Data
   module Design = Core.Design
   let name = "solvable"
-  let map = "if (!doc.dead && doc.solve !== null && doc.solved === null) emit([doc.plugin,doc.solve]);"
+  let map = "if (!doc.dead && doc.solved !== null && doc.solved[0] === 'n') emit([doc.plugin,doc.solved[1]]);"
 end)
 
 let task_solve, def_solve = O.async # declare "notif-solve" SolveArgs.fmt
@@ -33,10 +34,7 @@ let solve key =
   let! now  = ohmctx (#time) in
   let! mids = ohm (SolvableView.doc_query ~startkey:key ~endkey:key ~endinclusive:true ~limit:5 ()) in
   if mids = [] then return () else
-    let! () = ohm (Run.list_iter begin fun x ->
-      let mid = IMail.of_id (x # id) in
-      Core.Tbl.update mid (fun n -> Core.Data.({ n with solved = Some now })) 
-    end mids) in
+    let! () = ohm (Run.list_iter (#id |- IMail.of_id |- Core.solved) mids) in
     task_solve key 
 
 let () = def_solve solve
@@ -63,10 +61,26 @@ let get_parser pid =
   try Some (Hashtbl.find parsers pid) with Not_found -> None
 
 let parse mid t = 
-  match get_parser t.Core.Data.plugin with 
-    | None -> return None
-    | Some parse -> parse mid t
+  let! parse = req_or (return None) (get_parser t.Core.Data.plugin) in
+  parse mid t 
 
+let parse_mail mid t = 
+  let! render, info = ohm_req_or (return None) (parse mid t) in
+  return (Some (object
+    method info       = info 
+    method act a      = render # act a
+    method mail uid u = render # mail uid u 
+  end))
+
+let parse_item mid t = 
+  let! render, info = ohm_req_or (return None) (parse mid t) in
+  let! item = req_or (return None) (render # item) in
+  return (Some (object
+    method info  = info 
+    method act a = render # act a
+    method item  = item
+  end))
+  
 (* Actual plugin registration *) 
 
 module Register = functor(P:PLUGIN) -> struct
@@ -87,41 +101,24 @@ module Register = functor(P:PLUGIN) -> struct
   let parse mid m = 
     let! t = req_or (return None) (P.of_json_safe m.Core.Data.data) in
     let  render = match !render with None -> assert false | Some r -> r in
-    let  stub = Core.Data.(object
-      method plugin = P.id
-      method id     = mid
-      method wid    = m.wid
-      method iid    = m.iid
-      method uid    = m.uid
-      method from   = P.from t 
-      method time   = m.time
-      method read   = m.read
-      method sent   = m.sent
-      method solved = if m.solve <> None then m.solved else m.read
-      method nmc    = m.nmc
-      method nsc    = m.nsc
-      method nzc    = m.nzc
-      method inner  = t
+    let  info : MMail_types.info = Core.Data.(object
+      method plugin  = P.id
+      method id      = mid
+      method wid     = m.wid
+      method iid     = m.iid
+      method uid     = m.uid
+      method from    = P.from t 
+      method time    = m.time
+      method opened  = m.opened
+      method clicked = m.clicked
+      method sent    = m.sent
+      method blocked = m.blocked
+      method solved  = m.solved
+      method accept  = m.accept
+      method zapped  = m.zapped
     end) in 
-    let! r = ohm_req_or (return None) (render stub) in
-    return (Some Core.Data.(object 
-      method plugin = P.id
-      method id     = mid
-      method wid    = m.wid
-      method iid    = m.iid
-      method uid    = m.uid
-      method from   = P.from t 
-      method time   = m.time
-      method read   = m.read
-      method sent   = m.sent
-      method solved = if m.solve <> None then m.solved else m.read
-      method nmc    = m.nmc
-      method nsc    = m.nsc
-      method nzc    = m.nzc
-      method mail u = r # mail u 
-      method list   = r # list
-      method act a  = r # act a 
-    end))
+    let! r = ohm_req_or (return None) (render t info) in
+    return (Some (r, info))
 
   let () = add_parser P.id parse
 
@@ -130,25 +127,28 @@ module Register = functor(P:PLUGIN) -> struct
   let send_one ?time ?mwid t =
 
     let! time' = ohmctx (#time) in
-    let  time  = BatOption.default time' time in 
+    let  time  = Date.of_timestamp (BatOption.default time' time) in 
 
     let mwid = match mwid with Some mwid -> mwid | None -> IMail.Wave.gen () in
     
+    let solved = BatOption.map (fun msid -> `NotSolved msid) (P.solve t) in
+
     let m = Core.Data.({
-      plugin = P.id ;
-      data   = P.to_json t ;
-      iid    = P.iid t ;
-      uid    = P.uid t ;
-      solve  = P.solve t ;
-      wid    = mwid ;
-      time   ; 
-      nmc    = 0 ;
-      nsc    = 0 ;
-      nzc    = 0 ; 
-      solved = None ;
-      sent   = None ;
-      read   = None ; 
-      dead   = false ;       
+      plugin  = P.id ;
+      data    = P.to_json t ;
+      iid     = P.iid t ;
+      uid     = P.uid t ;
+      solved  ;
+      wid     = mwid ;
+      time    ; 
+      clicked = None ;
+      sent    = None ; 
+      opened  = None ; 
+      blocked = false ;
+      accept  = None ;        
+      dead    = false ;
+      zapped  = None ; 
+      item    = P.item t ; 
     }) in
 
     let! mid = ohm (Core.Tbl.create m) in

@@ -26,7 +26,7 @@ let () = UrlMe.Mail.def_link begin fun req res ->
 
   match what with 
     | `Valid (n,cuid) -> let uid = IUser.Deduce.is_anyone cuid in 
-			 let! ( ) = ohm $ MAdminLog.(log ~uid (Payload.LoginWithMail (n # plugin))) in   
+			 let! ( ) = ohm $ MAdminLog.(log ~uid (Payload.LoginWithMail (n # info # plugin))) in   
 			 let! ( ) = ohm $ MNews.Cache.prepare uid in
 			 let! ( ) = ohm $ TrackLog.(log (IsUser uid)) in 
 			 let! url = ohm (n # act maid) in 
