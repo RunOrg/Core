@@ -19,15 +19,15 @@ let () = Mail.define begin fun uid info ->
     method item = None
     method act _ owid _ = return (Action.url UrlMe.News.home owid ())
     method mail uid u = let title = `Mail_SignupConfirm_Title in
+
 			let body  = [
 			  [ `Mail_SignupConfirm_Intro (u # fullname) ] ;
 			  [ `Mail_SignupConfirm_Explanation (u # email) ] ; 
 			] in
-			let button = object
-			  method color = `Green
-			  method url   = CMail.link (info # id) None (u # white) 
-			  method label = `Mail_PassReset_Button 
-			end in 
+
+			let button = [ VMailBrick.green `Mail_PassReset_Button 
+					 (CMail.link (info # id) None (u # white)) ] in
+
 			let footer = CMail.Footer.core (info # id) uid (u # white) in
 			VMailBrick.render title `None body button footer
   end))

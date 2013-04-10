@@ -161,33 +161,50 @@ type result = <
 
 module Body = struct
   
-  let render body button =
+  let render body buttons =
 
-    let! label = ohm (AdLib.get button # label) in
-
-    let button = object
-      method green = button # color = `Green
-      method url = button # url 
-      method label = label  
-    end in
+    let! buttons = ohm $ Run.list_map begin fun button -> 
+      let! label = ohm (AdLib.get button # label) in
+      return (object
+	method green = button # color = `Green
+	method url = button # url 
+	method label = label  
+      end)
+    end buttons in
 
     let! sentences = ohm (Run.list_map (Run.list_map AdLib.get) body) in
 
     let  text = String.concat "\n\n" (List.map (String.concat " ") sentences) in
     let! html = ohm (Asset_MailBrick_Body.render (object
       method body = sentences
-      method button = button 
+      method buttons = buttons 
     end)) in
 		    
-    let text = text ^ "\n\n  " ^ label ^ " ~> " ^ button # url ^ "\n\n" ^ hr in
+    let text = 
+      text ^ "\n\n  " 
+      ^ String.concat "\n" (List.map (fun b -> b # label ^ " ~> " ^ b # url) buttons) 
+      ^ "\n\n" ^ hr 
+    in
 
     return (object method text = text method html = html end)
     
 end
 
-let render (title:O.i18n) (payload:payload) (body:body) (button:button) (footer:footer) = 
+let green label url = object
+  method color = `Green
+  method url = url
+  method label = label
+end
+
+let grey label url = object
+  method color = `Grey
+  method url = url
+  method label = label
+end
+
+let render (title:O.i18n) (payload:payload) (body:body) (buttons:button list) (footer:footer) = 
   let! payload = ohm (Payload.render payload) in
-  let! body = ohm (Body.render body button) in
+  let! body = ohm (Body.render body buttons) in
   let! footer = ohm (Footer.render footer) in
   let  text = payload # text ^ "\n\n" ^ body # text ^ "\n\n" ^ footer # text in
   let! title = ohm (AdLib.get title) in

@@ -39,11 +39,7 @@ let () = MAvatar.Notify.define begin fun t info ->
 
 			let  body   = [[ `Avatar_Notify_Mail (`Body (instance # name),what) ]] in
 
-			let  button = object
-			  method color = `Green
-			  method url   = url
-			  method label = `Avatar_Notify_Mail (`Button,what) 
-			end in 
+			let  button = [ VMailBrick.green (`Avatar_Notify_Mail (`Button,what)) url ] in
 
 			let footer = CMail.Footer.instance (info # id) uid instance in 
 			VMailBrick.render title payload body button footer

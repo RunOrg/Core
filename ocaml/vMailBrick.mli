@@ -46,7 +46,10 @@ type button = <
   label : O.i18n
 >
 
-val render : O.i18n -> payload -> body -> button -> footer -> (#O.ctx,result) Ohm.Run.t
+val grey : O.i18n -> string -> button
+val green : O.i18n -> string -> button 
+
+val render : O.i18n -> payload -> body -> button list -> footer -> (#O.ctx,result) Ohm.Run.t
 
 val boxProfile : 
      ?img:string
