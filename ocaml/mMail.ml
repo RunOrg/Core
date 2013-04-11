@@ -14,6 +14,9 @@ module Backdoor = MMail_backdoor
 
 include MMail_plugins
 
+let solve mid = 
+  Core.solved mid 
+
 let track mid = 
   Core.opened mid 
 

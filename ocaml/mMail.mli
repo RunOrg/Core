@@ -122,6 +122,8 @@ module All : sig
 
 end 
 
+val solve : IMail.t -> (#O.ctx,unit) Ohm.Run.t
+
 val track : IMail.t -> (#O.ctx,unit) Ohm.Run.t
 
 val zap_unread : 'any ICurrentUser.id -> unit O.run 

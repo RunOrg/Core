@@ -25,8 +25,10 @@ let () = MMembership.Notify.Invited.define begin fun uid u t info ->
     method act n = let url = Action.url UrlClient.Events.see key [ IEvent.to_string (t # eid) ] in
 		   let! () = ohm begin 
 		     if n = Act.accept then 
+		       let! () = ohm (MMail.solve (info # id)) in
 		       MMembership.user asid (access # actor) true
-		     else if n = Act.decline then 
+		     else if n = Act.decline then
+		       let! () = ohm (MMail.solve (info # id)) in 
 		       MMembership.user asid (access # actor) false
 		     else 
 		       return () 
