@@ -109,3 +109,8 @@
     | `Accept
     | `Decline
     | `Detail ]
+
+| `Event_Invite_Notify_Web of 
+    [ `Body of Ohm.AdLib.gender
+    | `Accept
+    | `Decline ]

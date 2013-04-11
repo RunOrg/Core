@@ -68,7 +68,6 @@ here.$zap.click () ->
         font-size: 13px;
         border-top: 1px dashed #DDD;
         padding: 0 8px 0 40px;
-        height: 36px;
         display: block;
         line-height: 20px;
         overflow: hidden; 
@@ -77,10 +76,15 @@ here.$zap.click () ->
           color: #24B;
           font-weight: normal;
         }
-        a {
+        > a {
           display: block; 
           padding: 8px 0;
+          height: 20px;
           color: #333;
+        }
+        .-buttons {
+          padding-bottom: 8px;
+          a { display: inline-block; }
         }
         .-text {
           display: block;

@@ -15,6 +15,8 @@ let () = MMembership.Notify.Invited.define begin fun uid u t info ->
   let! access = ohm_req_or (return None) (CAccess.of_notification uid (t # iid)) in
   let! event  = ohm_req_or (return None) (MEvent.view ~actor:(access # actor) (t # eid)) in
 
+  let  gender = u # gender in 
+
   let  asid = MEvent.Get.group event in 
   let  key = access # instance # key in
   
@@ -33,7 +35,34 @@ let () = MMembership.Notify.Invited.define begin fun uid u t info ->
 
     method item = Some begin fun owid ->
       let! name = ohm (MEvent.Get.fullname event) in 
-      return (Html.esc name) 
+      let  time = Date.to_timestamp (info # time) in
+      let! now  = ohmctx (#time) in      
+      let! author  = ohm (CAvatar.mini_profile (t # from)) in
+      let  data = object
+	method url  = Action.url UrlMe.Notify.follow owid (info # id,None) 
+	method date = (time,now)
+	method pic  = author # pico
+	method name = Some author # name
+	method segs = [ 
+	  AdLib.write (`Event_Invite_Notify_Web (`Body gender)) ; 
+	  return Html.(concat [ str "<strong>" ; esc name ; str "</strong>" ]) ;
+	]
+	method buttons = [
+	  (object
+	    method green = true
+	    method url   = Action.url UrlMe.Notify.follow owid (info # id, Act.accept)
+	    method label = AdLib.write (`Event_Invite_Notify_Web `Accept)
+	   end) ;
+	  (object
+	    method green = false
+	    method url   = Action.url UrlMe.Notify.follow owid (info # id, Act.decline)
+	    method label = AdLib.write (`Event_Invite_Notify_Web `Decline)
+	   end) ;
+	]
+      end in
+      match info # solved with 
+	| Some (`NotSolved _) -> Asset_Notify_SolvableItem.render data
+	| _ -> Asset_Notify_LinkItem.render data
     end
 
     method mail = let! name  = ohm (MEvent.Get.fullname event) in 

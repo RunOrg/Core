@@ -119,3 +119,10 @@ end
     | `Decline -> "Refuser"
     | `Detail -> "Plus de détails"
 end 
+
+| `Event_Invite_Notify_Web what -> begin 
+  match what with 
+    | `Body gender -> "vous invite à"
+    | `Accept -> "Accepter l'invitation"
+    | `Decline -> "Refuser"
+end 
