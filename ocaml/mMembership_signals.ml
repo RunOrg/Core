@@ -58,7 +58,9 @@ let perform_after_version =
   let task = O.async # define "after-membership-version" Versioned.VersionId.fmt perform in 
   let delay = 5.0 in
 
-  fun vid -> if delay_processing then task ~delay vid else perform vid 
+  (* Always delay this, because it is quite costly, and only affects
+     notifications (in theory). *)
+  fun vid -> task ~delay vid 
     
 let _ =
   if allow_propagation then 
