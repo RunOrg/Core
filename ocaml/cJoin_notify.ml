@@ -5,3 +5,4 @@ open Ohm.Universal
 open BatPervasives
 
 module Invited = CJoin_notify_invited
+module Pending = CJoin_notify_pending
