@@ -23,15 +23,15 @@ let task = O.async # define "resend-mail" ResendArgs.fmt
       let url = Action.url UrlMail.link (user # white) (arg # mid,token,arg # act) in
 
       let body   = [
-	[ `Notif_Resend_Hello (user # fullname) ] ;
-	[ `Notif_Resend_Body ]
+	[ `Notify_Resend_Hello (user # fullname) ] ;
+	[ `Notify_Resend_Body ]
       ] in
 
-      let button = [VMailBrick.green `Notif_Resend_Button url] in
+      let button = [VMailBrick.green `Notify_Resend_Button url] in
 
       let footer = Footer.core (arg # mid) self (user # white) in
 
-      let! m = ohm (VMailBrick.render `Notif_Resend_Title `None body button footer) in
+      let! m = ohm (VMailBrick.render `Notify_Resend_Title `None body button footer) in
 
       send ~owid:(user # white) ~subject:(m # title) ~text:(m # text) ~html:(m # html) ()
 	

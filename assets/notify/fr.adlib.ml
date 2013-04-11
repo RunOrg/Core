@@ -11,18 +11,8 @@
 | `Notify_Title -> "Notifications"
 
 | `Notify_Settings_Title -> "Paramètres"
-| `Notify_Settings_Choice c -> begin 
-  match c with 
-    | `Default -> "Options par défaut"
-    | `Everything -> "Recevoir toutes les notifications" 
-    | `Relevant -> "Uniquement les notifications qui me concernent"
-    | `Nothing -> "Ne rien recevoir"
-end
-| `Notify_Settings_Detail c -> begin
-  match c with 
-    | `Everything -> "Vous recevez en temps réel les notifications par mail"
-    | `Relevant -> "Des résumes quotidiens ou hebdomadaires vous informent du reste"
-    | `Nothing -> "Vous ne recevez strictement aucune notification"
-end
-| `Notify_Settings_Submit -> "Enregistrer"
-| `Notify_Settings_Default -> "Options par défaut"
+
+| `Notify_Resend_Title -> "Nouveau lien de connexion"
+| `Notify_Resend_Hello name -> !! "Bonjour %s," name
+| `Notify_Resend_Body -> "Vous avez visité un lien expiré. Cliquez sur le bouton ci-dessous pour vous connecter :"
+| `Notify_Resend_Button -> "Connexion"
