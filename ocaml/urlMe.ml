@@ -36,11 +36,10 @@ module Account = struct
 end
 
 module Notify = struct
-  let home, def_home = root "notify"
-  let count, def_count = O.declare O.core "notify/count" A.none
-  let follow, def_follow = O.declare O.core "notify/follow" (A.ro IMail.arg IMail.Action.arg) 
-  let mailed, def_mailed = O.declare O.core "nt" (A.rr INotify.arg A.string)
+  let home,     def_home     = root "notify"
   let settings, def_settings = child def_home "nt/settings" 
+  let count,    def_count    = O.declare O.core "notify/count" A.none
+  let follow,   def_follow   = O.declare O.core "notify/follow" (A.ro IMail.arg IMail.Action.arg) 
 end
   
 module News = struct
