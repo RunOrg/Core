@@ -121,8 +121,12 @@ let admin_expected now =
       | Some (ask,_,aid) -> ask && aid = now.who
       | None -> true)
       
-    (* There is no definite admin answer. *)
-    && Details.(now.admin = None)
+    (* There is no definite admin answer, or there is an older
+       negative answer. *)
+    && Details.(match now.admin, now.user with 
+      | None, _ -> true
+      | Some (false,t1,_), Some (_,t2,_) -> t1 < t2
+      | _ -> false)
 
   then 
 
