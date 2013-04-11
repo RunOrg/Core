@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open BatPervasives
@@ -39,3 +39,6 @@ let admin (access : 'any t) =
     method iid      = MActor.instance actor
   end)
 
+let of_notification uid iid = 
+  let! instance = ohm_req_or (return None) (MInstance.get iid) in
+  make (IUser.Deduce.self_is_current uid) iid instance

@@ -1,14 +1,16 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Notify = CItem_notify
+
 module Message = struct
 
   let render item message = 
     let body = Asset_Item_Message.render (object
-      method body = message # text
+      method body = `Text message # text
     end) in
     (message # author, `Message, body)
 
@@ -18,7 +20,7 @@ module Mail = struct
 
   let render item message = 
     let body = Asset_Item_Mail.render (object
-      method body    = message # body
+      method body    = `Text message # body
       method subject = message # subject
     end) in
     (message # author, `Mail, body)
@@ -58,7 +60,7 @@ module Poll = struct
       in
 
       let display answers count total questions = Asset_Item_Poll.render (object
-	method body = poll # text
+	method body = `Text poll # text
 	method questions = questions
 	method count = count
 	method total = total

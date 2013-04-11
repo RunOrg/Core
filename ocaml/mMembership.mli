@@ -178,3 +178,28 @@ module Backdoor : sig
   val make_admin : IAvatar.t -> IInstance.t -> unit O.run
 
 end
+
+module Notify : sig 
+  module Invited : sig
+    type t = <
+      uid  : IUser.t ;
+      from : IAvatar.t ; 
+      iid  : IInstance.t ;
+      eid  : IEvent.t ; 
+      mid  : IMembership.t ;
+    > ;;
+    val define : 
+      ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+  end
+  module Pending : sig
+    type t = <
+      uid   : IUser.t ;
+      from  : IAvatar.t ;
+      iid   : IInstance.t ;
+      where : [ `Event of IEvent.t | `Group of IGroup.t ] ;
+      mid   : IMembership.t 
+    > ;;
+    val define : 
+      ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+  end
+end

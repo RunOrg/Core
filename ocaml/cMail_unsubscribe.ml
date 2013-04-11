@@ -1,48 +1,52 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Wrap = CMail_wrap
+module Footer = CMail_footer
 
-module ConfirmArgs = Fmt.Make(struct
-  type json t = <
-    instance : IInstance.t option ;
-    user     : IUser.t 
-  >
-end)
+module Mail = MMail.Register(struct
+  include Fmt.Make(struct type json t = < iid : IInstance.t option ; uid : IUser.t > end)
+  let id = IMail.Plugin.of_string "obliterate"
+  let iid _ = None
+  let uid = (#uid)
+  let from _ = None
+  let solve _ = None
+  let item _ = false
+end) 
 
-let send_unsubscribe_confirmation = 
-  let task = O.async # define "unsubscribe-confirm" ConfirmArgs.fmt 
-    begin fun arg -> 
+let () = Mail.define begin fun uid u t info -> 
+  return (Some (object
 
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
-	begin fun self user send -> 
+    method item = None
 
-	  let  token = IUser.Deduce.make_unsub_token self in
-	  let  url = Action.url UrlMail.post_unsubscribe (user # white) (arg # user, token, arg # instance) in
-	  
-	  let  body = Asset_Mail_Unsubscribe.render (object
-	    method url   = url 
-	    method name  = user # fullname
-	    method email = user # email
-	  end) in
-	  
-	  let! from, html = ohm $ Wrap.render ?iid:(arg # instance) (user # white) self body in
-	  let  subject = AdLib.get `Mail_Unsubscribe_Title in
- 
-	  send ~owid:(user # white) ~from ~subject ~html
+    method act _ = let uuid = IUser.Deduce.unsubscribe uid in
+		   let! result = ohm $ MUser.obliterate uuid in
+		   let result = match result with 
+		     | `ok        -> "ok"
+		     | `destroyed -> "destroyed"
+		     | `missing   -> "missing"
+		   in
+		   return (Action.url UrlMail.post_unsubscribe (u # white) (t # uid, result, t # iid))
 
-	end in
+    method mail = let  title = `Mail_Unsubscribe_Title in
 
-      return () 
+		  let  body  = [
+		    [ `Mail_Unsubscribe_Intro (u # fullname) ] ; 
+		    [ `Mail_Unsubscribe_Explanation (u # email) ] ;
+		    [ `Mail_Unsubscribe_Warning ] ; 
+		    [ `Mail_Unsubscribe_Thanks ] ; 
+		  ] in
+		  
+		  let buttons = [ VMailBrick.grey `Mail_Unsubscribe_Button 
+				    (Action.url UrlMail.link (u # white) 
+				       (info # id, MMail.get_token info # id, None)) ] in
+		  
+		  return (title,`None,body,buttons)
 
-    end in
-  fun ~iid ~uid -> task (object
-    method instance = iid
-    method user     = uid
-  end)
+  end))
+end 
 
 let () = UrlMail.def_unsubscribe begin fun req res -> 
 
@@ -55,7 +59,10 @@ let () = UrlMail.def_unsubscribe begin fun req res ->
     method title  = title 
   end) in
 
-  let! () = ohm $ send_unsubscribe_confirmation ~iid ~uid in
+  let! () = ohm $ Mail.send_one (object 
+    method iid = iid 
+    method uid = uid 
+  end) in
 
   CPageLayout.core (req # server) `Unsubscribe_Send_Title html res
 
@@ -63,19 +70,13 @@ end
 
 let () = UrlMail.def_post_unsubscribe begin fun req res -> 
   
-  let uid, token, iid = req # args in
-  let fail = return $ Action.redirect 
-    (Action.url UrlMail.unsubscribe (req # server) (uid,iid)) res in
-
-  let! uid = req_or fail $ IUser.Deduce.from_unsub_token token uid in
-  
-  let! result = ohm $ MUser.obliterate uid in
+  let uid, result, iid = req # args in
 
   let title, html = 
     match result with 
-      | `ok        -> `Unsubscribe_Confirm_Title,   Asset_Unsubscribe_Confirm.render 
-      | `destroyed -> `Unsubscribe_Destroyed_Title, Asset_Unsubscribe_Destroyed.render  
-      | `missing   -> `Unsubscribe_Missing_Title,   Asset_Unsubscribe_Missing.render  
+      | "ok"        -> `Unsubscribe_Confirm_Title,   Asset_Unsubscribe_Confirm.render 
+      | "destroyed" -> `Unsubscribe_Destroyed_Title, Asset_Unsubscribe_Destroyed.render  
+      | _           -> `Unsubscribe_Missing_Title,   Asset_Unsubscribe_Missing.render  
   in
 
   let html = html (object

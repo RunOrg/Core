@@ -8,6 +8,8 @@ val to_html : Rich.t -> Ohm.Html.writer
 
 val to_text : Rich.t -> string
 
+val summary : Rich.t -> bool * Rich.t
+
 val length : Rich.t -> int
 
 module OrText : sig
@@ -17,6 +19,8 @@ module OrText : sig
   val to_html : t -> Ohm.Html.writer
 
   val to_text : t -> string
+
+  val summary : t -> bool * t 
 
   val length : t -> int
 

@@ -4,8 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Login = CLogin_login
-module Reset = CLogin_reset
+module Login   = CLogin_login
+module Reset   = CLogin_reset
+module Confirm = CLogin_confirm
 
 let template = 
   OhmForm.begin_object 
@@ -48,49 +49,6 @@ let template =
 	    (OhmForm.required (AdLib.get `Login_Form_Required))))
 
   |> OhmForm.Skin.with_ok_button ~ok:(AdLib.get `Login_Form_Signup_Submit)
-
-module ConfirmArgs = Fmt.Make(struct
-  type json t = <
-    instance : IInstance.t option ;
-    path     : string list ;
-    user     : IUser.t 
-  >
-end)
-
-let send_signup_confirmation = 
-  let task = O.async # define "login-signup-confirm" ConfirmArgs.fmt 
-    begin fun arg -> 
-
-      (* Restore new currentuser *)
-      let cuid  = IUser.Assert.is_new (arg # user) in
-      let token = IUser.Deduce.make_confirm_token cuid in
-
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
-	begin fun self user send -> 
-
-	  let  url = Action.url UrlMail.signupConfirm (user # white) (arg # user, token) in
-	  
-	  let  body = Asset_Mail_SignupConfirm.render (object
-	    method url   = url 
-	    method name  = user # fullname
-	    method email = user # email
-	  end) in
-	  
-	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) (user # white) self body in
-	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
- 
-	  send ~owid:(user # white) ~from ~subject ~html
-
-	end in
-
-      return () 
-
-    end in
-  fun ~iid ~path ~(cuid:[`New] ICurrentUser.id) -> task (object
-    method instance = iid
-    method path     = path
-    method user     = IUser.Deduce.is_anyone cuid
-  end)
 
 let () = UrlLogin.def_post_signup begin fun req res -> 
 
@@ -148,7 +106,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
     match result with 
       | `created cuid -> 
 
-	let! ( ) = ohm $ send_signup_confirmation ~iid ~path ~cuid in
+	let! ( ) = ohm $ Confirm.Mail.send_one (IUser.Deduce.is_anyone cuid) in
 
 	let! ins = ohm $ Run.opt_bind MInstance.get iid in 
 
@@ -166,7 +124,7 @@ let () = UrlLogin.def_post_signup begin fun req res ->
     
       | `duplicate uid -> 
 
-	let!  ()  = ohm $ Reset.send ~iid ~uid in
+	let!  ()  = ohm $ Reset.Mail.send_one uid in
 
 	let! html = ohm $ 
 	  Asset_Dialog_Dialog.render (object

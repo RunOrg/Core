@@ -37,3 +37,8 @@
 | `Network_Install_Add_Description
 | `Network_Install_Field_Description
 | `Network_Install_Submit 
+
+| `Network_Notify_CanInstall_Title of string
+| `Network_Notify_CanInstall_Intro 
+| `Network_Notify_CanInstall_Explanation of string
+| `Network_Notify_CanInstall_Button 

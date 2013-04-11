@@ -129,7 +129,7 @@ val update : [`Edit] IUser.id -> user_edit -> unit O.run
 
 val set_pic : [`Edit] IUser.id -> [`OwnPic] IFile.id option -> unit O.run
 
-val get : [<`View|`Bot] IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
+val get : [<`View|`Bot|`IsSelf] IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
 
 val knows_password : string -> 'any IUser.id -> [`Old] ICurrentUser.id option O.run
 
