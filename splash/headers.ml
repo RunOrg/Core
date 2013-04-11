@@ -77,6 +77,7 @@ let headers = [
 	  "Clubs de sport", "/catalog/clubs-sports/MultiSports", 
 		["Clubs multi-sports", "/catalog/clubs-sports/MultiSports" ;
 		"Judo et jujitsu", "/catalog/clubs-sports/Judo" ;
+		"Tennis", "/catalog/clubs-sports/Tennis" ;
 		"Badminton", "/catalog/clubs-sports/Badminton" ;
 		"Football US & cheerleading", "/catalog/clubs-sports/Footus" ;
 		"Athlétisme", "/catalog/clubs-sports/Athle" ;
@@ -170,6 +171,7 @@ let headers = [
 		"Improvisation", "/associations/Impro"; 
 		"Clubs multi-sports", "/associations/MultiSports" ;
 		"Judo", "/associations/Judo" ;
+		"Tennis", "/associations/Tennis" ;
 		"Badminton", "/associations/Badminton" ;
 		"Football US", "/associations/Footus" ;
 		"Athlétisme", "/associations/Athle" ;

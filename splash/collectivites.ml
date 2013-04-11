@@ -164,7 +164,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 
 	offer 
 	~title: "Assistance téléphonique"
-	~price: "40€/mois"
+	~price: "50€/mois"
 	"Si vous recherchez la tranquilité : c'est ce service qu'il faut souscrire ! Si vous avez des questions ou que vous souhaitez des conseils pour utiliser au mieux votre outil : on en parle directement au téléphone. Dans le cadre de ce service, nous pouvons prendre la main dans votre espace pour vous aider à réaliser certaines opérations."
 	[ "Envoyez-nous un message : nous vous rappelons" ;
 	  "Support téléphonique en moins de 24h (jours ouvrés)";
@@ -247,7 +247,7 @@ Nous le constatons chez tous nos clients : en quelques jours, leur intranet RunO
 	;
 
 	option_offer  ~before:"" ~link:("/collectivites/services","En savoir plus...") 
-	  "40" "HT par mois" "Assistance téléphonique"
+	  "50" "HT par mois" "Assistance téléphonique"
 	  "Ne cherchez plus : demandez ! 1h d'assistance téléphonique pour vous dépanner ou vous conseiller chaque mois."
 	;
 

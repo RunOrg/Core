@@ -295,16 +295,53 @@ let healthExamen = profileForm "HealthExamen"
   ]
 
 (* ========================================================================== *)
-(*  let healthParcours = profileForm "HealthParcours" 
+  let healthParcours = profileForm "HealthParcours" 
   ~name:"Mon parcours"
   [ 
-    join ~name:""
-         ~label:(adlib "ProfileForm_HealthParcours_Field_" "Troubles de l'appétit")
-		 (`PickMany [
-			adlib "ProfileFormValuesHealthParcours" "" ;
-			adlib "ProfileFormValuesHealthParcours" "" ] ) ;
+    join ~name:"decouverteMaladie"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_DecouverteMaladie" "Quand a-t-on découvert votre maladie ?")
+	 `LongText ;
+    join ~name:"decouverteMaladieOccasion"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_DecouverteMaladieOccasion" "A quelle occasion ?")
+	 `LongText ;
+    join ~name:"antecedentsFamille"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_AntecedentsFamille" "Y-a-t-il des antécédents dans votre famille ?")
+	 `Textarea ;
+    join ~name:"vivreAvec"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_VivreAvec" "Comment vivez votre maladie de l'annonce à ce jour ?")
+	 `Textarea ;
+    join ~name:"evenementsImportants"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_EvenementsImportants" "Y-a-t-il eu des événements de vie importants ?")
+	 `Textarea ;
+    join ~name:"connaissanceCauses"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_ConnaissanceCauses" "Connaissez-vous les causes ?")
+	 `Textarea ;
+    join ~name:"aVie"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_AVie" "Est-ce à vie ?")
+	 `Textarea ;
+    join ~name:"pourquoiMaladie"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_PourquoiMaladie" "Pourquoi avez vous cette maladie ?")
+	 `Textarea ;
+    join ~name:"connaissanceRisques"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_ConnaissanceRisques" "Connaissez-vous les risques ?")
+	 `Textarea ;
+    join ~name:"connaissanceTraitements"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_ConnaissanceTraitements" "Connaissez-vous les traitements ?")
+	 `Textarea ;
+    join ~name:"gestionAlimentaire"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_GestionAlimentaire" "Gestion alimentaire (qu'en savez-vous ? Comment le vivez-vous ? Que faites-vous en pratique ?)")
+	 `Textarea ;
+    join ~name:"gestionActivitePhysique"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_GestionActivitePhysique" "Gestion de l'activité physique (connaissance/vécu/pratiques)")
+	 `Textarea ;
+    join ~name:"gestionMedicaments"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_GestionMedicaments" "Gestion des médicaments (connaissance/vécu/pratiques)")
+	 `Textarea ;
+    join ~name:"gestionStress"
+         ~label:(adlib "ProfileForm_HealthParcours_Field_GestionStress" "Gestion du stress (connaissance/vécu/pratiques)")
+	 `Textarea ;
   ]	
-*)
+
 (* ========================================================================== *)
 let sectionSportEtudesAcademic = profileForm "SectionSportEtudesAcademic" 
   ~name:"Scolaire"
