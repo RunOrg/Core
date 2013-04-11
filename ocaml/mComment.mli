@@ -8,11 +8,9 @@ type t = <
   on    : IItem.t 
 > ;;
 
-module Signals : sig
-    
+module Signals : sig    
   val on_create : ([`Created] IComment.id * t, unit O.run) Ohm.Sig.channel
   val on_delete : (IComment.t * IItem.t, unit O.run) Ohm.Sig.channel 
-    
 end
 
 val max_length : int

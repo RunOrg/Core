@@ -76,25 +76,6 @@ let () =
   let! uid = req_or (return ()) details # who in 
   Store.create (`NewFavorite (`ItemAuthor, aid, IItem.decay itid)) uid
 
-(* Notify owner and interested parties when a comment is posted ----------------------------- *)
-
-let () = 
-  let! cid, comm = Ohm.Sig.listen MComment.Signals.on_create in 
-
-  let  aid       = comm # who in
-  let  bot_itid  = IItem.Assert.bot (comm # on) in
-  let! it_author = ohm_req_or (return ()) $ MItem.author bot_itid in
-  let! it_others = ohm $ MItem.interested bot_itid in 
-  let  it_others = List.filter (fun aid' -> aid' <> it_author && aid' <> aid) it_others in 
- 
-  let author_payload = (`NewComment (`ItemAuthor,   IComment.decay cid)) in
-  let others_payload = (`NewComment (`ItemFollower, IComment.decay cid)) in
-
-  let list = List.map (fun aid -> (others_payload, aid)) it_others in
-  let list = if it_author <> aid then (author_payload, it_author) :: list else list in
-
-  to_avatars (INotifyStats.of_id (IComment.to_id cid)) list
-
 (* Notify interested parties when an item with an author is posted on a feed ---------------- *)
 
 let push_item_task = O.async # define "notify-push-item" Fmt.(IItem.fmt * IFeed.fmt)

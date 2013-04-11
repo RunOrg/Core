@@ -30,17 +30,25 @@ end
 
 include CouchDB.Convenience.Table(struct let db = O.db "mail" end)(IMail)(Data)
 
+(* Clean updates ensure that small "pings" do not rewrite the entire document
+   to the database if they don't actually change anything. *)
+let clean_update mid f = 
+  Tbl.transact mid (function 
+  | None -> return ((), `keep)
+  | Some m -> let m' = f m in 
+	      if m = m' then return ((),`keep) else return ((),`put m') )
+
 (* Rot means a "rotten" notification has been found (no "full" could be
    extracted from it), and it therefore has to be destroyed from the 
    database. *)
 let rot mid = 
-  Tbl.update mid Data.(fun m -> { m with dead = true })
+  clean_update mid Data.(fun m -> { m with dead = true })
 
 (* Zap means that a given notification has been marked as seen. *)
 let zap mid = 
   let! now = ohmctx (#time) in
   let  date = Date.of_timestamp now in
-  Tbl.update mid Data.(fun m -> 
+  clean_update mid Data.(fun m -> 
     if m.clicked = None then { m with zapped = Some (BatOption.default date m.zapped) }
     else m 
   ) 
@@ -48,17 +56,17 @@ let zap mid =
 let clicked mid = 
   let! now  = ohmctx (#time) in
   let  date = Date.of_timestamp now in
-  Tbl.update mid Data.(fun m -> { m with clicked = Some (BatOption.default date m.clicked) })
+  clean_update mid Data.(fun m -> { m with clicked = Some (BatOption.default date m.clicked) })
 
 let opened mid = 
   let! now = ohmctx (#time) in
   let  date = Date.of_timestamp now in
-  Tbl.update mid Data.(fun m -> { m with opened = Some (BatOption.default date m.opened) })
+  clean_update mid Data.(fun m -> { m with opened = Some (BatOption.default date m.opened) })
 
 let solved mid = 
   let! now = ohmctx (#time) in
   let  date = Date.of_timestamp now in 
-  Tbl.update mid Data.(fun m -> { m with solved = match m.solved with 
+  clean_update mid Data.(fun m -> { m with solved = match m.solved with 
     | Some (`NotSolved _) -> Some (`Solved date) 
     | other -> other 
   })

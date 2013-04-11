@@ -112,18 +112,27 @@ module Create : sig
 end
 
 module Notify : sig
-
-  type t = <
-    itid : IItem.t ;
-    aid  : IAvatar.t ;
-    iid  : IInstance.t ; 
-    uid  : IUser.t ;
-    kind : [ `Mail ] 
-  >
-
-  val define :
-    ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
-
+  module Email : sig
+    type t = <
+      itid : IItem.t ;
+      aid  : IAvatar.t ;
+      iid  : IInstance.t ; 
+      uid  : IUser.t ;
+      kind : [ `Mail ] ;
+    >
+    val define : 
+      ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+  end
+  module Comment : sig
+    type t = <
+      uid : IUser.t ;
+      iid : IInstance.t ;
+      aid : IAvatar.t ;
+      cid : IComment.t ;	
+    > 
+    val define : 
+      ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+  end
 end
 
 module Remove : sig
@@ -165,8 +174,6 @@ val try_get :
   'any MActor.t -> 'a IItem.id -> item option O.run
 
 val author : [`Bot] IItem.id -> IAvatar.t option O.run 
-
-val interested : [`Bot] IItem.id -> IAvatar.t list O.run
 
 val iid : 'a IItem.id -> IInstance.t option O.run 
 
