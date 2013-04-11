@@ -1,0 +1,6 @@
+{ this | Asset_Notify_LinkItem.render | ohm }
+<div class="-buttons">
+  {#buttons}
+    <a class="action-button{if green} -green{/if}" href="{url}">{label|ohm}</a>
+  {/#}
+</div>

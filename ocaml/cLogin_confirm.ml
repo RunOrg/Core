@@ -4,62 +4,31 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let resend_confirmation = 
-  O.async # define "resend-confirm" IUser.fmt
-    begin fun uid -> 
-      
-      (* Restore new currentuser *)
-      let cuid  = IUser.Assert.is_new uid in
-      let token = IUser.Deduce.make_confirm_token cuid in
+module Mail = MMail.Register(struct
+  include (IUser : Ohm.Fmt.FMT with type t = IUser.t) 
+  let id = IMail.Plugin.of_string "confirm"
+  let iid _ = None
+  let uid = identity 
+  let from _ = None
+  let solve _ = None
+  let item _ = false
+end)
 
-      let! _ = ohm $ MMail.other_send_to_self uid
-	begin fun self user send -> 
+let () = Mail.define begin fun uid u _ info -> 
+  return (Some (object
+    method item = None
+    method act _ = return (Action.url UrlMe.News.home (u # white) ())
+    method mail = let title = `Mail_SignupConfirm_Title in
 
-	  let  url = Action.url UrlMail.signupConfirm (user # white) (uid, token) in
-	  
-	  let  body = Asset_Mail_SignupConfirm.render (object
-	    method url   = url 
-	    method name  = user # fullname
-	    method email = user # email
-	  end) in
-	  
-	  let! from, html = ohm $ CMail.Wrap.render (user # white) self body in
-	  let  subject = AdLib.get `Mail_SignupConfirm_Title in
- 
-	  send ~owid:(user # white) ~from ~subject ~html
+		  let body  = [
+		    [ `Mail_SignupConfirm_Intro (u # fullname) ] ;
+		    [ `Mail_SignupConfirm_Explanation (u # email) ] ; 
+		  ] in
+		  
+		  let buttons = [ VMailBrick.green `Mail_PassReset_Button 
+				    (CMail.link (info # id) None (u # white)) ] in
+		  
+		  return (title,`None,body,buttons)
+  end))
+end 
 
-	end in
-
-      return () 
-
-    end 
-
-let () = UrlMail.def_signupConfirm begin fun req res -> 
-
-  let expired uid = 
-    
-    let! () = ohm $ resend_confirmation uid in 
-    
-    let html = Asset_Confirm_Resend.render (object
-      method navbar = (req # server,None,None)
-      method title  = AdLib.get `Confirm_Resend_Title
-    end) in
-
-    CPageLayout.core (req # server) `Confirm_Resend_Title html res
-
-  in
-
-  let uid, proof = req # args in 
-  
-  let! cuid = req_or (expired uid) (IUser.Deduce.from_confirm_token proof uid) in
-  let  uid  = IUser.Deduce.old_can_confirm cuid in 
-  let!  _   = ohm $ MUser.confirm uid in 
-
-  let  url  = Action.url UrlMe.News.home (req # server) () in
-  
-  let! () = ohm $ MNews.Cache.prepare uid in
-  let! () = ohm $ TrackLog.(log (IsUser (IUser.decay uid))) in
-
-  return $ CSession.start (`Old cuid) (Action.redirect url res)
-
-end

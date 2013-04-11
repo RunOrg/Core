@@ -37,3 +37,9 @@
 | `Network_Install_Add_Description -> "Ajouter une description..."
 | `Network_Install_Field_Description -> "Une courte description"
 | `Network_Install_Submit -> "Confirmer ces informations"
+
+| `Network_Notify_CanInstall_Title asso -> !! "Installation - %s" asso
+| `Network_Notify_CanInstall_Intro -> "Bonjour,"
+| `Network_Notify_CanInstall_Explanation asso -> 
+  !! "Vous (ou un autre responsable) avez demandé à finir l'installation de l'espace privé en ligne pour %s. Il ne vous reste plus qu'à vérifier l'exactitude des données de cet espace. Pour cela, cliquez sur le bouton ci-dessous et suivez les instructions." asso
+| `Network_Notify_CanInstall_Button -> "Continuer"

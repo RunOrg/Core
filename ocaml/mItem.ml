@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open BatPervasives
@@ -14,6 +14,8 @@ module React    = MItem_react
 module Remove   = MItem_remove
 module Create   = MItem_create
 module Backdoor = MItem_backdoor
+module People   = MItem_people
+module Notify   = MItem_notify 
 
 include MItem_types
 include MItem_create
@@ -209,14 +211,6 @@ let last ?self source =
 let exists source = 
   let! last = ohm $ last source in 
   return (last <> None)
-
-let interested itid = 
-  let! likers     = ohm $ MLike.interested itid in 
-  let! commenters = ohm $ MComment.interested itid in
-  let! item       = ohm_req_or (return []) $ Tbl.get (IItem.decay itid) in
-  let  list = likers @ commenters in
-  let  list = match MItem_data.author item with None -> list | Some aid -> aid :: list in 
-  return $ BatList.sort_unique compare list 
 
 let iid itid = 
   let! data = ohm_req_or (return None) $ Tbl.get (IItem.decay itid) in

@@ -1,77 +1,70 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *) 
 
 open Ohm
-open Ohm.Util
-open BatPervasives
 open Ohm.Universal
+open BatPervasives
 
-let ping = 
-  ConfigPacemkr.every 60. begin fun email freq -> 
-    ConfigPacemkr.send ~nature:"E-mail Sender" "#$pid"
-      "%s (%.2f / minute)" email freq
-  end 
+module Send     = MMail_send
+module Types    = MMail_types
+module All      = MMail_all 
+module Compose  = MMail_compose
+module Zap      = MMail_zap 
+module Core     = MMail_core 
+module Backdoor = MMail_backdoor
 
-let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t -> 
-			    (owid:IWhite.t option ->
-			     from:string option -> 
-			     subject:string O.run ->
-			     html:Html.writer O.run -> unit O.run) -> unit O.run) = 
- 
-  (* Sending e-mail to self. *)
-  let uid   = IUser.Assert.is_self uid in 
-  let vuid  = IUser.Deduce.view uid in 
-  
-  let! user = ohm_req_or (return false) $ MUser.get vuid in
+include MMail_plugins
 
-  (* Never send anything to destroyed users *)
-  let! () = true_or (return false) (user # destroyed = None) in 
+let solve mid = 
+  Core.solved mid 
 
-  let! () = ohm $ build uid user begin fun ~owid ~from ~subject ~html ->
+let track mid = 
+  Core.opened mid 
 
-    let! () = ohm $ MAdminLog.log ~uid:(IUser.decay uid) MAdminLog.Payload.SendMail in 
-    
-    let! subject = ohm subject in
-    let! html    = ohm html in
-    let  html    = Html.to_html_string html in
-    
-    let to_email   = user # email in 
-    let to_name    = user # fullname in
-    let from_email = ConfigWhite.no_reply owid in
-    let from_name  = match from with 
-      | None      -> ConfigWhite.name owid 
-      | Some name -> name ^ " (" ^ ConfigWhite.short owid ^ ")"
-    in
-    
-    let () = 
-      try 
+let zap_unread cuid = 
+  Zap.unread (IUser.Deduce.is_anyone cuid) 
+
+let get_token mid = 
+  ConfigKey.prove [ "mail" ; IMail.to_string mid ]
+
+let check_token mid token = 
+  ConfigKey.is_proof token [ "mail" ; IMail.to_string mid ]
+
+let from_token mid ?current token = 
+
+  let! t = ohm_req_or (return `Missing) (Core.Tbl.get mid) in
+  let  extract cuid = 
+    O.decay (
+      let  uid  = IUser.Deduce.current_is_self cuid in 
+      let! u    = ohm_req_or (return `Missing) (MUser.get uid) in
+      let! full = ohm_req_or (return `Missing) (parse_mail uid u mid t) in
+      let! ()   = ohm (Core.clicked mid) in
+      return (`Valid (full, cuid))
+    )
+  in
+
+  match current with 
+    (* If the notification is owned by the current user, don't bother
+       checking the authentication token. *) 
+    | Some cuid when IUser.Deduce.is_anyone cuid = t.Core.Data.uid -> 
+      extract cuid 
+
+    (* The notification owner is not logged in. Attempt authentication. *)
+    | _ -> 
+      if check_token mid token then 
+	let cuid = IUser.Assert.is_old t.Core.Data.uid in
+	extract cuid 
+      else
+	return (`Expired t.Core.Data.uid) 
 	
-	Netsendmail.compose 
-	  ~in_charset:`Enc_utf8
-	  ~out_charset:`Enc_utf8
-	  ~from_addr:(from_name, from_email)
-	  ~to_addrs:[to_name, to_email]
-	  ~subject:subject
-	  ~content_type:("text/html", ["charset", Mimestring.mk_param "UTF-8"])
-	  ~container_type:("multipart/alternative",[])
-	  html
-	|> Netsendmail.sendmail ;
-	
-	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name ;
-	
-	ping to_email   
-
-      with exn -> 
-
-	Util.log "Error sending to: %s <%s> : %s" to_name to_email
-	  (Printexc.to_string exn) 
-
-    in
-    
-    return ()
-      
-  end in
-  
-  return true
-
-let send_to_self uid build =
-  other_send_to_self uid (fun uid user send -> build uid user (send ~from:None))
+let from_user mid cuid = 
+  let! t   = ohm_req_or (return None) (Core.Tbl.get mid) in
+  if IUser.Deduce.is_anyone cuid = t.Core.Data.uid then 
+    let  uid = IUser.Deduce.current_is_self cuid in 
+    let! u   = ohm_req_or (return None) (MUser.get uid) in
+    O.decay (
+      let! full = ohm_req_or (return None) (parse_item uid u mid t) in
+      let! ()   = ohm (Core.zap mid) in
+      return (Some full) 
+    )
+  else
+    return None

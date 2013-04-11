@@ -5,16 +5,7 @@ module Status : Ohm.Fmt.FMT with type t =
 
 module Signals : sig
 
-  type status_event = [`IsSelf] IAvatar.id option * IAvatar.t * IInstance.t
-
-  val on_update               : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel 
-  val on_upgrade_to_admin     : (status_event, unit O.run) Ohm.Sig.channel
-  val on_upgrade_to_member    : (status_event, unit O.run) Ohm.Sig.channel
-  val on_downgrade_to_member  : (status_event, unit O.run) Ohm.Sig.channel
-  val on_downgrade_to_contact : (status_event, unit O.run) Ohm.Sig.channel
-
-  val on_merge : (IAvatar.t * IAvatar.t, unit O.run) Ohm.Sig.channel 
-
+  val on_update     : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel 
   val on_obliterate : (IAvatar.t * IInstance.t, unit O.run) Ohm.Sig.channel
 
   (* Used when performing a global refresh on all avatars *)
@@ -22,14 +13,16 @@ module Signals : sig
 
 end
 
-module Pending : sig
+module Notify : sig
 
-  val get_latest_confirmed :
-       count:int
-    -> ?start:(float * IAvatar.t)
-    -> [`IsAdmin] IInstance.id
-    -> ((IAvatar.t * float) list * (float * IAvatar.t) option) O.run
-    
+  type t = 
+    [ `UpgradeToAdmin  of IUser.t * IInstance.t * IAvatar.t
+    | `UpgradeToMember of IUser.t * IInstance.t * IAvatar.t
+    ]
+
+  val define : 
+    ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit  
+
 end
 
 type details = <
@@ -52,16 +45,10 @@ val get_instance : 'any IAvatar.id -> IInstance.t option O.run
 val upgrade_to_admin     :
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
-val downgrade_to_member  : 
-  ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
-
-val upgrade_to_member    :
+val change_to_member     : 
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
 val downgrade_to_contact : 
-  ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
-
-val change_to_member     : 
   ?from:[`IsSelf] IAvatar.id -> [`Bot] IAvatar.id -> unit O.run
 
 val become_contact : 'a IInstance.id -> 'b IUser.id -> IAvatar.t O.run
@@ -84,8 +71,6 @@ val status : 'a IInstance.id -> 'b ICurrentUser.id -> ( #Ohm.CouchDB.ctx, Status
 val profile : 'a IAvatar.id -> IProfile.t O.run
 
 val my_profile : [`IsSelf] IAvatar.id -> [`IsSelf] IProfile.id O.run
-
-val usage : [<`ViewContacts|`SeeUsage] IInstance.id -> int O.run
 
 val search : 
      [`ViewContacts] IInstance.id
@@ -125,19 +110,6 @@ val by_status :
   -> count:int
   -> Status.t 
   -> (IAvatar.t list * IAvatar.t option) O.run
-
-val is_admin : ?other_than:IInstance.t -> 'any IUser.id -> bool O.run
-
-module List : sig
-
-  val with_pictures : 
-      count:int
-    -> [`ViewContacts] IInstance.id
-    -> IAvatar.t list O.run
-
-  val all_members : [`Bot] IInstance.id -> IAvatar.t list O.run
-    
-end
 
 module Backdoor : sig
 

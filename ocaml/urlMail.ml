@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
@@ -12,8 +12,6 @@ let unsubscribe, def_unsubscribe = O.declare O.core "mail/unsubscribe"
 let post_unsubscribe, def_post_unsubscribe = O.declare O.core "mail/unsubscribe/post"
   (A.rro IUser.arg A.string IInstance.arg)
  
-let signupConfirm, def_signupConfirm = O.declare O.core "c"
-  (A.rr IUser.arg A.string)
+let link, def_link = O.declare O.core "mail" (A.rro IMail.arg A.string IMail.Action.arg) 
 
-let passReset, def_passReset = O.declare O.core "p"
-  (A.rr IUser.arg A.string)
+let track, def_track = O.declare O.core "white" (A.r IMail.arg) 

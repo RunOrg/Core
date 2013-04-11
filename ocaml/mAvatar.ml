@@ -11,8 +11,8 @@ module Common  = MAvatar_common
 module Unique  = MAvatar_unique
 module Status  = MAvatar_status
 module Signals = MAvatar_signals
-module Pending = MAvatar_pending
 module Details = MAvatar_details
+module Notify  = MAvatar_notify
 
 (* Data types & formats ------------------------------------------------------------------- *)
 
@@ -103,7 +103,7 @@ let exists aid =
   let! avatar = ohm $ Tbl.get aid in 
   return (avatar <> None)
 
-let _get ins usr = 
+let get_raw ins usr = 
   let! aid    = ohm $ Unique.get ins usr in 
   let! avatar = ohm $ Tbl.get aid in 
   return (aid, avatar) 
@@ -120,7 +120,7 @@ let actor aid =
 
 (* Status updates ------------------------------------------------------------------------- *)
 
-let _update_status status ins usr =
+let update_status status ins usr =
 
   let ins = IInstance.decay ins in
   let usr = IUser.decay usr in
@@ -131,7 +131,6 @@ let _update_status status ins usr =
     | None -> 
       let  newsta = status None in 
       let! data   = ohm $ self_data ins usr in
-      let! _      = ohm $ Pending.invite ~uid:usr ~iid:ins aid in
       return (true, `put (object
 	(* Definition *)
 	method t       = `Avatar
@@ -172,14 +171,14 @@ let _update_status status ins usr =
   
   return (aid, changed)
 				       
-let _update_avatar_status status ?ins avatar =
+let update_avatar_status status ?ins avatar =
 
   let avatar = IAvatar.decay avatar in
   let update obj = 
     let newsta = status (obj # sta) in
-    if obj # sta = newsta || ins <> None && Some (obj # ins) <> ins
+    if obj # sta = newsta || ins <> None && Some (obj # who, obj # ins) <> ins
     then None, `keep 
-    else Some (obj # ins), `put (object	
+    else Some (obj # who, obj # ins), `put (object	
       (* Definition *)
       method t       = `Avatar
       method who     = obj # who
@@ -201,26 +200,33 @@ let _update_avatar_status status ?ins avatar =
   in
   let! () = ohm begin 
     match result with 
-      | None     -> return ()
-      | Some iid -> Signals.on_update_call (avatar, iid)
+      | None         -> return ()
+      | Some (_,iid) -> Signals.on_update_call (avatar, iid)
   end in
   return result
 
+let upgrade how avatar = 
+  let! _ = ohm (update_avatar_status how avatar) in
+  return () 
+
 let eventful_upgrade how signal ?from avatar =
-  let! iid = ohm_req_or (return ()) $ _update_avatar_status how avatar in
-  signal (from, IAvatar.decay avatar, iid)
+  let! uid, iid = ohm_req_or (return ()) $ update_avatar_status how avatar in
+  match from with None -> return () | Some from ->
+    let from = IAvatar.decay from in 
+    if from = IAvatar.decay avatar then return () else 
+      signal ~uid ~iid ~from
 
-let upgrade_to_admin = eventful_upgrade
-  (fun _ -> `Admin) Signals.on_upgrade_to_admin_call
+let upgrade_to_admin ?from aid = 
+  eventful_upgrade (fun _ -> `Admin) Notify.upgrade_to_admin ?from aid 
+      
+let upgrade_to_member ?from aid = 
+  eventful_upgrade (function `Admin -> `Admin | _ -> `Token) Notify.upgrade_to_member ?from aid 
 
-let upgrade_to_member = eventful_upgrade 
-  (function `Admin -> `Admin | _ -> `Token) Signals.on_upgrade_to_member_call
+let downgrade_to_contact ?from aid = 
+  upgrade (fun _ -> `Contact) aid  
 
-let downgrade_to_contact = eventful_upgrade
-  (fun _ -> `Contact) Signals.on_downgrade_to_contact_call
-
-let downgrade_to_member = eventful_upgrade 
-  (function `Contact -> `Contact | _ -> `Token) Signals.on_downgrade_to_member_call
+let downgrade_to_member ?from aid = 
+  upgrade (function `Contact -> `Contact | _ -> `Token) aid
 
 let change_to_member ?from avatar = 
   let! current = ohm_req_or (return ()) $ Tbl.get (IAvatar.decay avatar) in
@@ -231,7 +237,7 @@ let change_to_member ?from avatar =
 
 let become_contact instance user = 
   let! id, _ = ohm $
-    _update_status (function 
+    update_status (function 
       | Some `Admin -> `Admin
       | Some `Token -> `Token
       | _ -> `Contact) instance user 
@@ -239,7 +245,7 @@ let become_contact instance user =
   return id
 
 let become_admin instance user =
-  let! id, _ = ohm $ _update_status (fun _ -> `Admin) instance user in
+  let! id, _ = ohm $ update_status (fun _ -> `Admin) instance user in
   return id
 
 (* Identify an user for an instance ------------------------------------------------------- *)
@@ -247,16 +253,16 @@ let become_admin instance user =
 let status iid cuid = 
   let  uid = IUser.Deduce.is_anyone cuid in
   let  iid = IInstance.decay iid in 
-  let! aid, avatar = ohm $ _get iid uid in
+  let! aid, avatar = ohm $ get_raw iid uid in
   return $ BatOption.default `Contact (BatOption.map (#sta) avatar)
 
 let identify iid cuid = 
-  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.Deduce.is_anyone cuid) in
+  let! aid, avatar = ohm $ get_raw (IInstance.decay iid) (IUser.Deduce.is_anyone cuid) in
   let! avatar = req_or (return None) avatar in 
   return $ Some (actor_of_avatar aid avatar)
 
 let find iid uid = 
-  let! aid, avatar = ohm $ _get (IInstance.decay iid) (IUser.decay uid) in
+  let! aid, avatar = ohm $ get_raw (IInstance.decay iid) (IUser.decay uid) in
   if avatar = None then return None else return (Some aid) 
 
 let profile aid = 
@@ -269,24 +275,6 @@ let my_profile aid =
   let! pid = ohm $ profile aid in 
   (* Acting as self *)
   return (IProfile.Assert.is_self pid)
-
-(* Count members with a token ------------------------------------------------------------- *)
-
-module CountMembersView = CouchDB.ReduceView(struct
-  module Key = IInstance
-  module Value = Fmt.Int
-  module Reduced = Fmt.Int
-  module Design = Design
-  let name   = "usage" 
-  let map    = "if (doc.t == 'avtr' && (doc.sta == 'mbr' || doc.sta == 'own')) emit(doc.ins,1)" 
-  let reduce = "return sum(values)"
-  let level  = None
-  let group  = true
-end)
-
-let usage iid =
-  let iid = IInstance.decay iid in 
-  CountMembersView.reduce iid |> Run.map (BatOption.default 0)
 
 (* List all members of an instance -------------------------------------------------------- *)
 
@@ -485,12 +473,6 @@ let user_instances ?status ?count usr =
       IInstance.Assert.is_contact ins
     end avatars
 
-let is_admin ?other_than uid = 
-  let  count = if other_than = None then 2 else 1 in
-  let! list  = ohm $ user_instances ~status:`Admin ~count uid in 
-  let  iids  = List.map (snd |- IInstance.decay) list in 
-  return $ List.exists (fun iid -> other_than <> Some iid) iids
-
 let user_avatars uid = 
 
   let  uid = IUser.decay uid in 
@@ -622,7 +604,6 @@ let avatars_of_user uid =
   return $ List.map (#id |- IAvatar.of_id) list
 
 let obliterate aid = 
-  let! () = ohm $ Pending.obliterate aid in 
   let! avatar = ohm_req_or (return ()) $ Tbl.get aid in 
   let! () = ohm $ Signals.on_obliterate_call (aid, avatar # ins) in 
   Tbl.delete aid 
@@ -637,25 +618,6 @@ let obliterate_for_user_later =
 
 let _ =
   Sig.listen MUser.Signals.on_obliterate obliterate_for_user
-
-(* Propagate avatar merge signal. --------------------------------------------------------- *)
-
-let avatar_instances_of_user uid = 
-  let! list = ohm $ ByUserView.query ~startkey:(uid,`Contact) ~endkey:(uid,`Admin) () in
-  return $ List.map (fun item -> IAvatar.of_id item # id, item # value) list 
-
-let _ = 
-  let on_user_merge (merged_uid, into_uid) = 
-    let! merged_avatars = ohm $ avatar_instances_of_user merged_uid in
-    let! () = ohm $ Run.list_iter begin fun (merged_aid,iid) ->
-      let! into_aid   = ohm $ become_contact iid into_uid in 
-      let! ()         = ohm $ Signals.on_merge_call (merged_aid, into_aid) in
-      return () 
-    end merged_avatars in
-    let! _ = ohm $ obliterate_for_user_later merged_uid in
-    return ()
-  in
-  Sig.listen MUser.Signals.on_merge on_user_merge
 
 (* Final submodules ----------------------------------------------------------------------- *)
 
@@ -727,4 +689,3 @@ module Backdoor = struct
  
 end
 
-module List    = MAvatar_list
