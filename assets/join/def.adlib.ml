@@ -46,3 +46,15 @@
 | `Join_PublicConfirmed_Description
 | `Join_PublicConfirmed_Confirmed 
 
+| `Join_Pending_Notify_Web of
+    [ `Body of [`Group|`Event] * Ohm.AdLib.gender
+    | `Accept
+    | `Decline ]
+
+| `Join_Pending_Notify_Mail of 
+    [ `Title of string
+    | `Action of [`Group|`Event]
+    | `Body
+    | `Accept
+    | `Decline
+    | `Detail ]

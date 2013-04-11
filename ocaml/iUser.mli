@@ -23,11 +23,6 @@ module Deduce : sig
 							| `New of [`New] ICurrentUser.id 
 							] 
 
-  (* Removing an user. *)
-
-  val make_unsub_token : [`IsSelf] id -> string
-  val from_unsub_token : string -> 'any id -> [`Unsubscribe] id option
-
   (* The confirmation sequence. *)
 
   val make_confirm_token   : [`New] ICurrentUser.id -> string
@@ -52,4 +47,6 @@ module Deduce : sig
 
   val view      : [<`Bot|`IsSelf|`Edit] id -> [`View] id
   val view_inst : [<`Bot|`IsSelf|`Edit] id -> [`ViewInstances] id
+  val unsubscribe : [`IsSelf] id -> [`Unsubscribe] id
+
 end

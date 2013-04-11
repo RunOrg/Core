@@ -20,9 +20,5 @@
 | `Login_PopConfirmReset_Outro
 | `Login_PopReset_Intro
 | `Login_PopReset_Outro
-| `Login_ResetResend_Title
-| `Login_ResetResend_Prelude
-| `Login_ResetResend_Body 
-| `Login_ResetResend_Sorry 
 | `Login_RunOrg_Passport
 | `Login_RunOrg_Passport_Info
