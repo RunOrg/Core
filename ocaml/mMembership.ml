@@ -19,6 +19,7 @@ module Field     = MMembership_field
 module Grant     = MMembership_grant
 module Mass      = MMembership_mass
 module Signals   = MMembership_signals
+module Notify    = MMembership_notify
 
 include MMembership_extract
 
