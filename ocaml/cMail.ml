@@ -5,7 +5,6 @@ open Ohm.Universal
 open BatPervasives
 
 module Resend      = CMail_resend
-module Wrap        = CMail_wrap
 module Unsubscribe = CMail_unsubscribe
 module Footer      = CMail_footer
 module Track       = CMail_track 
