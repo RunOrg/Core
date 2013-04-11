@@ -98,7 +98,9 @@ end
 
 module Compose : sig
   val setRenderer : 
-    (    owid:IWhite.t option 
+    (    mid:IMail.t
+      -> uid:[`IsSelf] IUser.id
+      -> owid:IWhite.t option 
       -> block:bool option 
       -> subject:O.i18n
       -> payload:VMailBrick.payload

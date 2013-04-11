@@ -53,13 +53,13 @@ let setRenderer f =
 
 let () = O.async # periodic 1 begin 
   let! result = ohm $ one begin fun mid t ->	  
-    let! _ = ohm $ Send.send t.Core.Data.uid begin fun self user send ->
+    let! _ = ohm $ Send.send t.Core.Data.uid begin fun uid u send ->
 
       let  rotten = Core.rot mid in
-      let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail self user mid t)) in
+      let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail uid u mid t)) in
 
       let! subject, payload, body, buttons = ohm (full # mail) in
-      let  owid   = user # white in
+      let  owid   = u # white in
       let  iid    = full # info # iid in
       let  from   = full # info # from in
 
@@ -68,8 +68,13 @@ let () = O.async # periodic 1 begin
       match !render with 
       | None -> assert false
       | Some render -> 
-	let! result = ohm (render ~owid ~block ~subject ~payload ~body ~buttons ?iid ?from ()) in	
-	send ~owid ~subject:(result # subject) ~text:(result # text) ~html:(result # html) ()
+	let! result = ohm (render ~mid ~uid ~owid ~block ~subject ~payload ~body ~buttons ?iid ?from ()) in	
+	send 
+	  ?from:(result # from) 
+	  ~owid 
+	  ~subject:(result # subject) 
+	  ~text:(result # text) 
+	  ~html:(result # html) ()
 
     end in 
     return () 
