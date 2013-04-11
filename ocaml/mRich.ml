@@ -570,7 +570,7 @@ module OrText = struct
 
   let re_url = 
     let up  = "[-&~?./_#a-zA-Z0-9;=+%]" in
-    let url = "\\(https://"^up^"+|www\\)[.]"^up^"+/"^up^"*" in
+    let url = "\\(https?://"^up^"+\\|www\\)[.]"^up^"+/"^up^"*" in
     Str.regexp url 
 
   let enrich str = 

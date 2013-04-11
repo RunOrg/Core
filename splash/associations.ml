@@ -195,6 +195,11 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	Catalog.associations_judo_desc_b ;
 ];
 
+  page "associations/Tennis" "RunOrg Associations - Tennis "
+    [ Catalog.associations_tennis_title ;
+	Catalog.associations_tennis_desc_a ;
+];
+
   page "associations/Badminton" "RunOrg Associations - Badminton "
     [ Catalog.associations_badminton_title ;
 	Catalog.associations_badminton_desc_a ;
@@ -275,7 +280,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 
 	offer 
 	~title: "Assistance téléphonique"
-	~price: "40€/mois"
+	~price: "50€/mois"
 	"Si vous recherchez la tranquilité : c'est ce service qu'il faut souscrire ! Si vous avez des questions ou que vous souhaitez des conseils pour utiliser au mieux votre outil : on en parle directement au téléphone. Dans le cadre de ce service, nous pouvons prendre la main dans votre espace pour vous aider à réaliser certaines opérations."
 	[ "Envoyez-nous un message : nous vous rappelons" ;
 	  "Support téléphonique en moins de 24h (jours ouvrés)";
@@ -358,7 +363,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	;
 
 	option_offer  ~before:"" ~link:("/associations/services","En savoir plus...") 
-	  "40" "HT par mois" "Assistance téléphonique"
+	  "50" "HT par mois" "Assistance téléphonique"
 	  "Ne cherchez plus : demandez ! 1h d'assistance téléphonique pour vous dépanner ou vous conseiller chaque mois."
 	;
 

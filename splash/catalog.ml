@@ -408,7 +408,28 @@ let associations_federations_desc_c =
 	   [ "Utiliser l’outil uniquement pour votre structure fédérale" ;
 	     "Utiliser l’outil pour votre structure fédérale et l’ouvrir à vos clubs et associations affiliés" ;
 	     "Recommander la solution préconfigurée RunOrg à vos clubs et associations" ;
-	     "Créer un espace commun pour votre fédération et tous les clubs et associations affiliés" ] 	)  
+	     "Créer un espace commun pour votre fédération et tous les clubs et associations affiliés" ] 	) 
+
+(* NEW ITEM------------------- *)
+let associations_tennis_title =
+	composite `LR
+	(pride ~title:"Clubs de Tennis" "Solution loisir et compétition élaborée avec des clubs de tennis")
+	(create "Tennis")
+let associations_tennis_desc_a =
+    composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/",
+		       "")
+	   "/public/img/preconf_tennis.jpg")
+	(features [ 
+	  "Point fort",
+	  "Gestion du loisir et du haut niveau" ;
+
+	  "Modèles et groupes inclus",
+	  "Formulaire d'inscription personnalisé pour le tennis, groupes pour le loisir, la compétition et les entraîneurs ";	
+	  
+	  "Egalement pensé pour...",
+	  "La gestions des cours enfants et adultes, et la fidélisation des adhérents"	])  
 
 (* -------------------- COLLECTIVITES ------------------- *)
 (* NEW ITEM------------------- *)
@@ -772,6 +793,13 @@ let pages = [
       hr () ;
      default_price_asso ;
     ] ;
+
+  page "/clubs-sports/Tennis" "RunOrg Clubs - Tennis "
+    [ associations_tennis_title ;
+	associations_tennis_desc_a ;
+      hr () ;
+      default_price_asso ;
+    ] ;	
 
   page "/clubs-sports/Badminton" "RunOrg Clubs - Badminton "
     [ associations_badminton_title ;
