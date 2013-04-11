@@ -45,3 +45,22 @@
 
 | `Join_PublicConfirmed_Description -> "Votre demande d'inscription à cet espace a été acceptée."
 | `Join_PublicConfirmed_Confirmed -> "Accéder à l'espace membres"
+
+| `Join_Pending_Notify_Web what -> begin 
+  match what with 
+  | `Body (`Group,gender) -> "souhaite rejoindre le groupe" 
+  | `Body (`Event,gender) -> "souhaite participer à"
+  | `Accept -> "Accepter l'inscription"
+  | `Decline -> "Refuser"
+end 
+
+| `Join_Pending_Notify_Mail what -> begin 
+  match what with 
+  | `Title name -> "[Inscription] " ^ name
+  | `Action `Group -> "souhaite rejoindre le groupe :"
+  | `Action `Event -> "souhaite participer à :"
+  | `Body -> "Vous pouvez décider d'accepter ou de refuser cette demande."
+  | `Accept -> "Accepter"
+  | `Decline -> "Refuser"
+  | `Detail -> "Voir détails"
+end 

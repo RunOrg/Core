@@ -8,7 +8,6 @@ module Website   = CWebsite_admin
 module About     = CWebsite_about
 module Article   = CWebsite_article
 module Left      = CWebsite_left
-module Subscribe = CWebsite_subscribe
 module Calendar  = CWebsite_calendar
 
 let page actions content = 

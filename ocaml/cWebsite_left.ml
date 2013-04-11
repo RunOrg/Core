@@ -4,8 +4,6 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Subscribe = CWebsite_subscribe
-
 let render ?(calendar=true) cuid key iid = 
 
   let! calendar = ohm begin 
@@ -46,6 +44,4 @@ let render ?(calendar=true) cuid key iid =
 
   end in 
 
-  let! subscribe = ohm $ Subscribe.render cuid key iid in
-
-  return ( Html.concat [ calendar ; subscribe ] )
+  return calendar

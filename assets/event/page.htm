@@ -58,12 +58,14 @@
     </div>
     {/?}
     
-    <div class="entity-info">
-      
+    <div class="entity-info">     
+
       <div class="-main">
-	{?desc}<p>{this}</p>{else}
+	<div {$s}>
+	{?desc}{this|verbatim}{else}
   	  <div class="empty-text">{`Event_Desc_Empty}</div>
 	{/?}
+	</div>
       </div>
       
       <div class="-side">
@@ -89,9 +91,23 @@
       
       <div class="actions">
 	<li class="-r">
-	  <a href="{details}" class="action-button">{`Event_More_Details}</a>
+	  <a {$more} href="javascript:void(0)" class="action-button">{`Event_More_Details}</a>
 	</li>
       </div>
+
+      <script type="">
+$s = here.$s
+$m = here.$more
+h1 = $s.innerHeight()
+h2 = $s.addClass("-focus").innerHeight()
+$s.removeClass("-focus")
+if h1 >= h2
+  $m.remove()
+  $s.addClass("-enough")
+else
+  $m.click () ->
+    $s.toggleClass("-focus")
+      </script>
       
     </div>
     
@@ -268,25 +284,47 @@
 }
 
 .entity-info {
-  font-size: 13px;
-  overflow: hidden;
+  font-size: 13px;  
   position: relative;
-  min-height: 96px;
+  height: 96px;
   margin-right: 6px;
   background-color: #EEE;
 
   .-main {
     float: left;
     width: 360px;
-    margin: 0 12px;
+    margin: 0;
   
-    p { margin: 12px 0; }
+    > div {
+      height: 70px;
+      margin: 5px 5px 11px 5px;
+      padding: 6px 6px 0 6px;
+      overflow: hidden;
+      border: 1px solid #EEE;
+      border-bottom-color: #CCC;
+      &.-enough { border-bottom-color: #EEE }
+      &.-focus {
+        border-color: #AAAAAA;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+        height: auto;
+        padding-bottom: 5px;
+        position: absolute;
+        width: 336px;
+        z-index: 10;
+        background-color: white; 
+      }
+    }
+
+    p, ul { margin: 0; }
+    * + p, * + ul { margin-top: 8px; }
   }
 
   .-side {
     overflow: hidden;
     margin: 12px;
     font-size: 12px;
+    float: right; 
+    width: 320px;
   }
 
   dl {

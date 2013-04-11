@@ -1,0 +1,18 @@
+<tr>
+  <td style="background:#FFF;border-bottom:1px solid #CCC" align=left>
+    <table cellspacing=0 cellpadding=0 width="100%">      
+      <tr>
+	{?pic}
+	<td style="width:50px;height:50px;padding:16px 0 16px 16px;background:#EEE" valign=top>
+	  <img src="{this}" width=50 height=50>
+	</td>
+	{/?}
+	<td style="padding:16px;background:#EEE" valign=top>
+	  <strong style="color:#558">{name}</strong>&ensp;
+	  <span style="color:#555">{action|Ohm.AdLib.write|ohm}</span>	  
+	  {=detail}{html|verbatim}{/=}
+	</td>
+      </tr>      
+    </table>
+  </td>
+</tr>

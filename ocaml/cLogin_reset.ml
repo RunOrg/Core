@@ -1,49 +1,36 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module ConfirmArgs = Fmt.Make(struct
-  type json t = <
-    instance : IInstance.t option ;
-    user     : IUser.t 
-  >
+module Mail = MMail.Register(struct
+  include (IUser : Ohm.Fmt.FMT with type t = IUser.t)
+  let id = IMail.Plugin.of_string "password-reset"
+  let iid _ = None
+  let uid = identity 
+  let from _ = None
+  let solve _ = None
+  let item _ = false
 end)
+			       
+let () = Mail.define begin fun uid u _ info -> 
+  return (Some (object
+    method item = None
+    method act _ = return (Action.url UrlMe.Account.pass (u # white) ())
+    method mail = let title = `Mail_PassReset_Title in
 
-let send = 
-  let task = O.async # define "login-reset" ConfirmArgs.fmt 
-    begin fun arg -> 
-
-      (* Clicking the link will confirm the account *)
-      let cuid  = IUser.Assert.is_old (arg # user) in
-      let token = IUser.Deduce.make_old_session_token cuid in
-
-      let! _ = ohm $ MMail.other_send_to_self (arg # user) 
-	begin fun self user send -> 
-
-	  let  url = Action.url UrlMail.passReset (user # white) (arg # user, token) in
-	  
-	  let  body = Asset_Mail_PassReset.render (object
-	    method url   = url 
-	    method name  = user # fullname
-	    method email = user # email
-	  end) in
-	  
-	  let! from, html = ohm $ CMail.Wrap.render ?iid:(arg # instance) (user # white) self body in
-	  let  subject = AdLib.get `Mail_PassReset_Title in
- 
-	  send ~owid:(user # white) ~from ~subject ~html
-
-	end in
-
-      return () 
-
-    end in
-  fun ~iid ~(uid:IUser.t) -> task (object
-    method instance = iid
-    method user     = uid
-  end)
+		  let body  = [
+		    [ `Mail_PassReset_Intro (u # fullname) ] ;
+		    [ `Mail_PassReset_Explanation (u # email) ] ; 
+		  ] in
+		  
+		  let buttons = [ VMailBrick.green `Mail_PassReset_Button
+				    (CMail.link (info # id) None (u # white)) ] in
+		  
+		  return (title,`None,body,buttons)
+  end))
+end 
 
 let template = 
   OhmForm.Skin.text
@@ -104,9 +91,8 @@ let () = UrlLogin.def_post_lost
     in
 
     let! uid = ohm_req_or fail $ MUser.by_email email in
-    let  iid = UrlLogin.instance_of (req # args) in
     
-    let! ()  = ohm $ send ~iid ~uid  in
+    let! ()  = ohm $ Mail.send_one uid in
 
     let! html = ohm $ 
       Asset_Dialog_Dialog.render (object
@@ -122,37 +108,3 @@ let () = UrlLogin.def_post_lost
       
   end 
 
-let () = UrlMail.def_passReset begin fun req res -> 
-
-  let expired uid = 
-    
-    let! () = ohm $ send None uid in 
-    
-    let html = Asset_Login_ResetResend.render (object
-      method navbar = (req # server,None,None)
-      method title  = AdLib.get `Login_ResetResend_Title
-    end) in
-
-    CPageLayout.core (req # server) `Login_ResetResend_Title html res
-
-  in
-
-  let uid, proof = req # args in 
-  
-  let! cuid = req_or (expired uid) 
-    (match IUser.Deduce.from_session_token proof uid with `Old cuid -> Some cuid | _ -> None) 
-  in
-
-  let! () = ohm $ MAdminLog.log 
-    ~uid
-    MAdminLog.Payload.LoginWithReset
-  in
-
-  let  url  = Action.url UrlMe.Account.pass (req # server) () in
-  
-  let! () = ohm $ MNews.Cache.prepare uid in
-  let! () = ohm $ TrackLog.(log (IsUser (IUser.decay uid))) in
-
-  return $ CSession.start (`Old cuid) (Action.redirect url res)
-
-end

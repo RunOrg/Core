@@ -8,7 +8,7 @@ open CGroups_admin_common
 
 let delegator group access = object (self)
   method get = MGroup.Get.admins group
-  method set aids = MGroup.Set.admins (aids @ self # get) group (access # actor) 
+  method set aids = MGroup.Set.admins aids group (access # actor) 
 end
 
 let () = define UrlClient.Members.def_delpick begin fun parents group access ->
