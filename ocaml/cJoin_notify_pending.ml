@@ -136,8 +136,7 @@ let () = MMembership.Notify.Pending.define begin fun uid u t info ->
 		    VMailBrick.grey  (`Join_Pending_Notify_Mail `Detail)  (url None) ;
 		  ] in
 		  
-		  let  footer = CMail.Footer.instance (info # id) uid (access # instance) in 
-		  VMailBrick.render title payload body buttons footer
+		  return (title,payload,body,buttons)
 		  
   end))
 

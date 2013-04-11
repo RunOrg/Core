@@ -100,8 +100,7 @@ let () = MMembership.Notify.Invited.define begin fun uid u t info ->
 		    VMailBrick.grey  (`Event_Invite_Notify_Mail `Detail)  (url None) ;
 		  ] in
 		  
-		  let  footer = CMail.Footer.instance (info # id) uid (access # instance) in 
-		  VMailBrick.render title payload body buttons footer
+		  return (title,payload,body,buttons)
 		  
   end))
 

@@ -33,9 +33,10 @@ type payload =
   | `Action of action ]
 
 type result = <
-  title : string ; 
+  subject : string ; 
   html : Ohm.Html.writer ;
-  text : string
+  text : string ;
+  from : string option ; 
 >
 
 type body = O.i18n list list
@@ -49,7 +50,7 @@ type button = <
 val grey : O.i18n -> string -> button
 val green : O.i18n -> string -> button 
 
-val render : O.i18n -> payload -> body -> button list -> footer -> (#O.ctx,result) Ohm.Run.t
+val render : ?from:string -> O.i18n -> payload -> body -> button list -> footer -> (#O.ctx,result) Ohm.Run.t
 
 val boxProfile : 
      ?img:string

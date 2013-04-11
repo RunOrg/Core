@@ -154,9 +154,10 @@ type button = <
 >
 
 type result = <
-  title : string ; 
-  html  : Ohm.Html.writer ;
-  text  : string
+  subject : string ; 
+  html    : Ohm.Html.writer ;
+  text    : string ;
+  from    : string option ; 
 >
 
 module Body = struct
@@ -202,7 +203,7 @@ let grey label url = object
   method label = label
 end
 
-let render (title:O.i18n) (payload:payload) (body:body) (buttons:button list) (footer:footer) = 
+let render ?from title (payload:payload) (body:body) (buttons:button list) (footer:footer) = 
   let! payload = ohm (Payload.render payload) in
   let! body = ohm (Body.render body buttons) in
   let! footer = ohm (Footer.render footer) in
@@ -214,7 +215,12 @@ let render (title:O.i18n) (payload:payload) (body:body) (buttons:button list) (f
     method body = body # html
     method footer = footer # html
   end)) in
-  return (object method title = title method text = text method html = html end)
+  return (object 
+    method from = from 
+    method subject = title 
+    method text = text 
+    method html = html 
+  end)
 
 let boxProfile ?img ~detail ~name url =
   let  _, summary = MRich.OrText.summary detail in 

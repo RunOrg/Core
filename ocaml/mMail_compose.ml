@@ -46,16 +46,30 @@ let one f =
 
 let delay = 10.0 (* seconds *)
 
+(* Renderer function, provided from the outside. *) 
+let render = ref None
+let setRenderer f = 
+  render := Some f
+
 let () = O.async # periodic 1 begin 
   let! result = ohm $ one begin fun mid t ->	  
     let! _ = ohm $ Send.send t.Core.Data.uid begin fun self user send ->
 
       let  rotten = Core.rot mid in
       let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail self user mid t)) in
-      let! result = ohm (full # mail) in
-      let  owid = user # white in
 
-      send ~owid ~subject:(result # title) ~text:(result # text) ~html:(result # html) ()
+      let! subject, payload, body, buttons = ohm (full # mail) in
+      let  owid   = user # white in
+      let  iid    = full # info # iid in
+      let  from   = full # info # from in
+
+      let  block  = None in 
+
+      match !render with 
+      | None -> assert false
+      | Some render -> 
+	let! result = ohm (render ~owid ~block ~subject ~payload ~body ~buttons ?iid ?from ()) in	
+	send ~owid ~subject:(result # subject) ~text:(result # text) ~html:(result # html) ()
 
     end in 
     return () 

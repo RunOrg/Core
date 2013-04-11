@@ -1,7 +1,6 @@
 (* © 2013 RunOrg *) 
 
 module Send : sig 
-
   val send :
        'a IUser.id 
     -> (    [ `IsSelf ] IUser.id
@@ -15,24 +14,11 @@ module Send : sig
               -> unit O.run )
          -> unit O.run )
      -> unit O.run
-
-  val other_send_to_self :
-       'a IUser.id 
-    -> (    [ `IsSelf ] IUser.id
-         -> MUser.t
-         -> (    owid:IWhite.t option
-  	      -> from:string option 
-              -> subject:string O.run
-              -> html:Ohm.Html.writer O.run
-              -> unit O.run )
-         -> unit O.run )
-    -> bool O.run
-
 end
 
 module Types : sig
 
-  type render_mail = VMailBrick.result O.run       
+  type render_mail = (O.i18n * VMailBrick.payload * VMailBrick.body * VMailBrick.button list) O.run       
   type act         = IMail.Action.t option -> string O.run       
   type render_item = IWhite.t option -> Ohm.Html.writer O.run 
 
@@ -109,6 +95,21 @@ module Register : functor(P:PLUGIN) -> sig
   val define : ([`IsSelf] IUser.id -> MUser.t -> t -> Types.info -> Types.render option O.run) -> unit
 
 end 
+
+module Compose : sig
+  val setRenderer : 
+    (    owid:IWhite.t option 
+      -> block:bool option 
+      -> subject:O.i18n
+      -> payload:VMailBrick.payload
+      -> body:VMailBrick.body
+      -> buttons:VMailBrick.button list
+      -> ?iid:IInstance.t
+      -> ?from:IAvatar.t
+      -> unit
+      -> VMailBrick.result O.run)
+    -> unit
+end
 
 module All : sig
 

@@ -25,11 +25,10 @@ let () = Mail.define begin fun uid u _ info ->
 		    [ `Mail_PassReset_Explanation (u # email) ] ; 
 		  ] in
 		  
-		  let button = [ VMailBrick.green `Mail_PassReset_Button
-				   (CMail.link (info # id) None (u # white)) ] in
+		  let buttons = [ VMailBrick.green `Mail_PassReset_Button
+				    (CMail.link (info # id) None (u # white)) ] in
 		  
-		  let footer = CMail.Footer.core (info # id) uid (u # white) in
-		  VMailBrick.render title `None body button footer
+		  return (title,`None,body,buttons)
   end))
 end 
 

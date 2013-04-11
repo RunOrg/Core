@@ -39,12 +39,11 @@ let () = Mail.define begin fun uid u t info ->
 		    [ `Mail_Unsubscribe_Thanks ] ; 
 		  ] in
 		  
-		  let button = [ VMailBrick.grey `Mail_Unsubscribe_Button 
-				   (Action.url UrlMail.link (u # white) 
-				      (info # id, MMail.get_token info # id, None)) ] in
+		  let buttons = [ VMailBrick.grey `Mail_Unsubscribe_Button 
+				    (Action.url UrlMail.link (u # white) 
+				       (info # id, MMail.get_token info # id, None)) ] in
 		  
-		  let footer = Footer.core (info # id) uid (u # white) in
-		  VMailBrick.render title `None body button footer
+		  return (title,`None,body,buttons)
 
   end))
 end 

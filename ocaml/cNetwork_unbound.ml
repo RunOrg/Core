@@ -28,11 +28,10 @@ let () = Mail.define begin fun uid u t info ->
 		    [ `Network_Notify_CanInstall_Explanation (instance # name) ] ; 
 		  ] in
 		  
-		  let button = [ VMailBrick.green `Network_Notify_CanInstall_Button
-				   (CMail.link (info # id) None owid) ] in
+		  let buttons = [ VMailBrick.green `Network_Notify_CanInstall_Button
+				    (CMail.link (info # id) None owid) ] in
 		  
-		  let footer = CMail.Footer.core (info # id) uid owid in
-		  VMailBrick.render title `None body button footer
+		  return (title,`None,body,buttons) 
 
   end))
 end

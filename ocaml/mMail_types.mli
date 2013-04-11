@@ -1,6 +1,6 @@
 (* © 2013 RunOrg *) 
 
-type render_mail = VMailBrick.result O.run       
+type render_mail = (O.i18n * VMailBrick.payload * VMailBrick.body * VMailBrick.button list) O.run       
 type act         = IMail.Action.t option -> string O.run       
 type render_item = IWhite.t option -> Ohm.Html.writer O.run 
       

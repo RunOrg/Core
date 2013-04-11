@@ -33,7 +33,7 @@ let task = O.async # define "resend-mail" ResendArgs.fmt
 
       let! m = ohm (VMailBrick.render `Notify_Resend_Title `None body button footer) in
 
-      send ~owid:(user # white) ~subject:(m # title) ~text:(m # text) ~html:(m # html) ()
+      send ~owid:(user # white) ~subject:(m # subject) ~text:(m # text) ~html:(m # html) ()
 	
     end 
 

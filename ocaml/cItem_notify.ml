@@ -60,12 +60,10 @@ let () = MItem.Notify.Email.define begin fun uid u t info ->
 		    [ `Item_Notify_Body2 ]
 		  ] in
 
-		  let button = [ VMailBrick.green `Item_Notify_Button url ] in
+		  let buttons = [ VMailBrick.green `Item_Notify_Button url ] in
 		  
-		  let footer = CMail.Footer.instance (info # id) uid (access # instance) in
-		  VMailBrick.render title payload body button footer
+		  return (title,payload,body,buttons)
 		  
-
     method act _ = return url
 
     method item = None
@@ -105,10 +103,9 @@ let () = MItem.Notify.Comment.define begin fun uid u t info ->
 		    [ `Comment_Notify_Body2 ]
 		  ] in
 
-		  let button = [ VMailBrick.green `Comment_Notify_Button url ] in
+		  let buttons = [ VMailBrick.green `Comment_Notify_Button url ] in
 		  
-		  let footer = CMail.Footer.instance (info # id) uid (access # instance) in
-		  VMailBrick.render title payload body button footer
+		  return (title,payload,body,buttons)
 		  
 
     method act _ = return url
