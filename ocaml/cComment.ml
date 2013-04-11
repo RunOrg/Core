@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -27,7 +27,7 @@ let render comment =
 
   Asset_Comment_Single.render (object
     method author = author
-    method body   = comment # what
+    method body   = `Text comment # what
     method time   = (comment # time, now) 
     method like   = None
     method remove = None

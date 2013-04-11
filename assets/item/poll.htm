@@ -1,4 +1,4 @@
-<div class="-message">{ body | VText.format }</div>
+<div class="-message">{ body | MRich.OrText.to_html }</div>
 <div class="poll">
   <form {$f} >
     {#questions}

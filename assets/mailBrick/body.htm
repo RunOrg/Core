@@ -1,0 +1,22 @@
+<tr>
+  <td style="background:#FFF" align=left>    
+    {#body}
+      <p style="margin:16px 32px 16px 16px">
+        {#this}{this} {/#}
+      </p>
+    {/#}
+    <table cellspacing=0 cellpadding=0 width="100%" style="margin:16px 0">
+      <tr>
+	<td align=right style="padding:0 32px">
+	  {#buttons}
+  	    {if green}
+	      <a style="display:inline-block;background:#2A2;color:#FFF;text-shadow:0 -1px 0 #080;font-weight:bold;text-decoration:none;border:1px solid #080;border-radius:3px;padding:4px 8px" href="{url}">{label}</a>
+	    {else}
+	      <a style="display:inline-block;background:#AAA;color:#FFF;text-shadow:0 -1px 0 #888;font-weight:bold;text-decoration:none;border:1px solid #888;border-radius:3px;padding:4px 8px" href="{url}">{label}</a>
+	    {/if}
+	  {/#}
+	</td>
+      </tr>
+    </table>  
+  </td>
+</tr>

@@ -22,9 +22,5 @@
 | `Login_PopConfirmReset_Outro
 | `Login_PopReset_Outro -> 
   "Cet email contient un lien qui vous permettra de vous connecter à votre compte et d'en changer le mot de passe."
-| `Login_ResetResend_Title -> "Lien invalide"
-| `Login_ResetResend_Prelude -> "Votre lien de changement de mot de passe n'est plus valable !"
-| `Login_ResetResend_Body -> "Pour des raisons de sécurité, tous les liens de connexion ont une date limite de validité de trois jours. Au-delà, ils ne sont plus utilisables."
-| `Login_ResetResend_Sorry -> "Nous vous avons envoyé un nouveau lien par mail."
 | `Login_RunOrg_Passport -> "Connectez-vous avec votre passeport RunOrg"
 | `Login_RunOrg_Passport_Info -> "Votre passeport vous permet de vous connecter aux espaces privés des associations, clubs et organisations dont vous êtes membre."

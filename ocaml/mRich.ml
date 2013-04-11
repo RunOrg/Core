@@ -4,10 +4,14 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+let summary_chars = 240
+let summary_lines = 4
+
 type doc = 
   [ `TEXT of string
   | `I of doc
   | `B of doc
+  | `A of string * doc 
   | `BR
   | `P of doc
   | `UL of doc list
@@ -21,8 +25,10 @@ module Rich = Fmt.Make(struct
 
   let rec inline_to_json = function 
     | `TEXT   s      -> Json.String s
-    | `B      inline -> Json.Object [ "b", Json.of_list inline_to_json inline ] 
-    | `I      inline -> Json.Object [ "i", Json.of_list inline_to_json inline ] 
+    | `B      inline -> Json.Object [ "b", Json.of_list inline_to_json inline ]
+    | `A (u,inline)  -> Json.Object [ "a", Json.of_list inline_to_json inline ;
+				      "href", Json.String u ]
+    | `I      inline -> Json.Object [ "i", Json.of_list inline_to_json inline ]
     | `P      inline -> Json.Object [ "p", Json.of_list inline_to_json inline ]
     | `INDENT inline -> Json.Object [ "d", Json.of_list inline_to_json inline ]
     | `UL     list   -> Json.Object [ "u", Json.of_list (Json.of_list inline_to_json) list ]
@@ -38,6 +44,9 @@ module Rich = Fmt.Make(struct
     | Json.Object [ "d", json ] -> `INDENT (Json.to_list json_to_inline json) 
     | Json.Object [ "u", json ] -> `UL (Json.to_list (Json.to_list json_to_inline) json) 
     | Json.Object [ "o", json ] -> `OL (Json.to_list (Json.to_list json_to_inline) json) 
+    | Json.Object [ "a", json ; "href", Json.String u ]
+    | Json.Object [ "href", Json.String u ; "a", json ] -> 
+      `A (u, Json.to_list json_to_inline json) 
     | _ -> raise (Json.Error "Incorrect format for MRich.t") 
 
   let json_of_t = Json.of_list inline_to_json
@@ -55,6 +64,10 @@ let to_html (doc:doc) html =
     | `TEXT   t -> Html.esc t html
     | `BR       -> Buffer.add_string b "<br/>" 
     | `B l      -> Buffer.add_string b "<b>" ; List.iter recprint l ; Buffer.add_string b "</b>"
+    | `A (u,l)  -> let u = if BatString.starts_with u "http" then u else "http://" ^ u in 
+		   Buffer.add_string b "<a href=\"" ;
+		   Html.esc u html ;
+		   Buffer.add_string b "\">" ; List.iter recprint l ; Buffer.add_string b "</a>"
     | `I l      -> Buffer.add_string b "<i>" ; List.iter recprint l ; Buffer.add_string b "</i>"
     | `P l      -> Buffer.add_string b "<p>" ; List.iter recprint l ; Buffer.add_string b "</p>"
     | `INDENT l -> Buffer.add_string b "<div style='margin-left: 40px'>" ;
@@ -81,6 +94,7 @@ let to_text (doc:doc) =
     | `TEXT t   -> Buffer.add_string b t 
     | `BR       -> Buffer.add_char b '\n'
     | `B l    
+    | `A (_,l)      
     | `I l      -> List.iter recprint l 
     | `P l 
     | `INDENT l -> Buffer.add_char b '\n' ; List.iter recprint l ; Buffer.add_char b '\n'
@@ -91,6 +105,55 @@ let to_text (doc:doc) =
   List.iter recprint doc ;
 
   Buffer.contents b
+
+let summary (doc:doc) =
+  let chars_per_line = 80 in 
+  let rec on_doc chars = 
+    if chars <= 0 then (fun _ -> 0, []) else function
+      | [] -> chars, [] 
+      | `A (u,l) :: t -> let chars, l = on_doc chars l in
+			 let chars, t = on_doc chars t in 
+			 chars, `A (u,l) :: t
+      | `B l :: t -> let chars, l = on_doc chars l in 
+		     let chars, t = on_doc chars t in
+		     chars, `B l :: t
+      | `I l :: t -> let chars, l = on_doc chars l in
+		     let chars, t = on_doc chars t in
+		     chars, `I l :: t 
+      | `BR :: t -> let chars = chars - chars_per_line in 
+		    if chars < 0 then 0, [] else 
+		      let chars, t = on_doc chars t in
+		      if t = [] then 0, [] else 
+			chars, `BR :: t
+      | `P l :: t -> let chars, l = on_doc chars l in
+		     let chars = chars - chars_per_line in 
+		     let chars, t = on_doc chars t in
+		     chars, (if l = [] then [] else `P l :: t)
+      | `INDENT l :: t -> let chars, l = on_doc chars l in
+			  let chars, t = on_doc chars t in
+			  chars, (if l = [] then [] else `INDENT l :: t)
+      | `TEXT s :: t -> let chars, s = on_text chars s in
+			let chars, t = on_doc chars t in
+			if s = "" then 0, [] else chars, `TEXT s :: t
+      | `UL l :: t -> let chars, l = on_list chars l in
+		      let chars, t = on_doc chars t in
+		      if l = [] then 0, [] else chars, `UL l :: t
+      | `OL l :: t -> let chars, l = on_list chars l in
+		      let chars, t = on_doc chars t in
+		      if l = [] then 0, [] else chars, `OL l :: t
+  and on_list chars = function 
+    | [] -> chars, []
+    | x :: xs -> let chars, x = on_doc chars x in
+		 let chars = chars - chars_per_line in 
+		 let chars, xs = on_list chars xs in 
+		 if x = [] then chars, [] else chars, x :: xs
+  and on_text chars str = 
+    if String.length str < chars then chars - String.length str, str else
+      0, OhmText.cut ~ellipsis:"…" chars str
+  in
+  
+  let chars, doc = on_doc (chars_per_line * 5) doc in
+  chars <= 0, doc 
 
 let whitespace = 
   Str.regexp "^\\([ \t\r\n]\\|\194\160\\|&nbsp;\\|&emsp;\\|&ensp;\\)*$"
@@ -131,7 +194,7 @@ let length doc =
     List.fold_left (fun acc node -> 
       match node with 
 	| `TEXT t -> acc + String.length t
-	| `P l | `B l | `I l | `INDENT l -> total acc l 
+	| `P l | `A (_,l) | `B l | `I l | `INDENT l -> total acc l 
 	| `BR -> acc 
 	| `UL l | `OL l -> List.fold_left total acc l     
     ) acc doc
@@ -477,6 +540,7 @@ let parse string =
       | `OL l :: t -> recurse (`OL (List.map (clean [] []) l)) t
       | `P  l :: t -> if length l = 0 then clean accum current t else recurse (`P l) t 
       | `B  l :: t -> clean accum (`B l :: current) t
+      | `A (u,l) :: t -> clean accum (`A (u,l) :: current) t 
       | `I  l :: t -> clean accum (`I l :: current) t 
       | `INDENT l :: t -> recurse (`INDENT (clean [] [] l)) t
       | `TEXT s :: t -> clean accum (`TEXT s :: current) t 
@@ -486,7 +550,7 @@ let parse string =
       | [] -> let accum = mkp () in List.rev accum 
   in
 
-  clean [] [] blocks
+  clean [] [] blocks 
 
 module OrText = struct
 
@@ -504,22 +568,58 @@ module OrText = struct
 
   end)
 
-  let raw_html str = 
-    let amp     = Str.regexp "&" in
-    let lt      = Str.regexp "<" in
+  let re_url = 
+    let up  = "[-&~?./_#a-zA-Z0-9;=+%]" in
+    let url = "\\(https://"^up^"+|www\\)[.]"^up^"+/"^up^"*" in
+    Str.regexp url 
+
+  let enrich str = 
+
+    let shorten url = 
+      if BatString.starts_with url "https://" then
+	BatString.tail url 8 
+      else if BatString.starts_with url "http://" then
+	BatString.tail url 7
+      else
+	url 
+    in
+
+    let text seg = 
+      let list = Str.full_split re_url seg in 
+      List.map (function 
+        | Str.Delim url -> `A (url, [`TEXT (shorten url)]) 
+	| Str.Text text -> `TEXT text) list 
+    in
+
+    let break   = Str.regexp "\n" in    
+    let paragraph par = 
+
+      let segs = BatList.filter_map (fun seg -> 
+	let seg = BatString.strip seg in 
+	if seg = "" then None else Some seg 
+      ) (Str.split break par) in 
+
+      let rec merge = function 
+	| []  -> []
+	| [x] -> text x 
+	| h :: t -> (text h) @ (`BR :: merge t) 
+      in
+
+      let l = merge segs in
+      if l = [] then None else Some (`P l) 
+
+    in
+
     let parskip = Str.regexp "\n[ \t\n]*\n" in
-    let break   = Str.regexp "\n" in
-    let str     = Str.global_replace amp "&amp;" str in
-    let str     = Str.global_replace lt  "&lt;"  str in
-    let paragraphs = Str.split parskip str in 
-    let paragraphs = List.filter (fun s -> s <> "") paragraphs in
-    let paragraphs = List.map (Str.global_replace break "<br/>") paragraphs in
-    let html = "<p>" ^ String.concat "</p><p>" paragraphs ^ "</p>" in
-    html
+    BatList.filter_map paragraph (Str.split parskip str)
+
+  let summary = function 
+    | `Rich r -> let c, r = summary r in c, `Rich r
+    | `Text t -> let c, r = summary (enrich t) in c, `Rich r
 
   let to_html = function
     | `Rich r -> to_html r 
-    | `Text t -> Html.str (raw_html t)
+    | `Text t -> to_html (enrich t)
 
   let to_text = function 
     | `Rich r -> to_text r

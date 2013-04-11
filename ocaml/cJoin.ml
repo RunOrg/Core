@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -12,9 +12,10 @@ module StatusEditFmt = Fmt.Make(struct
   >
 end)
 
-module Top = CJoin_top 
-module Self = CJoin_self
+module Top    = CJoin_top 
+module Self   = CJoin_self
 module Public = CJoin_public
+module Notify = CJoin_notify
 
 let template fields = 
   List.fold_left (fun acc field -> 

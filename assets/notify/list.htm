@@ -28,22 +28,9 @@ here.$zap.click () ->
         <div class="-body">
 	  <ul>
 	    {#items}
-	      <li {if seen}{else}class="-unseen"{/if}>
-	        <a href="{url}">
-		  <span class="-date">{ `DateRelative date }</span>
-		  <span class="-text">
-  		    {?pic}<img src="{this}"/>{/?}
-		    {?name}<strong>{this}</strong>{/?}		
-		    { `Notify text } 
-		    {#more} 
-		      <strong>{this | fst | esc}</strong>
-		      { `Notify this|snd } 
-		    {/#}
-                  </span>
-	        </a>
-	      </li>
+  	      <li {if seen}{else}class="-unseen"{/if}>{body|ohm}</li>
 	    {/#}
-          </ul>
+	  </ul>
 	</div>
       </div>
     {else}
@@ -81,7 +68,6 @@ here.$zap.click () ->
         font-size: 13px;
         border-top: 1px dashed #DDD;
         padding: 0 8px 0 40px;
-        height: 36px;
         display: block;
         line-height: 20px;
         overflow: hidden; 
@@ -90,10 +76,15 @@ here.$zap.click () ->
           color: #24B;
           font-weight: normal;
         }
-        a {
+        > a {
           display: block; 
           padding: 8px 0;
+          height: 20px;
           color: #333;
+        }
+        .-buttons {
+          padding-bottom: 8px;
+          a { display: inline-block; }
         }
         .-text {
           display: block;
