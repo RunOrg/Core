@@ -11,9 +11,6 @@ end
 type time = { h : int ; i : int ; s : int }
 type date = { y : int ; m : int ; d : int ; t : time option }
 
-(* Subtract the tzoffset from any localtime to get the UTC time *)
-let tzoffset, _ = Unix.mktime (Unix.gmtime 0.0) 
-
 let of_compact s = 
   try
     let y = int_of_string (String.sub s 0 4) in
@@ -87,6 +84,15 @@ let of_timestamp ts =
     }
   }
 
+(* Small piece of date magic. This will break during the
+   specific hour or so when DST changes, but it's the best
+   we can do without timezone support in OCaml. *)
+
+let mkgmtime tm = 
+  let ts_local, _ = Unix.mktime tm in
+  let ts_iter,  _ = Unix.mktime (Unix.gmtime ts_local) in
+  2. *. ts_local -. ts_iter
+
 let to_timestamp t = 
 
   let tm_hour, tm_min, tm_sec = match t.t with 
@@ -107,8 +113,7 @@ let to_timestamp t =
     tm_isdst = false
   }) in
 
-  let ts_local, _ = Unix.mktime tm in
-  ts_local -. tzoffset
+  mkgmtime tm 
 
 let datetime tz year month day hour minute second = 
 
@@ -125,8 +130,7 @@ let datetime tz year month day hour minute second =
     tm_isdst = false
   }) in
 
-  let ts_local, _ = Unix.mktime tm in
-  of_timestamp (ts_local -. tzoffset +. tz) 
+  of_timestamp (mkgmtime tm +. tz)
 
 let date y m d = 
   { y ; m ; d ; t = None }
