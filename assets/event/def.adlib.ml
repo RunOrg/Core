@@ -100,3 +100,12 @@
 | `Event_Unnamed
 | `Event_Public_Map_Enlarge
 | `Event_Public_By
+
+| `Event_Invite_Notify_Mail of 
+    [ `Title of string
+    | `Action 
+    | `Body of string
+    | `Body2 
+    | `Accept
+    | `Decline
+    | `Detail ]

@@ -108,3 +108,14 @@ end
 | `Event_Unnamed -> "Sans Titre"
 | `Event_Public_Map_Enlarge -> "Agrandir la carte"
 | `Event_Public_By -> "Organisé par"
+
+| `Event_Invite_Notify_Mail what -> begin 
+  match what with 
+    | `Title name -> "[Invitation] " ^ name
+    | `Action -> "vous invite à une activité"
+    | `Body asso -> !! "Cette activité est organisée dans le cadre de %s" asso
+    | `Body2 -> "Pour en savoir plus, connectez-vous sur l'espace membres ou cliquez sur les boutons ci-dessous pour accepter ou refuser l'invitation."
+    | `Accept -> "Accepter l'invitation"
+    | `Decline -> "Refuser"
+    | `Detail -> "Plus de détails"
+end 
