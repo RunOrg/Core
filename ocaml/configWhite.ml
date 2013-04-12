@@ -50,7 +50,7 @@ let domain id = match represent (Some id) with
   | `FSCF -> "lafscf.fr"
   | `M2014 -> "m2014.fr"
   | `Innov -> "my-innovation.org" 
-  | `Clichy -> "clichy.fr"
+  | `Clichy -> "assoclichy.fr"
   | `Alfort -> "alfortville-asso.fr"
 
 let white = function 
@@ -59,7 +59,7 @@ let white = function
   | "lafscf.fr" -> Some fscf
   | "m2014.fr" -> Some m2014
   | "my-innovation.org" -> Some innov
-  | "clichy.fr" -> Some clichy
+  | "assoclichy.fr" -> Some clichy
   | "alfortville-asso.fr" -> Some alfort 
   | _ -> None
 
