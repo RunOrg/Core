@@ -15,7 +15,7 @@ let prove uid iid =
 
 let link owid uid iid mid allow = 
   let proof = (if allow then "Y" else "N") ^ prove uid iid in
-  Action.url UrlMail.post_block owid (uid,iid,mid,proof)
+  Action.url UrlMail.post_block owid (IUser.decay uid,IInstance.decay iid,mid,proof)
 
 let () = UrlMail.def_post_block begin fun req res -> 
   

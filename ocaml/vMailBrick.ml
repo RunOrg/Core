@@ -3,6 +3,24 @@
 open Ohm
 open Ohm.Universal
 
+type nospam = <
+  link : bool -> string ;
+  name : string ; 
+  pic  : string option ;
+> 
+
+module NoSpam = struct
+
+  let render nospam = 
+    Asset_MailBrick_NoSpam.render (object
+      method ok   = nospam # link true
+      method no   = nospam # link false
+      method pic  = nospam # pic
+      method name = nospam # name
+    end)
+
+end
+
 let hr = String.make 70 '-'
 
 type dual = <
@@ -203,14 +221,16 @@ let grey label url = object
   method label = label
 end
 
-let render ?from title (payload:payload) (body:body) (buttons:button list) (footer:footer) = 
+let render ?nospam ?from title (payload:payload) (body:body) (buttons:button list) (footer:footer) = 
   let! payload = ohm (Payload.render payload) in
   let! body = ohm (Body.render body buttons) in
   let! footer = ohm (Footer.render footer) in
   let  text = payload # text ^ "\n\n" ^ body # text ^ "\n\n" ^ footer # text in
   let! title = ohm (AdLib.get title) in
+  let! nospam = ohm (Run.opt_map NoSpam.render nospam) in
   let! html = ohm (Asset_MailBrick_Full.render (object
     method title = title 
+    method nospam = nospam
     method payload = payload # html
     method body = body # html
     method footer = footer # html

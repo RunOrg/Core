@@ -1,5 +1,11 @@
 (* © 2013 RunOrg *)
 
+type nospam = <
+  link : bool -> string ;
+  name : string ; 
+  pic  : string option ;
+> 
+
 type social = <
   pic     : string option ;
   name    : string ; 
@@ -50,7 +56,15 @@ type button = <
 val grey : O.i18n -> string -> button
 val green : O.i18n -> string -> button 
 
-val render : ?from:string -> O.i18n -> payload -> body -> button list -> footer -> (#O.ctx,result) Ohm.Run.t
+val render : 
+     ?nospam:nospam
+  -> ?from:string
+  -> O.i18n
+  -> payload 
+  -> body 
+  -> button list 
+  -> footer 
+  -> (#O.ctx,result) Ohm.Run.t
 
 val boxProfile : 
      ?img:string
