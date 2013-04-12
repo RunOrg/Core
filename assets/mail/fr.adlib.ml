@@ -23,8 +23,8 @@
 | `Mail_Unsubscribe_Button -> "Supprimer définitivement mon compte"
 
 | `Mail_Block_Title block -> 
-  if block then "Inscription confirmée"
-  else "Désinscription effectuée"
+  if block then "Désinscription effectuée"
+  else "Inscription confirmée"
 
 | `Mail_Block_Body block ->
   if block then "Vous ne recevrez plus aucun courriel de cette communauté."
