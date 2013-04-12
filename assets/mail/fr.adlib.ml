@@ -22,10 +22,13 @@
 | `Mail_Unsubscribe_Thanks -> "Si vous supprimez votre compte, alors ceci sera le dernier message que vous recevrez de RunOrg. Nous sommes tristes que votre expérience de nos services n'ait pas été aussi agréable que nous l'avons espéré, et nous nous excusons pour tout désagrément que vous avez pu subir."
 | `Mail_Unsubscribe_Button -> "Supprimer définitivement mon compte"
 
+| `Mail_Block_Title block -> 
+  if block then "Inscription confirmée"
+  else "Désinscription effectuée"
 
-
-
-
+| `Mail_Block_Body block ->
+  if block then "Vous ne recevrez plus aucun courriel de cette communauté."
+  else "Bienvenue ! Vous recevrez maintenant tous les courriels envoyés par cette communauté."
 
 
 

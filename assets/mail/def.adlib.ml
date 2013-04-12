@@ -19,4 +19,5 @@
 | `Mail_Unsubscribe_Thanks
 | `Mail_Unsubscribe_Button
 
-
+| `Mail_Block_Title of bool
+| `Mail_Block_Body of bool
