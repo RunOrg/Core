@@ -4,6 +4,7 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Spam     = MMail_spam 
 module Send     = MMail_send
 module Types    = MMail_types
 module All      = MMail_all 

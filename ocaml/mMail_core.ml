@@ -70,3 +70,7 @@ let solved mid =
     | Some (`NotSolved _) -> Some (`Solved date) 
     | other -> other 
   })
+
+let blocked mid = 
+  let! now = ohmctx (#time) in 
+  clean_update mid Data.(fun m -> { m with sent = None ; blocked = true })

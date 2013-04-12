@@ -7,6 +7,7 @@ open BatPervasives
 module Core    = MMail_core
 module Plugins = MMail_plugins
 module Send    = MMail_send
+module Spam    = MMail_spam
 
 module UnsentView = CouchDB.DocView(struct
   module Key = Date
@@ -54,6 +55,20 @@ let setRenderer f =
 let () = O.async # periodic 1 begin 
   let! result = ohm $ one begin fun mid t ->	  
     let! _ = ohm $ Send.send t.Core.Data.uid begin fun uid u send ->
+
+      let! allowed = ohm begin 
+	match t.Core.Data.iid with 		     
+	| None -> Spam.can_send uid
+	| Some iid -> let! attitude = ohm (Spam.attitude uid iid) in 
+		      match attitude with 
+		      | `Bounced
+		      | `Blocked -> return false
+		      | `Allowed 
+		      | `NewContact
+		      | `Silent _ -> return true
+      end in 
+
+      let! () = true_or (Core.blocked mid) allowed in 
 
       let  rotten = Core.rot mid in
       let! full   = ohm_req_or rotten (O.decay (Plugins.parse_mail uid u mid t)) in
