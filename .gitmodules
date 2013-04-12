@@ -21,3 +21,7 @@
 [submodule "AssoHelp"]
   path = portals/AssoHelp
   url = git://github.com/RunOrg/AssoHelp.git
+
+[submodule "portals/Clichy"]
+	path = portals/Clichy
+	url = git@github.com:RunOrg/PortalClichy.git
