@@ -14,6 +14,6 @@ val can_send : 'a IUser.id -> (#O.ctx, bool) Ohm.Run.t
 
 val get : 'a IUser.id -> 'b IInstance.id -> (#O.ctx, bool option) Ohm.Run.t
 
-val set : 'a IUser.id -> 'b IInstance.id -> bool -> (#O.ctx, unit) Ohm.Run.t
+val set : ?mid:IMail.t -> 'a IUser.id -> 'b IInstance.id -> bool -> (#O.ctx, unit) Ohm.Run.t
 
 val bounce : 'a IUser.id -> (#O.ctx, unit) Ohm.Run.t

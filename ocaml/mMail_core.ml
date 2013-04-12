@@ -74,3 +74,6 @@ let solved mid =
 let blocked mid = 
   let! now = ohmctx (#time) in 
   clean_update mid Data.(fun m -> { m with sent = None ; blocked = true })
+
+let accepted mid allow = 
+  clean_update mid Data.(fun m -> { m with accept = Some allow })

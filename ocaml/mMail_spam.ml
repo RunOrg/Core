@@ -4,7 +4,8 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module All = MMail_all
+module Core = MMail_core
+module All  = MMail_all
 
 module InstanceSet = Fmt.Make(struct
   type t = IInstance.t BatPSet.t
@@ -69,13 +70,18 @@ let apply uid f =
   Tbl.transact (IUser.decay uid) (fun t ->
     let t  = BatOption.default default t in
     let t' = f t in
-    if t == t' then return ((),`keep) else return ((),`put t'))
+    if t == t' then return (false,`keep) else return (true,`put t'))
 
-let set uid iid allow = 
-  apply uid ((if allow then do_allow else do_block) (IInstance.decay iid)) 
+let set ?mid uid iid allow = 
+  let! changed = ohm (apply uid ((if allow then do_allow else do_block) (IInstance.decay iid))) in
+  if changed then 
+    let! mid = req_or (return()) mid in 
+    Core.accepted mid allow
+  else
+    return () 
 
 let bounce uid = 
-  apply uid do_bounce 
+  Run.map ignore (apply uid do_bounce)
 
 let max_silent_emails = 3
 

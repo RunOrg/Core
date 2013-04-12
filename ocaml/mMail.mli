@@ -113,6 +113,11 @@ module Compose : sig
     -> unit
 end
 
+module Spam : sig
+  val get : [`IsSelf] IUser.id -> 'a IInstance.id -> (#O.ctx,bool option) Ohm.Run.t
+  val set : ?mid:IMail.t -> [`IsSelf] IUser.id -> 'a IInstance.id -> bool -> (#O.ctx,unit) Ohm.Run.t
+end
+
 module All : sig
 
   val mine : 
