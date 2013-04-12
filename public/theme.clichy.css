@@ -1,0 +1,97 @@
+#topbar {
+  background: #1E1E1E;
+  box-shadow: none;
+  border: none;
+}
+
+#navbar {
+  background: white; 
+  box-shadow: none;
+  border: none;
+  height: 67px;
+}
+
+#navbar a {
+  margin-top: 17px;
+  color: #333;
+}
+
+#navbar a:hover {
+  background-color: transparent;
+  color: #555;
+}
+
+#navbar #logo {
+  font-size: 24px; 
+  margin-top: 15px;
+  padding-right: 60px;
+}
+
+#navbar #logo img {
+  width: auto;
+}
+
+#notifications span {
+  border-color: #888;
+}
+
+#notifications .-on {
+  color: white;
+}
+
+#topbar .-asso h1 a {
+  color: #999;
+  text-shadow: none;
+}
+
+#topbar .-asso ul li.-root {
+  padding: 0 12px 0 0;
+  margin: 2px 0;
+}
+
+#topbar .-asso ul li.-root + li.-root {
+  padding: 0 12px;
+  border-left: 1px solid #555;
+}
+
+#topbar .-asso ul li.-root a {
+  color: white;
+  border: none;
+  padding: 4px 6px;
+  font-weight: bold;
+  font-family: 'Open Sans Condensed';
+  font-variant: small-caps;
+  font-size: 15px;
+}
+
+#topbar .-asso ul li.-root a:hover {
+  background: #F3444D !important;
+  border-radius: 4px;
+  box-shadow: none;
+  color: white !important;
+}
+
+#topbar .-asso ul li.-root.-selected a {
+  box-shadow: none;
+  color: #F3444D;
+  background: transparent;
+}
+
+#topbar .action-button {
+  box-shadow: none;
+}
+
+#gsearch {
+  margin-left: 50px;
+}
+
+#gsearch .-f {
+  background: #DDD;
+  border: 2px solid #888;
+}
+
+#gsearch input { background: #DDD; }
+
+#public .-left .-pic-wrap .-pic {
+  box-shadow: none;
+}

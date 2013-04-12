@@ -1,9 +1,9 @@
 EXE=www/server
 REAL=www/server.real
 
-full: server put reset
+full: all-static server put reset
 
-server:
+all-static:
 	./plugins.sh
 	splash/gen.sh
 	make -C config
@@ -13,6 +13,9 @@ server:
 	ohm plugins.ohmStatic portals/AssoHelp AssoHelp
 	ohm plugins.ohmStatic portals/M2014 M2014
 	ohm plugins.ohmStatic portals/Alfortville Alfortville
+	ohm plugins.ohmStatic portals/Clichy Clichy
+
+server:
 	make -C ocaml
 	ohm publish
 	cp $(EXE) $(REAL)
