@@ -24,5 +24,5 @@ let wrapper info =
 let _ = OhmStatic.export 
   ~render:(OhmStatic.extend ~page:render wrapper)
   ~server:(O.server owid) 
-  ~title:   "Clichy"
+  ~title: "Portail associatif Clichy-la-Garenne"
   Static_Clichy.site
