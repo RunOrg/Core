@@ -67,3 +67,28 @@ let unread cuid =
   let! value = ohm_req_or (return 0) (UnreadOrUnsolvedView.reduce uid) in
   return value 
 
+(* Count the number of untouched mails for a given user from a given instance. *)
+
+module SilentView = CouchDB.ReduceView(struct
+  module Key = Fmt.Make(struct type json t = (IUser.t * IInstance.t) end)
+  module Value = Fmt.Int
+  module Design = Core.Design 
+  let name = "silent"
+  let map  = "if (doc.dead) return;
+              if (doc.sent === null) return;
+              if (doc.blocked) return;
+              if (doc.solved) return;
+              if (doc.clicked) return;
+              if (doc.opened) return;
+              if (doc.zapped) return;
+              if (doc.iid === null) return;
+              emit([doc.uid,doc.iid],1);"
+  let reduce = "return sum(values);"
+  let group = true
+  let level = None
+end)
+
+let silent uid iid = 
+  let  iid = IInstance.decay iid and uid = IUser.decay uid in 
+  let! value = ohm_req_or (return 0) (SilentView.reduce (uid,iid)) in
+  return value 
