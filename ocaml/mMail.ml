@@ -52,8 +52,14 @@ let from_token mid ?current token =
     (* The notification owner is not logged in. Attempt authentication. *)
     | _ -> 
       if check_token mid token then 
-	let cuid = IUser.Assert.is_old t.Core.Data.uid in
-	extract cuid 
+	let  uid = IUser.Assert.confirm t.Core.Data.uid in
+	let! confirmed = ohm (O.decay (MUser.confirm uid)) in
+	if confirmed then
+	  (* User is confirmed, log in *)
+	  extract (IUser.Assert.is_old uid)
+	else
+	  (* Not confirmed : this means the user is missing. *)
+	  return `Missing
       else
 	return (`Expired t.Core.Data.uid) 
 	
