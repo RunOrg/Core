@@ -83,6 +83,22 @@ module Email = struct
       end in 
     
       let biid = IInstance.Assert.bot iid in 
+
+      (* Send to the user himself (this is intended so that the user
+	 will see what the sent e-mail looks like). *)
+
+      let! author = ohm (MAvatar.details aid) in
+      let mwid = IMail.Wave.of_id (IItem.to_id itid) in
+      let! () = ohm (match author # who with None -> return () | Some uid -> 
+	Send.send_one ~mwid (object
+	  method uid = uid
+	  method aid = aid
+	  method itid = itid
+	  method iid  = iid 
+	  method kind = `Mail
+	end)) in
+
+      (* Send to everyone else *)
       
       send_all biid access (itid, aid, iid) 
 	
