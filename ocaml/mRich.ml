@@ -570,18 +570,22 @@ module OrText = struct
 
   let re_url = 
     let up  = "[-&~?./_#a-zA-Z0-9;=+%]" in
-    let url = "\\(https?://"^up^"+\\|www\\)[.]"^up^"+/"^up^"*" in
+    let url = "\\(https?://"^up^"+\\|www\\)[.]"^up^"+[./]"^up^"+" in
     Str.regexp url 
 
   let enrich str = 
 
     let shorten url = 
-      if BatString.starts_with url "https://" then
-	BatString.tail url 8 
-      else if BatString.starts_with url "http://" then
-	BatString.tail url 7
-      else
-	url 
+      let url = 
+	if BatString.starts_with url "https://" then
+	  BatString.tail url 8 
+	else if BatString.starts_with url "http://" then
+	  BatString.tail url 7
+	else
+	  url 
+      in
+      let url = BatString.strip ~chars:"/" url in
+      url
     in
 
     let text seg = 
