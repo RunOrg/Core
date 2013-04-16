@@ -91,3 +91,8 @@
 
 | `DMS_Atom_Filter
 | `DMS_SearchResult_Nature 
+
+| `DMS_DocTask_Mail_Title of [ `State | `AssignedSelf | `Assigned | `NotifiedSelf ] * string
+| `DMS_DocTask_Mail_Action of [ `State | `AssignedSelf | `Assigned | `NotifiedSelf ]
+| `DMS_DocTask_Mail_Body of string
+| `DMS_DocTask_Mail_Button 
