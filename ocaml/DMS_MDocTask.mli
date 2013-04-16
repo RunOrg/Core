@@ -19,6 +19,21 @@ module FieldType : sig
     ]
 end 
 
+module Notify : sig
+  type t = <
+    what : [ `NewState    of state
+  	   | `SetAssigned of IAvatar.t (* Who is the new assignee ? *)
+	   | `SetNotified ] ;
+    uid  : IUser.t ;
+    iid  : IInstance.t ;
+    dtid : DMS_IDocTask.t ;
+    did  : DMS_IDocument.t ; 
+    from : IAvatar.t ;
+  >
+  val define : 
+    ([`IsSelf] IUser.id -> MUser.t -> t -> MMail.Types.info -> MMail.Types.render option O.run) -> unit
+end
+
 module All : sig
   val by_document : [`View] DMS_IDocument.id -> (#O.ctx,[`View] DMS_IDocTask.id list) Ohm.Run.t
   val last : [`View] DMS_IDocument.id -> process -> (#O.ctx,[`View] DMS_IDocTask.id option) Ohm.Run.t
