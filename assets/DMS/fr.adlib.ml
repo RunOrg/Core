@@ -91,3 +91,24 @@
 
 | `DMS_Atom_Filter -> "Documents"
 | `DMS_SearchResult_Nature -> "Document"
+
+| `DMS_DocTask_Mail_Title (kind,doc) -> begin 
+  match kind with 
+  | `State -> "Mise à jour - " ^ doc 
+  | `AssignedSelf -> "Nouvelle tâche - " ^ doc
+  | `Assigned -> "Nouveau responsable - " ^ doc
+  | `NotifiedSelf -> "Nouvelle tâche - " ^ doc  
+end
+
+| `DMS_DocTask_Mail_Action kind -> begin 
+  match kind with
+  | `State -> "a mis à jour une tâche :"
+  | `AssignedSelf -> "vous a nommé responsable d'une tâche :"
+  | `Assigned -> "a nommé un nouveau responsable pour :"
+  | `NotifiedSelf -> "vous met en copie d'une tâche : " 
+end
+
+| `DMS_DocTask_Mail_Body asso -> 
+  !! "Cette tâche est associée à un document sur l'espace %s, cliquez sur le bouton ci-dessous pour plus d'informations." asso
+
+| `DMS_DocTask_Mail_Button -> "Voir Détail"

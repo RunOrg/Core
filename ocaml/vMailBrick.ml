@@ -264,3 +264,33 @@ let boxProfile ?img ~detail ~name url =
     method text = text
     method html = html 
   end)
+
+let boxTask ~name ?subtitle ~status ~color url = 
+  let! html = ohm (Asset_MailBrick_BoxTask.render (object
+    method url = url
+    method name = name
+    method subtitle = subtitle
+    method status = status
+    method fontcolor = match color with 
+    | `Green -> "#060"
+    | `Red -> "#600"
+    method bordercolor = match color with 
+    | `Green -> "#4C4"
+    | `Red -> "#C44"
+    method backcolor = match color with
+    | `Green -> "#8E8"
+    | `Red -> "#E88"
+  end)) in
+
+  let text = 
+    name ^ "\n("
+    ^ url ^ ")\n\n"
+    ^ (match subtitle with None -> "" | Some subtitle -> subtitle ^ "\n\n")
+    ^ hr
+    ^ "\n"
+  in
+  
+  return (object
+    method text = text
+    method html = html
+  end)
