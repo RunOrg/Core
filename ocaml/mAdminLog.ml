@@ -119,7 +119,7 @@ let stats days_ago =
     method login = (object
       method manual = count "lm"
       method signup = count "ls"
-      method notify = count "ln"
+      method notify = count "ln" + count "le"
       method reset  = count "lr"
     end)
     method confirm = count "uc"

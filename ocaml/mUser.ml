@@ -744,27 +744,6 @@ module Backdoor = struct
       | _ -> 0
     end
 
-  module AllView = CouchDB.MapView(struct
-    module Key = Fmt.Unit
-    module Value = Fmt.Make(struct
-      module Float = Fmt.Float
-      type json t = <
-        firstname "f" : string option ;
-        lastname  "l" : string option ;
-	email     "e" : string ;
-	join      "j" : Float.t
-      >
-    end)
-    module Design = Design
-    let name = "backdoor-all"
-    let map  = "if (doc.t == 'user' && doc.confirmed && doc.joindate) emit(null,{
-      e:doc.email,l:doc.lastname,f:doc.firstname,j:doc.joindate});"
-  end)
-
-  let all = 
-    AllView.query () |> Run.map 
-	(List.map (fun item -> IUser.of_id (item # id), item # value))      
-
   module DeletedView = CouchDB.MapView(struct
     module Key = Fmt.Unit
     module Value = Fmt.Make(struct
@@ -782,16 +761,6 @@ module Backdoor = struct
   let unsubscribed ~count = 
     let! list = ohm $ DeletedView.query ~limit:count ~descending:true () in
     return (List.map (#value) list) 
-
-
-  let list ~count start = 
-    let! ids, next = ohm $ Tbl.all_ids ~count start in
-    let! users = ohm $ Run.list_filter begin fun uid ->
-      let! user = ohm_req_or (return None) $ get uid in 
-      return (Some (uid, user))
-    end ids in
-
-    return (users, next)
 
 end
 

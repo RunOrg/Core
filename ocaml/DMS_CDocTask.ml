@@ -7,6 +7,7 @@ open BatPervasives
 open DMS_CDocTask_common
 
 module Edit = DMS_CDocTask_edit
+module Notify = DMS_CDocTask_notify
 
 let () = CClient.define Url.Task.def_create begin fun access ->
 
