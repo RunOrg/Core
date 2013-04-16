@@ -72,3 +72,11 @@ val boxProfile :
   -> name:string
   -> string
   -> (#O.ctx,dual) Ohm.Run.t
+
+val boxTask : 
+      name:string
+  -> ?subtitle:string
+  ->  status:O.i18n
+  ->  color:[`Green|`Red]
+  ->  string
+  -> (#O.ctx,dual) Ohm.Run.t
