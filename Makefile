@@ -5,7 +5,7 @@ full: all-static server put reset
 
 all-static:
 	./plugins.sh
-	splash/gen.sh
+	make -C splash
 	make -C config
 	ohm plugins.ohmStatic portals/FFBAD FFBAD
 	ohm plugins.ohmStatic portals/FSCF FSCF

@@ -56,7 +56,7 @@ let () = Url.def_upform $ CClient.action begin fun access req res ->
   let  (fid : IFile.t) , proof = req # args in
   let! fid = req_or white $ IFile.Deduce.from_putDoc_token cuid fid proof in
 
-  CUpload.form (snd req # server) cuid fid 
+  CUpload.form (snd req # server) fid 
     (Asset_Upload_Form.render)
     (fun inner -> 
       Asset_Upload_Form_Inner.render (object

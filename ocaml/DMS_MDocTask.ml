@@ -10,6 +10,7 @@ module Get = DMS_MDocTask_get
 module Set = DMS_MDocTask_set
 module FieldType = DMS_MDocTask_fieldType
 module All = DMS_MDocTask_all
+module Notify = DMS_MDocTask_notify
 
 type 'relation t = 'relation Can.t
 
