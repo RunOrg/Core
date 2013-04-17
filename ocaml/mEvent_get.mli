@@ -5,7 +5,7 @@ val id       :            'any MEvent_can.t ->'any IEvent.id
 val draft    : [<`Admin|`View] MEvent_can.t -> bool
 val vision   : [<`Admin|`View] MEvent_can.t -> MEvent_vision.t
 val name     : [<`Admin|`View] MEvent_can.t -> string option 
-val picture  : [<`Admin|`View] MEvent_can.t -> [`GetPic] IFile.id option 
+val picture  : [<`Admin|`View] MEvent_can.t -> [`GetPic] IOldFile.id option 
 val date     : [<`Admin|`View] MEvent_can.t -> Date.t option
 val group    :            'any MEvent_can.t -> IAvatarSet.t 
 val iid      :            'any MEvent_can.t -> IInstance.t 

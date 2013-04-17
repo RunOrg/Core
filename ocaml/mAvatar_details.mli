@@ -3,7 +3,7 @@
 type details = <
   name    : string option ;
   sort    : string option ;
-  picture : [`GetPic] IFile.id option ;
+  picture : [`GetPic] IOldFile.id option ;
   ins     : IInstance.t option ;
   who     : IUser.t option ;
   status  : MAvatar_status.t option ;

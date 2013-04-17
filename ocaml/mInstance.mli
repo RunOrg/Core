@@ -9,7 +9,7 @@ type t = <
   seats   : int ;
   usr     : IUser.t ;
   ver     : IVertical.t ;
-  pic     : [`GetPic] IFile.id option ;
+  pic     : [`GetPic] IOldFile.id option ;
   plugins : IPlugin.t list ; 
 > ;;
 
@@ -29,7 +29,7 @@ module Profile : sig
     facebook : string option ;
     phone    : string option ;
     tags     : string list ;
-    pic      : [`GetPic] IFile.id option ;
+    pic      : [`GetPic] IOldFile.id option ;
     search   : bool ;
     unbound  : IUser.t list option ;
   > ;;
@@ -59,7 +59,7 @@ module Profile : sig
          IInstance.t
       -> name:string
       -> key:IWhite.key
-      -> pic:IFile.t option
+      -> pic:IOldFile.t option
       -> phone:string option
       -> desc:MRich.OrText.t option
       -> site:string option
@@ -85,7 +85,7 @@ module Signals : sig
 end
 
 val create : 
-     pic:[`OwnPic] IFile.id option
+     pic:[`OwnPic] IOldFile.id option
   -> who:('any ICurrentUser.id)
   -> key:string 
   -> name:string 
@@ -99,7 +99,7 @@ val create :
 
 val install : 
      [`CanInstall] IInstance.id 
-  -> pic:[`OwnPic] IFile.id option
+  -> pic:[`OwnPic] IOldFile.id option
   -> who:('any ICurrentUser.id)
   -> key:string 
   -> name:string 
@@ -121,7 +121,7 @@ val update :
 
 val set_pic : 
      [`IsAdmin] IInstance.id
-  -> [`InsPic] IFile.id option
+  -> [`InsPic] IOldFile.id option
   -> unit O.run 
 
 val by_key : ?fresh:bool -> IWhite.key -> IInstance.t option O.run

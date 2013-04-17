@@ -10,7 +10,7 @@ module E   = DMS_MDocument_core
 
 (* Store a "pending" note in a side database. The pending note contains 
    all information to create whatever should be created post-upload. 
-   Key for the note is the IFile.t being uploaded. *)
+   Key for the note is the IOldFile.t being uploaded. *)
 
 module NewDoc = struct
   module T = struct
@@ -60,11 +60,11 @@ let wrap what = object
   method what = what
 end
 
-include CouchDB.Convenience.Table(struct let db = O.db "dms-doc-upload" end)(IFile)(Pending)
+include CouchDB.Convenience.Table(struct let db = O.db "dms-doc-upload" end)(IOldFile)(Pending)
 
 (* These functions are available from outside this module and are
    used to create the "pending" notes. They should return the fresh 
-   IFile.t *)
+   IOldFile.t *)
 
 let create ~self ~iid rid = 
 
@@ -82,7 +82,7 @@ let create ~self ~iid rid =
 
     let pending = wrap (NewDoc.make ~rid ~iid ~aid) in 
  
-    let! _ = ohm $ Tbl.set (IFile.decay fid) pending in
+    let! _ = ohm $ Tbl.set (IOldFile.decay fid) pending in
     return (Some fid) 
 
   end
@@ -102,7 +102,7 @@ let add_version ~self ~iid t =
 
     let pending = wrap (NewVersion.make ~did ~aid) in 
  
-    let! _ = ohm $ Tbl.set (IFile.decay fid) pending in
+    let! _ = ohm $ Tbl.set (IOldFile.decay fid) pending in
     return (Some fid) 
 
   end
@@ -118,7 +118,7 @@ let ok pending =
   if ok then Some did else None
 
 let ready fid = 
-  let! pending = ohm_req_or (return None) $ Tbl.get (IFile.decay fid) in
+  let! pending = ohm_req_or (return None) $ Tbl.get (IOldFile.decay fid) in
   let! did     = req_or (return None) $ ok pending in
   let! found   = ohm $ MOldFile.check fid `File in
   return (if found then Some did else None)

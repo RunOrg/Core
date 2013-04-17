@@ -19,12 +19,12 @@ type mail = <
 
 type image    = <
   author : IAvatar.t ;
-  file   : [`GetImg] IFile.id
+  file   : [`GetImg] IOldFile.id
 >
 
 type doc     = <
   author : IAvatar.t ;
-  file   : [`GetDoc] IFile.id ;
+  file   : [`GetDoc] IOldFile.id ;
   title  : string ;
   ext    : MOldFile.Extension.t ;
   size   : float

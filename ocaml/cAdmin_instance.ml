@@ -19,7 +19,7 @@ let () = UrlAdmin.def_mksearch $ admin_only begin fun cuid req res ->
     let! ()  = ohm $ MInstance.Profile.Backdoor.update iid 
       ~name:(p # name)
       ~key:(p # key)
-      ~pic:(BatOption.map IFile.decay (p # pic))
+      ~pic:(BatOption.map IOldFile.decay (p # pic))
       ~phone:(p # phone)
       ~desc:(p # desc)
       ~site:(p # site)

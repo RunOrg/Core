@@ -9,14 +9,14 @@ module Tbl = MOldFile_common.Tbl
 
 let build_key version id name = 
   String.concat "/" [
-    IFile.to_string id ;
+    IOldFile.to_string id ;
     MOldFile_common.string_of_version version ;
     name
   ]
 
 let get file version = 
   
-  let id = IFile.decay file in 
+  let id = IOldFile.decay file in 
   
   let! file = ohm_req_or (return None) $ Tbl.get id in
 

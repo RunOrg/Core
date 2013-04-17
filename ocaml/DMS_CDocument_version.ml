@@ -24,7 +24,7 @@ let () = CClient.define Url.Doc.def_version begin fun access ->
   let  fail = noUpload rid did in
   let  back = back rid did in
 
-  let! peek = O.Box.react IFile.fmt begin fun fid _ _ res -> 
+  let! peek = O.Box.react IOldFile.fmt begin fun fid _ _ res -> 
     let! _ = ohm_req_or (return res) $ MDocument.ready fid in
     return (Action.json [ "url", Json.String back ] res)
   end in
@@ -37,10 +37,10 @@ let () = CClient.define Url.Doc.def_version begin fun access ->
     let! fid = ohm_req_or fail $ MDocument.add_version ~self:actor ~iid doc in
     Asset_DMS_Upload.render (object
       method upload = Action.url Url.upform (access # instance # key) 
-	(IFile.decay fid, IFile.Deduce.make_putDoc_token cuid fid)
+	(IOldFile.decay fid, IOldFile.Deduce.make_putDoc_token cuid fid)
       method back = back  
       method peek = JsCode.Endpoint.to_json 
-	(OhmBox.reaction_endpoint peek (IFile.decay fid))
+	(OhmBox.reaction_endpoint peek (IOldFile.decay fid))
     end)
   end 
 

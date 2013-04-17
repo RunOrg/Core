@@ -24,7 +24,7 @@ module Data = Fmt.Make(struct
     sta       : MAvatar_status.t ;
     (* Cached values *)
     name      : string option ;
-    picture   : IFile.t option ;
+    picture   : IOldFile.t option ;
     role      : string option ;
     sort      : string list
   > 

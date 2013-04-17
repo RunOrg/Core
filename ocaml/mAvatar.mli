@@ -28,7 +28,7 @@ end
 type details = <
   name    : string option ;
   sort    : string option ;
-  picture : [`GetPic] IFile.id option ;
+  picture : [`GetPic] IOldFile.id option ;
   ins     : IInstance.t option ;
   who     : IUser.t option ;
   status  : Status.t option ;
@@ -62,7 +62,7 @@ val actor : [`IsSelf] IAvatar.id -> (#O.ctx,[`IsContact] MActor.t option) Ohm.Ru
 val collect_profile : MProfile.Data.t -> < 
   name : string option ;
   sort : string list ; 
-  picture : IFile.t option ;
+  picture : IOldFile.t option ;
   role : string option
 > 
 

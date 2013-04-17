@@ -55,7 +55,7 @@ module Get : sig
   val draft    : [<`Admin|`View] t -> bool
   val vision   : [<`Admin|`View] t -> Vision.t
   val name     : [<`Admin|`View] t -> string option 
-  val picture  : [<`Admin|`View] t -> [`GetPic] IFile.id option 
+  val picture  : [<`Admin|`View] t -> [`GetPic] IOldFile.id option 
   val date     : [<`Admin|`View] t -> Date.t option
   val group    :            'any t -> IAvatarSet.t 
   val iid      :            'any t -> IInstance.t 
@@ -73,7 +73,7 @@ end
 val create : 
      self:'any MActor.t
   -> name:string option
-  -> ?pic:[`InsPic] IFile.id
+  -> ?pic:[`InsPic] IOldFile.id
   -> ?vision:Vision.t 
   -> iid:[`CreateEvent] IInstance.id
   -> ITemplate.Event.t
@@ -82,7 +82,7 @@ val create :
 module Set : sig
     
   val picture :
-       [`InsPic] IFile.id option
+       [`InsPic] IOldFile.id option
     -> [`Admin] t 
     -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t

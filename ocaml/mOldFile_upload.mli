@@ -3,41 +3,41 @@
 module Signals : sig
   val on_item_img_upload : (IItem.t, unit O.run) Ohm.Sig.channel
   val on_item_doc_upload :
-    (IItem.t option * string * MOldFile_extension.t * float * IFile.t, unit O.run) Ohm.Sig.channel
+    (IItem.t option * string * MOldFile_extension.t * float * IOldFile.t, unit O.run) Ohm.Sig.channel
 end
 
 val prepare_pic : 
      cuid:'any ICurrentUser.id
-  -> [ `PutPic ] IFile.id option O.run
+  -> [ `PutPic ] IOldFile.id option O.run
 
 val prepare_client_pic : 
      iid:[`Upload] IInstance.id
   -> cuid:'any ICurrentUser.id
-  -> [`PutPic] IFile.id option O.run
+  -> [`PutPic] IOldFile.id option O.run
 
 val prepare_img :
      ins:[ `Upload ] IInstance.id
   -> usr:'a IUser.id
   -> item:[`Created] IItem.id
-  -> [ `PutImg ] IFile.id option O.run
+  -> [ `PutImg ] IOldFile.id option O.run
 
 val prepare_doc :
      ins:[ `Upload ] IInstance.id
   -> usr:'a IUser.id
   -> ?item:[`Created] IItem.id
   -> unit 
-  -> [ `PutDoc ] IFile.id option O.run
+  -> [ `PutDoc ] IOldFile.id option O.run
 
 val configure :
-      [<`PutPic|`PutImg|`PutDoc] IFile.id
+      [<`PutPic|`PutImg|`PutDoc] IOldFile.id
   -> ?filename:string
   ->  redirect:string
   ->  ConfigS3.upload
 
-val confirm_pic : [ `GetPic ] IFile.id -> unit O.run
+val confirm_pic : [ `GetPic ] IOldFile.id -> unit O.run
 
-val confirm_img : [ `GetImg ] IFile.id -> unit O.run
+val confirm_img : [ `GetImg ] IOldFile.id -> unit O.run
 
-val confirm_doc : [ `GetDoc ] IFile.id -> unit O.run
+val confirm_doc : [ `GetDoc ] IOldFile.id -> unit O.run
 
-val remove : version:MOldFile_common.version -> IFile.t -> bool option O.run
+val remove : version:MOldFile_common.version -> IOldFile.t -> bool option O.run

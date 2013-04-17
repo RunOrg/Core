@@ -2,7 +2,7 @@
 
 open UrlClient.Common
 
-let upform, def_upform = O.declare O.client "dms/upload/form" (A.rr IFile.arg A.string) 
+let upform, def_upform = O.declare O.client "dms/upload/form" (A.rr IOldFile.arg A.string) 
 
 let home,   def_home   = root             "dms/repos"
 let create, def_create = child def_home   "dms/repo/create"

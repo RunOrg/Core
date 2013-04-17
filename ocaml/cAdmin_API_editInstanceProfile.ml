@@ -73,7 +73,7 @@ include Make(struct
     let! () = ohm $ MInstance.Profile.Backdoor.update iid
       ~name:(json # name)
       ~key:(key,owid)
-      ~pic:(BatOption.map IFile.decay (profile # pic))
+      ~pic:(BatOption.map IOldFile.decay (profile # pic))
       ~phone:(profile # phone)
       ~desc:(profile # desc)
       ~site:(profile # site)

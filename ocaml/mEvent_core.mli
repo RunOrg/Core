@@ -6,7 +6,7 @@ type data_t = {
   gid    : IAvatarSet.t ;
   name   : string option ;
   date   : Date.t option ;
-  pic    : IFile.t option ;
+  pic    : IOldFile.t option ;
   vision : MEvent_vision.t ;
   admins : MAccess.t ;
   draft  : bool ;
@@ -18,7 +18,7 @@ type diff_t =
   [ `SetDraft   of bool 
   | `SetName    of string option
   | `SetVision  of MEvent_vision.t
-  | `SetPicture of IFile.t option
+  | `SetPicture of IOldFile.t option
   | `SetDate    of Date.t option 
   | `SetAdmins  of MAccess.t	  
   | `EditConfig of MEvent_config.Diff.t list

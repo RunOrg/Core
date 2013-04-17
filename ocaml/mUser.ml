@@ -55,7 +55,7 @@ module Data = struct
      ?destroyed  : Float.t option ;
      ?autologin  : bool = true ; 
      ?facebook   : OhmFacebook.t option ; 
-     ?picture    : IFile.t option ;
+     ?picture    : IOldFile.t option ;
      ?birthdate  : Date.t option ;
      ?phone      : string option ;
      ?cellphone  : string option ;
@@ -109,7 +109,7 @@ type t = <
   confirmed : bool ;
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
-  picture   : [`GetPic] IFile.id option ;
+  picture   : [`GetPic] IOldFile.id option ;
   birthdate : Date.t option ;
   phone     : string option ;
   cellphone : string option ;
@@ -137,7 +137,7 @@ let extract t = Data.(object
   method confirmed  = t.confirmed
   method destroyed  = t.destroyed 
   method facebook   = t.facebook
-  method picture    = BatOption.map IFile.Assert.get_pic t.picture (* Can view user *)
+  method picture    = BatOption.map IOldFile.Assert.get_pic t.picture (* Can view user *)
   method birthdate  = t.birthdate
   method phone      = t.phone
   method cellphone  = t.cellphone
@@ -362,10 +362,10 @@ let _facebook_update uid facebook details =
 
   let pic_id = 
     (* It's a facebook picture, so we can upload it. *)
-    IFile.Assert.put_pic (IFile.gen ())
+    IOldFile.Assert.put_pic (IOldFile.gen ())
   in
 
-  let the_pic = Some (IFile.decay pic_id) in
+  let the_pic = Some (IOldFile.decay pic_id) in
 
   let update exists = 
 	  
@@ -525,7 +525,7 @@ class type user_full = object
   method zipcode   : string option
   method city      : string option
   method country   : string option
-  method picture   : [`GetPic] IFile.id option 
+  method picture   : [`GetPic] IOldFile.id option 
   method gender    : [`m|`f] option
   method white     : IWhite.t option
 end
@@ -565,7 +565,7 @@ let user_bind (user : user_full) =
 		 city      = oclip (user # city) ;
 		 country   = oclip (user # country) ;
 		 zipcode   = oclip (user # zipcode) ;
-		 picture   = BatOption.map IFile.decay (user # picture) ;
+		 picture   = BatOption.map IOldFile.decay (user # picture) ;
 		 gender    = user # gender ;
 		 white     = user # white
 	     }) in
@@ -665,7 +665,7 @@ let update uid (t:user_edit) =
 let set_pic uid pic = 
 
   let id = IUser.decay uid in
-  let fid = BatOption.map IFile.decay pic in 
+  let fid = BatOption.map IOldFile.decay pic in 
   let update e = 
     let o = Data.({ e with picture = fid }) in     
     if o <> e then Some o, `put o else None, `keep 
@@ -774,7 +774,7 @@ let obliterate uid =
   let! () = ohm begin 
     match user.Data.picture with None -> return () | Some fid -> 
 	(* Deletion acts as a bot - the user owns their picture. *)
-      let fid = IFile.Assert.bot fid in
+      let fid = IOldFile.Assert.bot fid in
       MOldFile.delete_now fid
   end in
   

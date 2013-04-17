@@ -5,7 +5,7 @@ type version = <
   filename : string ; 
   size     : float ; 
   ext      : MOldFile.Extension.t ;
-  file     : [`GetDoc] IFile.id ; 
+  file     : [`GetDoc] IOldFile.id ; 
   time     : float ;
   author   : IAvatar.t ;
 >

@@ -21,8 +21,8 @@ let schedule_deletion =
 	| `Message  _ -> return ()
 	| `Mail     _ -> return () 
 	| `MiniPoll p -> MPoll.delete_now (IPoll.Assert.bot (p # poll)) 
-	| `Image    i -> MOldFile.delete_now (IFile.Assert.bot (i # file))
-	| `Doc      d -> MOldFile.delete_now (IFile.Assert.bot (d # file))
+	| `Image    i -> MOldFile.delete_now (IOldFile.Assert.bot (i # file))
+	| `Doc      d -> MOldFile.delete_now (IOldFile.Assert.bot (d # file))
     end in
 
     Tbl.delete itid

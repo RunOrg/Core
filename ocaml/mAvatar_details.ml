@@ -9,7 +9,7 @@ module Tbl = MAvatar_common.Tbl
 type details = <
   name    : string option ;
   sort    : string option ;
-  picture : [`GetPic] IFile.id option ;
+  picture : [`GetPic] IOldFile.id option ;
   who     : IUser.t option ;
   ins     : IInstance.t option ;
   status  : MAvatar_status.t option ;
@@ -31,7 +31,7 @@ let from data = object
   method ins     = Some (data # ins)
   method name    = data # name
   method sort    = Util.first (data # sort)
-  method picture = BatOption.map IFile.Assert.get_pic data # picture (* Can view avatar *)
+  method picture = BatOption.map IOldFile.Assert.get_pic data # picture (* Can view avatar *)
   method role    = data # role
   method status  = Some (data # sta)
 end 

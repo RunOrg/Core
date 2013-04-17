@@ -33,7 +33,7 @@ type t = <
   create  : float ;
   usr     : IUser.t ; 
   ver     : IVertical.t ;
-  pic     : [`GetPic] IFile.id option ;
+  pic     : [`GetPic] IOldFile.id option ;
   plugins : IPlugin.t list ; 
 > ;; 
 
@@ -46,7 +46,7 @@ let extract id i = Data.(object
   method seats = i.seats
   method usr = i.usr
   method ver = i.ver
-  method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
+  method pic = BatOption.map IOldFile.Assert.get_pic i.pic (* Can view instance *)
   method plugins = i.plugins
 end)
 
@@ -75,7 +75,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = vertical ;
-    pic     = BatOption.map IFile.decay pic ;
+    pic     = BatOption.map IOldFile.decay pic ;
     white   ;
     plugins = [] ;
   }) in 
@@ -89,7 +89,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
       desc     ;
       site     = BatOption.map (clip 256) site ;
       contact  = BatOption.map (clip 256) contact ;
-      pic      = BatOption.map IFile.decay pic ;
+      pic      = BatOption.map IOldFile.decay pic ;
       unbound  = false ;
   }) in
 
@@ -137,7 +137,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
 let set_pic id pic = 
  
   let id  = IInstance.decay id in 
-  let pic = BatOption.map IFile.decay pic in 
+  let pic = BatOption.map IOldFile.decay pic in 
 
   let update ins = Data.({ ins with pic }) in
   let info   old = Profile.Info.({ old with pic }) in
@@ -278,7 +278,7 @@ let install iid ~pic ~who ~key ~name ~desc =
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = ConfigWhite.default_vertical owid ;
-    pic     = BatOption.map IFile.decay pic ;
+    pic     = BatOption.map IOldFile.decay pic ;
     white   = owid ;
     plugins = [] ;
   }) in 
@@ -286,7 +286,7 @@ let install iid ~pic ~who ~key ~name ~desc =
   let info old = Profile.Info.({ 
     old with     
       name     = clip 80 name ;
-      pic      = BatOption.map IFile.decay pic ;
+      pic      = BatOption.map IOldFile.decay pic ;
       key      ;
       desc     ;
       unbound  = false ;

@@ -15,7 +15,7 @@ module MiniPoll = Fmt.Make(struct
 end)
 
 module Image = Fmt.Make(struct
-  type json t = < author "a" : IAvatar.t ; file "f" : IFile.t >
+  type json t = < author "a" : IAvatar.t ; file "f" : IOldFile.t >
 end)
 
 module Mail = Fmt.Make(struct
@@ -25,7 +25,7 @@ end)
 module Doc = Fmt.Make(struct
   type json t = <
     author "a" : IAvatar.t ;
-    file   "f" : IFile.t ;
+    file   "f" : IOldFile.t ;
     title  "t" : string ;
     ext    "e" : MOldFile.Extension.t ; 
     size   "s" : float 

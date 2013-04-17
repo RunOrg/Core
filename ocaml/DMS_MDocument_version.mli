@@ -5,7 +5,7 @@ include Ohm.Fmt.FMT with type t = <
   filename : string ; 
   size     : float ; 
   ext      : MOldFile.Extension.t ;
-  file     : IFile.t ; 
+  file     : IOldFile.t ; 
   time     : float ;
   author   : IAvatar.t ;
 >

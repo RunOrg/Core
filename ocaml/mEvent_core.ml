@@ -18,7 +18,7 @@ module Cfg = struct
       [ `SetDraft   of bool 
       | `SetName    of string option
       | `SetVision  of Vision.t
-      | `SetPicture of IFile.t option
+      | `SetPicture of IOldFile.t option
       | `SetDate    of Date.t option 
       | `SetAdmins  of MAccess.t	  
       | `EditConfig of Config.Diff.t list
@@ -34,7 +34,7 @@ module Cfg = struct
 	gid    : IAvatarSet.t ;
 	name   : string option ;
 	date   : Date.t option ;
-	pic    : IFile.t option ;
+	pic    : IOldFile.t option ;
 	vision : Vision.t ;
 	admins : MAccess.t ;
 	draft  : bool ;
@@ -68,7 +68,7 @@ type data_t = Cfg.Data.t = {
   gid    : IAvatarSet.t ;
   name   : string option ;
   date   : Date.t option ;
-  pic    : IFile.t option ;
+  pic    : IOldFile.t option ;
   vision : Vision.t ;
   admins : MAccess.t ;
   draft  : bool ;

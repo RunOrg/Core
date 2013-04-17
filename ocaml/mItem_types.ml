@@ -22,12 +22,12 @@ type mail = <
 
 type image    = <
   author : IAvatar.t ;
-  file   : [`GetImg] IFile.id
+  file   : [`GetImg] IOldFile.id
 >
 
 type doc     = <
   author : IAvatar.t ;
-  file   : [`GetDoc] IFile.id ;
+  file   : [`GetDoc] IOldFile.id ;
   title  : string ;
   ext    : MOldFile.Extension.t ;
   size   : float
@@ -89,12 +89,12 @@ let payload  t = match t # payload with
 		     method text   = p # text
 		     method poll   = id
 		   end )
-  | `Image    i -> let id = IFile.Assert.get_img (i # file) in
+  | `Image    i -> let id = IOldFile.Assert.get_img (i # file) in
 		   `Image ( object
 		     method author = i # author
 		     method file   = id
 		   end )
-  | `Doc      d -> let id = IFile.Assert.get_doc (d # file) in
+  | `Doc      d -> let id = IOldFile.Assert.get_doc (d # file) in
 		   `Doc ( object
 		     method author = d # author
 		     method title  = d # title

@@ -35,7 +35,7 @@ let create ~self ~name ?pic ?(vision=`Normal) ~iid tid =
       tid    ;
       gid    ;
       name   ;
-      pic    = BatOption.map IFile.decay pic ;
+      pic    = BatOption.map IOldFile.decay pic ;
       vision ;
       date   = None ;
       admins ;

@@ -197,7 +197,7 @@ let () = UrlNetwork.def_create begin fun req res ->
   let! pic = ohm begin 
     let! pic = req_or (return None) (post # pic) in
     let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
-    MOldFile.own_pic cuid (IFile.of_string fid) 
+    MOldFile.own_pic cuid (IOldFile.of_string fid) 
   end in
 
   let! key = ohm_req_or fail $ MInstance.install iid 

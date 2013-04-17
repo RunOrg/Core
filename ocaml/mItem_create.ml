@@ -50,7 +50,7 @@ let image actor album =
   (* Prepare item contents *)
   let payload = `Image (object
     method author = IAvatar.decay self
-    method file   = IFile.decay img 
+    method file   = IOldFile.decay img 
   end) in
 
   let where = `album (IAlbum.decay (MAlbum.Get.id album)) in 
@@ -82,7 +82,7 @@ let doc actor folder =
 
   let payload = `Doc (object 
     method author = IAvatar.decay self
-    method file   = IFile.decay doc
+    method file   = IOldFile.decay doc
     method title  = "" 
     method ext    = `File
     method size   = 0.

@@ -93,7 +93,7 @@ type description = <
   name        : string option ;
   site        : string option ;
   url         : [`None|`Site of string|`Key of IWhite.key|`Profile of IInstance.t] ;
-  picture     : [`GetPic] IFile.id option ;
+  picture     : [`GetPic] IOldFile.id option ;
   access      : [ `Public | `Private ] ;
   profile     : IInstance.t option 
 > ;;

@@ -24,7 +24,7 @@ module Data = struct
     zipcode   : string option ;
     city      : string option ;
     country   : string option ;
-    picture   : [`GetPic] IFile.id option ;
+    picture   : [`GetPic] IOldFile.id option ;
     gender    : [`m|`f] option 
   } ;;          
 
@@ -40,7 +40,7 @@ module Data = struct
       zipcode   : string option ;
       city      : string option ;
       country   : string option ;
-      picture   : IFile.t option ;
+      picture   : IOldFile.t option ;
       gender    : [`m|`f] option ;
     } ;;    
   end 
@@ -58,7 +58,7 @@ module Data = struct
       zipcode   = o.Inner.zipcode ;
       city      = o.Inner.city ;
       country   = o.Inner.country ;
-      picture   = BatOption.map IFile.Assert.get_pic o.Inner.picture ; (* view profile *)
+      picture   = BatOption.map IOldFile.Assert.get_pic o.Inner.picture ; (* view profile *)
       gender    = o.Inner.gender 
     } in
     t
@@ -76,7 +76,7 @@ module Data = struct
       Inner.zipcode   = oclip 10  t.zipcode ; 
       Inner.city      = oclip 80  t.city ; 
       Inner.country   = oclip 80  t.country ; 
-      Inner.picture   = BatOption.map IFile.decay t.picture ;
+      Inner.picture   = BatOption.map IOldFile.decay t.picture ;
       Inner.gender    = t.gender
     }
  
@@ -271,7 +271,7 @@ let create iid data =
 	  method email     = match data.Data.email with Some e -> e | None -> ""
 	  method picture   = 
 	    (* Profile is available *)
-	    BatOption.map IFile.Assert.get_pic data.Data.picture
+	    BatOption.map IOldFile.Assert.get_pic data.Data.picture
 	  method birthdate = data.Data.birthdate
 	  method phone     = data.Data.phone
 	  method cellphone = data.Data.cellphone
@@ -378,7 +378,7 @@ type details = <
   firstname : string ;
   lastname  : string ;
   email     : string option ; 
-  picture   : [`GetPic] IFile.id option
+  picture   : [`GetPic] IOldFile.id option
 > ;;
 
 let details id = 
@@ -387,7 +387,7 @@ let details id =
   let data = profile.data in 
   let picture = 
     (* If profile is visible, so is the picture. *)
-    BatOption.map IFile.Assert.get_pic data.Data.picture
+    BatOption.map IOldFile.Assert.get_pic data.Data.picture
   in
   return (
     Some Data.( object

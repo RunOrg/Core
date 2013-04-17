@@ -27,23 +27,23 @@ let confirm ?(white=white) prove confirm req res =
   white
 
 let () = UrlUpload.Core.def_ok 
-  (confirm IFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
+  (confirm IOldFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
 
 let () = UrlUpload.Client.def_ok 
-  (confirm IFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
+  (confirm IOldFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
 
 let () = UrlUpload.Client.Doc.def_ok 
-  (confirm IFile.Deduce.from_getDoc_token MOldFile.Upload.confirm_doc)
+  (confirm IOldFile.Deduce.from_getDoc_token MOldFile.Upload.confirm_doc)
 
 let () = UrlUpload.Client.Img.def_confirm
   (confirm ~white:(fun _ res -> return res) 
-     IFile.Deduce.from_getImg_token MOldFile.Upload.confirm_img)
+     IOldFile.Deduce.from_getImg_token MOldFile.Upload.confirm_img)
 
 (* Preparing an upload --------------------------------------------------------------------- *) 
 
 let form owid fid outer inner prove ok res = 
   let proof = prove fid in 
-  let redirect = ok (IFile.decay fid, proof) in
+  let redirect = ok (IOldFile.decay fid, proof) in
   let html = outer (ConfigS3.upload_form (MOldFile.Upload.configure fid redirect) inner) in
   CPageLayout.core owid `EMPTY html res
 
@@ -60,7 +60,7 @@ let () = UrlUpload.Core.def_root begin fun req res ->
 	method cancel = Action.url UrlUpload.Core.cancel (req # server) ()
 	method inner  = inner
       end))
-    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
+    (IOldFile.Deduce.get_pic |- IOldFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Core.ok (req # server))
     res
 
@@ -80,7 +80,7 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
 	method cancel = Action.url UrlUpload.Client.cancel (req # server) ()
 	method inner  = inner
       end))
-    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
+    (IOldFile.Deduce.get_pic |- IOldFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Client.ok (req # server))
     res
 
@@ -99,7 +99,7 @@ let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res
   form (snd req # server) fid 
     (Asset_Upload_DocForm.render) 
     (Asset_Upload_DocForm_Inner.render)
-    (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
+    (IOldFile.Deduce.get_doc |- IOldFile.Deduce.make_getDoc_token cuid) 
     (Action.url UrlUpload.Client.Doc.ok (req # server))
     res
 
@@ -125,10 +125,10 @@ let () = UrlUpload.Client.Img.def_prepare $ CClient.action begin fun access req 
   let upload_post = Json.Object (List.map (fun (k,v) -> k, Json.String v) upload_post) in
 
   let confirm = Action.url UrlUpload.Client.Img.confirm (access # instance # key) 
-    (IFile.decay fid, IFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
+    (IOldFile.decay fid, IOldFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
 
   let check = Action.url UrlUpload.Client.Img.check (access # instance # key) 
-    (IFile.decay fid, IFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
+    (IOldFile.decay fid, IOldFile.Deduce.(get_img fid |> make_getImg_token cuid)) in
 
 
   return $ Action.json [ "confirm", Json.String confirm ;
@@ -146,9 +146,9 @@ let find req res =
 
   let! cuid  = req_or fail $ CSession.get req in
 
-  let! id    = req_or fail $ BatOption.map IFile.of_string (req # get "id") in
+  let! id    = req_or fail $ BatOption.map IOldFile.of_string (req # get "id") in
   let! proof = req_or fail $ req # get "proof" in
-  let! fid   = req_or fail $ IFile.Deduce.from_getPic_token cuid id proof in
+  let! fid   = req_or fail $ IOldFile.Deduce.from_getPic_token cuid id proof in
 
   let! small = ohm_req_or fail $ MOldFile.Url.get fid `Small in
   let! large = ohm_req_or fail $ MOldFile.Url.get fid `Large in
@@ -171,7 +171,7 @@ let () = UrlUpload.Client.Img.def_check begin fun req res ->
 
   let  id, proof = req # args in 
 
-  let! fid   = req_or fail $ IFile.Deduce.from_getImg_token cuid id proof in
+  let! fid   = req_or fail $ IOldFile.Deduce.from_getImg_token cuid id proof in
 
   let! large = ohm_req_or fail $ MOldFile.Url.get fid `Large in
 

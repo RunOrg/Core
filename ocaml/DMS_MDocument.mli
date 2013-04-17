@@ -7,7 +7,7 @@ type version = <
   filename : string ; 
   size     : float ; 
   ext      : MOldFile.Extension.t ;
-  file     : [`GetDoc] IFile.id ; 
+  file     : [`GetDoc] IOldFile.id ; 
   time     : float ;
   author   : IAvatar.t ;
 >
@@ -87,15 +87,15 @@ val create :
      self:'any MActor.t
   -> iid:[`Upload] IInstance.id
   -> [`Upload] DMS_IRepository.id
-  -> (#O.ctx,[`PutDoc] IFile.id option) Ohm.Run.t
+  -> (#O.ctx,[`PutDoc] IOldFile.id option) Ohm.Run.t
 
 val add_version : 
      self:'any MActor.t 
   -> iid:[`Upload] IInstance.id 
   -> [`Admin] t 
-  -> (#O.ctx,[`PutDoc] IFile.id option) Ohm.Run.t
+  -> (#O.ctx,[`PutDoc] IOldFile.id option) Ohm.Run.t
 
-val ready : 'any IFile.id -> (#O.ctx, DMS_IDocument.t option) Ohm.Run.t
+val ready : 'any IOldFile.id -> (#O.ctx, DMS_IDocument.t option) Ohm.Run.t
 
 val get : ?actor:'any MActor.t -> 'rel DMS_IDocument.id -> (#O.ctx,'rel t option) Ohm.Run.t
 val view : ?actor:'any MActor.t -> 'rel DMS_IDocument.id -> (#O.ctx,[`View] t option) Ohm.Run.t

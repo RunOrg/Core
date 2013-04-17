@@ -49,7 +49,7 @@ module File = Fmt.Make(struct
   > 
 end)
 
-module Tbl = CouchDB.Table(MyDB)(IFile)(File)
+module Tbl = CouchDB.Table(MyDB)(IOldFile)(File)
 
 include File
 

@@ -11,7 +11,7 @@ module File : Ohm.Fmt.FMT with type t = <
   versions : (string * < name : string ; size : float >) list
 > 
 
-module Tbl : Ohm.CouchDB.TABLE with type id = IFile.t and type elt = File.t
+module Tbl : Ohm.CouchDB.TABLE with type id = IOldFile.t and type elt = File.t
 
 module Design : Ohm.CouchDB.DESIGN
 

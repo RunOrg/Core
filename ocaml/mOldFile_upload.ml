@@ -15,19 +15,19 @@ module Signals = struct
 end
 
 let erase_if_still_temp =   
-  let task = O.async # define "file.erase-temp" IFile.fmt 
+  let task = O.async # define "file.erase-temp" IOldFile.fmt 
     (fun id -> Tbl.delete_if id (#k |- (=) `Temp))
   in
   task ~delay:600.
 
 let _do_prepare ~usr ~lift ?iid ?item () =   
-  let id = IFile.gen () in
+  let id = IOldFile.gen () in
   let file = object
     method t        = `File
     method k        = `Temp
     method usr      = IUser.decay usr
     method ins      = BatOption.map IInstance.decay iid
-    method key      = IFile.to_id id
+    method key      = IOldFile.to_id id
     method name     = None
     method item     = BatOption.map IItem.decay item 
     method versions = []
@@ -49,7 +49,7 @@ let prepare_pic ~cuid =
   if used >= free then 
     return None
   else 
-    let! id = ohm $ _do_prepare ~usr ~lift:IFile.Assert.put_pic () in
+    let! id = ohm $ _do_prepare ~usr ~lift:IOldFile.Assert.put_pic () in
     return $ Some id
 
 let prepare_if_allowed ~iid ~prepare = 
@@ -66,20 +66,20 @@ let prepare_if_allowed ~iid ~prepare =
 let prepare_client_pic ~iid ~cuid =
   let usr = IUser.Deduce.is_anyone cuid in 
   prepare_if_allowed ~iid
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_pic ~usr ~iid ())
+    ~prepare:(_do_prepare ~lift:IOldFile.Assert.put_pic ~usr ~iid ())
 
 let prepare_img ~ins ~usr ~item = 
   prepare_if_allowed ~iid:ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_img ~usr ~iid:ins ~item ())
+    ~prepare:(_do_prepare ~lift:IOldFile.Assert.put_img ~usr ~iid:ins ~item ())
 
 let prepare_doc ~ins ~usr ?item () = 
   prepare_if_allowed ~iid:ins
-    ~prepare:(_do_prepare ~lift:IFile.Assert.put_doc ~usr ~iid:ins ?item ())
+    ~prepare:(_do_prepare ~lift:IOldFile.Assert.put_doc ~usr ~iid:ins ?item ())
 
 let configure id ?filename ~redirect = 
   ConfigS3.upload 
     ~bucket:"ro-temp"
-    ~key:(IFile.to_string id ^ "/" ^ MOldFile_common.string_of_version `Original)
+    ~key:(IOldFile.to_string id ^ "/" ^ MOldFile_common.string_of_version `Original)
     ?filename
     ~redirect
     ()
@@ -173,7 +173,7 @@ let remove ~version id =
 
       
 let remove_original = 
-  let task = O.async # define "file.rm-original" IFile.fmt 
+  let task = O.async # define "file.rm-original" IOldFile.fmt 
     begin fun id ->
 
       let! result = ohm $ remove ~version:`Original id in
@@ -185,7 +185,7 @@ let remove_original =
   fun id -> task id
 
 let define_async_resizer ~kind ~name ~bucket ~large ~small =   
-  let task = O.async # define ("file.resize."^name) IFile.fmt begin fun id   ->
+  let task = O.async # define ("file.resize."^name) IOldFile.fmt begin fun id   ->
     
     let process file reader =       
 
@@ -227,7 +227,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	    let! () = ohm $ Tbl.update id update in 
 	    return true
 	  else 
-	    ( log "File.resize_pic: %s upload failed" (IFile.to_string id) ;
+	    ( log "File.resize_pic: %s upload failed" (IOldFile.to_string id) ;
 	      return false)
     
 	in
@@ -270,7 +270,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 	let obj = (List.assoc MOldFile_common.original (file # versions)) in
 	download_file file (obj # name)
       with Not_found -> 
-	return (log "File.resize: %s has no original version!" (IFile.to_string id)) 
+	return (log "File.resize: %s has no original version!" (IOldFile.to_string id)) 
     in
 
     let! file_opt = ohm $ Tbl.get id in
@@ -278,10 +278,10 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
     match file_opt with 
       | Some file -> 
 	if file # k = kind then get_original file else
-	  return ( log "File.resize: %s is not correct type" (IFile.to_string id) )
+	  return ( log "File.resize: %s is not correct type" (IOldFile.to_string id) )
 	    
       | None -> 
-	return ( log "File.resize: %s not found" (IFile.to_string id) )
+	return ( log "File.resize: %s not found" (IOldFile.to_string id) )
 	
   end in
   fun id -> task id
@@ -303,7 +303,7 @@ let process_img =
     ~bucket:"ro-files"
 
 let process_doc =
-  let task = O.async # define "file.process.doc" IFile.fmt begin fun id ->
+  let task = O.async # define "file.process.doc" IOldFile.fmt begin fun id ->
     
     let process file name =       
 
@@ -358,31 +358,31 @@ let process_doc =
 	let obj = (List.assoc MOldFile_common.original (file # versions)) in
 	process file (obj # name) 
       with Not_found -> 
-	return (log "File.process-doc: %s has no original version!" (IFile.to_string id))
+	return (log "File.process-doc: %s has no original version!" (IOldFile.to_string id))
     in
     
     let! file = ohm_req_or (return ()) $ Tbl.get id in
 
     if file # k = `Doc then get_original file else
-      return (log "File.process-doc: %s is not correct type" (IFile.to_string id))
+      return (log "File.process-doc: %s is not correct type" (IOldFile.to_string id))
 	
   end in
   fun id -> task id 
       
 let define_async_confirmer ~kind ~name ~process = 
-  let task = O.async # define ("file.confirm."^name) IFile.fmt begin fun id ->
+  let task = O.async # define ("file.confirm."^name) IOldFile.fmt begin fun id ->
 
     let fail = return () in
     let success = return () in
 
     let transform = function 
       | None -> 
-	log "File.confirm: %s does not exist" (IFile.to_string id) ; 
+	log "File.confirm: %s does not exist" (IOldFile.to_string id) ; 
 	false, `keep
 
       | Some file ->
 	if file # k <> `Temp then
-	  ( log "File.confirm: %s expected to be Temp" (IFile.to_string id) ; 
+	  ( log "File.confirm: %s expected to be Temp" (IOldFile.to_string id) ; 
 	    false, `keep )
 	else 
 	  let bucket = "ro-temp"
@@ -390,11 +390,11 @@ let define_async_confirmer ~kind ~name ~process =
 	  match ConfigS3.find_upload ~bucket ~prefix with 
 	    | None -> 
 	      log "File.confirm: %s : %s/%s/* was not uploaded" 
-		(IFile.to_string id) bucket prefix ;
+		(IOldFile.to_string id) bucket prefix ;
 	      false, `keep
 	    | Some found ->	      	     
 	      if found.ConfigS3.name = "" then
-		( log "File.confirm: %s has no name!" (IFile.to_string id) ; 
+		( log "File.confirm: %s has no name!" (IOldFile.to_string id) ; 
 		  false, `keep )
 	      else
 		true, `put (object 
@@ -439,7 +439,7 @@ let define_async_confirmer ~kind ~name ~process =
       | _ -> success
 
   end in
-  fun id -> task (IFile.decay id) 
+  fun id -> task (IOldFile.decay id) 
 
 let confirm_pic = 
   define_async_confirmer ~kind:`Picture ~name:"pic" ~process:process_pic

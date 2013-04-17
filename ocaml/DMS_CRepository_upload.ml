@@ -27,7 +27,7 @@ let () = CClient.define Url.def_upload begin fun access ->
   let  iid   = IInstance.Deduce.upload (access # iid) in 
   let  cuid  = MActor.user (access # actor) in 
 
-  let! peek = O.Box.react IFile.fmt begin fun fid _ _ res -> 
+  let! peek = O.Box.react IOldFile.fmt begin fun fid _ _ res -> 
     let! did = ohm_req_or (return res) $ MDocument.ready fid in
     let  url = Action.url Url.file (access # instance # key) 
       [ IRepository.to_string rid ; IDocument.to_string did ] in
@@ -38,10 +38,10 @@ let () = CClient.define Url.def_upload begin fun access ->
     let! fid = ohm_req_or (noUpload rid) (MDocument.create ~self:actor ~iid uprid) in
     Asset_DMS_Upload.render (object
       method upload = Action.url Url.upform (access # instance # key) 
-	(IFile.decay fid, IFile.Deduce.make_putDoc_token cuid fid)
+	(IOldFile.decay fid, IOldFile.Deduce.make_putDoc_token cuid fid)
       method back = back rid 
       method peek = JsCode.Endpoint.to_json 
-	(OhmBox.reaction_endpoint peek (IFile.decay fid))
+	(OhmBox.reaction_endpoint peek (IOldFile.decay fid))
     end)
   end 
 
@@ -53,8 +53,8 @@ let () = Url.def_upform $ CClient.action begin fun access req res ->
 
   let cuid = MActor.user (access # actor) in
 
-  let  (fid : IFile.t) , proof = req # args in
-  let! fid = req_or white $ IFile.Deduce.from_putDoc_token cuid fid proof in
+  let  (fid : IOldFile.t) , proof = req # args in
+  let! fid = req_or white $ IOldFile.Deduce.from_putDoc_token cuid fid proof in
 
   CUpload.form (snd req # server) fid 
     (Asset_Upload_Form.render)
@@ -63,7 +63,7 @@ let () = Url.def_upform $ CClient.action begin fun access req res ->
 	method cancel = Action.url UrlUpload.Client.cancel (req # server) () 
 	method inner  = inner
       end))
-    (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
+    (IOldFile.Deduce.get_doc |- IOldFile.Deduce.make_getDoc_token cuid) 
     (Action.url UrlUpload.Client.Doc.ok (req # server))
     res
 

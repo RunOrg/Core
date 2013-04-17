@@ -13,7 +13,7 @@ module Data : sig
     zipcode   : string option ;
     city      : string option ;
     country   : string option ;
-    picture   : [`GetPic] IFile.id option ;
+    picture   : [`GetPic] IOldFile.id option ;
     gender    : [`m|`f] option 
   }
     
@@ -62,7 +62,7 @@ type details = <
   firstname : string ;
   lastname : string ;
   email : string option ; 
-  picture : [`GetPic] IFile.id option 
+  picture : [`GetPic] IOldFile.id option 
 >
 
 val details : [`IsSelf] IProfile.id -> details option O.run

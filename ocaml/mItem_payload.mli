@@ -7,7 +7,7 @@ module MiniPoll : Ohm.Fmt.FMT with type t =
   < author : IAvatar.t ; text : string ; poll : IPoll.t >
 
 module Image : Ohm.Fmt.FMT with type t = 
-  < author : IAvatar.t ; file : IFile.t >
+  < author : IAvatar.t ; file : IOldFile.t >
 
 module Mail : Ohm.Fmt.FMT with type t = 
   < author : IAvatar.t ; subject : string ; body : string >
@@ -15,7 +15,7 @@ module Mail : Ohm.Fmt.FMT with type t =
 module Doc : Ohm.Fmt.FMT with type t = 
   <
     author : IAvatar.t ;
-    file   : IFile.t ;
+    file   : IOldFile.t ;
     title  : string ;
     ext    : MOldFile.Extension.t ; 
     size   : float 

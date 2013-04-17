@@ -13,7 +13,7 @@ module T = struct
    ?create  : Float.t = Unix.gettimeofday () ;
     usr     : IUser.t ; 
     ver     : IVertical.t ;
-    pic     : IFile.t option ;
+    pic     : IOldFile.t option ;
    ?white   : IWhite.t option ;
    ?plugins : IPlugin.t list = [] 
   } ;; 

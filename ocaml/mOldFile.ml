@@ -16,23 +16,23 @@ type version = MOldFile_common.version
 
 let own_pic cuid id = 
   let usr = IUser.Deduce.is_anyone cuid in 
-  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->
+  Tbl.get (IOldFile.decay id) |> Run.map (BatOption.bind begin fun file ->
     if file # usr = IUser.decay usr && file # ins = None && file # k = `Picture then 
-      Some (IFile.Assert.own_pic id)
+      Some (IOldFile.Assert.own_pic id)
     else None
   end)
 
 let instance_pic ins id = 
   let ins = IInstance.decay ins in 
-  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
+  Tbl.get (IOldFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
     if file # ins = Some ins && file # k = `Picture then 
-      Some (IFile.Assert.ins_pic id)
+      Some (IOldFile.Assert.ins_pic id)
     else None
   end)
 
 let set_facebook_pic pic user details = 
 
-  let id = IFile.decay pic in 
+  let id = IOldFile.decay pic in 
   let obj = object
     method t        = `File
     method k        = `Extern
@@ -57,7 +57,7 @@ let set_facebook_pic pic user details =
 
 let give_pic pic ins = 
 
-  let id = IFile.decay pic in   
+  let id = IOldFile.decay pic in   
   let give file = 
     if file # ins <> None then file else 
       (object
@@ -90,7 +90,7 @@ let _ =
 
 let delete_now fid = 
 
-  let fid = IFile.decay fid in
+  let fid = IOldFile.decay fid in
   let versions = [ `Original ; `File ; `Small ; `Large ] in
 
   let remove version = 
@@ -105,13 +105,13 @@ let delete_now fid =
   return () 
 
 let item fid = 
-  let   fid = IFile.decay fid in 
+  let   fid = IOldFile.decay fid in 
   Run.map (BatOption.bind (#item)) (Tbl.get fid) 
 
 (* Check that a file version is currently available for download *)
 
 let check fid version = 
-  let! file = ohm_req_or (return false) (Tbl.get (IFile.decay fid)) in
+  let! file = ohm_req_or (return false) (Tbl.get (IOldFile.decay fid)) in
   let  v    = MOldFile_common.string_of_version version in 
   return (
     try ignore (List.assoc v (file # versions)) ; true 

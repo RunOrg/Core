@@ -11,7 +11,7 @@ module Data = MEvent_data
 include HEntity.Set(Can)(E)
 
 let picture fid t self = 
-  let fid = BatOption.map IFile.decay fid in 
+  let fid = BatOption.map IOldFile.decay fid in 
   if fid = (Can.data t).E.pic then return () else 
     update [`SetPicture fid] t self
     

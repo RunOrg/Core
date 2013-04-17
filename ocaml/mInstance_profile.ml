@@ -34,7 +34,7 @@ module Info = struct
       facebook : string option ;
       phone    : string option ;
       tags     : string list ;
-     ?pic      : IFile.t option ;
+     ?pic      : IOldFile.t option ;
      ?search   : bool = false ;
      ?owners   : IUser.t list = [] ;
      ?unbound  : bool = false ;
@@ -70,7 +70,7 @@ type t = <
   facebook : string option ;
   phone    : string option ;
   tags     : string list ;
-  pic      : [`GetPic] IFile.id option ;
+  pic      : [`GetPic] IOldFile.id option ;
   search   : bool ;
   unbound  : IUser.t list option ;
 > ;;
@@ -87,7 +87,7 @@ let extract iid i = Info.(object
   method facebook = i.facebook
   method phone    = i.phone
   method tags     = i.tags
-  method pic      = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
+  method pic      = BatOption.map IOldFile.Assert.get_pic i.pic (* Can view instance *)
   method search   = i.search 
   method unbound  = if i.unbound then Some i.owners else None
 end)

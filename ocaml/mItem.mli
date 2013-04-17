@@ -24,12 +24,12 @@ type mail = <
 
 type image    = <
   author : IAvatar.t ;
-  file   : [`GetImg] IFile.id
+  file   : [`GetImg] IOldFile.id
 >
 
 type doc     = <
   author : IAvatar.t ;
-  file   : [`GetDoc] IFile.id ;
+  file   : [`GetDoc] IOldFile.id ;
   title  : string ;
   ext    : MOldFile.Extension.t ;
   size   : float
@@ -102,12 +102,12 @@ module Create : sig
   val image :
        'any MActor.t 
     -> [`Write] MAlbum.t
-    -> ([`Created] IItem.id * [`PutImg] IFile.id) option O.run
+    -> ([`Created] IItem.id * [`PutImg] IOldFile.id) option O.run
 
   val doc :
        'any MActor.t 
     -> [`Write] MFolder.t
-    -> ([`Created] IItem.id * [`PutDoc] IFile.id) option O.run
+    -> ([`Created] IItem.id * [`PutDoc] IOldFile.id) option O.run
 
 end
 

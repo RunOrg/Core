@@ -52,7 +52,7 @@ let collect ~lastname ~firstname ~email ~picture =
       else
 	if firstname = "" then Some lastname
 	else Some (firstname ^ " " ^ lastname)
-    method picture = BatOption.map IFile.decay picture
+    method picture = BatOption.map IOldFile.decay picture
     method role    = None
     method sort    =   
       if ln = "" then

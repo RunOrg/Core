@@ -30,7 +30,7 @@ type t = <
   confirmed : bool ;
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
-  picture   : [`GetPic] IFile.id option ;
+  picture   : [`GetPic] IOldFile.id option ;
   birthdate : Date.t option ;
   phone     : string option ;
   cellphone : string option ;
@@ -105,7 +105,7 @@ class type user_full = object
   method zipcode   : string option
   method city      : string option
   method country   : string option
-  method picture   : [`GetPic] IFile.id option 
+  method picture   : [`GetPic] IOldFile.id option 
   method gender    : [`m|`f] option
   method white     : IWhite.t option 
 end
@@ -127,7 +127,7 @@ val user_bind : user_full -> IUser.t O.run
 
 val update : [`Edit] IUser.id -> user_edit -> unit O.run
 
-val set_pic : [`Edit] IUser.id -> [`OwnPic] IFile.id option -> unit O.run
+val set_pic : [`Edit] IUser.id -> [`OwnPic] IOldFile.id option -> unit O.run
 
 val get : [<`View|`Bot|`IsSelf] IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
 

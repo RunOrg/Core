@@ -12,7 +12,7 @@ type version = <
   filename : string ; 
   size     : float ; 
   ext      : MOldFile.Extension.t ;
-  file     : [`GetDoc] IFile.id ; 
+  file     : [`GetDoc] IOldFile.id ; 
   time     : float ;
   author   : IAvatar.t ;
 > ;;
@@ -22,7 +22,7 @@ let publish v = object
   method filename = v # filename
   method size     = v # size
   method ext      = v # ext
-  method file     = IFile.Assert.get_doc (v # file) 
+  method file     = IOldFile.Assert.get_doc (v # file) 
   method time     = v # time
   method author   = v # author
 end

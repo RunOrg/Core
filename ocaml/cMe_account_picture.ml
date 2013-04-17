@@ -18,7 +18,7 @@ let () = define UrlMe.Account.def_picture begin fun owid cuid ->
     let  pic  = BatOption.bind (#picture) user in 
     let  id   = match pic with 
       | None -> "" 
-      | Some fid -> IFile.to_string (IFile.decay fid) ^ "/" ^ IFile.Deduce.make_getPic_token cuid fid
+      | Some fid -> IOldFile.to_string (IOldFile.decay fid) ^ "/" ^ IOldFile.Deduce.make_getPic_token cuid fid
     in
 
     let html = Asset_Upload_Picture.render (object
@@ -49,7 +49,7 @@ let () = UrlMe.Account.def_picpost begin fun req res ->
     let! json = req_or (return None) $ Action.Convenience.get_json req in 
     let! pic = req_or (return None) (try Some (Json.to_string json) with _ -> None) in
     let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
-    MOldFile.own_pic cuid (IFile.of_string fid) 
+    MOldFile.own_pic cuid (IOldFile.of_string fid) 
   end in
 
   let! () = ohm $ MUser.set_pic (IUser.Deduce.can_edit cuid) pic in 
