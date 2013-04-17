@@ -5,6 +5,8 @@ open BatPervasives
 
 module Actions = struct
 
+  open MFile
+
   (* High-level action tasks *)
   open MDo
 
