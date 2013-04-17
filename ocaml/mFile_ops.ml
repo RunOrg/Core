@@ -38,7 +38,38 @@ let uploader h =
   return log.Data.author 
 
 let upload store author ~public ~filename local = 
-  return None
+  
+  let! time = ohmctx (#time) in
+  let! provider = req_or (return None) (Store.provider store) in
+
+  let! size = req_or (return None) begin 
+    try let chan = Pervasives.open_in_bin local in
+	try let size = Pervasives.in_channel_length chan in
+	    Pervasives.close_in chan ; Some (float_of_int size /. 1024.) 
+	with _ -> Pervasives.close_in chan ; None
+    with _ -> None
+  end in 
+
+  let! fileT = ohm_req_or (return None) (provider # upload ~public ~filename local) in
+
+  let store, storeT = store in 
+  
+  let data = Data.({
+    owner  = Some (provider # owner) ;
+    author = Some author ;
+    name   = filename ;
+    size   ;
+    store  ;
+    storeT ;
+    fileT  ;
+    del    = None ;
+    time   ;
+    delok = false ;
+  }) in
+
+  let! id = ohm (Tbl.create data) in
+  
+  return (Some Handle.({ id ; store ; storeT ; fileT }))
 
 let register h author ~size ~filename = 
 
