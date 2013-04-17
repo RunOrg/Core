@@ -5,12 +5,12 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module Tbl = MFile_common.Tbl
+module Tbl = MOldFile_common.Tbl
 
 let build_key version id name = 
   String.concat "/" [
     IFile.to_string id ;
-    MFile_common.string_of_version version ;
+    MOldFile_common.string_of_version version ;
     name
   ]
 
@@ -21,7 +21,7 @@ let get file version =
   let! file = ohm_req_or (return None) $ Tbl.get id in
 
   let versionData_opt = 
-    try Some (List.assoc (MFile_common.string_of_version version) (file # versions))
+    try Some (List.assoc (MOldFile_common.string_of_version version) (file # versions))
     with Not_found -> None
   in
   

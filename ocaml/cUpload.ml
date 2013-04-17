@@ -27,31 +27,31 @@ let confirm ?(white=white) prove confirm req res =
   white
 
 let () = UrlUpload.Core.def_ok 
-  (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
+  (confirm IFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
 
 let () = UrlUpload.Client.def_ok 
-  (confirm IFile.Deduce.from_getPic_token MFile.Upload.confirm_pic)
+  (confirm IFile.Deduce.from_getPic_token MOldFile.Upload.confirm_pic)
 
 let () = UrlUpload.Client.Doc.def_ok 
-  (confirm IFile.Deduce.from_getDoc_token MFile.Upload.confirm_doc)
+  (confirm IFile.Deduce.from_getDoc_token MOldFile.Upload.confirm_doc)
 
 let () = UrlUpload.Client.Img.def_confirm
   (confirm ~white:(fun _ res -> return res) 
-     IFile.Deduce.from_getImg_token MFile.Upload.confirm_img)
+     IFile.Deduce.from_getImg_token MOldFile.Upload.confirm_img)
 
 (* Preparing an upload --------------------------------------------------------------------- *) 
 
 let form owid fid outer inner prove ok res = 
   let proof = prove fid in 
   let redirect = ok (IFile.decay fid, proof) in
-  let html = outer (ConfigS3.upload_form (MFile.Upload.configure fid redirect) inner) in
+  let html = outer (ConfigS3.upload_form (MOldFile.Upload.configure fid redirect) inner) in
   CPageLayout.core owid `EMPTY html res
 
 let () = UrlUpload.Core.def_root begin fun req res -> 
 
   let! cuid = req_or (white req res) $ CSession.get req in
     
-  let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_pic ~cuid in
+  let! fid = ohm_req_or (white req res) $ MOldFile.Upload.prepare_pic ~cuid in
   
   form (req # server) fid 
     (Asset_Upload_Form.render) 
@@ -71,7 +71,7 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
   let cuid = MActor.user (access # actor) in
   let iid  = IInstance.Deduce.upload (access # iid) in
     
-  let! fid = ohm_req_or (white req res) $ MFile.Upload.prepare_client_pic ~iid ~cuid in
+  let! fid = ohm_req_or (white req res) $ MOldFile.Upload.prepare_client_pic ~iid ~cuid in
   
   form (snd req # server) fid 
     (Asset_Upload_Form.render) 
@@ -118,7 +118,7 @@ let () = UrlUpload.Client.Img.def_prepare $ CClient.action begin fun access req 
 
   let! _, fid = ohm_req_or (return res) $ MItem.Create.image (access # actor) album in
   
-  let upload_config = MFile.Upload.configure fid ~filename ~redirect:"-" in
+  let upload_config = MOldFile.Upload.configure fid ~filename ~redirect:"-" in
     
   let upload_url, upload_post = ConfigS3.upload_url upload_config in
 
@@ -150,8 +150,8 @@ let find req res =
   let! proof = req_or fail $ req # get "proof" in
   let! fid   = req_or fail $ IFile.Deduce.from_getPic_token cuid id proof in
 
-  let! small = ohm_req_or fail $ MFile.Url.get fid `Small in
-  let! large = ohm_req_or fail $ MFile.Url.get fid `Large in
+  let! small = ohm_req_or fail $ MOldFile.Url.get fid `Small in
+  let! large = ohm_req_or fail $ MOldFile.Url.get fid `Large in
 
   return $ Action.json [
     "small", Json.String small ;
@@ -173,7 +173,7 @@ let () = UrlUpload.Client.Img.def_check begin fun req res ->
 
   let! fid   = req_or fail $ IFile.Deduce.from_getImg_token cuid id proof in
 
-  let! large = ohm_req_or fail $ MFile.Url.get fid `Large in
+  let! large = ohm_req_or fail $ MOldFile.Url.get fid `Large in
 
   return $ Action.json [ "ok", Json.Bool true ] res
 

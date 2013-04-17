@@ -10,7 +10,7 @@ let render ?moderate access item =
     | `Doc   d -> Some d
     | _        -> None
   end in
-  let! download = ohm_req_or (return None) $ MFile.Url.get (doc # file) `File in
+  let! download = ohm_req_or (return None) $ MOldFile.Url.get (doc # file) `File in
 
   let! now = ohmctx (#time) in
 

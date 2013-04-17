@@ -13,7 +13,7 @@ let () = define UrlClient.Events.def_picture begin fun parents event access ->
     let! pic = ohm begin
       let! pic = req_or (return None) (try Some (Json.to_string json) with _ -> None) in
       let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
-      O.decay $ MFile.instance_pic (access # iid) (IFile.of_string fid) 
+      O.decay $ MOldFile.instance_pic (access # iid) (IFile.of_string fid) 
     end in
 
     let! () = ohm $ O.decay (MEvent.Set.picture pic event (access # actor)) in

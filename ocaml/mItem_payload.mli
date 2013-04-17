@@ -17,7 +17,7 @@ module Doc : Ohm.Fmt.FMT with type t =
     author : IAvatar.t ;
     file   : IFile.t ;
     title  : string ;
-    ext    : MFile.Extension.t ; 
+    ext    : MOldFile.Extension.t ; 
     size   : float 
   >
 

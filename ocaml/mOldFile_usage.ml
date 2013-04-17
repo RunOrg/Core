@@ -9,7 +9,7 @@ module UsageView = CouchDB.ReduceView(struct
   module Key = Id
   module Value = Fmt.Float
   module Reduced = Fmt.Float
-  module Design = MFile_common.Design
+  module Design = MOldFile_common.Design
   let name   = "usage"
   let map    = "if (doc.t == 'file') 
                   for (var v in doc.versions) 

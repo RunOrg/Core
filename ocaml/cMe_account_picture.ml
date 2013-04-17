@@ -49,7 +49,7 @@ let () = UrlMe.Account.def_picpost begin fun req res ->
     let! json = req_or (return None) $ Action.Convenience.get_json req in 
     let! pic = req_or (return None) (try Some (Json.to_string json) with _ -> None) in
     let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
-    MFile.own_pic cuid (IFile.of_string fid) 
+    MOldFile.own_pic cuid (IFile.of_string fid) 
   end in
 
   let! () = ohm $ MUser.set_pic (IUser.Deduce.can_edit cuid) pic in 

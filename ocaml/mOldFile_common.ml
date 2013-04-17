@@ -33,7 +33,7 @@ module VersionData = Fmt.Make(struct
   > 
 end)
 
-module MFile = Fmt.Make(struct
+module File = Fmt.Make(struct
   module IUser = IUser
   module IInstance = IInstance
   module IItem = IItem
@@ -49,9 +49,9 @@ module MFile = Fmt.Make(struct
   > 
 end)
 
-module Tbl = CouchDB.Table(MyDB)(IFile)(MFile)
+module Tbl = CouchDB.Table(MyDB)(IFile)(File)
 
-include MFile
+include File
 
 type version = 
   [ `Original

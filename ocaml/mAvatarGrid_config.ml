@@ -36,7 +36,7 @@ let apply_avatar aid what =
   let! picture = ohm begin 
     match d # picture with 
       | None     -> return None 
-      | Some fid -> MFile.Url.get fid `Small
+      | Some fid -> MOldFile.Url.get fid `Small
   end in
   return begin match what with 
     | `Name -> begin 
@@ -81,7 +81,7 @@ let apply_profile aid what =
 	| h :: _ -> Json.String h 
       end in 
 
-      let! pic = ohm $ Run.opt_bind (fun fid -> MFile.Url.get fid `Small) profile.picture in
+      let! pic = ohm $ Run.opt_bind (fun fid -> MOldFile.Url.get fid `Small) profile.picture in
 
       let data = (object
 	method fullname = collected # name

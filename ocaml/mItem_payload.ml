@@ -27,7 +27,7 @@ module Doc = Fmt.Make(struct
     author "a" : IAvatar.t ;
     file   "f" : IFile.t ;
     title  "t" : string ;
-    ext    "e" : MFile.Extension.t ; 
+    ext    "e" : MOldFile.Extension.t ; 
     size   "s" : float 
   >
 end)

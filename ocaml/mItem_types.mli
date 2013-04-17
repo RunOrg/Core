@@ -26,7 +26,7 @@ type doc     = <
   author : IAvatar.t ;
   file   : [`GetDoc] IFile.id ;
   title  : string ;
-  ext    : MFile.Extension.t ;
+  ext    : MOldFile.Extension.t ;
   size   : float
 >
 

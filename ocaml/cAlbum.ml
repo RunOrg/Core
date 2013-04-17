@@ -9,7 +9,7 @@ let render access item =
     | `Image i -> Some (i # file) 
     | _        -> None
   in
-  let! pic = ohm $ Run.opt_bind (fun fid -> MFile.Url.get fid `Small) fidopt in
+  let! pic = ohm $ Run.opt_bind (fun fid -> MOldFile.Url.get fid `Small) fidopt in
   return $ Some (object
     method url      = "javascript:void(0)"
     method pic      = pic
@@ -29,7 +29,7 @@ let album_rw more access album walbum =
   O.Box.fill begin 
     let! items, more = ohm $ O.decay (items more access album None) in 
     let  iid = IInstance.Deduce.can_see_usage (MAlbum.Get.write_instance walbum) in 
-    let! used, full = ohm $ O.decay (MFile.Usage.instance iid) in 
+    let! used, full = ohm $ O.decay (MOldFile.Usage.instance iid) in 
     Asset_Album_List.render (object
       method upload = Some (object 
 	method prepare = Action.url UrlUpload.Client.Img.prepare (access # instance # key) 

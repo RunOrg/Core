@@ -2711,7 +2711,7 @@ let zoom_in = _icon "zoom_in"
 let zoom_out = _icon "zoom_out"
 let zoom = _icon "zoom"
 
-let of_extension : MFile.Extension.t -> string = function
+let of_extension : MOldFile.Extension.t -> string = function
   | `File       -> page_white
   | `Text       -> page_white_text
   | `Image      -> page_white_picture

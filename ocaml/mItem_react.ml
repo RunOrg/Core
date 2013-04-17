@@ -113,7 +113,7 @@ let () =
     Tbl.update id update
   in
 
-  Sig.listen MFile.Upload.Signals.on_item_img_upload upload
+  Sig.listen MOldFile.Upload.Signals.on_item_img_upload upload
 
 let () = 
   let upload (id,name,ext,size,fid) = 
@@ -146,7 +146,7 @@ let () =
     Tbl.update id update
   in
 
-  Sig.listen MFile.Upload.Signals.on_item_doc_upload upload
+  Sig.listen MOldFile.Upload.Signals.on_item_doc_upload upload
 
 (* Obliterate item *)
 

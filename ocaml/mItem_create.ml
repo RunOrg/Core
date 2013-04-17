@@ -41,7 +41,7 @@ let image actor album =
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create image-uploader on this instance *)
-  let! img = ohm_req_or (return None) $ MFile.Upload.prepare_img 
+  let! img = ohm_req_or (return None) $ MOldFile.Upload.prepare_img 
     ~ins:instance
     ~usr:(IUser.Deduce.is_anyone user)
     ~item:itid
@@ -70,7 +70,7 @@ let doc actor folder =
   let  itid     = IItem.Assert.created (IItem.gen ()) (* Creating it right now *) in
 
   (* Attempt to create file-uploader on this instance. *)
-  let! doc = ohm_req_or (return None) $ MFile.Upload.prepare_doc 
+  let! doc = ohm_req_or (return None) $ MOldFile.Upload.prepare_doc 
     ~ins:instance
     ~usr:(IUser.Deduce.is_anyone user)
     ~item:itid

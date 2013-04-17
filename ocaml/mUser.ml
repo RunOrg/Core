@@ -406,7 +406,7 @@ let _facebook_update uid facebook details =
       
   in
 	
-  let! () = ohm $ MFile.set_facebook_pic pic_id self details in
+  let! () = ohm $ MOldFile.set_facebook_pic pic_id self details in
 	
   let! created, confirmed, obj = ohm $
     Tbl.transact uid (update |- return)
@@ -775,7 +775,7 @@ let obliterate uid =
     match user.Data.picture with None -> return () | Some fid -> 
 	(* Deletion acts as a bot - the user owns their picture. *)
       let fid = IFile.Assert.bot fid in
-      MFile.delete_now fid
+      MOldFile.delete_now fid
   end in
   
   let update user =

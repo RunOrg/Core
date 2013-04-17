@@ -5,7 +5,7 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module Tbl = MFile_common.Tbl
+module Tbl = MOldFile_common.Tbl
 
 module Signals = struct
 
@@ -44,7 +44,7 @@ let prepare_pic ~cuid =
   
   let usr = IUser.Deduce.is_anyone cuid in
     
-  let! used, free = ohm $ MFile_usage.user usr in
+  let! used, free = ohm $ MOldFile_usage.user usr in
     
   if used >= free then 
     return None
@@ -55,7 +55,7 @@ let prepare_pic ~cuid =
 let prepare_if_allowed ~iid ~prepare = 
 
   let  see_usage_ins = IInstance.Deduce.can_see_usage iid in
-  let! used, free = ohm $ MFile_usage.instance see_usage_ins in
+  let! used, free = ohm $ MOldFile_usage.instance see_usage_ins in
   
   if used >= free then 
     return None
@@ -79,7 +79,7 @@ let prepare_doc ~ins ~usr ?item () =
 let configure id ?filename ~redirect = 
   ConfigS3.upload 
     ~bucket:"ro-temp"
-    ~key:(IFile.to_string id ^ "/" ^ MFile_common.string_of_version `Original)
+    ~key:(IFile.to_string id ^ "/" ^ MOldFile_common.string_of_version `Original)
     ?filename
     ~redirect
     ()
@@ -120,11 +120,11 @@ let remove ~version id =
 
   let remove file = 
     try 
-      let vstr     = MFile_common.string_of_version version in 
+      let vstr     = MOldFile_common.string_of_version version in 
       let bucket   =
 	match
 	  (file # k : [`Temp|`Extern|`Doc|`Image|`Picture]),
-	  (version : MFile_common.version)
+	  (version : MOldFile_common.version)
 	with 
 	  (* temporary and original files remain in temp bucket *)
 	  | `Temp, _ | _,  `Original -> Some "ro-temp"
@@ -199,7 +199,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 
 	let upload v filename = 
 	  
-	  let version = MFile_common.string_of_version v in 
+	  let version = MOldFile_common.string_of_version v in 
 	  let size = BatFile.size_of filename in
 	  let key = Id.str (file # key) ^ "/" ^ version ^ "/" ^ Filename.basename filename in
 	  let ok  = ConfigS3.publish ~bucket ~key ~file:filename in
@@ -259,7 +259,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 
     let download_file file name =
       let bucket = "ro-temp" 
-      and key = (Id.str (file # key)) ^ "/" ^ MFile_common.original ^ "/" ^ name in
+      and key = (Id.str (file # key)) ^ "/" ^ MOldFile_common.original ^ "/" ^ name in
       
       let! _ = ohm $ process file (ConfigS3.download ~bucket ~key) in
       return ()	    
@@ -267,7 +267,7 @@ let define_async_resizer ~kind ~name ~bucket ~large ~small =
 
     let get_original file = 
       try 
-	let obj = (List.assoc MFile_common.original (file # versions)) in
+	let obj = (List.assoc MOldFile_common.original (file # versions)) in
 	download_file file (obj # name)
       with Not_found -> 
 	return (log "File.resize: %s has no original version!" (IFile.to_string id)) 
@@ -307,12 +307,12 @@ let process_doc =
     
     let process file name =       
 
-      let version = MFile_common.string_of_version `File in 
+      let version = MOldFile_common.string_of_version `File in 
 
       let size_opt = 
 
 	let bucket = "ro-temp" 
-	and key = Id.str (file # key) ^ "/" ^ MFile_common.original ^ "/" ^ name in
+	and key = Id.str (file # key) ^ "/" ^ MOldFile_common.original ^ "/" ^ name in
 
 	let! filename = ConfigS3.download ~bucket ~key in
 
@@ -355,7 +355,7 @@ let process_doc =
 
     let get_original file = 
       try 
-	let obj = (List.assoc MFile_common.original (file # versions)) in
+	let obj = (List.assoc MOldFile_common.original (file # versions)) in
 	process file (obj # name) 
       with Not_found -> 
 	return (log "File.process-doc: %s has no original version!" (IFile.to_string id))
@@ -386,7 +386,7 @@ let define_async_confirmer ~kind ~name ~process =
 	    false, `keep )
 	else 
 	  let bucket = "ro-temp"
-	  and prefix = Id.str (file # key) ^ "/" ^ MFile_common.original in
+	  and prefix = Id.str (file # key) ^ "/" ^ MOldFile_common.original in
 	  match ConfigS3.find_upload ~bucket ~prefix with 
 	    | None -> 
 	      log "File.confirm: %s : %s/%s/* was not uploaded" 
@@ -405,7 +405,7 @@ let define_async_confirmer ~kind ~name ~process =
 		  method key  = file # key
 		  method item = file # item
 		  method name = Some found.ConfigS3.name
-		  method versions = [ MFile_common.original , (object
+		  method versions = [ MOldFile_common.original , (object
 		    method size = (float_of_int found.ConfigS3.size) /. 1048576.
 		    method name = Netencoding.Url.encode ~plus:false found.ConfigS3.name
 		  end )]
@@ -426,7 +426,7 @@ let define_async_confirmer ~kind ~name ~process =
 		  Signals.on_item_img_upload_call item
 		    
       | `Doc -> let! name = req_or success (file # name) in
-		let ext = MFile_extension.extension_of_file name in
+		let ext = MOldFile_extension.extension_of_file name in
 		
 		let size =
 		  match file # versions with 

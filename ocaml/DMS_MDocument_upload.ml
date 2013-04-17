@@ -70,7 +70,7 @@ let create ~self ~iid rid =
 
   O.decay begin
 
-    let! fid = ohm_req_or (return None) $ MFile.Upload.prepare_doc
+    let! fid = ohm_req_or (return None) $ MOldFile.Upload.prepare_doc
       ~ins:iid
       ~usr:(IUser.Deduce.is_anyone (MActor.user self))
       ()
@@ -91,7 +91,7 @@ let add_version ~self ~iid t =
 
   O.decay begin
 
-    let! fid = ohm_req_or (return None) $ MFile.Upload.prepare_doc
+    let! fid = ohm_req_or (return None) $ MOldFile.Upload.prepare_doc
       ~ins:iid
       ~usr:(IUser.Deduce.is_anyone (MActor.user self))
       ()
@@ -120,7 +120,7 @@ let ok pending =
 let ready fid = 
   let! pending = ohm_req_or (return None) $ Tbl.get (IFile.decay fid) in
   let! did     = req_or (return None) $ ok pending in
-  let! found   = ohm $ MFile.check fid `File in
+  let! found   = ohm $ MOldFile.check fid `File in
   return (if found then Some did else None)
 
 (* React to an upload being completed successfully. *)
@@ -170,7 +170,7 @@ let finish_version name ext size fid version =
   Tbl.set fid (object method what = `Version NewVersion.({ version with ok = true }) end)
   
 let () = 
-  let! _, name, ext, size, fid = Sig.listen MFile.Upload.Signals.on_item_doc_upload in
+  let! _, name, ext, size, fid = Sig.listen MOldFile.Upload.Signals.on_item_doc_upload in
   let! pending = ohm_req_or (return ()) $ Tbl.get fid in 
   match pending # what with 
     | `Doc     d -> finish_doc name ext size fid d

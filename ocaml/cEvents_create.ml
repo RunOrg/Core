@@ -28,7 +28,7 @@ let () = CClient.define UrlClient.Events.def_create begin fun access ->
     let! pic = ohm $ O.decay begin 
       let! pic = req_or (return None) (post # pic) in
       let! fid, _ = req_or (return None) (try Some (BatString.split pic "/") with _ -> None) in
-      MFile.instance_pic iid (IFile.of_string fid) 
+      MOldFile.instance_pic iid (IFile.of_string fid) 
     end in    
 
     let name = match BatString.strip (post # name) with 

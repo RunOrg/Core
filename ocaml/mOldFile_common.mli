@@ -1,6 +1,6 @@
 (* © 2013 RunOrg *)
 
-module MFile : Ohm.Fmt.FMT with type t = <
+module File : Ohm.Fmt.FMT with type t = <
   t        : MType.t ;
   k        : [ `Temp | `Doc | `Extern | `Picture | `Image ] ;
   usr      : IUser.t ;
@@ -11,7 +11,7 @@ module MFile : Ohm.Fmt.FMT with type t = <
   versions : (string * < name : string ; size : float >) list
 > 
 
-module Tbl : Ohm.CouchDB.TABLE with type id = IFile.t and type elt = MFile.t
+module Tbl : Ohm.CouchDB.TABLE with type id = IFile.t and type elt = File.t
 
 module Design : Ohm.CouchDB.DESIGN
 

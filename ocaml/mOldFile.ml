@@ -5,14 +5,14 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module Tbl = MFile_common.Tbl
+module Tbl = MOldFile_common.Tbl
 
-module Upload    = MFile_upload
-module Url       = MFile_url
-module Usage     = MFile_usage
-module Extension = MFile_extension 
+module Upload    = MOldFile_upload
+module Url       = MOldFile_url
+module Usage     = MOldFile_usage
+module Extension = MOldFile_extension 
 
-type version = MFile_common.version
+type version = MOldFile_common.version
 
 let own_pic cuid id = 
   let usr = IUser.Deduce.is_anyone cuid in 
@@ -42,11 +42,11 @@ let set_facebook_pic pic user details =
     method item     = None
     method name     = Some "profile.jpg"
     method versions = [
-      MFile_common.small, (object
+      MOldFile_common.small, (object
 	method size = 0.0
 	method name = details # pic_small
       end) ;
-      MFile_common.large, (object
+      MOldFile_common.large, (object
 	method size = 0.0
 	method name = details # pic_large
       end)
@@ -94,7 +94,7 @@ let delete_now fid =
   let versions = [ `Original ; `File ; `Small ; `Large ] in
 
   let remove version = 
-    let! success = ohm $ MFile_upload.remove ~version fid in 
+    let! success = ohm $ MOldFile_upload.remove ~version fid in 
     match success with
       | Some false -> Run.of_lazy (lazy (raise Async.Reschedule))
       | _          -> return ()
@@ -112,7 +112,7 @@ let item fid =
 
 let check fid version = 
   let! file = ohm_req_or (return false) (Tbl.get (IFile.decay fid)) in
-  let  v    = MFile_common.string_of_version version in 
+  let  v    = MOldFile_common.string_of_version version in 
   return (
     try ignore (List.assoc v (file # versions)) ; true 
     with Not_found -> false
