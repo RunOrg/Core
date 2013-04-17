@@ -1,3 +1,5 @@
+(* © 2013 RunOrg *)
+
 (** A file handle, represents a file that exists in storage. Designed to stick in 
     a third-party object and (at least on Amazon) query the download link without 
     a database access. *)
@@ -18,6 +20,7 @@ type upload_info = <
 module type POSTUPLOADER = sig
   include Ohm.Fmt.FMT
   val id : IFile.PostUploader.t
+  val author : t -> (#O.ctx,[`Avatar of IAvatar.t | `User of IUser.t] option) Ohm.Run.t
   val process : t -> upload_info -> (#O.ctx,unit) Ohm.Run.t
 end
 
@@ -45,15 +48,16 @@ module type STORAGE = sig
       after the fact. The client should provide the confirmation URL 
       here. *)
   val prepare : 
-       confirm:string
-    -> maxsize:float
+       maxsize:float
     -> t 
     -> (#O.ctx, < 
          handle : UpHandle.t ; 
-         post   : (string * string) list ; 
-	 key    : string ; 
-         url    : string ;
-       >) Ohm.Run.t
+         form   : string -> <
+           post   : (string * string) list ; 
+	   key    : string ; 
+           url    : string ;
+         >
+       > option) Ohm.Run.t
 
   (** Find an uploaded file from its upload handle (usually after the 
       upload has been confirmed). *)
@@ -63,30 +67,25 @@ module type STORAGE = sig
       available for a few minutes. *)
   val url : Handle.t -> t -> (#O.ctx,string option) Ohm.Run.t
 
-  (** Grab the name of the file (as it was uploaded from the client). *)
-  val filename : Handle.t -> t -> (#O.ctx,string option) Ohm.Run.t 
-
-  (** Set the MIME-type of the file. *)
-  val set_mime : Handle.t -> t -> string -> (#O.ctx, unit) Ohm.Run.t
-
   (** Upload a file. Data is provided as a path to a file on the server. *)
   val upload : 
        public:bool 
     -> filename:string 
     -> local_path 
+    -> t
     -> (#O.ctx, Handle.t option) Ohm.Run.t
 
   (** Download a file, retrieves both the file name and the data itself
       (represented as a path to a temporary file on the server). Size is 
       expressed in megabytes. *)
-  val download : Handle.t -> (#O.ctx,< 
+  val download : Handle.t -> t -> (#O.ctx,< 
     filename : string ; 
     local    : local_path ;
     size     : float  ;
   > option) Ohm.Run.t
 
   (** Delete a file, permanently. *)
-  val delete : Handle.t -> (#O.ctx,unit) Ohm.Run.t
+  val delete : Handle.t -> t -> (#O.ctx,unit) Ohm.Run.t
 
 end
 
@@ -122,11 +121,12 @@ module Uploader : functor(P:POSTUPLOADER) -> sig
   val prepare : 
        ?maxsize:float
     -> store
+    -> t 
     -> (#O.ctx, (UploadToken.t * form) option) Ohm.Run.t 
 
 end
 
-(** Confirm that a file has been sent. This usually triggers the post-uploader. *)
+(** Confirm that a file has been sent. This triggers the post-uploader. *)
 val confirm : UploadToken.t -> (#O.ctx,unit) Ohm.Run.t
 
 (** The store associated with a handle. *)
@@ -135,8 +135,24 @@ val store  : Handle.t -> store
 (** Delete a file, permanently. *)
 val delete : Handle.t -> (#O.ctx,unit) Ohm.Run.t
 
+(** The original uploader of a file. *)
+val uploader : Handle.t -> (#O.ctx,[`Avatar of IAvatar.t | `User of IUser.t] option) Ohm.Run.t
+
 (** Upload a temporary local file to the selected storage. *)
-val upload : store -> ?public:bool -> filename:string -> local_path -> (#O.ctx,Handle.t) Ohm.Run.t
+val upload : 
+      store
+  -> [`Avatar of IAvatar.t | `User of IUser.t ] 
+  -> ?public:bool 
+  -> filename:string 
+  -> local_path 
+  -> (#O.ctx,Handle.t option) Ohm.Run.t
 
 (** A client-safe download URL for a file. *)
-val download : Handle.t -> (#O.ctx,string option) Ohm.Run.t
+val url : Handle.t -> (#O.ctx,string option) Ohm.Run.t
+
+(** Create a temporary local file from the remote file. *)
+val download : Handle.t -> (#O.ctx,<
+  filename : string ;
+  local : string ;
+  size : float
+> option) Ohm.Run.t
