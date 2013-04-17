@@ -34,7 +34,8 @@ let delete h =
     (fun d -> Data.({ d with del = Some (BatOption.default time (BatOption.map (min time) d.del)) })) 
 
 let uploader h = 
-  return None
+  let! log = ohm_req_or (return None) (Tbl.get h.Handle.id) in
+  return log.Data.author 
 
 let upload store author ~public ~filename local = 
   return None
