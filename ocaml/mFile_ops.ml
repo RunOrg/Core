@@ -29,7 +29,9 @@ end
 include CouchDB.Convenience.Table(struct let db = O.db "file-log" end)(Id)(Data)
 
 let delete h = 
-  return () 
+  let! time = ohmctx (#time) in
+  Tbl.update h.Handle.id 
+    (fun d -> Data.({ d with del = Some (BatOption.default time (BatOption.map (min time) d.del)) })) 
 
 let uploader h = 
   return None
