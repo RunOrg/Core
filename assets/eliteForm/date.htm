@@ -4,8 +4,7 @@
     <input type="hidden"/>
     <input type="text" class="-d" readonly="readonly"/>
     <div class="-t" style="display:none">
-      <label>0:00</label>
-      <input type="text"/>
+      <input type="text" placeholder="00:00"/>
     </div>
     <div class="-calendar" style="display:none">
     </div>
@@ -28,20 +27,32 @@ setDate = (s) ->
   date = s 
   if date 
     $d.val [ s.substring(6,6+2), s.substring(4,4+2), s.substring(0,0+4) ].join("/") 
-    $h.val (date + time)
+    $h.val(if time then date + time + "00" else date)
+    $t.parent().show()
   else
     $d.val "" 
     $h.val ""
+    $t.parent().hide()
  
+setTime = (s) -> 
+  time = s
+  if time     
+    $t.val [ s.substring(0,2), s.substring(2,4) ].join(":")
+    $h.val (date + time + "00") if date
+  else
+    $t.val ""    
+    $h.val(if date then date else "")
+  
 $h.data 'onSet', (v) -> 
   if v && v.length >= 8
-    time = v.substring(8)
+    setTime v.substring(8)
     setDate v.substring(0,0+8) 
 
 $n.click () -> 
-  time = "" 
+  setTime "" 
   setDate "" 
   $c.hide()  
+  $t.hide()
 
 y = (x) -> x.getFullYear()
 m = (x) -> x.getMonth()
@@ -64,16 +75,36 @@ nextDay = (x) ->
 fmt = (x) -> 
   [ y(x), (if m(x) < 9 then '0' else ''), 1 + m(x), (if d(x) > 9 then '' else '0'), d(x) ].join "" 
 
+$t.change () ->
+
+  time = $t.val()
+  return setTime "" if !time
+
+  time = time + ":00" if !/:/.test(time)
+  time = time.split(":")
+
+  hour = parseInt time[0], 10
+  return setTime "" if hour is NaN
+  hour = if hour < 0 then 0 else if hour > 23 then 23 else hour
+  hour = if hour < 10 then "0" + hour else hour
+
+  minute = parseInt time[1], 10
+  return setTime(hour + "00") if minute is NaN
+  minute = if minute < 0 then 0 else if minute > 59 then 59 else minute
+  minute = if minute < 10 then "0" + minute else minute 
+
+  setTime(hour + "" + minute)
+
 $c.click (ev) -> 
-  $t = $ ev.target 
-  if $t.is ".-p"
+  $ta = $ ev.target 
+  if $ta.is ".-p"
     mm--
     return render() 
-  if $t.is ".-n"
+  if $ta.is ".-n"
     mm++
     return render() 
-  if $t.is "a"
-    setDate $t.attr "name"
+  if $ta.is "a"
+    setDate $ta.attr "name"
     return $c.hide()
 
 render = () ->
@@ -136,7 +167,7 @@ do render
 
   input {
     .asap();
-    padding: 3px; 
+    padding: 4px; 
     border: none;
     float: left;
   }
@@ -144,7 +175,8 @@ do render
   .-t {
     position: relative;
     width: 56px;
-    border-left: 1px dashed #CCC;
+    height: 23px;
+    border-left: 1px dotted #CCC;
     float: left;
 
     label {
