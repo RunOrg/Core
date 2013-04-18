@@ -139,5 +139,7 @@ let day_only d = { d with t = None }
 
 let ymd d = d.y, d.m, d.d
 
+let hms d = match d.t with None -> None | Some t -> Some (t.h, t.i, t.s)
+
 let min = { y =    0 ; m =  1 ; d =  1 ; t = None }
 let max = { y = 9999 ; m = 12 ; d = 31 ; t = None }

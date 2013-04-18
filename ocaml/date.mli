@@ -30,6 +30,8 @@ val date : int -> int -> int -> t
 
 val ymd : t -> int * int * int 
 
+val hms : t -> (int * int * int) option 
+
 val day_only : t -> t 
 
 val min : t
