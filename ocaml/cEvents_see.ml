@@ -93,7 +93,14 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
     let! name = ohm $ MEvent.Get.fullname event in
     let! pic  = ohm $ CPicture.large (MEvent.Get.picture event) in
     let  page = MEvent.Data.page data in 
-    let  date = BatOption.map Date.to_timestamp (MEvent.Get.date event) in 
+
+    let time =
+      let! date = req_or None (MEvent.Get.date event) in 
+      let  hour = BatOption.map (fun (h,i,_) -> Printf.sprintf "%02d:%02d" h i) (Date.hms date) in
+      let  date = Date.to_timestamp date in 
+      Some (object method date = date method hour = hour end)
+    in
+
     let  address = MEvent.Data.address data in 
     
     let location = 
@@ -153,10 +160,10 @@ let () = CClient.define ~back:(Action.url UrlClient.Events.home) UrlClient.Event
       method title      = name
       method join       = join
       method pic_change = pic_change 
-      method date       = BatOption.map (fun t -> (t,now)) date
+      method date       = BatOption.map (fun t -> (t # date,now)) time
       method status     = BatOption.map (fun s -> (s :> VStatus.t)) (MEvent.Get.status event)
       method desc       = desc
-      method time       = date
+      method time       = time
       method location   = location
       method details    = "/"
       method box        = O.Box.render contents 
