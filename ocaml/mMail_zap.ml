@@ -12,7 +12,7 @@ module ZapUnreadView = CouchDB.DocView(struct
   module Doc = Core.Data
   module Design = Core.Design
   let name = "zap_unread"
-  let map = "if (!doc.dead && doc.item && doc.zapped === null) emit(doc.uid);"
+  let map = "if (!doc.dead && doc.item && doc.solve === null && doc.zapped === null) emit(doc.uid);"
 end)
 
 let task_zap, def_zap = O.async # declare "notif-zap" IUser.fmt
