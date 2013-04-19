@@ -346,6 +346,28 @@ module Backdoor = struct
 
     return (insts, next)
 
+  module ChronoView = CouchDB.DocView(struct
+    module Key = Fmt.Float
+    module Value = Fmt.Unit
+    module Doc = Data
+    module Design = Design
+    let name = "backdoor-chrono"
+    let map = "if (doc.t == 'inst') emit(doc.create);"
+  end)
+
+  let chrono _ ~count start = 
+    let  limit = count + 1 in 
+    let! list = ohm $ ChronoView.doc_query ~descending:true ?startkey:start ~limit () in
+    let  list, next = OhmPaging.slice ~count list in
+
+    let  next = BatOption.map (#key) next in
+    let  list = List.map (fun item -> 
+      let id = IInstance.of_id (item # id) in
+      id, extract id (item # doc) 
+    ) list in 
+
+    return (list,next)
+
   let set_plugins plugins src = 
     let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
     let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with plugins })) in
