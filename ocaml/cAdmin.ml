@@ -13,6 +13,7 @@ module Public   = CAdmin_public
 module Instance = CAdmin_instance
 module API      = CAdmin_API
 module Unsbs    = CAdmin_unsbs
+module Insts    = CAdmin_insts
 
 let () = UrlAdmin.def_home $ admin_only begin fun cuid req res -> 
 
@@ -51,6 +52,13 @@ let () = UrlAdmin.def_home $ admin_only begin fun cuid req res ->
       method url      = Parents.unsbs # url 
       method title    = return "Désinscriptions"
       method subtitle = Some (return "Utilisateurs qui ont supprimé leur compte RunOrg")
+     end) ;
+
+    (object
+      method img      = VIcon.Large.building
+      method url      = Parents.insts # url 
+      method title    = return "Instances"
+      method subtitle = Some (return "Communautés par ordre inverse de création")
      end) ;
 
   ] in

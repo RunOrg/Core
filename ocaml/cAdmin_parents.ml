@@ -17,4 +17,4 @@ let public = make "Sites Web"       public None
 let stats  = make "Statistiques"    stats  ()
 let api    = make "API"             api    ()
 let unsbs  = make "Désinscriptions" unsbs  () 
-
+let insts  = make "Instances"       insts  () 
