@@ -162,4 +162,7 @@ module Backdoor : sig
     time  : float ; 
   >) list O.run
 
+  val get : [`Admin] ICurrentUser.id -> 'a IUser.id -> (#Ohm.CouchDB.ctx,t option) Ohm.Run.t
+
+
 end

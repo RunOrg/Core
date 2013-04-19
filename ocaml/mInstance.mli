@@ -145,6 +145,12 @@ module Backdoor : sig
 
   val list : count:int -> IInstance.t option -> ((IInstance.t * t) list * IInstance.t option) O.run
 
+  val chrono : 
+       [`Admin] ICurrentUser.id
+    -> count:int 
+    -> float option 
+    -> ((IInstance.t * t) list * float option) O.run
+
   val set_plugins : IPlugin.t list -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
 
 end

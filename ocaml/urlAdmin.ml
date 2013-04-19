@@ -15,6 +15,6 @@ let stats,    def_stats    = O.declare O.secure "admin/stats" A.none
 let getStats, def_getStats = O.declare O.secure "admin/stats/get" (A.r A.int) 
 let api,      def_api      = O.declare O.secure "admin/api" A.none
 let unsbs,    def_unsbs    = O.declare O.secure "admin/unsbs" A.none
-
+let insts,    def_insts    = O.declare O.secure "admin/insts" A.none
 
 module API = UrlAdmin_API
