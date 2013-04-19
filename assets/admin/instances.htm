@@ -1,0 +1,10 @@
+{#list}
+  <li class="-has-pic">
+    {?pic}<img src="{this}"/>{/?}
+    <div class="-body">
+      <h2>{name}</h2>
+      <a href="{url}">{url}</a>
+    </div>
+  </li>
+{/#}
+{?more}{this|ohm}{/?}

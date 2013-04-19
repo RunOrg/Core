@@ -1,0 +1,29 @@
+.admin-list {
+  padding: 0;
+  margin: 0;
+
+  h2 {
+    margin: 0;
+    font-size: 19px;
+  }
+
+  li {
+    list-style-type: none;
+    padding: 8px 0;
+  }
+
+  .-has-pic {
+    overflow: hidden;
+    > img { 
+      float: left; 
+      width: 50px; 
+    }
+    > .-body {
+      margin-left: 58px;
+    }
+  }
+
+  li + li {
+    border-top: 1px solid #AAA;
+  }
+}
