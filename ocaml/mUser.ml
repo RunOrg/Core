@@ -762,6 +762,9 @@ module Backdoor = struct
     let! list = ohm $ DeletedView.query ~limit:count ~descending:true () in
     return (List.map (#value) list) 
 
+  let get _ uid = 
+    get uid 
+
 end
 
 let obliterate uid =

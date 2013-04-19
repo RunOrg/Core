@@ -3,7 +3,22 @@
     {?pic}<img src="{this}"/>{/?}
     <div class="-body">
       <h2>{name}</h2>
-      <a href="{url}">{url}</a>
+      <span class="-sub">
+	<a href="{url}">{url}</a> 
+	&middot; <strong>{ `DateRelative date }</strong> 
+	&middot; <strong>{ members | string_of_int | esc }</strong> members
+      </span>
+      <ul class="admin-list">
+	{#admins}
+	<li class="-has-pic">
+	  {?pic}<img src="{this}"/>{/?}
+	  <div class="-body">
+	    <h2>{name}</h2>
+	    <span class="-sub"><a href="mailto:{email}">{email}</a>{?phone}&middot; <strong>{this}</strong>{/?}</span>
+	  </div>
+	</li>
+	{/#}
+      </ul>
     </div>
   </li>
 {/#}

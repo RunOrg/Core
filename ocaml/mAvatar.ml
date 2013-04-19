@@ -659,6 +659,33 @@ module Backdoor = struct
       end
     ) (return ()) 
 
+  module InstanceCountView = CouchDB.ReduceView(struct
+    module Key = IInstance
+    module Value = Fmt.Int
+    module Reduced = Fmt.Int
+    module Design = Design
+    let name   = "backdoor-instance-count"
+    let map    = "if (doc.t == 'avtr' && (doc.sta == 'mbr' || doc.sta == 'own')) emit(doc.ins,1);"
+    let reduce = "return sum(values);"
+    let group  = true
+    let level  = None
+  end)
+
+  let instance_member_count _ iid = 
+    let! n = ohm_req_or (return 0) (InstanceCountView.reduce iid) in 
+    return n 
+
+  let instance_admins _ iid = 
+    let key = (IInstance.decay iid, `Admin) in
+    let! list = ohm $ ByStatusView.query
+      ~startkey:key
+      ~endkey:key 
+      ~limit:10
+      ~endinclusive:true
+      ()
+    in 
+    O.decay (Run.list_map (fun item -> details (IAvatar.of_id item # id)) list)
+
   let list ~count start = 
     let! ids, next = ohm $ Tbl.all_ids ~count start in
     let! avatars = ohm $ Run.list_filter begin fun aid ->
