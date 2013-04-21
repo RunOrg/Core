@@ -3,6 +3,6 @@
 open Ohm
 open Ohm.Universal
 
-let () = 
-  let! uid = Sig.listen MDigest.send in 
-  return () 
+let () = MDigest.Send.define begin fun uid u t info ->
+  return None
+end

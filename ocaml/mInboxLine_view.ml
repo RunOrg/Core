@@ -117,6 +117,17 @@ module ByInboxView = CouchDB.DocView(struct
                emit([doc.aid,doc.filter[i],doc.last])"			   
 end)
 
+let make line view aid = object
+  method owner = line.Line.owner
+  method wall  = view.Data.wall
+  method folder = view.Data.folder
+  method album = view.Data.album
+  method time = view.Data.last
+  method seen = view.Data.seen >= view.Data.last
+  method aid  = aid
+  method filter = view.Data.filter 
+end 
+  
 let list ?start ?(filter=`All) ~count actor f = 
   let  aid = IAvatar.decay (MActor.avatar actor) in
   let! now = ohmctx (#time) in
@@ -137,16 +148,7 @@ let list ?start ?(filter=`All) ~count actor f =
     let! line  = ohm_req_or (delete ilvid) $ MInboxLine_common.Tbl.get ilid in
     let! _, aid = req_or (delete ilvid) line.Line.last in
     if not line.Line.show then delete ilvid else
-      let data : t = object
-	method owner = line.Line.owner
-	method wall  = view.Data.wall
-	method folder = view.Data.folder
-	method album = view.Data.album
-	method time = view.Data.last
-	method seen = view.Data.seen >= view.Data.last
-	method aid  = aid
-	method filter = view.Data.filter 
-      end in
+      let  data = make line view aid in 
       let! result = ohm_req_or (delete ilvid) $ f data in
       return (Some result) 
   in
@@ -156,6 +158,34 @@ let list ?start ?(filter=`All) ~count actor f =
   let  next = BatOption.map (#key |- (fun (_,_,t) -> t)) next in
 
   return (list, next) 
+
+module UnreadByInboxView = CouchDB.DocView(struct
+  module Key    = Fmt.Make(struct type json t = (IAvatar.t * float) end)
+  module Value  = Fmt.Unit
+  module Doc    = Data
+  module Design = Design
+  let name = "unread-by-inbox"
+  let map = "if (doc.seen < doc.last) emit([doc.aid,doc.last])"			   
+end)
+
+let digest ~since ~count actor f = 
+
+  let  aid    = IAvatar.decay (MActor.avatar actor) in
+  let! now    = ohmctx (#time) in
+
+  let  startkey = (aid,now) and endkey = (aid,since) in
+  let! list = ohm $ UnreadByInboxView.doc_query ~startkey ~endkey ~limit:count ~descending:true () in
+  
+  let extract item = 
+    let  view  = item # doc in 
+    let  ilid  = view.Data.ilid in
+    let! line  = ohm_req_or (return None) $ MInboxLine_common.Tbl.get ilid in
+    let! _, aid = req_or (return None) line.Line.last in
+    if not line.Line.show then return None else
+      f (make line view aid)
+  in
+
+  Run.list_filter extract list 
 
 module FilterCountView = CouchDB.ReduceView(struct
   module Key    = Fmt.Make(struct type json t = (IAvatar.t * IInboxLine.Filter.t) end)

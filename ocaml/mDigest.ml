@@ -20,8 +20,6 @@ end
 
 include CouchDB.Convenience.Table(struct let db = O.db "digest-last" end)(IUser)(Data) 
 
-let send_call, send = Sig.make (Run.list_iter identity) 
-
 (* Extracting an item for processing *)
 
 module ByStartView = CouchDB.DocView(struct
@@ -43,10 +41,13 @@ let rec process_next () =
     let  id = IUser.of_id (x # id) and doc = x # doc in 
     let! result = ohm (Tbl.Raw.put id Data.({ doc with start = Some time })) in
     match result with `collision -> process_next () | `ok -> 
+      let  start = Unix.gettimeofday () in
       let  sent = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty doc.Data.sent in
       let! sent = ohm (Send.send id sent) in 
       let  sent = BatPMap.foldi (fun k v l -> (k,v) :: l) sent [] in  
       let! () = ohm (Tbl.set id Data.({ start = None ; last = time ; sent })) in
+      let  () = Util.log "Created digest for %s (%.2f seconds)" (IUser.to_string id) 
+	(Unix.gettimeofday () -. start) in
       return true 
 
 let () = O.async # periodic 10 begin
