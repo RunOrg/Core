@@ -40,7 +40,11 @@ let rec process_next action =
   match next with [] -> return () | x :: _ -> 
     let  id = IUser.of_id (x # id) and doc = x # doc in 
     let! result = ohm (Tbl.Raw.put id Data.({ doc with start = Some time })) in
-    match result with `ok -> action id | `collision -> process_next action
+    match result with `collision -> process_next action | `ok -> 
+      let  sent = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty doc.Data.sent in
+      let! sent = ohm (action id sent) in 
+      let! _ = ohm (Tbl.Raw.put id Data.({ start = None ; last = time ; sent })) in
+      return () 
 
 (* Registering confirmed users as targets for sending. *)
 
