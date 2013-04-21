@@ -14,7 +14,7 @@ module Data = struct
   include Fmt.Extend(T)
 end
 
-include CouchDB.Convenience.Table(struct let db = "digest-last" end)(IUser)(Data) 
+include CouchDB.Convenience.Table(struct let db = O.db "digest-last" end)(IUser)(Data) 
 
 let send_call, send = Sig.make (Run.list_iter identity) 
 
