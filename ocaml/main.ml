@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *) 
+(* © 2013 RunOrg *) 
 
 open Ohm
 open BatPervasives
@@ -30,6 +30,7 @@ module Actions = struct
   open CHelp
   open CSearch
   open CInbox
+  open CDigest
 
   (* Standalone splash page *)
   open Splash
