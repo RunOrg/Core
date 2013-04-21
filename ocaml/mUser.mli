@@ -1,24 +1,5 @@
 (* © 2013 RunOrg *)
 
-module Notification : Ohm.Fmt.FMT with type t = 
-  [ `message
-  | `myMembership 
-  | `likeItem
-  | `commentItem
-  | `welcome 
-  | `subscription 
-  | `event
-  | `forum
-  | `album
-  | `group
-  | `poll
-  | `course
-  | `item
-  | `pending
-  | `digest
-  | `networkInvite
-  | `chatReq ]
-
 type t = <
   firstname : string option ;
   lastname  : string option ;
@@ -26,7 +7,6 @@ type t = <
   passhash  : string option ;
   email     : string ;
   emails    : (string * bool) list ;
-  autologin : bool ;
   confirmed : bool ;
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
@@ -40,7 +20,6 @@ type t = <
   country   : string option ;
   gender    : [`m|`f] option ;
   share     : MFieldShare.t list ;
-  blocktype : Notification.t list ;
   joindate  : float ;
   white     : IWhite.t option 
 > ;;
@@ -139,8 +118,6 @@ val confirmed : 'any IUser.id -> bool O.run
 val confirmed_time : [<`Bot] IUser.id -> float option O.run
 
 val set_password : string -> 'any ICurrentUser.id -> unit O.run
-  
-val blocks : 'any IUser.id -> Notification.t list O.run
 
 module Share : sig
 
