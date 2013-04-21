@@ -4,12 +4,14 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
+module Send = MDigest_send
+
 module Data = struct
   module T = struct
     type json t = {
-     ?start : float option ; 
+      start : float option ; 
       last  : float ;
-     ?sent  : (IInstance.t * float) list = [] ; 
+      sent  : (IInstance.t * float) list ; 
     } 
   end
   include T
@@ -31,20 +33,26 @@ module ByStartView = CouchDB.DocView(struct
   let map = "if (doc.start) emit(doc.start); else emit(doc.last);"
 end)
 
-let wait = 3600. *. 24.
+let wait = 3600. *. 24. (* Maximum one day between sendings *)
 
-let rec process_next action = 
+let rec process_next () = 
   let! time = ohmctx (#time) in
   let  endkey = time -. wait in 
   let! next = ohm (ByStartView.doc_query ~endkey ~limit:1 ()) in
-  match next with [] -> return () | x :: _ -> 
+  match next with [] -> return false | x :: _ -> 
     let  id = IUser.of_id (x # id) and doc = x # doc in 
     let! result = ohm (Tbl.Raw.put id Data.({ doc with start = Some time })) in
-    match result with `collision -> process_next action | `ok -> 
+    match result with `collision -> process_next () | `ok -> 
       let  sent = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty doc.Data.sent in
-      let! sent = ohm (action id sent) in 
-      let! _ = ohm (Tbl.Raw.put id Data.({ start = None ; last = time ; sent })) in
-      return () 
+      let! sent = ohm (Send.send id sent) in 
+      let  sent = BatPMap.foldi (fun k v l -> (k,v) :: l) sent [] in  
+      let! () = ohm (Tbl.set id Data.({ start = None ; last = time ; sent })) in
+      return true 
+
+let () = O.async # periodic 10 begin
+  let! processed = ohm (process_next ()) in
+  if processed then return None else return (Some 3600.)
+end
 
 (* Registering confirmed users as targets for sending. *)
 
