@@ -3,6 +3,33 @@
 open Ohm
 open Ohm.Universal
 
+type digest = <
+  pic   : string option ;
+  url   : string ;
+  name  : string ; 
+  items : <
+    name   : string ;
+    url    : string ;
+    pic    : string option ;
+    what   : [`Wall|`Folder|`Album] * int ;
+    unread : int ; 
+  > list
+> list
+
+module Digest = struct
+
+  let render digest = 
+    let! html = ohm (Asset_MailBrick_Digest.render digest) in
+    let  text = String.concat "\n\n" (List.map (fun inst ->       
+      inst # name ^ "\n(" ^ inst # url ^ ")\n\n" ^
+	String.concat "\n" (List.map (fun item -> 
+	  "  " ^ item # name 
+	) inst # items) ^ "\n"
+    ) digest) in 
+    return (object method html = html method text = text end)
+
+end
+
 type nospam = <
   link : bool -> string ;
   name : string ; 
@@ -74,7 +101,8 @@ end
 type payload = 
   [ `None
   | `Social of social 
-  | `Action of action ]
+  | `Action of action 
+  | `Digest of digest ]
 
 module Payload = struct
     
@@ -82,7 +110,7 @@ module Payload = struct
     | `None     -> return (object method text = "" method html = ignore end)
     | `Social s -> Social.render s 
     | `Action a -> Action.render a 
-
+    | `Digest d -> Digest.render d 
 end
 
 type footer = <
