@@ -31,7 +31,7 @@ module ByStartView = CouchDB.DocView(struct
   let map = "if (doc.start) emit(doc.start); else emit(doc.last);"
 end)
 
-let wait = 3600. *. 24. (* Maximum one day between sendings *)
+let wait = 3600. *. 24. *. 2. (* Minimum two days between sendings *)
 
 let rec process_next () = 
   let! time = ohmctx (#time) in
@@ -43,11 +43,11 @@ let rec process_next () =
     match result with `collision -> process_next () | `ok -> 
       let  start = Unix.gettimeofday () in
       let  sent = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty doc.Data.sent in
-      let! sent = ohm (Send.send id sent) in 
+      let! sent, items = ohm (Send.send id sent) in 
       let  sent = BatPMap.foldi (fun k v l -> (k,v) :: l) sent [] in  
       let! () = ohm (Tbl.set id Data.({ start = None ; last = time ; sent })) in
-      let  () = Util.log "Created digest for %s (%.2f seconds)" (IUser.to_string id) 
-	(Unix.gettimeofday () -. start) in
+      let  () = Util.log "Created digest for %s (%.2f seconds) %s" (IUser.to_string id) 
+	(Unix.gettimeofday () -. start) (if items = 0 then "" else Printf.sprintf " : %d items" items) in
       return true 
 
 let () = O.async # periodic 10 begin

@@ -60,8 +60,10 @@ let send uid sent =
   end actors) in
 
   (* If there's nothing to be send, just give up. *)
-  if byiid = [] then return sent else
+  if byiid = [] then return (sent,0) else
     
+    let count = List.fold_left (fun acc (_,b) -> acc + List.length b) 0 byiid in
+
     (* Create digest e-mail. *)
     let! () = ohm (Mailer.send_one (object
       method uid  = uid 
@@ -69,5 +71,7 @@ let send uid sent =
     end)) in  
     
     (* Update "last sent" for all instances. *)  
-    return (List.fold_left (fun map (iid,_) -> BatPMap.add iid now map) sent byiid) 
+    let sent = List.fold_left (fun map (iid,_) -> BatPMap.add iid now map) sent byiid in
+    
+    return (sent, count) 
 
