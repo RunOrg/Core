@@ -29,6 +29,11 @@
   padding-right: 40px;
 }
 
+#navbar #logo img {
+  height: 22px;
+  width: 111px;
+}
+
 #notifications span {
   border-color: #888;
 }
