@@ -2,7 +2,7 @@
   [| "Janvier" ; "Février" ; "Mars" ; "Avril" ; "Mai" ; "Juin" ;
      "Juillet" ; "Août" ; "Septembre" ; "Octobre" ; "Novembre" ; "Décembre" |].(m-1)
 
-| `Digest_Body -> "Ce courrier vous est envoyé automatiquement une fois par jour s'il reste des messages non lus dans une communauté dont vous êtes membre."
+| `Digest_Body -> "Ce courrier vous est envoyé automatiquement tous les deux jours s'il reste des messages non lus dans une communauté dont vous êtes membre."
 
 | `Digest_Unread (what,n) -> begin
   match what with 

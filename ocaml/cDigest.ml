@@ -75,7 +75,8 @@ let () = MDigest.Send.define begin fun uid u t info ->
     method mail = let! now = ohmctx (#date) in 
 		  let  title = `Digest_Title (Date.ymd now) in
 
-		  let  url iid n = CMail.link (info # id) (Some (to_action (iid,n))) (u # white) in
+		  let  url instance n = 
+		    CMail.link (info # id) (Some (to_action (instance # id,n))) (snd (instance # key)) in
 
 		  let! instances = ohm (Run.list_filter begin fun (iid, items) -> 
 
@@ -84,11 +85,11 @@ let () = MDigest.Send.define begin fun uid u t info ->
 		    
 		    let! access = ohm_req_or (return None) (CAccess.of_notification uid iid) in
 
-		    let  items = BatList.mapi (fun i item -> url iid i, item) items in
+		    let  items = BatList.mapi (fun i item -> url instance i, item) items in
 		    let! items = ohm (Run.list_filter (render_item access) items) in 
 
 		    if items = [] then return None else return (Some (object
-		      method url   = url iid (-1) 
+		      method url   = url instance (-1) 
 		      method name  = instance # name 
 		      method pic   = ipic
 		      method items = items 
