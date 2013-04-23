@@ -26,5 +26,12 @@ val list :
   -> 'any MActor.t
   -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)
   -> ('ctx,'a list * float option) Ohm.Run.t  
+
+val digest : 
+     since:float
+  -> count:int
+  -> 'any MActor.t
+  -> (t -> ((#O.ctx as 'ctx),'a option) Ohm.Run.t)
+  -> ('ctx,'a list) Ohm.Run.t  
   
 val mark : 'a MActor.t -> 'b IInboxLineOwner.id -> (#O.ctx,unit) Ohm.Run.t

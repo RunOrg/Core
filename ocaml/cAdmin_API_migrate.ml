@@ -11,7 +11,7 @@ include Make(struct
   let api = UrlAdmin.API.migrate
 
   module Format = Fmt.Make(struct
-    type json t = [ `AvatarAtoms ]
+    type json t = [ `AvatarAtoms | `Digest ]
   end)
 
   let example = `AvatarAtoms
@@ -20,5 +20,7 @@ include Make(struct
     match json with 
       | `AvatarAtoms -> let! () = ohm (MAvatar.Backdoor.refresh_avatar_atoms ()) in
 			ok "Avatar atom refresh started !"
+      | `Digest      -> let! () = ohm (MDigest.Backdoor.migrate_confirmed ()) in
+			ok "User digest import started !"
 
 end)

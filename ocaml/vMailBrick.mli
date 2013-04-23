@@ -1,5 +1,18 @@
 (* © 2013 RunOrg *)
 
+type digest = <
+  pic   : string option ;
+  url   : string ;
+  name  : string ; 
+  items : <
+    name   : string ;
+    url    : string ;
+    pic    : string option ;
+    what   : [`Wall|`Folder|`Album] * int ;
+    unread : int ; 
+  > list
+> list
+
 type nospam = <
   link : bool -> string ;
   name : string ; 
@@ -36,7 +49,8 @@ type footer = <
 type payload = 
   [ `None
   | `Social of social 
-  | `Action of action ]
+  | `Action of action
+  | `Digest of digest ]
 
 type result = <
   subject : string ; 

@@ -21,26 +21,6 @@ module Design = struct
   let name = "user" 
 end
 
-module Notification = Fmt.Make(struct
-  type json t = [ `message       "ms"
-		| `myMembership  "mm"
-		| `likeItem      "li"
-		| `commentItem   "ci"
-		| `welcome       "w"
-		| `subscription  "js"
-		| `event         "je" 
-		| `forum         "jf"
-		| `album         "ja"
-		| `group         "jg"
-		| `poll          "jp"
-		| `course        "jc"
-		| `item          "i"
-		| `pending       "p"
-		| `digest        "d"
-		| `networkInvite "n"
-		| `chatReq       "cr" ]
-end)
-
 module Data = struct
   module Float = Fmt.Float
   module T = struct
@@ -53,7 +33,6 @@ module Data = struct
      ?emails     : (!string, bool) Ohm.ListAssoc.t = [] ;
       confirmed  : bool   ;
      ?destroyed  : Float.t option ;
-     ?autologin  : bool = true ; 
      ?facebook   : OhmFacebook.t option ; 
      ?picture    : IFile.t option ;
      ?birthdate  : Date.t option ;
@@ -65,7 +44,6 @@ module Data = struct
      ?country    : string option ;
      ?gender     : [`m|`f] option ;
      ?share      : MFieldShare.t list = [`basic ; `email] ;
-     ?blocktype  : Notification.t list = [] ;
      ?joindate   : Float.t = 0.0 ;
      ?white      : IWhite.t option
     }
@@ -105,7 +83,6 @@ type t = <
   passhash  : string option ;
   email     : string ;
   emails    : (string * bool) list ;
-  autologin : bool ; 
   confirmed : bool ;
   destroyed : float option ;
   facebook  : OhmFacebook.t option ;
@@ -119,7 +96,6 @@ type t = <
   country   : string option ;
   gender    : [`m|`f] option ;
   share     : MFieldShare.t list ;
-  blocktype : Notification.t list ;
   joindate  : float ;
   white     : IWhite.t option
 > ;;
@@ -133,7 +109,6 @@ let extract t = Data.(object
   method passhash   = t.passhash
   method email      = EmailUtil.canonical t.email
   method emails     = List.map (fun (email,confirmed) -> EmailUtil.canonical email, confirmed) t.emails
-  method autologin  = t.autologin
   method confirmed  = t.confirmed
   method destroyed  = t.destroyed 
   method facebook   = t.facebook
@@ -147,7 +122,6 @@ let extract t = Data.(object
   method country    = t.country
   method gender     = t.gender
   method share      = t.share
-  method blocktype  = t.blocktype
   method joindate   = t.joindate
   method white      = t.white
 end)
@@ -161,7 +135,6 @@ let default = Data.({
   emails    = [] ;
   facebook  = None ;
   destroyed = None ;
-  autologin = true ;
   confirmed = false ;
   birthdate = None ;
   picture   = None ;
@@ -173,7 +146,6 @@ let default = Data.({
   country   = None ;
   gender    = None ;
   share     = [`basic ; `email] ;
-  blocktype = [] ; 
   joindate  = 0.0 ;
   white     = None 
 })
@@ -264,10 +236,6 @@ let confirm uid =
 let confirmed uid = 
   let! user = ohm_req_or (return false) $ Tbl.get (IUser.decay uid) in
   return user.Data.confirmed
-
-let blocks uid = 
-  let! user = ohm_req_or (return []) $ Tbl.get (IUser.decay uid) in
-  return user.Data.blocktype
 
 let confirmed_time uid = 
   let! user = ohm_req_or (return None) $ Tbl.get (IUser.decay uid) in 
@@ -792,7 +760,6 @@ let obliterate uid =
 	facebook  = None ;
 	confirmed = true ;
 	destroyed = Some (Unix.gettimeofday ()) ;
-	autologin = false ;
 	picture   = None ;
 	birthdate = None ;
 	phone     = None ;
@@ -803,7 +770,6 @@ let obliterate uid =
 	country   = None ;
 	gender    = None ;
 	share     = [] ;
-	blocktype = [] ;
 	joindate  = 0.0 ;
     }) 
   in
