@@ -139,7 +139,7 @@ let favicon id = match represent id with
   | `Test   -> "/ffbad-favicon.ico"
   | `FFBAD  -> "/ffbad-favicon.ico"
   | `FSCF   -> "/fscf-favicon.ico"
-  | `M2014  -> "/m2014-favicon.ico"
+  | `M2014  -> "/m2014-favicon.png"
   | `Innov  -> "/myInnovation-favicon.ico"
   | `Clichy -> "/clichy-favicon.ico"
   | `Alfort -> "/alfort-favicon.ico"
