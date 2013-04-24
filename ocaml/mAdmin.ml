@@ -5,7 +5,7 @@ open Ohm.Util
 open BatPervasives
 
 module MAdmin = Fmt.Make(struct
-  type json t = <  users : Id.t list > ;;
+  type json t = < users : Id.t list > ;;
 end)
 
 module MyTable = CouchDB.Table(O.ConfigDB)(Id)(MAdmin)
