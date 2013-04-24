@@ -12,6 +12,12 @@ let () = UrlSplash.def_contact begin fun req res ->
     | Some (`POST m) -> m
   in
 
+  let redirect = try Some (BatPMap.find "redirect" data) with Not_found -> None in
+  let data = BatPMap.remove "redirect" data in 
+
+  let uids = try [ IUser.of_string (BatPMap.find "to" data) ] with Not_found -> MAdmin.list () in
+  let data = BatPMap.remove "to" data in 
+
   let write html = BatPMap.iter begin fun k v -> 
     Html.concat [ Html.str "<dt>" ;
 		  Html.esc k ;
@@ -32,13 +38,14 @@ let () = UrlSplash.def_contact begin fun req res ->
 	~html:body
 	()
 	
-
     end in
 
     return ()
 
-  end (MAdmin.list ()) in
+  end uids in
 
-  return res
+  match redirect with 
+  | None -> return res
+  | Some url -> return (Action.redirect url res)
 
 end
