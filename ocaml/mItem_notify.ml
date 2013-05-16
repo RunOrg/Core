@@ -39,7 +39,7 @@ module Email = struct
     type json t = (IItem.t * IAvatar.t * IInstance.t)
   end)
     
-  let send_all = MReverseAccess.async "item-notify-loop" SendFmt.fmt 
+  let send_all = MAvatarStream.iter "item-notify-loop" SendFmt.fmt 
     (fun (itid, from, iid) aid ->     
       let! ( ) = true_or (return ()) (aid <> from) in
       let! uid = ohm_req_or (return ()) (MAvatar.get_user aid) in
@@ -71,15 +71,15 @@ module Email = struct
 	  (* For events, don't send to all readers (because event could be public), 
 	     send to any people in the event and to event moderators. *)
 	  let! event  = ohm_req_or (return None) $ MEvent.get eid in 
-	  let! access = ohm $ MEvent.Satellite.access event (`Wall `Manage) in
-	  let  iid    = MEvent.Get.iid event in 
-	  let  gid    = MEvent.Get.group event in 
-	  return $ Some (iid, [ access ; `Groups (`Any,[gid])]) 
+	  let! managers = ohm $ MEvent.Satellite.access event (`Wall `Manage) in
+	  let! viewers  = ohm $ MEvent.Can.member_access event in 
+	  let  iid    = MEvent.Get.iid event in 	
+	  return $ Some (iid, MAvatarStream.( managers + viewers ))
 	| `Discussion did ->
 	  let! discn  = ohm_req_or (return None) $ MDiscussion.get did in 
-	  let! access = ohm $ MDiscussion.Satellite.access discn (`Wall `Read) in
+	  let! readers = ohm $ MDiscussion.Satellite.access discn (`Wall `Read) in
 	  let  iid    = MDiscussion.Get.iid discn in
-	  return $ Some (iid, [access]) 
+	  return $ Some (iid, readers) 
       end in 
     
       let biid = IInstance.Assert.bot iid in 
@@ -148,7 +148,7 @@ module Comment = struct
     type json t = (IComment.t * IAvatar.t * IInstance.t)
   end)
     
-  let send_all = MReverseAccess.async "comment-notify-loop" SendFmt.fmt 
+  let send_all = MAvatarStream.iter "comment-notify-loop" SendFmt.fmt 
     (fun (cid, from, iid) aid ->     
       let! ( ) = true_or (return ()) (aid <> from) in
       let! uid = ohm_req_or (return ()) (MAvatar.get_user aid) in
@@ -179,6 +179,6 @@ module Comment = struct
     let  iid  = item # iid in
     let  biid = IInstance.Assert.bot iid in 
     
-    send_all biid [`List aids] (IComment.decay cid, from, iid) 
+    send_all biid (MAvatarStream.avatars aids) (IComment.decay cid, from, iid) 
 
 end 

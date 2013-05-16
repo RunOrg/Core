@@ -503,7 +503,7 @@ let count_user_instances uid =
   let! n   = ohm $ CountByUserView.reduce uid in
   return $ BatOption.default 0 n 
 
-(* MAccess by status ----------------------------------------------------------------------- *)
+(* Access by status ----------------------------------------------------------------------- *)
 
 module ByStatusView = CouchDB.MapView(struct
   module Key    = InsSta

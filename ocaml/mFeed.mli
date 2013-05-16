@@ -13,8 +13,7 @@ module Get : sig
 
   val id    : 'any t -> 'any IFeed.id
 
-  val notified    : [`Bot] t -> MAccess.t list O.run
-  val read_access : [`Bot] t -> MAccess.t list O.run
+  val read_access : [`Bot] t -> MAvatarStream.t O.run
 
   val owner : 'any t -> IFeedOwner.t
   val instance : 'any t -> IInstance.t

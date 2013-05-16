@@ -13,7 +13,7 @@ module Satellite : sig
     | `Folder of [ `Manage | `Read | `Write ]
     ]
 
-  val access : 'any t -> action -> (#O.ctx,MAccess.t) Ohm.Run.t
+  val access : 'any t -> action -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
 
 end
 
@@ -36,6 +36,8 @@ module Can : sig
 
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
+
+  val member_access : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
 
 end
 

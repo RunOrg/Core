@@ -8,9 +8,7 @@ module Data = struct
   module T = struct
     type json t = 
 	{
-	  directory : MAccess.t ;
-	 ?events    : MAccess.t = `Admin ; 
-	  freeze    : bool 
+	 ?events    : IDelegation.t = `Admin ; 
 	}
   end
   include T
@@ -21,16 +19,12 @@ module MyDB = CouchDB.Convenience.Database(struct let db = O.db "instance-access
 module Tbl = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let default = Data.({
-  directory = `Token ;
-  events    = `Token ;
-  freeze    = false
+  events    = `Everyone ;
 })
 
 let get id = 
   let! data = ohm_req_or (return default) $ Tbl.get (IInstance.decay id) in
   return data
-
-let set id data = Tbl.set (IInstance.decay id) data
 
 let update id f = 
   Tbl.Raw.transaction (IInstance.decay id) begin fun id -> 
@@ -40,26 +34,8 @@ let update id f =
     if data = real then return ((),`keep) else return ((),`put real)
   end 
 
-let view_directory id = 
-  let! t = ohm $ get (IInstance.decay id) in
-  return (MAccess.summarize t.Data.directory)
-
-let can_view_directory actor = 
-  let iid = MActor.instance actor in 
-  let! t = ohm $ get (IInstance.decay iid) in
-  let! allowed = ohm $ MAccess.test actor [ t.Data.directory ; `Admin ] in
-  return (if allowed then Some (IInstance.Assert.see_contacts iid) else None)
-
-let create_event id = 
-  let! t = ohm $ get (IInstance.decay id) in
-  return (MAccess.summarize t.Data.events)
-
 let can_create_event actor = 
   let iid = MActor.instance actor in 
   let! t = ohm $ get (IInstance.decay iid) in
-  let! allowed = ohm $ MAccess.test actor [ t.Data.events ; `Admin ] in
+  let! allowed = ohm $ MDelegation.test actor t.Data.events in
   return (if allowed then Some (IInstance.Assert.create_event iid) else None)
-
-let wall_post id = 
-  let! t = ohm $ get (IInstance.decay id) in
-  return (if t.Data.freeze then `Admin else `Member) 

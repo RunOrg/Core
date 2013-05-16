@@ -170,7 +170,7 @@ module SendFmt = Fmt.Make(struct
   >
 end)
 
-let send_all = MReverseAccess.async "membership-pending-notify-loop" SendFmt.fmt 
+let send_all = MAvatarStream.iter "membership-pending-notify-loop" SendFmt.fmt 
   (fun data aid ->     
     let! ( ) = true_or (return ()) (aid <> data # from) in
     let! uid = ohm_req_or (return ()) (MAvatar.get_user aid) in
@@ -205,13 +205,13 @@ let () =
     | Some (_,time,aid) -> Some (aid,time)) in
 
   let! avset = ohm_req_or (return ()) (MAvatarSet.naked_get now.Details.where) in
-  let! access = ohm $ MAvatarSet.Get.write_access avset in 
+  let! stream = ohm $ MAvatarSet.Get.write_access avset in 
   let  owner = MAvatarSet.Get.owner avset in
 
   let  biid = IInstance.Assert.bot iid in 
   let  mwid = IMail.Wave.gen () in
   
-  send_all biid [access] (object
+  send_all biid stream (object
     method from  = from
     method mid   = data # mid 
     method iid   = iid

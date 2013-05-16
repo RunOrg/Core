@@ -32,7 +32,7 @@ let implementation ?pcname ?(vision=`Normal) ~self ?name ~iid tid =
       gid    = asid ; 
       name   ;
       vision ; 
-      admins = `Nobody ;
+      admins = `Admin ;
       config = Config.default ;
       del    = None ;
     }) in

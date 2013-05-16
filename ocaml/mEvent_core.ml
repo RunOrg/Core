@@ -20,7 +20,7 @@ module Cfg = struct
       | `SetVision  of Vision.t
       | `SetPicture of IFile.t option
       | `SetDate    of Date.t option 
-      | `SetAdmins  of MAccess.t	  
+      | `SetAdmins  of IDelegation.t	  
       | `EditConfig of Config.Diff.t list
       | `Delete     of IAvatar.t
       ]
@@ -36,7 +36,7 @@ module Cfg = struct
 	date   : Date.t option ;
 	pic    : IFile.t option ;
 	vision : Vision.t ;
-	admins : MAccess.t ;
+	admins : IDelegation.t ;
 	draft  : bool ;
 	config : Config.t ;
 	del    : IAvatar.t option ;
@@ -70,7 +70,7 @@ type data_t = Cfg.Data.t = {
   date   : Date.t option ;
   pic    : IFile.t option ;
   vision : Vision.t ;
-  admins : MAccess.t ;
+  admins : IDelegation.t ;
   draft  : bool ;
   config : Config.t ;
   del    : IAvatar.t option ;

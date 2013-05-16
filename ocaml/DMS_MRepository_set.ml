@@ -10,10 +10,10 @@ module Can  = DMS_MRepository_can
 include HEntity.Set(Can)(E)
 
 let admins aids t self = 
-  let aids = BatList.sort_unique compare aids in
-  if aids <> List.sort compare (MAccess.delegates (Can.data t).E.admins) then
-    let admins = MAccess.set_delegates aids (Can.data t).E.admins in 
-    update [`SetAdmins admins] t self
+  let deleg  = (Can.data t).E.admins in 
+  let deleg' = IDelegation.set_avatars aids deleg in 
+  if deleg <> deleg' then 
+    update [`SetAdmins deleg'] t self
   else
     return ()
     

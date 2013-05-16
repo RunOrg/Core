@@ -22,7 +22,7 @@ module Cfg = struct
       | `SetUpload  of Upload.t 
       | `SetRemove  of Remove.t 
       | `SetDetail  of Detail.t 
-      | `SetAdmins  of MAccess.t	  
+      | `SetAdmins  of IDelegation.t
       | `Delete     of IAvatar.t
       ]
   end)
@@ -36,7 +36,7 @@ module Cfg = struct
 	upload : Upload.t ;
        ?remove : Remove.t = `Free ;
        ?detail : Detail.t = `Public ; 
-	admins : MAccess.t ;
+	admins : IDelegation.t ;
 	del    : IAvatar.t option ;
       }
     end
@@ -66,7 +66,7 @@ type data_t = Cfg.Data.t = {
   upload : Upload.t ; 
   remove : Remove.t ;
   detail : Detail.t ;
-  admins : MAccess.t ;
+  admins : IDelegation.t ;
   del    : IAvatar.t option ;
 }
 

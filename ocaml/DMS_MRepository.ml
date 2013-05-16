@@ -33,8 +33,9 @@ let create ~self ~name ~vision ~upload ~iid =
     let rid = DMS_IRepository.gen () in
     
     let admins = 
-      if None = MActor.admin self then `List [IAvatar.decay (MActor.avatar self)] 
-      else `Nobody
+      if None = MActor.admin self 
+      then IDelegation.make ~avatars:[IAvatar.decay (MActor.avatar self)] ~groups:[]
+      else `Admin
     in
 
     let upload = match upload with 

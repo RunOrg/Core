@@ -28,13 +28,13 @@ type 'relation t =
     {
       id     : 'relation IFeed.id ;
       data   : Data.t ;
-      access : ([`Read|`Write|`Manage] -> MAccess.t O.run) O.run ;
+      access : ([`Read|`Write|`Manage] -> MAvatarStream.t O.run) O.run ;
       read   : bool O.run ;
       write  : bool O.run ;
       admin  : bool O.run ;
     }
 
-let nil _ = return `Nobody
+let nil _ = return MAvatarStream.nobody
 			  
 let _access iid = function 
   | `Event eid -> let! event = ohm_req_or (return nil) $ MEvent.get eid in
@@ -52,14 +52,14 @@ let _make actor id (data:Data.t) =
 	       let! read = ohm (f `Read) in
 	       let! write = ohm (f `Write) in
 	       let! manage = ohm (f `Manage) in
-	       MAccess.test actor [ read ; write ; manage ] ) ;
+	       MAvatarStream.(is_in actor (union [read;write;manage])) ) ;
     write  = ( let! f = ohm owner in 
 	       let! write = ohm (f `Write) in
 	       let! manage = ohm (f `Manage) in
-	       MAccess.test actor [ write ; manage ] ) ;
+	       MAvatarStream.(is_in actor (write + manage)) ) ;
     admin  = ( let! f = ohm owner in 
 	       let! manage = ohm (f `Manage) in
-	       MAccess.test actor [ manage ] ) ;
+	       MAvatarStream.is_in actor manage ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)
@@ -85,15 +85,12 @@ module Get = struct
   let instance t = 
     t.data # iid
 
-  let notified t = 
+  let read_access t = 
     let! f = ohm t.access in
     let! read = ohm (f `Read) in
     let! write = ohm (f `Write) in
     let! manage = ohm (f `Manage) in
-    return [ read ; write ; manage ]
-
-  let read_access t = 
-    notified t
+    return (MAvatarStream.union [ read ; write ; manage ])
 
 end
 

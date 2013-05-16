@@ -20,10 +20,9 @@ module Satellite = struct
 
   let access t = function
     | `Wall   `Manage
-    | `Folder `Manage  -> return `Admin
+    | `Folder `Manage  -> return MAvatarStream.admins
     | `Wall   (`Read | `Write)  
-    | `Folder (`Read | `Write) -> let! access = ohm (Can.view_access t) in
-				  return (`Union access) 
+    | `Folder (`Read | `Write) -> Can.view_access t 
 
 end
 

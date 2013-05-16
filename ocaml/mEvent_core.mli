@@ -8,7 +8,7 @@ type data_t = {
   date   : Date.t option ;
   pic    : IFile.t option ;
   vision : MEvent_vision.t ;
-  admins : MAccess.t ;
+  admins : IDelegation.t ;
   draft  : bool ;
   config : MEvent_config.t ;
   del    : IAvatar.t option ;
@@ -20,7 +20,7 @@ type diff_t =
   | `SetVision  of MEvent_vision.t
   | `SetPicture of IFile.t option
   | `SetDate    of Date.t option 
-  | `SetAdmins  of MAccess.t	  
+  | `SetAdmins  of IDelegation.t	  
   | `EditConfig of MEvent_config.Diff.t list
   | `Delete     of IAvatar.t
   ]
