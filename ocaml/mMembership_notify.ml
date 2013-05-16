@@ -119,7 +119,7 @@ let admin_expected now =
     (* The user has performed a yes request. *)
     Details.(match now.user with 
       | Some (ask,_,aid) -> ask && aid = now.who
-      | None -> true)
+      | None -> false)
       
     (* There is no definite admin answer, or there is an older
        negative answer. *)
