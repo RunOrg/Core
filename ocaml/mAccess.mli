@@ -1,7 +1,4 @@
-module Action : Ohm.Fmt.FMT with type t = 
-  [ `View   (* "v" *)
-  | `Manage (* "m" *)
-  ]
+(* © 2013 RunOrg *)
 
 module State : Ohm.Fmt.FMT with type t = 
   [ `Pending   (* "p" *)

@@ -5,13 +5,6 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-module Action = Fmt.Make(struct
-  type json t = 
-    [ `View   "v"
-    | `Manage "m"
-    ]
-end) 
-
 module State = Fmt.Make(struct
   type json t = 
     [ `Pending   "p"
