@@ -551,6 +551,12 @@ let _ =
   let! id, _ = Sig.listen MUser.Signals.on_update in 
   task (IUser.to_id id)
 
+let () = 
+  let! aid, iid = Sig.listen Signals.on_update in 
+  let! avatar = ohm_req_or (return ()) (Tbl.get aid) in  
+  let! name = req_or (return ()) (avatar # name) in
+  MAtom.reflect iid `Avatar (IAvatar.to_id aid) name  
+
 let _ = 
 
   let! _, uid, iid, data = Sig.listen MProfile.Signals.on_update in 
@@ -588,13 +594,6 @@ let _ =
       | Some data -> return (update data))
   in
   
-  let! () = ohm begin 
-    if changed then match data # name with 
-      | None -> return () 
-      | Some name -> MAtom.reflect iid `Avatar (IAvatar.to_id aid) name
-    else return () 
-  end in 
-
   Signals.on_update_call (aid,iid)
 
 (* Obliterate all avatars for an user ----------------------------------------------------- *)
