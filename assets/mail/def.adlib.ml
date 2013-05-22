@@ -21,3 +21,4 @@
 
 | `Mail_Block_Title of bool
 | `Mail_Block_Body of bool
+| `Mail_Block_Button
