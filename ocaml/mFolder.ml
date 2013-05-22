@@ -32,7 +32,7 @@ type 'relation t =
       admin : bool O.run ;
     }
 
-let nil _ = return `Nobody 
+let nil _ = return MAvatarStream.nobody
 
 let _make actor id data = 
   let owner = Run.memo begin
@@ -49,14 +49,14 @@ let _make actor id data =
 	      let! read = ohm (f `Read) in
 	      let! write = ohm (f `Write) in
 	      let! manage = ohm (f `Manage) in
-	      MAccess.test actor [ read ; write ; manage ] ) ;
+	      MAvatarStream.(is_in actor (union [read;write;manage])) ) ;
     write = ( let! f = ohm owner in 
 	      let! write = ohm (f `Write) in
 	      let! manage = ohm (f `Manage) in
-	      MAccess.test actor [ write ; manage ] ) ;
+	      MAvatarStream.(is_in actor (write + manage)) ) ;
     admin = ( let! f = ohm owner in 
 	      let! manage = ohm (f `Manage) in
-	      MAccess.test actor [ manage ] ) ;
+	      MAvatarStream.is_in actor manage ) ;
   }
 
 (* Direct access ---------------------------------------------------------------------------- *)

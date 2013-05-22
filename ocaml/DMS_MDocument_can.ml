@@ -16,17 +16,17 @@ include HEntity.Can(struct
 
   let admin   e = 
     let! from_repos = ohm $ Run.list_map (fun rid ->
-      let! repo = ohm_req_or (return []) $ DMS_MRepository.get rid in
+      let! repo = ohm_req_or (return MAvatarStream.nobody) $ DMS_MRepository.get rid in
       DMS_MRepository.Can.admin_access repo
     ) e.E.repos in
-    return (`List [e.E.creator] :: List.concat from_repos) 
+    return MAvatarStream.(union (avatars [e.E.creator] :: from_repos)) 
 
   let view e = 
     let! from_repos = ohm $ Run.list_map (fun rid ->
-      let! repo = ohm_req_or (return []) $ DMS_MRepository.get rid in
+      let! repo = ohm_req_or (return MAvatarStream.nobody) $ DMS_MRepository.get rid in
       DMS_MRepository.Can.details_access repo
     ) e.E.repos in
-    return (`List [e.E.creator] :: List.concat from_repos) 
+    return MAvatarStream.(union (avatars [e.E.creator] :: from_repos)) 
 	
   let id_view  id = DMS_IDocument.Assert.view id
   let id_admin id = DMS_IDocument.Assert.admin id 

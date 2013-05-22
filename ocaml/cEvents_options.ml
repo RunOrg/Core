@@ -16,8 +16,10 @@ let template : (O.BoxCtx.t,'a,'b) OhmForm.template =
      ~format:AccessFmt.fmt
      ~source:[ `Admin,  (AdLib.write `Events_Options_Admin) ;
 	       `Member, (AdLib.write `Events_Options_Member) ]
-     (fun iid -> let! access = ohm $ O.decay (MInstanceAccess.create_event iid) in
-		 return (Some access))
+     (fun iid -> let! access = ohm $ O.decay (MInstanceAccess.get iid) in
+		 return (Some (match access.MInstanceAccess.Data.events with 
+  		   | `Everyone -> `Member
+  		   | _ -> `Admin)))
      OhmForm.keep)
       
   |> VEliteForm.with_ok_button ~ok:(AdLib.get `Events_Options_Submit) 
@@ -41,12 +43,12 @@ let () = CClient.define_admin UrlClient.Events.def_options begin fun access ->
     let events = match result with 
       | None -> `Admin
       | Some `Admin -> `Admin
-      | Some `Member -> `Token
+      | Some `Member -> `Everyone
     in
 
     let! () = ohm $ O.decay 
       (MInstanceAccess.update (access # iid)
-	 (fun data -> MInstanceAccess.Data.({ data with events })))
+	 (fun data -> MInstanceAccess.Data.({ (* data with *) events })))
     in 
     
     (* Return to main page *) 

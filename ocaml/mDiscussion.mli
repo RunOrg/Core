@@ -9,7 +9,7 @@ module Satellite : sig
     | `Folder of [ `Manage | `Read | `Write ]
     ]
 
-  val access : 'any t -> action -> (#O.ctx,MAccess.t) Ohm.Run.t
+  val access : 'any t -> action -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
 
 end
 

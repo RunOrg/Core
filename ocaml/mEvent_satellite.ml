@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -35,10 +35,8 @@ let access t action =
       | `Folder `Manage -> `Managers
   in
   
-  let! access = ohm begin match level with 
+  match level with 
     | `Viewers    -> Can.view_access t
     | `Registered -> Can.member_access t
     | `Managers   -> Can.admin_access t
-  end in 
   
-  return (`Union access) 

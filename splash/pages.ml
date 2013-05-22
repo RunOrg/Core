@@ -424,55 +424,7 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 	;
       
     ] ;
-  
-  page "/associations/benefits" "RunOrg - Avantages"
-    ~section:"associations" 
-    ~head:"associations"
-    ~subsection:"avantages"
-    [ composite `LR
-	(image "/public/img/2012-04-19-1.png")
-	(pride
-	   ~title:"Un seul outil pour tous"
-	   ~subtitle:"Tout faire depuis un seul outil c'est bien plus simple !" 
-	   "Pour les responsables comme pour les membres : plus besoin d'apprendre à utiliser un logiciel différent pour gérer le fichier adhérents, partager des photos ou des documents, organiser des événements ou des sondages, etc.
-
-RunOrg regroupe en une seule plate-forme tous ces outils, avec une interface commune. Les membres s'y retrouvent facilement, et les responsables n'ont plus besoin de formations multiples."
-	) ;
-      
-      composite `LR
-	(pride
-	   ~title:"Une meilleure mobilisation"
-	   ~subtitle:"S'impliquer n'a jamais été aussi simple"
-	   "Pour les membres, échanger avec son association est difficile : 
-on ne sait pas comment, ça ne marche pas, ou ça prend du temps. Alors, souvent, on ne le fait pas, et on ne se sent pas impliqué.  
-
-RunOrg fournit aux membres un outil simple pour communiquer avec leur association et pour s'informer sur les dernières actualités. Et nous avons constaté que les membres s'impliquent et se mobilisent davantage, et plus efficacement. "
-	) 
-	(image "/public/img/2012-04-19-2.png")
-	   ;
-      composite `LR
-	(image 
-	   ~copyright:("http://www.flickr.com/photos/giena/3361653109/",
-		       "Eugenijus Barzdzius")
-	   "/public/img/imagerugby.jpg")
-	(pride
-	   ~title:"Plus d'échanges et de cohésion"
-	   ~subtitle:"Partager un espace privé, cela soude une communauté"
-	   "Plus que les autres, les membres des associations et des clubs ont besoin de se sentir appartenir à une communauté, un groupe, une équipe. Ils veulent pouvoir échanger entre eux et partager passion, conseils ou services.
-
-RunOrg offre aux membres l'espace de communication dont ils ont besoin pour échanger entre eux dans le cadre de l'association. Ces échanges directs sont le moteur de la cohésion au sein des associations et des clubs."
-	) ;
-      composite `LR
-
-	(pride
-	   ~title:"Meilleur partage des tâches"
-	   ~subtitle:"Déléguer devient accessible et évident"
-	   "Les responsables associatifs le savent bien : le manque de contrôle et l'ampleur des tâches à réaliser sont deux freins importants qui les empèchent de déléguer ou de trouver des volontaires.
-
-RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait. De plus, l'outil permet de répartir certaines tâches sur les membres (ex : inscriptions en ligne). Les responsables vont adorer leur nouveau temps libre !")
-	(image  "/public/img/imagephilippines.jpg")
-    ] ;
-  
+    
   page "/pricing" "RunOrg - Tarifs"
         ~section:"pricing" 
         ~head:"pricing"

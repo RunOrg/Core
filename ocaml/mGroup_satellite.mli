@@ -5,5 +5,5 @@ type action =
   | `Send   of [ `Inbox  | `Mail ] 
   ]
     
-val access : 'any MGroup_can.t -> action -> (#O.ctx,MAccess.t) Ohm.Run.t
+val access : 'any MGroup_can.t -> action -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
 

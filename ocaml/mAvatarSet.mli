@@ -37,7 +37,7 @@ module Get : sig
   val list     : [<`Admin|`Write|`List] t -> [`List] IAvatarGrid.id 
   val listedit :         [<`Admin|`Bot] t -> [`Edit] IAvatarGrid.id
 
-  val write_access : 'any t -> MAccess.t O.run
+  val write_access : 'any t -> MAvatarStream.t O.run
 
 end
 

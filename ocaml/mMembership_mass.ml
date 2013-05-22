@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -14,36 +14,24 @@ let admin_one gid diffs aid =
   return ()
 
 module AdminFmt = Fmt.Make(struct
-  type json t = (IInstance.t * Diff.t list * MAccess.t * IAvatar.t option * IAvatarSet.t)
+  type json t = (Diff.t list * IAvatarSet.t)
 end)
 
-let admin_slice = 10
-let admin_task, define_admin_task = 
-  O.async # declare "membership-mass-admin" AdminFmt.fmt 
+let admin_task = 
+  MAvatarStream.iter "membership-mass-admin" AdminFmt.fmt 
+    (fun (diffs,asid) aid -> admin_one asid diffs aid) 
+    (fun _ -> return ())
 
-let () = define_admin_task begin fun (iid,diffs,access,start,gid) -> 
-  let  biid = IInstance.Assert.bot iid in 
-  let! aids, next = ohm $ MReverseAccess.reverse biid ?start ~count:admin_slice [access] in 
-  let! () = ohm $ Run.list_iter (admin_one gid diffs) aids in
-  if next <> None then 
-    admin_task (iid,diffs,access,next,gid) 
-  else
-    return () 
-end 
-
-let admin_task iid gid access diffs =
-  match access with 
-    | `Nobody -> return ()
-    | `List [aid] -> admin_one gid diffs aid
-    | _   -> admin_task (iid,diffs,access,None,gid) 
-    
-let admin ~from iid gid access what = 
+let admin_task iid asid astream diffs = 
+  admin_task (IInstance.Assert.bot iid) astream (diffs,asid)
+      
+let admin ~from iid gid astream what = 
   let gid   = IAvatarSet.decay gid in 
   let iid   = IInstance.decay iid in 
   let diffs = List.map (Diff.make from) what in
   if diffs = [] then return () else 
     (* Start the insertion task *)
-    admin_task iid gid access diffs
+    admin_task iid gid astream diffs
 	
 (* Creating avatars and adding them to a group -------------------------------------------------------------- *)
 

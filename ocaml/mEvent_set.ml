@@ -16,9 +16,10 @@ let picture fid t self =
     update [`SetPicture fid] t self
     
 let admins aids t self = 
-  if List.sort compare aids <> List.sort compare (MAccess.delegates (Can.data t).E.admins) then
-    let admins = MAccess.set_delegates aids (Can.data t).E.admins in 
-    update [`SetAdmins admins] t self
+  let deleg  = (Can.data t).E.admins in 
+  let deleg' = IDelegation.set_avatars aids deleg in 
+  if deleg <> deleg' then 
+    update [`SetAdmins deleg'] t self
   else
     return ()
     

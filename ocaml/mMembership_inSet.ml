@@ -12,34 +12,35 @@ module Reflected = MMembership_reflected
 (* Find a member status by its group + avatar --------------------------------------------- *)
 
 let () = 
-  let! avatar, group, expect = Sig.listen MAccess.Signals.in_group in  
+  let! avatar, group = Sig.listen MDelegation.Signals.is_in_group in  
   let! id    = ohm_req_or (return false) $ Unique.find_if_exists group avatar in
   let! value = ohm_req_or (return false) $ Versioned.get id in
-  let  valid = `Member    = (Versioned.reflected value).Reflected.status in
-  let  out   = `NotMember = (Versioned.reflected value).Reflected.status in
-  match expect with 
-    | `Any       -> return (not out) 
-    | `Pending   -> return (not out && not valid)
-    | `Validated -> return valid
+  return (`Member = (Versioned.reflected value).Reflected.status)
+
+let () = 
+  let! avatar, state, group = Sig.listen MAvatarStream.Signals.is_in_group in  
+  let! id    = ohm_req_or (return false) $ Unique.find_if_exists group avatar in
+  let! value = ohm_req_or (return false) $ Versioned.get id in
+  return ((state :> Status.t) = (Versioned.reflected value).Reflected.status)
 
 (* List elements in a group --------------------------------------------------------------- *)
 
 module MembersView = CouchDB.MapView(struct
   module Key    = Fmt.Make(struct
-    type json t = (IAvatarSet.t * IAvatar.t)
+    type json t = (IAvatarSet.t * Status.t * IAvatar.t)
   end)
   module Value  = Fmt.Unit
   module Design = Versioned.Design
   let name = "members"
-  let map  = "if (doc.r.status == 'Member') emit ([doc.c.where,doc.c.who]);"
+  let map  = "emit([doc.c.where,doc.r.status,doc.c.who]);"
 end)
 
-let list_members ?start ~count group = 
+let list_members_by_status status ?start ~count group = 
   let group = IAvatarSet.decay group in 
 
   let limit    = count + 1 in
-  let startkey = (group,BatOption.default IAvatar.smallest start) in
-  let endkey   = (group,IAvatar.largest) in
+  let startkey = (group,status,BatOption.default IAvatar.smallest start) in
+  let endkey   = (group,status,IAvatar.largest) in
   
   let !list = ohm $ MembersView.query 
     ~startkey 
@@ -49,7 +50,10 @@ let list_members ?start ~count group =
     ()
   in
 
-  return (OhmPaging.slice ~count (List.map (#key |- snd) list))
+  return (OhmPaging.slice ~count (List.map (#key |- (fun (_,_,aid) -> aid)) list))
+
+let list_members ?start ~count group = 
+  list_members_by_status `Member ?start ~count group
 
 module EveryoneView = CouchDB.MapView(struct
   module Key    = IAvatarSet
@@ -94,8 +98,13 @@ let list_everyone ?start ~count group =
 (* Return avatars for access reversal ---------------------------------------------------- *)
 
 let () = 
-  let! asid, start, count = Sig.listen MReverseAccess.inSet in 
-  let! list, next = ohm $ list_members ?start ~count asid in
+  let! iid, status, asid, start, count = Sig.listen MAvatarStream.Signals.all_in_group in 
+
+  (* Make sure the group exists and belongs to the instance. *)
+  let! avset = ohm_req_or (return []) (MAvatarSet.naked_get asid) in
+  let! () = true_or (return []) (MAvatarSet.Get.instance avset = IInstance.decay iid) in
+
+  let! list, next = ohm $ list_members_by_status (status :> Status.t) ?start ~count asid in
   return (match next with Some aid -> aid :: list | None -> list) 
 
 (* List avatars in a group --------------------------------------------------------------- *)

@@ -109,10 +109,10 @@ module type CAN = sig
   val id   : 'any t -> 'any id
   val data : 'any t -> core  
 
-  val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t
+  val test : 'any t -> MAvatarStream.t -> (#O.ctx,bool) Ohm.Run.t
   
-  val view_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
-  val admin_access  : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t 
+  val view_access   : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val admin_access  : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
     
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
@@ -126,8 +126,8 @@ module type CAN_ARG = sig
   type 'a id
   val deleted : core -> bool
   val iid : core -> IInstance.t
-  val admin : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
-  val view : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val admin : core -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val view : core -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
   val id_view  : 'a id -> [`View] id
   val id_admin : 'a id -> [`Admin] id  
   val decay : 'a id -> [`Unknown] id 
@@ -166,9 +166,9 @@ module Can = functor (C:CAN_ARG) -> struct
   let view_access t = 
     C.view t.data 
 
-  let test t access = 
+  let test t deleg = 
     match t.actor with None -> return false | Some actor -> 
-      O.decay (MAccess.test actor access)
+      O.decay (MAvatarStream.is_in actor deleg)
 
   let id t = t.id
     
@@ -180,7 +180,7 @@ module Can = functor (C:CAN_ARG) -> struct
       match t.actor with 
 	| None -> if C.public t.data then return (Some t') else return None
 	| Some actor -> let! view = ohm $ view_access t in
-			let! ok = ohm $ MAccess.test actor view in
+			let! ok = ohm $ MAvatarStream.is_in actor view in
 			if ok then return (Some t') else return None
     end
       
@@ -190,7 +190,7 @@ module Can = functor (C:CAN_ARG) -> struct
       match t.actor with 
 	| None       -> return None
 	| Some actor -> let! admin = ohm $ admin_access t in
-			let! ok = ohm $ MAccess.test actor admin in
+			let! ok = ohm $ MAvatarStream.is_in actor admin in
 			if ok then return (Some t') else return None
     end
 

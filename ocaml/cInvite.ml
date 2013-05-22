@@ -22,7 +22,7 @@ let by_name kind back access gid render =
     let aids = BatList.sort_unique compare aids in
     
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # actor) (access # iid) gid (`List aids) 
+	~from:(access # actor) (access # iid) gid (MAvatarStream.avatars aids) 
 	(match kind with 
 	  | `Group -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
@@ -68,7 +68,7 @@ let by_group kind back access asid render =
     end list) in
 
     let! () = ohm $ O.decay begin MMembership.Mass.admin
-	~from:(access # actor) (access # iid) asid (`Groups (`Validated,asids))
+	~from:(access # actor) (access # iid) asid (MAvatarStream.groups `Member asids)
 	(match kind with 
 	  | `Group -> [ `Accept true ; `Default true ] 
 	  | `Event -> [ `Accept true ; `Invite ])
