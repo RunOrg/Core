@@ -55,7 +55,7 @@ module All = struct
                   for (var i = 0; i < doc.sort.length; ++i)
                     emit([doc.iid, nature, doc.sort[i]]);
                 }
-                if ('hide' in doc && !doc.hide) return;
+                if ('hide' in doc && doc.hide) return;
                 out(null);
                 out(doc.nature);
                 for (var i = 0; i < doc.more.length; ++i) 

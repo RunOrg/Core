@@ -555,7 +555,11 @@ let () =
   let! aid, iid = Sig.listen Signals.on_update in 
   let! avatar = ohm_req_or (return ()) (Tbl.get aid) in  
   let! name = req_or (return ()) (avatar # name) in
-  MAtom.reflect iid `Avatar (IAvatar.to_id aid) name  
+  let  hide = match avatar # sta with 
+    | `Contact -> true
+    | `Admin
+    | `Token -> false in 
+  MAtom.reflect iid `Avatar (IAvatar.to_id aid) ~hide name  
 
 let _ = 
 
@@ -706,9 +710,13 @@ module Backdoor = struct
       let! avatar = ohm_req_or (return ()) $ Tbl.get aid in
       let! name   = req_or (return ()) (avatar # name) in
       let  iid    = avatar # ins in
-      let  ()     = Util.log "Reflect avatar %s [%s > %s]" name 
-	(IInstance.to_string iid) (IAvatar.to_string aid) in
-      MAtom.reflect iid `Avatar (IAvatar.to_id aid) name)
+      let  hide = match avatar # sta with 
+	| `Contact -> true
+	| `Admin
+	| `Token -> false in 
+      let  ()     = Util.log "Reflect avatar %s [%s > %s] %s" name 
+	(IInstance.to_string iid) (IAvatar.to_string aid) (if hide then "(hidden)" else "")in
+      MAtom.reflect iid `Avatar (IAvatar.to_id aid) ~hide name)
    
   let refresh_avatar_atoms () = 
     refresh_avatar_atoms () 
