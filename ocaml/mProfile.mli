@@ -26,9 +26,6 @@ end
 
 module Signals : sig
 
-  val on_create : ( [`Created] IProfile.id * IUser.t * IInstance.t * Data.t, 
-		    unit O.run ) Ohm.Sig.channel
-
   val on_update : ( [`Updated] IProfile.id * IUser.t * IInstance.t * Data.t,
 		    unit O.run ) Ohm.Sig.channel
 
@@ -45,7 +42,7 @@ val find_or_create : IInstance.t -> IUser.t -> IProfile.t O.run
 val refresh   : [`Bot] IUser.id -> 'b IInstance.id -> unit O.run
 
 val create : 'any IInstance.id -> Data.t -> 
-  [ `ok of (IUser.t * [`Created] IProfile.id) | `exists of IUser.t ] O.run
+  [ `ok of IUser.t | `exists of IUser.t ] O.run
     
 val data : [<`IsSelf|`View] IProfile.id -> (MFieldShare.t list * Data.t) option O.run
 

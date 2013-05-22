@@ -138,7 +138,6 @@ include Profile
 
 module Signals = struct
 
-  let on_create_call,     on_create     = Sig.make (Run.list_iter identity)
   let on_update_call,     on_update     = Sig.make (Run.list_iter identity)
   let on_obliterate_call, on_obliterate = Sig.make (Run.list_iter identity)
 
@@ -221,10 +220,10 @@ let create_from_user iid uid =
   } in
   
   (* We just created the object. *)
-  let created = IProfile.Assert.created pid in
+  let created = IProfile.Assert.updated pid in
   
   let! () = ohm $ Tbl.set pid insert in 
-  let! () = ohm $ Signals.on_create_call (created , IUser.decay uid, iid, data) in
+  let! () = ohm $ Signals.on_update_call (created , IUser.decay uid, iid, data) in
 
   return pid
 
@@ -304,12 +303,12 @@ let create iid data =
       } in
       
       (* We just created the object. *)      
-      let created = IProfile.Assert.created pid in
+      let created = IProfile.Assert.updated pid in
       
       let! _  = ohm $ Tbl.set pid insert in 
-      let! () = ohm $ Signals.on_create_call (created, uid, iid, data) in
+      let! () = ohm $ Signals.on_update_call (created, uid, iid, data) in
       
-      return (`ok (uid, created))
+      return (`ok uid)
 
     end 
 

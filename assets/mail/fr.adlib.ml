@@ -30,8 +30,7 @@
   if block then "Vous ne recevrez plus aucun courriel de cette communauté."
   else "Bienvenue ! Vous recevrez maintenant tous les courriels envoyés par cette communauté."
 
-
-
+| `Mail_Block_Button -> "Retour à mon espace"
 
 
 

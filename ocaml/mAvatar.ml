@@ -392,7 +392,9 @@ module SearchView = CouchDB.DocView(struct
   module Doc    = Common.Data
   module Design = Design
   let name = "search"
-  let map  = "if (doc.t == 'avtr') for (var k in doc.sort) emit([doc.ins,doc.sort[k]],null)"
+  let map  = "if (doc.t == 'avtr') 
+                if (doc.sta == 'own' || doc.sta == 'mbr') 
+                  for (var k in doc.sort) emit([doc.ins,doc.sort[k]],null)"
 end)
 
 let search iid name count = 
@@ -551,6 +553,16 @@ let _ =
   let! id, _ = Sig.listen MUser.Signals.on_update in 
   task (IUser.to_id id)
 
+let () = 
+  let! aid, iid = Sig.listen Signals.on_update in 
+  let! avatar = ohm_req_or (return ()) (Tbl.get aid) in  
+  let! name = req_or (return ()) (avatar # name) in
+  let  hide = match avatar # sta with 
+    | `Contact -> true
+    | `Admin
+    | `Token -> false in 
+  MAtom.reflect iid `Avatar (IAvatar.to_id aid) ~hide name  
+
 let _ = 
 
   let! _, uid, iid, data = Sig.listen MProfile.Signals.on_update in 
@@ -588,13 +600,6 @@ let _ =
       | Some data -> return (update data))
   in
   
-  let! () = ohm begin 
-    if changed then match data # name with 
-      | None -> return () 
-      | Some name -> MAtom.reflect iid `Avatar (IAvatar.to_id aid) name
-    else return () 
-  end in 
-
   Signals.on_update_call (aid,iid)
 
 (* Obliterate all avatars for an user ----------------------------------------------------- *)
@@ -707,9 +712,13 @@ module Backdoor = struct
       let! avatar = ohm_req_or (return ()) $ Tbl.get aid in
       let! name   = req_or (return ()) (avatar # name) in
       let  iid    = avatar # ins in
-      let  ()     = Util.log "Reflect avatar %s [%s > %s]" name 
-	(IInstance.to_string iid) (IAvatar.to_string aid) in
-      MAtom.reflect iid `Avatar (IAvatar.to_id aid) name)
+      let  hide = match avatar # sta with 
+	| `Contact -> true
+	| `Admin
+	| `Token -> false in 
+      let  ()     = Util.log "Reflect avatar %s [%s > %s] %s" name 
+	(IInstance.to_string iid) (IAvatar.to_string aid) (if hide then "(hidden)" else "")in
+      MAtom.reflect iid `Avatar (IAvatar.to_id aid) ~hide name)
    
   let refresh_avatar_atoms () = 
     refresh_avatar_atoms () 
