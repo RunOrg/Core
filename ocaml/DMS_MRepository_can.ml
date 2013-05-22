@@ -13,12 +13,12 @@ include HEntity.Can(struct
 
   let deleted e = e.E.del <> None
   let iid     e = e.E.iid
-  let admin   e = return [ `Admin ; e.E.admins ]
+  let admin   e = return (MDelegation.stream e.E.admins)
 
   let view e = 
     match e.E.vision with 
-      | `Normal        -> return [ `Token ]
-      | `Private asids -> let! admin = ohm (admin e) in return (`Groups (`Any,asids) :: admin)
+      | `Normal        -> return MAvatarStream.everyone
+      | `Private asids -> let! admin = ohm (admin e) in return MAvatarStream.(groups `Member asids + admin)
 	
   let id_view  id = DMS_IRepository.Assert.view id
   let id_admin id = DMS_IRepository.Assert.admin id 
@@ -31,7 +31,7 @@ end)
 let upload t = 
   let! allowed = ohm begin match (data t).E.upload with 
     | `Viewers   -> return true
-    | `List aids -> let! admin = ohm (admin_access t) in test t (`List aids :: admin)
+    | `List aids -> let! admin = ohm (admin_access t) in test t MAvatarStream.(avatars aids + admin)
   end in 
   if allowed then return (Some (DMS_IRepository.Assert.upload (id t)))
   else return None

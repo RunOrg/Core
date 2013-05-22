@@ -15,7 +15,7 @@ let name t = (Can.data t).E.name
 let group t = (Can.data t).E.gid
 let iid t = (Can.data t).E.iid
 let template t = (Can.data t).E.tid
-let admins t = MAccess.delegates (Can.data t).E.admins
+let admins t = IDelegation.avatars (Can.data t).E.admins
 
 (* Helper properties *)
 

@@ -17,7 +17,7 @@ module Cfg = struct
     type json t = 
       [ `SetName    of TextOrAdlib.t option
       | `SetVision  of Vision.t
-      | `SetAdmins  of MAccess.t	  
+      | `SetAdmins  of IDelegation.t	  
       | `EditConfig of Config.Diff.t list
       | `Delete     of IAvatar.t
       ]
@@ -31,7 +31,7 @@ module Cfg = struct
 	gid    : IAvatarSet.t ;
 	name   : TextOrAdlib.t option ;
 	vision : Vision.t ;
-	admins : MAccess.t ;
+	admins : IDelegation.t ;
 	config : Config.t ;
 	del    : IAvatar.t option ;
       }
@@ -59,7 +59,7 @@ type data_t = Cfg.Data.t = {
   gid    : IAvatarSet.t ;
   name   : TextOrAdlib.t option ;
   vision : Vision.t ;
-  admins : MAccess.t ;
+  admins : IDelegation.t ;
   config : Config.t ;
   del    : IAvatar.t option ;
 }

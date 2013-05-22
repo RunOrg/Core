@@ -114,7 +114,7 @@ module Mass : sig
        from:'any MActor.t
     -> 'a IInstance.id
     -> [<`Admin|`Write|`Bot] IAvatarSet.id
-    -> MAccess.t
+    -> MAvatarStream.t
     -> [ `Accept of bool | `Invite | `Default of bool ] list
     -> unit O.run
 

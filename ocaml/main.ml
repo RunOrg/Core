@@ -31,6 +31,7 @@ module Actions = struct
   open CSearch
   open CInbox
   open CDigest
+  open CMailing
 
   (* Standalone splash page *)
   open Splash

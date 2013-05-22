@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
@@ -16,5 +16,6 @@ let getStats, def_getStats = O.declare O.secure "admin/stats/get" (A.r A.int)
 let api,      def_api      = O.declare O.secure "admin/api" A.none
 let unsbs,    def_unsbs    = O.declare O.secure "admin/unsbs" A.none
 let insts,    def_insts    = O.declare O.secure "admin/insts" A.none
+let cqrs,     def_cqrs     = O.declare O.secure "admin/cqrs" A.none
 
 module API = UrlAdmin_API

@@ -39,10 +39,10 @@ module type CAN = sig
   val id   : 'any t -> 'any id
   val data : 'any t -> core
 
-  val test : 'any t -> MAccess.t list -> (#O.ctx,bool) Ohm.Run.t 
+  val test : 'any t -> MAvatarStream.t -> (#O.ctx,bool) Ohm.Run.t 
 
-  val view_access   : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t
-  val admin_access  : 'any t -> (#O.ctx,MAccess.t list) Ohm.Run.t 
+  val view_access   : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val admin_access  : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
     
   val view  : 'any t -> (#O.ctx,[`View]  t option) Ohm.Run.t 
   val admin : 'any t -> (#O.ctx,[`Admin] t option) Ohm.Run.t 
@@ -56,8 +56,8 @@ module type CAN_ARG = sig
   type 'a id
   val deleted : core -> bool
   val iid : core -> IInstance.t
-  val admin : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
-  val view : core -> (#O.ctx,MAccess.t list) Ohm.Run.t
+  val admin : core -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val view : core -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
   val id_view  : 'a id -> [`View] id
   val id_admin : 'a id -> [`Admin] id 
   val decay : 'a id -> [`Unknown] id 

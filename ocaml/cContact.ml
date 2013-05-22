@@ -12,6 +12,10 @@ let () = UrlSplash.def_contact begin fun req res ->
     | Some (`POST m) -> m
   in
 
+  let data = match req # cookie "mailing" with 
+    | None -> data
+    | Some mailing -> BatPMap.add "mailing" mailing data in
+
   let redirect = try Some (BatPMap.find "redirect" data) with Not_found -> None in
   let data = BatPMap.remove "redirect" data in 
 

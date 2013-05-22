@@ -7,7 +7,7 @@ type data_t = {
   upload : DMS_MRepository_upload.t ; 
   remove : DMS_MRepository_remove.t ;
   detail : DMS_MRepository_detail.t ; 
-  admins : MAccess.t ;
+  admins : IDelegation.t ;
   del    : IAvatar.t option ;
 }
 
@@ -17,7 +17,7 @@ type diff_t =
   | `SetUpload  of DMS_MRepository_upload.t 
   | `SetRemove  of DMS_MRepository_remove.t
   | `SetDetail  of DMS_MRepository_detail.t
-  | `SetAdmins  of MAccess.t	  
+  | `SetAdmins  of IDelegation.t	  
   | `Delete     of IAvatar.t
   ]
 
