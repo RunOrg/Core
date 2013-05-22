@@ -10,6 +10,7 @@ type t = <
   id     : IAtom.t ; 
   nature : IAtom.Nature.t ;
   label  : string ;
+  hide   : bool ; 
 > ;;
 
 module Data = struct
@@ -19,6 +20,7 @@ module Data = struct
       more   : IAtom.Nature.t list ;
       label  : string ; 
       iid    : IInstance.t ;
+     ?hide   : bool = false ; 
       sort   : string list 
     }
   end
@@ -53,6 +55,7 @@ module All = struct
                   for (var i = 0; i < doc.sort.length; ++i)
                     emit([doc.iid, nature, doc.sort[i]]);
                 }
+                if ('hide' in doc && !doc.hide) return;
                 out(null);
                 out(doc.nature);
                 for (var i = 0; i < doc.more.length; ++i) 
@@ -86,7 +89,8 @@ module All = struct
     val nature = (item # doc).Data.nature
     method nature = nature
     val label = (item # doc).Data.label
-    method label  = label
+    method label = label
+    method hide = false
   end
      
   let fetch_at_least ~count iid nature query = 
@@ -144,6 +148,7 @@ let get ~actor atid =
     method id     = atid 
     method nature = atom.Data.nature
     method label  = atom.Data.label 
+    method hide   = atom.Data.hide
   end))
 
 let create actor nature label = 
@@ -159,12 +164,13 @@ let create actor nature label =
 	  more ;
 	  label ;
 	  sort ;
+	  hide = false ; 
 	  iid
 	}) in
 	let! atid = ohm (Tbl.create data) in
 	return (Some atid) 
 	
-let reflect iid nature id label = 
+let reflect iid nature id ?(hide=false) label = 
   let atid = IAtom.of_id id in 
   let label = BatString.head (BatString.strip label) max_label_size in 
   if label = "" then return () else
@@ -176,6 +182,7 @@ let reflect iid nature id label =
 	more ;
 	sort ;
 	label ;
+	hide ; 
 	iid
       }) in
       Tbl.set atid data
