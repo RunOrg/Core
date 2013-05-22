@@ -392,7 +392,9 @@ module SearchView = CouchDB.DocView(struct
   module Doc    = Common.Data
   module Design = Design
   let name = "search"
-  let map  = "if (doc.t == 'avtr') for (var k in doc.sort) emit([doc.ins,doc.sort[k]],null)"
+  let map  = "if (doc.t == 'avtr') 
+                if (doc.sta == 'own' || doc.sta == 'mbr') 
+                  for (var k in doc.sort) emit([doc.ins,doc.sort[k]],null)"
 end)
 
 let search iid name count = 
