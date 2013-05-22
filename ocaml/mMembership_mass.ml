@@ -54,7 +54,7 @@ let create_one (email,firstname,lastname) iid gid diffs =
   
   let! result = ohm $ MProfile.create iid general in
 
-  let user = match result with `ok (user,_) | `exists user -> user in
+  let user = match result with `ok user | `exists user -> user in
   
   let! aid = ohm $ MAvatar.become_contact iid user in
 

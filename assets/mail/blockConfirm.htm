@@ -4,6 +4,9 @@
 
 <div style="width: 600px ; margin: 40px auto ; overflow: hidden ; color : #555">
   <p>{ `Mail_Block_Body block }</p>
+  {?home}<p style="text-align:center">
+    <a style="display:inline-block" class="action-button" href="{this}">{`Mail_Block_Button}</a>
+  </p>{/?}
 </div>
 
 { Asset_PageLayout_Footer.render | ohm } 

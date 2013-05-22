@@ -25,7 +25,7 @@
 | `Join_Self_AcceptEdit -> "Accepter..."
 | `Join_Self_Decline -> "Refuser"
 
-| `Join_Self_Save -> "Enregistrer"
+| `Join_Self_Save -> "Inscription"
 
 | `Join_Public_Title inst -> "Accès membres - " ^ inst
 | `Join_Public_Save -> "Inscription"

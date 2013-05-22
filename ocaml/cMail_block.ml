@@ -40,10 +40,16 @@ let () = UrlMail.def_post_block begin fun req res ->
 
   (* Render an appropriate page *)
 
+  let! home = ohm begin 
+    let! instance = ohm_req_or (return None) (MInstance.get iid) in
+    return (Some (Action.url UrlClient.website (instance # key) ())) 
+  end in 
+
   let title = `Mail_Block_Title block in
   let html  = Asset_Mail_BlockConfirm.render (object
     method navbar = (req # server,None,Some iid)
     method block  = block 
+    method home   = home
     method title  = AdLib.get title
   end) in
 
