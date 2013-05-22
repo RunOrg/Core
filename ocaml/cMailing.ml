@@ -9,6 +9,8 @@ let mkurl = O.register O.core "ml" Action.Args.(r Id.arg) begin fun req res ->
   let fail = return (Action.redirect "http://runorg.com/404" res) in
 
   let! url, mailing = ohm_req_or fail (MMailing.click (req # args)) in
+
+  let url = url ^ "?" ^ mailing in
   
   return 
     (Action.with_cookie ~name:"mailing" ~value:mailing ~life:(3600 * 30)
