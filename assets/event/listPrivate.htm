@@ -40,10 +40,15 @@
       {#undated}{this | Asset_Event_ShortPrivate.render | ohm}{/#}
     {/if}
 
-    {if past | OhmAsset.notEmpty}
+    {@!past}
+      {#list}{this | Asset_Event_ShortPrivate.render | ohm}{/#}
+      {?more}{this | VMore.div | ohm }{/?}
+    {/@}
+
+    {?past}
       <h2>{`Events_List_Past}</h2>
-      {#past}{this | Asset_Event_ShortPrivate.render | ohm}{/#}
-    {/if}
+      {this | VMore.div | ohm}
+    {/?}
 
   </div>
 
