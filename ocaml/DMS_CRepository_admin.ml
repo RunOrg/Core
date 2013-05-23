@@ -8,9 +8,10 @@ open DMS_CRepository_common
 open DMS_CRepository_admin_common
 
 module Delete = DMS_CRepository_admin_delete
+module Edit   = DMS_CRepository_admin_edit
 
 let () = define Url.Repo.def_admin begin fun parents repo access ->
-  O.Box.fill begin 
+  O.Box.fill (O.decay begin 
 
     let choices = Asset_Admin_Choice.render (BatList.filter_map identity [
 
@@ -43,5 +44,5 @@ let () = define Url.Repo.def_admin begin fun parents repo access ->
       method body = choices
     end)
 
-  end 
+  end) 
 end

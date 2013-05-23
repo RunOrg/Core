@@ -7,7 +7,7 @@ open BatPervasives
 open DMS_CRepository_common
 
 let make title endpoint key rid = object
-  method title = (AdLib.get (title : O.i18n) : string O.boxrun) 
+  method title = (AdLib.get (title : O.i18n) : string O.run) 
   method url = Action.url endpoint key [ IRepository.to_string rid ]
 end
 
