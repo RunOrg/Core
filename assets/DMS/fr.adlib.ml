@@ -8,12 +8,22 @@
 | `DMS_NewRepo_Link -> "Nouvelle Bibliothèque"
 
 | `DMS_NewRepo_Title -> "Nouvelle Bibliothèque"
+| `DMS_NewRepo_Button -> "Créer"
+
+| `DMS_Repo_Save -> "Enregistrer"
 
 | `DMS_Repo_Field_Name   -> "Nom de la bibliothèque"
 | `DMS_Repo_Field_Vision -> "Qui peut voir cette bibliothèque ?"
 | `DMS_Repo_Field_Upload -> "Qui peut ajouter des documents ?"
 | `DMS_Repo_Upload_Viewers -> "Tous les membres"
 | `DMS_Repo_Upload_List -> "Une liste réduite de personnes"
+
+| `DMS_Repo_Detail_Private -> "Uniquement les responsables"
+| `DMS_Repo_Detail_Public -> "Tous les membres"
+| `DMS_Repo_Field_Detail -> "Qui peut voir les détails des fichiers ?" 
+| `DMS_Repo_Field_Remove -> "Qui peut supprimer un fichier ?"
+| `DMS_Repo_Remove_Free -> "Tous les membres"
+| `DMS_Repo_Remove_Restricted -> "Uniquement les responsables"
 
 | `DMS_Field_Required -> "Champ obligatoire"
 
@@ -30,6 +40,10 @@
 | `DMS_Repo_Uploaders_Title -> "Contributeurs"
 | `DMS_Repo_Uploaders_Link -> "Contributeurs"
 | `DMS_Repo_Uploaders_Sub -> "Déterminer qui peut ajouter des documents à cette bibliothèque"
+
+| `DMS_Repo_Advanced_Title -> "Options Avancées"
+| `DMS_Repo_Advanced_Link -> "Options Avancées"
+| `DMS_Repo_Advanced_Sub -> "Configuration spécifique pour utilisateurs experts"
 
 | `DMS_Repo_Delete_Title -> "Supprimer"
 | `DMS_Repo_Delete_Link -> "Supprimer"

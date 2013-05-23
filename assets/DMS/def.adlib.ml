@@ -8,12 +8,22 @@
 | `DMS_NewRepo_Link
 
 | `DMS_NewRepo_Title 
+| `DMS_NewRepo_Button
+
+| `DMS_Repo_Save
 
 | `DMS_Repo_Field_Name  
 | `DMS_Repo_Field_Vision
 | `DMS_Repo_Field_Upload
 | `DMS_Repo_Upload_Viewers
 | `DMS_Repo_Upload_List 
+
+| `DMS_Repo_Detail_Private
+| `DMS_Repo_Detail_Public
+| `DMS_Repo_Field_Detail
+| `DMS_Repo_Field_Remove
+| `DMS_Repo_Remove_Free
+| `DMS_Repo_Remove_Restricted
 
 | `DMS_Repo_Admin_Link 
 | `DMS_Repo_Admin_Title
@@ -25,6 +35,10 @@
 | `DMS_Repo_Uploaders_Title
 | `DMS_Repo_Uploaders_Link
 | `DMS_Repo_Uploaders_Sub
+
+| `DMS_Repo_Advanced_Title
+| `DMS_Repo_Advanced_Link
+| `DMS_Repo_Advanced_Sub
 
 | `DMS_Repo_Delete_Title
 | `DMS_Repo_Delete_Link

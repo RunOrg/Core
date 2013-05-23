@@ -37,21 +37,32 @@ let render_event access event =
   end)
 
 let () = CClient.define UrlClient.Events.def_home begin fun access -> 
+
+  let  actor = access # actor in    
+  let  iid = access # iid in  
+
+  let! more = O.Box.react Fmt.(Date.fmt * IEvent.fmt) begin fun start _ self res ->
+    let! list, next = ohm (O.decay (MEvent.All.past ~actor ~start ~count:8 iid)) in 
+    let! list = ohm (O.decay (Run.list_map (render_event access) list)) in 
+    let  more = BatOption.map (fun next -> OhmBox.reaction_endpoint self next, Json.Null) next in 
+    let! html = ohm (Asset_Event_ListPrivate_Past.render (object
+      method list = list
+      method more = more
+    end)) in
+    return $ Action.json [ "more", Html.to_json html ] res
+  end in 
+
   O.Box.fill $ O.decay begin 
 
     (* Construct the list of entities to be displayed *)
-    let! now = ohmctx (#time) in
-    let  iid = access # iid in 
-    let  actor = access # actor in 
-
     let! future = ohm $ MEvent.All.future ~actor iid in
     let! future = ohm $ Run.list_map (render_event access) future in 
 
     let! undated = ohm $ MEvent.All.undated ~actor iid in
     let! undated = ohm $ Run.list_map (render_event access) undated in 
 
-    let! past, _ = ohm $ MEvent.All.past ~actor ~count:10 iid in
-    let! past = ohm $ Run.list_map (render_event access) past in 
+    let! _, past = ohm $ MEvent.All.past ~actor ~count:0 iid in
+    let  past = BatOption.map (fun next -> OhmBox.reaction_endpoint more next, Json.Null) past in 
 
     (* The URL of the options page *)
     let options = 

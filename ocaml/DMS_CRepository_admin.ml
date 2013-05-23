@@ -7,10 +7,13 @@ open BatPervasives
 open DMS_CRepository_common 
 open DMS_CRepository_admin_common
 
-module Delete = DMS_CRepository_admin_delete
+module Delete   = DMS_CRepository_admin_delete
+module Edit     = DMS_CRepository_admin_edit
+module Advanced = DMS_CRepository_admin_advanced
+module Uploader = DMS_CRepository_admin_uploader
 
 let () = define Url.Repo.def_admin begin fun parents repo access ->
-  O.Box.fill begin 
+  O.Box.fill (O.decay begin 
 
     let choices = Asset_Admin_Choice.render (BatList.filter_map identity [
 
@@ -29,6 +32,13 @@ let () = define Url.Repo.def_admin begin fun parents repo access ->
       end) else None ;
 
       Some (object
+	method img = VIcon.Large.cog_add
+	method url = parents # advanced # url
+	method title = AdLib.get `DMS_Repo_Advanced_Link
+	method subtitle = Some (AdLib.get `DMS_Repo_Advanced_Sub)
+      end) ;
+
+      Some (object
 	method img = VIcon.Large.cross
 	method url = parents # delete # url
 	method title = AdLib.get `DMS_Repo_Delete_Link
@@ -43,5 +53,5 @@ let () = define Url.Repo.def_admin begin fun parents repo access ->
       method body = choices
     end)
 
-  end 
+  end) 
 end
