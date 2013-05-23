@@ -10,6 +10,7 @@ open DMS_CRepository_admin_common
 module Delete   = DMS_CRepository_admin_delete
 module Edit     = DMS_CRepository_admin_edit
 module Advanced = DMS_CRepository_admin_advanced
+module Uploader = DMS_CRepository_admin_uploader
 
 let () = define Url.Repo.def_admin begin fun parents repo access ->
   O.Box.fill (O.decay begin 
