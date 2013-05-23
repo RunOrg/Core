@@ -15,6 +15,13 @@
 | `DMS_Repo_Upload_Viewers
 | `DMS_Repo_Upload_List 
 
+| `DMS_Repo_Detail_Private
+| `DMS_Repo_Detail_Public
+| `DMS_Repo_Field_Detail
+| `DMS_Repo_Field_Remove
+| `DMS_Repo_Remove_Free
+| `DMS_Repo_Remove_Restricted
+
 | `DMS_Repo_Admin_Link 
 | `DMS_Repo_Admin_Title
 

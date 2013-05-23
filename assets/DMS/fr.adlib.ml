@@ -15,6 +15,13 @@
 | `DMS_Repo_Upload_Viewers -> "Tous les membres"
 | `DMS_Repo_Upload_List -> "Une liste réduite de personnes"
 
+| `DMS_Repo_Detail_Private -> "Uniquement les responsables"
+| `DMS_Repo_Detail_Public -> "Tous les membres"
+| `DMS_Repo_Field_Detail -> "Qui peut voir les détails des fichiers ?" 
+| `DMS_Repo_Field_Remove -> "Qui peut supprimer un fichier ?"
+| `DMS_Repo_Remove_Free -> "Tous les membres"
+| `DMS_Repo_Remove_Restricted -> "Uniquement les responsables"
+
 | `DMS_Field_Required -> "Champ obligatoire"
 
 | `DMS_Repo_Empty  -> "Aucun document dans cette bibliothèque"
