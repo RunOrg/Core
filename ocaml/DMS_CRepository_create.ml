@@ -41,9 +41,7 @@ let template groups =
 	   (fun f sel -> return (Ok (sel <> Some false))))	
   in
 
-  let html = Asset_Discussion_Create.render () in
-
-  OhmForm.wrap "" html inner
+  VEliteForm.with_ok_button ~ok:(AdLib.get `DMS_NewRepo_Button) inner
 
 let () = CClient.define Url.def_create begin fun access ->
   

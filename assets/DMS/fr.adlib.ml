@@ -8,6 +8,9 @@
 | `DMS_NewRepo_Link -> "Nouvelle Bibliothèque"
 
 | `DMS_NewRepo_Title -> "Nouvelle Bibliothèque"
+| `DMS_NewRepo_Button -> "Créer"
+
+| `DMS_Repo_Save -> "Enregistrer"
 
 | `DMS_Repo_Field_Name   -> "Nom de la bibliothèque"
 | `DMS_Repo_Field_Vision -> "Qui peut voir cette bibliothèque ?"

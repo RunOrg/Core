@@ -8,6 +8,9 @@
 | `DMS_NewRepo_Link
 
 | `DMS_NewRepo_Title 
+| `DMS_NewRepo_Button
+
+| `DMS_Repo_Save
 
 | `DMS_Repo_Field_Name  
 | `DMS_Repo_Field_Vision

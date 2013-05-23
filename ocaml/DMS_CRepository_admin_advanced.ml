@@ -39,10 +39,7 @@ let template () =
 
   in
 
-  let html = Asset_Discussion_Create.render () in
-
-  OhmForm.wrap "" html inner
-
+  VEliteForm.with_ok_button ~ok:(AdLib.get `DMS_Repo_Save) inner
 
 let () = define Url.Repo.def_advanced begin fun parents repo access -> 
 
