@@ -31,6 +31,10 @@
 | `DMS_Repo_Uploaders_Link -> "Contributeurs"
 | `DMS_Repo_Uploaders_Sub -> "Déterminer qui peut ajouter des documents à cette bibliothèque"
 
+| `DMS_Repo_Advanced_Title -> "Options Avancées"
+| `DMS_Repo_Advanced_Link -> "Options Avancées"
+| `DMS_Repo_Advanced_Sub -> "Configuration spécifique pour utilisateurs experts"
+
 | `DMS_Repo_Delete_Title -> "Supprimer"
 | `DMS_Repo_Delete_Link -> "Supprimer"
 | `DMS_Repo_Delete_Sub -> "Détruire cette bibliothèque et ses documents"

@@ -26,6 +26,10 @@
 | `DMS_Repo_Uploaders_Link
 | `DMS_Repo_Uploaders_Sub
 
+| `DMS_Repo_Advanced_Title
+| `DMS_Repo_Advanced_Link
+| `DMS_Repo_Advanced_Sub
+
 | `DMS_Repo_Delete_Title
 | `DMS_Repo_Delete_Link
 | `DMS_Repo_Delete_Sub

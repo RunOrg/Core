@@ -21,6 +21,7 @@ let parents title key rid = object
   method admin     = make `DMS_Repo_Admin_Title     admin    key rid
   method edit      = make `DMS_Repo_Edit_Title      edit     key rid
   method uploaders = make `DMS_Repo_Uploaders_Title upload   key rid
+  method advanced  = make `DMS_Repo_Advanced_Title  advanced key rid 
   method delete    = make `DMS_Repo_Delete_Title    delete   key rid
 end
 

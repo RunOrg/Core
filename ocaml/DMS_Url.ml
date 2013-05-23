@@ -30,10 +30,11 @@ end
 
 module Repo = struct
 
-  let admin,  def_admin  = child def_see   "dms/repo/admin"
-  let upload, def_upload = child def_admin "dms/repo/upload"
-  let delete, def_delete = child def_admin "dms/repo/delete"
-  let edit,   def_edit   = child def_admin "dms/repo/edit"
+  let admin,    def_admin    = child def_see   "dms/repo/admin"
+  let upload,   def_upload   = child def_admin "dms/repo/upload"
+  let delete,   def_delete   = child def_admin "dms/repo/delete"
+  let edit,     def_edit     = child def_admin "dms/repo/edit"
+  let advanced, def_advanced = child def_admin "dms/repo/advanced"
 
 end
 
