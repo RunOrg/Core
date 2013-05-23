@@ -10,13 +10,13 @@ open DMS_CRepository_admin_common
 let () = define Url.Repo.def_delete begin fun parents repo access -> 
 
   let respond body = 
-    O.Box.fill begin 
+    O.Box.fill (O.decay begin 
       Asset_Admin_Page.render (object
 	method parents = [ parents # home ; parents # admin ] 
 	method here = parents # delete # title
 	method body = body
       end)
-    end
+    end)
   in  
 
   (* Only accept deletion if there are no documents in the repository. *)
