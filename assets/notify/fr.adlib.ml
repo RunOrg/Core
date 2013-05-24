@@ -24,3 +24,5 @@
 | `Notify_Settings_Digest_Title -> "Résumé"
 | `Notify_Settings_Digest_Link -> "Résumés"
 | `Notify_Settings_Digest_Sub -> "Changez la fréquence d'envoi des résumés"
+
+| `Notify_AJAX_Feedback -> "Enregistré !"

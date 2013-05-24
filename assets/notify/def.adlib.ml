@@ -23,3 +23,5 @@
 | `Notify_Settings_Digest_Title 
 | `Notify_Settings_Digest_Link 
 | `Notify_Settings_Digest_Sub 
+
+| `Notify_AJAX_Feedback
