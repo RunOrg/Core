@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Util
@@ -28,7 +28,6 @@ type t = <
   id      : IInstance.t ;
   key     : IWhite.key ;
   disk    : float ;
-  seats   : int ;
   name    : string ;
   create  : float ;
   usr     : IUser.t ; 
@@ -43,7 +42,6 @@ let extract id i = Data.(object
   method name = i.name
   method disk = i.disk
   method create = i.create
-  method seats = i.seats
   method usr = i.usr
   method ver = i.ver
   method pic = BatOption.map IFile.Assert.get_pic i.pic (* Can view instance *)
@@ -71,7 +69,6 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     key     ;
     name    = clip 80 name ;
     disk    = 50.0 ;
-    seats   = 30 ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = vertical ;
@@ -274,7 +271,6 @@ let install iid ~pic ~who ~key ~name ~desc =
     key     ;
     name    = clip 80 name ;
     disk    = 50.0 ;
-    seats   = 30 ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = ConfigWhite.default_vertical owid ;

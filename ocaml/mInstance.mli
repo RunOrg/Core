@@ -6,7 +6,6 @@ type t = <
   name    : string ;
   disk    : float ;
   create  : float ;
-  seats   : int ;
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;

@@ -9,7 +9,6 @@ module T = struct
     key     : string ;
     name    : string ;
     disk    : Float.t ;
-    seats   : int ;
    ?create  : Float.t = Unix.gettimeofday () ;
     usr     : IUser.t ; 
     ver     : IVertical.t ;
