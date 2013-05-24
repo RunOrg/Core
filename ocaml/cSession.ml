@@ -18,7 +18,7 @@ let start cuid res =
   in
 
   let token = id ^ "-" ^ proof in
-  Action.with_cookie ~name:session ~value:token ~life:0 res
+  Action.with_cookie ~name:session ~value:token ~life:(3600 * 24 * 30) res
 
 let check req = 
   let! cookie     = req_or `None (req # cookie session) in
