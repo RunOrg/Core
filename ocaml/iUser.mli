@@ -10,6 +10,7 @@ module Assert : sig
   val is_new      : 'unknown id -> [`New] ICurrentUser.id 
   val is_old      : 'unknown id -> [`Old] ICurrentUser.id
   val confirm     : 'unknown id -> [`Confirm] id
+  val unsubscribe : 'unknown id -> [`Unsubscribe] id
 end
   
 module Deduce : sig
