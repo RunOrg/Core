@@ -1,10 +1,12 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
 open BatPervasives
 
 open CMe_common
+
+module Block = CMe_notify_settings_block
 
 let () = define UrlMe.Notify.def_settings begin fun owid cuid -> 
   O.Box.fill begin
