@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -13,12 +13,27 @@ module Refresh = MInboxLine_refresh
 let () = 
   let! eid  = Sig.listen MEvent.Signals.on_bind_inboxLine in
   let! ilid = ohm $ ByOwner.get_or_create (`Event eid) in 
-  Refresh.schedule ilid
+  Refresh.line ilid
 
 let () = 
   let! did  = Sig.listen MDiscussion.Signals.on_bind_inboxLine in
   let! ilid = ohm $ ByOwner.get_or_create (`Discussion did) in 
-  Refresh.schedule ilid
+  Refresh.line ilid
+
+let () = 
+  let! mid, mem = Sig.listen MMembership.Signals.after_update in 
+
+  (* Only when a member. *)
+  let! () = true_or (return ()) (mem.MMembership.status = `Member) in
+  
+  (* Only inside groups *)
+  let  asid = mem.MMembership.where in 
+  let! avset = ohm_req_or (return ()) (MAvatarSet.naked_get asid) in
+  let! gid = req_or (return ()) (match MAvatarSet.Get.owner avset with
+    | `Event _ -> None
+    | `Group gid -> Some gid) in
+
+  Refresh.group mem.MMembership.who gid 
 
 let () = 
   let! item = Sig.listen MItem.Signals.on_post in 
@@ -43,5 +58,5 @@ let () =
 			 | `Discussion did -> Some (`Discussion did)) 
   end in
   let! ilid = ohm $ ByOwner.get_or_create iloid in
-  Refresh.schedule ilid
+  Refresh.line ilid
 

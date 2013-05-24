@@ -68,3 +68,4 @@ end
 (* Database and table -------------------------------------------------------------------------------------- *)
 
 include CouchDB.Convenience.Table(struct let db = O.db "inbox-line" end)(IInboxLine)(Line)
+
