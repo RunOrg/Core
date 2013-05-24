@@ -22,7 +22,7 @@ let () = define UrlMe.Notify.def_settings begin fun owid cuid ->
 	method img      = VIcon.Large.report_go
 	method url      = Action.url UrlMe.Notify.digest owid ()
 	method title    = AdLib.get `Notify_Settings_Digest_Link
-	method subtitle = Some (AdLib.get `Notify_Settings_Block_Sub)
+	method subtitle = Some (AdLib.get `Notify_Settings_Digest_Sub)
        end) ;
 
     ] in 
