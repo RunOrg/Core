@@ -1,0 +1,70 @@
+<div {$l} class="notify-block">
+  {#items}
+    <label class="{if allowed} -allowed{/if}" href="javascript:void(0)">
+      <input type="checkbox" 
+	     {if allowed}checked="checked"{else}{/if}
+	     name="{id}"/>
+      <span class="-name">{name}</span>	
+      <span class="-ok">{`Notify_AJAX_Feedback}</span>
+    </label>
+  {/#}
+</div>
+
+<script type="post:json">
+here.$l.find("input").change -> 
+  $t = $ @
+  $l = $t.closest "label"
+  $t.attr "readonly", true 
+  $l.css {opacity:0.5}
+  allowed = $t.is ":checked"
+  id = $t.attr "name"   
+  to_endpoint post, {iid:id,allow:allowed}, (data) ->
+    $t.attr {readonly:false,checked:data.allowed }
+    $l.css({opacity:1}).toggleClass("-allowed", data.allowed)
+    $l.find(".-ok").show().fadeOut(2000)
+</script>
+
+<style>
+.notify-block {
+
+  margin: 20px;
+  border: 1px solid #BBB;
+  background-color: #FFF;
+  color: #333;
+
+  label {
+    display: block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 20px;
+    input {   
+      margin: 0 4px 2px;
+      vertical-align: middle; 
+    }
+    background-color: #FFF;
+    &.-allowed {
+      background-color: #DFD;  
+    }
+  }
+
+  .-ok { 
+    float: right;
+    display: none; 
+    background-color: #2A2;
+    background: -webkit-linear-gradient(top, #4C4 0%, #2A2 100%);
+    background: -moz-linear-gradient(top, #4C4 0%, #2A2 100%);
+    color: white;
+    text-shadow: 0 -1px 0 #080;
+    border: 1px solid #080;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  label + label {
+    border-top: 1px solid #DDD;
+  }
+
+}
+</style>
