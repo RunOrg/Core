@@ -33,3 +33,5 @@ let set_plugins = declare "Modifier les plugins" "set-plugins"
 let refresh_grants = declare "Recalculer les jetons" "refresh-grants"
 
 let migrate = declare "Migration de données" "migrate"
+
+let set_disk = declare "Affecter de l'espace disque" "set-disk"

@@ -5,6 +5,8 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
+let default_disk = 2. *. 1024. (* 2 Go *)
+
 module Data    = MInstance_data
 module Common  = MInstance_common
 module Profile = MInstance_profile
@@ -68,7 +70,7 @@ let create ~pic ~who ~key ~name ~address ~desc ~site ~contact ~vertical ~white =
     t       = `Instance ;
     key     ;
     name    = clip 80 name ;
-    disk    = 50.0 ;
+    disk    = default_disk ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = vertical ;
@@ -270,7 +272,7 @@ let install iid ~pic ~who ~key ~name ~desc =
     t       = `Instance ;
     key     ;
     name    = clip 80 name ;
-    disk    = 50.0 ;
+    disk    = default_disk ;
     create  = now ;
     usr     = IUser.Deduce.is_anyone who ;
     ver     = ConfigWhite.default_vertical owid ;
@@ -368,6 +370,12 @@ module Backdoor = struct
     let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
     let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with plugins })) in
     return `OK 
+
+  let set_disk disk src = 
+    let disk = 1024. *. disk in 
+    let! iid = ohm_req_or (return `NOT_FOUND) $ by_key ~fresh:true src in
+    let! _ = ohm $ Tbl.update iid (fun ins -> Data.({ ins with disk })) in
+    return `OK
 
 end
 

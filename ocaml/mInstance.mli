@@ -152,5 +152,7 @@ module Backdoor : sig
 
   val set_plugins : IPlugin.t list -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
 
+  val set_disk : float -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
+
 end
 
