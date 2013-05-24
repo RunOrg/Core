@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
@@ -32,6 +32,9 @@ let set_plugins = declare "Modifier les plugins" "set-plugins"
 
 let refresh_grants = declare "Recalculer les jetons" "refresh-grants"
 
+let obliterate = declare "Oblitérer un compte utilisateur" "obliterate-user"
+
 let migrate = declare "Migration de données" "migrate"
 
 let set_disk = declare "Affecter de l'espace disque" "set-disk"
+
