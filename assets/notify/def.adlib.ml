@@ -15,3 +15,13 @@
 | `Notify_Resend_Hello of string
 | `Notify_Resend_Body
 | `Notify_Resend_Button
+
+| `Notify_Settings_Block_Title
+| `Notify_Settings_Block_Link
+| `Notify_Settings_Block_Sub 
+
+| `Notify_Settings_Digest_Title 
+| `Notify_Settings_Digest_Link 
+| `Notify_Settings_Digest_Sub 
+
+| `Notify_AJAX_Feedback

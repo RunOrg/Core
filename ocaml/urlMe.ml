@@ -38,6 +38,8 @@ end
 module Notify = struct
   let home,     def_home     = root "notify"
   let settings, def_settings = child def_home "nt/settings" 
+  let digest,   def_digest   = child def_settings "nt/digest"
+  let block,    def_block    = child def_settings "nt/block"
   let count,    def_count    = O.declare O.core "notify/count" A.none
   let follow,   def_follow   = O.declare O.core "notify/follow" (A.ro IMail.arg IMail.Action.arg) 
 end

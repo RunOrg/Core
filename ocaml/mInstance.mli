@@ -6,7 +6,6 @@ type t = <
   name    : string ;
   disk    : float ;
   create  : float ;
-  seats   : int ;
   usr     : IUser.t ;
   ver     : IVertical.t ;
   pic     : [`GetPic] IFile.id option ;
@@ -152,6 +151,8 @@ module Backdoor : sig
     -> ((IInstance.t * t) list * float option) O.run
 
   val set_plugins : IPlugin.t list -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
+
+  val set_disk : float -> IWhite.key -> (#O.ctx,[`OK | `NOT_FOUND]) Ohm.Run.t
 
 end
 

@@ -38,14 +38,14 @@ here.$f.load () ->
   <center>{`Folder_ReadOnly}</center>
 {/?}
 </div>
-<div class="-list {if files | OhmAsset.notEmpty}{else}-empty{/if}">
+<div class="-list {?more}{else}-empty{/?}">
   <div class="shadow" style="position:relative"><div class="-inner"></div></div>
   <div class="folder">
-    {if files | OhmAsset.notEmpty}
-      { this | Asset_Folder_More.render | ohm }
+    {?more}
+      { this | VMore.div | ohm }
     {else}
       <div class="empty-list">{`Folder_List_Empty}</div>
-    {/if}
+    {/?}
   </div>
 </div>
 </div>

@@ -52,7 +52,6 @@ $n.click () ->
   setTime "" 
   setDate "" 
   $c.hide()  
-  $t.hide()
 
 y = (x) -> x.getFullYear()
 m = (x) -> x.getMonth()
@@ -167,7 +166,9 @@ do render
 
   input {
     .asap();
-    padding: 4px; 
+    padding: 2px;
+    line-height: 16px;
+    height: 19px;
     border: none;
     float: left;
   }
@@ -226,7 +227,8 @@ do render
     padding: 2px;
     position: absolute;
     top: 0;
-    
+    z-index: 2;
+
     .-w { overflow: hidden } 
 
     .-top {
