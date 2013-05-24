@@ -95,8 +95,10 @@ let get_filter = function
 			   | `Event   _  -> return None
 		       end  gids in 
 		       return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
+
+(* Refreshing an inbox line (pushes that line to all avatars that can read it) *)
   
-let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt 
+let line = O.async # define "inbox-line-refresh" IInboxLine.fmt 
   begin fun ilid -> 
     let! push = ohm_req_or (return ()) $ Tbl.transact ilid begin function
       | None -> return (None, `keep) 
@@ -129,5 +131,5 @@ let schedule = O.async # define "inbox-line-refresh" IInboxLine.fmt
     Push.schedule ilid push 
   end
 
-let schedule ilid = 
-  O.decay (schedule ilid)
+let line ilid = 
+  O.decay (line ilid)
