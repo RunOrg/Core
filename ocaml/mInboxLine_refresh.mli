@@ -1,3 +1,5 @@
 (* © 2013 RunOrg *)
 
-val schedule : IInboxLine.t -> (#O.ctx,unit) Ohm.Run.t
+val line : IInboxLine.t -> (#O.ctx,unit) Ohm.Run.t
+
+val group : IAvatar.t -> IGroup.t -> (#O.ctx,unit) Ohm.Run.t
