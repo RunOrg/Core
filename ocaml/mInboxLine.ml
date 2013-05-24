@@ -21,6 +21,21 @@ let () =
   Refresh.line ilid
 
 let () = 
+  let! mid, mem = Sig.listen MMembership.Signals.after_update in 
+
+  (* Only when a member. *)
+  let! () = true_or (return ()) (mem.MMembership.status = `Member) in
+  
+  (* Only inside groups *)
+  let  asid = mem.MMembership.where in 
+  let! avset = ohm_req_or (return ()) (MAvatarSet.naked_get asid) in
+  let! gid = req_or (return ()) (match MAvatarSet.Get.owner avset with
+    | `Event _ -> None
+    | `Group gid -> Some gid) in
+
+  Refresh.group mem.MMembership.who gid 
+
+let () = 
   let! item = Sig.listen MItem.Signals.on_post in 
   let! iloid = ohm_req_or (return ()) begin 
     match item # where with 
