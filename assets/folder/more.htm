@@ -19,6 +19,9 @@ here.$a.click ->
     </a>       
   </div>
 {/#}
+{?more}
+  { this | VMore.div | ohm }
+{/?}
 
 <style>
 .folder {

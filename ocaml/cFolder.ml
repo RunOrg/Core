@@ -42,8 +42,8 @@ let render ?moderate access item =
     method comments = if item # ncomm = 0 then None else Some item # ncomm 
   end)
  
-let items more access folder start = 
-  let! items, next = ohm $ MItem.list ~self:(access # self) (`folder (MFolder.Get.id folder)) ~count:9 start in
+let items ~count more access folder start = 
+  let! items, next = ohm $ MItem.list ~self:(access # self) (`folder (MFolder.Get.id folder)) ~count start in
   let! admin = ohm $ MFolder.Can.admin folder in
   let  moderate = 
     if admin = None then None else 
@@ -58,23 +58,21 @@ let items more access folder start =
 
 let folder_rw ~compact more access folder wfolder = 
   O.Box.fill begin 
-    let! files, more = ohm $ O.decay (items more access folder None) in 
+    let! files, more = ohm $ O.decay (items ~count:0 more access folder None) in 
     let upload = Action.url UrlUpload.Client.Doc.root (access # instance # key) 
       (IFolder.decay $ MFolder.Get.id folder) in
     Asset_Folder_List.render (object
-      method upload = Some upload
-      method files  = files
-      method more   = more
+      method upload  = Some upload
+      method more    = more
       method compact = compact
     end)
   end
 
 let folder_ro ~compact more access folder = 
-  let! files, more = ohm $ O.decay (items more access folder None) in 
+  let! files, more = ohm $ O.decay (items ~count:0 more access folder None) in 
   O.Box.fill (Asset_Folder_List.render (object
-    method upload = None
-    method files  = files
-    method more   = more
+    method upload  = None
+    method more    = more
     method compact = compact 
   end))
 
@@ -82,7 +80,7 @@ let folder_none () =
   O.Box.fill (Asset_Folder_ListNone.render ())
 
 let getmore access folder = begin fun time _ self res -> 
-  let! files, more = ohm $ O.decay (items self access folder (Some time)) in
+  let! files, more = ohm $ O.decay (items ~count:10 self access folder (Some time)) in
   let! html = ohm $ Asset_Folder_More.render (object
     method files = files
     method more  = more
