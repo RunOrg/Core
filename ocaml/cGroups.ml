@@ -125,15 +125,17 @@ let () = CClient.define UrlClient.Members.def_home begin fun access ->
 
       end in            
       let status = MGroup.Get.status group in
-      return $ Some (isMember, object
+      return $ Some (Util.fold_all name, (isMember, object
 	method id     = IGroup.to_string (MGroup.Get.id group) 
 	method count  = count
 	method status = (status :> VStatus.t option)  
 	method name   = name
 	method url    = Action.url UrlClient.Members.home (access # instance # key) 
 	  [ IGroup.to_string (MGroup.Get.id group) ]  
-      end)
+      end))
     end list in 
+
+    let list = List.map snd (List.sort (fun a b -> compare (fst a) (fst b)) list) in
 
     let isMember, isNotMember = List.partition fst list in
 
