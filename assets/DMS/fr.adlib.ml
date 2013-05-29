@@ -41,6 +41,10 @@
 | `DMS_Repo_Uploaders_Link -> "Contributeurs"
 | `DMS_Repo_Uploaders_Sub -> "Déterminer qui peut ajouter des documents à cette bibliothèque"
 
+| `DMS_Repo_Admins_Title -> "Responsables"
+| `DMS_Repo_Admins_Link -> "Responsables"
+| `DMS_Repo_Admins_Sub -> "Déléguer les droits d'administration sur cette bibliothèque"
+
 | `DMS_Repo_Advanced_Title -> "Options Avancées"
 | `DMS_Repo_Advanced_Link -> "Options Avancées"
 | `DMS_Repo_Advanced_Sub -> "Configuration spécifique pour utilisateurs experts"

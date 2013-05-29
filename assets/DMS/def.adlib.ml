@@ -36,6 +36,10 @@
 | `DMS_Repo_Uploaders_Link
 | `DMS_Repo_Uploaders_Sub
 
+| `DMS_Repo_Admins_Title
+| `DMS_Repo_Admins_Link
+| `DMS_Repo_Admins_Sub
+
 | `DMS_Repo_Advanced_Title
 | `DMS_Repo_Advanced_Link
 | `DMS_Repo_Advanced_Sub

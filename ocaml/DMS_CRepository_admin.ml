@@ -24,6 +24,13 @@ let () = define Url.Repo.def_admin begin fun parents repo access ->
 	method subtitle = Some (AdLib.get `DMS_Repo_Edit_Sub)
       end) ;
 
+      Some (object
+	method img = VIcon.Large.key
+	method url = parents # admins # url
+	method title = AdLib.get `DMS_Repo_Admins_Link
+	method subtitle = Some (AdLib.get `DMS_Repo_Admins_Sub)
+      end) ;
+
       if MRepository.Get.upload repo <> `Viewers then Some (object
 	method img = VIcon.Large.folder_key
 	method url = parents # uploaders # url
