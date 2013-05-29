@@ -8,21 +8,21 @@ open DMS_CRepository_common
 open DMS_CRepository_admin_common
 
 let delegator repo access = object (self)
-  method get = MRepository.Get.uploaders repo
-  method set aids = MRepository.Set.uploaders aids repo (access # actor) 
+  method get = MRepository.Get.admins repo
+  method set aids = MRepository.Set.admins aids repo (access # actor) 
 end
 
-let labels lbl = `DMS_Repo_Uploaders_Label lbl
+let labels lbl = `DMS_Repo_Admins_Label lbl 
 
-let () = define Url.Repo.def_delpick begin fun parents repo access ->
+let () = define Url.Repo.def_admpick begin fun parents repo access ->
 
-  let back = parents # uploaders # url in
+  let back = parents # admins # url in
 
   let wrap body = 
     O.Box.fill (O.decay begin 
       Asset_Admin_Page.render (object
 	method parents = [ parents # home ; parents # admin ; parents # uploaders ] 
-	method here = parents # delpick # title
+	method here = parents # admins # title
 	method body = O.decay body
       end)
     end)
@@ -32,15 +32,15 @@ let () = define Url.Repo.def_delpick begin fun parents repo access ->
 
 end
 
-let () = define Url.Repo.def_uploader begin fun parents repo access -> 
+let () = define Url.Repo.def_admins begin fun parents repo access -> 
 
-  let pick = Some (parents # delpick # url) in 
+  let pick = Some (parents # admpick # url) in 
 
   let wrap body = 
     O.Box.fill (O.decay begin 
       Asset_Admin_Page.render (object
 	method parents = [ parents # home ; parents # admin ] 
-	method here = parents # uploaders # title
+	method here = parents # admins # title
 	method body = O.decay body
       end)	
     end)

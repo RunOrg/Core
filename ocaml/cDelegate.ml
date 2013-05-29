@@ -13,7 +13,7 @@ type delegator = <
   set : IAvatar.t list -> unit O.run
 >
 
-let picker kind back access deleg wrap = 
+let picker labels back access deleg wrap = 
 
   let! post = O.Box.react Fmt.Unit.fmt begin fun _ json _ res ->
 
@@ -29,7 +29,7 @@ let picker kind back access deleg wrap =
 
   wrap begin 
 
-    let! submit = ohm $ AdLib.get (`Delegate_Submit kind) in
+    let! submit = ohm $ AdLib.get (labels `Submit) in
 
     Asset_Search_Pick.render (object
       method submit = submit
@@ -39,7 +39,7 @@ let picker kind back access deleg wrap =
 
   end
 
-let list kind pick access deleg wrap = 
+let list ?(admins=true) labels pick access deleg wrap = 
 
   let delegates = deleg # get in
 
@@ -53,12 +53,7 @@ let list kind pick access deleg wrap =
 
     let! admin = ohm $ MGroup.admin_name (access # iid) in     
 
-    let  admins = match kind with 
-      | `ProfileView -> None
-      | `Event
-      | `Group
-      | `Forum -> Some admin
-    in
+    let  admins = if admins then Some admin else None in 
 
     let! delegates = ohm $ Run.list_map begin fun aid ->
       let! profile = ohm $ CAvatar.mini_profile aid in 
@@ -70,8 +65,10 @@ let list kind pick access deleg wrap =
       end)
     end delegates in 
 
+    let! help = ohm (AdLib.get (labels `Help)) in
+
     Asset_Delegate_List.render (object 
-      method kind      = kind 
+      method help      = help
       method admins    = admins
       method delegates = delegates
       method add       = pick

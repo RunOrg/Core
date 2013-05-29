@@ -34,3 +34,8 @@ end
 | `Profile_ViewPick_Title -> "Ajouter"
 
 | `Profile_Admin_Title -> "Administration"
+
+| `Profile_Viewers_Label lbl -> begin match lbl with 
+  | `Submit -> "Ajouter Parents"
+  | `Help -> "Les parents peuvent voir et modifier le profil de leurs enfants. La liste ci-dessous recense les parents de ce profil :"
+end
