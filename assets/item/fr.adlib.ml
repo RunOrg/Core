@@ -12,3 +12,5 @@ end
 | `Item_Notify_Body asso -> !! "Ce message a été publié dans «%s»" asso
 | `Item_Notify_Body2 -> "Pour y répondre, ou pour consulter les réponses déjà écrites, cliquez sur le bouton ci-dessous."
 | `Item_Notify_Button -> "Plus de détails"
+
+| `Item_Author_AddPic -> "Soyez reconnaissable ! Cliquez ici pour associer une photo à votre profil."
