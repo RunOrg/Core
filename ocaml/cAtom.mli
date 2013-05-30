@@ -15,7 +15,7 @@ end
 
 val register :       
      ?render:(MAtom.t -> (O.ctx,Ohm.Html.writer) Ohm.Run.t) 
-  ->  search:(IWhite.key -> IAtom.t -> string) 
+  ->  search:([`IsToken] MActor.t -> IWhite.key -> IAtom.t -> (O.ctx,string) Ohm.Run.t) 
   ->  IAtom.Nature.t
   ->  unit
 

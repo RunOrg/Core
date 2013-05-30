@@ -98,13 +98,14 @@ let () = UrlClient.def_viewAtom $ CClient.action begin fun access req res ->
 
   let key = access # instance # key in
 
-  let default key atid = Action.url UrlClient.Atom.view key [ IAtom.to_string atid ] in
-  let result  url  = return (Action.javascript (Js.redirect url ()) res) in
+  let default _ key atid = return (Action.url UrlClient.Atom.view key [ IAtom.to_string atid ]) in
+  let result  url  = let! url = ohm url in 
+		     return (Action.javascript (Js.redirect url ()) res) in
 
   let! atom = ohm (MAtom.get ~actor:(access # actor) atid) in
   match atom with 
-    | `Some atom -> result (search (atom # nature) default key atid)
+    | `Some atom -> result (search (atom # nature) default (access # actor) key atid) 
     | `Missing 
-    | `Limited _ -> result (default key atid) 
+    | `Limited _ -> result (default (access # actor) key atid) 
 
 end
