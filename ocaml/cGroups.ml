@@ -4,8 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Admin  = CGroups_admin
-module Create = CGroups_create
+module Admin   = CGroups_admin
+module Create  = CGroups_create
+module ForAtom = CGroups_forAtom
 
 let contents access = 
 

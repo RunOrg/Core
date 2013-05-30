@@ -117,6 +117,6 @@ module ForAtom = struct
     let  aid = IAvatar.of_id (IAtom.to_id atid) in
     Action.url UrlClient.Profile.home key [ IAvatar.to_string aid ]
 
-  let () = CAtom.register ~nature:`Avatar ~render ~search
+  let () = CAtom.register ~render ~search `Avatar 
 
 end

@@ -10,11 +10,11 @@ module View = CAtom_view
 
 let plugins = ref BatPMap.empty 
 
-let register ~nature ~render ~search = 
+let register ?render ~search nature = 
   plugins := BatPMap.add nature (render, search) !plugins
 
 let render nature default = 
-  try BatPMap.find nature !plugins |> fst 
+  try BatOption.default default (BatPMap.find nature !plugins |> fst)
   with Not_found -> default
 
 let search nature default = 
