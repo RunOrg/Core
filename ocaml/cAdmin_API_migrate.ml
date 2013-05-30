@@ -22,7 +22,7 @@ include Make(struct
 			ok "Avatar atom refresh started !"
       | `Digest      -> let! () = ohm (MDigest.Backdoor.migrate_confirmed ()) in
 			ok "User digest import started !"
-      | `GroupAtoms  -> let! () = ohm (MGroup.Backdoor.refresh_group_atoms cuid) in
+      | `GroupAtoms  -> let! () = ohm (MGroup.Backdoor.refresh_atoms cuid) in
 			ok "Group atom refresh started !"
 
 end)

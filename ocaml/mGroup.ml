@@ -39,6 +39,6 @@ let admin_name ?actor iid =
   return (BatOption.default default (Get.name group))   
 
 module Backdoor = struct
-  let refresh_group_atoms cuid = 
-    Atom.refresh_group_atoms cuid 
+  let refresh_atoms cuid = 
+    Atom.refresh_atoms cuid 
 end

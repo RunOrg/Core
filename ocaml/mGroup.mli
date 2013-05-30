@@ -106,6 +106,6 @@ val admin_name : ?actor:'a MActor.t -> 'any IInstance.id -> TextOrAdlib.t O.run
 
 module Backdoor : sig
 
-  val refresh_group_atoms : [`Admin] ICurrentUser.id -> (#O.ctx,unit) Ohm.Run.t
+  val refresh_atoms : [`Admin] ICurrentUser.id -> (#O.ctx,unit) Ohm.Run.t
 
 end
