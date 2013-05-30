@@ -37,3 +37,8 @@ let admin_name ?actor iid =
   let! gid     = ohm $ MPreConfigNamer.group IGroup.admin pcnamer in 
   let! group   = ohm_req_or (return default) $ view ?actor gid in 
   return (BatOption.default default (Get.name group))   
+
+module Backdoor = struct
+  let refresh_group_atoms cuid = 
+    Atom.refresh_group_atoms cuid 
+end

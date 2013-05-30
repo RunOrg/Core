@@ -19,10 +19,9 @@ let () =
     return true
   end
 
-(* React to group updates to create atoms. *)
+(* Create an atom from a group id *)
 
-let () = 
-  let! gid = Sig.listen Signals.on_update in 
+let reflect gid = 
 
   (* TODO : react when group is deleted *)  
   let! group = ohm_req_or (return ()) (E.Tbl.get (IGroup.decay gid)) in
@@ -39,3 +38,20 @@ let () =
   let iid = group.E.iid in
 
   MAtom.reflect iid `Group (IGroup.to_id gid) ~lim:limited name 
+
+
+(* React to group updates to create atoms. *)
+
+let () = 
+  Sig.listen Signals.on_update reflect 
+
+(* API-controlled refresh of all groups *)
+
+let refresh_group_atoms = Async.Convenience.foreach O.async "refresh-group-atoms"
+  IGroup.fmt (E.Tbl.all_ids ~count:10) 
+  (fun gid -> 
+    let () = Util.log "Reflect group %s" (IGroup.to_string gid) in 
+    reflect gid)
+  
+let refresh_group_atoms cuid = 
+  O.decay (refresh_group_atoms ())
