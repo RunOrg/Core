@@ -7,10 +7,11 @@ open BatPervasives
 let max_label_size = 100
 
 type t = <
-  id     : IAtom.t ; 
-  nature : IAtom.Nature.t ;
-  label  : string ;
-  hide   : bool ; 
+  id      : IAtom.t ; 
+  nature  : IAtom.Nature.t ;
+  label   : string ;
+  hide    : bool ; 
+  limited : bool ;
 > ;;
 
 module Data = struct
@@ -21,6 +22,7 @@ module Data = struct
       label  : string ; 
       iid    : IInstance.t ;
      ?hide   : bool = false ; 
+     ?lim    : bool = false ; 
       sort   : string list 
     }
   end
@@ -42,6 +44,19 @@ let to_sort label =
     |> String.lowercase
   in
   BatList.sort_unique compare (BatString.nsplit clean " ") 
+
+(* Limit filtering *)
+
+let filters = Hashtbl.create 10
+
+let access_register nature f = 
+  Hashtbl.add filters nature f 
+
+let limitFilter nature actor id = 
+  let! actor = req_or (return false) (MActor.member actor) in
+  try Hashtbl.find filters nature actor id with Not_found -> return false
+
+(* Querying multiple elements *) 
 
 module All = struct
 
@@ -82,7 +97,16 @@ module All = struct
     in
 
     is_subset (query,(item # doc).Data.sort)
+
+  (* Determines whether the current element is either not limited, or satistfies
+     the accessibility filter (e.g. a secret group can be seen by this user). *)
  
+  let filter_lvl3 filter item = 
+    let doc = item # doc in 
+    if not doc.Data.lim then return (Some item) else 
+      let! ok = ohm (filter doc.Data.nature (item # id)) in
+      return (if ok then Some item else None)
+
   let extract item = object
     val id = IAtom.of_id (item # id) 
     method id = id
@@ -91,13 +115,16 @@ module All = struct
     val label = (item # doc).Data.label
     method label = label
     method hide = false
+    val limited = (item # doc).Data.lim
+    method limited = limited
   end
      
-  let fetch_at_least ~count iid nature query = 
+  let fetch_at_least ~filter ~count iid nature query = 
 
     let qseg, query = match query with [] -> "", [] | x :: xs -> x, xs in
     let lvl1 = filter_lvl1 qseg in
     let lvl2 = filter_lvl2 query in
+    let lvl3 = filter_lvl3 filter in 
 
     let rec fetch_more ~count ?startid prefix = 
 
@@ -118,7 +145,10 @@ module All = struct
       (* Eliminate duplicate atoms (by IAtom) *)
       let  unique   = BatList.sort_unique (fun a b -> compare (a # id) (b # id)) postlvl2 in
 
-      let  result   = List.map extract unique in
+      (* Eliminate inaccessible atoms. *)
+      let! postlvl3 = ohm (Run.list_filter lvl3 unique) in
+
+      let  result   = List.map extract postlvl3 in
 
       (* If not up to count yet, keep searching. *)
       let found = List.length result in 
@@ -135,21 +165,33 @@ module All = struct
     let  list  = List.concat lists in
     return (List.sort (fun a b -> compare (a # label) (b # label)) list) 
 
-  let suggest iid ?nature ~count query = 
-    let query = to_sort query in 
-    fetch_at_least ~count iid nature query 
+  let suggest_public iid ?nature ~count query = 
+    let  query  = to_sort query in 
+    let  filter _ _ = return false in 
+    fetch_at_least ~filter ~count iid nature query
+
+  let suggest actor ?nature ~count query = 
+    let query = to_sort query in
+    let filter nid id = O.decay (limitFilter nid actor id) in
+    let iid = IInstance.decay (MActor.instance actor) in 
+    fetch_at_least ~filter ~count iid  nature query 
       
 end
 
 let get ~actor atid = 
-  let! atom = ohm_req_or (return None) (Tbl.get atid) in
+  let! atom = ohm_req_or (return `Missing) (Tbl.get atid) in
   let  iid  = IInstance.decay (MActor.instance actor) in
-  if iid <> atom.Data.iid then return None else return (Some (object
-    method id     = atid 
-    method nature = atom.Data.nature
-    method label  = atom.Data.label 
-    method hide   = atom.Data.hide
-  end))
+  if iid <> atom.Data.iid then return `Missing else 
+    let obj = `Some (object
+      method id      = atid 
+      method nature  = atom.Data.nature
+      method label   = atom.Data.label 
+      method hide    = atom.Data.hide
+      method limited = atom.Data.lim
+    end) in
+    if not atom.Data.lim then return obj else 
+      let! visible = ohm (O.decay (limitFilter atom.Data.nature actor (IAtom.to_id atid))) in
+      if visible then return obj else return (`Limited atom.Data.nature)
 
 let create actor nature label = 
   if not (IAtom.Nature.can_create nature) then return None else
@@ -165,12 +207,13 @@ let create actor nature label =
 	  label ;
 	  sort ;
 	  hide = false ; 
+	  lim = false ;
 	  iid
 	}) in
 	let! atid = ohm (Tbl.create data) in
 	return (Some atid) 
 	
-let reflect iid nature id ?(hide=false) label = 
+let reflect iid nature id ?(lim=false) ?(hide=false) label = 
   let atid = IAtom.of_id id in 
   let label = BatString.head (BatString.strip label) max_label_size in 
   if label = "" then return () else
@@ -183,14 +226,18 @@ let reflect iid nature id ?(hide=false) label =
 	sort ;
 	label ;
 	hide ; 
+	lim ; 
 	iid
       }) in
       Tbl.set atid data
 
 let of_json ~actor json = 
   let! atid = req_or (return None) (IAtom.of_json_safe json) in
-  let! atom = ohm_req_or (return None) (get ~actor atid) in
-  return (Some (atom # label))
+  let! atom = ohm (get ~actor atid) in
+  match atom with 
+    | `Some atom -> return (Some (atom # label))
+    | `Missing
+    | `Limited _ -> return None
 
 module PublicFormat = Fmt.Make(struct
   type json t = 

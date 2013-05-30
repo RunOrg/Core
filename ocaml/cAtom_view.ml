@@ -95,7 +95,13 @@ let () = CClient.define UrlClient.Atom.def_view begin fun access ->
 
     let missing = Asset_Client_PageNotFound.render () in
 
-    let! atom = ohm_req_or missing (MAtom.get ~actor:(access # actor) atid) in
+    let! atom = ohm_req_or missing begin 
+      let! result = ohm (MAtom.get ~actor:(access # actor) atid) in
+      match result with
+        | `Some atom -> return (Some atom) 
+	| `Missing
+	| `Limited _ -> return None
+    end in 
     
     let! filters = ohm $ Run.list_map begin fun (filter',label) -> 
       let! url = ohm (O.Box.url [ IAtom.to_string atid ; filter' ]) in
