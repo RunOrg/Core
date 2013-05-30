@@ -17,6 +17,7 @@ module All       = MGroup_all
 module Initial   = MGroup_initial
 module E         = MGroup_core
 module Create    = MGroup_create
+module Atom      = MGroup_atom
 
 let create = Create.public
 
