@@ -63,4 +63,9 @@ end
 | `Group_Delegate_Link  -> "Responsables"
 | `Group_Delegate_Sub   -> "Déléguer la gestion du groupe à des membres"
 
+| `Group_Delegate_Label lbl -> begin match lbl with 
+  | `Submit -> "Nommer responsables"
+  | `Help -> "Les responsables disposent de tous les pouvoirs sur ce groupe. La liste ci-dessous recense les responsables actuels :"
+end
+
 | `Group_DelPick_Title  -> "Ajouter"

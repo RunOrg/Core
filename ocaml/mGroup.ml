@@ -17,6 +17,7 @@ module All       = MGroup_all
 module Initial   = MGroup_initial
 module E         = MGroup_core
 module Create    = MGroup_create
+module Atom      = MGroup_atom
 
 let create = Create.public
 
@@ -36,3 +37,8 @@ let admin_name ?actor iid =
   let! gid     = ohm $ MPreConfigNamer.group IGroup.admin pcnamer in 
   let! group   = ohm_req_or (return default) $ view ?actor gid in 
   return (BatOption.default default (Get.name group))   
+
+module Backdoor = struct
+  let refresh_atoms cuid = 
+    Atom.refresh_atoms cuid 
+end

@@ -119,6 +119,9 @@ module type CAN = sig
 
   val decay : 'any id -> [`Unknown] id 
 
+  val deleted : core -> bool 
+  val iid : core -> IInstance.t
+
 end
 
 module type CAN_ARG = sig
@@ -194,6 +197,9 @@ module Can = functor (C:CAN_ARG) -> struct
 			if ok then return (Some t') else return None
     end
 
+  let deleted = C.deleted
+  let iid = C.iid
+
 end
 
 (* Mutation ("set") module ---------------------------------------------------------------------------------- *)
@@ -233,5 +239,56 @@ module Get = functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id a
   let admin ?actor id = 
     let! e = ohm_req_or (return None) (get ?actor id) in
     C.admin e
+
+end
+
+(* Atom reflection module ---------------------------------------------------------------------------------- *)
+
+module type ATOM = sig
+  type t 
+  val key     : string
+  val nature  : IAtom.Nature.t
+  val limited : t -> bool
+  val hide    : t -> bool 
+  val name    : t -> string O.run
+end 
+
+module Atom = 
+  functor(C:CAN) ->
+    functor(S:CORE with type Id.t = [`Unknown] C.id and type t = C.core) -> 
+      functor(A:ATOM with type t = C.core) -> 
+struct
+  
+  let () = 
+    MAtom.access_register A.nature begin fun actor id -> 
+      let  cid = S.Id.of_id id in 
+      let! e = ohm_req_or (return false) (S.Tbl.get (C.decay cid)) in
+      let! c = req_or (return false) (C.make cid ~actor e) in
+      let! v = ohm_req_or (return false) (C.view c) in
+      return true
+    end
+
+  let reflect cid = 
+    let! e = ohm_req_or (return ()) (S.Tbl.get (C.decay cid)) in
+    let  lim  = A.limited e || C.deleted e in
+    let  hide = A.hide e || C.deleted e in
+    let  iid  = C.iid e in
+    let! name = ohm (A.name e) in
+    MAtom.reflect iid A.nature (S.Id.to_id cid) ~lim ~hide name 
+
+  let () = 
+    Sig.listen S.on_update reflect
+
+  let refresh_atoms = Async.Convenience.foreach O.async ("refresh-" ^ A.key ^ "-atoms")
+    Id.fmt 
+    (fun id -> 
+      let! list, next = ohm (S.Tbl.all_ids ~count:10 (BatOption.map S.Id.of_id id)) in
+      return (List.map S.Id.to_id list, BatOption.map S.Id.to_id next)) 
+    (fun id -> 
+      let () = Util.log "Reflect %s %s" A.key (Id.to_string id) in
+      reflect (S.Id.of_id id))
+
+  let refresh_atoms cuid = 
+    O.decay (refresh_atoms ()) 
 
 end

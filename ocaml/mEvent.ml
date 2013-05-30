@@ -16,6 +16,7 @@ module Set       = MEvent_set
 module Config    = MEvent_config
 module All       = MEvent_all
 module E         = MEvent_core
+module Atom      = MEvent_atom
 
 let create ~self ~name ?pic ?(vision=`Normal) ~iid tid = 
 
@@ -63,3 +64,7 @@ let instance eid =
   let! event = ohm_req_or (return None) (get eid) in
   return $ Some (Get.iid event)
 
+module Backdoor = struct
+  let refresh_atoms cuid = 
+    Atom.refresh_atoms cuid 
+end

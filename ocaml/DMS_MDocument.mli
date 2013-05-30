@@ -102,3 +102,7 @@ val view : ?actor:'any MActor.t -> 'rel DMS_IDocument.id -> (#O.ctx,[`View] t op
 val admin : ?actor:'any MActor.t -> 'rel DMS_IDocument.id -> (#O.ctx,[`Admin] t option) Ohm.Run.t
 
 val instance : 'any DMS_IDocument.id -> (#O.ctx,IInstance.t option) Ohm.Run.t
+
+module Backdoor : sig
+  val refresh_atoms : [ `Admin ] ICurrentUser.id -> (#O.ctx, unit) Ohm.Run.t
+end

@@ -8,3 +8,5 @@
 | `Item_Notify_Body of string
 | `Item_Notify_Body2
 | `Item_Notify_Button 
+
+| `Item_Author_AddPic

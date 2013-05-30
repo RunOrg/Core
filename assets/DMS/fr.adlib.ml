@@ -41,6 +41,20 @@
 | `DMS_Repo_Uploaders_Link -> "Contributeurs"
 | `DMS_Repo_Uploaders_Sub -> "Déterminer qui peut ajouter des documents à cette bibliothèque"
 
+| `DMS_Repo_Uploaders_Label lbl -> begin match lbl with 
+  | `Submit -> "Nommer contributeurs"
+  | `Help -> "Les contributeurs peuvent ajouter des documents à une bibliothèque, ainsi que modifier et supprimer les documents qu'ils ont ajoutés. Voici la liste des contributeurs actuels : "
+end
+
+| `DMS_Repo_Admins_Title -> "Responsables"
+| `DMS_Repo_Admins_Link -> "Responsables"
+| `DMS_Repo_Admins_Sub -> "Déléguer les droits d'administration sur cette bibliothèque"
+
+| `DMS_Repo_Admins_Label lbl -> begin match lbl with 
+  | `Submit -> "Nommer responsables"
+  | `Help -> "Les responsables d'une bibliothèque peuvent créer, modifier et supprimer tous les documents, et changer les options de la bibliothèque. Voici la liste des responsables actuels : "
+end
+
 | `DMS_Repo_Advanced_Title -> "Options Avancées"
 | `DMS_Repo_Advanced_Link -> "Options Avancées"
 | `DMS_Repo_Advanced_Sub -> "Configuration spécifique pour utilisateurs experts"

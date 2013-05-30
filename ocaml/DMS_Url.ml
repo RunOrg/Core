@@ -37,6 +37,8 @@ module Repo = struct
   let advanced, def_advanced = child def_admin    "dms/repo/advanced"
   let uploader, def_uploader = child def_admin    "dms/repo/uploader"
   let delpick,  def_delpick  = child def_uploader "dms/repo/delpick"
+  let admins,   def_admins   = child def_admin    "dms/repo/admdeleg"
+  let admpick,  def_admpick  = child def_admins   "dms/repo/admpick"
   
 end
 

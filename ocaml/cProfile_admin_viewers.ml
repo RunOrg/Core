@@ -13,6 +13,8 @@ let delegator pid =
     method set = MProfile.set_parents pid
   end)
 
+let labels x = `Profile_Viewers_Label x 
+
 let () = define UrlClient.Profile.def_viewPick begin fun parents pid access ->
 
   let back = parents # viewers # url in
@@ -29,7 +31,7 @@ let () = define UrlClient.Profile.def_viewPick begin fun parents pid access ->
     end
   in
 
-  CDelegate.picker `ProfileView back access delegator wrap 
+  CDelegate.picker labels back access delegator wrap 
 
 end
 
@@ -49,6 +51,6 @@ let () = define UrlClient.Profile.def_viewers begin fun parents pid access ->
     end
   in
 
-  CDelegate.list `ProfileView pick access delegator wrap
+  CDelegate.list ~admins:false labels pick access delegator wrap
 
 end

@@ -4,6 +4,29 @@
   overflow: hidden;
   position: relative;
 
+  .-addpic {
+    display: block;
+    padding: 6px 12px;
+    background-color: #111;
+    color: white;
+    margin-bottom: 4px;
+    position: relative;
+  }
+
+  .-addpic:after {
+    top: 100%;
+    border: 10px solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: #111;
+    left: 35px;
+    margin-left: -10px;
+  }
+
+
   .-top { 
     overflow: hidden; 
     margin-bottom: 8px;

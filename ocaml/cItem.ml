@@ -95,7 +95,7 @@ module Poll = struct
 
 end
 
-let render ?moderate access item = 
+let render ?(posted=false) ?moderate access item = 
 
   let! now = ohmctx (#time) in
 
@@ -148,10 +148,21 @@ let render ?moderate access item =
 	| None   -> None
   in
 
+  let addpic = 
+    if not posted || author # pico <> None then None else 
+      Some (Action.url UrlMe.Account.picture (snd (access # instance # key)) ()) in 
+
+  let author = object
+    method name = author # name
+    method pic  = author # pic
+    method url  = BatOption.default (author # url) addpic 
+  end in 
+
   let! html = ohm $ Asset_Item_Wrap.render (object
     method author   = author
     method body     = body
     method action   = action
+    method addpic   = addpic 
     method time     = (item # time,now)
     method comments = comments
     method like     = Some (CLike.render (CLike.item access (item # id)) likes (item # nlike)) 
@@ -200,7 +211,7 @@ let post access feed json res =
   end in
 
   let! item = ohm_req_or (return res) $ MItem.try_get actor itid in
-  let! html = ohm_req_or (return res) $ render access item in 
+  let! html = ohm_req_or (return res) $ render ~posted:true access item in 
   
   return $ Action.json ["post", Html.to_json html] res
   

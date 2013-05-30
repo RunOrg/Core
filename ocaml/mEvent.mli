@@ -139,3 +139,9 @@ val admin : ?actor:'any MActor.t -> 'rel IEvent.id -> (#O.ctx,[`Admin] t option)
 val delete : [`Admin] t -> 'any MActor.t -> (#O.ctx,unit) Ohm.Run.t 
 
 val instance : 'any IEvent.id -> (#O.ctx,IInstance.t option) Ohm.Run.t
+
+module Backdoor : sig
+
+  val refresh_atoms : [`Admin] ICurrentUser.id -> (#O.ctx,unit) Ohm.Run.t
+
+end

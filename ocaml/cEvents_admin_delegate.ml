@@ -11,6 +11,8 @@ let delegator event access = object
   method set aids = MEvent.Set.admins aids event (access # actor) 
 end
 
+let labels lbl = `Event_Delegate_Label lbl 
+
 let () = define UrlClient.Events.def_delpick begin fun parents event access ->
 
   let back = parents # delegate # url in
@@ -25,7 +27,7 @@ let () = define UrlClient.Events.def_delpick begin fun parents event access ->
     end
   in
 
-  CDelegate.picker `Event back access (delegator event access) wrap 
+  CDelegate.picker labels back access (delegator event access) wrap 
 
 end
 
@@ -43,6 +45,6 @@ let () = define UrlClient.Events.def_delegate begin fun parents event access ->
     end
   in
 
-  CDelegate.list `Event pick access (delegator event access) wrap
+  CDelegate.list labels pick access (delegator event access) wrap
 
 end

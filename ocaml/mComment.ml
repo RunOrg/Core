@@ -37,7 +37,7 @@ let () =
   let! uid = ohm_req_or (return ()) $ MAvatar.get_user (comm # who) in
   MAdminLog.log ~uid ~iid (MAdminLog.Payload.CommentCreate (IComment.decay cid))
 
-let max_length = 1000
+let max_length = 50000
   
 let create on who what =
   

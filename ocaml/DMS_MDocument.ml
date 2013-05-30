@@ -13,6 +13,7 @@ module Set       = DMS_MDocument_set
 module All       = DMS_MDocument_all
 module Upload    = DMS_MDocument_upload
 module E         = DMS_MDocument_core
+module Atom      = DMS_MDocument_atom
 
 include HEntity.Get(Can)(E)
 
@@ -35,3 +36,8 @@ let ready fid =
 
 let add_version ~self ~iid t = 
   Upload.add_version ~self ~iid t
+
+module Backdoor = struct
+  let refresh_atoms cuid = 
+    Atom.refresh_atoms cuid 
+end

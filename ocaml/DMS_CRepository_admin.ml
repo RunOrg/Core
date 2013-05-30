@@ -11,6 +11,7 @@ module Delete   = DMS_CRepository_admin_delete
 module Edit     = DMS_CRepository_admin_edit
 module Advanced = DMS_CRepository_admin_advanced
 module Uploader = DMS_CRepository_admin_uploader
+module Admins   = DMS_CRepository_admin_admins
 
 let () = define Url.Repo.def_admin begin fun parents repo access ->
   O.Box.fill (O.decay begin 
@@ -22,6 +23,13 @@ let () = define Url.Repo.def_admin begin fun parents repo access ->
 	method url = parents # edit # url
 	method title = AdLib.get `DMS_Repo_Edit_Link
 	method subtitle = Some (AdLib.get `DMS_Repo_Edit_Sub)
+      end) ;
+
+      Some (object
+	method img = VIcon.Large.key
+	method url = parents # admins # url
+	method title = AdLib.get `DMS_Repo_Admins_Link
+	method subtitle = Some (AdLib.get `DMS_Repo_Admins_Sub)
       end) ;
 
       if MRepository.Get.upload repo <> `Viewers then Some (object

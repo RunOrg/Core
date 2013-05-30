@@ -49,6 +49,9 @@ module type CAN = sig
     
   val decay : 'any id -> [`Unknown] id
 
+  val deleted : core -> bool 
+  val iid : core -> IInstance.t
+
 end
 
 module type CAN_ARG = sig
@@ -88,3 +91,21 @@ module Get : functor(C:CAN) -> functor(S:CORE with type Id.t = [`Unknown] C.id a
   val admin : ?actor:'any MActor.t -> 'rel C.id -> (#O.ctx,[`Admin] C.t option) Ohm.Run.t
 end
 
+(* Atom reflection module ---------------------------------------------------------------------------------- *)
+
+module type ATOM = sig
+  type t 
+  val key     : string
+  val nature  : IAtom.Nature.t
+  val limited : t -> bool
+  val hide    : t -> bool 
+  val name    : t -> string O.run
+end 
+
+module Atom : 
+  functor(C:CAN) -> 
+    functor(S:CORE with type Id.t = [`Unknown] C.id and type t = C.core) -> 
+      functor(A:ATOM with type t = C.core) -> 
+sig
+  val refresh_atoms : [`Admin] ICurrentUser.id -> (#O.ctx,unit) Ohm.Run.t
+end

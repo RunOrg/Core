@@ -59,4 +59,6 @@
 | `Group_Delegate_Link
 | `Group_Delegate_Sub
 
+| `Group_Delegate_Label of [`Submit|`Help]
+
 | `Group_DelPick_Title
