@@ -23,7 +23,6 @@ let () =
 
 let reflect gid = 
 
-  (* TODO : react when group is deleted *)  
   let! group = ohm_req_or (return ()) (E.Tbl.get (IGroup.decay gid)) in
 
   let  limited = match group.E.vision with 
@@ -31,13 +30,17 @@ let reflect gid =
     | `Normal -> false
     | `Private -> true in
 
+  (* React when group is deleted *)
+  let limited = limited || group.E.del <> None in 
+  let hide = group.E.del <> None in 
+
   let! name = ohm (match group.E.name with 
     | Some n -> TextOrAdlib.to_string n
     | None   -> AdLib.get `Group_Unnamed) in
 
   let iid = group.E.iid in
 
-  MAtom.reflect iid `Group (IGroup.to_id gid) ~lim:limited name 
+  MAtom.reflect iid `Group (IGroup.to_id gid) ~lim:limited ~hide name 
 
 
 (* React to group updates to create atoms. *)
