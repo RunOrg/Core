@@ -27,3 +27,6 @@ let group = nature "Group" "Groupe secret"
 
 let event = nature "Event" "Activité secrète"
   "Activité"
+
+let dms_document = nature "DMS_Document" "Document indisponible"
+  "Document"

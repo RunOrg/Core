@@ -16,6 +16,7 @@ include Make(struct
       | `Digest 
       | `GroupAtoms 
       | `EventAtoms
+      | `DMS_DocumentAtoms
       ]
   end)
 
@@ -31,5 +32,7 @@ include Make(struct
 			ok "Group atom refresh started !"
       | `EventAtoms  -> let! () = ohm (MEvent.Backdoor.refresh_atoms cuid) in
 			ok "Event atom refresh started !"
+      | `DMS_DocumentAtoms -> let! () = ohm (DMS.MDocument.Backdoor.refresh_atoms cuid) in
+			      ok "[DMS] Document atom refresh started !"
 
 end)
