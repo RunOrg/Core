@@ -8,7 +8,8 @@ val post :
   -> Ohm.Action.response O.run
 
 val render :
-     ?moderate:(IItem.t -> string)
+     ?posted:bool
+  -> ?moderate:(IItem.t -> string)
   ->  'any CAccess.t
   ->  MItem.item
   ->  Ohm.Html.writer option O.run

@@ -24,6 +24,8 @@ let parents title key rid = object
   method delpick   = make `DMS_Repo_Uploaders_Title delpick  key rid
   method advanced  = make `DMS_Repo_Advanced_Title  advanced key rid 
   method delete    = make `DMS_Repo_Delete_Title    delete   key rid
+  method admins    = make `DMS_Repo_Admins_Title    admins   key rid
+  method admpick   = make `DMS_Repo_Admins_Title    admpick  key rid 
 end
 
   

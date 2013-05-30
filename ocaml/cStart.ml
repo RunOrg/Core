@@ -32,7 +32,8 @@ end
 
 let () = UrlStart.def_free begin fun req res -> 
 
-  let name = BatOption.default "test" (req # get "name") in
+  let name = BatString.strip (BatOption.default "test" (req # get "name")) in
+  let name = if name = "" || BatString.starts_with name "-" then "test" ^ name else name in 
 
   let! key = ohm $ MInstance.free_name (name,req # server) in 
 
@@ -61,7 +62,9 @@ let () = UrlStart.def_create begin fun req res ->
 
   let! vertical = req_or fail $ PreConfig_Vertical.Catalog.vertical (post # vertical) in
 
-  let! key = ohm $ MInstance.free_name (post # key, req # server) in 
+  let  key = BatString.strip (post # key) in
+  let  key = if key = "" then post # name else key in 
+  let! key = ohm $ MInstance.free_name (key, req # server) in 
 
   let! pic = ohm begin 
     let! pic = req_or (return None) (post # pic) in

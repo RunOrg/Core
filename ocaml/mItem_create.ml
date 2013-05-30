@@ -4,6 +4,9 @@ open Ohm
 open BatPervasives
 open Ohm.Universal
 
+let max_text_size = 50000
+let max_title_size = 250
+
 module Signals = MItem_signals
 module Types   = MItem_types
 
@@ -99,7 +102,7 @@ let message actor text iid where =
   
   let payload = `Message (object
     method author = IAvatar.decay (MActor.avatar actor)
-    method text   = if String.length text > 3000 then String.sub text 0 3000 else text
+    method text   = if String.length text > max_text_size then String.sub text 0 max_text_size else text
   end) in
 
   let where = `feed where in 
@@ -114,8 +117,8 @@ let mail actor ~subject text iid where =
   
   let payload = `Mail (object
     method author  = IAvatar.decay (MActor.avatar actor)
-    method subject = if String.length subject > 100 then String.sub subject 0 100 else subject
-    method body    = if String.length text > 30000 then String.sub text 0 30000 else text
+    method subject = if String.length subject > max_title_size then String.sub subject 0 max_title_size else subject
+    method body    = if String.length text > max_text_size then String.sub text 0 max_text_size else text
   end) in
 
   let where = `feed where in 
@@ -131,7 +134,7 @@ let poll actor text poll iid where =
   
   let payload = `MiniPoll (object
     method author = IAvatar.decay (MActor.avatar actor)
-    method text   = if String.length text > 3000 then String.sub text 0 3000 else text
+    method text   = if String.length text > max_text_size then String.sub text 0 max_text_size else text
     method poll   = IPoll.decay poll 
   end) in
 

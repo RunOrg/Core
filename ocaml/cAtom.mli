@@ -13,9 +13,9 @@ module View : sig
     -> unit
 end
 
-val register : 
-     nature:IAtom.Nature.t
-  -> render:(MAtom.t -> (O.ctx,Ohm.Html.writer) Ohm.Run.t) 
-  -> search:(IWhite.key -> IAtom.t -> string) 
-  -> unit
+val register :       
+     ?render:(MAtom.t -> (O.ctx,Ohm.Html.writer) Ohm.Run.t) 
+  ->  search:([`IsToken] MActor.t -> IWhite.key -> IAtom.t -> (O.ctx,string) Ohm.Run.t) 
+  ->  IAtom.Nature.t
+  ->  unit
 

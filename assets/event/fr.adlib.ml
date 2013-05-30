@@ -89,6 +89,11 @@ end
 | `Event_Delegate_Link -> "Organisateurs"
 | `Event_Delegate_Sub -> "Déléguez l'organisation de cette activité à des membres"
 
+| `Event_Delegate_Label lbl -> begin match lbl with 
+  | `Help -> "Les organisateurs disposent de tous les pouvoirs sur cette activité. La liste ci-dessous recense les organisateurs actuels :"
+  | `Submit -> "Nommer organisateurs"
+end
+
 | `Event_JoinForm_Title -> "Formulaire"
 | `Event_JoinForm_Link -> "Formulaire d'inscription"
 | `Event_JoinForm_Sub -> "Demandez des informations aux participants"

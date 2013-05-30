@@ -10,11 +10,11 @@ module View = CAtom_view
 
 let plugins = ref BatPMap.empty 
 
-let register ~nature ~render ~search = 
+let register ?render ~search nature = 
   plugins := BatPMap.add nature (render, search) !plugins
 
 let render nature default = 
-  try BatPMap.find nature !plugins |> fst 
+  try BatOption.default default (BatPMap.find nature !plugins |> fst)
   with Not_found -> default
 
 let search nature default = 
@@ -33,12 +33,15 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   let! json = req_or (result []) (Action.Convenience.get_json req) in
   let! mode = req_or (result []) (VEliteForm.Picker.QueryFmt.of_json_safe json) in
   
-  let  iid    = IInstance.decay (access # iid) in
   let  nature = req # args in
 
   let  display atom = 
     let render = render (atom # nature) (fun atom -> return (Html.esc (atom # label))) atom in
     (`Saved (atom # id), render) 
+  in
+
+  let  limited id nature = 
+    (`Saved id, AdLib.write (PreConfig_Atom.limited_label nature))
   in
 
   let  create n label =
@@ -56,7 +59,7 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   let by_prefix prefix =
     let  prefix = BatString.strip prefix in
     let  count  = 10 in
-    let! list   = ohm $ MAtom.All.suggest iid ?nature ~count prefix in 
+    let! list   = ohm $ MAtom.All.suggest (access # actor) ?nature ~count prefix in 
     let  list   = List.map display list in 
     result (match create nature prefix with 
       | Some create -> list @ [create]
@@ -66,9 +69,12 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   let by_json atids = 
     let  atids = BatList.filter_map MAtom.PublicFormat.of_json_safe atids in 
     let! list = ohm $ Run.list_filter begin function 
-      | `Saved atid -> let! atom = ohm_req_or (return None) (MAtom.get (access # actor) atid) in 
-		       return (Some (display atom))
       | `Unsaved (n,label) -> return (create (Some n) label)
+      | `Saved atid -> let! atom = ohm (MAtom.get (access # actor) atid) in 
+		       match atom with 
+ 		       | `Some atom -> return (Some (display atom))
+		       | `Missing -> return None
+		       | `Limited nature -> return (Some (limited atid nature))
     end atids in 
     result list
   in
@@ -92,11 +98,14 @@ let () = UrlClient.def_viewAtom $ CClient.action begin fun access req res ->
 
   let key = access # instance # key in
 
-  let default key atid = Action.url UrlClient.Atom.view key [ IAtom.to_string atid ] in
-  let result  url  = return (Action.javascript (Js.redirect url ()) res) in
+  let default _ key atid = return (Action.url UrlClient.Atom.view key [ IAtom.to_string atid ]) in
+  let result  url  = let! url = ohm url in 
+		     return (Action.javascript (Js.redirect url ()) res) in
 
-  let! atom = ohm_req_or (result (default key atid)) (MAtom.get ~actor:(access # actor) atid) in
-  
-  result (search (atom # nature) default key atid)
+  let! atom = ohm (MAtom.get ~actor:(access # actor) atid) in
+  match atom with 
+    | `Some atom -> result (search (atom # nature) default (access # actor) key atid) 
+    | `Missing 
+    | `Limited _ -> result (default (access # actor) key atid) 
 
 end

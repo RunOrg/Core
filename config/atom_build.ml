@@ -20,6 +20,11 @@ let labels natures =
     Printf.sprintf "\n  | `%s -> `PreConfig `%s" nature.n_name nature.n_label
   end natures)
 
+let limited_labels natures = 
+  String.concat "" (List.map begin fun nature ->
+    Printf.sprintf "\n  | `%s -> `PreConfig `%s" nature.n_name nature.n_label_lim
+  end natures)
+
 let of_string natures = 
   String.concat "" (List.map begin fun nature ->
     Printf.sprintf "\n  | %S -> Some `%s" nature.n_name nature.n_name
@@ -54,5 +59,6 @@ let ml () =
   ^ "  let arg = to_string, of_string\n"
   ^ "end\n"
   ^ "let parents = function " ^ parents natures ^ "\n"
-  ^ "let create_label = function " ^ create_labels natures ^ "\n"
+  ^ "let create_label = function " ^ create_labels natures ^ "\n"  
+  ^ "let limited_label = function " ^ limited_labels natures ^ "\n"
   ^ "let label = function " ^ labels natures ^ "\n"

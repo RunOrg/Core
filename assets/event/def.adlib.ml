@@ -81,6 +81,8 @@
 | `Event_Delegate_Link
 | `Event_Delegate_Sub
 
+| `Event_Delegate_Label of [`Submit|`Help]
+
 | `Event_JoinForm_Title
 | `Event_JoinForm_Link
 | `Event_JoinForm_Sub 

@@ -8,6 +8,7 @@ module See     = CEvents_see
 module Create  = CEvents_create
 module Options = CEvents_options
 module Admin   = CEvents_admin
+module ForAtom = CEvents_forAtom
 
 let unnamed = AdLib.get `Event_Unnamed
 

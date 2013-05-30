@@ -11,6 +11,8 @@ let delegator group access = object (self)
   method set aids = MGroup.Set.admins aids group (access # actor) 
 end
 
+let labels lbl = `Group_Delegate_Label lbl
+
 let () = define UrlClient.Members.def_delpick begin fun parents group access ->
 
   let back = parents # delegate # url in
@@ -25,7 +27,7 @@ let () = define UrlClient.Members.def_delpick begin fun parents group access ->
     end
   in
 
-  CDelegate.picker `Group back access (delegator group access) wrap 
+  CDelegate.picker labels back access (delegator group access) wrap 
 
 end
 
@@ -45,6 +47,6 @@ let () = define UrlClient.Members.def_delegate begin fun parents group access ->
     end
   in
 
-  CDelegate.list `Group pick access (delegator group access) wrap
+  CDelegate.list labels pick access (delegator group access) wrap
 
 end
