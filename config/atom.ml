@@ -24,3 +24,6 @@ let avatar = nature "Avatar" "Profil membre inaccessible"
 
 let group = nature "Group" "Groupe secret"
   "Groupe"
+
+let event = nature "Event" "Activité secrète"
+  "Activité"
