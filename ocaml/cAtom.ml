@@ -36,7 +36,8 @@ let () = UrlClient.def_atom $ CClient.action begin fun access req res ->
   let  nature = req # args in
 
   let  display atom = 
-    let render = render (atom # nature) (fun atom -> return (Html.esc (atom # label))) atom in
+    let render = 
+      render (atom # nature) (fun _ atom -> return (Html.esc (atom # label))) (access # actor) atom in
     (`Saved (atom # id), render) 
   in
 
