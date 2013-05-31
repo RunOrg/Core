@@ -20,12 +20,15 @@
   </form>
 </div>
 
-<script type="count: int list, total: int, answers: int list option, url: string"> 
+<script type="count: int list, total: int, answers: int list option, url: string, voters: string"> 
 n = here.$f.children().length
+
+# Rebuilds the contents of the bars based on the votes
+# that are currently available
 
 fill = () -> 
   div = 100 / Math.max(total, 1) 
-  here.$f.children().each (i) -> 
+  here.$f.children("label").each (i) -> 
     $t = $ @
     p = count[i] * div
 
@@ -40,6 +43,9 @@ fill = () ->
 
 do fill
 
+# Counts the votes again, updating both individual counts
+# and (if this is the first vote for the person) the total
+
 update = () -> 
 
   sel = []
@@ -49,6 +55,8 @@ update = () ->
 
   return if answers is sel 
 
+  # Schedule for sending in 1s, with an Id to cancel 
+  # outdated scheduled sendings
   mySendId = ++sendId
   setTimeout send(mySendId), 1000 
 
@@ -63,6 +71,10 @@ update = () ->
 
 here.$f.find("input").change update 
 
+# Sends a specified vote (that is, the list of all checked
+# answers) to the server. sendId is used to ensure that there
+# have been no changes since the sending was scheduled
+
 sendId = 0
 send = (mySendId) ->
   () ->   
@@ -70,11 +82,43 @@ send = (mySendId) ->
     post url, answers, () -> 
       false
 
+# Renders the "who voted this?" list of avatars below a
+# specific answer, or hides the list if need be. 
+
+render = ($w) -> 
+  $l = $w.closest("label")
+
+  if $l.next().is("div")
+    return $l.next().remove()
+
+  n = $l.prevAll("label").length
+
+  $l.after("<div></div>")
+  $n = $l.next()
+  
+  post voters, n, (data) -> 
+    if 'list' of data
+      $n.html(data.list.html)
+      call data.list.code
+    else
+      $n.remove()
+
+here.$f.find("a").click () -> 
+  render($ @) 
+
 </script> 
 
 <style>
 .poll {
   margin: 9px 0;
+
+  > form > div {
+    padding: 5px;
+    min-height: 1px;
+    border: 1px solid #CCC;
+    margin-bottom: -1px;
+    background-color: #EEE;
+  }
 
   label {
     display: block;

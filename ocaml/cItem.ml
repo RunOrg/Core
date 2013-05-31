@@ -66,6 +66,7 @@ module Poll = struct
 	method total = total
 	method answers = answers
 	method url = vote
+	method voters = ""
       end) in
 
       let! p       = ohm_req_or (display None [] 0 []) $ MPoll.get (poll # poll) in
