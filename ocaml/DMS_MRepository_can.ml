@@ -45,6 +45,9 @@ let remove t =
   else return None
 
 let details_access t = 
+  view_access t 
+
+let download_access t = 
   match (data t).E.detail with 
     | `Public  -> view_access t
     | `Private -> admin_access t 

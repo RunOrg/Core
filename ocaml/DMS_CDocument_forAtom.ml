@@ -12,7 +12,7 @@ let render actor atom =
   let! doc = ohm_req_or default (MDocument.view ~actor did) in
   Asset_DMS_PickerLine.render (object
     method name = atom # label 
-    method ext  = VIcon.of_extension ((MDocument.Get.current doc) # ext) 
+    method ext  = VIcon.of_extension ((MDocument.Get.current_info doc) # ext) 
   end)
 
 let search actor key atid = 
