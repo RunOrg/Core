@@ -20,7 +20,7 @@
   </form>
 </div>
 
-<script type="count: int list, total: int, answers: int list option, url: string, voters: string"> 
+<script type="count: int list, total: int, answers: int list option, url: string, voters: json"> 
 n = here.$f.children().length
 
 # Rebuilds the contents of the bars based on the votes
@@ -96,10 +96,10 @@ render = ($w) ->
   $l.after("<div></div>")
   $n = $l.next()
   
-  post voters, n, (data) -> 
-    if 'list' of data
-      $n.html(data.list.html)
-      call data.list.code
+  to_endpoint voters, {answer:n,start:null}, (d) -> 
+    if d.more
+      $n.html(d.more.html)
+      call d.more.code
     else
       $n.remove()
 
@@ -118,6 +118,7 @@ here.$f.find("a").click () ->
     border: 1px solid #CCC;
     margin-bottom: -1px;
     background-color: #EEE;
+    .more { min-height: 5px; background: #EEE; }
   }
 
   label {

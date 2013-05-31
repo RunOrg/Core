@@ -52,12 +52,12 @@ module Poll = struct
     let body = 
 
       let pid  = IPoll.Deduce.read_can_answer (poll # poll) in
-      let vote = 
-	Action.url UrlClient.MiniPoll.vote (access # instance # key) 
-	  ( let cuid = MActor.user (access # actor) in
-	    let proof = IPoll.Deduce.make_answer_token cuid pid in
-	    (IPoll.decay pid, proof) ) 
-      in
+      let cuid = MActor.user (access # actor) in
+      let proof = IPoll.Deduce.make_answer_token cuid pid in
+      let key = access # instance # key in
+
+      let vote = Action.url UrlClient.MiniPoll.vote key (IPoll.decay pid, proof) in
+      let voters = Action.url UrlClient.MiniPoll.voters key (IPoll.decay pid, proof) in 
 
       let display answers count total questions = Asset_Item_Poll.render (object
 	method body = `Text poll # text
@@ -66,7 +66,7 @@ module Poll = struct
 	method total = total
 	method answers = answers
 	method url = vote
-	method voters = ""
+	method voters = JsCode.Endpoint.to_json (JsCode.Endpoint.of_url voters)
       end) in
 
       let! p       = ohm_req_or (display None [] 0 []) $ MPoll.get (poll # poll) in
