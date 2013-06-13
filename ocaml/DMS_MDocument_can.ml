@@ -36,3 +36,11 @@ include HEntity.Can(struct
 
 end)
 
+let download t = 
+  let e = data t in
+  let! from_repos = ohm (Run.list_map begin fun rid ->
+    let! repo = ohm_req_or (return MAvatarStream.nobody) $ DMS_MRepository.get rid in
+    DMS_MRepository.Can.download_access repo
+  end e.E.repos) in
+  let avstream = MAvatarStream.(union (avatars [e.E.creator] :: from_repos)) in
+  test t avstream

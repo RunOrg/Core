@@ -14,7 +14,7 @@ module View : sig
 end
 
 val register :       
-     ?render:(MAtom.t -> (O.ctx,Ohm.Html.writer) Ohm.Run.t) 
+     ?render:([`IsToken] MActor.t -> MAtom.t -> (O.ctx,Ohm.Html.writer) Ohm.Run.t) 
   ->  search:([`IsToken] MActor.t -> IWhite.key -> IAtom.t -> (O.ctx,string) Ohm.Run.t) 
   ->  IAtom.Nature.t
   ->  unit

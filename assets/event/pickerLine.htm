@@ -1,0 +1,37 @@
+<span class="picked-event">
+  {?pico}<img src="{this}"/>{/?} <span>{name}</span> 
+  {?date}<span class="-date">{`ShortWeekDate this}</span>{/?}
+</span>
+
+<style>
+.-l .picked-event {
+  img { 
+    width: 20px; 
+    height: 20px;
+    vertical-align: top;
+  }
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  display: block;
+  .-date {
+    color: #888;
+    float: right;
+  } 
+}
+
+.-f .picked-event {
+  > span {
+    display: block;
+    line-height: 27px;
+    margin-left: 28px;
+  }
+  img {
+    width: 26px;
+    height: 26px;
+    float: left;
+    margin: 0 8px 0 -6px;
+  }
+  .-date { display: none; }
+}
+</style>

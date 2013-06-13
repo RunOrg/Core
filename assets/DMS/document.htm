@@ -23,12 +23,14 @@
   <h2>{name}</h2>
   {?current}
     <div class="-current" style="background-image:url({icon})">
-      <a href="{url}" class="-name">{filename}</a>
+      <a {?url}href="{this}"{/?} class="-name">{filename}</a>
       <span class="-version">v.{version|string_of_int|esc}</span>
       <span class="-date">{`DateRelative time}</span>
-      <a href="{url}" class="action-button">
-	{ `DMS_Document_Download }
-      </a>
+      {?url}
+        <a href="{this}" class="action-button">
+          { `DMS_Document_Download }
+        </a>
+      {/?}
       <span class="-author">
 	{=author}
   	  {?pico}<img src="{this}"/>{/?}

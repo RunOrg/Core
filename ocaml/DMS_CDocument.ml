@@ -26,8 +26,8 @@ let () = CClient.define Url.def_file begin fun access ->
   (* Render the download link for the latest version *)
 
   let! current = ohm begin 
-    let  v = MDocument.Get.current doc in 
-    let! url = ohm_req_or (return None) $ MFile.Url.get (v # file) `File in 
+    let! v = ohm (MDocument.Get.current doc) in 
+    let! url = ohm (Run.opt_bind (fun f -> MFile.Url.get f `File) (v # file)) in 
     let! author = ohm $ O.decay (CAvatar.mini_profile (v # author)) in
     return $ Some (object
       method version  = v # number

@@ -14,9 +14,10 @@ module Can : sig
   val upload : 'any t -> (#O.ctx,[`Upload] DMS_IRepository.id option) Ohm.Run.t
   val remove : 'any t -> (#O.ctx,[`Remove] DMS_IRepository.id option) Ohm.Run.t
 
-  val view_access    : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
-  val admin_access   : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
-  val details_access : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
+  val view_access     : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val admin_access    : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t
+  val details_access  : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
+  val download_access : 'any t -> (#O.ctx,MAvatarStream.t) Ohm.Run.t 
 
 end
 
