@@ -6,12 +6,16 @@ open BatPervasives
 
 let owid = Some ConfigWhite.innov
 
-let splash_css = "/MyInnovation/splash.css"
+let splash_css = [
+  "/MyInnovation/stylesheets/reset.css" ;
+  "/MyInnovation/stylesheets/fonts.css" ;
+  "/MyInnovation/stylesheets/home.css"
+]
 
 let render ?(css=[]) ?(js=[]) ?head ?favicon ?(body_classes=[]) ~title html = 
   Html.print_page
     ~js:(CPageLayout.js false @ js)
-    ~css:([Asset.css] @ CPageLayout.white_css owid @ [ splash_css ] @ css)
+    ~css:(splash_css @ css)
     ?head
     ~favicon:(ConfigWhite.favicon owid)
     ~title

@@ -108,7 +108,7 @@ end
 
 module ForAtom = struct
 
-  let render atom = 
+  let render _ atom = 
     let  aid = IAvatar.of_id (IAtom.to_id (atom # id)) in
     let! details = ohm (mini_profile aid) in 
     Asset_Avatar_PickerLine.render details

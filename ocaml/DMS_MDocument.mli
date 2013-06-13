@@ -7,7 +7,7 @@ type version = <
   filename : string ; 
   size     : float ; 
   ext      : MFile.Extension.t ;
-  file     : [`GetDoc] IFile.id ; 
+  file     : [`GetDoc] IFile.id option ; 
   time     : float ;
   author   : IAvatar.t ;
 >
@@ -24,7 +24,8 @@ module Get : sig
   val repositories : [<`View|`Admin] t -> DMS_IRepository.t list 
   val name         : [<`View|`Admin] t -> string 
   val version      : [<`View|`Admin] t -> int 
-  val current      : [<`View|`Admin] t -> version
+  val current      : [<`View|`Admin] t -> (#O.ctx,version) Ohm.Run.t
+  val current_info : [<`View|`Admin] t -> version 
   val last_update  : [<`View|`Admin] t -> (float * IAvatar.t) 
 end
 
