@@ -7,6 +7,8 @@ open Ohm.Universal
 
 module Tbl = MFile_common.Tbl
 
+let max_upload_size = 10
+
 module Signals = struct
 
   let on_item_img_upload_call, on_item_img_upload = Sig.make (Run.list_iter identity)
@@ -79,6 +81,7 @@ let prepare_doc ~ins ~usr ?item () =
 let configure id ?filename ~redirect = 
   ConfigS3.upload 
     ~bucket:"ro-temp"
+    ~size:(0,max_upload_size*1024*1024)
     ~key:(IFile.to_string id ^ "/" ^ MFile_common.string_of_version `Original)
     ?filename
     ~redirect
