@@ -26,9 +26,15 @@ end
 module Answer : sig
 
   val answered : 'any IAvatar.id -> [`Read] IPoll.id -> bool O.run
-  val get_all : count:int -> [`Read] IPoll.id -> int -> IAvatar.t list O.run
   val get : [`IsSelf] IAvatar.id -> [`Read] IPoll.id -> int list O.run
   val set : [`IsSelf] IAvatar.id -> [`Answer] IPoll.id -> int list -> unit O.run
+
+  val get_all : 
+       ?start:IAvatar.t 
+    -> count:int 
+    -> [`Read] IPoll.id 
+    -> int 
+    -> (#O.ctx, IAvatar.t list * IAvatar.t option) Ohm.Run.t
 
 end
 
