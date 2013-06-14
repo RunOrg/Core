@@ -48,6 +48,44 @@ module Poll = struct
 
   end
 
+  module MoreFmt = Fmt.Make(struct
+    type json t = <
+      answer : int ;
+      start : IAvatar.t option ;
+    >
+  end)
+
+  let () = UrlClient.MiniPoll.def_voters $ CClient.action begin fun access req res -> 
+    
+    let  fail = return res in
+    let  cuid = MActor.user (access # actor) in
+   
+    let  pid, proof = req # args in
+    let! pid = req_or fail $ IPoll.Deduce.from_answer_token cuid pid proof in
+    let  pid = IPoll.Deduce.answer_can_read pid in
+  
+    let! json = req_or fail $ Action.Convenience.get_json req in
+    let! query = req_or fail $ MoreFmt.of_json_safe json in
+
+    let! aids, next = ohm (MPoll.Answer.get_all ?start:(query # start) ~count:6 pid (query # answer)) in
+    
+    let  url = JsCode.Endpoint.of_url (Action.url (req # self) (req # server) (req # args)) in
+    let  more = BatOption.map (fun next -> url, MoreFmt.to_json (object 
+      method start = Some next 
+      method answer = query # answer 
+    end)) next in
+
+    let! avatars = ohm (Run.list_map CAvatar.mini_profile aids) in
+
+    let! html = ohm (Asset_Item_Poll_More.render (object
+      method avatars = avatars
+      method more = more
+    end)) in
+
+    return (Action.json [ "more" , Html.to_json html ] res) 
+
+  end
+
   let render access item poll = 
     let body = 
 
