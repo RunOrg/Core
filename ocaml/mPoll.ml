@@ -152,7 +152,7 @@ module Answer = struct
     return $ BatOption.is_some answer_opt
 
   module ByAnswer = Fmt.Make(struct
-    type json t = (IPoll.t * int)
+    type json t = (IPoll.t * int * IAvatar.t)
   end)
 
   module ByAvatar = CouchDB.DocView(struct
@@ -181,16 +181,20 @@ module Answer = struct
 
   module ByAnswerView = CouchDB.MapView(struct
     module Key = ByAnswer
-    module Value = IAvatar
+    module Value = Fmt.Unit
     module Design = Design
     let name = "by_answer"
-    let map  = "if (doc.t == 'pans') for (var k in doc.a) emit([doc.p,doc.a[k]],doc.w);" 
+    let map  = "if (doc.t == 'pans') for (var k in doc.a) emit([doc.p,doc.a[k],doc.w]);" 
   end)
       
-  let get_all ~count poll answer = 
-    let key = (IPoll.decay poll,answer) in
-    let! list = ohm $ ByAnswerView.query ~startkey:key ~endkey:key ~limit:count () in
-    return $ List.map (#value) list
+  let get_all ?start ~count poll answer = 
+    let pid = IPoll.decay poll in
+    let startkey = (pid,answer,BatOption.default (IAvatar.of_id Id.smallest) start) in
+    let endkey = (pid,answer,IAvatar.of_id Id.largest) in
+    let limit = count + 1 in 
+    let! list = ohm $ ByAnswerView.query ~startkey ~endkey ~limit () in
+    let  list = List.map (#key |- (fun (_,_,aid) -> aid)) list in
+    return (OhmPaging.slice ~count list) 
 
   let get avatar poll = 
     let! id = ohm_req_or (return []) $ MyUnique.get_if_exists (key avatar poll) in
