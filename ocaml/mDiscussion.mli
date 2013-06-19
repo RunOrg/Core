@@ -32,6 +32,7 @@ module Get : sig
   val groups   : [<`Admin|`View] t -> IAvatarSet.t list
   val avatars  : [<`Admin|`View] t -> IAvatar.t list 
   val body     : [<`Admin|`View] t -> MRich.OrText.t
+  val isPM     : [<`Admin|`View] t -> bool 
 end
 
 val create : 

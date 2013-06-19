@@ -95,6 +95,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	  | `Groups    -> static `Groups
 	  | `HasPics   -> static `HasPics
 	  | `HasFiles  -> static `HasFiles
+	  | `Private   -> static `Private
 	  | `Group gid -> let! group = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in 
 			  let! name  = ohm $ MGroup.Get.fullname group in 
 			  return (Some name) 
@@ -105,11 +106,12 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
       let sort = 
 	let rank = match f' with 
 	  | `All      -> 0
-	  | `HasFiles -> 1 
-	  | `HasPics  -> 2
-	  | `Events   -> 3
-	  | `Groups   -> 4
-	  | `Group _  -> 5
+	  | `Private  -> 1
+	  | `HasFiles -> 2 
+	  | `HasPics  -> 3
+	  | `Events   -> 4
+	  | `Groups   -> 5
+	  | `Group _  -> 6
 	in
 	let name = Util.fold_all name in
 	rank, name
@@ -122,6 +124,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	method count = count
 	method depth = match f' with 
 	  | `All     -> 0 
+	  | `Private 
 	  | `HasFiles 
 	  | `HasPics
 	  | `Events

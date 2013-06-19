@@ -22,6 +22,7 @@ end
 module Filter = struct
 
   type f = [ `All
+	   | `Private
 	   | `HasFiles
 	   | `HasPics
 	   | `Events 
@@ -35,6 +36,7 @@ module Filter = struct
     | "hf" -> `HasFiles
     | "hp" -> `HasPics
     | "g"  -> `Groups 
+    | "pm" -> `Private
     | s when s.[0] = 'g' -> `Group (IGroup.of_string (BatString.lchop s))
     |  _ -> `All 
 
@@ -44,6 +46,7 @@ module Filter = struct
     | `HasPics   -> "hp"
     | `Events    -> "e"
     | `Groups    -> "g"
+    | `Private   -> "pm"
     | `Group eid -> "g" ^ IGroup.to_string eid  
 
   include Fmt.Make(struct

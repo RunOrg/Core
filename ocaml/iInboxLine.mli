@@ -22,6 +22,7 @@ module Filter : sig
 		  | `HasPics 
 		  | `Events
 		  | `Groups
+		  | `Private
 		  | `Group of IGroup.t ]
   val to_string : t -> string
   val of_string : string -> t

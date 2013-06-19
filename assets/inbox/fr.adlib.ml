@@ -14,6 +14,7 @@
     | `Groups -> "Groupes"
     | `HasFiles -> "Avec pièces jointes"
     | `HasPics -> "Avec photos"
+    | `Private -> "Messages privés"
 end 
 
 | `Inbox_IsAdmin g -> 
