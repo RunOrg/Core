@@ -61,6 +61,6 @@ module Filter = struct
   let seg = to_string, of_string
 
   let smallest = `All
-  let largest  = `HasPics
+  let largest  = `Private
 
 end
