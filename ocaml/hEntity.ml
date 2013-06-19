@@ -19,6 +19,7 @@ module type CORE = sig
   val update : Id.t -> 'any MActor.t -> diff list -> (O.ctx,unit) Ohm.Run.t
   val create : Id.t -> 'any MActor.t -> Raw.t -> diff list -> (O.ctx,unit) Ohm.Run.t 
   val on_update : (Id.t,unit O.run) Ohm.Sig.channel 
+  val on_version : (Id.t * diff list,unit O.run) Ohm.Sig.channel
 end 
 
 module type CORE_ARG = sig
@@ -92,6 +93,12 @@ module Core = functor(C:CORE_ARG) -> struct
   let () = 
     let! t = Sig.listen Store.Signals.version_create in
     on_update_call (Store.version_object t) 
+
+  let on_version_call, on_version = Sig.make (Run.list_iter identity) 
+
+  let () = 
+    let! t = Sig.listen Store.Signals.version_create in
+    on_version_call (Store.version_object t, Store.version_diffs t) 
 
 end
 

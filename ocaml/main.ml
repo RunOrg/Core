@@ -42,6 +42,8 @@ module Actions = struct
   (* Pacemaker *)
   open ConfigPacemkr
 
+  open MNewsletter
+
 end
 
 module Main = Ohm.Main.Make(O.Reset)
