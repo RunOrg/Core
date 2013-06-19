@@ -1,7 +1,8 @@
 | `Inbox_Discussion -> "Conversation"
 
-| `Inbox_New_Discussion -> "Nouvelle conversation"
-| `Inbox_New_Event -> "Nouvelle Activité"
+| `Inbox_New_Discussion -> "Conversation"
+| `Inbox_New_Event -> "Activité"
+| `Inbox_New -> "Créer :"
 
 | `Inbox_Title -> "Messages et conversations"
 
