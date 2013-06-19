@@ -72,7 +72,7 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
 
     let! () = true_or (return res) (groups <> []) in
 
-    let! did = ohm $ MDiscussion.create (access # actor) ~title ~body ~groups in
+    let! did = ohm $ MDiscussion.create (access # actor) ~title ~body ~groups ~avatars:[] in
 
     (* Redirect to main page *)
 

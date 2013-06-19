@@ -31,13 +31,14 @@ module Signals = struct
   let on_update = Core.on_update
 end
 
-let create actor ~title ~body ~groups = 
+let create actor ~title ~body ~groups ~avatars = 
   O.decay begin
     let  did  = IDiscussion.gen () in
     let! time = ohmctx (#time) in 
     let  init = Core.({
       iid   = IInstance.decay (MActor.instance actor) ;
       gids  = [] ;
+      aids  = [] ; 
       title = "" ;
       body  = `Text "" ;
       time  ;
@@ -45,9 +46,10 @@ let create actor ~title ~body ~groups =
       del   = None ;
     }) in
     let diffs = [
-      `SetTitle  title ;
-      `SetBody   body ;
-      `AddGroups groups ;
+      `SetTitle   title ;
+      `SetBody    body ;
+      `AddGroups  groups ;
+      `AddAvatars avatars ;
     ] in
     let! () = ohm $ Core.create did actor init diffs in
     let! () = ohm $ Signals.on_bind_inboxLine_call did in

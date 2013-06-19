@@ -14,7 +14,8 @@ include HEntity.Can(struct
   let deleted e = e.D.del <> None
   let iid     e = e.D.iid
   let admin   e = return MAvatarStream.(admins + avatars [ e.D.crea ])
-  let view    e = let! admin = ohm (admin e) in return MAvatarStream.(groups `Member e.D.gids + admin)
+  let view    e = let! admin = ohm (admin e) in 
+		  return MAvatarStream.(groups `Member e.D.gids + avatars e.D.aids + admin)
   let public  e = false
 
   let id_view  id = IDiscussion.Assert.view id
