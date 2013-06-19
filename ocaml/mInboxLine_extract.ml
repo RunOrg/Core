@@ -82,14 +82,18 @@ let get_core_info = function
 		       return (Some (t,aid))
 
 let get_filter = function
-  | `Event _ -> return [`All;`Events]
+  | `Event _ -> return [ `All ; `Events ]
   | `Discussion did -> let  did = IDiscussion.Assert.view did in 
 		       let! discn = ohm_req_or (return []) $ MDiscussion.get did in 
-		       let  gids = MDiscussion.Get.groups discn in
-		       let! eids = ohm $ Run.list_filter begin fun asid -> 
-			 let! avset = ohm_req_or (return None) $ MAvatarSet.naked_get asid in 
-			 match MAvatarSet.Get.owner avset with 
+		       if MDiscussion.Get.isPM discn then 
+			 return [ `All ; `Private ]
+		       else 
+			 let  gids = MDiscussion.Get.groups discn in
+			 let! eids = ohm $ Run.list_filter begin fun asid -> 
+			   let! avset = ohm_req_or (return None) $ MAvatarSet.naked_get asid in 
+			   match MAvatarSet.Get.owner avset with 
 			   | `Group  gid -> return (Some gid) 
 			   | `Event   _  -> return None
-		       end  gids in 
-		       return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
+			 end  gids in 
+			 return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
+			   
