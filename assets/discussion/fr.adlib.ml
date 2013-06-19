@@ -28,3 +28,5 @@
 
 | `Discussion_Create_Step_One -> "Sélectionnez les destinataires"
 | `Discussion_Create_Step_Two -> "Composez votre message"
+
+| `Discussion_Participants -> "Participants"

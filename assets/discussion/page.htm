@@ -11,18 +11,29 @@
     </ul>
     {/?}
     <h2>{title}</h2>
-    <div class="-involved">
-      {=author}
-        <a href="{url}">
-          {?pico}<img src="{this}"/>{/?}
-          {name}
-        </a>
-      {/=}
-      {#groups}
-        &middot; <span>{name}</span>
-      {/#}
-    </div>
-    <div class="-details">
+  </div>
+
+  <div class="-involved">
+    <h3>{`Discussion_Participants}</h3>
+    {#groups}
+      <a href="{url}">{name}</a>
+    {/#}
+    {#avatars}
+      <a href="{url}">
+        {?pico}<img src="{this}"/>{/?}
+        {name}
+      </a>
+    {/#}
+  </div>
+
+  <div class="-details">      
+    {=author}
+    <a href="{url}">
+      <img src="{pic}"/>
+    </a>
+    {/=}
+    <div class="-main">
+      {=author}<a class="-name" href="{url}">{name}</a>{/=}
       {page|verbatim}
     </div>
   </div>
@@ -40,8 +51,10 @@
 <style>  
 .discussion-page {
 
-  width: 710px;
-  margin: auto; 
+  .-head {
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
 
   .-head .actions { float: right; margin: 0 }
 
@@ -50,30 +63,51 @@
   }
 
   .-involved {
-    border-bottom: 1px solid #CCC;
-    border-top: 1px solid #CCC;
+    h3 { margin: 0; color: #555; }
     line-height: 29px;
     font-size: 13px;
-    padding-left: 3px;
-    background-color: #EEE;
-    .ellipsis();
+    a { 
+      display: block;
+      .ellipsis(); 
+    }
     img {
       float: left;
       width: 23px;
       height: 23px;
       margin: 3px 5px 3px 0;
     }
+    float: left;
+    width: 200px;
   }
 
   .-details {
     color: #333;
-    font-size: 16px;
-    padding: 0 8px;
+    font-size: 13px;
+    padding: 8px 8px 0 8px;
+    min-height: 58px; // 50 + 8
     line-height: 1.5em;
+    width: 690px;
+    margin-left: 242px; // 950-706-2-2*8
+    border: 1px solid #BBB;
+    border-bottom: none;
+    overflow: hidden;
+    border-radius: 5px 5px 0 0;
+   
+    > a img { float: left; width: 50px; height: 50px; }
+
+    .-main {
+      margin-left: 58px;
+    }
+  
+    p {
+      margin: 0.4em 0;
+    }
+
   }
   
   > .-body {
-    width: 708px;
+    width: 706px;
+    margin-left: 242px; // 950-706-2
     border: 1px solid #BBB;
     overflow: hidden;
   }
@@ -84,7 +118,6 @@
 
   .-files {
     border-bottom: medium none;
-    border-radius: 5px 5px 0 0;
   }
 
 }
