@@ -44,7 +44,8 @@ let () =
 		     let  owner = MFeed.Get.owner feed in 
 		     return (match owner with 
 		       | `Event eid -> Some (`Event eid)
-		       | `Discussion did -> Some (`Discussion did))
+		       | `Discussion did -> Some (`Discussion did)
+		       | `Newsletter nid -> Some (`Newsletter nid))      
       | `album aid -> let aid = IAlbum.Assert.bot aid in
 		      let! album = ohm_req_or (return None) $ MAlbum.bot_get aid in 
 		      let  owner = MAlbum.Get.owner album in

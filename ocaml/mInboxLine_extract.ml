@@ -11,7 +11,7 @@ let get_wall_info owner current =
   let! fid = ohm_req_or (return None) begin 
     match current with Some info -> return (Some info.Info.Wall.id) | None ->
       match (owner : IInboxLineOwner.t) with 
-	| (`Event _|`Discussion _) as owner -> MFeed.try_by_owner owner 			      	
+	| (`Event _|`Discussion _|`Newsletter _) as owner -> MFeed.try_by_owner owner 			      	
   end in 
 
   (* Act as a bot to extract the information. 
@@ -34,7 +34,7 @@ let get_album_info owner current =
     match current with Some info -> return (Some info.Info.Album.id) | None ->
       match (owner : IInboxLineOwner.t) with 
 	| (`Event _) as owner -> MAlbum.try_by_owner owner 			      	
-	| `Discussion _ -> return None
+	| `Discussion _ | `Newsletter _ -> return None
   end in 
 
   (* Act as a bot to extract the information. 
@@ -57,6 +57,7 @@ let get_folder_info owner current =
     match current with Some info -> return (Some info.Info.Folder.id) | None ->
       match (owner : IInboxLineOwner.t) with 
 	| (`Event _ | `Discussion _) as owner -> MFolder.try_by_owner owner 			      	
+	| `Newsletter _ -> return None
   end in 
 
   (* Act as a bot to extract the information. 
@@ -80,6 +81,11 @@ let get_core_info = function
 		       let  aid = MDiscussion.Get.creator discn in
 		       let  t   = MDiscussion.Get.update  discn in 
 		       return (Some (t,aid))
+  | `Newsletter nid -> let  nid = INewsletter.Assert.view nid in 
+		       let! nletter = ohm_req_or (return None) $ MNewsletter.get nid in 
+		       let  aid = MNewsletter.Get.creator nletter in
+		       let  t   = MNewsletter.Get.update  nletter in 
+		       return (Some (t,aid))
 
 let get_filter = function
   | `Event _ -> return [ `All ; `Events ]
@@ -96,4 +102,14 @@ let get_filter = function
 			   | `Event   _  -> return None
 			 end  gids in 
 			 return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
-			   
+  | `Newsletter nid -> let  nid = INewsletter.Assert.view nid in 
+		       let! nletter = ohm_req_or (return []) $ MNewsletter.get nid in 
+		       let  gids = MNewsletter.Get.groups nletter in
+		       let! eids = ohm $ Run.list_filter begin fun (asid,_) -> 
+			 let! avset = ohm_req_or (return None) $ MAvatarSet.naked_get asid in 
+			 match MAvatarSet.Get.owner avset with 
+			 | `Group  gid -> return (Some gid) 
+			 | `Event   _  -> return None
+		       end  gids in 
+		       return (`All :: `Groups :: List.map (fun gid -> `Group gid) eids) 
+

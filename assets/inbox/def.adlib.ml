@@ -5,6 +5,8 @@
 | `Inbox_New_Newsletter
 | `Inbox_New
 
+| `Inbox_Newsletter
+
 | `Inbox_Title
 
 | `Inbox_Empty

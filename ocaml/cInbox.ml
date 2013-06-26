@@ -54,10 +54,27 @@ let render_discussion_line access line did =
   end) in
   return (Some html) 
 
+let render_newsletter_line access line nid =
+  let! nletter = ohm_req_or (return None) $ MNewsletter.view ~actor:(access # actor) nid in
+  let  name = MNewsletter.Get.title nletter in
+  let! now  = ohmctx (#time) in
+
+  let! kind = ohm $ AdLib.get `Inbox_Newsletter in 
+
+  let! html  = ohm $ Asset_Inbox_Line.render (object
+    method name = name
+    method url  = Action.url UrlClient.Newsletter.see (access # instance # key) [ INewsletter.to_string nid ]
+    method view = line
+    method time = if line # time = 0. then None else Some (line # time, now) 
+    method details = [kind]
+  end) in
+  return (Some html) 
+
 let render_line access line = 
   match line # owner with 
     | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
+    | `Newsletter nid -> render_newsletter_line access line nid 
 
 let render_list ?start ~count filter access more = 
   let! items, next = ohm $ MInboxLine.View.list 

@@ -5,6 +5,8 @@
 | `Inbox_New_Newsletter -> "Newsletter"
 | `Inbox_New -> "Créer :"
 
+| `Inbox_Newsletter -> "Newsletter"
+
 | `Inbox_Title -> "Messages et conversations"
 
 | `Inbox_Empty -> "Aucune conversation à afficher"

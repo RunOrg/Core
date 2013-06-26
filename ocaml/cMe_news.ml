@@ -39,6 +39,8 @@ let render_item access itid =
 					    (access # instance # key) [ IEvent.to_string eid ])	
 	  | `Discussion did -> return $ Some (Action.url UrlClient.Discussion.see
 						(access # instance # key) [ IDiscussion.to_string did ]) 
+	  | `Newsletter nid -> return $ Some (Action.url UrlClient.Newsletter.see
+						(access # instance # key) [ INewsletter.to_string nid ]) 
       end
       | `album  aid -> return None
       | `folder fid -> return None			
