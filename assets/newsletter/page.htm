@@ -1,1 +1,45 @@
+<div class="newsletter-page">
 
+  {?admin}
+    <ul class="actions">
+      <li class="-r">
+	<a class="action-button -admin" href="{url}">
+	  {`Newsletter_Admin}
+	</a>
+      </li>
+    </ul>
+  {/?}
+
+  <div class="-page">
+    <h2>{title}</h2>
+    {page|verbatim}
+  </div>
+
+</div>
+  
+<style>  
+.newsletter-page {
+  
+  position: relative;
+  background: #DDD;
+  padding: 40px;
+
+  > .actions { position: absolute; top: 10px; right: 10px; }
+
+  .-page {
+    overflow: hidden;
+    border: 1px solid #BBB;
+    padding: 16px;
+    background-color: white;
+    width: 500px;
+    margin: auto;
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin: 0 0 8px;
+  }
+
+}
+</style>
