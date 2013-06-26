@@ -79,10 +79,14 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
   O.Box.fill begin 
 
-    let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
-    let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
+    let actor = access # actor in
 
-    let! filters = ohm $ MInboxLine.View.filters (access # actor) in
+    let key = access # instance # key in 
+    let new_newsletter = Action.url UrlClient.Newsletter.create key [] in
+    let new_discussion = Action.url UrlClient.Discussion.create key [] in
+    let new_event = Action.url UrlClient.Events.create key [] in
+
+    let! filters = ohm $ MInboxLine.View.filters actor in
 
     let! filters = ohm $ O.decay (Run.list_filter begin fun (f',count) -> 
 
@@ -96,12 +100,12 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	  | `HasPics   -> static `HasPics
 	  | `HasFiles  -> static `HasFiles
 	  | `Private   -> static `Private
-	  | `Group gid -> let! group = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in 
+	  | `Group gid -> let! group = ohm_req_or (return None) $ MGroup.view ~actor gid in 
 			  let! name  = ohm $ MGroup.Get.fullname group in 
 			  return (Some name) 
       end in 
 
-      let url = Action.url UrlClient.Inbox.home (access # instance # key) [ IInboxLine.Filter.to_string f' ] in
+      let url = Action.url UrlClient.Inbox.home key [ IInboxLine.Filter.to_string f' ] in
 
       let sort = 
 	let rank = match f' with 
@@ -149,6 +153,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
+	method new_newsletter = new_newsletter
       end 
       method admin = admin
       method filters = filters

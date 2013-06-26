@@ -2,6 +2,7 @@
 
 | `Inbox_New_Discussion -> "Conversation"
 | `Inbox_New_Event -> "Activité"
+| `Inbox_New_Newsletter -> "Newsletter"
 | `Inbox_New -> "Créer :"
 
 | `Inbox_Title -> "Messages et conversations"
