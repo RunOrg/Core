@@ -1,11 +1,12 @@
 let sections = [
   (* BEGIN SECTIONS --------------------------------------------------------- *)
-  
-  "associations", "Associations", "/" ;
+
+  "accueil", "Accueil", "/" ;  
+  "references", "Références", "/references" ;
   "entreprises", "Entreprises", "/entreprises" ; 
   "collectivites", "Collectivités", "/collectivites" ; 
-  "catalogue", "Catalogue", "/catalog" ;
-  "references", "Références", "/references" ;
+  "associations", "Associations", "/associations" ;
+  (*"catalogue", "Catalogue", "/catalog" ; *)
   (* "network", "Réseau", "/network" ; *)
   "login", "Connexion", "/me" ;
 
