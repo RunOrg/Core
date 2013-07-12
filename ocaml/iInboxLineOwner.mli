@@ -3,6 +3,7 @@
 type 'a id = 
   [ `Event      of 'a IEvent.id 
   | `Discussion of 'a IDiscussion.id 
+  | `Newsletter of 'a INewsletter.id
   ]
 
 include Ohm.Fmt.FMT with type t = [`Unknown] id 

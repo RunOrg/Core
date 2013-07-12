@@ -18,6 +18,7 @@ module Data = Fmt.Make(struct
     iid "ins" : IInstance.t ;
     own       : [ `Event of IEvent.t 
 		| `Discussion of IDiscussion.t 
+		| `Newsletter of INewsletter.t
 		]
   > 
 end)
@@ -41,6 +42,8 @@ let _access iid = function
 		  return (fun what -> MEvent.Satellite.access event (`Wall what))
   | `Discussion did -> let! discussion = ohm_req_or (return nil) $ MDiscussion.get did in 
 		       return (fun what -> MDiscussion.Satellite.access discussion (`Wall what)) 
+  | `Newsletter nlid -> let! nletter = ohm_req_or (return nil) $ MNewsletter.get nlid in 
+			return (fun what -> MNewsletter.Satellite.access nletter (`Wall what)) 
     
 let _make actor id (data:Data.t) = 
   let owner = Run.memo (_access (data # iid) (data # own)) in

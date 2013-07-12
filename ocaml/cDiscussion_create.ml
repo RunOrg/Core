@@ -4,24 +4,23 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-let template groups = 
+(* The type system chokes on the optional parameters... *)
+let template (picker : ?left:bool -> label:'a -> ?max:int -> 'c) = 
 
   let inner = 
-    OhmForm.begin_object (fun ~groups ~title ~body -> (object
-      method groups = groups 
-      method title  = title
-      method body   = body 
+    OhmForm.begin_object (fun ~targets ~title ~body -> (object
+      method targets = targets
+      method title   = title
+      method body    = body 
     end))
 
-    |> OhmForm.append (fun f groups -> return $ f ~groups) 
-	(VEliteForm.picker
+    |> OhmForm.append (fun f targets -> return $ f ~targets) 
+	(picker
 	   ~left:true
 	   ~label:(AdLib.get `Discussion_Field_To)
-	   ~format:IGroup.fmt
-	   ~static:groups
 	   ~max:30
 	   (fun _ -> return []) 
-	   (fun f gids -> return (Ok gids)))
+	   (fun f targets -> return (Ok targets)))
       
     |> OhmForm.append (fun f title -> return $ f ~title) 
 	(VEliteForm.text
@@ -46,7 +45,8 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
   
   let! save = O.Box.react Fmt.Unit.fmt begin fun _ json _ res -> 
     
-    let  template = template [] in
+    let! picker = ohm (CSearch.target_picker ~query:false access) in
+    let  template = template picker in
     let  src  = OhmForm.from_post_json json in 
     let  form = OhmForm.create ~template ~source:src in
         
@@ -61,7 +61,8 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
     let! result = ohm_ok_or fail $ OhmForm.result form in  
 
     (* Save the changes to the database *)
-    let gids  = result # groups in 
+    let gids  = BatList.filter_map (function `Group gid -> Some gid | `Avatar _ -> None) (result # targets) in 
+    let aids  = BatList.filter_map (function `Avatar aid -> Some aid | `Group _ -> None) (result # targets) in
     let title = result # title in
     let body = `Rich (MRich.parse (result # body)) in
 
@@ -70,9 +71,9 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
       return $ Some (MGroup.Get.group group)
     end gids in 
 
-    let! () = true_or (return res) (groups <> []) in
+    let! () = true_or (return res) (groups <> [] || aids <> []) in
 
-    let! did = ohm $ MDiscussion.create (access # actor) ~title ~body ~groups in
+    let! did = ohm $ MDiscussion.create (access # actor) ~title ~body ~groups ~avatars:aids in
 
     (* Redirect to main page *)
 
@@ -92,14 +93,9 @@ let () = CClient.define UrlClient.Discussion.def_create begin fun access ->
       end)
     in
 
-    let! list = ohm $ MGroup.All.visible ~actor:(access # actor) (access # iid) in
-    let! groups = ohm $ Run.list_map (fun group -> 
-      let! name = ohm $ MGroup.Get.fullname group in 
-      let  eid  = IGroup.decay (MGroup.Get.id group) in
-      return (eid, name, return (Html.esc name)) 
-    ) list in 
+    let! picker = ohm (CSearch.target_picker access) in
 
-    let template = template groups in
+    let template = template picker in
     let form = OhmForm.create ~template ~source:(OhmForm.empty) in
     let url  = OhmBox.reaction_endpoint save () in
         

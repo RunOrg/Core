@@ -16,4 +16,6 @@ let creator t = (!!t).crea
 let iid     t = (!!t).iid
 let groups  t = (!!t).gids
 let body    t = (!!t).body
+let avatars t = (!!t).crea :: (!!t).aids 
+let isPM    t = groups t = []
 

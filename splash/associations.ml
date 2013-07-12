@@ -2,7 +2,7 @@ open Common
 open WithSections 
 
 let page url title list =
-  let url = "/"^url in
+  let url = "/associations"^url in
   page url title 
     ~section:"associations"
     ~head:"associations" 
@@ -334,9 +334,9 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	) ;
 
 	prices [
-	  ("GRATUIT",  "free - gratis",[ "2000 personnes"   ; "2 Go"  ],[ ""]) ;
-	  ("125", "HT par mois",[ "5000 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
-	  ("200", "HT par mois",[ "10000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
+	  ("GRATUIT",  "free - gratis",[ "100 personnes"   ; "2 Go"  ],[ ""]) ;
+	  ("125", "HT par mois",[ "2000 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
+	  ("200", "HT par mois",[ "5000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
 	] 
 
 	  "Toutes nos offres incluent l'hébergement, la maintenance et les mises à jour logicielles"

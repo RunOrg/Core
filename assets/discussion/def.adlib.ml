@@ -29,3 +29,4 @@
 | `Discussion_Create_Step_One
 | `Discussion_Create_Step_Two
 
+| `Discussion_Participants

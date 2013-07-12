@@ -4,6 +4,55 @@ open WithSections
 let pages = Associations.pages @ Entreprises.pages @ Collectivites.pages @ Catalog.pages @ [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
+  page "/" "RunOrg - Créateur de communautés"
+    ~head:"accueil"
+    ~section:"accueil"
+    [   	composite `LR 
+	(image 
+	   ~copyright:("http://www.flickr.com/photos/proimos/4045973322/",
+		       "Alex E. Proimos")
+	   "/public/img/preconf_company.jpg")
+	(features [ 
+	  "Vous restez maître de vos données",
+	  "Contrairement à un réseau social classique, vous êtes propriétaire de vos données" ;
+	    
+	  "Simple et rapide à mettre en oeuvre",
+	  "Nous étudions avec vous les meilleurs outils et stratégies pour atteindre rapidement vos objectifs" ;
+	  
+	  "Faites des économies",
+	  "Nos solutions vous font gagner du temps et économiser sur vos relations clients"
+	]) ; 	
+
+	ribbon ( important
+		"Un service innovant au service de vos idées"
+		"RunOrg offre des espaces communautaires privés aux organisations leur permettant d'être plus efficaces et d'innover dans leurs relations avec leurs clients, salariés, fournisseurs, partenaires, membres, etc.") ;
+
+      composite `LR
+       (bullets
+	   ~title:"Des solutions à votre image"
+	   ~subtitle:"Pour répondre à vos objectifs"
+	   ~ordered:false
+	   [ "Conception de communautés sur mesure" ;
+	     "Utilisation de notre générateur de plateforme" ;
+	     "Respect de votre marque et de votre image" ;
+	     "Conseils et accompagnement" ]
+	) 	
+
+        (pride
+	   ~title:"Tirez le meilleur de vos communautés"
+	   ~subtitle:"Notre expérience vous fait gagner du temps"
+	   "Nous avons développé une plateforme qui équipe déjà de nombreuses organisations. 
+	   
+	   Fort des retours de nos clients, nous élargissons notre offre en proposant de concevoir et créer des communautés sur mesure pour les organisations qui ne trouvent pas de solution adaptés sur le marché. 
+
+	Nous  proposons également de les accompagner dans la mise en place d'outils déjà existant mais pour lesquels la stratégie de déploiement est souvent le facteur clef de succès."
+	   
+	) ;
+
+
+ 
+    ] ;
+
   page "/about/team" "À Propos de RunOrg - L'Équipe"
     ~head:"about"
     ~subsection:"equipe"
@@ -480,6 +529,15 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 	   "L'IEPP utilise RUNORG pour fidéliser les personnes qui ont suivi des formations au sein de l'institut et pour communiquer avec ses formateurs." ) ;
 
 	composite `LRR
+	(image "/public/img/logoM2014simple.png")
+	(pride
+	   ~title:"M2014.fr"
+	   ~subtitle:"Politique"
+	   ~link:("http://www.m2014.fr",
+		  "www.m2014.fr") 
+	   "Nous avons développé toute l'architecture du site d'information M2014.fr ainsi que la plateforme qui permet à chaque candidat de disposer d'un espace numérique privé pour organiser sa campagne." ) ;
+
+	composite `LRR
 	(image "/public/img/ref-logo-idfnews-head.png")
 	(pride
 	   ~title:"Ile de France News"
@@ -498,6 +556,15 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 	   ~link:("http://www.ville-clichy.fr/",
 		  "www.ville-clichy.fr") 
 	   "La ville de Clichy utilise RunOrg pour communiquer avec les responsables associatif de la commune, et pour offrir à toutes ses associations un espace intranet et un site Internet." ) ;
+
+	composite `LRR
+	(image "/public/img/alfortville.png")
+	(pride
+	   ~title:"Alfortville"
+	   ~subtitle:"Service vie associative"
+	   ~link:("http://www.alforville-asso.fr/",
+		  "www.alforville-asso.fr") 
+	   "La ville d'Alfortville utilise RunOrg pour communiquer avec les responsables associatif de la commune, et pour offrir à toutes ses associations un espace intranet et un site Internet." ) ;
 
 	 ribbon_title ~name:"referencesfederations" "Fédérations" ;
 

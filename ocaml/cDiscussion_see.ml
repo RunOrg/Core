@@ -46,9 +46,13 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
 	| `Group  gid -> let! group  = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in
 			 let! name   = ohm (MGroup.Get.fullname group) in
 			 return $ Some (object
+			   method url  = Action.url UrlClient.Members.home (access # instance # key) 
+			     [ IGroup.to_string gid ]
 			   method name = name
 			 end)  
     end (MDiscussion.Get.groups discn) in 
+
+    let! avatars = ohm (Run.list_map CAvatar.mini_profile (MDiscussion.Get.avatars discn)) in
 
     (* Administrator URLs -------------------------------------------------------------------------------- *)
 
@@ -72,6 +76,7 @@ let () = CClient.define ~back:(Action.url UrlClient.Inbox.home) UrlClient.Discus
       method wall       = O.Box.render wallbox
       method author     = author
       method groups     = groups
+      method avatars    = avatars
     end)
   end
 end

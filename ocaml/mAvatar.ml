@@ -374,16 +374,14 @@ let list_administrators ?start ~count instance =
 (* List extractions ----------------------------------------------------------------------- *)
 
 module ContactsView = CouchDB.DocView(struct
-  module Key = Fmt.Make(struct
-    type json t = (IInstance.t * string)
-  end)
-
+  module Key = Search
   module Value  = Fmt.Unit
   module Doc    = Common.Data
   module Design = Design
   let name = "contacts" 
   let map  = "if (doc.t == 'avtr') 
-    if (doc.sort.length > 0) emit([doc.ins,doc.sort[0]],null)" 
+                if (doc.sta == 'own' || doc.sta == 'mbr') 
+                  if (doc.sort.length > 0) emit([doc.ins,doc.sort[0]],null)" 
 end)
   
 module SearchView = CouchDB.DocView(struct

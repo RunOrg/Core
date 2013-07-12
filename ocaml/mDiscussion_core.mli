@@ -3,6 +3,7 @@
 type data_t = {
   iid   : IInstance.t ;
   gids  : IAvatarSet.t list ; 
+  aids  : IAvatar.t list ; 
   title : string ; 
   body  : MRich.OrText.t ;
   time  : float ;
@@ -11,10 +12,11 @@ type data_t = {
 }
 
 type diff_t = 
-  [ `SetTitle  of string
-  | `SetBody   of MRich.OrText.t
-  | `AddGroups of IAvatarSet.t list 
-  | `Delete    of IAvatar.t
+  [ `SetTitle   of string
+  | `SetBody    of MRich.OrText.t
+  | `AddGroups  of IAvatarSet.t list 
+  | `AddAvatars of IAvatar.t list
+  | `Delete     of IAvatar.t
   ]
 
 include HEntity.CORE

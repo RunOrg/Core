@@ -80,6 +80,11 @@ module Email = struct
 	  let! readers = ohm $ MDiscussion.Satellite.access discn (`Wall `Read) in
 	  let  iid    = MDiscussion.Get.iid discn in
 	  return $ Some (iid, readers) 
+	| `Newsletter nlid -> 
+	  let! nletter = ohm_req_or (return None) $ MNewsletter.get nlid in 
+	  let! readers = ohm $ MNewsletter.Satellite.access nletter (`Wall `Read) in
+	  let  iid    = MNewsletter.Get.iid nletter in
+	  return $ Some (iid, readers) 
       end in 
     
       let biid = IInstance.Assert.bot iid in 
