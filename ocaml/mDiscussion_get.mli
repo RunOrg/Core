@@ -9,3 +9,5 @@ val creator  : 'any t -> IAvatar.t
 val iid      : 'any t -> IInstance.t 
 val groups   : 'any t -> IAvatarSet.t list
 val body     : 'any t -> MRich.OrText.t
+val avatars  : 'any t -> IAvatar.t list 
+val isPM     : 'any t -> bool

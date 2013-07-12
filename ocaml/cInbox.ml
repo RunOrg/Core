@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal
@@ -54,10 +54,27 @@ let render_discussion_line access line did =
   end) in
   return (Some html) 
 
+let render_newsletter_line access line nid =
+  let! nletter = ohm_req_or (return None) $ MNewsletter.view ~actor:(access # actor) nid in
+  let  name = MNewsletter.Get.title nletter in
+  let! now  = ohmctx (#time) in
+
+  let! kind = ohm $ AdLib.get `Inbox_Newsletter in 
+
+  let! html  = ohm $ Asset_Inbox_Line.render (object
+    method name = name
+    method url  = Action.url UrlClient.Newsletter.see (access # instance # key) [ INewsletter.to_string nid ]
+    method view = line
+    method time = if line # time = 0. then None else Some (line # time, now) 
+    method details = [kind]
+  end) in
+  return (Some html) 
+
 let render_line access line = 
   match line # owner with 
     | `Event      eid -> render_event_line access line eid 
     | `Discussion did -> render_discussion_line access line did 
+    | `Newsletter nid -> render_newsletter_line access line nid 
 
 let render_list ?start ~count filter access more = 
   let! items, next = ohm $ MInboxLine.View.list 
@@ -79,10 +96,14 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 
   O.Box.fill begin 
 
-    let new_discussion = Action.url UrlClient.Discussion.create (access # instance # key) [] in
-    let new_event = Action.url UrlClient.Events.create (access # instance # key) [] in
+    let actor = access # actor in
 
-    let! filters = ohm $ MInboxLine.View.filters (access # actor) in
+    let key = access # instance # key in 
+    let new_newsletter = Action.url UrlClient.Newsletter.create key [] in
+    let new_discussion = Action.url UrlClient.Discussion.create key [] in
+    let new_event = Action.url UrlClient.Events.create key [] in
+
+    let! filters = ohm $ MInboxLine.View.filters actor in
 
     let! filters = ohm $ O.decay (Run.list_filter begin fun (f',count) -> 
 
@@ -95,21 +116,23 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	  | `Groups    -> static `Groups
 	  | `HasPics   -> static `HasPics
 	  | `HasFiles  -> static `HasFiles
-	  | `Group gid -> let! group = ohm_req_or (return None) $ MGroup.view ~actor:(access # actor) gid in 
+	  | `Private   -> static `Private
+	  | `Group gid -> let! group = ohm_req_or (return None) $ MGroup.view ~actor gid in 
 			  let! name  = ohm $ MGroup.Get.fullname group in 
 			  return (Some name) 
       end in 
 
-      let url = Action.url UrlClient.Inbox.home (access # instance # key) [ IInboxLine.Filter.to_string f' ] in
+      let url = Action.url UrlClient.Inbox.home key [ IInboxLine.Filter.to_string f' ] in
 
       let sort = 
 	let rank = match f' with 
 	  | `All      -> 0
-	  | `HasFiles -> 1 
-	  | `HasPics  -> 2
-	  | `Events   -> 3
-	  | `Groups   -> 4
-	  | `Group _  -> 5
+	  | `Private  -> 1
+	  | `HasFiles -> 2 
+	  | `HasPics  -> 3
+	  | `Events   -> 4
+	  | `Groups   -> 5
+	  | `Group _  -> 6
 	in
 	let name = Util.fold_all name in
 	rank, name
@@ -122,6 +145,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
 	method count = count
 	method depth = match f' with 
 	  | `All     -> 0 
+	  | `Private 
 	  | `HasFiles 
 	  | `HasPics
 	  | `Events
@@ -146,6 +170,7 @@ let () = CClient.define UrlClient.Inbox.def_home begin fun access ->
       method actions = object
 	method new_discussion = new_discussion
 	method new_event = new_event
+	method new_newsletter = new_newsletter
       end 
       method admin = admin
       method filters = filters

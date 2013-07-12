@@ -1,4 +1,4 @@
-(* © 2012 RunOrg *)
+(* © 2013 RunOrg *)
 
 open Ohm
 open Ohm.Universal 
@@ -17,18 +17,4 @@ let see,      def_see      = child def_create   "discussion"
 let admin,    def_admin    = child def_see      "ds/admin"
 let edit,     def_edit     = child def_admin    "ds/edit"
 let delete,   def_delete   = child def_admin    "ds/delete"
-
-let tabs = 
-  (function 
-    | `Wall   -> "wall"
-    | `Album  -> "album" 
-    | `Folder -> "folder"
-    | `People -> "people"), 
-  (function
-    | "wall"   -> `Wall
-    | "album"  -> `Album
-    | "folder" -> `Folder
-    | "people" -> `People
-    | other    -> `Wall)
-    
 

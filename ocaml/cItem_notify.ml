@@ -24,6 +24,12 @@ let context_of_item access item =
 			   Action.url UrlClient.Discussion.see key [ IDiscussion.to_string did ] in
 			 let  context = MDiscussion.Get.title dscn in 
 			 return $ Some (url, context) 
+    | `Newsletter nid -> let! nletter = ohm_req_or (return None) 
+			   (MNewsletter.view ~actor:(access # actor) nid) in
+			 let  url = 
+			   Action.url UrlClient.Newsletter.see key [ INewsletter.to_string nid ] in
+			 let  context = MNewsletter.Get.title nletter in 
+			 return $ Some (url, context) 
   end
   | `album  aid -> return None
   | `folder fid -> return None		

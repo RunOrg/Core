@@ -13,6 +13,14 @@
       margin: 0 0 0 5px;
     }
 
+    &.-rlabel {
+      height: 30px;
+      font-size: 13px;
+      line-height: 30px;
+      font-weight: bold;
+      color: #888;
+    }
+
     &.-stack {
       float: none;
       margin: 5px; 

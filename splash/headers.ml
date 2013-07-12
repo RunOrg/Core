@@ -21,6 +21,11 @@ let headers = [
       "Équipe", "equipe", "/about/team" ;
     ] ;
 
+  header "accueil" 
+    ~title:"Créateur de communautés à votre image"
+    ~text:"Que vous soyez une entreprise, une collectivité, une fédération : nous vous aidons à communiquer et à organiser les intéractions efficacement avec vos communautés"
+    [ ] ;
+
   header "cgu" 
     ~title:"Mentions Légales"
     ~text:"Ici, toutes les informations d'ordre juridique."
@@ -126,14 +131,14 @@ let headers = [
 	  "Ecoles primaires", "/collectivites/ElementarySchool";
 	  "Copropriétés", "/collectivites/syndic-copropriete";
 	] ;
-	"Options",  "/collectivites/options", 
-	[ (*"Pack Pro", "/entreprises/offres" ;
+	(* "Options",  "/collectivites/options", 
+	[ "Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
-	  "Multi-portails", "/entreprises/multiportails"; *)
+	  "Multi-portails", "/entreprises/multiportails"; 
 	  ] ; 
-	"Services",  "/collectivites/services", [];    
+	"Services",  "/collectivites/services", []; *)   
 	"Fonctionnalités",  "/collectivites/features", [];
-      "Tarifs", "/collectivites/pricing", [];
+      (*"Tarifs", "/collectivites/pricing", []; *)
     ] ; 
 
 	 multiheader "entreprises" 
@@ -148,21 +153,21 @@ let headers = [
 	  "Comité d'Entreprise", "/entreprises/ComiteEnt";
 	  "Organisation d'évènements", "/entreprises/Events"
 	  ] ;
-	"Options",  "/entreprises/options", 
-	[ (*"Pack Pro", "/entreprises/offres" ;
+	(*"Options",  "/entreprises/options", 
+	[ "Pack Pro", "/entreprises/offres" ;
 	  "Personnalisation+", "/entreprises/personnalisation";
-	  "Multi-portails", "/entreprises/multiportails"; *)
-	  ] ; 
-	"Services",  "/entreprises/services", [];    
+	  "Multi-portails", "/entreprises/multiportails";
+	  ] ;  
+	"Services",  "/entreprises/services", [];    *)
 	"Fonctionnalités",  "/entreprises/features", [];
-      "Tarifs", "/entreprises/pricing", [];
+      (*"Tarifs", "/entreprises/pricing", []; *)
     ] ;
 
 	 multiheader "associations" 
     ~title:"L'intranet de votre association"
     ~text:"Un outil collaboratif en ligne pour gérer plus facilement les membres, les adhésions, les activités et la communication de votre association."
     ~trynow:( "Essayer Gratuitement", "/start/Simple" ) 
-    [ "Accueil",         "/", [] ;
+    [ "Accueil",         "/associations", [] ;
       "Avantages",     "/associations/benefits", [] ;
 	"Solutions", "/associations/standard",
 	      [ "Standard",              "/associations/standard" ;
@@ -186,8 +191,8 @@ let headers = [
     ] ; 
 
   header "references" 
-    ~title:"Quelques références"
-    ~text:"Nous avons plus de 60 000 inscrits. Voilà quelques-unes de nos références par secteur."
+    ~title:"Ils nous font confiance"
+    ~text:"Nous avons plus de 70 000 inscrits. Voilà quelques-unes de nos références par secteur."
     [] ;
    
   (* END HEADERS ------------------------------------------------------------ *)

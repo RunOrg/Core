@@ -15,6 +15,10 @@ let access_of_owner = function
   | `Discussion did -> let! discn = ohm_req_or (return None) $ MDiscussion.get did in 
 		       let! access = ohm (MDiscussion.Satellite.access discn (`Wall `Read)) in
 		       return $ Some (MDiscussion.Get.iid discn, access) 
+  | `Newsletter nid -> let! nletter = ohm_req_or (return None) $ MNewsletter.get nid in 
+		       let! access = ohm (MNewsletter.Satellite.access nletter (`Wall `Read)) in
+		       return $ Some (MNewsletter.Get.iid nletter, access) 
+
 
 let loop = 
   MAvatarStream.iter "inbox-line-push-loop" IInboxLine.fmt 

@@ -29,6 +29,12 @@ let () = MDigest.Send.define begin fun uid u t info ->
     return (Action.url UrlClient.Discussion.see (access # instance # key) [ IDiscussion.to_string did ])
   in
 
+  let newsletter_url iid nid default = 
+    let! access = ohm_req_or (return default) (CAccess.of_notification uid iid) in
+    let! nletter = ohm_req_or (return default) $ MNewsletter.view ~actor:(access # actor) nid in
+    return (Action.url UrlClient.Newsletter.see (access # instance # key) [ INewsletter.to_string nid ])
+  in
+
   let render_item access (url,(owner,time,what,unread)) = 
 
     let! name, pic = ohm_req_or (return None) begin 
@@ -41,6 +47,9 @@ let () = MDigest.Send.define begin fun uid u t info ->
       | `Discussion did -> 
 	let! discn = ohm_req_or (return None) $ MDiscussion.view ~actor:(access # actor) did in
 	return (Some (MDiscussion.Get.title discn, None))
+      | `Newsletter nid -> 
+	let! nletter = ohm_req_or (return None) $ MNewsletter.view ~actor:(access # actor) nid in
+	return (Some (MNewsletter.Get.title nletter, None))
     end in 
 
     return (Some (object
@@ -71,6 +80,7 @@ let () = MDigest.Send.define begin fun uid u t info ->
 		     match owner with 
 		     | `Event eid -> event_url iid eid default
 		     | `Discussion did -> discussion_url iid did default 
+		     | `Newsletter nid -> newsletter_url iid nid default
 
     method mail = let! now = ohmctx (#date) in 
 		  let  title = `Digest_Title (Date.ymd now) in
