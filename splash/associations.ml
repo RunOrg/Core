@@ -85,7 +85,7 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	(price
 	   "Gratuit"
 	   "pour les associations"
-	   "de moins de 2000 adhérents") ; 
+	   "de moins de 100 adhérents") ; 
       
       recommend 
 	~title:"Ils recommandent RunOrg"
@@ -114,7 +114,7 @@ Organiser un groupe autour d'une passion ou d'un projet, ça ne s'improvise pas.
 	   (facebook ()) ;	
     ] ;
 
-  page "associations/benefits" "RunOrg - Avantages"
+  page "/benefits" "RunOrg - Avantages"
     [ composite `LR
 	(image "/public/img/2012-04-19-1.png")
 	(pride
@@ -159,79 +159,79 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	(image  "/public/img/imagephilippines.jpg")
     ] ;
 
-  page "associations/standard" "RunOrg Associations - Standard"
+  page "/standard" "RunOrg Associations - Standard"
     [ Catalog.associations_standard_title;     
 	Catalog.default_price_asso ;
 ];
 
-  page "associations/Students" "RunOrg Associations - BDE et Associations Etudiantes"
+  page "/Students" "RunOrg Associations - BDE et Associations Etudiantes"
    [ Catalog.associations_students_title ;
 	Catalog.associations_students_desc_a ;
 	Catalog.associations_students_desc_b ;
 	Catalog.associations_students_desc_c ;
 ];
 
-  page "associations/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
+  page "/Ess" "RunOrg Associations - Economie Sociale et Solidaire"
     [ Catalog.associations_ess_title ;
 	Catalog.associations_ess_desc_a ;
 	Catalog.associations_ess_desc_b ;
 ];
 
-  page "associations/Impro" "RunOrg Associations - Théâtre d'Improvisation"
+  page "/Impro" "RunOrg Associations - Théâtre d'Improvisation"
     [ Catalog.associations_impro_title ;
 	Catalog.associations_impro_desc_a ;
 	Catalog.associations_impro_desc_b ;
 ];
 
-  page "associations/MultiSports" "RunOrg Associations - Clubs multi-sports "
+  page "/MultiSports" "RunOrg Associations - Clubs multi-sports "
     [ Catalog.associations_multisports_title ;
 	Catalog.associations_multisports_desc_a ;
 	Catalog.associations_multisports_desc_b ;
 ];
 
-  page "associations/Judo" "RunOrg Associations - Judo et Jujitsu"
+  page "/Judo" "RunOrg Associations - Judo et Jujitsu"
     [ Catalog.associations_judo_title ;
 	Catalog.associations_judo_desc_a ;
 	Catalog.associations_judo_desc_b ;
 ];
 
-  page "associations/Tennis" "RunOrg Associations - Tennis "
+  page "/Tennis" "RunOrg Associations - Tennis "
     [ Catalog.associations_tennis_title ;
 	Catalog.associations_tennis_desc_a ;
 ];
 
-  page "associations/Badminton" "RunOrg Associations - Badminton "
+  page "/Badminton" "RunOrg Associations - Badminton "
     [ Catalog.associations_badminton_title ;
 	Catalog.associations_badminton_desc_a ;
 	Catalog.associations_badminton_desc_b ;
 	Catalog.associations_badminton_desc_c ;
 ];
 
-  page "associations/Footus" "RunOrg Associations - Football US & cheerleading "
+  page "/Footus" "RunOrg Associations - Football US & cheerleading "
     [ Catalog.associations_footus_title ;
 	Catalog.associations_footus_desc_a ;
 	Catalog.associations_footus_desc_b ;
 ];
 
-  page "associations/Athle" "RunOrg Associations - Athlétisme "
+  page "/Athle" "RunOrg Associations - Athlétisme "
     [ Catalog.associations_athle_title ;
 	Catalog.associations_athle_desc_a ;
 ];
 
-  page "associations/SalleSport" "RunOrg Associations - Salle de sport et coaching "
+  page "/SalleSport" "RunOrg Associations - Salle de sport et coaching "
     [ Catalog.associations_sallesport_title;
 	Catalog.associations_sallesport_desc_a ;
 	Catalog.associations_sallesport_desc_b ;
 ];
 
-  page "associations/Sports" "RunOrg Associations - Autres sports"
+  page "/Sports" "RunOrg Associations - Autres sports"
     [ Catalog.associations_sports_title ;
 	Catalog.associations_sports_desc_a ;
 	Catalog.associations_sports_desc_b ;
 	Catalog.associations_sports_desc_c ;
 ];
 
-  page "associations/Federations" "RunOrg Associations - Fédérations"
+  page "/Federations" "RunOrg Associations - Fédérations"
     [ Catalog.associations_federations_title ;
 	Catalog.associations_federations_desc_a ;
 	Catalog.associations_federations_desc_b ;
@@ -242,7 +242,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 ];
 
 
-  page "associations/options" "RunOrg Associations - Options"
+  page "/options" "RunOrg Associations - Options"
     [ offer 
 	~title: "Pack Pro"
 	~price: "20€/mois"
@@ -271,7 +271,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 	  "D'autres options sont disponibles. Contactez-nous." ] ;
 ];
 
-  page "associations/services" "RunOrg Associations - Services"
+  page "/services" "RunOrg Associations - Services"
     [ offer 
 	~title: "Assistance+ en ligne"
 	~price: "10€/mois"
@@ -326,7 +326,7 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 ];
 
 
-  page "associations/pricing" "RunOrg - Tarifs Associations"
+  page "/pricing" "RunOrg - Tarifs Associations"
       [    ribbon 
 	(important 
 	   "L'offre la plus compétitive du marché !"
@@ -335,12 +335,12 @@ RunOrg permet de déléguer tout en gardant le contrôle sur ce qui a été fait
 
 	prices [
 	  ("GRATUIT",  "free - gratis",[ "100 personnes"   ; "2 Go"  ],[ ""]) ;
-	  ("125", "HT par mois",[ "2000 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
-	  ("200", "HT par mois",[ "5000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
+	  ("50", "HT par mois",[ "500 personnes"  ; "5 Go" ],[ "Assistance+ en ligne" ; "Pack Pro" ]) ;
+	  ("100", "HT par mois",[ "2000 personnes" ; "10 Go" ],[ "Pack Pro" ; "Assistance téléphonique" ])	  
 	] 
 
 	  "Toutes nos offres incluent l'hébergement, la maintenance et les mises à jour logicielles"
-	  "<a href=\"contact\">Contactez-nous</a> si vous souhaitez créer des espaces pour plus de 10000 personnes." 
+	  "<a href=\"contact\">Contactez-nous</a> si vous souhaitez créer des espaces pour plus de 2000 personnes." 
 
 ;
 
@@ -385,7 +385,7 @@ Un jour de formation est offert avec l'offre à 400€/mois"
 	;
     ] ;
 
-  page "associations/features" "RunOrg Associations - Fonctionnalités"
+  page "/features" "RunOrg Associations - Fonctionnalités"
       [ composite `LR
 	(image "/public/img/2012-08-28-9-cut.png")
 	(pride
@@ -470,7 +470,7 @@ Il est facile de créer un mur de discussion pour un groupe ou une activité, et
 	(price
 	   "Gratuit"
 	   "pour les associations"
-	   "de moins de 2000 adhérents") 
+	   "de moins de 100 adhérents") 
 	(bullets
 	   ~title:"Avec services inclus"
 	   ~subtitle:"Pas besoin d'être informaticien"

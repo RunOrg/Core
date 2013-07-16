@@ -20,7 +20,7 @@ let default_price_asso =
 	(price
     		"Gratuit"
     		"pour les associations"
-   		"de moins de 2000 adhérents")
+   		"de moins de 100 adhérents")
 	(bullets
 	   ~title:"La plateforme la plus complète"
 	   ~subtitle:"Tous les outils utiles regroupés dans un même espace"
