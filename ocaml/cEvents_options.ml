@@ -48,7 +48,7 @@ let () = CClient.define_admin UrlClient.Events.def_options begin fun access ->
 
     let! () = ohm $ O.decay 
       (MInstanceAccess.update (access # iid)
-	 (fun data -> MInstanceAccess.Data.({ (* data with *) events })))
+	 (fun data -> MInstanceAccess.Data.({ data with events })))
     in 
     
     (* Return to main page *) 

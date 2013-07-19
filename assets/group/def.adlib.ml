@@ -24,7 +24,9 @@
 | `Group_Edit_Publish
 | `Group_Edit_Publish_Detail 
 | `Group_Edit_Publish_Label of [`Public|`Normal|`Private]
-
+| `Group_Edit_ListView 
+| `Group_Edit_ListView_Detail 
+| `Group_Edit_ListView_Label of [`Viewers|`Registered|`Managers]
 | `Group_People_Title 
 | `Group_People_Link 
 | `Group_People_Sub 

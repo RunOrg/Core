@@ -29,6 +29,14 @@
     | `Private -> "Sur invitation uniquement"
 end
 
+| `Group_Edit_ListView -> "Annuaire"
+| `Group_Edit_ListView_Detail -> "Détermine qui peut voir les membres du groupe."
+| `Group_Edit_ListView_Label what -> begin match what with
+  | `Viewers -> "Tous les membres de votre communauté"
+  | `Registered -> "Uniquement les membres de ce groupe"
+  | `Managers -> "Uniquement les responsables"
+end
+
 | `Group_People_Title -> "Membres"
 | `Group_People_Link -> "Gestion des membres"
 | `Group_People_Sub -> "Inscrivez des membres et validez les demandes d'inscription"

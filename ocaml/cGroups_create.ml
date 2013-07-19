@@ -8,7 +8,7 @@ module FormFmt = Fmt.Make(struct
   type json t = <
     name : string ;
     template : ITemplate.Group.t ;
-   ?access : [ `Public | `Normal | `Private ] = `Normal
+   ?access : [ `Public | `Normal | `Private ] = `Normal ;
   >
 end)
 

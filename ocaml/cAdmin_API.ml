@@ -18,6 +18,7 @@ module RefreshGrants       = CAdmin_API_refreshGrants
 module Migrate             = CAdmin_API_migrate
 module SetDisk             = CAdmin_API_setDisk
 module Obliterate          = CAdmin_API_obliterate
+module SetInstanceAccess   = CAdmin_API_setInstanceAccess
 
 let () = UrlAdmin.def_api $ admin_only begin fun cuid req res -> 
 
