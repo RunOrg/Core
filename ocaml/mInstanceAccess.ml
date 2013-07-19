@@ -9,6 +9,7 @@ module Data = struct
     type json t = 
 	{
 	 ?events    : IDelegation.t = `Admin ; 
+	 ?search    : IDelegation.t = `Everyone ; 
 	}
   end
   include T
@@ -20,6 +21,7 @@ module Tbl = CouchDB.Table(MyDB)(IInstance)(Data)
 
 let default = Data.({
   events    = `Everyone ;
+  search    = `Everyone ; 
 })
 
 let get id = 
@@ -39,3 +41,9 @@ let can_create_event actor =
   let! t = ohm $ get (IInstance.decay iid) in
   let! allowed = ohm $ MDelegation.test actor t.Data.events in
   return (if allowed then Some (IInstance.Assert.create_event iid) else None)
+
+let can_search_atoms actor = 
+  let iid = MActor.instance actor in 
+  let! t = ohm $ get (IInstance.decay iid) in
+  let! allowed = ohm $ MDelegation.test actor t.Data.search in
+  return (if allowed then Some (IInstance.Assert.search_atoms iid) else None)

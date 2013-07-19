@@ -21,6 +21,7 @@ module Assert = struct
   let bot          = identity
 
   let see_contacts = identity
+  let search_atoms = identity
 
 end
   

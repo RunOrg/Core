@@ -19,6 +19,8 @@ module Assert : sig
 
   val see_contacts : 'any id -> [`ViewContacts] id
 
+  val search_atoms : 'any id -> [`SearchAtoms] id 
+
 end
   
 module Deduce : sig
