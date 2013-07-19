@@ -17,13 +17,13 @@ let template () =
     |> OhmForm.append (fun f title -> return $ f ~title) 
 	(VEliteForm.text
 	   ~label:(AdLib.get `Discussion_Field_Title)
-	   (MDiscussion.Get.title |- return)
+	   (MDiscussion.Get.title %> return)
 	   (OhmForm.required (AdLib.get `Discussion_Field_Required)))
 	
     |> OhmForm.append (fun f body -> return $ f ~body) 
 	(VEliteForm.rich     
 	   ~label:(AdLib.get `Discussion_Field_Body)
-	   (MDiscussion.Get.body |- MRich.OrText.to_html |- Html.to_html_string |- return) 
+	   (MDiscussion.Get.body %> MRich.OrText.to_html %> Html.to_html_string %> return) 
 	   (OhmForm.keep))
 	
   in

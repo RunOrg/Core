@@ -121,7 +121,7 @@ let list ?self source ~count start =
   in 
     
   let list, next = OhmPaging.slice list ~count in
-  let next = BatOption.map (#key |- snd) next in
+  let next = BatOption.map (#key %> snd) next in
   let list = List.map (extract self) list in 
 
   return (list,next)

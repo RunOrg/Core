@@ -8,17 +8,17 @@ module View = CAtom_view
 
 (* Plug-in registration ------------------------------------------------------------------------------------- *)
 
-let plugins = ref BatPMap.empty 
+let plugins = ref BatMap.empty 
 
 let register ?render ~search nature = 
-  plugins := BatPMap.add nature (render, search) !plugins
+  plugins := BatMap.add nature (render, search) !plugins
 
 let render nature default = 
-  try BatOption.default default (BatPMap.find nature !plugins |> fst)
+  try BatOption.default default (BatMap.find nature !plugins |> fst)
   with Not_found -> default
 
 let search nature default = 
-  try BatPMap.find nature !plugins |> snd
+  try BatMap.find nature !plugins |> snd
   with Not_found -> default
 
 (* Listing atoms in search fields --------------------------------------------------------------------------- *)

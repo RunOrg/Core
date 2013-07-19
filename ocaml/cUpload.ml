@@ -60,7 +60,7 @@ let () = UrlUpload.Core.def_root begin fun req res ->
 	method cancel = Action.url UrlUpload.Core.cancel (req # server) ()
 	method inner  = inner
       end))
-    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
+    (IFile.Deduce.get_pic %> IFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Core.ok (req # server))
     res
 
@@ -80,7 +80,7 @@ let () = UrlUpload.Client.def_root $ CClient.action begin fun access req res ->
 	method cancel = Action.url UrlUpload.Client.cancel (req # server) ()
 	method inner  = inner
       end))
-    (IFile.Deduce.get_pic |- IFile.Deduce.make_getPic_token cuid) 
+    (IFile.Deduce.get_pic %> IFile.Deduce.make_getPic_token cuid) 
     (Action.url UrlUpload.Client.ok (req # server))
     res
 
@@ -99,7 +99,7 @@ let () = UrlUpload.Client.Doc.def_root $ CClient.action begin fun access req res
   form (snd req # server) fid 
     (Asset_Upload_DocForm.render) 
     (Asset_Upload_DocForm_Inner.render)
-    (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
+    (IFile.Deduce.get_doc %> IFile.Deduce.make_getDoc_token cuid) 
     (Action.url UrlUpload.Client.Doc.ok (req # server))
     res
 

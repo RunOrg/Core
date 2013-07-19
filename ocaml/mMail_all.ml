@@ -38,7 +38,7 @@ let mine ?start ~count cuid =
     return (Some full) 
   end list) in
 
-  let  next = BatOption.map (#key |- snd) next in 
+  let  next = BatOption.map (#key %> snd) next in 
 
   return (list, next) 
 

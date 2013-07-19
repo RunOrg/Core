@@ -56,11 +56,11 @@ let active_instances _ ago =
   let! list = ohm $ InstanceCountView.reduce_query ~startkey ~endkey ( ) in
 
   let  totals = List.fold_left (fun map ((_,iid),count) -> 
-    let old = try BatPMap.find iid map with Not_found -> 0 in 
-    BatPMap.add iid (old + count) map
-  ) BatPMap.empty list in 
+    let old = try BatMap.find iid map with Not_found -> 0 in 
+    BatMap.add iid (old + count) map
+  ) BatMap.empty list in 
 
-  let list   = BatPMap.foldi (fun k v acc -> (k,v) :: acc) totals [] in
+  let list   = BatMap.foldi (fun k v acc -> (k,v) :: acc) totals [] in
   let sorted = List.sort (fun (_,a) (_,b) -> compare b a) list in
 							  
   return sorted

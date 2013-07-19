@@ -154,8 +154,8 @@ let () = define UrlMe.News.def_home begin fun owid cuid ->
 
     let! instances = ohm $ draw_instances [
       Run.map (List.map IInstance.decay) (MInstance.visited ~count:4 cuid) ;
-      Run.map (List.map (snd |- IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Admin uid) ;
-      Run.map (List.map (snd |- IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Token uid) ; 
+      Run.map (List.map (snd %> IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Admin uid) ;
+      Run.map (List.map (snd %> IInstance.decay)) (MAvatar.user_instances ~count:4 ~status:`Token uid) ; 
     ] in
 
     (* News feed render seed *)

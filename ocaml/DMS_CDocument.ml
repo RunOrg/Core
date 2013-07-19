@@ -79,10 +79,10 @@ let () = CClient.define Url.def_file begin fun access ->
   let! meta = ohm begin 
     let! meta = ohm (MDocMeta.get (MDocument.Get.id doc)) in
     let  data = MDocMeta.Get.data meta in
-    if BatPMap.is_empty data then return [] else 
+    if BatMap.is_empty data then return [] else 
       let! metafields = ohm (MDocMeta.fields (access # iid)) in
       Run.list_filter begin fun (fieldkey, fieldinfo) -> 
-	try let value = BatPMap.find fieldkey data in
+	try let value = BatMap.find fieldkey data in
 	    let label = AdLib.write (fieldinfo # label) in
 	    let! value = ohm begin match fieldinfo # kind with 
 	      | `TextShort
@@ -116,7 +116,7 @@ let () = CClient.define Url.def_file begin fun access ->
     let! data = ohm begin 
       let fields = MDocTask.Get.fields task in      
       Run.list_filter begin fun (fieldkey, fieldinfo) -> 
-	try let value = BatPMap.find fieldkey data in
+	try let value = BatMap.find fieldkey data in
 	    let label = AdLib.write (fieldinfo # label) in
 	    let! value = ohm begin match fieldinfo # kind with 
 	      | `TextShort

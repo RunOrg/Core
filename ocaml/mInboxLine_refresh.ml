@@ -23,14 +23,14 @@ let line = O.async # define "inbox-line-refresh" IInboxLine.fmt
 			let! core   = ohm $ get_core_info   current.Line.owner in 
 			let! filter = ohm $ get_filter      current.Line.owner in 
 			
-			let last_album = BatOption.bind (fun a -> a.Info.Album.last) album in
+			let last_album = BatOption.bind album (fun a -> a.Info.Album.last) in
 			let filter = if last_album <> None then `HasPics :: filter else filter in 
 
-			let last_folder = BatOption.bind (fun f -> f.Info.Folder.last) folder in
+			let last_folder = BatOption.bind folder (fun f -> f.Info.Folder.last) in
 			let filter = if last_folder <> None then `HasFiles :: filter else filter in 
 
 			let  times  = [ 
-			  BatOption.bind (fun w -> w.Info.Wall.last) wall ;
+			  BatOption.bind wall (fun w -> w.Info.Wall.last) ;
 			  last_album ; 
 			  last_folder ; 
 			  core ; 

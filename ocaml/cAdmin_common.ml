@@ -9,7 +9,7 @@ let admin_only body req res =
   let  cuid = CSession.get req in
   let  e404 = C404.render None cuid res in
 
-  let! cuid = req_or e404 $ BatOption.bind MAdmin.user_is_admin cuid in 
+  let! cuid = req_or e404 $ BatOption.bind cuid MAdmin.user_is_admin in 
 
   body cuid req res
 

@@ -5,11 +5,11 @@ open Ohm.Universal
 open BatPervasives
 
 module Assoc = Fmt.Make(struct
-  type t = (string,Json.t) BatPMap.t
+  type t = (string,Json.t) BatMap.t
   let json_of_t t = 
-    Json.Object (BatPMap.foldi (fun k v l -> (k,v) :: l) t [])
+    Json.Object (BatMap.foldi (fun k v l -> (k,v) :: l) t [])
   let t_of_json json = 
-    List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty 
+    List.fold_left (fun m (k,v) -> BatMap.add k v m) BatMap.empty 
       (Json.to_assoc json) 
 end)
 
@@ -32,7 +32,7 @@ module Task = struct
 end
 
 let clean m = 
-  BatPMap.filter ((<>) Json.Null) m 
+  BatMap.filter (fun _ -> (<>) Json.Null) m
 
 module Cfg = struct
     
@@ -77,7 +77,7 @@ module Cfg = struct
     return Data.({ data with notified = aids })
 
   let apply_data assoc _ _ data = 
-    return Data.({ data with data = clean (BatPMap.foldi BatPMap.add assoc data.data) })
+    return Data.({ data with data = clean (BatMap.foldi BatMap.add assoc data.data) })
 
   let apply = function
     | `SetState state -> return (apply_state state) 

@@ -29,10 +29,10 @@ let template actor key metafields =
 	List.fold_left begin fun form (fieldkey, fieldinfo) -> 
 
 	  (* For each field, append the result to the complete meta-map *)
-	  OhmForm.append (fun map json -> return (BatPMap.add fieldkey json map)) 
+	  OhmForm.append (fun map json -> return (BatMap.add fieldkey json map)) 
 	    (VField.render actor key ~fieldkey ~fieldinfo) form
 	    
-	end (OhmForm.begin_object BatPMap.empty) metafields
+	end (OhmForm.begin_object BatMap.empty) metafields
       
       end
     end

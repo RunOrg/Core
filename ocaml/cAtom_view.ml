@@ -30,7 +30,7 @@ let () =
 let filter_all = "all"
 
 let filterQueryByName = lazy 
-  (List.fold_left (fun map (key, (_,query)) -> BatPMap.add key query map) BatPMap.empty !filters)
+  (List.fold_left (fun map (key, (_,query)) -> BatMap.add key query map) BatMap.empty !filters)
 
 let filterLabels = lazy 
   ((filter_all, `Atom_Filter_All) :: List.rev_map (fun (key,(label,_)) -> (key, label)) !filters)
@@ -39,7 +39,7 @@ let allFilters = lazy
   (List.rev_map fst !filters) 
 
 let filtersByKey key = 
-  if BatPMap.mem key (Lazy.force filterQueryByName) then key, [ key ] else filter_all, Lazy.force allFilters 
+  if BatMap.mem key (Lazy.force filterQueryByName) then key, [ key ] else filter_all, Lazy.force allFilters 
 
 (* Search management *)
 
@@ -65,7 +65,7 @@ let () = CClient.define UrlClient.Atom.def_view begin fun access ->
 
   let! more = O.Box.react SearchFmt.fmt begin fun search _ self res ->
     let count = 8 in
-    let query key = try BatPMap.find key (Lazy.force filterQueryByName) with Not_found -> empty in
+    let query key = try BatMap.find key (Lazy.force filterQueryByName) with Not_found -> empty in
     let result htmls search = 
       let! more = ohm (render_more self search) in
       let  html = Html.concat (htmls @ [more]) in

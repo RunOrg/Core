@@ -29,7 +29,7 @@ let () = MAvatar.Notify.define begin fun uid u t info ->
 		  let! iprf    = ohm (MInstance.Profile.get iid) in			
 		  let! detail  = ohm (VMailBrick.boxProfile ?img:ipic ~name:(instance # name) 
 					~detail:(BatOption.default empty
-						   (BatOption.bind (#desc) iprf))
+						   (BatOption.bind iprf (#desc)))
 					url) in
 		  
 		  let  payload = `Action (object

@@ -187,9 +187,8 @@ end)
 
 let by_email email = 
   ByEmailView.doc (EmailUtil.canonical email)
-  |> Run.map (Util.first 
-		 |- BatOption.map (#id |- IUser.of_id))
-
+  |> Run.map (Util.first %> BatOption.map (#id %> IUser.of_id))
+	     
 module ByFacebookView = CouchDB.DocView(struct
   module Key = OhmFacebook
   module Value = Fmt.Bool
@@ -201,7 +200,7 @@ end)
 
 let by_facebook uid = 
   ByFacebookView.doc uid
-  |> Run.map (Util.first |- BatOption.map (#id |- IUser.of_id))
+  |> Run.map (Util.first %> BatOption.map (#id %> IUser.of_id))
 
 class type user_short = object
   method firstname : string
@@ -272,7 +271,7 @@ let quick_create (user : user_short) =
       `created (IUser.decay id, obj), `put obj
   in
   
-  let! result = ohm $ Tbl.transact id (update |- return) in
+  let! result = ohm $ Tbl.transact id (update %> return) in
   match result with
     | `duplicate id      -> return $ `duplicate id
     | `created (id, obj) -> let! () = ohm $ (* Created above. *)
@@ -315,7 +314,7 @@ let listener_create email =
       (id, false), `put obj
   in
   
-  let! id, exists = ohm $ Tbl.transact id (update |- return) in 
+  let! id, exists = ohm $ Tbl.transact id (update %> return) in 
   
   if exists then return None else
     (* We have created or retrieved a new, unconfirmed listener *)
@@ -377,7 +376,7 @@ let _facebook_update uid facebook details =
   let! () = ohm $ MFile.set_facebook_pic pic_id self details in
 	
   let! created, confirmed, obj = ohm $
-    Tbl.transact uid (update |- return)
+    Tbl.transact uid (update %> return)
   in 
   
   let! () = ohm begin 
@@ -541,7 +540,7 @@ let user_bind (user : user_full) =
 	     (true, obj), `put obj
   in
   
-  let! (created,obj) = ohm $ Tbl.transact id (update |- return) in
+  let! (created,obj) = ohm $ Tbl.transact id (update %> return) in
 
   let! () = ohm begin 
     if created then 

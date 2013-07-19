@@ -203,7 +203,7 @@ let box access gid inner =
 		    `Profile (data # req, f)
     in
 
-    let fields = (List.map (snd |- fst) fields) @ [field] in
+    let fields = (List.map (snd %> fst) fields) @ [field] in
     
     let! () = ohm (O.decay (MAvatarSet.Fields.set group fields)) in
 

@@ -33,7 +33,7 @@ let define f = Mailer.define f
 let max_age = 3600. *. 24. *. 7. (* A week *)
 
 let get_last now map iid =
-  try BatPMap.find iid map with Not_found -> now -. max_age
+  try BatMap.find iid map with Not_found -> now -. max_age
 
 let send uid sent = 
   
@@ -71,7 +71,7 @@ let send uid sent =
     end)) in  
     
     (* Update "last sent" for all instances. *)  
-    let sent = List.fold_left (fun map (iid,_) -> BatPMap.add iid now map) sent byiid in
+    let sent = List.fold_left (fun map (iid,_) -> BatMap.add iid now map) sent byiid in
     
     return (sent, count) 
 

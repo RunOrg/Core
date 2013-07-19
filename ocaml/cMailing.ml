@@ -27,10 +27,10 @@ let _ = O.register O.core "new-mail" Action.Args.none begin fun req res ->
     | _ -> None) in
 
   let! mailing, email, name, url = req_or fail (
-    try let mailing = BatPMap.find "mailing" post in 
-	let email   = BatPMap.find "email" post in 
-	let name    = BatPMap.find "name" post in
-	let url     = BatPMap.find "url" post in 
+    try let mailing = BatMap.find "mailing" post in 
+	let email   = BatMap.find "email" post in 
+	let name    = BatMap.find "name" post in
+	let url     = BatMap.find "url" post in 
 	Some (mailing, email, name, url)
     with _ -> None) in
   

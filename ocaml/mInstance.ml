@@ -126,7 +126,7 @@ let update id ~name ~desc ~address ~site ~contact ~facebook ~twitter ~phone ~tag
       facebook = BatOption.map (clip 256)  facebook ;
       twitter  = BatOption.map (clip 256)  twitter ;
       phone    = BatOption.map (clip 30)   phone ;
-      tags     = BatList.sort_unique compare (List.map (Util.fold_all |- clip 32) tags) ;
+      tags     = BatList.sort_unique compare (List.map (Util.fold_all %> clip 32) tags) ;
       unbound  = false ;
   }) in
 
@@ -247,7 +247,7 @@ let visit user inst =
 		  (), `put obj
   in
 
-  RecentTable.transact id (add_recent inst |- return)
+  RecentTable.transact id (add_recent inst %> return)
 
 (* Installing instances ------------------------------------------------------------- *)
 

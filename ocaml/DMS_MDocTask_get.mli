@@ -5,7 +5,7 @@ val id       : 'any DMS_MDocTask_can.t -> 'any DMS_IDocTask.id
 val iid      : 'any DMS_MDocTask_can.t -> IInstance.t
 val process  : 'any DMS_MDocTask_can.t -> PreConfig_Task.ProcessId.DMS.t
 val state    : 'any DMS_MDocTask_can.t -> Ohm.Json.t
-val data     : 'any DMS_MDocTask_can.t -> (string, Ohm.Json.t) BatPMap.t
+val data     : 'any DMS_MDocTask_can.t -> (string, Ohm.Json.t) BatMap.t
 val assignee : 'any DMS_MDocTask_can.t -> IAvatar.t option 
 val notified : 'any DMS_MDocTask_can.t -> IAvatar.t list
 val created  : 'any DMS_MDocTask_can.t -> IAvatar.t * float

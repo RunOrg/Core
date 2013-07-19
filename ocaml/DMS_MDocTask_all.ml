@@ -28,7 +28,7 @@ let by_document did =
   let  startkey = did, now in
   let  endkey = did, 0.0 in
   let! list = ohm $ ByDocumentView.doc_query ~startkey ~endkey ~descending:true ~limit:20 () in
-  return (List.map DMS_IDocTask.(#id |- of_id |- Assert.view) list) 
+  return (List.map DMS_IDocTask.(#id %> of_id %> Assert.view) list) 
 
 module LastView = CouchDB.DocView(struct
   include Default

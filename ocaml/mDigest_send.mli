@@ -1,6 +1,6 @@
 (* © 2013 RunOrg *)
 
-val send : IUser.t -> (IInstance.t,float) BatPMap.t -> (#O.ctx, (IInstance.t,float) BatPMap.t * int) Ohm.Run.t
+val send : IUser.t -> (IInstance.t,float) BatMap.t -> (#O.ctx, (IInstance.t,float) BatMap.t * int) Ohm.Run.t
 
 type t = <
   uid  : IUser.t ;

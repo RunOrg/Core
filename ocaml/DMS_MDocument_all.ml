@@ -47,7 +47,7 @@ let in_repository ?actor ?start ~count rid =
     let! list = ohm $ TimeByRepoView.doc_query ~startkey ~endkey ~descending:true ~limit:(count+1) () in
     let  list, next = OhmPaging.slice ~count list in     
     let! list = ohm $ Run.list_filter (entry ?actor) list in
-    let  next = BatOption.map (#key |- snd) next in
+    let  next = BatOption.map (#key %> snd) next in
     return (list, next)
   end
 

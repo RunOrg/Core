@@ -9,7 +9,7 @@ let render actor key ~fieldkey ~fieldinfo =
 
   let label = AdLib.get (fieldinfo # label) in
 
-  let seed data = try BatPMap.find fieldkey data with Not_found -> Json.Null in
+  let seed data = try BatMap.find fieldkey data with Not_found -> Json.Null in
 
   (* String fields *)
 

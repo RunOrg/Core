@@ -111,8 +111,8 @@ let stats days_ago =
   in
 
   let  stats = match data with (_, stats) :: _ -> stats | _ -> [] in
-  let  map   = BatPMap.of_enum (BatList.enum stats) in
-  let  count key = try BatPMap.find key map with _ -> 0 in 
+  let  map   = BatMap.of_enum (BatList.enum stats) in
+  let  count key = try BatMap.find key map with _ -> 0 in 
 
   return (object
     method instanceCreate = count "ic"

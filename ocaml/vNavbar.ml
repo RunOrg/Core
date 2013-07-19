@@ -105,7 +105,7 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
 
   end in
 
-  let admin = if BatOption.bind MAdmin.user_is_admin cuid <> None then
+  let admin = if BatOption.bind cuid MAdmin.user_is_admin <> None then
       Some (Action.url UrlAdmin.home None ())
     else 
       None

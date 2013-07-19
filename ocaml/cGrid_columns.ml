@@ -94,7 +94,7 @@ let box access gid render =
     let columns = 
       columns
       |> BatList.mapi (fun i x -> (i,x)) 
-      |> List.filter (fst |- ((<>) idx))
+      |> List.filter (fst %> ((<>) idx))
       |> List.map snd
     in
     let! () = ohm $ O.decay (Grid.MyGrid.set_columns lid columns) in
