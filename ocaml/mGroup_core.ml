@@ -4,8 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module Vision = MGroup_vision 
-module Config = MGroup_config
+module ListView = MGroup_listView
+module Vision   = MGroup_vision 
+module Config   = MGroup_config
 
 module Cfg = struct
 
@@ -15,11 +16,11 @@ module Cfg = struct
 
   module Diff = Fmt.Make(struct
     type json t = 
-      [ `SetName    of TextOrAdlib.t option
-      | `SetVision  of Vision.t
-      | `SetAdmins  of IDelegation.t	  
-      | `EditConfig of Config.Diff.t list
-      | `Delete     of IAvatar.t
+      [ `SetName     of TextOrAdlib.t option
+      | `SetVision   of Vision.t
+      | `SetAdmins   of IDelegation.t	  
+      | `EditConfig  of Config.Diff.t list
+      | `Delete      of IAvatar.t
       ]
   end)
 

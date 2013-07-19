@@ -3,6 +3,7 @@
 type 'relation t 
 
 module Vision : Ohm.Fmt.FMT with type t = [ `Public | `Normal | `Private ]
+module ListView : Ohm.Fmt.FMT with type t = [ `Viewers | `Registered | `Managers ] 
 
 module Satellite : sig
 
@@ -47,6 +48,7 @@ module Get : sig
   val iid      :            'any t -> IInstance.t 
   val template : [<`Admin|`View] t -> ITemplate.Group.t
   val admins   : [<`Admin|`View] t -> IAvatar.t list 
+  val listView : [<`Admin|`View] t -> ListView.t
 
   (* Helper properties *)
   val public   : [<`Admin|`View] t -> bool 
@@ -61,7 +63,7 @@ end
 val create : 
      self:'any MActor.t
   -> name:string
-  -> vision:Vision.t 
+  -> vision:Vision.t
   -> iid:[`CreateGroup] IInstance.id
   -> ITemplate.Group.t
   -> (#O.ctx,IGroup.t) Ohm.Run.t 
@@ -77,6 +79,7 @@ module Set : sig
   val info : 
        name:TextOrAdlib.t option 
     -> vision:Vision.t
+    -> listView:ListView.t
     -> [`Admin] t
     -> 'any MActor.t
     -> (#O.ctx,unit) Ohm.Run.t 

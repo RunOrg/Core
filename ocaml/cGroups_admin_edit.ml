@@ -9,9 +9,10 @@ open CGroups_admin_common
 let template () = 
 
   let inner = 
-    OhmForm.begin_object (fun ~name ~vision -> (object
-      method name   = name
-      method vision = vision
+    OhmForm.begin_object (fun ~name ~vision ~listView -> (object
+      method name     = name
+      method vision   = vision
+      method listView = listView
     end))
       
     |> OhmForm.append (fun f name -> return $ f ~name) 
@@ -35,6 +36,21 @@ let template () =
 			`Private, Some `Secret ])
 	   (fun group -> return $ Some (MGroup.Get.vision group))
 	   OhmForm.keep)	
+
+    |> OhmForm.append (fun f listView -> return $ f ~listView) 
+	(VEliteForm.radio     
+	   ~label:(AdLib.get `Group_Edit_ListView)
+	   ~detail:(AdLib.get `Group_Edit_ListView_Detail)
+	   ~format:MGroup.ListView.fmt
+	   ~source:(List.map 
+		      (fun x -> x, Asset_Event_StatusRadio.render (object
+			method status = None
+			method label = AdLib.get (`Group_Edit_ListView_Label x)
+		       end))
+		      [ `Viewers ; `Registered ; `Managers ])
+	   (fun group -> return $ Some (MGroup.Get.listView group))
+	   OhmForm.keep)	
+
   in
 
   let html = Asset_Group_Edit.render () in
@@ -66,8 +82,9 @@ let () = define UrlClient.Members.def_edit begin fun parents group access ->
     in
 
     let vision = BatOption.default `Normal (result # vision) in
+    let listView = BatOption.default `Managers (result # listView) in 
 
-    let! () = ohm $ MGroup.Set.info ~name ~vision group (access # actor) in
+    let! () = ohm $ MGroup.Set.info ~name ~vision ~listView group (access # actor) in
 
     (* Redirect to main page *)
 

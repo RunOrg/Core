@@ -4,8 +4,9 @@ open Ohm
 open Ohm.Universal
 open BatPervasives
 
-module E    = MGroup_core
-module Can  = MGroup_can
+module E      = MGroup_core
+module Can    = MGroup_can
+module Config = MGroup_config
 
 (* Primary properties *)
 
@@ -16,6 +17,7 @@ let group t = (Can.data t).E.gid
 let iid t = (Can.data t).E.iid
 let template t = (Can.data t).E.tid
 let admins t = IDelegation.avatars (Can.data t).E.admins
+let listView t = Config.group_read (template t) (Can.data t).E.config 
 
 (* Helper properties *)
 
