@@ -7,6 +7,7 @@ val admins : IAvatar.t list -> ('a,#O.ctx) t
 val info : 
      name:TextOrAdlib.t option 
   -> vision:MGroup_vision.t
+  -> listView:MGroup_listView.t
   -> ('a,#O.ctx) t
   
 

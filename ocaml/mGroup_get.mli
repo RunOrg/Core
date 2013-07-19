@@ -8,6 +8,7 @@ val group    :            'any MGroup_can.t -> IAvatarSet.t
 val iid      :            'any MGroup_can.t -> IInstance.t 
 val template : [<`Admin|`View] MGroup_can.t -> ITemplate.Group.t
 val admins   : [<`Admin|`View] MGroup_can.t -> IAvatar.t list 
+val listView : [<`Admin|`View] MGroup_can.t -> MGroup_listView.t 
   
 (* Helper properties *)
 val public   : [<`Admin|`View] MGroup_can.t -> bool 

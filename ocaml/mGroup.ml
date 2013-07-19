@@ -7,6 +7,7 @@ open BatPervasives
 type 'relation t = 'relation MGroup_can.t
 
 module Vision    = MGroup_vision 
+module ListView  = MGroup_listView
 module Signals   = MGroup_signals
 module Can       = MGroup_can 
 module Get       = MGroup_get
