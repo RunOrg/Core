@@ -42,7 +42,11 @@ let template () =
 	   ~label:(AdLib.get `Group_Edit_ListView)
 	   ~detail:(AdLib.get `Group_Edit_ListView_Detail)
 	   ~format:MGroup.ListView.fmt
-	   ~source:(List.map (fun x -> x, AdLib.write (`Group_Edit_ListView_Label x))
+	   ~source:(List.map 
+		      (fun x -> x, Asset_Event_StatusRadio.render (object
+			method status = None
+			method label = AdLib.get (`Group_Edit_ListView_Label x)
+		       end))
 		      [ `Viewers ; `Registered ; `Managers ])
 	   (fun group -> return $ Some (MGroup.Get.listView group))
 	   OhmForm.keep)	
