@@ -75,17 +75,20 @@ let render ?(hidepic=false) ~public ~menu (owid,cuid,iid) =
       Action.url UrlClient.newhere key () 
     in
 
-    let search = 
-      if public || user = None then
-	None
-      else
-	Some (object
-	  method dyn = JsCode.Endpoint.to_json 
-	    (JsCode.Endpoint.of_url (Action.url UrlClient.atom key None))
-	  method view = JsCode.Endpoint.to_json 
-	    (JsCode.Endpoint.of_url (Action.url UrlClient.viewAtom key ()))
-	end)
-    in
+    let! search = ohm begin 
+      let! () = true_or (return None) (not public) in
+      let! cuid = req_or (return None) cuid in
+      (* Only needed to determine if search can happen... *)
+      let  cuid = ICurrentUser.Assert.is_old cuid in  
+      let! actor = ohm_req_or (return None) (MAvatar.identify (instance # id) cuid) in
+      let! _ = ohm_req_or (return None) (MInstanceAccess.can_search_atoms actor) in
+      return (Some (object
+	method dyn = JsCode.Endpoint.to_json 
+	  (JsCode.Endpoint.of_url (Action.url UrlClient.atom key None))
+	method view = JsCode.Endpoint.to_json 
+	  (JsCode.Endpoint.of_url (Action.url UrlClient.viewAtom key ()))
+      end))
+    end in
 
     return $ Some (object
       method hidepic = hidepic
