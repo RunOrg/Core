@@ -45,7 +45,7 @@ module Get : sig
   val iid      :    'any t -> IInstance.t
   val process  :    'any t -> process
   val state    : [`View] t -> state
-  val data     : [`View] t -> (Field.t, Ohm.Json.t) BatPMap.t
+  val data     : [`View] t -> (Field.t, Ohm.Json.t) BatMap.t
   val assignee : [`View] t -> IAvatar.t option 
   val notified : [`View] t -> IAvatar.t list
   val created  : [`View] t -> IAvatar.t * float
@@ -63,7 +63,7 @@ module Set : sig
        ?state:state
     -> ?assignee:IAvatar.t option
     -> ?notified:IAvatar.t list
-    -> ?data:(Field.t,Ohm.Json.t) BatPMap.t
+    -> ?data:(Field.t,Ohm.Json.t) BatMap.t
     -> [`View] t
     -> 'any MActor.t 
     -> (#O.ctx,unit) Ohm.Run.t

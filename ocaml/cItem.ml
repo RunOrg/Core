@@ -263,7 +263,7 @@ let () = UrlClient.Item.def_comments $ CClient.action begin fun access req res -
   let! itid = req_or fail $ IItem.Deduce.from_read_token cuid itid proof in
   
   let! comments = ohm $ MComment.all itid in
-  let! htmls = ohm $ Run.list_map (snd |- CComment.render) comments in
+  let! htmls = ohm $ Run.list_map (snd %> CComment.render) comments in
   let  html = Html.concat htmls in
 
   return $ Action.json ["all", Html.to_json html] res

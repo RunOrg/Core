@@ -422,11 +422,11 @@ module Backdoor = struct
     let! list = ohm $ InstanceCountView.reduce_query ~startkey ~endkey ( ) in
     
     let  totals = List.fold_left (fun map ((_,iid),count) -> 
-      let old = try BatPMap.find iid map with Not_found -> 0 in 
-      BatPMap.add iid (old + count) map
-    ) BatPMap.empty list in 
+      let old = try BatMap.find iid map with Not_found -> 0 in 
+      BatMap.add iid (old + count) map
+    ) BatMap.empty list in 
     
-    let list   = BatPMap.foldi (fun k v acc -> (k,v) :: acc) totals [] in
+    let list   = BatMap.foldi (fun k v acc -> (k,v) :: acc) totals [] in
     let sorted = List.sort (fun (_,a) (_,b) -> compare b a) list in
     
     return sorted
@@ -445,10 +445,10 @@ let import data =
   let  edit bid = 
 
     let! broadcast = ohm $ Tbl.get bid in 
-    let  delete    = BatOption.bind (fun i -> i.Item.delete) broadcast in
-    let  forwards  = BatOption.default 0 $ BatOption.bind (fun i -> match i.Item.kind with
+    let  delete    = BatOption.bind broadcast (fun i -> i.Item.delete) in
+    let  forwards  = BatOption.default 0 $ BatOption.bind broadcast (fun i -> match i.Item.kind with
       | `Content c -> Some (c # forwards)
-      | `Forward _ -> None) broadcast 
+      | `Forward _ -> None) 
     in
 
     let  kind      = `Content (object

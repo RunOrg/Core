@@ -15,7 +15,7 @@ let () = define UrlMe.Account.def_picture begin fun owid cuid ->
   O.Box.fill begin
 
     let! user = ohm $ O.decay (MUser.get (IUser.Deduce.can_view cuid)) in
-    let  pic  = BatOption.bind (#picture) user in 
+    let  pic  = BatOption.bind user (#picture) in 
     let  id   = match pic with 
       | None -> "" 
       | Some fid -> IFile.to_string (IFile.decay fid) ^ "/" ^ IFile.Deduce.make_getPic_token cuid fid

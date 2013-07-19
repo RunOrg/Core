@@ -31,7 +31,7 @@ let () = define UrlMe.Notify.def_block begin fun owid cuid ->
   O.Box.fill begin
 
     let! sta_iids  = ohm (MAvatar.user_instances (IUser.Deduce.can_view_inst cuid)) in
-    let! instances = ohm (Run.list_filter (snd |- MInstance.get) sta_iids) in 
+    let! instances = ohm (Run.list_filter (snd %> MInstance.get) sta_iids) in 
     let  instances = List.sort (fun a b -> compare (a # name) (b # name)) instances in 
 
     let uid = IUser.Deduce.can_block cuid in 

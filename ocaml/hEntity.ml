@@ -167,7 +167,7 @@ module Can = functor (C:CAN_ARG) -> struct
   let make id ?actor data = if valid ?actor data then Some {
     id ;
     data ;
-    actor = BatOption.bind MActor.member actor ;
+    actor = BatOption.bind actor MActor.member ;
   } else None
   
   let admin_access t = 

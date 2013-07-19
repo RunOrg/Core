@@ -174,7 +174,7 @@ module Answer = struct
     in
     let on_obliterate_avatar (aid,_) = 
       let! list = ohm $ ByAvatar.doc aid in
-      let! _    = ohm $ Run.list_map (#id |- obliterate) list in
+      let! _    = ohm $ Run.list_map (#id %> obliterate) list in
       return ()
     in
     Sig.listen MAvatar.Signals.on_obliterate on_obliterate_avatar
@@ -193,7 +193,7 @@ module Answer = struct
     let endkey = (pid,answer,IAvatar.of_id Id.largest) in
     let limit = count + 1 in 
     let! list = ohm $ ByAnswerView.query ~startkey ~endkey ~limit () in
-    let  list = List.map (#key |- (fun (_,_,aid) -> aid)) list in
+    let  list = List.map (#key %> (fun (_,_,aid) -> aid)) list in
     return (OhmPaging.slice ~count list) 
 
   let get avatar poll = 

@@ -8,12 +8,12 @@ module Core = MMail_core
 module All  = MMail_all
 
 module InstanceSet = Fmt.Make(struct
-  type t = IInstance.t BatPSet.t
+  type t = IInstance.t BatSet.t
   let json_of_t s =
     Json.of_list IInstance.to_json 
-      (BatPSet.fold (fun x xs -> x :: xs) s [])
+      (BatSet.fold (fun x xs -> x :: xs) s [])
   let t_of_json l = 
-    BatPSet.of_list 
+    BatSet.of_list 
       (Json.to_list IInstance.of_json l) 
 end)
 
@@ -31,8 +31,8 @@ end
 
 let default = Data.({
   bounced = false ;
-  allowed = BatPSet.empty ;
-  blocked = BatPSet.empty ;
+  allowed = BatSet.empty ;
+  blocked = BatSet.empty ;
 })
 
 let do_bounce t = 
@@ -40,17 +40,17 @@ let do_bounce t =
     Data.({ t with bounced = true })
 
 let do_allow iid t = 
-  if BatPSet.mem iid t.Data.allowed then t else 
+  if BatSet.mem iid t.Data.allowed then t else 
     Data.({ t with 
-      allowed = BatPSet.add iid t.allowed ;
-      blocked = BatPSet.remove iid t.blocked ;
+      allowed = BatSet.add iid t.allowed ;
+      blocked = BatSet.remove iid t.blocked ;
     })
 
 let do_block iid t = 
-  if BatPSet.mem iid t.Data.blocked then t else 
+  if BatSet.mem iid t.Data.blocked then t else 
     Data.({ t with 
-      allowed = BatPSet.remove iid t.allowed ;
-      blocked = BatPSet.add iid t.blocked
+      allowed = BatSet.remove iid t.allowed ;
+      blocked = BatSet.add iid t.blocked
     })
 
 include CouchDB.Convenience.Table(struct let db = O.db "mail-user" end)(IUser)(Data) 
@@ -58,8 +58,8 @@ include CouchDB.Convenience.Table(struct let db = O.db "mail-user" end)(IUser)(D
 let get uid iid = 
   let iid = IInstance.decay iid and uid = IUser.decay uid in 
   let! status = ohm_req_or (return None) (Tbl.get uid) in
-  if BatPSet.mem iid status.Data.allowed then return (Some true)
-  else if BatPSet.mem iid status.Data.blocked then return (Some false)
+  if BatSet.mem iid status.Data.allowed then return (Some true)
+  else if BatSet.mem iid status.Data.blocked then return (Some false)
   else return None
 
 let can_send uid = 
@@ -90,8 +90,8 @@ let attitude uid iid =
   let! status = ohm (Tbl.get uid) in
   let  status = BatOption.default default status in 
   if status.Data.bounced then return `Bounced else
-    if BatPSet.mem iid status.Data.blocked then return `Blocked else
-      if BatPSet.mem iid status.Data.allowed then return `Allowed else
+    if BatSet.mem iid status.Data.blocked then return `Blocked else
+      if BatSet.mem iid status.Data.allowed then return `Allowed else
 	let! confirmed = ohm (O.decay (MUser.confirmed uid)) in
 	if confirmed then return `NewContact else
 	  let! silent = ohm (All.silent uid iid) in

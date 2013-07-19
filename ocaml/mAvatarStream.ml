@@ -61,7 +61,7 @@ let nobody = `Nobody
 
 module Signals = struct
   let is_in_group_call, is_in_group = Sig.make (Run.list_exists identity)
-  let all_in_group_call, all_in_group = Sig.make (Run.list_map identity |- Run.map List.concat)
+  let all_in_group_call, all_in_group = Sig.make (Run.list_map identity %> Run.map List.concat)
 end
 
 (* Iterating through all delegated-to avatars. *)

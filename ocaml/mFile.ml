@@ -16,7 +16,7 @@ type version = MFile_common.version
 
 let own_pic cuid id = 
   let usr = IUser.Deduce.is_anyone cuid in 
-  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->
+  Tbl.get (IFile.decay id) |> Run.map (flip BatOption.bind begin fun file ->
     if file # usr = IUser.decay usr && file # ins = None && file # k = `Picture then 
       Some (IFile.Assert.own_pic id)
     else None
@@ -24,7 +24,7 @@ let own_pic cuid id =
 
 let instance_pic ins id = 
   let ins = IInstance.decay ins in 
-  Tbl.get (IFile.decay id) |> Run.map (BatOption.bind begin fun file ->  
+  Tbl.get (IFile.decay id) |> Run.map (flip BatOption.bind begin fun file ->  
     if file # ins = Some ins && file # k = `Picture then 
       Some (IFile.Assert.ins_pic id)
     else None
@@ -106,7 +106,7 @@ let delete_now fid =
 
 let item fid = 
   let   fid = IFile.decay fid in 
-  Run.map (BatOption.bind (#item)) (Tbl.get fid) 
+  Run.map (flip BatOption.bind (#item)) (Tbl.get fid) 
 
 (* Check that a file version is currently available for download *)
 

@@ -56,7 +56,7 @@ let rec past ?actor ?start ~count iid =
 
     let  limit = count + 1 in
 
-    let! now      = ohmctx (#date |- Date.day_only) in
+    let! now      = ohmctx (#date %> Date.day_only) in
     let  startkey, startid = match start with 
       | Some (date,eid) -> (iid,date), Some (IEvent.to_id eid)
       | None            -> (iid,now),  None

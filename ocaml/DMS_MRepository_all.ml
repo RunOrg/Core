@@ -31,7 +31,7 @@ let visible ?actor ?start ~count iid =
     let! list = ohm $ AllView.doc_query ~startkey:iid ?startid ~endkey:iid ~limit:(count+1) () in
     let  list, next = OhmPaging.slice ~count list in     
     let! list = ohm $ Run.list_filter (viewable ?actor) list in
-    let  next = BatOption.map (#id |- DMS_IRepository.of_id) next in
+    let  next = BatOption.map (#id %> DMS_IRepository.of_id) next in
     return (list, next)
   end
 

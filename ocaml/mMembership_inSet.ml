@@ -50,7 +50,7 @@ let list_members_by_status status ?start ~count group =
     ()
   in
 
-  return (OhmPaging.slice ~count (List.map (#key |- (fun (_,_,aid) -> aid)) list))
+  return (OhmPaging.slice ~count (List.map (#key %> (fun (_,_,aid) -> aid)) list))
 
 let list_members ?start ~count group = 
   list_members_by_status `Member ?start ~count group
@@ -133,7 +133,7 @@ let avatars gid ~start ~count =
     ()
   in
 
-  let list = List.map (#key |- snd) list in 
+  let list = List.map (#key %> snd) list in 
 
   let rec extract n = function
     | [] -> [], None

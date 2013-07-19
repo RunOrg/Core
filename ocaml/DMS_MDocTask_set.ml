@@ -12,21 +12,21 @@ let info ?state ?assignee ?notified ?data t actor =
   let aid = IAvatar.decay (MActor.avatar actor) in
   let id = DMS_IDocTask.decay t.Can.id in 
   let diffs = BatList.filter_map identity [
-    BatOption.bind (fun s -> 
+    BatOption.bind state (fun s -> 
       let (s',_,_) = t.Can.data.E.state in
-      if s = s' then None else Some (`SetState (s, aid))) state ;
-    BatOption.bind (fun aidopt -> 
-      if aidopt = t.Can.data.E.assignee then None else Some (`SetAssignee aidopt)) assignee ;
-    BatOption.bind (fun aids -> 
+      if s = s' then None else Some (`SetState (s, aid))) ;
+    BatOption.bind assignee (fun aidopt -> 
+      if aidopt = t.Can.data.E.assignee then None else Some (`SetAssignee aidopt)) ;
+    BatOption.bind notified (fun aids -> 
       let aids = List.sort compare aids in 
-      if aids = t.Can.data.E.notified then None else Some (`SetNotified aids)) notified ;
-    BatOption.bind (fun data ->	
+      if aids = t.Can.data.E.notified then None else Some (`SetNotified aids)) ;
+    BatOption.bind data (fun data ->	
       let data = 
-	BatPMap.filteri 
-	  (fun k v -> v <> (try BatPMap.find k t.Can.data.E.data with Not_found -> Json.Null)) 
+	BatMap.filter
+	  (fun k v -> v <> (try BatMap.find k t.Can.data.E.data with Not_found -> Json.Null)) 
 	  data 
       in
-      if BatPMap.is_empty data then None else Some (`SetData data)) data
+      if BatMap.is_empty data then None else Some (`SetData data))
   ] in
   if diffs <> [] then 
     O.decay begin
@@ -51,7 +51,7 @@ let create ~process ~actor did =
     state = (state, aid, now) ; 
     active ;
     process ;
-    data = BatPMap.empty ;
+    data = BatMap.empty ;
     assignee = None ;
     notified = [] ;
     created = (aid, now) ;    

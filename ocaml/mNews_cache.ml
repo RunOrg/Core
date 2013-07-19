@@ -42,7 +42,7 @@ let raw_user_cache ?start ~count uid =
   let  list, next = OhmPaging.slice ~count list in 
   return (
     List.map (fun i -> (i # doc).Doc.what) list,
-    BatOption.map (#key |- snd) next 
+    BatOption.map (#key %> snd) next 
     )
 
 let cache_item uid item = 

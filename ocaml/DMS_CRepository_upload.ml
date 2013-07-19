@@ -63,7 +63,7 @@ let () = Url.def_upform $ CClient.action begin fun access req res ->
 	method cancel = Action.url UrlUpload.Client.cancel (req # server) () 
 	method inner  = inner
       end))
-    (IFile.Deduce.get_doc |- IFile.Deduce.make_getDoc_token cuid) 
+    (IFile.Deduce.get_doc %> IFile.Deduce.make_getDoc_token cuid) 
     (Action.url UrlUpload.Client.Doc.ok (req # server))
     res
 

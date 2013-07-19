@@ -25,7 +25,7 @@ val fields :
   -> (#O.ctx, (Field.t * < label : O.i18n ; kind : FieldType.t >) list) Ohm.Run.t
 
 module Data : sig
-  type t = (Field.t,Ohm.Json.t) BatPMap.t
+  type t = (Field.t,Ohm.Json.t) BatMap.t
 end
 
 module Search : sig
