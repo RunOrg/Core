@@ -18,7 +18,7 @@ end
 
 let erase_if_still_temp =   
   let task = O.async # define "file.erase-temp" IFile.fmt 
-    (fun id -> Tbl.delete_if id (#k |- (=) `Temp))
+    (fun id -> Tbl.delete_if id (#k %> (=) `Temp))
   in
   task ~delay:600.
 
@@ -415,7 +415,7 @@ let define_async_confirmer ~kind ~name ~process =
 		end) 
     in
     
-    let! update_succeeded = ohm $ Tbl.transact id (transform |- return) in
+    let! update_succeeded = ohm $ Tbl.transact id (transform %> return) in
 
     let! () = true_or fail update_succeeded in
    

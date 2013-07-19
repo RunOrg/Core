@@ -10,6 +10,6 @@ val target_picker : ?query:bool -> [`IsToken] CAccess.t ->
    -> ('seed -> ('ctx, AvatarOrGroup.t list) Ohm.Run.t)
    -> (OhmForm.field
        -> AvatarOrGroup.t list
-       -> ('ctx, ('result, OhmForm.field * string) BatStd.result) Ohm.Run.t)
+       -> ('ctx, ('result, OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
    -> ('ctx, 'seed, 'result) OhmForm.template
   ) Ohm.Run.t

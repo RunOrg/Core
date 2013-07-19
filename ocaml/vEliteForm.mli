@@ -5,28 +5,28 @@ val text :
   -> ?left:bool
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
-  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 val textarea : 
       label:('c,string) Ohm.Run.t
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
-  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 val rich : 
       label:('c,string) Ohm.Run.t
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
-  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 val date : 
       label:('c,string) Ohm.Run.t
   -> ?detail:('c,string) Ohm.Run.t
   ->  ('s -> ('c,string) Ohm.Run.t)
-  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> string -> ('c,('r,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 val picker : 
@@ -38,7 +38,7 @@ val picker :
   -> ?dynamic:Ohm.JsCode.Endpoint.t
   -> ?max:int
   ->  ('s -> ('c,'data list) Ohm.Run.t)
-  ->  (OhmForm.field -> 'data list -> ('c,('r,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> 'data list -> ('c,('r,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('c,'s,'r) OhmForm.template
 
 module Picker : sig 
@@ -58,7 +58,7 @@ val radio :
   ->  format:'data Ohm.Fmt.fmt 
   ->  source:('data * ('ctx,Ohm.Html.writer) Ohm.Run.t) list 
   ->  ('seed -> ('ctx,'data option) Ohm.Run.t)
-  ->  (OhmForm.field -> 'data option -> ('ctx,('result,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> 'data option -> ('ctx,('result,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('ctx,'seed,'result) OhmForm.template    
 
 val checkboxes : 
@@ -67,7 +67,7 @@ val checkboxes :
   ->  format:'data Ohm.Fmt.fmt 
   ->  source:('data * ('ctx,Ohm.Html.writer) Ohm.Run.t) list 
   ->  ('seed -> ('ctx,'data list) Ohm.Run.t)
-  ->  (OhmForm.field -> 'data list -> ('ctx,('result,OhmForm.field * string) BatStd.result) Ohm.Run.t)
+  ->  (OhmForm.field -> 'data list -> ('ctx,('result,OhmForm.field * string) BatPervasives.result) Ohm.Run.t)
   ->  ('ctx,'seed,'result) OhmForm.template    
     
 val with_ok_button : 

@@ -10,7 +10,7 @@ module type DEF = sig
   val api : ( (IWhite.t option, unit) Action.request -> Action.response -> Action.response O.run) -> unit
   module Format : Fmt.FMT
   val example : Format.t
-  val action : [`Admin] ICurrentUser.id -> Format.t -> (string,string) BatStd.result O.run
+  val action : [`Admin] ICurrentUser.id -> Format.t -> (string,string) BatPervasives.result O.run
 end
 
 module Make = functor (Def:DEF) -> struct

@@ -41,7 +41,7 @@ module Cfg = struct
     | `SetTitle   title -> { t with title ; time }
     | `SetBody    body  -> { t with body ; time }
     | `AddGroups  gids  -> { t with gids = BatList.sort_unique compare (gids @ t.gids) }
-    | `AddAvatars aids  -> { t with aids = BatList.(remove (sort_unique compare (aids @ t.aids)) t.crea) }  
+    | `AddAvatars aids  -> { t with aids = BatList.(remove (sort_unique Pervasives.compare (aids @ t.aids) ) t.crea) }  
     | `Delete     aid   -> { t with del = Some (BatOption.default aid t.del) }
   )
 

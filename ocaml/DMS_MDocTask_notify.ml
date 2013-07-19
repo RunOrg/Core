@@ -61,17 +61,17 @@ let task = O.async # define "dms-doctask-notify" Core.Store.VersionId.fmt begin 
      added to the list of notified people. If one of them is the new assignee, however, 
      do not tell them that they are also going to be notified ! *)
 
-  let before_notified = BatPSet.of_list (
+  let before_notified = BatSet.of_list (
     match before.Core.assignee with 
     | None -> before.Core.notified 
     | Some aid -> aid :: before.Core.notified) in
 
-  let after_notified = BatPSet.of_list after.Core.notified in 
+  let after_notified = BatSet.of_list after.Core.notified in 
 
   let new_notified = 
-    BatPSet.filter (fun aid -> not (BatPSet.mem aid before_notified)) after_notified 
-    |> (match before.Core.assignee with None -> identity | Some aid -> BatPSet.remove aid) 
-    |> (fun set -> BatPSet.fold (fun a l -> a :: l) set [])
+    BatSet.filter (fun aid -> not (BatSet.mem aid before_notified)) after_notified 
+    |> (match before.Core.assignee with None -> identity | Some aid -> BatSet.remove aid) 
+    |> (fun set -> BatSet.fold (fun a l -> a :: l) set [])
   in 
  
   let! () = ohm (Run.list_iter (send `SetNotified) new_notified) in
@@ -81,7 +81,7 @@ let task = O.async # define "dms-doctask-notify" Core.Store.VersionId.fmt begin 
      they already received an email for this change). The new assignee should 
      be told ! *)
 
-  let old_notified = BatPSet.fold (fun a l -> a :: l) before_notified [] in
+  let old_notified = BatSet.fold (fun a l -> a :: l) before_notified [] in
 
   match after.Core.assignee with 
   | Some aid when after.Core.assignee <> before.Core.assignee -> 

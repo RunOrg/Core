@@ -6,7 +6,7 @@ open BatPervasives
 
 let query ~count ?start access atid = 
 
-  let start = BatOption.bind DMS_IDocument.of_json_safe start in
+  let start = BatOption.bind start DMS_IDocument.of_json_safe in
   let! list, next = ohm (DMS_MDocument.Search.by_atom ~actor:(access # actor) ?start ~count atid) in
 
   let! htmls = ohm $ Run.list_filter (fun doc -> 

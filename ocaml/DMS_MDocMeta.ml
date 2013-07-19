@@ -35,16 +35,16 @@ let fields iid =
 (* Metadata management -------------------------------------------------------------------------------------- *)
 
 module Data = Fmt.Make(struct
-  type t = (Field.t,Json.t) BatPMap.t
+  type t = (Field.t,Json.t) BatMap.t
   let json_of_t t = 
-    Json.Object (BatPMap.foldi (fun k v l -> (k,v) :: l) t [])
+    Json.Object (BatMap.foldi (fun k v l -> (k,v) :: l) t [])
   let t_of_json json = 
-    List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty 
+    List.fold_left (fun m (k,v) -> BatMap.add k v m) BatMap.empty 
       (Json.to_assoc json) 
 end)
 
 let clean m = 
-  BatPMap.filter ((<>) Json.Null) m 
+  BatMap.filter (fun _ -> (<>) Json.Null) m 
 
 module Cfg = struct
 
@@ -70,7 +70,7 @@ module Cfg = struct
   module Diff = Data 
 
   let apply diff = return begin fun _ _ data ->
-    return (clean (BatPMap.foldi BatPMap.add diff data))
+    return (clean (BatMap.foldi BatMap.add diff data))
   end
 
   module VersionData = MUpdateInfo
@@ -93,7 +93,7 @@ module Get = struct
 end
 
 let empty id = 
-  { id ; exists = false ; data = BatPMap.empty }
+  { id ; exists = false ; data = BatMap.empty }
 
 module Set = struct
   let data data t actor = 
@@ -102,14 +102,14 @@ module Set = struct
       let id = DMS_IDocument.decay t.id in 
       if t.exists then 
 	let diff = 
-	  BatPMap.filteri 
-	    (fun k v -> v <> (try BatPMap.find k t.data with Not_found -> Json.Null)) 
+	  BatMap.filter 
+	    (fun k v -> v <> (try BatMap.find k t.data with Not_found -> Json.Null)) 
 	    data 
 	in 
 	let! _ = ohm $ Store.update ~id ~diffs:[diff] ~info () in 
 	return () 
       else
-	let! _ = ohm $ Store.create ~id ~init:BatPMap.empty ~diffs:[data] ~info () in
+	let! _ = ohm $ Store.create ~id ~init:BatMap.empty ~diffs:[data] ~info () in
 	return ()
     end 
 end
@@ -161,7 +161,7 @@ module Search = struct
     let  startid  = BatOption.map DMS_IDocument.to_id start in
     let  limit = count + 1 in
     let! list = ohm $ ByAtom.query ~startkey ?startid ~endkey ~endinclusive:true ~limit () in
-    let  list = List.map (#id |- DMS_IDocument.of_id) list in
+    let  list = List.map (#id %> DMS_IDocument.of_id) list in
     let  list, next = OhmPaging.slice ~count list in 
     return (list, next)
 

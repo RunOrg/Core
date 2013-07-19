@@ -53,7 +53,7 @@ end
 let get_field gid name = 
   let! fields = ohm $ MAvatarSet.Fields.local gid in
   return 
-    (try Some (List.find ((#name) |- (=) name) fields)
+    (try Some (List.find ((#name) %> (=) name) fields)
      with _ -> None)
     
 let get_format = function

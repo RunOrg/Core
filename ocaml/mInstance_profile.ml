@@ -161,11 +161,11 @@ let tag_stats_get () =
   let  list = List.filter (fun (_,count) -> count > 0) list in
 
   let  map  = List.fold_left (fun map ((owid,tag),count) -> 
-    let list = try BatPMap.find owid map with Not_found -> [] in
-    BatPMap.add owid ((tag,count) :: list) map
-  ) BatPMap.empty list in 
+    let list = try BatMap.find owid map with Not_found -> [] in
+    BatMap.add owid ((tag,count) :: list) map
+  ) BatMap.empty list in 
 
-  let  map  = BatPMap.map (List.sort (fun a b -> compare (snd b) (snd a))) map in
+  let  map  = BatMap.map (List.sort (fun a b -> compare (snd b) (snd a))) map in
 
   return map
 
@@ -182,7 +182,7 @@ let tag_stats owid =
 		    let () = tag_stats_cache := Some (map, time) in
 		    return map
   end in
-  return (try BatPMap.find owid map with Not_found -> [])
+  return (try BatMap.find owid map with Not_found -> [])
 
 (* Search instances ======================================================================================== *)
 
@@ -244,7 +244,7 @@ let search ?start ~count owid search =
   return begin 
     List.map (fun i -> extract (IInstance.of_id i#id) i#doc) 
       (List.filter (fun i -> filter (i#doc).Info.vtag) list),
-    BatOption.map (#id |- IInstance.of_id) next
+    BatOption.map (#id %> IInstance.of_id) next
   end
 
 (* Install the instance if not bound and owner ============================================================= *)

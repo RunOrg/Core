@@ -167,13 +167,13 @@ module Flat = struct
       List.fold_left begin fun (profile,groups) (key,json) ->
 	match key with 
 	  | `Group (gid,name) ->
-	    let current = try BatPMap.find gid groups with Not_found -> [] in
-	    profile, BatPMap.add gid ((name,json) :: current) groups
+	    let current = try BatMap.find gid groups with Not_found -> [] in
+	    profile, BatMap.add gid ((name,json) :: current) groups
 	  | `Profile key -> 
 	    (key,json) :: profile, groups
-      end ([],BatPMap.empty) data 
+      end ([],BatMap.empty) data 
     in
-    let groups = BatPMap.foldi (fun k l acc -> (k,l) :: acc) groups [] in
+    let groups = BatMap.foldi (fun k l acc -> (k,l) :: acc) groups [] in
     (object
       method profile = profile
       method groups  = groups

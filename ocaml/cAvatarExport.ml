@@ -67,7 +67,7 @@ let start gid =
     let! fields = ohm $ MAvatarSet.Fields.local gid in 
     let  from_fields = BatList.filter_map (fun field -> 
       let eval = `Group (IAvatarSet.decay gid, `Field (field # name)) in
-      if List.exists (snd |- (=) eval) from_columns then None else
+      if List.exists (snd %> (=) eval) from_columns then None else
 	Some (field # label, eval)
     ) fields in 
 

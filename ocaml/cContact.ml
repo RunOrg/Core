@@ -8,21 +8,21 @@ let () = UrlSplash.def_contact begin fun req res ->
 
   let data = match req # post with 
     | None 
-    | Some (`JSON _) -> BatPMap.empty 
+    | Some (`JSON _) -> BatMap.empty 
     | Some (`POST m) -> m
   in
 
   let data = match req # cookie "mailing" with 
     | None -> data
-    | Some mailing -> BatPMap.add "mailing" mailing data in
+    | Some mailing -> BatMap.add "mailing" mailing data in
 
-  let redirect = try Some (BatPMap.find "redirect" data) with Not_found -> None in
-  let data = BatPMap.remove "redirect" data in 
+  let redirect = try Some (BatMap.find "redirect" data) with Not_found -> None in
+  let data = BatMap.remove "redirect" data in 
 
-  let uids = try [ IUser.of_string (BatPMap.find "to" data) ] with Not_found -> MAdmin.list () in
-  let data = BatPMap.remove "to" data in 
+  let uids = try [ IUser.of_string (BatMap.find "to" data) ] with Not_found -> MAdmin.list () in
+  let data = BatMap.remove "to" data in 
 
-  let write html = BatPMap.iter begin fun k v -> 
+  let write html = BatMap.iter begin fun k v -> 
     Html.concat [ Html.str "<dt>" ;
 		  Html.esc k ;
 		  Html.str "</dt><dd>" ;

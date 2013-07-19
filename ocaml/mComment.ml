@@ -74,7 +74,7 @@ let _ =
   let obliterate cid = remove cid in
   let on_obliterate_avatar (aid,_) = 
     let! list = ohm $ ByAvatar.doc aid in 
-    let! _    = ohm $ Run.list_map (#id |- IComment.of_id |- obliterate) list in 
+    let! _    = ohm $ Run.list_map (#id %> IComment.of_id %> obliterate) list in 
     return ()
   in
   Sig.listen MAvatar.Signals.on_obliterate on_obliterate_avatar

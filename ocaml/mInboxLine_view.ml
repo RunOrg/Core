@@ -155,7 +155,7 @@ let list ?start ?(filter=`All) ~count actor f =
 
   let  list, next = OhmPaging.slice ~count list in 
   let! list = ohm $ Run.list_filter extract list in 
-  let  next = BatOption.map (#key |- (fun (_,_,t) -> t)) next in
+  let  next = BatOption.map (#key %> (fun (_,_,t) -> t)) next in
 
   return (list, next) 
 

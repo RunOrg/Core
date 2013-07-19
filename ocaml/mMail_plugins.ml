@@ -34,7 +34,7 @@ let solve key =
   let! now  = ohmctx (#time) in
   let! mids = ohm (SolvableView.doc_query ~startkey:key ~endkey:key ~endinclusive:true ~limit:5 ()) in
   if mids = [] then return () else
-    let! () = ohm (Run.list_iter (#id |- IMail.of_id |- Core.solved) mids) in
+    let! () = ohm (Run.list_iter (#id %> IMail.of_id %> Core.solved) mids) in
     task_solve key 
 
 let () = def_solve solve

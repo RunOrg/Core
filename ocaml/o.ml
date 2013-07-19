@@ -109,7 +109,7 @@ let register s u a body =
 
 let declare s u a = 
   let endpoint, define = Action.declare s u a in
-  endpoint, action |- define
+  endpoint, action %> define
 
 (* Box management ------------------------------------------------------------------------------------------- *)
 

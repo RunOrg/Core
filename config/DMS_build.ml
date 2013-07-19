@@ -27,14 +27,14 @@ let field f =
     (kind f.kind)
 
 let fieldmap () = 
-  Printf.sprintf "let fieldmap = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty [ %s ]"
+  Printf.sprintf "let fieldmap = List.fold_left (fun m (k,v) -> BatMap.add k v m) BatMap.empty [ %s ]"
     (String.concat ";" (List.map field (!fields))) 
 
 let fieldcheck key = 
   List.exists (fun f -> f.key = key) (!fields) 
 
 let fieldfind key = 
-  Printf.sprintf "%S, BatPMap.find %S fieldmap" key key
+  Printf.sprintf "%S, BatMap.find %S fieldmap" key key
 
 let fieldset (name,keys) = 
   Printf.sprintf "let fs%s : fs = [ %s ]" name

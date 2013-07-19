@@ -15,7 +15,7 @@ module ShareFmt = Fmt.Make(struct
 end)
 
 let is_shared repo shared_rids = 
-  BatPSet.mem (IRepository.decay (MRepository.Get.id repo)) shared_rids 
+  BatSet.mem (IRepository.decay (MRepository.Get.id repo)) shared_rids 
 
 let allowed current_rid share repo = 
   if current_rid = IRepository.decay (MRepository.Get.id repo) then return false else 
@@ -51,7 +51,7 @@ let render_repos ?start ~count current_rid shared_rids access self =
 let () = define Url.Doc.def_share begin fun parents rid doc access ->
   
   let shared_rids = 
-    List.fold_left (fun s repo -> BatPSet.add repo s) BatPSet.empty
+    List.fold_left (fun s repo -> BatSet.add repo s) BatSet.empty
       (MDocument.Get.repositories doc)
   in 
   

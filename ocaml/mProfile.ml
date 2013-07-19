@@ -248,7 +248,7 @@ let create iid data =
   (* Apply a first round of sharing to the old data *)
 
   let! instance = ohm $ MInstance.get iid in 
-  let  white    = BatOption.bind (#key |- snd) instance in 
+  let  white    = BatOption.bind instance (#key %> snd) in 
 
   let! (uid, source, data) = ohm $ 
     let! uid_opt = ohm $ Run.opt_bind MUser.by_email data.Data.email in
@@ -335,7 +335,7 @@ let find_or_create iid uid =
 
 let find iid uid = 
   FindView.doc (iid,uid)
-  |> Run.map (Util.first |- BatOption.map (fun v -> IProfile.of_id v # id))
+  |> Run.map (Util.first %> BatOption.map (fun v -> IProfile.of_id v # id))
 
 let find_view iid uid = 
   find (IInstance.decay iid) uid  
@@ -462,7 +462,7 @@ let _ =
   in
   let on_user_obliterated uid = 
     let! list = ohm $ ByUser.doc uid in 
-    let! () = ohm $ Run.list_iter (#id |- IProfile.of_id |- obliterate) list in 
+    let! () = ohm $ Run.list_iter (#id %> IProfile.of_id %> obliterate) list in 
     return () 
   in
   Sig.listen MUser.Signals.on_obliterate on_user_obliterated

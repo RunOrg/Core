@@ -318,8 +318,8 @@ let list_members ?start ~count instance =
   
   let last, rest = extract count members in 
     
-  let last = BatOption.map (#key |- snd) last in 
-  let rest = List.map (#id |- IAvatar.of_id) rest in 
+  let last = BatOption.map (#key %> snd) last in 
+  let rest = List.map (#id %> IAvatar.of_id) rest in 
   
   return (rest, last)
 
@@ -365,8 +365,8 @@ let list_administrators ?start ~count instance =
   
   let last, rest = extract count members in 
     
-  let last = BatOption.map (#key |- snd) last in 
-  let rest = List.map (#id |- IAvatar.of_id) rest in 
+  let last = BatOption.map (#key %> snd) last in 
+  let rest = List.map (#id %> IAvatar.of_id) rest in 
   
   return (rest, last)
 
@@ -544,7 +544,7 @@ let _ =
       
       let! list = ohm $ user_instances (IUser.Deduce.view_inst uid) in
       
-      Run.list_iter (snd |- MProfile.refresh uid) list
+      Run.list_iter (snd %> MProfile.refresh uid) list
 
   end in
 
@@ -604,7 +604,7 @@ let _ =
 
 let avatars_of_user uid = 
   let! list = ohm $ ByUserView.query ~startkey:(uid,`Contact) ~endkey:(uid,`Admin) () in
-  return $ List.map (#id |- IAvatar.of_id) list
+  return $ List.map (#id %> IAvatar.of_id) list
 
 let obliterate aid = 
   let! avatar = ohm_req_or (return ()) $ Tbl.get aid in 

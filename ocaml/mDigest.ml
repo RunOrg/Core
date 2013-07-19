@@ -42,9 +42,9 @@ let rec process_next () =
     let! result = ohm (Tbl.Raw.put id Data.({ doc with start = Some time })) in
     match result with `collision -> process_next () | `ok -> 
       let  start = Unix.gettimeofday () in
-      let  sent = List.fold_left (fun m (k,v) -> BatPMap.add k v m) BatPMap.empty doc.Data.sent in
+      let  sent = List.fold_left (fun m (k,v) -> BatMap.add k v m) BatMap.empty doc.Data.sent in
       let! sent, items = ohm (Send.send id sent) in 
-      let  sent = BatPMap.foldi (fun k v l -> (k,v) :: l) sent [] in  
+      let  sent = BatMap.foldi (fun k v l -> (k,v) :: l) sent [] in  
       let! () = ohm (Tbl.set id Data.({ start = None ; last = time ; sent })) in
       let  () = Util.log "Created digest for %s (%.2f seconds) %s" (IUser.to_string id) 
 	(Unix.gettimeofday () -. start) (if items = 0 then "" else Printf.sprintf " : %d items" items) in

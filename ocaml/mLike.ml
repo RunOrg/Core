@@ -111,7 +111,7 @@ let like who what =
       | None -> Id.gen () 
     end) in
 	
-    let! write = ohm $ Tbl.transact id (transform |- return) in
+    let! write = ohm $ Tbl.transact id (transform %> return) in
     
     Signals.on_like_call (who, liked what)
 
@@ -176,7 +176,7 @@ let _ =
   in
   let on_obliterate_avatar (aid,_) = 
     let! list = ohm $ ByAvatarView.doc aid in 
-    let! _ = ohm $ Run.list_map (#id |- obliterate) list in 
+    let! _ = ohm $ Run.list_map (#id %> obliterate) list in 
     return ()
   in
   Sig.listen MAvatar.Signals.on_obliterate on_obliterate_avatar
