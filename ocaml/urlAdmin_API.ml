@@ -38,3 +38,4 @@ let migrate = declare "Migration de données" "migrate"
 
 let set_disk = declare "Affecter de l'espace disque" "set-disk"
 
+let set_instance_access = declare "Définir droits d'un espace" "set-instance-access"
