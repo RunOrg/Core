@@ -9,3 +9,4 @@ module FSCF  = CPortal_FSCF
 module MyInnovation = CPortal_MyInnovation
 module M2014 = CPortal_M2014
 module Alfortville = CPortal_Alfortville
+module GEFeL = CPortal_GEFeL
