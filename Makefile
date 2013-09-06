@@ -14,6 +14,7 @@ all-static:
 	ohm plugins.ohmStatic portals/M2014 M2014
 	ohm plugins.ohmStatic portals/Alfortville Alfortville
 	ohm plugins.ohmStatic portals/Clichy Clichy
+	ohm plugins.ohmStatic portals/GEFeL GEFeL
 
 server:
 	make -C ocaml

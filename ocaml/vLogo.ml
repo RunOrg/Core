@@ -14,3 +14,4 @@ let render owid =
     | `Clichy -> Asset_Logo_Clichy.render ()
     | `Alfort -> Asset_Logo_Alfort.render ()  
     | `Innov  -> Asset_Logo_MyInnovation.render () 
+    | `GEFeL  -> Asset_Logo_Gefel.render ()

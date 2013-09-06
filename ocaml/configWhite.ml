@@ -7,6 +7,7 @@ let innov  = IWhite.of_string "innov"
 let m2014  = IWhite.of_string "m2014"
 let clichy = IWhite.of_string "clichy"
 let alfort = IWhite.of_string "alfort"
+let gefel  = IWhite.of_string "gefel"
 
 let all = [
   test ;
@@ -16,6 +17,7 @@ let all = [
   m2014 ;
   clichy ; 
   alfort ; 
+  gefel ;
 ]
 
 type t = 
@@ -27,6 +29,7 @@ type t =
   | `Clichy
   | `Alfort 
   | `Innov
+  | `GEFeL
   ]
 
 let represent = function
@@ -38,7 +41,8 @@ let represent = function
       | "m2014" -> `M2014
       | "innov" -> `Innov
       | "clichy" -> `Clichy
-      | "alfort" -> `Alfort 
+      | "alfort" -> `Alfort
+      | "gefel" -> `GEFeL 
       | other -> let error = "Unknown white id #" ^ other in
 		 Ohm.Util.log "%s" error ;
 		 raise Not_found
@@ -52,6 +56,7 @@ let domain id = match represent (Some id) with
   | `Innov -> "my-innovation.org" 
   | `Clichy -> "assoclichy.fr"
   | `Alfort -> "alfortville-asso.fr"
+  | `GEFeL -> "gefel-asso.org"
 
 let white = function 
   | "test.local" -> Some test
@@ -60,7 +65,8 @@ let white = function
   | "m2014.fr" -> Some m2014
   | "my-innovation.org" -> Some innov
   | "assoclichy.fr" -> Some clichy
-  | "alfortville-asso.fr" -> Some alfort 
+  | "alfortville-asso.fr" -> Some alfort
+  | "gefel-asso.org" -> Some gefel 
   | _ -> None
 
 let slice_domain domain = 
@@ -83,6 +89,7 @@ let name id = match represent id with
   | `Clichy -> "Clichy"
   | `Alfort -> "Alfortville"
   | `Innov  -> "My Innovation"
+  | `GEFeL  -> "GEFeL"
 
 let the id = match represent id with 
   | `RunOrg -> "RunOrg"
@@ -93,6 +100,7 @@ let the id = match represent id with
   | `Clichy -> "Clichy"
   | `Alfort -> "Alfortville"
   | `Innov  -> "My Innovation"
+  | `GEFeL  -> "la GEFeL"
 
 let of_the id = match represent id with 
   | `RunOrg -> "de RunOrg"
@@ -103,6 +111,7 @@ let of_the id = match represent id with
   | `Clichy -> "de Clichy"
   | `Alfort -> "d'Alfortville"
   | `Innov  -> "de My Innovation"
+  | `GEFeL  -> "de la GEFeL"
 
 let email id = match represent id with 
   | `RunOrg -> "contact@runorg.com"
@@ -113,6 +122,7 @@ let email id = match represent id with
   | `Clichy -> "contact@clichy.fr" (* TODO: find an address *)
   | `Alfort -> "contact@alfort.fr" (* TODO: find an address *) 
   | `Innov  -> "contact@my-innovation.com" (* TODO : find an address *)
+  | `GEFeL  -> "contact@gefel-asso.org"
 
 let no_reply id = match represent id with
   | `RunOrg -> "no-reply@runorg.com"
@@ -123,6 +133,7 @@ let no_reply id = match represent id with
   | `Clichy -> "no-reply@clichy.fr"
   | `Alfort -> "no-reply@alfort.fr"
   | `Innov  -> "no-reply@my-innovation.com" 
+  | `GEFeL  -> "no-reply@gefel-asso.org"
 
 let short id = match represent id with 
   | `RunOrg -> "RunOrg"
@@ -133,6 +144,7 @@ let short id = match represent id with
   | `Clichy -> "Clichy"
   | `Alfort -> "Alfortville"
   | `Innov  -> "My Innovation"
+  | `GEFeL  -> "GEFeL"
 
 let favicon id = match represent id with
   | `RunOrg -> "/public/favicon.ico"
@@ -143,6 +155,7 @@ let favicon id = match represent id with
   | `Innov  -> "/myInnovation-favicon.png"
   | `Clichy -> "/clichy-favicon.ico"
   | `Alfort -> "/alfort-favicon.ico"
+  | `GEFeL  -> "/gefel-favicon.ico"
 
 let default_vertical id = match represent id with 
   | `RunOrg -> `Simple
@@ -153,3 +166,4 @@ let default_vertical id = match represent id with
   | `Alfort -> `Simple
   | `FSCF   -> `Simple (* TODO: find a vertical *)
   | `Innov  -> `Simple (* TODO: find a vertical *)
+  | `GEFeL  -> `Simple

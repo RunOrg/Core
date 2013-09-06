@@ -7,6 +7,7 @@ val innov : IWhite.t
 val m2014 : IWhite.t
 val clichy : IWhite.t
 val alfort : IWhite.t
+val gefel  : IWhite.t
 
 type t = 
   [ `RunOrg
@@ -17,6 +18,7 @@ type t =
   | `Clichy
   | `Alfort
   | `Innov
+  | `GEFeL
   ]
 
 val represent : IWhite.t option -> t 
