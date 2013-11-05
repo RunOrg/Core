@@ -353,7 +353,7 @@ module Backdoor = struct
     let map = "if (doc.t == 'inst') emit(doc.create);"
   end)
 
-  let chrono _ ~count start = 
+  let chronological _ ~count start = 
     let  limit = count + 1 in 
     let! list = ohm $ ChronoView.doc_query ~descending:true ?startkey:start ~limit () in
     let  list, next = OhmPaging.slice ~count list in

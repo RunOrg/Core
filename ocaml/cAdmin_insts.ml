@@ -13,7 +13,7 @@ let more, def_more = O.declare O.secure "admin/insts/more" Action.Args.(o float)
 let more t = VMore.li (JsCode.Endpoint.of_url (Action.url more None t), Json.Null)
 
 let () = def_more $ admin_only begin fun cuid req res ->
-  let! list, next = ohm (MInstance.Backdoor.chrono cuid ~count:5 (req # args)) in
+  let! list, next = ohm (MInstance.Backdoor.chronological cuid ~count:5 (req # args)) in
   let  more = BatOption.map (fun time -> more (Some time)) next in 
   let! now  = ohmctx (#time) in
   let! list = ohm (Run.list_map begin fun (iid, i) -> 
