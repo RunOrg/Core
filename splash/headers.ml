@@ -89,12 +89,6 @@ let headers = [
 		"Salle de sport et coaching", "/catalog/clubs-sports/SalleSport" ;
 		"Autre", "/catalog/clubs-sports/Sports" 
 		] ;
-	  "Collectivités", "/catalog/collectivites/Collectivites" ,
-	  [ "Mairies & collectivités", "/catalog/collectivites/Collectivites";
-	  "Portail associatif communal", "/catalog/collectivites/LocalNpPortal";
-	  "Maison des associations", "/catalog/collectivites/MaisonAsso" ;
-	  "Campagnes électorales", "/catalog/collectivites/Campaigns"
-	  ];
 	  "Fédérations", "/catalog/federations/Federations", 
 	  [ "Fédérations", "/catalog/federations/Federations" ;
 	  "FF Badminton", "/catalog/federations/Badminton" ;
@@ -109,17 +103,13 @@ let headers = [
 	  [ "Copropriété avec syndic professionnel", "/catalog/syndic-copropriete/Copro" ;
 	  "Copropriété avec syndic bénévole", "/catalog/syndic-copropriete/CoproVolunteer"
 	  ] ;
-	  "Entreprises", "/catalog/entreprises/Company", 
-	  [ "Entreprises", "/catalog/entreprises/Company" ;
-	  "Centres de formation", "/catalog/entreprises/CompanyTraining"
-	  ] ;
-      "Comités d'entreprise", "/catalog/ComiteEnt", [] ;
+	  "Comités d'entreprise", "/catalog/ComiteEnt", [] ;
       "Autres", "/catalog/others/Events", 
 	  [ "Organisation d'évènements", "/catalog/others/Events" 
 	  ] ;
     ] ;
 
-	multiheader "collectivites" 
+(*	multiheader "collectivites" 
     ~title:"L'espace numérique de votre collectivité"
     ~text:"Des plateformes collaboratives spécialement adapatées pour gérer et communiquer avec vos administrés, vos agents, vos associations et vos sympathisants."
      [ "Accueil",    "/collectivites" , [];
@@ -161,7 +151,7 @@ let headers = [
 	"Services",  "/entreprises/services", [];    *)
 	"Fonctionnalités",  "/entreprises/features", [];
       (*"Tarifs", "/entreprises/pricing", []; *)
-    ] ;
+    ] ; *)
 
 	 multiheader "associations" 
     ~title:"L'intranet de votre association"

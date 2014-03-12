@@ -1,10 +1,10 @@
 open Common
 open WithSections 
 
-let pages = Associations.pages @ Entreprises.pages @ Collectivites.pages @ Catalog.pages @ [
+let pages = Associations.pages @ Catalog.pages @ [
   (* BEGIN PAGES ------------------------------------------------------------ *)
 
-  page "/" "RunOrg - Créateur de communautés"
+ (* page "/oldrunorg" "RunOrg - Créateur de communautés"
     ~head:"accueil"
     ~section:"accueil"
     [   	composite `LR 
@@ -51,7 +51,7 @@ let pages = Associations.pages @ Entreprises.pages @ Collectivites.pages @ Catal
 
 
  
-    ] ;
+    ] ; *)
 
   page "/about/team" "À Propos de RunOrg - L'Équipe"
     ~head:"about"
@@ -380,7 +380,7 @@ Capital social : 10.000,00 euros
 R.C.S. : Paris 499 669 927
 TVA intracommunautaire : FR2049966992700018
 Siège social : 22 rue Planchat 75020, France
-Directeur de la publication : Victor Nicollet
+Directeur de la publication : Mehdi Foughali
 
 L'ensemble de ce site relève des législations françaises et internationales sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents iconographiques et photographiques."
 	;
@@ -409,7 +409,7 @@ Conformément à la loi \"Informatique et Libertés\", le traitement de vos info
   page "/contact" "RunOrg - Nous Contacter"
     [ "Asset_Splash_Contact.render ()" ] ;
 
-  page "/press" "RunOrg - Presse"
+ (* page "/press" "RunOrg - Presse"
     ~head:"press"
     ~subsection:"press"
     [ composite `LRR
@@ -472,9 +472,9 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 	"RunOrg démocratise le vote en ligne pour les associations. La dernière version de RunOrg voit la mise à disposition pour toutes les associations de votes sécurisés en ligne. Cette nouveauté leur permet de simplifier les prises de décisions tout en respectant les contraintes démocratiques qui sont au cœur de la philosophie des associations loi 1901. "
 	;
       
-    ] ;
+    ] ; *)
     
-  page "/pricing" "RunOrg - Tarifs"
+ (* page "/pricing" "RunOrg - Tarifs"
         ~section:"pricing" 
         ~head:"pricing"
       [ pricing 
@@ -597,7 +597,7 @@ Imaginez et construisez : RunOrg met à disposition cet outil. "
 		  "www.careep.fr") 
 	   "Le CAREEP utilise RunOrg pour organiser les comités mensuels de ses 5 pôles, et pour communiquer avec ses membres, ses partenaires et ses annonceurs." ) ;
 
-    ] ;
+    ] ; *)
   
   (* END PAGES -------------------------------------------------------------- *)
 ]
