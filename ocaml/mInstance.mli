@@ -144,7 +144,7 @@ module Backdoor : sig
 
   val list : count:int -> IInstance.t option -> ((IInstance.t * t) list * IInstance.t option) O.run
 
-  val chrono : 
+  val chronological : 
        [`Admin] ICurrentUser.id
     -> count:int 
     -> float option 

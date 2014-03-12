@@ -40,9 +40,6 @@ module Actions = struct
   (* Plugins *)
   open DMS
 
-  (* Pacemaker *)
-  open ConfigPacemkr
-
 end
 
 module Main = Ohm.Main.Make(O.Reset)

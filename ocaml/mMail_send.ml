@@ -5,12 +5,6 @@ open Ohm.Util
 open BatPervasives
 open Ohm.Universal
 
-let ping = 
-  ConfigPacemkr.every 60. begin fun email freq -> 
-    ConfigPacemkr.send ~nature:"E-mail Sender" "#$pid"
-      "%s (%.2f / minute)" email freq
-  end 
-
 let send uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	      (owid:IWhite.t option ->
 	       ?from:string -> 
