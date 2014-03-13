@@ -66,10 +66,8 @@ let send uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	  end
 	in
 	
-	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name ;
+	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name 
 	
-	ping to_email   
-
       with exn -> 
 
 	Util.log "Error sending to: %s <%s> : %s" to_name to_email
@@ -126,9 +124,7 @@ let other_send_to_self uid (build : [`IsSelf] IUser.id -> MUser.t ->
 	  html
 	|> Netsendmail.sendmail ;
 	
-	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name ;
-	
-	ping to_email   
+	Util.log "Sent to: %s <%s> From: %s" to_name to_email from_name 
 
       with exn -> 
 
