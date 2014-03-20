@@ -3,7 +3,7 @@ let footer = [
   
   "À propos", "/about" ;
   "Contact", "/contact" ;
-  (* "Support", "/help" ; *)
+   "Support", "/associations-support.html" ; 
  (* "Accompagnement", "/autres/accompagnement" ;*)
   (*"Tarifs", "/pricing";*)
   (*"Presse", "/press" ;*)
