@@ -8,7 +8,7 @@ let sections = [
   "collectivites", "Collectivités", "/collectivites" ;   
   "catalogue", "Catalogue", "/catalog" ; 
   "network", "Réseau", "/network" ; *)
-   "Support", "/associations-support.html" 
+   "support", "Support", "/associations-support.html" ;
   "login", "Connexion", "/me" ;
 
   (* END SECTIONS ----------------------------------------------------------- *)
